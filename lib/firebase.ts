@@ -37,22 +37,52 @@ export async function getUserWithUsername(username) {
   return userDoc;
 }
 
-/**`
- * Converts a firestore document to JSON
- * @param  {DocumentSnapshot} doc
- */
-export function postToJSON(doc) {
-  const data = doc.data();
-  return {
-    ...data,
-    // Gotcha! firestore timestamp NOT serializable to JSON. Must convert to milliseconds
-    createdAt: data.createdAt.toMillis(),
-    updatedAt: data.updatedAt.toMillis(),
-  };
-}
 
 export const fromMillis = firebase.firestore.Timestamp.fromMillis;
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 // Get first name from firebase user 
+/**`
+ * Convert a ticker symbol to ISIN using firebase docs
+ * @param  {string} ticker
+ */
 export const userFirstName = (user) => user.displayName.split(" ")[0]
+
+/**`
+ * Gets a ticker/{isin} document ISIN by querying the ticker
+ * @param  {string} ticker
+ */
+ export async function tickerToISIN(ticker: string): string {
+  const tickerRef = firestore.collection("tickers");
+  const query = tickerRef.where("tickerSymbol", "==", ticker).limit(1);
+  const tickerDoc = (await query.get()).docs[0];
+  return tickerDoc.id;
+}
+
+export const getLogoUrlFromTicker = async (ticker) => {
+  
+  const isin = tickerToISIN(ticker);
+  const logoRef = storage.ref(`logos/${isin}.jpg`);
+
+  // Get the download URL
+  try {
+    const url = await logoRef.getDownloadURL()
+  }  catch(error) {
+      // A full list of error codes is available at
+      // https://firebase.google.com/docs/storage/web/handle-errors
+      switch (error.code) {
+        case "storage/object-not-found":
+          console.log("File doesn't exist");
+          break;
+        case "storage/unauthorized":
+          console.log("User doesn't have permission to access the object");
+          break;
+        case "storage/canceled":
+          console.log("User canceled the upload");
+          break;
+        case "storage/unknown":
+          console.log("Unknown error occurred, inspect the server response");
+          break;
+      }
+    };
+}
