@@ -5,7 +5,7 @@ import "react-vis/dist/style.css";
 
 export default function LineChart(props) {
   const [colorType, setColorType] = useState("typeA");
-  const [strokeWidth, setStrokeWidth] = useState(1);
+  const [strokeWidth, setStrokeWidth] = useState(2);
   const [crosshairValue, setCrosshairValue] = useState(false);
 
   const colorRanges = {
@@ -39,10 +39,17 @@ export default function LineChart(props) {
     colorRange: colorRanges[colorType],
     opacityType: "literal",
     strokeWidth,
-    data: props.data,
+    data: props.data.map((d) => {
+      return {
+        x: typeof d.x != 'Date' ? new Date(d.x) : d.x,
+        y: d.y
+      }
+    }),
     onNearestX: (d) => setCrosshairValue(d),
     style: { fill: "none" },
   };
+
+
 
   return (
     <div className="canvas-wrapper">

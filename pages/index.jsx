@@ -6,7 +6,6 @@ import useFetch from "react-fetch-hook";
 
 export default function Home() {
   const tickerSymbol = "TSLA"; // TODO this will be retrieved from the routing url
-
   const functionType = "TIME_SERIES_DAILY";
   const apiKey = "E9W8LZBTXVYZ31IO";
   const fetchUrl = `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`;
