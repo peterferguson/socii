@@ -64,8 +64,8 @@ with open("/Users/peter/Projects/socii/temp/t212_tickers.json", "r") as f:
     ticker_isins = [
         isin
         for ticker in ticker_mapping
-        if (isin := ticker.get("isin")) and isin[:2] in ("GB", "US")
-    ][335:]
+        if (isin := ticker.get("isin")) and isin[:2] not in ("GB", "US")
+    ]
 
 credentials = firebase_admin.credentials.Certificate(service_account_info)
 
@@ -82,4 +82,4 @@ client = firestore.client()
 
 for isin in tqdm(ticker_isins):
     client.document(f"tickers/{isin}").set(yahooData(isin))
-    sleep(0.1)
+    sleep(1)

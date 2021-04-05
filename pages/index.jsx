@@ -20,8 +20,8 @@ export default function Home() {
       // Return close for each date
       setTimeseries(
           dates.map((ts) => ({
-              x: new Date(ts),
-              y: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
+              date: new Date(ts),
+              close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
             }))
           );
         }, [data]);

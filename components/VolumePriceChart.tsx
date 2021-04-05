@@ -1,9 +1,17 @@
+import { storage } from "@lib/firebase";
 import ShowcaseButton from "@components/ShowcaseButton";
-import { XYPlot, XAxis, YAxis, LineSeries, Crosshair } from "react-vis";
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  LineSeries,
+  VerticalBarSeries,
+  Crosshair,
+} from "react-vis";
 import { useState } from "react";
 import "react-vis/dist/style.css";
 
-export default function LineChart(props) {
+export default function VolumePriceChart(props) {
   const [colorType, setColorType] = useState("typeA");
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [crosshairValue, setCrosshairValue] = useState(false);
@@ -27,14 +35,26 @@ export default function LineChart(props) {
     strokeWidth,
     data: props.data.map((d) => {
       return {
-        x: typeof d.date != 'Date' ? new Date(d.date) : d.date,
-        y: d.close
-      }
+        x: typeof d.date != "Date" ? new Date(d.date) : d.date,
+        y: d.close,
+      };
     }),
     onNearestX: (d) => setCrosshairValue(d),
     style: { fill: "none" },
   };
 
+  const barSeriesProps = {
+    animation: true,
+    className: "vertical-bar-series-example",
+    color: colorType === "typeA" ? "#59E4EC" : "#EFC1E3",
+    data: props.data.map((d) => {
+      return {
+        x: typeof d.date != "Date" ? new Date(d.date) : d.date,
+        y: d.volumne,
+      };
+    }),
+    // onNearestX: (d) => setCrosshairValue(d),
+  };
 
   return (
     <div className="canvas-wrapper">
@@ -69,16 +89,15 @@ export default function LineChart(props) {
         />
         <YAxis />
         <LineSeries {...lineSeriesProps} />
+        <VerticalBarSeries {...barSeriesProps} />
         {crosshairValue && (
           <Crosshair
             values={[crosshairValue]}
             titleFormat={(d) => ({
               title: "Date",
-              value: new Date(d[0].x).toLocaleDateString(),
+              value: new Date(d[0].date).toLocaleDateString(),
             })}
-            itemsFormat={(d) => [
-              { title: "Close price", value: d[0].y },
-            ]}
+            itemsFormat={(d) => [{ title: "Close price", value: d[0].close }]}
           />
         )}
       </XYPlot>
