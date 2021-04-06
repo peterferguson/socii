@@ -2,10 +2,10 @@ const algoliasearch = require("algoliasearch");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const serviceAccount = require("/Users/peter/Projects/socii/serviceAccountKey.json");
-
+const storageBucket = "sociiinvest.appspot.com";
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "sociiinvest.appspot.com/",
+  storageBucket: storageBucket,
 });
 
 // Config var initialisation
@@ -17,6 +17,7 @@ const ALGOLIA_INDEX_NAME = "tickers";
 // Client Initialisation
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 const firestore = admin.firestore();
+const storage = admin.storage();
 
 /**
  * Listens for new tickers added to /tickers/:documentId/ and updates
@@ -51,29 +52,21 @@ exports.loadTickersToAlgolia = functions.https.onRequest(async (req, res) => {
   // Retrieve all documents from the tickers collection.
   const querySnapshot = await firestore.collection(indexName).get();
 
-  querySnapshot.docs.forEach(async (doc) => {
+  querySnapshot.docs.slice(0,3).forEach(async (doc) => {
     const document = doc.data();
 
-    const { hits } = await collectionIndex.search(document.tickerSymbol, {
-      attributesToRetrieve: ["ISIN"],
-      hitsPerPage: 1,
-    });
+    const record = {
+      objectID: doc.id, // use document id as the objectID
+      ISIN: document.ISIN,
+      longName: document.longName,
+      shortName: document.shortName,
+      tickerSymbol: document.tickerSymbol,
+    };
 
-    if (!hits) {
-      console.log(document);
-    }
-    // const record = {
-    //   objectID: doc.id, // use document id as the objectID
-    //   ISIN: document.ISIN,
-    //   longName: document.longName,
-    //   shortName: document.shortName,
-    //   tickerSymbol: document.tickerSymbol,
-    // };
-
-    // algoliaRecords.push(record);
+    algoliaRecords.push(record);
   });
 
-  // collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
-  //   res.status(200).send("COLLECTION was indexed to Algolia successfully.");
-  // });
+  collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
+    res.status(200).send("COLLECTION was indexed to Algolia successfully.");
+  });
 });

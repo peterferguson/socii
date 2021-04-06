@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 function ShowcaseButton(props) {
   const {buttonContent, onClick} = props;
   return (
-    <button className="showcase-button" onClick={onClick}>
+    <button className="btn-login" onClick={onClick}>
       {buttonContent}
     </button>
   );

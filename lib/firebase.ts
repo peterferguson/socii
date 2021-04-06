@@ -59,14 +59,11 @@ export const userFirstName = (user) => user.displayName.split(" ")[0]
   return tickerDoc.id;
 }
 
-export const getLogoUrlFromTicker = async (ticker) => {
-  
-  const isin = tickerToISIN(ticker);
+export const getLogoUrlFromISIN = async (isin) => {
   const logoRef = storage.ref(`logos/${isin}.jpg`);
 
-  // Get the download URL
   try {
-    const url = await logoRef.getDownloadURL()
+    return await logoRef.getDownloadURL()
   }  catch(error) {
       // A full list of error codes is available at
       // https://firebase.google.com/docs/storage/web/handle-errors
@@ -85,4 +82,9 @@ export const getLogoUrlFromTicker = async (ticker) => {
           break;
       }
     };
+}
+
+export const getLogoUrlFromTicker = async (ticker) => {
+  const isin = tickerToISIN(ticker);
+  getLogoUrlFromISIN(isin);
 }

@@ -43,16 +43,12 @@ export default function LineChart(props) {
           <h1 color={colorType === "typeA" ? "#0D676C" : "#B52F93"}>
             {`Ticker: ${props.tickerSymbol}`}
           </h1>
-        </div>
-        <ShowcaseButton
-          className="push-left"
-          onClick={() => setColorType(nextType[colorType])}
-          buttonContent={`TOGGLE COLOR to ${nextType[colorType]}`}
-        />
-        <ShowcaseButton
-          onClick={() => setStrokeWidth(strokeWidth === 1 ? 2 : 1)}
-          buttonContent={"TOGGLE STROKEWIDTH"}
-        />
+            <ShowcaseButton
+              className="card"
+              onClick={() => setColorType(nextType[colorType])}
+              buttonContent={`Toggle Color`}
+              />
+              </div>
       </div>
       <XYPlot
         onMouseLeave={() => setCrosshairValue(false)}

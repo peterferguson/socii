@@ -21,7 +21,8 @@
     "paths": {
         "@lib/*": ["lib/*"],
         "@components/*": ["components/*"],
-        "@styles/*": ["styles/*"]
+        "@styles/*": ["styles/*"],
+        "@public/*": ["public/*"]
     }
   },
   "include": [

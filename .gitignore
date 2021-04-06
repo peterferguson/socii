@@ -69,7 +69,6 @@ node_modules/
 # dotenv environment variables file
 .env
 
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -107,3 +106,6 @@ yarn-error.log*
 
 # GCP Functions
 .runtimeconfig.json
+
+# env in next.config
+next.config.js

@@ -54,15 +54,15 @@ export async function getStaticPaths(context) {
 
   // For testing to not use the firebase quota
   const paths = [
-    {params: 'AAPL'},
-    {params: 'TSLA'},
-    {params: 'GME'},
-    {params: 'NIO'},
-    {params: 'PLTR'},
-    {params: 'XPEV'},
-    {params: 'PLUG'},
-    {params: 'AMD'},
-    {params: 'FB'},
+    {params: {"tickerSymbol": "AAPL"}},
+    {params: {"tickerSymbol": "TSLA"}},
+    {params: {"tickerSymbol": "GME"}},
+    {params: {"tickerSymbol": "NIO"}},
+    {params: {"tickerSymbol": "PLTR"}},
+    {params: {"tickerSymbol": "XPEV"}},
+    {params: {"tickerSymbol": "PLUG"}},
+    {params: {"tickerSymbol": "AMD"}},
+    {params: {"tickerSymbol": "FB"}},
   ]
 
 

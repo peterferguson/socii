@@ -1,22 +1,33 @@
-/*
- *   Entrypoint for all pages that acts a page wrapper for components.
- *   This allows us to add default components which appear on all pages, such as
- *     - Navbar
- *     - User Auth
- */
-import Navbar from "@components/Navbar";
-import "@styles/globals.css";
-import { Toaster } from "react-hot-toast";
+import "tailwindcss/tailwind.css";
+import Head from "@components/Head";
+import Navigation from "@components/Navigation";
+import SearchCard from "@components/SearchCard";
 import { UserContext } from "@lib/context";
 import { useUserData } from "@lib/hooks";
 
-function MyApp({ Component, pageProps }) {
+import { useState } from "react";
+
+import { Toaster } from "react-hot-toast";
+
+export default function MyApp({ Component, pageProps }) {
   const userData = useUserData();
+  const [showSearchCard, setShowSearchCard] = useState(false);
+  const toggleSearchCard = () => {
+    setShowSearchCard(!showSearchCard);
+  };
+  const props = {
+    ...pageProps,
+    showSearchCard,
+    toggleSearchCard,
+  };
   return (
     <UserContext.Provider value={userData}>
-      <Navbar />
+      <Head />
+      <Navigation {...props} />
+      <SearchCard {...props} />
       <Component {...pageProps} />
-      <Toaster position="top-center"
+      <Toaster
+        position="top-center"
         reverseOrder={false}
         toastOptions={{
           // Define default options
@@ -48,5 +59,3 @@ function MyApp({ Component, pageProps }) {
     </UserContext.Provider>
   );
 }
-
-export default MyApp;
