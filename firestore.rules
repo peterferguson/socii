@@ -4,6 +4,17 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if
           request.time < timestamp.date(2021, 4, 30);
+    
+    // Payment ledger
+    match /payments/{payments} {
+      
+      // Replace with checks on the count and the user id
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId 
+                    && request.resource.data.count > 0;
+      allow update: if false;
+      allow delete: if false;
+
     }
   }
 }

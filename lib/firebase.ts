@@ -1,7 +1,8 @@
 import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import "firebase/storage"
+import "firebase/auth"
+import "firebase/firestore"
+// import "firebase/performance"
 
 const firebaseConfig = {
     apiKey: "AIzaSyD13i3isXoeOgerBKTdSae9pl4j1oBKoDg",
@@ -16,13 +17,15 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
-export const storage = firebase.storage();
 export const auth = firebase.auth();
+export const storage = firebase.storage();
 export const firestore = firebase.firestore();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
 export const increment = firebase.firestore.FieldValue.increment;
+
+// Initialize Performance Monitoring and get a reference to the service
+// export const perf = firebase.performance();
 
 // Helper Functions
 
