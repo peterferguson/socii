@@ -1,6 +1,7 @@
 const algoliasearch = require("algoliasearch");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const escapeHtml = require('escape-html');
 const serviceAccount = require("/Users/peter/Projects/socii/serviceAccountKey.json");
 const storageBucket = "sociiinvest.appspot.com";
 admin.initializeApp({
@@ -52,7 +53,7 @@ exports.loadTickersToAlgolia = functions.https.onRequest(async (req, res) => {
   // Retrieve all documents from the tickers collection.
   const querySnapshot = await firestore.collection(indexName).get();
 
-  querySnapshot.docs.slice(0,3).forEach(async (doc) => {
+  querySnapshot.docs.slice(0, 3).forEach(async (doc) => {
     const document = doc.data();
 
     const record = {

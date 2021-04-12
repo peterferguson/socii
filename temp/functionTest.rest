@@ -1,0 +1,7 @@
+POST http://localhost:5001/sociiinvest/us-central1/loadLogoUrl
+
+content-type: application/json
+
+{
+    "isin": "US88160R1014",
+}

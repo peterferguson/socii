@@ -1,65 +1,41 @@
-import ShowcaseButton from "@components/ShowcaseButton";
-import { XYPlot, XAxis, YAxis, LineSeries, Crosshair } from "react-vis";
+import { FlexibleXYPlot, XAxis, YAxis, LineSeries, Crosshair } from "react-vis";
 import { useState } from "react";
 import "react-vis/dist/style.css";
 
 export default function LineChart(props) {
-  const [colorType, setColorType] = useState("typeA");
-  const [strokeWidth, setStrokeWidth] = useState(2);
   const [crosshairValue, setCrosshairValue] = useState(false);
-
-  const colorRanges = {
-    typeA: ["#59E4EC", "#0D676C"],
-    typeB: ["#EFC1E3", "#B52F93"],
-  };
-
-  const nextType = {
-    typeA: "typeB",
-    typeB: "typeA",
-  };
+  const strokeWidth = 2;
 
   const lineSeriesProps = {
     animation: true,
     // className: "mark-series-example",
-    color: colorType === "typeA" ? "#0D676C" : "#B52F93",
-    colorRange: colorRanges[colorType],
+    color: props.colorType === "typeA" ? "#0D676C" : "#B52F93",
+    colorRange: props.colorRanges[props.colorType],
     opacityType: "literal",
     strokeWidth,
     data: props.data.map((d) => {
       return {
-        x: typeof d.date != 'Date' ? new Date(d.date) : d.date,
-        y: d.close
-      }
+        x: typeof d.date != "Date" ? new Date(d.date) : d.date,
+        y: d.close,
+      };
     }),
     onNearestX: (d) => setCrosshairValue(d),
     style: { fill: "none" },
   };
 
-
+  
   return (
-    <div className="canvas-wrapper">
-      <div className="canvas-example-controls">
-        <div>
-          <h1 color={colorType === "typeA" ? "#0D676C" : "#B52F93"}>
-            {`Ticker: ${props.tickerSymbol}`}
-          </h1>
-            <ShowcaseButton
-              className="card"
-              onClick={() => setColorType(nextType[colorType])}
-              buttonContent={`Toggle Color`}
-              />
-              </div>
-      </div>
-      <XYPlot
+    <>
+      <FlexibleXYPlot
         onMouseLeave={() => setCrosshairValue(false)}
-        width={900}
         height={600}
+        // width={800}
         xType="time"
-        margin={{ left: 100, bottom: 100 }}
+        margin={{ left: 75, bottom: 75 }}
       >
         <XAxis
           tickLabelAngle={-75}
-          tickFormat={function tickFormat(d) {
+          tickFormat={(d) => {
             return d.toLocaleDateString();
           }}
         />
@@ -72,12 +48,10 @@ export default function LineChart(props) {
               title: "Date",
               value: new Date(d[0].x).toLocaleDateString(),
             })}
-            itemsFormat={(d) => [
-              { title: "Close price", value: d[0].y },
-            ]}
+            itemsFormat={(d) => [{ title: "Close price", value: d[0].y }]}
           />
         )}
-      </XYPlot>
-    </div>
+      </FlexibleXYPlot>
+    </>
   );
 }

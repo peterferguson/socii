@@ -4,6 +4,8 @@ import "firebase/auth"
 import "firebase/firestore"
 // import "firebase/performance"
 
+import toast from "react-hot-toast";
+
 const firebaseConfig = {
     apiKey: "AIzaSyD13i3isXoeOgerBKTdSae9pl4j1oBKoDg",
     authDomain: "sociiinvest.firebaseapp.com",
@@ -21,6 +23,7 @@ export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const firestore = firebase.firestore();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
 export const increment = firebase.firestore.FieldValue.increment;
 
@@ -62,32 +65,9 @@ export const userFirstName = (user) => user.displayName.split(" ")[0]
   return tickerDoc.id;
 }
 
-export const getLogoUrlFromISIN = async (isin) => {
-  const logoRef = storage.ref(`logos/${isin}.jpg`);
-
-  try {
-    return await logoRef.getDownloadURL()
-  }  catch(error) {
-      // A full list of error codes is available at
-      // https://firebase.google.com/docs/storage/web/handle-errors
-      switch (error.code) {
-        case "storage/object-not-found":
-          console.log("File doesn't exist");
-          break;
-        case "storage/unauthorized":
-          console.log("User doesn't have permission to access the object");
-          break;
-        case "storage/canceled":
-          console.log("User canceled the upload");
-          break;
-        case "storage/unknown":
-          console.log("Unknown error occurred, inspect the server response");
-          break;
-      }
-    };
-}
-
-export const getLogoUrlFromTicker = async (ticker) => {
-  const isin = tickerToISIN(ticker);
-  getLogoUrlFromISIN(isin);
+export function signOut(router, firstname) {
+  toast.dismiss()
+  toast(`Bye for now ${firstname}!`, { icon: "👋" });
+  auth.signOut();
+  if (router) router.push("/enter");
 }

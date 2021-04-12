@@ -17,6 +17,7 @@
     "next": "^10.0.0",
     "postcss-preset-env": "^6.7.0",
     "react": "^16.0.0",
+    "react-backdrop-filter": "^2.1.0",
     "react-bootstrap": "^1.5.2",
     "react-dom": "^16.0.0",
     "react-fetch-hook": "^1.8.5",
