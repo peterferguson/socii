@@ -1,19 +1,30 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { Button } from "@components/Button";
 
 export default function Custom404() {
   return (
     <main>
-      <h1>404 - That page does not seem to exist...</h1>
+      <div className="flex-direction: column">
+      <div className="pt-4 pb-2 flex justify-center text-5xl font-poppins font-bold">404 ...</div>
+      <div className="flex justify-center text-3xl font-poppins font-bold">
       <iframe
         src="https://giphy.com/embed/l2JehQ2GitHGdVG9y"
         width="480"
         height="362"
         frameBorder="0"
         allowFullScreen
-      ></iframe>
+        className="p-4 flex justify-center"
+        ></iframe>
+        </div>
+      <div className="p-2 flex justify-center text-3xl font-poppins font-bold">Page not found</div>
+      <div className="p-4 flex justify-center">
       <Link href="/">
-        <button className="btn-blue">Go home</button>
+        <Button>
+          Go home
+        </Button>
       </Link>
+      </div>
+      </div>
     </main>
   );
 }

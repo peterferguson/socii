@@ -1,12 +1,11 @@
 import { UserContext } from "@lib/context";
-import { auth, userFirstName, signOut } from "@lib/firebase";
+import { userFirstName, signOut } from "@lib/firebase";
 import SearchIcon from "@public/icons/search.svg";
+import { Button } from "@components/Button";
 
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useRouter } from "next/router";
-
-
 
 export default function Navigation(props) {
   const { user, username } = useContext(UserContext);
@@ -20,10 +19,10 @@ export default function Navigation(props) {
           <>
             <div>
               <button
-                className="flex-1 rounded p-2 m-4 text-white bg-green-500 hover:bg-green-400"
+                className="btn"
                 onClick={() => signOut(router, userFirstName(user))}
               >
-                <a>Sign Out 👋</a>
+                <a>Sign Out</a>
               </button>
             </div>
             <NavItem
@@ -34,12 +33,18 @@ export default function Navigation(props) {
           </>
         )}
         {!username && (
-          <button
-            className="flex-1 rounded p-2 m-4 text-white bg-green-500 hover:bg-green-400"
-            href="/enter"
+          // <button
+          //   className="btn"
+          //   onClick={() => router.push("/enter")}
+          // >
+          //   <a className="font-work-sans">Login</a>
+          // </button>
+          <Button
+            className="font-work-sans"
+            onClick={() => router.push("/enter")}
           >
-            <a className="font-bold">Login</a>
-          </button>
+          Login
+          </Button>
         )}
       </NavigationButtons>
     </div>
@@ -50,7 +55,10 @@ function Logo() {
   return (
     <div className="p-4">
       <Link href="/">
-        <a className="text-4xl text-green-400">socii</a>
+        <a className="text-4xl font-poppins">soc</a>
+      </Link>
+      <Link href="/">
+        <a className="text-4xl text-brand font-poppins">ii</a>
       </Link>
     </div>
   );

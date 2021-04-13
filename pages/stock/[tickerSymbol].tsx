@@ -2,7 +2,7 @@ import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallCardComponent from "@components/Card";
 // import styles from "@styles/Home.module.css";
-import { firestore, getLogoUrlFromTicker } from "@lib/firebase";
+import { firestore } from "@lib/firebase";
 import { useEffect, useState } from "react";
 import useFetch from "react-fetch-hook";
 import { useRouter } from "next/router";
@@ -104,14 +104,14 @@ export default function TickerPage(props) {
             />
           )}
           <button
-            className="flex rounded p-2 m-4 text-white bg-green-500 hover:bg-green-400"
+            className="flex rounded p-2 m-4 text-white bg-brand hover:bg-brand-dark"
             onClick={() => setShowTradingView(!showTradingView)}
           >
             {!showTradingView ? "TradingView" : "socii Chart"}
           </button>
           {!showTradingView && (
             <button
-              className="flex rounded p-2 m-4 text-white bg-green-500 hover:bg-green-400"
+              className="flex rounded p-2 m-4 text-white bg-brand hover:bg-brand-dark"
               onClick={() => setColorType(nextType[colorType])}
             >
               Toggle Color

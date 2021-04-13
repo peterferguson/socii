@@ -1,4 +1,4 @@
-import "tailwindcss/tailwind.css";
+import '@styles/globals.css';
 import Head from "@components/Head";
 import Navigation from "@components/Navigation";
 import SearchCard from "@components/SearchCard";
@@ -30,8 +30,6 @@ export default function MyApp({ Component, pageProps }) {
         position="top-center"
         reverseOrder={false}
         toastOptions={{
-          // Define default options
-          className: "",
           style: {
             margin: "40px",
             background: "#363636",
@@ -41,14 +39,14 @@ export default function MyApp({ Component, pageProps }) {
           duration: 1000,
           // Default options for specific types
           success: {
-            duration: 3000,
+            duration: 5000,
             theme: {
               primary: "green",
               secondary: "black",
             },
           },
           error: {
-            duration: 3000,
+            duration: 5000,
             theme: {
               primary: "green",
               secondary: "black",

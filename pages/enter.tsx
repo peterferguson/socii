@@ -5,11 +5,16 @@ import {
   userFirstName,
   facebookAuthProvider,
 } from "@lib/firebase";
+import AppleLogo from "@icons/apple.svg";
+import FacebookLogo from "@icons/fb.svg";
+import TwitterLogo from "@icons/twitter.svg";
+import GoogleLogo from "@icons/google.svg";
 import { UserContext } from "@lib/context";
 import Head from "@components/Head";
 import { useContext } from "react";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import router from "next/router";
 
 const BackdropFilter = dynamic(
   () => {
@@ -21,6 +26,7 @@ const BackdropFilter = dynamic(
 auth.onAuthStateChanged((user) => {
   if (user) {
     toast.dismiss();
+    router.push("/")
     toast.success(`Welcome ${userFirstName(user)}`);
   }
 });
@@ -71,17 +77,17 @@ export default function Enter(props) {
                     </div>
                     <div>
                       <a
-                        className="font-bold text-sm text-purple-500 hover:text-purple-800"
+                        className="font-bold text-sm text-brand hover:text-brand-dark"
                         href="#password-request"
                       >
-                        forgot password
+                        forgot password?
                       </a>
                     </div>
                   </div>
                 </div>
                 <button
                   type="submit"
-                  className="rounded bg-purple-theme w-full text-white py-3 px-4 mb-3 leading-tight font-bold"
+                  className="transform transition hover:-translate-y-0.5 rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white py-3 px-4 mb-3 leading-tight font-bold"
                   disabled={false}
                 >
                   Sign in
@@ -94,7 +100,6 @@ export default function Enter(props) {
               </span>
             </div>
             {!user && !username && <SignInButtons />}
-            {user && username && <SignOutComponent />}
           </div>
         </BackdropFilter>
       </div>
@@ -106,37 +111,24 @@ export default function Enter(props) {
 function SignInButtons() {
   const signInPopUp = async (authProvider) =>
     await auth.signInWithPopup(authProvider);
-
   return (
     <div className="flex justify-center p-8 space-x-8">
-      <button
-        className="justify-center rounded m-2 p-2 text-white border-solid border-2 border-gray-900"
-        onClick={() => signInPopUp(googleAuthProvider)}
-      >
-        <img src={"/icons/google.png"} width="30px" />
-      </button>
-      <button
-        className="justify-center rounded m-2 p-2 text-white border-solid border-2 border-gray-900"
+      <GoogleLogo 
+      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
+      onClick={() => signInPopUp(googleAuthProvider)}
+      />
+      <AppleLogo 
+      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
         onClick={() => null}
-      >
-        <img
-          src={"/icons/twitter.png"}
-          width="30px"
-          className="object- object-center"
-        />
-      </button>
-      <button
-        className="justify-center rounded m-2 p-2 text-white border-solid border-2 border-gray-900"
+      />
+      <TwitterLogo 
+      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
         onClick={() => null}
-      >
-        <img src={"/icons/apple.png"} width="30px" />
-      </button>
-      <button
-        className="justify-center rounded m-2 p-2 text-white border-solid border-2 border-gray-900"
+      />
+      <FacebookLogo 
+      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
         onClick={() => signInPopUp(facebookAuthProvider)}
-      >
-        <img src={"/icons/fb.png"} width="30px" />
-      </button>
+      />
     </div>
   );
 }
