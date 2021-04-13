@@ -42,7 +42,7 @@ export default function Enter(props) {
       <Head title="Enter" description="Sign up for this amazing app!" />
       <div className="py-3 max-w-xl mx-auto">
         <BackdropFilter
-          className="px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
+          className="px-4 py-8 bg-gray-50 shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
           filter={"blur(10px) sepia(50%)"}
           canvasFallback={true}
           html2canvasOpts={{ allowTaint: true }}
@@ -56,7 +56,7 @@ export default function Enter(props) {
               <form onSubmit={null}>
                 <div className="w-full">
                   <input
-                    className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-50 focus:border-gray-500"
                     type="email"
                     placeholder="warren@buffet.com"
                   />
@@ -64,7 +64,7 @@ export default function Enter(props) {
                 <p className="text-md">Password</p>
                 <div className="w-full">
                   <input
-                    className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-50 focus:border-gray-500"
                     type="password"
                     placeholder="**********"
                   />
@@ -95,7 +95,7 @@ export default function Enter(props) {
               </form>
             </div>
             <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
-              <span className="py-0 px-2.5 bg-white text-gray-400">
+              <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
                 Or continue with{" "}
               </span>
             </div>
@@ -140,7 +140,7 @@ function SignOutComponent() {
     <div className="">
       <p>Hey {userFirstName}!</p>
       <button
-        className="flex rounded m-2 p-2 text-gray-900 bg-white border-solid border-2 border-gray-300"
+        className="flex rounded m-2 p-2 text-gray-900 bg-gray-50 border-solid border-2 border-gray-300"
         onClick={() => signOut(null, userFirstName(user))}
       >
         Sign Out

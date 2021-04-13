@@ -11,7 +11,7 @@ export default function Navigation(props) {
   const { user, username } = useContext(UserContext);
   const router = useRouter();
   return (
-    <div className="sticky top-0 z-40 lg:z-50 w-full max-w-8xl mx-auto bg-white flex-none flex">
+    <div className="sticky top-0 z-40 lg:z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
       <Logo />
       <SearchBar {...props} />
       <NavigationButtons>

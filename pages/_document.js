@@ -8,7 +8,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" className="max-h-full max-w-full">
         <Head>
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link

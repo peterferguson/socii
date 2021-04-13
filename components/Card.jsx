@@ -2,7 +2,7 @@
 // Requires at least imageUrl to be passed
 export default function SmallCardComponent(props) {
   return(
-    <div className="max-w-sm mx-auto flex p-6 bg-white rounded-lg shadow-xl">
+    <div className="max-w-sm mx-auto flex p-6 bg-gray-50 rounded-lg shadow-xl">
       <div className="flex-shrink-0">
         <img src={`${props.imageUrl}`} alt="" className="h-12 w-12" />
       </div>

@@ -92,7 +92,7 @@ const HitComponent = ({ hit }) => {
   if (hit) {
     return (
       <Link href={`stock/${hit.tickerSymbol}`}>
-        <div className="max-w-sm mx-auto flex p-6 bg-white rounded-lg shadow-xl">
+        <div className="max-w-sm mx-auto flex p-6 bg-gray-50 rounded-lg shadow-xl">
           <div className="flex-shrink-0">
             <img src={`${hit.image}`} alt="" className="h-12 w-12" />
           </div>
@@ -113,7 +113,7 @@ export default function SearchCard(props) {
       show={props.showSearchCard}
       size="lg"
       onHide={props.toggleSearchCard}
-      dialogClassName="w-11/12 h-11/12 flex p-24 m-8 bg-white rounded-lg shadow-xl"
+      dialogClassName="w-11/12 h-11/12 flex p-24 m-8 bg-gray-50 rounded-lg shadow-xl"
     >
       <InstantSearch {...searchProps}>
         <Modal.Body>
@@ -127,7 +127,7 @@ export default function SearchCard(props) {
           <LoadingIndicator />
           <Hits
             hitComponent={HitComponent}
-            className="max-w-sm mx-auto flex p-6 bg-white rounded-lg shadow-xl"
+            className="max-w-sm mx-auto flex p-6 bg-gray-50 rounded-lg shadow-xl"
           />
         </Modal.Body>
       </InstantSearch>

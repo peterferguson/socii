@@ -25,7 +25,7 @@ export default function MyApp({ Component, pageProps }) {
       <Head />
       <Navigation {...props} />
       <SearchCard {...props} />
-      <Component {...pageProps} />
+      <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
       <Toaster
         position="top-center"
         reverseOrder={false}
