@@ -26,7 +26,7 @@ const BackdropFilter = dynamic(
 auth.onAuthStateChanged((user) => {
   if (user) {
     toast.dismiss();
-    router.push("/")
+    router.push("/") // TODO: Direct to the users home page
     toast.success(`Welcome ${userFirstName(user)}`);
   }
 });

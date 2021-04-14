@@ -1,4 +1,4 @@
-import '@styles/globals.css';
+import "@styles/globals.css";
 import Head from "@components/Head";
 import Navigation from "@components/Navigation";
 import SearchCard from "@components/SearchCard";
@@ -6,7 +6,6 @@ import { UserContext } from "@lib/context";
 import { useUserData } from "@lib/hooks";
 
 import { useState } from "react";
-
 import { Toaster } from "react-hot-toast";
 
 export default function MyApp({ Component, pageProps }) {
@@ -20,40 +19,43 @@ export default function MyApp({ Component, pageProps }) {
     showSearchCard,
     toggleSearchCard,
   };
+
+  const toastProps = {
+    position: "top-center",
+    reverseOrder: false,
+    toastOptions: {
+      style: {
+        margin: "40px",
+        background: "#363636",
+        color: "#fff",
+        zIndex: 1,
+      },
+      duration: 1000,
+      // Default options for specific types
+      success: {
+        duration: 5000,
+        theme: {
+          primary: "green",
+          secondary: "black",
+        },
+      },
+      error: {
+        duration: 5000,
+        theme: {
+          primary: "green",
+          secondary: "black",
+        },
+      },
+    },
+  };
+
   return (
     <UserContext.Provider value={userData}>
       <Head />
       <Navigation {...props} />
       <SearchCard {...props} />
       <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{
-          style: {
-            margin: "40px",
-            background: "#363636",
-            color: "#fff",
-            zIndex: 1,
-          },
-          duration: 1000,
-          // Default options for specific types
-          success: {
-            duration: 5000,
-            theme: {
-              primary: "green",
-              secondary: "black",
-            },
-          },
-          error: {
-            duration: 5000,
-            theme: {
-              primary: "green",
-              secondary: "black",
-            },
-          },
-        }}
-      />
+      <Toaster {...toastProps} />
     </UserContext.Provider>
   );
 }

@@ -4,7 +4,7 @@ export default function Home() {
   const router = useRouter();
   return (
     <>
-      <div className="grid grid-cols-2 bg-gray-50 h-full z-2">
+      <div className="grid grid-cols-2 bg-gray-50 z-2">
         <div className="grid-rows-4">
           <div className="flex jusitfy-center text-7xl pt-32 px-4 font-poppins">
             Invest Together.
