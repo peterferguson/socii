@@ -1,0 +1,8 @@
+{
+  "version": "9.10.0",
+  "firestore": {
+    "version": "1.11.14",
+    "path": "socii-firestore-backup",
+    "metadata_file": "socii-firestore-backup/socii-firestore-backup.overall_export_metadata"
+  }
+}

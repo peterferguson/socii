@@ -1,0 +1,37 @@
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/uWYXwR0FvtfrWPFpucqP",
+    "assetRef": "tickers/US88160R1014",
+    "orderType": "BUY",
+    "price": 420.00,
+    "shares": 1
+}
+
+### 
+
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/uWYXwR0FvtfrWPFpucqP",
+    "assetRef": "tickers/US0378331005",
+    "orderType": "BUY",
+    "price": 130.00,
+    "shares": 1
+}
+
+###
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/uWYXwR0FvtfrWPFpucqP",
+    "assetRef": "tickers/US0378331005",
+    "orderType": "SELL",
+    "price": 135.00,
+    "shares": 0.5
+}
+
+###

@@ -5,15 +5,34 @@ service cloud.firestore {
       allow read, write: if
           request.time < timestamp.date(2021, 4, 30);
     
-    // Payment ledger
-    match /payments/{payments} {
+    match /groups/{groupId} {
+      allow read, create: if request.time < timestamp.date(2021, 4, 30);
+
+        // Explicitly define rules for the 'trades' subcollection
+        // * Trades ledger
+        match /trades/{tradeId} {
+          allow read, create: if request.auth != null && request.auth.uid == userId;
+          allow delete: if false;
+          allow update: if false;
+        }
+        // TODO Add requirements that the assetRef exists, price > 0 & shares > 0
+        
+        // Explicitly define rules for the 'holdings' subcollection
+        match /holdings/{assetId} {
+          allow read, update, create: if request.auth != null && request.auth.uid == userId;
+          allow delete: if false;
+        }
+    }
+
+    // // * Payment ledger
+    // match /payments/{payments} {
       
-      // Replace with checks on the count and the user id
-      allow create: if request.auth != null 
-                    && request.auth.uid == userId 
-                    && request.resource.data.count > 0;
-      allow update: if false;
-      allow delete: if false;
+    //   // Replace with checks on the count and the user id
+    //   allow create: if request.auth != null 
+    //                 && request.auth.uid == userId 
+    //                 && request.resource.data.count > 0;
+    //   allow update: if false;
+    //   allow delete: if false;
 
     }
   }
