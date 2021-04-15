@@ -35,3 +35,15 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/uWYXwR0FvtfrWPFpucqP",
+    "assetRef": "tickers/US0378331005",
+    "orderType": "SELL",
+    "price": 125.00,
+    "shares": 0.25
+}
+
+###

@@ -144,12 +144,12 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
   const tradeRef = await firestore
     .collection(`${requiredArgs.executorRef}/trades`)
     .doc();
-
-  batch.set(tradeRef, {
+  
+    var tradeData = {
     ...optionalArgs,
     ...requiredArgs,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
-  });
+  };
 
   // * Update the holdings avgPrice & shares
   const holdingRef = firestore
@@ -161,7 +161,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
     : -1;
 
   // ! We keep holdings which have zero shares in order to easily identify all previous
-  // ! holdings of the client without needing to count over trades. This is imposed in the 
+  // ! holdings of the client without needing to count over trades. This is imposed in the
   // ! firestore rules.
 
   // ! On selling shares the cost basis is not affected & so only the shares is changed
@@ -173,18 +173,26 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
   if (doc.exists) {
     const currentShares = doc.get("shares");
     const currentAvgPrice = doc.get("avgPrice");
-    const newAvgPrice = negativeEquityMultiplier + 1
-      ? (currentAvgPrice * currentShares +
-          requiredArgs.price * requiredArgs.shares) /
-        (currentShares + requiredArgs.shares)
-      : currentAvgPrice;
+    const newAvgPrice =
+      negativeEquityMultiplier + 1
+        ? (currentAvgPrice * currentShares +
+            requiredArgs.price * requiredArgs.shares) /
+          (currentShares + requiredArgs.shares)
+        : currentAvgPrice;
+
+    // * Add profit to a sell trade on a current holding
+    if (!(negativeEquityMultiplier + 1)) {
+      tradeData["pnlPercentage"] =
+        (100 * (requiredArgs.price - currentAvgPrice)) / currentAvgPrice;
+    }
+
     batch.update(holdingRef, {
       avgPrice: newAvgPrice,
       shares: admin.firestore.FieldValue.increment(sharesIncrement),
       lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
     });
   } else {
-    functions.logger.log('Adding a new holding!');
+    functions.logger.log("Adding a new holding!");
     batch.set(holdingRef, {
       assetRef,
       avgPrice: requiredArgs.price / requiredArgs.shares,
@@ -193,6 +201,8 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
       lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
     });
   }
+
+  batch.set(tradeRef, tradeData);
 
   const batchResponse = await batch.commit();
   res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
