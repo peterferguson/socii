@@ -1,10 +1,28 @@
 from time import sleep
+import json
+from typing import Union
+import requests
+
 import yahooquery as yq
 from rich import print
 import firebase_admin
 from firebase_admin import firestore, storage
-import json
 from tqdm import tqdm
+
+# Helper Functions
+def willItFloat(string: str) -> Union[str, float]:
+    try:
+        return float(string)
+    except ValueError:
+        return string
+
+
+def camelCase(string: str) -> str:
+    return (
+        string[0].lower() + string[1:]
+        if not all(x.isupper() for x in string[:2])
+        else string
+    )
 
 
 def yahooData(isin: str, exchanges=yq.get_exchanges().to_dict("records")):
@@ -60,18 +78,37 @@ def yahooData(isin: str, exchanges=yq.get_exchanges().to_dict("records")):
     }
 
 
-def uploadYahooDataToFirestore(isin: str, is_popular: bool = False):
+def yahooDataToFirestore(isin: str, is_popular: bool = False):
     data = yahooData(isin)
     if is_popular:
         data = {**data, **{"isPopular": True}}
     client.document(f"tickers/{isin}").set(data)
 
 
-def yahooSummary(ticker: str):
-    pass
+def alphaVantageDataToFirestore(
+    ticker: str, query_params: dict[str, str] = {"function": "OVERVIEW"}
+):
+    base_url = "https://www.alphavantage.co/query?"
+    api_key = "&apikey=E9W8LZBTXVYZ31IO"
+    symbol = f"&symbol={ticker}"
+    params = "&".join([f"{param}={value}" for param, value in query_params.items()])
+
+    data = requests.get(base_url + params + symbol + api_key).json()
+
+    if "note" in data and "Alpha Vantange" in data['note']:
+        # API call limit reached ... return without writing to Firestore
+        print(f"API call limit reached for {ticker}")
+        return
+
+    data = {camelCase(k): willItFloat(v) for k, v in data.items() if "None" not in v}
+    
+    data["lastUpdate"] = firestore.SERVER_TIMESTAMP
+
+    isin = tickerToISIN(ticker)
+    client.document(f"tickers/{isin}/data/alphaVantage").set(data)
 
 
-def uploadYahooSummaryToFirestore(ticker: str = ""):
+def yahooSummaryToFirestore(ticker: str = ""):
     isin = tickerToISIN(ticker)
 
     ticker_ref = yq.Ticker(ticker)
@@ -144,7 +181,7 @@ def trading212TickersToFireStore():
             if (isin := ticker.get("isin")) and isin[:2] not in ("GB", "US")
         ]
     for isin in tqdm(ticker_isins):
-        uploadYahooDataToFirestore(isin)
+        yahooDataToFirestore(isin)
         sleep(1)
 
 
@@ -203,11 +240,14 @@ if __name__ == "__main__":
     # for ticker in popular_tickers:
     #     isin = tickerToISIN(ticker)
     #     if isin:
-    #         uploadYahooDataToFirestore(isin, is_popular=True)
+    #         yahooDataToFirestore(isin, is_popular=True)
 
-    # * Upload summary detail
+    # # * Upload yahoo data
+    # # TODO : Set up cloud function to update these every so often
+    # for ticker in tqdm(popular_tickers):
+    #     yahooSummaryToFirestore(ticker=ticker)
+
+    # * Upload alpha vantage data
     # TODO : Set up cloud function to update these every so often
     for ticker in tqdm(popular_tickers):
-        # if count > 1: break
-        uploadYahooSummaryToFirestore(ticker=ticker)
-        # break
+        alphaVantageDataToFirestore(ticker=ticker)

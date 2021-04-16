@@ -1,1 +1,9 @@
-GET https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=E9W8LZBTXVYZ31IO
+GET https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=E9W8LZBTXVYZ31IO
+###
+GET https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=TSLA&apikey=E9W8LZBTXVYZ31IO
+###
+GET https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=TSLA&interval=1min&ouptputsize=full&apikey=E9W8LZBTXVYZ31IO
+###
+GET https://www.alphavantage.co/query?function=OVERVIEW&symbol=TSLA&apikey=E9W8LZBTXVYZ31IO
+###
+GET https://www.alphavantage.co/query?function=OVERVIEW&apikey=E9W8LZBTXVYZ31IO&symbol=TSLA
