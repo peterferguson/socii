@@ -82,6 +82,7 @@ export default function TickerPage(props) {
     // <div className="flex h-full w-full ">
     <>
       {/* Card Component Start */}
+      {/* Market state with some nice symbols like sun & moon for open & closed plus info on last updated */}
       <div className="relative p-8">
         <div className="bg-white p-6 rounded-lg shadow-lg w-1/4">
           <div className="flex items-baseline">
