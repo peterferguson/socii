@@ -186,12 +186,12 @@ if __name__ == "__main__":
 
     # uploadLogoLocation()
     popular_tickers = [
-        # "TSLA",
-        # "ZM",
-        # "AMZN",
-        # "NFLX",
-        # "NVDA",
-        # "AAPL",
+        "TSLA",
+        "ZM",
+        "AMZN",
+        "NFLX",
+        "NVDA",
+        "AAPL",
         "SPOT",
         "UBER",
         "BABA",
