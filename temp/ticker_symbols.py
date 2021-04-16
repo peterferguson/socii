@@ -197,14 +197,12 @@ def isinToTicker(isin: str) -> str:
     return results[0].to_dict()["tickerSymbol"] if results else None
 
 
-def logoLocation():
+def makeLogoPublic(isin: str):
     # Access storage bucket
     bucket = storage.bucket()
-    for blob in bucket.list_blobs():
-        if "logos" in blob.name:
-            isin = blob.name.split("/")[-1].split(".")[0]
-            # print(blob.make_public())
-            print(blob.public_url)
+    blob = bucket.blob(f"logos/{isin}.png")
+    blob.make_public()
+    print(blob.public_url)
 
 
 if __name__ == "__main__":
@@ -221,7 +219,6 @@ if __name__ == "__main__":
 
     client = firestore.client()
 
-    # uploadLogoLocation()
     popular_tickers = [
         "TSLA",
         "ZM",
@@ -241,13 +238,18 @@ if __name__ == "__main__":
     #     isin = tickerToISIN(ticker)
     #     if isin:
     #         yahooDataToFirestore(isin, is_popular=True)
+    
+    # # * Make popular tickers
+    # for ticker in popular_tickers:
+    #     isin = tickerToISIN(ticker)
+    #     makeLogoPublic(isin)
 
     # # * Upload yahoo data
     # # TODO : Set up cloud function to update these every so often
     # for ticker in tqdm(popular_tickers):
     #     yahooSummaryToFirestore(ticker=ticker)
 
-    # * Upload alpha vantage data
-    # TODO : Set up cloud function to update these every so often
-    for ticker in tqdm(popular_tickers):
-        alphaVantageDataToFirestore(ticker=ticker)
+    # # * Upload alpha vantage data
+    # # TODO : Set up cloud function to update these every so often
+    # for ticker in tqdm(popular_tickers):
+    #     alphaVantageDataToFirestore(ticker=ticker)
