@@ -1,15 +1,13 @@
 import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallCardComponent from "@components/Card";
-// import styles from "@styles/Home.module.css";
-import { firestore } from "@lib/firebase";
-import { useEffect, useState } from "react";
-import useFetch from "react-fetch-hook";
-import { useRouter } from "next/router";
-import { toast } from "react-hot-toast";
+import { firestore, tickerToISIN, firebaseConfig } from "@lib/firebase";
+import { useState } from "react";
 
 export async function getStaticProps({ params }) {
   const { tickerSymbol } = params; // TODO add username section here based on the users portfolio
+
+  const tickerISIN = await tickerToISIN(tickerSymbol);
 
   const functionType = "TIME_SERIES_DAILY";
   const apiKey = "E9W8LZBTXVYZ31IO";
@@ -19,14 +17,24 @@ export async function getStaticProps({ params }) {
   const data = await response.json();
 
   const dates = Object.keys(data["Time Series (Daily)"]);
-  // Return close for each date
+
+  // * Return close for each date
   const timeseries = dates.map((ts) => ({
     date: ts,
     close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
     volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
   }));
+
+  // * Get ticker data from firestore
+  const tickerRef = firestore
+    .collection("tickers")
+    .where("tickerSymbol", "==", tickerSymbol)
+    .limit(1);
+
+  const tickerData = (await tickerRef.get()).docs[0].data();
+
   return {
-    props: { timeseries, tickerSymbol },
+    props: { timeseries, tickerSymbol, tickerData, tickerISIN },
     revalidate: 3000,
   };
 }
@@ -44,43 +52,17 @@ export async function getStaticPaths(context) {
     };
   });
 
-  return { paths, fallback: false }; 
+  return { paths, fallback: false };
   //TODO change query to return only popular stocks & use fallback: true
   // TODO need to implement a popular flag on the tickers to ensure only some are pre-rendered!
   // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 }
 
 export default function TickerPage(props) {
-
   const [colorType, setColorType] = useState("typeA");
   const [showTradingView, setShowTradingView] = useState(false);
-  const [companyLogoUrl, setCompanyLogoUrl] = useState(undefined);
 
   // TODO: Need to get the ticker logo display working
-
-  // getLogoUrlFromTicker(props.tickerSymbol).then((url) => {
-  //   setCompanyLogoUrl(url);
-  //   console.log(url);
-  //   console.log(companyLogoUrl);
-  // });
-
-  // toast.promise(
-  //   getLogoUrlFromTicker(props.tickerSymbol),
-  //   {
-  //     loading: 'Loading',
-  //     success: (url) => `Successfully saved ${url}`,
-  //     error: (err) => `This just happened: ${err.toString()}`,
-  //   },
-  //   {
-  //     style: {
-  //       minWidth: '250px',
-  //     },
-  //     success: {
-  //       duration: 5000,
-  //       icon: '🔥',
-  //     },
-  //   }
-  // );
 
   const colorRanges = {
     typeA: ["#59E4EC", "#0D676C"],
@@ -92,17 +74,69 @@ export default function TickerPage(props) {
     typeB: "typeA",
   };
 
+  const dailyPctChange = 1;
+  const closePrice = 420;
+  const logoUrl = `https://storage.googleapis.com/sociiinvest.appspot.com/logos/${props.tickerISIN}.png`;
+
   return (
     // <div className="flex h-full w-full ">
     <>
+      {/* Card Component Start */}
+      <div className="relative p-8">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-1/4">
+          <div className="flex items-baseline">
+            <div className="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider">
+              ${props.tickerSymbol} &bull; {props.tickerData.shortName}
+            </div>
+            <span
+              className={`${
+                dailyPctChange > 0
+                  ? "bg-teal-200"
+                  : dailyPctChange < 0
+                  ? "bg-red-200"
+                  : "bg-gray-200"
+              } text-black text-xs px-2 mx-1 inline-block rounded-full  uppercase font-semibold tracking-wide`}
+            >
+              1D: {dailyPctChange.toFixed(2)}%
+            </span>
+          </div>
+
+          <div className="mt-1">
+            ${closePrice.toFixed(2)}
+            <span className="text-gray-600 text-sm"> /wk</span>
+          </div>
+          <h4 className="mt-1 text-xl font-semibold uppercase leading-tight truncate">
+            A random Title
+          </h4>
+          <div className="w-6/12 sm:w-4/12 px-4">
+            <img
+              src={logoUrl}
+              alt={`${props.tickerSymbol} logo`}
+              className="shadow-lg rounded-full max-w-full h-auto align-middle border-none"
+            />
+          </div>
+
+          <div className="mt-4">
+            <span className="text-teal-600 text-md font-semibold">
+              4/5 ratings{" "}
+            </span>
+            <span className="text-sm text-gray-600">
+              (based on 234 ratings)
+            </span>
+          </div>
+        </div>
+      </div>
+      {/* Card Component End */}
+
       <div className="flex-auto w-full h-1/8">
         <div className="flex w-full h-1/8">
-          {companyLogoUrl && (
+          {/* {props.companyLogoUrl && (
             <SmallCardComponent
-              // imageUrl={companyLogoUrl}
+              // imageUrl={props.companyLogoUrl}
+              imageUrl={logoUrl}
               headerText={props.tickerSymbol}
             />
-          )}
+          )} */}
           <button
             className="flex rounded p-2 m-4 text-white bg-brand hover:bg-brand-dark"
             onClick={() => setShowTradingView(!showTradingView)}

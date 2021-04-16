@@ -59,27 +59,45 @@ def yahooData(isin: str, exchanges=yq.get_exchanges().to_dict("records")):
 with open("/Users/peter/Projects/socii/serviceAccountKey.json", "r") as f:
     service_account_info = json.load(f)
 
-with open("/Users/peter/Projects/socii/temp/t212_tickers.json", "r") as f:
-    ticker_mapping = json.load(f)
-    ticker_isins = [
-        isin
-        for ticker in ticker_mapping
-        if (isin := ticker.get("isin")) and isin[:2] not in ("GB", "US")
-    ]
+def uploadYahooData():
 
-credentials = firebase_admin.credentials.Certificate(service_account_info)
+    with open("/Users/peter/Projects/socii/temp/t212_tickers.json", "r") as f:
+        ticker_mapping = json.load(f)
+        ticker_isins = [
+            isin
+            for ticker in ticker_mapping
+            if (isin := ticker.get("isin")) and isin[:2] not in ("GB", "US")
+        ]
+    
+    client = firestore.client()
 
-# initialize firebase admin
-firebase_app = firebase_admin.initialize_app(
-    credentials, options=dict(storageBucket="sociiinvest.appspot.com")
-)
+    for isin in tqdm(ticker_isins):
+        client.document(f"tickers/{isin}").set(yahooData(isin))
+        sleep(1)
 
-# # Access storage bucket
-# bucket  = storage.bucket()
-# blob = bucket.blob(f"logos/{isin}.png").download_to_filename(f"{isin}.png")
 
-client = firestore.client()
+def uploadLogoLocation():
+    # Access storage bucket
+    bucket  = storage.bucket()
+    client = firestore.client()
+    for blob in bucket.list_blobs():
+        if "logos" in blob.name:
+            isin = blob.name.split('/')[-1].split(".")[0]
+            # client.document(f"tickers/{isin}").set(yahooData(isin))
+            print(blob.make_public())
+            print(blob.public_url)
 
-for isin in tqdm(ticker_isins):
-    client.document(f"tickers/{isin}").set(yahooData(isin))
-    sleep(1)
+    # blob = bucket.blob(f"logos/{isin}.png").download_to_filename(f"{isin}.png")
+
+
+if __name__ == "__main__":
+
+    credentials = firebase_admin.credentials.Certificate(service_account_info)
+
+    # initialize firebase admin
+    firebase_app = firebase_admin.initialize_app(
+        credentials, options=dict(storageBucket="sociiinvest.appspot.com")
+    )
+
+
+    uploadLogoLocation()

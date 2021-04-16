@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
@@ -9,6 +11,9 @@ module.exports = {
           DEFAULT: "#0fa9e6",
           dark: "#0c87b8",
         },
+        gray: colors.blueGray,
+        teal: colors.teal,
+        orange: colors.orange,
       },
       fontFamily: {
         "work-sans": ['"Work Sans"', "sans-serif"],

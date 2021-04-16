@@ -1,24 +1,25 @@
 import firebase from "firebase/app";
-import "firebase/storage"
-import "firebase/auth"
-import "firebase/firestore"
+import "firebase/storage";
+import "firebase/auth";
+import "firebase/firestore";
 // import "firebase/performance"
 
 import toast from "react-hot-toast";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyD13i3isXoeOgerBKTdSae9pl4j1oBKoDg",
-    authDomain: "sociiinvest.firebaseapp.com",
-    projectId: "sociiinvest",
-    storageBucket: "sociiinvest.appspot.com",
-    messagingSenderId: "584929113403",
-    appId: "1:584929113403:web:73fa9920cb14c1cc19b31e",
-    measurementId: "G-F7JH023N5Q",
+export const firebaseConfig = {
+  apiKey: "AIzaSyD13i3isXoeOgerBKTdSae9pl4j1oBKoDg",
+  authDomain: "sociiinvest.firebaseapp.com",
+  projectId: "sociiinvest",
+  storageBucket: "sociiinvest.appspot.com",
+  messagingSenderId: "584929113403",
+  appId: "1:584929113403:web:73fa9920cb14c1cc19b31e",
+  measurementId: "G-F7JH023N5Q",
 };
 
-if (!firebase.apps.length) {
+if (!firebase.apps.some(app => app.name_ == "[DEFAULT]")) {
   firebase.initializeApp(firebaseConfig);
 }
+
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const firestore = firebase.firestore();
@@ -43,22 +44,21 @@ export async function getUserWithUsername(username) {
   return userDoc;
 }
 
-
 export const fromMillis = firebase.firestore.Timestamp.fromMillis;
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
-// Get first name from firebase user 
+// Get first name from firebase user
 /**`
  * Convert a ticker symbol to ISIN using firebase docs
  * @param  {string} ticker
  */
-export const userFirstName = (user) => user.displayName.split(" ")[0]
+export const userFirstName = (user) => user.displayName.split(" ")[0];
 
 /**`
  * Gets a ticker/{isin} document ISIN by querying the ticker
  * @param  {string} ticker
  */
- export async function tickerToISIN(ticker: string): string {
+export async function tickerToISIN(ticker: string): string {
   const tickerRef = firestore.collection("tickers");
   const query = tickerRef.where("tickerSymbol", "==", ticker).limit(1);
   const tickerDoc = (await query.get()).docs[0];
@@ -66,7 +66,7 @@ export const userFirstName = (user) => user.displayName.split(" ")[0]
 }
 
 export function signOut(router, firstname) {
-  toast.dismiss()
+  toast.dismiss();
   toast(`Bye for now ${firstname}!`, { icon: "👋" });
   auth.signOut();
   if (router) router.push("/enter");
