@@ -18,12 +18,12 @@ export default function Navigation(props) {
         {username && (
           <>
             <div>
-              <button
+              <Button
                 className="btn"
                 onClick={() => signOut(router, userFirstName(user))}
               >
-                <a>Sign Out</a>
-              </button>
+                Sign Out
+              </Button>
             </div>
             <NavItem
               href={`/${username}`}
@@ -33,17 +33,11 @@ export default function Navigation(props) {
           </>
         )}
         {!username && (
-          // <button
-          //   className="btn"
-          //   onClick={() => router.push("/enter")}
-          // >
-          //   <a className="font-work-sans">Login</a>
-          // </button>
           <Button
-            className="font-work-sans"
+            className="btn-transition"
             onClick={() => router.push("/enter")}
           >
-          Login
+            Login
           </Button>
         )}
       </NavigationButtons>

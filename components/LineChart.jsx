@@ -1,15 +1,31 @@
 import { FlexibleXYPlot, XAxis, YAxis, LineSeries, Crosshair } from "react-vis";
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import "react-vis/dist/style.css";
 
+const useWindowSize = () => {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
+};
+
+
 export default function LineChart(props) {
+  const [width, height] = useWindowSize();
   const [crosshairValue, setCrosshairValue] = useState(false);
   const strokeWidth = 2;
 
   const lineSeriesProps = {
     animation: true,
     // className: "mark-series-example",
-    color: props.colorType === "typeA" ? "#0D676C" : "#B52F93",
+    // color: props.colorType === "typeA" ? "#99f6e4" : "#fecaca",
+    color: props.colorType === "typeA" ? "#0fa9e6" : "#fecaca",
     colorRange: props.colorRanges[props.colorType],
     opacityType: "literal",
     strokeWidth,
@@ -28,10 +44,10 @@ export default function LineChart(props) {
     <>
       <FlexibleXYPlot
         onMouseLeave={() => setCrosshairValue(false)}
-        height={600}
-        // width={800}
+        height={height*0.6}
+        width={width*0.7}
         xType="time"
-        margin={{ left: 75, bottom: 75 }}
+        margin={{ left: 75, bottom: 75, right: 75, top: 10 }}
       >
         <XAxis
           tickLabelAngle={-75}
@@ -39,7 +55,7 @@ export default function LineChart(props) {
             return d.toLocaleDateString();
           }}
         />
-        <YAxis />
+        {/* <YAxis /> */}
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && (
           <Crosshair

@@ -1,6 +1,5 @@
 import {
   auth,
-  signOut,
   googleAuthProvider,
   userFirstName,
   facebookAuthProvider,
@@ -26,7 +25,7 @@ const BackdropFilter = dynamic(
 auth.onAuthStateChanged((user) => {
   if (user) {
     toast.dismiss();
-    router.push("/") // TODO: Direct to the users home page
+    router.push("/"); // TODO: Direct to the users home page
     toast.success(`Welcome ${userFirstName(user)}`);
   }
 });
@@ -34,15 +33,12 @@ auth.onAuthStateChanged((user) => {
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
 
-  // 1. user signed out <SignInButtons />
-  // 2. user signed in, but missing username <UsernameForm />
-  // 3. user signed in, has username <SignOutButton />
   return (
-    <main>
+    <main className="bg-gray-50">
       <Head title="Enter" description="Sign up for this amazing app!" />
-      <div className="py-3 max-w-xl mx-auto">
+      <div className="py-3 max-w-xl mx-6 sm:mx-auto">
         <BackdropFilter
-          className="px-4 py-8 bg-gray-50 shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
+          className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
           filter={"blur(10px) sepia(50%)"}
           canvasFallback={true}
           html2canvasOpts={{ allowTaint: true }}
@@ -87,7 +83,7 @@ export default function Enter(props) {
                 </div>
                 <button
                   type="submit"
-                  className="transform transition hover:-translate-y-0.5 rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white py-3 px-4 mb-3 leading-tight font-bold"
+                  className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white py-3 px-4 mb-3 leading-tight font-bold"
                   disabled={false}
                 >
                   Sign in
@@ -111,40 +107,23 @@ export default function Enter(props) {
 function SignInButtons() {
   const signInPopUp = async (authProvider) =>
     await auth.signInWithPopup(authProvider);
+
+  const signInOptions = [
+    { logo: GoogleLogo, provider: googleAuthProvider },
+    { logo: AppleLogo, provider: null },
+    { logo: TwitterLogo, provider: null },
+    { logo: FacebookLogo, provider: facebookAuthProvider },
+  ];
   return (
     <div className="flex justify-center p-8 space-x-8">
-      <GoogleLogo 
-      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
-      onClick={() => signInPopUp(googleAuthProvider)}
-      />
-      <AppleLogo 
-      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
-        onClick={() => null}
-      />
-      <TwitterLogo 
-      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
-        onClick={() => null}
-      />
-      <FacebookLogo 
-      className="w-14 h-14 justify-center transform transition hover:-translate-y-0.5 rounded m-2 p-2 border-solid border-2 border-gray-900"
-        onClick={() => signInPopUp(facebookAuthProvider)}
-      />
-    </div>
-  );
-}
-
-// Sign out button
-function SignOutComponent() {
-  const { user } = useContext(UserContext);
-  return (
-    <div className="">
-      <p>Hey {userFirstName}!</p>
-      <button
-        className="flex rounded m-2 p-2 text-gray-900 bg-gray-50 border-solid border-2 border-gray-300"
-        onClick={() => signOut(null, userFirstName(user))}
-      >
-        Sign Out
-      </button>
+      {signInOptions.map((option) => {
+        return (
+          <option.logo
+            className="w-14 h-14 justify-center btn-transition rounded m-2 p-2 border-solid border-2 border-gray-900"
+            onClick={() => signInPopUp(option.provider)}
+          />
+        );
+      })}
     </div>
   );
 }

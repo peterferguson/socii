@@ -19,6 +19,9 @@ module.exports = {
         "work-sans": ['"Work Sans"', "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
       },
+      fontSize: {
+        "tiny": "0.625rem"
+      },
       keyframes: {
         wiggle: {
           "0%, 100%": {
