@@ -23,10 +23,7 @@ export default function LineChart(props) {
 
   const lineSeriesProps = {
     animation: true,
-    // className: "mark-series-example",
-    // color: props.colorType === "typeA" ? "#99f6e4" : "#fecaca",
-    color: props.colorType === "typeA" ? "#0fa9e6" : "#fecaca",
-    colorRange: props.colorRanges[props.colorType],
+    color: "#0fa9e6",
     opacityType: "literal",
     strokeWidth,
     data: props.data.map((d) => {

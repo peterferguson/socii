@@ -52,7 +52,7 @@ function Logo() {
         <a className="text-4xl font-poppins">soc</a>
       </Link>
       <Link href="/">
-        <a className="text-4xl text-brand font-poppins">ii</a>
+        <a className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-brand-light font-poppins">ii</a>
       </Link>
     </div>
   );

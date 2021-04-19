@@ -121,7 +121,7 @@ export default function SearchCard(props) {
             <Configure hitsPerPage={1} />
             <DebouncedSearchBox delay={400} className="p-2 flex-1 max-w-sm" />
             <button className="" onClick={props.toggleSearchCard}>
-              <CrossIcon />
+              <CrossIcon className="w-6"/>
             </button>
           </div>
           <LoadingIndicator />

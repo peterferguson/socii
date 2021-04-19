@@ -11,6 +11,10 @@ module.exports = {
           DEFAULT: "#0fa9e6",
           dark: "#0c87b8",
         },
+        back: {
+          DEFAULT: "#0D5F78",
+          light: "#0E7B82"
+        },
         gray: colors.blueGray,
         teal: colors.teal,
         orange: colors.orange,
@@ -79,6 +83,9 @@ module.exports = {
         "fade-in-right": "fade-in-down 0.5s ease-out",
         "fade-in-left": "fade-in-up 0.5s ease-out",
       },
+      spacing:{
+        "0.5": "0.125rem",
+      }
     },
   },
   variants: {

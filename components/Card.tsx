@@ -1,3 +1,10 @@
+import { string } from "prop-types";
+
+SmallCardComponent.propTypes = {
+  imageUrl: string,
+  headerText: string,
+  message: string,
+};
 
 // Requires at least imageUrl to be passed
 export default function SmallCardComponent(props) {
