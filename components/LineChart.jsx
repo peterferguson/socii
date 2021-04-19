@@ -33,7 +33,8 @@ export default function LineChart(props) {
       };
     }),
     onNearestX: (d) => setCrosshairValue(d),
-    style: { fill: "none" },
+    // style: { fill: "none" },
+    className: {...props.className}
   };
 
   

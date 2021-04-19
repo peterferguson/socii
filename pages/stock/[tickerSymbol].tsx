@@ -1,4 +1,5 @@
 import LineChart from "@components/LineChart";
+import ChartCard from "@components/ChartCard";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallAssetCard from "@components/SmallAssetCard";
 import { logoUrl } from "@utils/helper";
@@ -122,12 +123,19 @@ export default function TickerPage(props) {
 
   return (
     <>
-      <SmallAssetCard 
-      logoUrl={logoUrl(props.tickerData.ISIN)}
-      tickerSymbol={props.tickerSymbol}
-      shortName={props.tickerData.shortName}
-      dailyPctChange={dailyPctChange}
-      monthlyPctChange={monthlyPctChange}
+      <SmallAssetCard
+        logoUrl={logoUrl(props.tickerData.ISIN)}
+        tickerSymbol={props.tickerSymbol}
+        shortName={props.tickerData.shortName}
+        dailyPctChange={dailyPctChange}
+        monthlyPctChange={monthlyPctChange}
+      />
+
+      <ChartCard
+        logoUrl={logoUrl(props.tickerData.ISIN)}
+        tickerSymbol={props.tickerSymbol}
+        shortName={props.tickerData.shortName}
+        data={props.timeseries}
       />
       <div className="flex-auto w-full h-1/8 bg-gray-50">
         <div className="flex w-full h-1/8">
@@ -140,19 +148,19 @@ export default function TickerPage(props) {
         </div>
       </div>
       <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
-      <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
-        {showTradingView ? (
-          <TradingViewChart tickerSymbol={props.tickerSymbol} />
-        ) : props.timeseries ? (
-          <LineChart
-            tickerSymbol={props.tickerSymbol}
-            data={props.timeseries}
-          />
-        ) : (
-          <div>Loading</div>
-        )}
+        <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
+          {showTradingView ? (
+            <TradingViewChart tickerSymbol={props.tickerSymbol} />
+          ) : props.timeseries ? (
+            <LineChart
+              tickerSymbol={props.tickerSymbol}
+              data={props.timeseries}
+            />
+          ) : (
+            <div>Loading</div>
+          )}
           <span className="z-50 w-12 text-xl h-4">{previousClose}</span>
-      </div>
+        </div>
       </div>
     </>
   );

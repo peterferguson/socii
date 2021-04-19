@@ -24,6 +24,15 @@ service cloud.firestore {
         }
     }
 
+    match /users/{userId} {
+      allow read, create: if request.time < timestamp.date(2021, 4, 30);
+
+      match /invites/{referralCode} {
+        allow read, update, create: if request.auth != null && request.auth.uid == userId;
+        allow delete: if false;
+      }
+    }
+
     // // * Payment ledger
     // match /payments/{payments} {
       

@@ -45,52 +45,54 @@ export default function Enter(props) {
   return (
     <main className="bg-gray-50 h-screen">
       <Head title="Enter" description="Sign up for this amazing app!" />
+        <div className="flex items-center justify-center min-h-screen">
       <div className="py-3 max-w-xl mx-6 sm:mx-auto">
         {!referred && (
           <div className="w-full text-center py-8 text-4xl font-bold font-work-sans">
             Have you got a Referral?
           </div>
         )}
-        <BackdropFilter
-          className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
-          filter={"blur(10px) sepia(50%)"}
-          canvasFallback={true}
-          // html2canvasOpts={{ allowTaint: true }}
-        >
-          <div className="max-w-md mx-auto">
-            {!referred && (
-              <>
-                {/* <div className="w-full text-center pt-8 text-3xl font-bold font-work-sans">
+          <BackdropFilter
+            className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
+            filter={"blur(10px) sepia(50%)"}
+            canvasFallback={true}
+            // html2canvasOpts={{ allowTaint: true }}
+          >
+            <div className="max-w-md mx-auto">
+              {!referred && (
+                <>
+                  {/* <div className="w-full text-center pt-8 text-3xl font-bold font-work-sans">
                   Have you got a Referral?
                 </div> */}
-                <div className="w-full text-center text-md pt-4 font-bold font-work-sans">
-                  Sorry this is a pre-Alpha (version 0.0) limited release.
-                </div>
-                <div className="w-full text-center text-md pb-4 font-bold font-work-sans">
-                  You will need a referral code to continue
-                </div>
-                <ReferralVerification referred setReferred={setReferred} />
-              </>
-            )}
-            {referred && (
-              <>
-                <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
-                  Sign Up!
-                </div>
-                <div className="">
-                  <PhoneSignUp />
-                </div>
-                <div className="leading-6 sm:text-lg sm:leading-7"></div>
-                <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
-                  <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
-                    Or continue with
-                  </span>
-                </div>
-                {!user && !username && <SignInButtons />}{" "}
-              </>
-            )}
-          </div>
-        </BackdropFilter>
+                  <div className="w-full text-center text-md pt-4 font-bold font-work-sans">
+                    Sorry this is a pre-Alpha (version 0.0) limited release.
+                  </div>
+                  <div className="w-full text-center text-md pb-4 font-bold font-work-sans">
+                    You will need a referral code to continue
+                  </div>
+                  <ReferralVerification setReferred={setReferred} />
+                </>
+              )}
+              {referred && (
+                <>
+                  <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
+                    Sign Up!
+                  </div>
+                  <div className="">
+                    <PhoneSignUp />
+                  </div>
+                  <div className="leading-6 sm:text-lg sm:leading-7"></div>
+                  <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
+                    <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
+                      Or continue with
+                    </span>
+                  </div>
+                  {!user && !username && <SignInButtons />}{" "}
+                </>
+              )}
+            </div>
+          </BackdropFilter>
+        </div>
       </div>
     </main>
   );
@@ -112,7 +114,8 @@ function SignInButtons() {
       {signInOptions.map((option) => {
         return (
           <option.logo
-            className="w-14 h-14 justify-center btn-transition rounded m-2 p-2 border-solid border-2 border-gray-900"
+            className="w-14 h-14 justify-center btn-transition rounded m-2 p-2
+            border-solid border-2 border-gray-900"
             onClick={() => signInPopUp(option.provider)}
           />
         );
@@ -122,7 +125,7 @@ function SignInButtons() {
 }
 
 // * Referral Code mechanism
-function ReferralVerification({ referred, setReferred }) {
+function ReferralVerification({ setReferred }) {
   const [invited, setInvited] = useState(undefined); // * need this and referred as referred was updating to true before being set to false for some reason
   const [code, setCode] = useState("");
 
@@ -136,7 +139,9 @@ function ReferralVerification({ referred, setReferred }) {
         ref.get().then(({ empty }) => {
           setInvited(!empty);
           setReferred(!empty);
-          if (empty) {throw "nope"}
+          if (empty) {
+            throw "nope";
+          }
         }),
         {
           loading: "Checking...",
@@ -248,7 +253,7 @@ function PhoneNumberVerification({ recaptcha }) {
          border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
          focus:bg-gray-50 focus:border-gray-500"
         >
-          <div className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 align-middle">
+          <div className="bg-gray-100 h-full text-sm sm:text-base text-black pt-0.5 align-middle">
             +44
           </div>
           <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
@@ -256,7 +261,7 @@ function PhoneNumberVerification({ recaptcha }) {
             className="bg-gray-100 w-2/3 sm:w-full  appearance-none focus:outline-none  "
             type="tel"
             maxLength={10}
-            placeholder="79 1234 5678"
+            placeholder="7912345678"
             onChange={(e) => setDigits(e.target.value)}
           />
           <div
@@ -305,17 +310,17 @@ function PhoneNumberVerification({ recaptcha }) {
 // TODO: Implement this into the UI
 function SendInvites({ user }) {
   const numberOfInvites = 2; // * The number of invites available to each user
-  const query = firestore.collection("invites").where("sender", "==", user.uid);
+  const query = firestore.collection(`users/${user.uid}/invites`);
   const [invites] = useCollectionData(query);
 
   const [digits, setDigits] = useState("");
   const phoneNumber = `+44${digits}`;
 
   const sendInvite = async () => {
-    const inviteRef = firestore.collection("invites").doc(phoneNumber);
+    const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc();
     await inviteRef.set({
       phoneNumber,
-      sender: user.uid,
+      referralCode: inviteRef.id,
     });
   };
 

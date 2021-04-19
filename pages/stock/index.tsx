@@ -27,7 +27,7 @@ export default function Stock() {
   return (
     <div>
       {!isLoading && timeseries ? (
-        <LineChart tickerSymbol={tickerSymbol} data={timeseries} />
+        <LineChart tickerSymbol={tickerSymbol} data={timeseries} className="items-center justify-center"/>
       ) : (
         <div>Loading</div>
       )}
