@@ -1,7 +1,9 @@
 from time import sleep
 import json
 from typing import Union
+import re
 import requests
+from datetime import datetime
 
 import yahooquery as yq
 from rich import print
@@ -95,17 +97,64 @@ def alphaVantageDataToFirestore(
 
     data = requests.get(base_url + params + symbol + api_key).json()
 
-    if "note" in data and "Alpha Vantange" in data['note']:
+    if "note" in data and "Alpha Vantange" in data["note"]:
         # API call limit reached ... return without writing to Firestore
         print(f"API call limit reached for {ticker}")
         return
 
     data = {camelCase(k): willItFloat(v) for k, v in data.items() if "None" not in v}
-    
+
     data["lastUpdate"] = firestore.SERVER_TIMESTAMP
 
     isin = tickerToISIN(ticker)
     client.document(f"tickers/{isin}/data/alphaVantage").set(data)
+
+
+def alphaVantageTimeseriesToFirestore(
+    ticker: str, query_params: dict[str, str] = {"function": "TIME_SERIES_DAILY"}
+):
+    isin = tickerToISIN(ticker)
+    base_url = "https://www.alphavantage.co/query?"
+    api_key = "&apikey=E9W8LZBTXVYZ31IO"
+    symbol = f"&symbol={ticker}"
+    params = "&".join([f"{param}={value}" for param, value in query_params.items()])
+
+    data = requests.get(base_url + params + symbol + api_key).json()
+
+    if "note" in data and "Alpha Vantange" in data["note"]:
+        # API call limit reached ... return without writing to Firestore
+        print(f"API call limit reached for {ticker}")
+        return
+
+    timeseries_key = [key for key in data.keys() if "time series" in key.lower()][0]
+
+    timeseries = data[timeseries_key]
+
+    batch = client.batch()
+
+    for count, (ts, ohlc) in enumerate(timeseries.items()):
+        if count > 499:
+            batch.commit()
+            batch = client.batch()
+
+        _date = datetime.strptime(ts, "%Y-%m-%d")
+
+        batch.set(
+            client.document(f"tickers/{isin}/timeseries/{int(_date.timestamp())}"),
+            {
+                **{
+                    re.sub("[0-9.\n]", " ", desc).strip(): float(value)
+                    for desc, value in ohlc.items()
+                },
+                **{"timestamp": _date},
+            },
+        )
+
+    batch.update(
+        client.document(f"tickers/{isin}"),
+        {"timeseriesLastUpdated": firestore.SERVER_TIMESTAMP},
+    )
+    batch.commit()
 
 
 def yahooSummaryToFirestore(ticker: str = ""):
@@ -169,7 +218,7 @@ def yahooSummaryToFirestore(ticker: str = ""):
         },
     }
 
-    client.document(f"tickers/{isin}/data/yahoo").set(data)
+    client.document(f"tickers/{isin}/times/yahoo").set(data)
 
 
 def trading212TickersToFireStore():
@@ -205,6 +254,15 @@ def makeLogoPublic(isin: str):
     print(blob.public_url)
 
 
+def uploadLogoUrl(ticker: str):
+    isin = tickerToISIN(ticker)
+    client.document(f"tickers/{isin}").update(
+        {
+            "logoUrl": f"https://storage.googleapis.com/sociiinvest.appspot.com/logos/{isin}.png"
+        }
+    )
+
+
 if __name__ == "__main__":
 
     with open("/Users/peter/Projects/socii/serviceAccountKey.json", "r") as f:
@@ -238,7 +296,7 @@ if __name__ == "__main__":
     #     isin = tickerToISIN(ticker)
     #     if isin:
     #         yahooDataToFirestore(isin, is_popular=True)
-    
+
     # # * Make popular tickers
     # for ticker in popular_tickers:
     #     isin = tickerToISIN(ticker)
@@ -253,3 +311,20 @@ if __name__ == "__main__":
     # # TODO : Set up cloud function to update these every so often
     # for ticker in tqdm(popular_tickers):
     #     alphaVantageDataToFirestore(ticker=ticker)
+
+    # # * Upload alpha vantage timeseries (monthly)
+    # # TODO : Set up cloud function to update these every so often
+    # for ticker in tqdm(popular_tickers):
+    #     alphaVantageTimeseriesToFirestore(
+    #         ticker=ticker, query_params={"function": "TIME_SERIES_MONTHLY"}
+    #     )
+    #     alphaVantageTimeseriesToFirestore(
+    #         ticker=ticker, query_params={"function": "TIME_SERIES_DAILY"}
+    #     )
+    #     alphaVantageTimeseriesToFirestore(ticker=ticker)
+    #     sleep(60)
+
+    # * Upload storage logo urls to firestore docs
+    # TODO : Set up cloud function to update these every so often
+    for ticker in tqdm(popular_tickers):
+        uploadLogoUrl(ticker)
