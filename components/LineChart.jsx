@@ -28,13 +28,14 @@ export default function LineChart(props) {
     strokeWidth,
     data: props.data.map((d) => {
       return {
-        x: typeof d.date != "Date" ? new Date(d.date) : d.date,
+        x: typeof d.timestamp != "Date" ? new Date(d.timestamp) : d.timestamp,
         y: d.close,
       };
     }),
     onNearestX: (d) => setCrosshairValue(d),
     // style: { fill: "none" },
-    className: {...props.className}
+    className: {...props.className},
+
   };
 
   

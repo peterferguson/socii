@@ -1,9 +1,8 @@
 import LineChart from "@components/LineChart";
-import ChartCard from "@components/ChartCard";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallAssetCard from "@components/SmallAssetCard";
-import { logoUrl } from "@utils/helper";
-import { firestore } from "@lib/firebase";
+import { alphaVantageData, logoUrl, pctChange } from "@utils/helper";
+import { firestore, tickerToISIN } from "@lib/firebase";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -11,19 +10,16 @@ export async function getStaticProps({ params }) {
   // TODO add username section here based on the users portfolio
   const { tickerSymbol } = params;
 
-  // * Get ticker data from firestore
-  const tickerRef = firestore
-    .collection("tickers")
-    .where("tickerSymbol", "==", tickerSymbol)
-    .limit(1);
+  const isin = await tickerToISIN(tickerSymbol);
 
+  // * Get ticker data from firestore
+  const tickerRef = firestore.doc(`tickers/${isin}`);
   const tickerDoc = await tickerRef.get();
 
   let tickerData;
   try {
-    tickerData = tickerDoc.docs[0].data();
+    tickerData = tickerDoc.data();
   } catch (e) {
-    // console.log(e);
     return {
       redirect: {
         destination: "/404",
@@ -35,6 +31,21 @@ export async function getStaticProps({ params }) {
   // * Use the tickerAdded field to know when the symbol was added to the site
   const tickerAdded = JSON.stringify(tickerData.timestamp.toDate());
   delete tickerData.timestamp;
+  delete tickerData.timeseriesLastUpdated;
+
+  const timeseriesRef = tickerRef.collection("timeseries").orderBy("timestamp", "desc");
+
+  var timeseriesDocs = (await timeseriesRef.get()).docs;
+
+  let timeseries;
+  if (timeseriesDocs.length === 0) {
+    // * Get timeseries data from api
+    timeseries = await alphaVantageData(tickerSymbol);
+  }
+
+  timeseries = timeseriesDocs.map((doc) => {
+    return { ...doc.data(), timestamp: parseInt(doc.id)*1000 };
+  });
 
   // * Get summary data from firestore
   const summaryRef = firestore.doc(
@@ -55,23 +66,6 @@ export async function getStaticProps({ params }) {
   const tickerSummary = tickerSummaryDoc.data();
   const summaryLastUpdated = JSON.stringify(tickerSummary.lastUpdate.toDate());
   delete tickerSummary.lastUpdate;
-
-  // * Get timeseries data from api
-  const functionType = "TIME_SERIES_DAILY";
-  const apiKey = "E9W8LZBTXVYZ31IO";
-  const fetchUrl = `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`;
-
-  const response = await fetch(fetchUrl);
-  const data = await response.json();
-
-  const dates = Object.keys(data["Time Series (Daily)"]);
-
-  // * Return close for each date
-  const timeseries = dates.map((ts) => ({
-    date: ts,
-    close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
-    volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
-  }));
 
   return {
     props: {
@@ -116,29 +110,20 @@ export default function TickerPage(props) {
   const twicePreviousClose = props.timeseries[1].close;
   const previousMonthClose = props.timeseries[21].close;
 
-  const dailyPctChange =
-    ((previousClose - twicePreviousClose) * 100) / twicePreviousClose;
-  const monthlyPctChange =
-    ((previousClose - previousMonthClose) * 100) / previousMonthClose;
+  const dailyPctChange = pctChange(previousClose, twicePreviousClose);
+  const monthlyPctChange = pctChange(previousClose, previousMonthClose);
 
   return (
     <>
-      <SmallAssetCard
-        logoUrl={logoUrl(props.tickerData.ISIN)}
-        tickerSymbol={props.tickerSymbol}
-        shortName={props.tickerData.shortName}
-        dailyPctChange={dailyPctChange}
-        monthlyPctChange={monthlyPctChange}
-      />
-
-      <ChartCard
-        logoUrl={logoUrl(props.tickerData.ISIN)}
-        tickerSymbol={props.tickerSymbol}
-        shortName={props.tickerData.shortName}
-        data={props.timeseries}
-      />
-      <div className="flex-auto w-full h-1/8 bg-gray-50">
-        <div className="flex w-full h-1/8">
+      <div className="flex flex-row w-full h-1/8 bg-gray-50">
+        <SmallAssetCard
+          logoUrl={props.tickerData.logoUrl}
+          tickerSymbol={props.tickerSymbol}
+          shortName={props.tickerData.shortName}
+          dailyPctChange={dailyPctChange}
+          monthlyPctChange={monthlyPctChange}
+        />
+        <div className="flex w-full h-20">
           <button
             className="flex rounded shadow-lg p-2 m-4 text-white bg-brand hover:bg-brand-dark"
             onClick={() => setShowTradingView(!showTradingView)}

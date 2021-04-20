@@ -3,11 +3,11 @@ import { pnlColour } from "@utils/helper";
 export default function SmallAssetkCard(props) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="relative pl-8 pt-4 bg-gray-50">
-      <div className="bg-white p-4 rounded-lg shadow-lg w-1/3 sm:w-52">
+    <div className="flex-none pl-8 pt-4 bg-gray-50">
+      <div className="bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52">
         <div className="items-center justify-center sm:flex">
           <img
-            className="shadow-lg rounded-full h-auto w-16 ml-4 sm:ml-0"
+            className="shadow-lg rounded-full h-auto w-16 mx-auto"
             src={props.logoUrl}
             alt={`${props.tickerSymbol} logo`}
           />
