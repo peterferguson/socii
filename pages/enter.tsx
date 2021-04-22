@@ -15,9 +15,10 @@ import MailIcon from "@icons/mail.svg";
 import CheckIcon from "@icons/check.svg";
 import { UserContext } from "@lib/context";
 import Head from "@components/Head";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import debounce from "lodash.debounce";
 import router from "next/router";
 import { useState, useRef, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -34,61 +35,46 @@ const BackdropFilter = dynamic(
 auth.onAuthStateChanged((user) => {
   if (user) {
     toast.dismiss();
-    router.push("/"); // TODO: Direct to the users home page
+    router.push("/"); // TODO: Direct to the users home page / group page
     toast.success(`Welcome ${userFirstName(user)}`);
   }
 });
 
+// TODO: Update toast to mention the referral system for early users
+// TODO: Remove login action of login buttons if not verified
+// ? Should we REQUIRE that the user login with email
+// TODO: Add user info to users colleciton on sign up
+// TODO: Implement passwordless login
+// TODO: Implement account linking
+// TODO: Implement invite system
+
 export default function Enter(props) {
   const { user } = useContext(UserContext);
-  const [referred, setReferred] = useState(undefined);
 
   return (
     <main className="bg-gray-50 h-screen">
       <Head title="Enter" description="Sign up for this amazing app!" />
-        <div className="flex items-center justify-center min-h-screen">
-      <div className="py-3 max-w-xl mx-6 sm:mx-auto">
-        {/* {!referred && (
-          <div className="w-full text-center py-8 text-4xl font-bold font-work-sans">
-            Have you got a Referral?
-          </div>
-        )} */}
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="py-3 max-w-xl mx-6 sm:mx-auto">
           <BackdropFilter
             className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
             filter={"blur(10px) sepia(50%)"}
             canvasFallback={true}
-            // html2canvasOpts={{ allowTaint: true }}
           >
             <div className="max-w-md mx-auto">
-              {/* {!referred && (
-                <>
-                  <div className="w-full text-center text-md pt-4 font-bold font-work-sans">
-                    Sorry this is a pre-Alpha (version 0.0) limited release.
-                  </div>
-                  <div className="w-full text-center text-md pb-4 font-bold font-work-sans">
-                    You will need a referral code to continue
-                  </div>
-                  <ReferralVerification setReferred={setReferred} />
-                </>
-              )} */}
-              {!referred && (
-                <>
-                  <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
-                    Sign Up!
-                  </div>
-                  <div className="">
-                    {/* <PhoneSignUp /> */}
-                    <EmailSignUp />
-                  </div>
-                  <div className="leading-6 sm:text-lg sm:leading-7"></div>
-                  <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
-                    <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
-                      Or continue with
-                    </span>
-                  </div>
-                  {!user && <SignInButtons />}{" "}
-                </>
-              )}
+              <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
+                Sign Up!
+              </div>
+              <div className="">
+                <EmailSignUp />
+              </div>
+              <div className="leading-6 sm:text-lg sm:leading-7"></div>
+              <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
+                <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
+                  Or continue with
+                </span>
+              </div>
+              {!user && <SignInButtons />}
             </div>
           </BackdropFilter>
         </div>
@@ -123,70 +109,6 @@ function SignInButtons() {
   );
 }
 
-// * Referral Code mechanism
-function ReferralVerification({ setReferred }) {
-  const [invited, setInvited] = useState(undefined); // * need this and referred as referred was updating to true before being set to false for some reason
-  const [code, setCode] = useState("");
-
-  // Step 1 - Verify Invite
-  useEffect(() => {
-    if (code.length === 20) {
-      const ref = firestore
-        .collectionGroup("invites")
-        .where("referralCode", "==", code);
-      toast.promise(
-        ref.get().then(({ empty }) => {
-          setInvited(!empty);
-          setReferred(!empty);
-          if (empty) {
-            throw "nope";
-          }
-        }),
-        {
-          loading: "CheckIconing...",
-          success: "Hey you have been invited!",
-          error: "Sorry you haven't been invited yet 😞",
-        }
-      );
-    }
-  }, [code]);
-
-  return (
-    <>
-      <fieldset>
-        <p className="text-md font-semibold pb-2 font-work-sans">
-          Enter Your Referral Code
-        </p>
-        <div
-          className="appearance-none flex w-full bg-gray-100 text-gray-700 border
-         border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
-         focus:bg-gray-50 focus:border-gray-500"
-        >
-          <input
-            className="bg-gray-100 w-2/3 sm:w-full appearance-none focus:outline-none"
-            maxLength={20}
-            placeholder="Oh someones popular!"
-            onChange={(e) => setCode(e.target.value)}
-          />
-          <div
-            className={`bg-gray-100 text-sm sm:text-tiny ${
-              code.length === 20 && invited
-                ? "text-green-400 btn-transition"
-                : "text-red-400"
-            } p-0.5 align-middle`}
-          >
-            {code.length === 20 && invited ? (
-              <CheckIcon className="w-6" />
-            ) : (
-              <CrossIcon className="w-6" />
-            )}
-          </div>
-        </div>
-      </fieldset>
-    </>
-  );
-}
-
 // * Phone sign up & invite system
 function PhoneSignUp() {
   const [recaptcha, setRecaptcha] = useState(true); // ! Set to true for testing purposes
@@ -201,6 +123,88 @@ function PhoneSignUp() {
       verifier.verify().then(() => setRecaptcha(verifier));
     }
   }, []);
+  // * Verify the phone number exists
+  function PhoneNumberVerification({ recaptcha }) {
+    const [digits, setDigits] = useState("");
+    const [textConfirmationResult, setTextConfirmationResult] = useState(null);
+    const [code, setCode] = useState("");
+
+    const phoneNumber = `+44${digits}`;
+
+    // // Step 1 - Verify Invite
+    // useEffect(() => {
+    //   if (phoneNumber.length === 13) {
+    //     const ref = firestore.collection("invites").doc(phoneNumber);
+    //     ref.get().then(({ exists }) => {
+    //       setInvited(exists);
+    //     });
+    //   }
+    // }, [phoneNumber]);
+
+    // Step 2 - Sign in
+    const signInWithPhoneNumber = async () => {
+      setTextConfirmationResult(
+        await auth.signInWithPhoneNumber(phoneNumber, recaptcha)
+      );
+    };
+
+    // Step 3 - Verify SMS code
+    const verifyCode = async () => {
+      const result = await textConfirmationResult.confirm(code);
+      console.log(result.user);
+    };
+
+    return (
+      <div>
+        <fieldset>
+          <p className="text-md font-semibold pb-2 font-work-sans">
+            Enter a UK Phone Number
+          </p>
+          <div
+            className="appearance-none flex w-full bg-gray-100 text-gray-700 border
+           border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
+           focus:bg-gray-50 focus:border-gray-500"
+          >
+            <div className="bg-gray-100 h-full text-sm sm:text-base text-black pt-0.5 align-middle">
+              +44
+            </div>
+            <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
+            <input
+              className="bg-gray-100 w-2/3 sm:w-full  appearance-none focus:outline-none  "
+              type="tel"
+              maxLength={10}
+              placeholder="7912345678"
+              onChange={(e) => setDigits(e.target.value)}
+            />
+            <div
+              className={`bg-gray-100 text-sm sm:text-tiny ${
+                phoneNumber.length === 13
+                  ? "text-green-400 btn-transition"
+                  : "text-red-400"
+              } p-0.5 align-middle`}
+              onKeyDown={(e) => handleEnterKeyDown(e, signInWithPhoneNumber)}
+            >
+              {phoneNumber.length === 13 ? (
+                <CheckIcon className="w-6" onClick={signInWithPhoneNumber} />
+              ) : (
+                <CrossIcon className="w-6" />
+              )}
+            </div>
+          </div>
+        </fieldset>
+        {/* // TODO: Implement this into the UI */}
+        {textConfirmationResult && (
+          <fieldset>
+            <label>Verify code</label>
+            <br />
+            <input value={code} onChange={(e) => setCode(e.target.value)} />
+
+            <button onClick={verifyCode}>Verify Code</button>
+          </fieldset>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -210,105 +214,17 @@ function PhoneSignUp() {
   );
 }
 
-// * Verify the phone number exists
-function PhoneNumberVerification({ recaptcha }) {
-  const [digits, setDigits] = useState("");
-  const [textConfirmationResult, setTextConfirmationResult] = useState(null);
-  const [code, setCode] = useState("");
-
-  const phoneNumber = `+44${digits}`;
-
-  // // Step 1 - Verify Invite
-  // useEffect(() => {
-  //   if (phoneNumber.length === 13) {
-  //     const ref = firestore.collection("invites").doc(phoneNumber);
-  //     ref.get().then(({ exists }) => {
-  //       setInvited(exists);
-  //     });
-  //   }
-  // }, [phoneNumber]);
-
-  // Step 2 - Sign in
-  const signInWithPhoneNumber = async () => {
-    setTextConfirmationResult(
-      await auth.signInWithPhoneNumber(phoneNumber, recaptcha)
-    );
-  };
-
-  // Step 3 - Verify SMS code
-  const verifyCode = async () => {
-    const result = await textConfirmationResult.confirm(code);
-    console.log(result.user);
-  };
-
-  return (
-    <div>
-      <fieldset>
-        <p className="text-md font-semibold pb-2 font-work-sans">
-          Enter a UK Phone Number
-        </p>
-        <div
-          className="appearance-none flex w-full bg-gray-100 text-gray-700 border
-         border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
-         focus:bg-gray-50 focus:border-gray-500"
-        >
-          <div className="bg-gray-100 h-full text-sm sm:text-base text-black pt-0.5 align-middle">
-            +44
-          </div>
-          <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
-          <input
-            className="bg-gray-100 w-2/3 sm:w-full  appearance-none focus:outline-none  "
-            type="tel"
-            maxLength={10}
-            placeholder="7912345678"
-            onChange={(e) => setDigits(e.target.value)}
-          />
-          <div
-            className={`bg-gray-100 text-sm sm:text-tiny ${
-              phoneNumber.length === 13
-                ? "text-green-400 btn-transition"
-                : "text-red-400"
-            } p-0.5 align-middle`}
-            onKeyDown={(e) => handleEnterKeyDown(e, signInWithPhoneNumber)}
-          >
-            {phoneNumber.length === 13 ? (
-              <CheckIcon className="w-6" onClick={signInWithPhoneNumber} />
-            ) : (
-              <CrossIcon className="w-6" />
-            )}
-          </div>
-        </div>
-
-      </fieldset>
-      {/* // TODO: Implement this into the UI */}
-      {textConfirmationResult && (
-        <fieldset>
-          <label>Verify code</label>
-          <br />
-          <input value={code} onChange={(e) => setCode(e.target.value)} />
-
-          <button onClick={verifyCode}>Verify Code</button>
-        </fieldset>
-      )}
-    </div>
-  );
-}
-
 // TODO: Implement this into the UI
 function SendInvites({ user }) {
   const numberOfInvites = 2; // * The number of invites available to each user
   const query = firestore.collection(`users/${user.uid}/invites`);
   const [invites] = useCollectionData(query);
 
-  const [digits, setDigits] = useState("");
-  const phoneNumber = `+44${digits}`;
+  const [email, setEmail] = useState("");
 
   const sendInvite = async () => {
     const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc();
-    await inviteRef.set({
-      phoneNumber,
-      referralCode: inviteRef.id,
-    });
+    await inviteRef.set({ email });
   };
 
   return (
@@ -320,7 +236,7 @@ function SendInvites({ user }) {
 
       {invites?.length < numberOfInvites && (
         <>
-          <input value={digits} onChange={(e) => setDigits(e.target.value)} />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} />
           <button onClick={sendInvite}>Send Invite</button>
         </>
       )}
@@ -330,38 +246,84 @@ function SendInvites({ user }) {
 
 // * Email sign up form
 function EmailSignUp() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(undefined);
+  const [userEmpty, setUserEmpty] = useState(null);
+  const [inviteEmpty, setInviteEmpty] = useState(null);
+  const [referred, setReferred] = useState(null);
+
+  const validateUser = useCallback(
+    debounce(async (email) => {
+      const inviteRef = firestore
+        .collectionGroup("invites")
+        .where("email", "==", email)
+        .limit(1);
+
+      const userRef = firestore
+        .collection("users")
+        .where("email", "==", email)
+        .limit(1);
+
+      const verified = Promise.all([inviteRef.get(), userRef.get()]).then(
+        (values) => {
+          setInviteEmpty(values[0].empty);
+          setUserEmpty(values[1].empty);
+          setReferred(!(inviteEmpty || userEmpty));
+          if (inviteEmpty || userEmpty) {
+            throw "nope";
+          }
+          return !(inviteEmpty || userEmpty);
+        }
+      );
+
+      toast.promise(verified, {
+        loading: "Checking...",
+        success: "Hey you have been invited!" + `${inviteEmpty} ${userEmpty}`,
+        error: "Sorry this is a pre-Alpha (version 0.0) limited release. You have to be invited 😞.",
+        // TODO buttons here to ask for an invite?
+      });
+    }, 250),
+    []
+  );
+  // Step 1 - Verify Invite
+  useEffect(() => {
+    if (email) {
+      validateUser(email);
+    }
+  }, [email]);
 
   return (
     <form onSubmit={null}>
-      {/* <p className="text-md pb-4 font-bold tracking-wide">Email</p> */}
       <div
-          className="appearance-none flex w-full bg-gray-100 text-gray-700 border
+        className="appearance-none flex w-full bg-gray-100 text-gray-700 border
          border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
          focus:bg-gray-50 focus:border-gray-500"
+      >
+        <MailIcon className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 mr-2 align-middle w-8" />
+        <input
+          className="bg-gray-100 w-2/3 sm:w-full appearance-none focus:outline-none "
+          type="email"
+          placeholder="warren@buffet.com"
+          onChange={(e) => {
+            validateEmail(e.target.value)
+              ? setEmail(e.target.value)
+              : setEmail(undefined);
+          }}
+        />
+        <div
+          className={`bg-gray-100 text-sm sm:text-tiny ${
+            validateEmail(email) && referred
+              ? "text-green-400 btn-transition"
+              : "text-red-400"
+          } p-0.5 align-middle`}
+          onKeyDown={(e) => handleEnterKeyDown(e, null)}
         >
-            <MailIcon className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 mr-2 align-middle w-8" />
-          <input
-            className="bg-gray-100 w-2/3 sm:w-full appearance-none focus:outline-none  "
-            type="email"
-            placeholder="warren@buffet.com"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <div
-            className={`bg-gray-100 text-sm sm:text-tiny ${
-              validateEmail(email)
-                ? "text-green-400 btn-transition"
-                : "text-red-400"
-            } p-0.5 align-middle`}
-            onKeyDown={(e) => handleEnterKeyDown(e, null)}
-          >
-            {validateEmail(email) ? (
-              <CheckIcon className="w-6" onClick={null} />
-            ) : (
-              <CrossIcon className="w-6" />
-            )}
-          </div>
+          {validateEmail(email) && referred ? (
+            <CheckIcon className="w-6" onClick={null} />
+          ) : (
+            <CrossIcon className="w-6" />
+          )}
         </div>
+      </div>
       <button
         type="submit"
         className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white my-4 py-3 px-4 leading-tight font-bold"
