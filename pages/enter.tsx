@@ -247,8 +247,6 @@ function SendInvites({ user }) {
 // * Email sign up form
 function EmailSignUp() {
   const [email, setEmail] = useState(undefined);
-  const [userEmpty, setUserEmpty] = useState(null);
-  const [inviteEmpty, setInviteEmpty] = useState(null);
   const [referred, setReferred] = useState(null);
 
   const validateUser = useCallback(
@@ -265,20 +263,20 @@ function EmailSignUp() {
 
       const verified = Promise.all([inviteRef.get(), userRef.get()]).then(
         (values) => {
-          setInviteEmpty(values[0].empty);
-          setUserEmpty(values[1].empty);
-          setReferred(!(inviteEmpty || userEmpty));
-          if (inviteEmpty || userEmpty) {
+          const isInvited = !(values[0].empty ?? false);
+          const isUser = !(values[1].empty ?? false);
+          setReferred(isUser || isInvited);
+          if (!(isUser || isInvited)) {
             throw "nope";
           }
-          return !(inviteEmpty || userEmpty);
         }
       );
 
       toast.promise(verified, {
         loading: "Checking...",
-        success: "Hey you have been invited!" + `${inviteEmpty} ${userEmpty}`,
-        error: "Sorry this is a pre-Alpha (version 0.0) limited release. You have to be invited 😞.",
+        success: "Hey you have been invited!",
+        error:
+          "Sorry this is a pre-Alpha (version 0.0) limited release. You have to be invited 😞.",
         // TODO buttons here to ask for an invite?
       });
     }, 250),
