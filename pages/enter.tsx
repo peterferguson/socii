@@ -10,8 +10,9 @@ import AppleLogo from "@icons/apple.svg";
 import FacebookLogo from "@icons/fb.svg";
 import TwitterLogo from "@icons/twitter.svg";
 import GoogleLogo from "@icons/google.svg";
-import Cross from "@icons/cross.svg";
-import Check from "@icons/check.svg";
+import CrossIcon from "@icons/cross.svg";
+import MailIcon from "@icons/mail.svg";
+import CheckIcon from "@icons/check.svg";
 import { UserContext } from "@lib/context";
 import Head from "@components/Head";
 import { useContext } from "react";
@@ -20,7 +21,7 @@ import toast from "react-hot-toast";
 import router from "next/router";
 import { useState, useRef, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { handleEnterKeyDown } from "@utils/helper";
+import { handleEnterKeyDown, validateEmail } from "@utils/helper";
 
 const BackdropFilter = dynamic(
   // TODO: There is nothing behind the card for this to work
@@ -39,7 +40,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 export default function Enter(props) {
-  const { user, username } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [referred, setReferred] = useState(undefined);
 
   return (
@@ -47,11 +48,11 @@ export default function Enter(props) {
       <Head title="Enter" description="Sign up for this amazing app!" />
         <div className="flex items-center justify-center min-h-screen">
       <div className="py-3 max-w-xl mx-6 sm:mx-auto">
-        {!referred && (
+        {/* {!referred && (
           <div className="w-full text-center py-8 text-4xl font-bold font-work-sans">
             Have you got a Referral?
           </div>
-        )}
+        )} */}
           <BackdropFilter
             className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
             filter={"blur(10px) sepia(50%)"}
@@ -59,11 +60,8 @@ export default function Enter(props) {
             // html2canvasOpts={{ allowTaint: true }}
           >
             <div className="max-w-md mx-auto">
-              {!referred && (
+              {/* {!referred && (
                 <>
-                  {/* <div className="w-full text-center pt-8 text-3xl font-bold font-work-sans">
-                  Have you got a Referral?
-                </div> */}
                   <div className="w-full text-center text-md pt-4 font-bold font-work-sans">
                     Sorry this is a pre-Alpha (version 0.0) limited release.
                   </div>
@@ -72,14 +70,15 @@ export default function Enter(props) {
                   </div>
                   <ReferralVerification setReferred={setReferred} />
                 </>
-              )}
-              {referred && (
+              )} */}
+              {!referred && (
                 <>
                   <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
                     Sign Up!
                   </div>
                   <div className="">
-                    <PhoneSignUp />
+                    {/* <PhoneSignUp /> */}
+                    <EmailSignUp />
                   </div>
                   <div className="leading-6 sm:text-lg sm:leading-7"></div>
                   <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
@@ -87,7 +86,7 @@ export default function Enter(props) {
                       Or continue with
                     </span>
                   </div>
-                  {!user && !username && <SignInButtons />}{" "}
+                  {!user && <SignInButtons />}{" "}
                 </>
               )}
             </div>
@@ -144,7 +143,7 @@ function ReferralVerification({ setReferred }) {
           }
         }),
         {
-          loading: "Checking...",
+          loading: "CheckIconing...",
           success: "Hey you have been invited!",
           error: "Sorry you haven't been invited yet 😞",
         }
@@ -177,9 +176,9 @@ function ReferralVerification({ setReferred }) {
             } p-0.5 align-middle`}
           >
             {code.length === 20 && invited ? (
-              <Check className="w-6" />
+              <CheckIcon className="w-6" />
             ) : (
-              <Cross className="w-6" />
+              <CrossIcon className="w-6" />
             )}
           </div>
         </div>
@@ -273,25 +272,13 @@ function PhoneNumberVerification({ recaptcha }) {
             onKeyDown={(e) => handleEnterKeyDown(e, signInWithPhoneNumber)}
           >
             {phoneNumber.length === 13 ? (
-              <Check className="w-6" onClick={signInWithPhoneNumber} />
+              <CheckIcon className="w-6" onClick={signInWithPhoneNumber} />
             ) : (
-              <Cross className="w-6" />
+              <CrossIcon className="w-6" />
             )}
           </div>
         </div>
 
-        {/* {phoneNumber.length === 13 &&
-          invited != undefined &&
-          (invited ? (
-            <>
-              <p className="text-center">Hey you have been invited!</p>
-              <p className="text-center">
-                Welcome to the world best social investment app
-              </p>
-            </>
-          ) : (
-            <p className="text-center">Sorry you haven't been invited yet 😞</p>
-          ))} */}
       </fieldset>
       {/* // TODO: Implement this into the UI */}
       {textConfirmationResult && (
@@ -343,43 +330,41 @@ function SendInvites({ user }) {
 
 // * Email sign up form
 function EmailSignUp() {
+  const [email, setEmail] = useState("");
+
   return (
     <form onSubmit={null}>
-      <p className="text-md">Email</p>
-      <div className="w-full">
-        <input
-          className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-50 focus:border-gray-500"
-          type="email"
-          placeholder="warren@buffet.com"
-        />
-      </div>
-      <p className="text-md">Password</p>
-      <div className="w-full">
-        <input
-          className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-50 focus:border-gray-500"
-          type="password"
-          placeholder="**********"
-        />
-      </div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <input className="ml-2 leading-tight" type="checkbox" />
-            <span className="text-sm"> Remember me</span>
-          </div>
-          <div>
-            <a
-              className="font-bold text-sm text-brand hover:text-brand-dark"
-              href="#password-request"
-            >
-              forgot password?
-            </a>
+      {/* <p className="text-md pb-4 font-bold tracking-wide">Email</p> */}
+      <div
+          className="appearance-none flex w-full bg-gray-100 text-gray-700 border
+         border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
+         focus:bg-gray-50 focus:border-gray-500"
+        >
+            <MailIcon className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 mr-2 align-middle w-8" />
+          <input
+            className="bg-gray-100 w-2/3 sm:w-full appearance-none focus:outline-none  "
+            type="email"
+            placeholder="warren@buffet.com"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div
+            className={`bg-gray-100 text-sm sm:text-tiny ${
+              validateEmail(email)
+                ? "text-green-400 btn-transition"
+                : "text-red-400"
+            } p-0.5 align-middle`}
+            onKeyDown={(e) => handleEnterKeyDown(e, null)}
+          >
+            {validateEmail(email) ? (
+              <CheckIcon className="w-6" onClick={null} />
+            ) : (
+              <CrossIcon className="w-6" />
+            )}
           </div>
         </div>
-      </div>
       <button
         type="submit"
-        className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white py-3 px-4 mb-3 leading-tight font-bold"
+        className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white my-4 py-3 px-4 leading-tight font-bold"
         disabled={false}
       >
         Sign in
