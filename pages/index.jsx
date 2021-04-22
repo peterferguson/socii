@@ -1,6 +1,7 @@
 import { Button } from "@components/Button";
-import { firestore } from "@lib/firebase";
+import { firestore, auth } from "@lib/firebase";
 import { logoUrl } from "@utils/helper";
+
 
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -52,7 +53,7 @@ export default function Home() {
           <div>
             <Button
               className="btn-transition"
-              onClick={() => router.push("/enter")}
+              onClick={() => router.push( auth.currentUser ? "/stock" : "/enter")}
             >
               Invest Now
             </Button>

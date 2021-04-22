@@ -83,6 +83,9 @@ module.exports = {
         "fade-in-right": "fade-in-down 0.5s ease-out",
         "fade-in-left": "fade-in-up 0.5s ease-out",
       },
+      boxShadow:{
+        "left": "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
+      },
       spacing:{
         "0.5": "0.125rem",
       }

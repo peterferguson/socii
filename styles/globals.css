@@ -25,4 +25,20 @@
     .btn-transition:hover {
         @apply -translate-y-0.5;
     }
+
+    .slide-card {
+        @apply flex flex-col transition relative m-0 h-80 w-96 min-w-min p-6 rounded-2xl bg-white clear-both shadow-left
+    }
+
+    .slidecard:focus-within~.slide-card, .slide-card:hover~.slide-card {
+        transform: translateX(50px);
+    }
+    
+    .slide-card:hover {
+        transform: translateY(-1rem);
+    }
+
+    .slide-card:not(:first-child) {
+        margin-left: -50px;
+    }
 }

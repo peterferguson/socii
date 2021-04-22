@@ -2,13 +2,9 @@ import { FlexibleXYPlot, LineSeries, Crosshair } from "react-vis";
 import "react-vis/dist/style.css";
 import { useRef, useEffect, useState } from "react";
 import { pctChange } from "@utils/helper";
+import Link from "next/link";
 
-export default function ChartCard({
-  logoUrl,
-  tickerSymbol,
-  shortName,
-  data,
-}) {
+export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
   const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
   const [crosshairValue, setCrosshairValue] = useState(false);
@@ -22,10 +18,10 @@ export default function ChartCard({
       setWidth(middleDivRef.current.offsetWidth);
     }
   }, [middleDivRef]);
-  
+
   const closeDelta = pctChange(data[0].close, data[data.length - 1].close);
 
-  const profitabilityColor =
+  const pnlColor =
     closeDelta > 0 ? "bg-teal-200" : closeDelta < 0 ? "bg-red-200" : "bg-brand";
 
   const tailwindColorMap = {
@@ -37,7 +33,7 @@ export default function ChartCard({
   const lineSeriesProps = {
     animation: true,
     opacityType: "literal",
-    color: tailwindColorMap[profitabilityColor],
+    color: tailwindColorMap[pnlColor],
     strokeWidth,
     onNearestX: (d) => setCrosshairValue(d),
     data: data.map((d) => {
@@ -52,27 +48,36 @@ export default function ChartCard({
       <div className="max-w-sm w-full sm:w-1/2 lg:w-1/3 h-auto m-1">
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden flex h-20 p-2">
           <div className="flex-none mx-auto justify-center rounded-full w-20">
-            <img
-              className="shadow-lg rounded-full h-10 w-10 mx-auto"
-              src={logoUrl}
-              alt={`${tickerSymbol} logo`}
-            />
-            <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
-              {shortName}
-            </div>
-            <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
-              {tickerSymbol}
+            <Link href={`stock/${tickerSymbol}`}>
+              <a>
+                <img
+                  className="shadow-lg rounded-full h-10 w-10 mx-auto"
+                  src={logoUrl}
+                  alt={`${tickerSymbol} logo`}
+                />
+              </a>
+            </Link>
+            <Link href={`stock/${tickerSymbol}`}>
+              <a>
+                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                  {shortName}
+                </div>
+              </a>
+            </Link>
+            <Link href={`stock/${tickerSymbol}`}>
+              <a>
+                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                  {tickerSymbol}
+                </div>
+              </a>
+            </Link>
           </div>
-            </div>
-          <div
-            className="flex-grow mx-auto w-2/4"
-            ref={middleDivRef}
-          >
+          <div className="flex-grow mx-auto w-2/4" ref={middleDivRef}>
             <FlexibleXYPlot
               height={height}
               width={width}
               className="mx-auto"
-              margin={{bottom: 0, left: 10, right: 10}} 
+              margin={{ bottom: 0, left: 10, right: 10 }}
               onMouseLeave={() => setCrosshairValue(false)}
             >
               <LineSeries {...lineSeriesProps} />
@@ -93,7 +98,7 @@ export default function ChartCard({
               ${data[0].close}
             </div>
             <div
-              className={`${profitabilityColor} text-black text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
+              className={`${pnlColor} text-black text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
             >
               M: {closeDelta.toFixed(2)}%
             </div>

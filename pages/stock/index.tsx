@@ -1,19 +1,24 @@
 import ChartCard from "@components/ChartCard";
+import CardSlider from "@components/CardSlider";
 import { firestore } from "@lib/firebase";
 
 export default function StockDisplay({ tickerSymbols }) {
   return (
-    <div className="bg-gray-50 flex flex-col items-center justify-center min-h-screen">
-      {tickerSymbols.map(({ ticker, timeseries }) => {
-        return (
-          <ChartCard
-            logoUrl={ticker.logoUrl}
-            tickerSymbol={ticker.tickerSymbol}
-            shortName={ticker.shortName}
-            data={timeseries}
-          />
-        );
-      })}
+    <div className="">
+      <CardSlider tickerSymbols={tickerSymbols}/>
+      <div className="bg-gray-50 flex flex-col items-center justify-center min-h-screen">
+      <div className="font-bold uppercase text-3xl text-black p-4 bg-gray-50">Popular Stocks</div>
+        {tickerSymbols.map(({ ticker, timeseries }) => {
+          return (
+            <ChartCard
+              logoUrl={ticker.logoUrl}
+              tickerSymbol={ticker.tickerSymbol}
+              shortName={ticker.shortName}
+              data={timeseries}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -23,7 +28,7 @@ export async function getStaticProps(context) {
   const tickerRef = firestore
     .collection("tickers")
     .where("isPopular", "==", true)
-    .limit(10);
+    .limit(5);
 
   const tickerDocs = await tickerRef.get();
 
@@ -48,8 +53,19 @@ export async function getStaticProps(context) {
     const timeseries = timeseriesDocs.map((doc) => {
       return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
     });
+    
+    // * Get sector & industry data
+    const sectorRef = tickerDoc.ref
+    .collection("data")
+    .where("industry", ">", "''")
+    .orderBy("industry", "asc")
+    .limit(1);
+    
+    var sector = (await sectorRef.get()).docs[0].data();
+    
+    sector = { ...sector, lastUpdate: sector.lastUpdate.toMillis() };
 
-    tickerSymbols.push({ ticker, timeseries });
+    tickerSymbols.push({ ticker, timeseries, sector });
   }
 
   return {
