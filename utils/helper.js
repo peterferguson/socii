@@ -1,5 +1,7 @@
 import { tickerToISIN } from "@lib/firebase";
 
+export const isBrowser = typeof window !== "undefined";
+
 export const pctChange = (first, second) => {
   return ((first - second) * 100) / second
 }

@@ -1,10 +1,14 @@
-const colors = require('tailwindcss/colors');
+const colors = require("tailwindcss/colors");
 
 module.exports = {
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(20px)',
+      },
       colors: {
         brand: {
           light: "#3fbaeb",
@@ -13,7 +17,7 @@ module.exports = {
         },
         back: {
           DEFAULT: "#0D5F78",
-          light: "#0E7B82"
+          light: "#0E7B82",
         },
         gray: colors.blueGray,
         teal: colors.teal,
@@ -24,7 +28,7 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
       },
       fontSize: {
-        "tiny": "0.625rem"
+        tiny: "0.625rem",
       },
       keyframes: {
         wiggle: {
@@ -83,12 +87,12 @@ module.exports = {
         "fade-in-right": "fade-in-down 0.5s ease-out",
         "fade-in-left": "fade-in-up 0.5s ease-out",
       },
-      boxShadow:{
-        "left": "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
+      boxShadow: {
+        left: "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
       },
-      spacing:{
-        "0.5": "0.125rem",
-      }
+      spacing: {
+        0.5: "0.125rem",
+      },
     },
   },
   variants: {
@@ -97,5 +101,5 @@ module.exports = {
       backgroundColor: ["active"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-filters")],
 };

@@ -1,5 +1,6 @@
 import {
   auth,
+  credentialWithLink,
   googleAuthProvider,
   userFirstName,
   facebookAuthProvider,
@@ -40,16 +41,16 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// TODO: Update toast to mention the referral system for early users
-// TODO: Remove login action of login buttons if not verified
 // ? Should we REQUIRE that the user login with email
 // TODO: Add user info to users colleciton on sign up
 // TODO: Implement passwordless login
 // TODO: Implement account linking
 // TODO: Implement invite system
+// TODO: Implement a route for invitees which has the invited email so we can bypass the auth verification & attach the email to whatever auth user is provided
 
 export default function Enter(props) {
   const { user } = useContext(UserContext);
+  const [verified, setVerified] = useState(null);
 
   return (
     <main className="bg-gray-50 h-screen">
@@ -66,7 +67,7 @@ export default function Enter(props) {
                 Sign Up!
               </div>
               <div className="">
-                <EmailSignUp />
+                <EmailSignUp verified={verified} setVerified={setVerified} />
               </div>
               <div className="leading-6 sm:text-lg sm:leading-7"></div>
               <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
@@ -74,7 +75,7 @@ export default function Enter(props) {
                   Or continue with
                 </span>
               </div>
-              {!user && <SignInButtons />}
+              {!user && <SignInButtons verified={verified} />}
             </div>
           </BackdropFilter>
         </div>
@@ -84,7 +85,7 @@ export default function Enter(props) {
 }
 
 // * Sign in with Google button
-function SignInButtons() {
+function SignInButtons({ verified }) {
   const signInPopUp = async (authProvider) =>
     await auth.signInWithPopup(authProvider);
 
@@ -99,9 +100,11 @@ function SignInButtons() {
       {signInOptions.map((option) => {
         return (
           <option.logo
-            className="w-14 h-14 justify-center btn-transition rounded m-2 p-2
-            border-solid border-2 border-gray-900"
-            onClick={() => signInPopUp(option.provider)}
+            className={`w-14 h-14 justify-center rounded m-2 p-2 \
+            border-solid border-2 border-gray-900 ${
+              verified ? "btn-transition" : ""
+            }`}
+            onClick={() => (verified ? signInPopUp(option.provider) : null)}
           />
         );
       })}
@@ -245,9 +248,8 @@ function SendInvites({ user }) {
 }
 
 // * Email sign up form
-function EmailSignUp() {
+function EmailSignUp({ verified, setVerified }) {
   const [email, setEmail] = useState(undefined);
-  const [referred, setReferred] = useState(null);
 
   const validateUser = useCallback(
     debounce(async (email) => {
@@ -265,7 +267,7 @@ function EmailSignUp() {
         (values) => {
           const isInvited = !(values[0].empty ?? false);
           const isUser = !(values[1].empty ?? false);
-          setReferred(isUser || isInvited);
+          setVerified(isUser || isInvited);
           if (!(isUser || isInvited)) {
             throw "nope";
           }
@@ -276,7 +278,8 @@ function EmailSignUp() {
         loading: "Checking...",
         success: "Hey you have been invited!",
         error:
-          "Sorry this is a pre-Alpha (version 0.0) limited release. You have to be invited 😞.",
+          "Sorry this is a pre-Alpha (version 0.0) limited release. \
+          You have to be invited 😞.",
         // TODO buttons here to ask for an invite?
       });
     }, 250),
@@ -289,16 +292,59 @@ function EmailSignUp() {
     }
   }, [email]);
 
+  const emailSignInHandler = (email) => {
+    auth
+      .sendSignInLinkToEmail(email, {
+        url: `http://localhost:3000/enter?email?${email}`,
+        handleCodeInApp: true,
+      })
+      .then(() => {
+        toast("👋 Thanks for signing up! Please verify your email address and we will see you very soon!");
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
+
+    if (auth.isSignInWithEmailLink(window.location.href)) {
+      if (!email) {
+        email = window.prompt("Please provide your email for confirmation");
+      }
+      auth
+        .signInWithEmailLink(email, window.location.href)
+        .then((result) => {
+          console.log(result.user.uid);
+          console.log(result.user.displayName);
+        })
+        .catch((error) => {
+        });
+
+        // ! The following allows links to another verification type
+      // var credential = credentialWithLink(email, window.location.href);
+
+      // // Link the credential to the current user.
+      // auth.currentUser
+      //   .linkWithCredential(credential)
+      //   .then((usercred) => {
+      //     // The provider is now successfully linked.
+      //     // The phone user can now sign in with their phone number or email.
+      //   })
+      //   .catch((error) => {
+      //     // Some error occurred.
+      //   });
+    }
+  };
+
   return (
-    <form onSubmit={null}>
+    <form onSubmit={() => emailSignInHandler(email)}>
       <div
-        className="appearance-none flex w-full bg-gray-100 text-gray-700 border
+        className="appearance-none flex flex-none w-full bg-gray-100 text-gray-700 border
          border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
          focus:bg-gray-50 focus:border-gray-500"
       >
         <MailIcon className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 mr-2 align-middle w-8" />
         <input
-          className="bg-gray-100 w-2/3 sm:w-full appearance-none focus:outline-none "
+          className="bg-gray-100 flex flex-grow w-2/3 sm:w-full appearance-none focus:outline-none "
           type="email"
           placeholder="warren@buffet.com"
           onChange={(e) => {
@@ -308,15 +354,15 @@ function EmailSignUp() {
           }}
         />
         <div
-          className={`bg-gray-100 text-sm sm:text-tiny ${
-            validateEmail(email) && referred
+          className={`flex flex-none bg-gray-100 text-sm sm:text-tiny ${
+            validateEmail(email) && verified
               ? "text-green-400 btn-transition"
               : "text-red-400"
           } p-0.5 align-middle`}
-          onKeyDown={(e) => handleEnterKeyDown(e, null)}
+          onKeyDown={(e) => handleEnterKeyDown(e, () => emailSignInHandler(email))}
         >
-          {validateEmail(email) && referred ? (
-            <CheckIcon className="w-6" onClick={null} />
+          {validateEmail(email) && verified ? (
+            <CheckIcon className="w-6" onClick={() => emailSignInHandler(email)} />
           ) : (
             <CrossIcon className="w-6" />
           )}
@@ -326,6 +372,7 @@ function EmailSignUp() {
         type="submit"
         className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white my-4 py-3 px-4 leading-tight font-bold"
         disabled={false}
+        onClick={() => emailSignInHandler(email)}
       >
         Sign in
       </button>

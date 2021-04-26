@@ -1,7 +1,8 @@
 import { UserContext } from "@lib/context";
 import { userFirstName, signOut } from "@lib/firebase";
-import SearchIcon from "@public/icons/search.svg";
+import SearchIcon from "@icons/search.svg";
 import { Button } from "@components/Button";
+import { isBrowser } from "@utils/helper";
 
 import Link from "next/link";
 import { useContext } from "react";
@@ -11,7 +12,7 @@ export default function Navigation(props) {
   const { user, username } = useContext(UserContext);
   const router = useRouter();
   return (
-    <div className="sticky top-0 z-40 lg:z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
+    <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
       <Logo />
       <SearchBar {...props} />
       <NavigationButtons>
@@ -52,19 +53,21 @@ function Logo() {
         <a className="text-4xl font-poppins">soc</a>
       </Link>
       <Link href="/">
-        <a className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-brand-light font-poppins">ii</a>
+        <a className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-brand-light font-poppins">
+          ii
+        </a>
       </Link>
     </div>
   );
 }
 
-function SearchBar(props) {
+function SearchBar({ setShowSearchCard }) {
   return (
     <div className="border-b-2 border-gray-200 flex-1 h-18 flex items-center justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8">
       <button
         type="button"
         className="group leading-6 font-medium flex items-center space-x-3 sm:space-x-4 hover:text-gray-600 transition-colors duration-200 w-full py-2"
-        onClick={props.toggleSearchCard}
+        onClick={() => setShowSearchCard(true)}
       >
         <SearchIcon className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200" />
         <span className="text-gray-400">

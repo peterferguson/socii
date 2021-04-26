@@ -1,10 +1,11 @@
 import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallAssetCard from "@components/SmallAssetCard";
-import { alphaVantageData, logoUrl, pctChange } from "@utils/helper";
+import { alphaVantageData, isBrowser, pctChange } from "@utils/helper";
 import { firestore, tickerToISIN } from "@lib/firebase";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { Switch } from "@headlessui/react";
 
 export async function getStaticProps({ params }) {
   // TODO add username section here based on the users portfolio
@@ -33,7 +34,9 @@ export async function getStaticProps({ params }) {
   delete tickerData.timestamp;
   delete tickerData.timeseriesLastUpdated;
 
-  const timeseriesRef = tickerRef.collection("timeseries").orderBy("timestamp", "desc");
+  const timeseriesRef = tickerRef
+    .collection("timeseries")
+    .orderBy("timestamp", "desc");
 
   var timeseriesDocs = (await timeseriesRef.get()).docs;
 
@@ -44,7 +47,7 @@ export async function getStaticProps({ params }) {
   }
 
   timeseries = timeseriesDocs.map((doc) => {
-    return { ...doc.data(), timestamp: parseInt(doc.id)*1000 };
+    return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
   });
 
   // * Get summary data from firestore
@@ -123,17 +126,35 @@ export default function TickerPage(props) {
           dailyPctChange={dailyPctChange}
           monthlyPctChange={monthlyPctChange}
         />
-        <div className="flex w-full h-20">
-          <button
-            className="flex rounded shadow-lg p-2 m-4 text-white bg-brand hover:bg-brand-dark"
-            onClick={() => setShowTradingView(!showTradingView)}
-          >
-            {!showTradingView ? "TradingView" : "socii Chart"}
-          </button>
-        </div>
       </div>
       <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
         <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
+          <div className="flex justify-between w-full h-20">
+            <span className="z-50 w-12 text-2xl h-4">${previousClose}</span>
+            <div className="flex">
+              <div className="px-4">
+                {!showTradingView ? "TradingView" : "socii Chart"}
+              </div>
+              {isBrowser && (
+                <Switch
+                  checked={showTradingView}
+                  onChange={setShowTradingView}
+                  className={`${
+                    showTradingView ? "bg-brand" : "bg-brand-light"
+                  } relative inline-flex items-center h-6 rounded-full w-11 \
+                  flex-shrink-0 h-[38px] w-[74px] border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                >
+                  <span className="sr-only">Show Trading View Chart</span>
+                  <span
+                    className={`${
+                      showTradingView ? "translate-x-6" : "translate-x-1"
+                    } inline-block w-4 h-4 transform bg-white rounded-full \
+                    pointer-events-none h-[34px] w-[34px] shadow-lg ring-0 transition ease-in-out duration-200`}
+                  />
+                </Switch>
+              )}
+            </div>
+          </div>
           {showTradingView ? (
             <TradingViewChart tickerSymbol={props.tickerSymbol} />
           ) : props.timeseries ? (
@@ -144,7 +165,6 @@ export default function TickerPage(props) {
           ) : (
             <div>Loading</div>
           )}
-          <span className="z-50 w-12 text-xl h-4">{previousClose}</span>
         </div>
       </div>
     </>

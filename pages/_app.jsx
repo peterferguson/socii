@@ -4,6 +4,7 @@ import Navigation from "@components/Navigation";
 import SearchCard from "@components/SearchCard";
 import { UserContext } from "@lib/context";
 import { useUserData } from "@lib/hooks";
+import { isBrowser } from "@utils/helper";
 
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -11,13 +12,11 @@ import { Toaster } from "react-hot-toast";
 export default function MyApp({ Component, pageProps }) {
   const userData = useUserData();
   const [showSearchCard, setShowSearchCard] = useState(false);
-  const toggleSearchCard = () => {
-    setShowSearchCard(!showSearchCard);
-  };
+
   const props = {
     ...pageProps,
     showSearchCard,
-    toggleSearchCard,
+    setShowSearchCard,
   };
 
   const toastProps = {
@@ -30,7 +29,7 @@ export default function MyApp({ Component, pageProps }) {
         color: "#fff",
         zIndex: 1,
       },
-      duration: 1000,
+      duration: 500,
       // Default options for specific types
       success: {
         duration: 5000,
@@ -53,9 +52,10 @@ export default function MyApp({ Component, pageProps }) {
     <UserContext.Provider value={userData}>
       <Head />
       <Navigation {...props} />
-      <SearchCard {...props} />
+      {isBrowser && <SearchCard {...props} />}
       <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
       <Toaster {...toastProps} />
     </UserContext.Provider>
   );
 }
+  
