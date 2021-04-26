@@ -299,7 +299,10 @@ function EmailSignUp({ verified, setVerified }) {
         handleCodeInApp: true,
       })
       .then(() => {
-        toast("👋 Thanks for signing up! Please verify your email address and we will see you very soon!");
+        toast(
+          "👋 Thanks for signing up! Please verify your email address and \
+            we will see you very soon!"
+        );
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -316,10 +319,9 @@ function EmailSignUp({ verified, setVerified }) {
           console.log(result.user.uid);
           console.log(result.user.displayName);
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
 
-        // ! The following allows links to another verification type
+      // ! The following allows links to another verification type
       // var credential = credentialWithLink(email, window.location.href);
 
       // // Link the credential to the current user.
@@ -342,9 +344,13 @@ function EmailSignUp({ verified, setVerified }) {
          border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
          focus:bg-gray-50 focus:border-gray-500"
       >
-        <MailIcon className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 pt-0.5 mr-2 align-middle w-8" />
+        <MailIcon
+          className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 /
+                      pt-0.5 mr-2 align-middle w-8"
+        />
         <input
-          className="bg-gray-100 flex flex-grow w-2/3 sm:w-full appearance-none focus:outline-none "
+          className="bg-gray-100 flex flex-grow w-2/3 sm:w-full appearance-none \
+                      focus:outline-none "
           type="email"
           placeholder="warren@buffet.com"
           onChange={(e) => {
@@ -359,10 +365,15 @@ function EmailSignUp({ verified, setVerified }) {
               ? "text-green-400 btn-transition"
               : "text-red-400"
           } p-0.5 align-middle`}
-          onKeyDown={(e) => handleEnterKeyDown(e, () => emailSignInHandler(email))}
+          onKeyDown={(e) =>
+            handleEnterKeyDown(e, () => emailSignInHandler(email))
+          }
         >
           {validateEmail(email) && verified ? (
-            <CheckIcon className="w-6" onClick={() => emailSignInHandler(email)} />
+            <CheckIcon
+              className="w-6"
+              onClick={() => emailSignInHandler(email)}
+            />
           ) : (
             <CrossIcon className="w-6" />
           )}
@@ -370,7 +381,10 @@ function EmailSignUp({ verified, setVerified }) {
       </div>
       <button
         type="submit"
-        className="btn-transition rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full text-white my-4 py-3 px-4 leading-tight font-bold"
+        className={`${
+          verified ? "btn-transition" : ""
+        } rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full \
+        text-white my-4 py-3 px-4 leading-tight font-bold`}
         disabled={false}
         onClick={() => emailSignInHandler(email)}
       >

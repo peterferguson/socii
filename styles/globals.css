@@ -43,6 +43,9 @@
     }
 }
 
+/* 
+ * Need to update the following to remove the border line around the hits
+ */
 .ais-Hits-list {
     width: 100%;
 }
