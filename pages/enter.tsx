@@ -1,11 +1,9 @@
 import {
   auth,
-  credentialWithLink,
   googleAuthProvider,
   userFirstName,
   facebookAuthProvider,
   firestore,
-  recaptchaVerifier,
 } from "@lib/firebase";
 import AppleLogo from "@icons/apple.svg";
 import FacebookLogo from "@icons/fb.svg";
@@ -21,8 +19,7 @@ import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import debounce from "lodash.debounce";
 import router from "next/router";
-import { useState, useRef, useEffect } from "react";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useState, useEffect } from "react";
 import { handleEnterKeyDown, validateEmail } from "@utils/helper";
 
 const BackdropFilter = dynamic(
@@ -108,141 +105,6 @@ function SignInButtons({ verified }) {
           />
         );
       })}
-    </div>
-  );
-}
-
-// * Phone sign up & invite system
-function PhoneSignUp() {
-  const [recaptcha, setRecaptcha] = useState(true); // ! Set to true for testing purposes
-  const element = useRef(null);
-
-  useEffect(() => {
-    if (!recaptcha) {
-      const verifier = new recaptchaVerifier(element.current, {
-        size: "invisible",
-      });
-
-      verifier.verify().then(() => setRecaptcha(verifier));
-    }
-  }, []);
-  // * Verify the phone number exists
-  function PhoneNumberVerification({ recaptcha }) {
-    const [digits, setDigits] = useState("");
-    const [textConfirmationResult, setTextConfirmationResult] = useState(null);
-    const [code, setCode] = useState("");
-
-    const phoneNumber = `+44${digits}`;
-
-    // // Step 1 - Verify Invite
-    // useEffect(() => {
-    //   if (phoneNumber.length === 13) {
-    //     const ref = firestore.collection("invites").doc(phoneNumber);
-    //     ref.get().then(({ exists }) => {
-    //       setInvited(exists);
-    //     });
-    //   }
-    // }, [phoneNumber]);
-
-    // Step 2 - Sign in
-    const signInWithPhoneNumber = async () => {
-      setTextConfirmationResult(
-        await auth.signInWithPhoneNumber(phoneNumber, recaptcha)
-      );
-    };
-
-    // Step 3 - Verify SMS code
-    const verifyCode = async () => {
-      const result = await textConfirmationResult.confirm(code);
-      console.log(result.user);
-    };
-
-    return (
-      <div>
-        <fieldset>
-          <p className="text-md font-semibold pb-2 font-work-sans">
-            Enter a UK Phone Number
-          </p>
-          <div
-            className="appearance-none flex w-full bg-gray-100 text-gray-700 border
-           border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
-           focus:bg-gray-50 focus:border-gray-500"
-          >
-            <div className="bg-gray-100 h-full text-sm sm:text-base text-black pt-0.5 align-middle">
-              +44
-            </div>
-            <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
-            <input
-              className="bg-gray-100 w-2/3 sm:w-full  appearance-none focus:outline-none  "
-              type="tel"
-              maxLength={10}
-              placeholder="7912345678"
-              onChange={(e) => setDigits(e.target.value)}
-            />
-            <div
-              className={`bg-gray-100 text-sm sm:text-tiny ${
-                phoneNumber.length === 13
-                  ? "text-green-400 btn-transition"
-                  : "text-red-400"
-              } p-0.5 align-middle`}
-              onKeyDown={(e) => handleEnterKeyDown(e, signInWithPhoneNumber)}
-            >
-              {phoneNumber.length === 13 ? (
-                <CheckIcon className="w-6" onClick={signInWithPhoneNumber} />
-              ) : (
-                <CrossIcon className="w-6" />
-              )}
-            </div>
-          </div>
-        </fieldset>
-        {/* // TODO: Implement this into the UI */}
-        {textConfirmationResult && (
-          <fieldset>
-            <label>Verify code</label>
-            <br />
-            <input value={code} onChange={(e) => setCode(e.target.value)} />
-
-            <button onClick={verifyCode}>Verify Code</button>
-          </fieldset>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {recaptcha && <PhoneNumberVerification recaptcha={recaptcha} />}
-      <div className="" ref={element}></div>
-    </>
-  );
-}
-
-// TODO: Implement this into the UI
-function SendInvites({ user }) {
-  const numberOfInvites = 2; // * The number of invites available to each user
-  const query = firestore.collection(`users/${user.uid}/invites`);
-  const [invites] = useCollectionData(query);
-
-  const [email, setEmail] = useState("");
-
-  const sendInvite = async () => {
-    const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc();
-    await inviteRef.set({ email });
-  };
-
-  return (
-    <div>
-      <h1>Invite Your Friends</h1>
-      {invites?.map((data) => (
-        <p>You invited {data?.phoneNumber}</p>
-      ))}
-
-      {invites?.length < numberOfInvites && (
-        <>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
-          <button onClick={sendInvite}>Send Invite</button>
-        </>
-      )}
     </div>
   );
 }

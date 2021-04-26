@@ -1,10 +1,64 @@
-import { useState } from "react";
-import { RadioGroup } from "@headlessui/react";
+import { useState, useEffect, useCallback } from "react";
+import { Dialog, RadioGroup } from "@headlessui/react";
+import { firestore } from "@lib/firebase";
+import { groupPrivacyOptions } from "@lib/constants";
+import { Button } from "@components/Button";
+import CrossIcon from "@icons/cross.svg";
+import debounce from "lodash/debounce";
 
 export default function Create() {
   const [groupName, setGroupName] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
+  const [privacyOption, setPrivacyOption] = useState(groupPrivacyOptions[1]);
+  const [isValidGroupName, setisValidGroupName] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const onChange = (e) => {
+    // Force form value typed in form to match correct format
+    const val = e.target.value;
+    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+
+    // Only set form value if length is < 3 OR it passes regex
+    if (val.length >= 3) {
+      setGroupName(val);
+      setLoading(false);
+      setisValidGroupName(false);
+    } else {
+      setGroupName("");
+      setisValidGroupName(false);
+    }
+
+    if (re.test(val)) {
+      setGroupName(val);
+      setLoading(true);
+      setisValidGroupName(false);
+    }
+  };
+
+  useEffect(() => {
+    checkGroupName(groupName);
+  }, [groupName]);
+
+  // Hit the database for groupName match after each debounced change
+  // useCallback is required for debounce to work
+  const checkGroupName = useCallback(
+    debounce(async (name) => {
+      if (name.length >= 3) {
+        const nameQuery = firestore
+          .collection("groups")
+          .where("groupName", "==", name);
+
+        const { empty } = await nameQuery.get();
+
+        setisValidGroupName(empty);
+        setLoading(false);
+      }
+    }, 500),
+    []
+  );
+
   return (
-    <main className="bg-gray-50 h-screen w-screen justify-center flex">
+    <main className="bg-gray-50 h-screen w-screen justify-center items-center flex">
       <form className="w-full sm:w-2/3 my-16">
         <div
           className="appearance-none bg-brand-light bg-opacity-10 \
@@ -15,54 +69,93 @@ export default function Create() {
           <div className="p-4 font-bold text-xl font-work-sans">
             Create an Investment Group
           </div>
-          <input
-            className="h-8 ml-4 pl-4 border border-brand-dark border-opacity-30 \
-                       rounded-lg w-11/12 sm:w-2/3 appearance-none focus:outline-none"
-            type="text"
-            placeholder="Investment Group Name"
-            onChange={(e) => {
-              validateGroupName(e.target.value)
-                ? setGroupName(e.target.value)
-                : null;
-            }}
-          />
+          <div
+            className="appearance-none flex w-11/12 bg-white text-gray-700 
+                     border border-brand-dark border-opacity-30 \
+                     rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
+                     active:border-opacity-100 active:border-brand-light
+                     focus:border-opacity-100 focus:border-brand-light"
+          >
+            <input
+              className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none"
+              type="text"
+              placeholder="Investment Group Name"
+              onChange={onChange}
+            />
+            <div
+              className={`bg-white text-sm sm:text-tiny ${
+                isValidGroupName
+                  ? "text-brand-light btn-transition"
+                  : "text-red-400"
+              } p-0.5 align-middle`}
+              onKeyDown={null}
+            >
+              {isValidGroupName ? (
+                <CheckIcon className="w-6" onClick={null} />
+              ) : (
+                <CrossIcon className="w-6" />
+              )}
+            </div>
+          </div>
+          <div className="py-4 px-6 font-bold text-md font-work-sans">
+            Add a short description
+          </div>
+          <div
+            className="appearance-none flex w-11/12 bg-white text-gray-700 
+                     border border-brand-dark border-opacity-30 \
+                     rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
+                     active:border-opacity-100 active:border-brand-light
+                     focus:border-opacity-100 focus:border-brand-light"
+          >
+            <input
+              className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none text-tiny sm:text-base"
+              type="text"
+              placeholder="Best active value/dividend/growth investment club around!"
+              onChange={onChange}
+            />
+            <div
+              className={`bg-white text-sm sm:text-tiny ${
+                isValidGroupName
+                  ? "text-brand-light btn-transition"
+                  : "text-red-400"
+              } p-0.5 align-middle`}
+              onKeyDown={null}
+            >
+              {isValidGroupName ? (
+                <CheckIcon className="w-6" onClick={null} />
+              ) : (
+                <CrossIcon className="w-6" />
+              )}
+            </div>
+          </div>
           <div className="p-4 font-bold text-md font-work-sans">
             Group Privacy
           </div>
-          <PrivacyOptions className="px-4"/>
+          <PrivacyOptions
+            privacyOption={privacyOption}
+            setPrivacyOption={setPrivacyOption}
+          />
+          <Button
+            className="btn w-11/12 my-8"
+            // onClick={() => signOut(router, userFirstName(user))}
+          >
+            Create!
+          </Button>
         </div>
       </form>
     </main>
   );
 }
 
-// TODO: Write function to check against the db & to reject explicit terms
-function validateGroupName(name) {
-    return (
-        name
-    )
-}
-
-const privacyOptions = [
-  {
-    name: "Private",
-    desc: "Only group members can see the activity feed",
-  },
-  {
-    name: "Public",
-    desc: "Anyone can see the activity feed",
-  },
-];
-
-function PrivacyOptions(props) {
-  const [selected, setSelected] = useState(privacyOptions[1]);
-
+function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
   return (
-    <div className={`w-full max-w-md sm:max-w-none mx-auto ${props.className}`}>
-      <RadioGroup value={selected} onChange={setSelected}>
+    <div
+      className={`w-full px-4 flex-grow max-w-md sm:max-w-none ${className}`}
+    >
+      <RadioGroup value={privacyOption} onChange={setPrivacyOption}>
         <RadioGroup.Label className="sr-only">Privacy option</RadioGroup.Label>
-        <div className="space-x-0 sm:space-x-12 space-y-2 sm:space-y-0 sm:flex flex-col sm:flex-row">
-          {privacyOptions.map((option) => (
+        <div className="flex-grow space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 sm:flex flex-col sm:flex-row">
+          {groupPrivacyOptions.map((option) => (
             <RadioGroup.Option
               key={option.name}
               value={option}
@@ -96,9 +189,7 @@ function PrivacyOptions(props) {
                             checked ? "text-black" : "text-gray-500"
                           }`}
                         >
-                          <span>
-                            {option.desc}
-                          </span>
+                          <span>{option.desc}</span>
                         </RadioGroup.Description>
                       </div>
                     </div>
