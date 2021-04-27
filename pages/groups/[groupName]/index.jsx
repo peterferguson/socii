@@ -32,3 +32,15 @@
     // ! Implementing storage of this data would also save us money in the future since we 
     // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
+
+import { useRouter } from "next/router";
+
+export default function Group() {
+    const router = useRouter();
+
+    const groupName = router.query.groupName
+
+    return (
+        <div className="font-poppins text-8xl">{groupName}</div>
+    )
+}

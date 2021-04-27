@@ -1,39 +1,26 @@
 import {
   auth,
-  googleAuthProvider,
   userFirstName,
-  facebookAuthProvider,
   firestore,
 } from "@lib/firebase";
-import AppleLogo from "@icons/apple.svg";
-import FacebookLogo from "@icons/fb.svg";
-import TwitterLogo from "@icons/twitter.svg";
-import GoogleLogo from "@icons/google.svg";
-import CrossIcon from "@icons/cross.svg";
+import { signInOptions } from "@lib/constants";
+import { UserContext } from "@lib/context";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { handleEnterKeyDown, validateEmail } from "@utils/helper";
+
 import MailIcon from "@icons/mail.svg";
 import CheckIcon from "@icons/check.svg";
-import { UserContext } from "@lib/context";
-import Head from "@components/Head";
-import { useCallback, useContext } from "react";
-import dynamic from "next/dynamic";
+import CrossIcon from "@icons/cross.svg";
 import toast from "react-hot-toast";
 import debounce from "lodash.debounce";
 import router from "next/router";
-import { useState, useEffect } from "react";
-import { handleEnterKeyDown, validateEmail } from "@utils/helper";
-
-const BackdropFilter = dynamic(
-  // TODO: There is nothing behind the card for this to work
-  () => {
-    return import("react-backdrop-filter");
-  },
-  { ssr: false }
-);
 
 auth.onAuthStateChanged((user) => {
   if (user) {
     toast.dismiss();
-    router.push("/"); // TODO: Direct to the users home page / group page
+    // TODO: If a user already belongs to a group redirect there first
+    // TODO: Check the group first since if they are in a group they will already have a username
+    router.push(user ? "/groups/create" : "/username/create");
     toast.success(`Welcome ${userFirstName(user)}`);
   }
 });
@@ -47,23 +34,25 @@ auth.onAuthStateChanged((user) => {
 
 export default function Enter(props) {
   const { user } = useContext(UserContext);
+
   const [verified, setVerified] = useState(null);
 
   return (
     <main className="bg-gray-50 h-screen">
-      <Head title="Enter" description="Sign up for this amazing app!" />
       <div className="flex items-center justify-center min-h-screen">
         <div className="py-3 max-w-xl mx-6 sm:mx-auto">
-          <BackdropFilter
-            className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl bg-clip-padding bg-opacity-60 border border-gray-200"
-            filter={"blur(10px) sepia(50%)"}
-            canvasFallback={true}
+          <div
+            className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl \
+                       bg-clip-padding bg-opacity-60 border border-gray-200"
           >
             <div className="max-w-md mx-auto">
               <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
                 Sign Up!
               </div>
-              <div className="">
+              <div className="flex flex-col">
+                <span className="py-2 font-bold font-work-sans leading text-md">
+                  Email
+                </span>
                 <EmailSignUp verified={verified} setVerified={setVerified} />
               </div>
               <div className="leading-6 sm:text-lg sm:leading-7"></div>
@@ -74,7 +63,7 @@ export default function Enter(props) {
               </div>
               {!user && <SignInButtons verified={verified} />}
             </div>
-          </BackdropFilter>
+          </div>
         </div>
       </div>
     </main>
@@ -86,12 +75,6 @@ function SignInButtons({ verified }) {
   const signInPopUp = async (authProvider) =>
     await auth.signInWithPopup(authProvider);
 
-  const signInOptions = [
-    { logo: GoogleLogo, provider: googleAuthProvider },
-    { logo: AppleLogo, provider: null },
-    { logo: TwitterLogo, provider: null },
-    { logo: FacebookLogo, provider: facebookAuthProvider },
-  ];
   return (
     <div className="flex justify-center p-8 space-x-8">
       {signInOptions.map((option) => {
@@ -147,6 +130,7 @@ function EmailSignUp({ verified, setVerified }) {
     }, 250),
     []
   );
+
   // Step 1 - Verify Invite
   useEffect(() => {
     if (email) {

@@ -1,12 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
-import { Dialog, RadioGroup } from "@headlessui/react";
-import { firestore } from "@lib/firebase";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { RadioGroup } from "@headlessui/react";
+import { firestore, serverTimestamp } from "@lib/firebase";
 import { groupPrivacyOptions } from "@lib/constants";
+import { UserContext } from "@lib/context";
 import { Button } from "@components/Button";
+import CheckIcon from "@components/BackgroundCheck";
 import CrossIcon from "@icons/cross.svg";
 import debounce from "lodash/debounce";
+import toast from "react-hot-toast";
 
 export default function Create() {
+  const { user, username } = useContext(UserContext);
+
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [privacyOption, setPrivacyOption] = useState(groupPrivacyOptions[1]);
@@ -51,6 +56,9 @@ export default function Create() {
         const { empty } = await nameQuery.get();
 
         setisValidGroupName(empty);
+        if (!empty) {
+          toast.error(`Sorry the group name ${name} is taken`);
+        }
         setLoading(false);
       }
     }, 500),
@@ -123,9 +131,16 @@ export default function Create() {
           />
           <Button
             className="btn w-11/12 my-8"
-            onClick={() =>
+            onClick={(e) =>
               isValidGroupName
-                ? createGroup(groupName, groupPrivacyOptions, groupDescription)
+                ? createGroup(
+                    e,
+                    user,
+                    username,
+                    groupName,
+                    privacyOption,
+                    groupDescription
+                  )
                 : null
             }
           >
@@ -182,7 +197,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
                             checked ? "text-black" : "text-gray-500"
                           }`}
                         >
-                          <span>{option.desc}</span>
+                          <span>{option.description}</span>
                         </RadioGroup.Description>
                       </div>
                     </div>
@@ -202,24 +217,35 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
   );
 }
 
-function CheckIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <circle cx={12} cy={12} r={12} fill="currentColor" opacity="0.2" />
-      <path
-        d="M7 13l3 3 7-7"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+const createGroup = async (
+  e,
+  user,
+  username,
+  groupName,
+  privacyOption,
+  groupDescription
+) => {
+  e.preventDefault();
+  // const router = useRouter();
+  
+  const userGroupRef = firestore
+    .collection(`users/${user.uid}/groups/`)
+    .doc(groupName);
+  const groupRef = firestore.collection("groups").doc(groupName);
+  const investorsRef = groupRef.collection("investors").doc(username);
 
-function createGroup() {
-  const groupRef = firestore.collection("groups")
-  .doc()
+  const batch = firestore.batch();
+  batch.set(userGroupRef, { groupName, joinDate: serverTimestamp() });
+  batch.set(groupRef, {
+    groupDescription,
+    groupName,
+    privacyOption,
+    groupType: "", // TODO: Implement group types (dividend/active/value/growth)
+    startDate: serverTimestamp(),
+  });
+  batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() });
+  await batch.commit();
 
-  groupRef.collection("investors")
-}
+  // Imperative navigation after doc is set
+  // router.push(`/groups/${groupName}`);
+};
