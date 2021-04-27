@@ -66,7 +66,7 @@ export default function Username(props) {
       <form className="w-full sm:w-2/3 my-16">
         <div
           className="appearance-none bg-brand-light bg-opacity-10 \
-                      text-gray-700 border border-gray-300 rounded-t-3xl sm:rounded-xl py-3 px-4 mb-3 \
+                      text-gray-700 border border-gray-300 rounded-xl py-3 px-4 m-4 sm:mb-3 \
                       leading-tight focus:outline-none focus:bg-gray-50 \
                       focus:border-gray-500"
         >
