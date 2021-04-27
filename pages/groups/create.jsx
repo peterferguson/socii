@@ -111,22 +111,8 @@ export default function Create() {
               className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none text-tiny sm:text-base"
               type="text"
               placeholder="Best active value/dividend/growth investment club around!"
-              onChange={onChange}
+              onChange={(e) => setGroupDescription(e.target.value)}
             />
-            <div
-              className={`bg-white text-sm sm:text-tiny ${
-                isValidGroupName
-                  ? "text-brand-light btn-transition"
-                  : "text-red-400"
-              } p-0.5 align-middle`}
-              onKeyDown={null}
-            >
-              {isValidGroupName ? (
-                <CheckIcon className="w-6" onClick={null} />
-              ) : (
-                <CrossIcon className="w-6" />
-              )}
-            </div>
           </div>
           <div className="p-4 font-bold text-md font-work-sans">
             Group Privacy
@@ -137,7 +123,11 @@ export default function Create() {
           />
           <Button
             className="btn w-11/12 my-8"
-            // onClick={() => signOut(router, userFirstName(user))}
+            onClick={() =>
+              isValidGroupName
+                ? createGroup(groupName, groupPrivacyOptions, groupDescription)
+                : null
+            }
           >
             Create!
           </Button>
@@ -154,8 +144,10 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
     >
       <RadioGroup value={privacyOption} onChange={setPrivacyOption}>
         <RadioGroup.Label className="sr-only">Privacy option</RadioGroup.Label>
-        <div className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
-                        sm:flex flex-col sm:flex-row">
+        <div
+          className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
+                        sm:flex flex-col sm:flex-row"
+        >
           {groupPrivacyOptions.map((option) => (
             <RadioGroup.Option
               key={option.name}
@@ -223,4 +215,11 @@ function CheckIcon(props) {
       />
     </svg>
   );
+}
+
+function createGroup() {
+  const groupRef = firestore.collection("groups")
+  .doc()
+
+  groupRef.collection("investors")
 }
