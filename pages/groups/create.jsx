@@ -150,11 +150,12 @@ export default function Create() {
 function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
   return (
     <div
-      className={`w-full px-4 flex-grow max-w-md sm:max-w-none ${className}`}
+      className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}
     >
       <RadioGroup value={privacyOption} onChange={setPrivacyOption}>
         <RadioGroup.Label className="sr-only">Privacy option</RadioGroup.Label>
-        <div className="flex-grow space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 sm:flex flex-col sm:flex-row">
+        <div className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
+                        sm:flex flex-col sm:flex-row">
           {groupPrivacyOptions.map((option) => (
             <RadioGroup.Option
               key={option.name}
