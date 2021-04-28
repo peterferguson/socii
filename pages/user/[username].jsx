@@ -9,7 +9,10 @@
 
 // TODOs (Page Features):
 // - Display the pie charts of each of the groups the user is part of but solely for their share
-// -
+  // // - Create pie charts & skeleton loaders for those charts
+  // - Create conversion function for the group holdings data into pie format
+  // - Create conversion function for the group trade data into long form cards
+  // ? - Create conversion function for the group trade data into an activity feed
 // -
 // -
 // -
@@ -37,7 +40,7 @@ export default function UserPage() {
           .where("groupName", ">", "")
       : null
   );
-console.log(groups);
+  console.log(groups);
   // TODO: Convert user photo to a default if none is present
   // TODO: (maybe create a component based on initials)
   return (
@@ -59,17 +62,19 @@ console.log(groups);
           )}
           {username == pagename && (
             <AuthCheck>
-              {groups ? groups.docs.map((data) => {
-                return (
-                  <PieCard
-                    groupName={data?.id}
-                    data={[{ theta: 1.5 }, { theta: 2 }]}
-                    scaling={0.3}
-                    radius={250}
-                    text={{ main: "Price", sub: "%pct" }}
-                  />
-                );
-              }) : null}
+              {groups
+                ? groups.docs.map((data) => {
+                    return (
+                      <PieCard
+                        groupName={data?.id}
+                        data={[{ theta: 1.5 }, { theta: 2 }]}
+                        scaling={0.3}
+                        radius={250}
+                        text={{ main: "Price", sub: "%pct" }}
+                      />
+                    );
+                  })
+                : null}
             </AuthCheck>
           )}
         </div>
