@@ -1,20 +1,7 @@
 import { FlexibleXYPlot, XAxis, YAxis, LineSeries, Crosshair } from "react-vis";
-import { useState, useLayoutEffect } from "react";
+import { useState } from "react";
+import { useWindowSize } from "@lib/hooks";
 import "react-vis/dist/style.css";
-
-const useWindowSize = () => {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-};
-
 
 export default function LineChart(props) {
   const [width, height] = useWindowSize();
@@ -34,17 +21,15 @@ export default function LineChart(props) {
     }),
     onNearestX: (d) => setCrosshairValue(d),
     // style: { fill: "none" },
-    className: {...props.className},
-
+    className: { ...props.className },
   };
 
-  
   return (
     <>
       <FlexibleXYPlot
         onMouseLeave={() => setCrosshairValue(false)}
-        height={height*0.6}
-        width={width*0.7}
+        height={height * 0.6}
+        width={width * 0.7}
         xType="time"
         margin={{ left: 75, bottom: 75, right: 75, top: 10 }}
       >
