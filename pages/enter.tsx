@@ -1,8 +1,4 @@
-import {
-  auth,
-  userFirstName,
-  firestore,
-} from "@lib/firebase";
+import { auth, userFirstName, firestore } from "@lib/firebase";
 import { signInOptions } from "@lib/constants";
 import { UserContext } from "@lib/context";
 import { useState, useEffect, useCallback, useContext } from "react";
@@ -15,16 +11,6 @@ import toast from "react-hot-toast";
 import debounce from "lodash.debounce";
 import router from "next/router";
 
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    toast.dismiss();
-    // TODO: If a user already belongs to a group redirect there first
-    // TODO: Check the group first since if they are in a group they will already have a username
-    router.push(user ? "/groups/create" : "/username/create");
-    toast.success(`Welcome ${userFirstName(user)}`);
-  }
-});
-
 // ? Should we REQUIRE that the user login with email
 // TODO: Add user info to users colleciton on sign up
 // TODO: Implement passwordless login
@@ -33,7 +19,17 @@ auth.onAuthStateChanged((user) => {
 // TODO: Implement a route for invitees which has the invited email so we can bypass the auth verification & attach the email to whatever auth user is provided
 
 export default function Enter(props) {
-  const { user } = useContext(UserContext);
+  const { user, username } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user) {
+      toast.dismiss();
+      // TODO: If a user already belongs to a group redirect there first
+      // TODO: Check the group first since if they are in a group they will already have a username
+      router.push(`/user/${username}`);
+      toast.success(`Welcome ${userFirstName(user)}`);
+    }
+  }, [username]);
 
   const [verified, setVerified] = useState(null);
 

@@ -8,31 +8,26 @@ import LogoutIcon from "@icons/logout.svg";
 import GroupIcon from "@icons/group.svg";
 import RightChevronIcon from "@icons/rightChevron.svg";
 import MenuIcon from "@icons/menu.svg";
-import { Menu, Transition, Popover } from "@headlessui/react";
+import { Transition, Popover } from "@headlessui/react";
 
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 
 export default function Navigation(props) {
-  const { user, username } = useContext(UserContext);
+  const { username } = useContext(UserContext);
   const router = useRouter();
+  
   return (
     <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
       <Logo />
       <SearchBar {...props} />
-      {username && (
-        <>
-          <MyPopover />
-          {/* <Link href={`/${username}`} className="icon-button">
-              {user?.photoUrl ? <img src={user?.photoUrl}></img> : <a>"🙋‍♂️"</a>}
-            </Link> */}
-        </>
-      )}
-      {!username && (
+      {username ? (
+        <Dropdown />
+      ) : (
         <button
-          className="btn btn-transition"
+          className="btn btn-transition flex-none"
           onClick={() => router.push("/enter")}
         >
           Login
@@ -91,46 +86,51 @@ function SearchBar({ setShowSearchCard }) {
   );
 }
 
-const dropdownItems = [
-  {
-    name: "Invites",
-    description: "Invite yours friends to the alpha",
-    href: "##",
-    icon: AtIcon,
-  },
-  {
-    name: "Porfolio",
-    description: "Keep track of your growth",
-    href: "##",
-    icon: PieIcon,
-  },
-  {
-    name: "Groups",
-    description: "View all of your Groups",
-    href: "##",
-    icon: GroupIcon,
-    rightIcon: RightChevronIcon,
-  },
-  {
-    name: "Settings",
-    description: "Adjust your settings",
-    href: "##",
-    icon: CogIcon,
-    rightIcon: RightChevronIcon,
-  },
-];
+function Dropdown() {
+  // const [openSettings, setOpenSettings] = useState(false);
+  const { user, username } = useContext(UserContext);
+  const router = useRouter();
 
-const grayedDropdownItems = [
-  {
-    name: "Sign Out",
-    description: "",
-    href: "",
-    icon: LogoutIcon,
-    onClick: () => signOut(router, userFirstName(user)),
-  },
-];
+  const dropdownItems = [
+    {
+      name: "Invites",
+      description: "Invite yours friends to the alpha",
+      href: "/user/invites",
+      icon: AtIcon,
+    },
+    {
+      name: "Porfolio",
+      description: "Keep track of your growth",
+      href: `/user/${username}`,
+      icon: PieIcon,
+    },
+    {
+      name: "Groups",
+      description: "View all of your Groups",
+      href: "",
+      icon: GroupIcon,
+      rightIcon: RightChevronIcon,
+      // onClick: () => setOpenSettings(!openSettings),
+    },
+    {
+      name: "Settings",
+      description: "Adjust your settings",
+      href: "",
+      icon: CogIcon,
+      rightIcon: RightChevronIcon,
+    },
+  ];
 
-function MyPopover() {
+  const grayedDropdownItems = [
+    {
+      name: "Sign Out",
+      description: "",
+      href: "",
+      icon: LogoutIcon,
+      onClick: () => signOut(router, userFirstName(user)),
+    },
+  ];
+
   return (
     <Popover className="relative inline-block text-left p-4">
       {({ open }) => (
@@ -174,22 +174,26 @@ function MyPopover() {
 
 function DropdownItem({ item }) {
   return (
-    <a
-      key={item.name}
-      href={item.href}
-      onClick={item.onClick}
-      className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
-    >
-      <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-        <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
-      </div>
-      <div className="ml-4 flex-grow">
-        <p className="text-sm font-medium text-gray-900">{item.name}</p>
-        <p className="text-sm text-gray-500">{item.description}</p>
-      </div>
-      {item.rightIcon && (
-        <item.rightIcon className="flex-none h-6 w-6 text-brand-light" aria-hidden="true" />
-      )}
-    </a>
+    <Link href={item.href}>
+      <a
+        key={item.name}
+        onClick={item.onClick}
+        className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
+      >
+        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
+          <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
+        </div>
+        <div className="ml-4 flex-grow">
+          <p className="text-sm font-medium text-gray-900">{item.name}</p>
+          <p className="text-sm text-gray-500">{item.description}</p>
+        </div>
+        {item.rightIcon && (
+          <item.rightIcon
+            className="flex-none h-6 w-6 text-brand-light"
+            aria-hidden="true"
+          />
+        )}
+      </a>
+    </Link>
   );
 }
