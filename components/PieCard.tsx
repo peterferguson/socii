@@ -1,19 +1,16 @@
 import DonutChart from "@components/DonutChart";
+import Link from "next/link";
 
-export default function PieCard({
-  groupName,
-  data,
-  scaling,
-  radius,
-  text
-}) {
+export default function PieCard({ groupName, data, scaling, radius, text }) {
   return (
     <div className="bg-gray-50 rounded-none sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
-      <div className="text-xl font-poppins text-center pt-4 -mb-8">
-        {groupName}
-      </div>
+      <Link href={`/groups/${groupName}`}>
+        <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10">
+          {groupName}
+        </div>
+      </Link>
       <DonutChart
-        className="z-0"
+        className="z-0 -mt-8"
         data={data}
         scaling={scaling}
         radius={radius}
