@@ -51,6 +51,12 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <UserContext.Provider value={userData}>
       <Head />
+      {!userData.user && (
+        <div className="w-full h-20 bg-gradient-to-r to-brand-light from-teal-400 text-white font-work-sans text-lg text-center align-middle p-4">
+          👋 socii is currently in private pre-alpha mode.
+          <div className="-mt-1">You will need an invite!</div>
+        </div>
+      )}
       <Navigation {...props} />
       {isBrowser && <SearchCard {...props} />}
       <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
@@ -58,4 +64,3 @@ export default function MyApp({ Component, pageProps }) {
     </UserContext.Provider>
   );
 }
-  

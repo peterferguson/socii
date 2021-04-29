@@ -106,7 +106,7 @@ export default function SearchCard({ showSearchCard, setShowSearchCard }) {
       onClose={setIsOpen}
       as="div"
       className={`fixed inset-1 overflow-y-auto w-11/12 p-24 m-8 bg-gray-200 \
-                  rounded-lg shadow-xl backdrop-filter-blur \
+                  rounded-lg shadow-xl backdrop-filter backdrop-blur-lg \
                   bg-opacity-50 bg-clip-padding z-50`}
     >
       <InstantSearch {...searchProps}>

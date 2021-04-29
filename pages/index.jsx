@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+
 import { firestore, auth } from "@lib/firebase";
 import { logoUrl } from "@utils/helper";
 
@@ -51,12 +51,12 @@ export default function Home() {
             Future With Friends.
           </div>
           <div>
-            <Button
-              className="btn-transition"
+            <button
+              className="btn btn-transition"
               onClick={() => router.push( auth.currentUser ? "/stock" : "/enter")}
             >
               Invest Now
-            </Button>
+            </button>
           </div>
         </div>
         <div className="flex bg-gradient-to-r from-green-300 to-brand-light z-0 animate-fade-in-right">

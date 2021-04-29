@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "@components/Button";
+
 import { UserContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
 import CheckIcon from "@components/BackgroundCheck";
@@ -101,14 +101,14 @@ export default function Username(props) {
               )}
             </div>
           </div>
-          <Button
+          <button
             className="btn w-11/12 my-4"
             onClick={(e) =>
               isValidUsername ? createUsername(e, user, username) : null
             }
           >
             Choose!
-          </Button>
+          </button>
         </div>
       </form>
     </main>

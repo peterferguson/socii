@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@components/Button";
+
 
 export default function Custom404() {
   return (
@@ -19,9 +19,9 @@ export default function Custom404() {
       <div className="p-2 flex justify-center text-3xl font-poppins font-bold">Page not found</div>
       <div className="p-4 flex justify-center">
       <Link href="/">
-        <Button>
+        <button className="btn">
           Go home
-        </Button>
+        </button>
       </Link>
       </div>
       </div>

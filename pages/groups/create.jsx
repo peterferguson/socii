@@ -3,7 +3,7 @@ import { RadioGroup } from "@headlessui/react";
 import { firestore, serverTimestamp } from "@lib/firebase";
 import { groupPrivacyOptions } from "@lib/constants";
 import { UserContext } from "@lib/context";
-import { Button } from "@components/Button";
+
 import CheckIcon from "@components/BackgroundCheck";
 import CrossIcon from "@icons/cross.svg";
 import debounce from "lodash/debounce";
@@ -129,7 +129,7 @@ export default function Create() {
             privacyOption={privacyOption}
             setPrivacyOption={setPrivacyOption}
           />
-          <Button
+          <button
             className="btn w-11/12 my-8"
             onClick={(e) =>
               isValidGroupName
@@ -145,7 +145,7 @@ export default function Create() {
             }
           >
             Create!
-          </Button>
+          </button>
         </div>
       </form>
     </main>
