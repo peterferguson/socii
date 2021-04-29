@@ -12,6 +12,7 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
 
   const middleDivRef = useRef(null);
 
+  // TODO: Convert this into a useContainerSize hook
   useEffect(() => {
     if (middleDivRef.current) {
       setHeight(middleDivRef.current.offsetHeight);

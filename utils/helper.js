@@ -3,10 +3,10 @@ import { tickerToISIN } from "@lib/firebase";
 export const isBrowser = typeof window !== "undefined";
 
 export const pctChange = (first, second) => {
-  return ((first - second) * 100) / second
-}
+  return ((first - second) * 100) / second;
+};
 
-export const pnlColour = (pctChange) => {
+export const pnlBackgroundColor = (pctChange) => {
   return pctChange > 0
     ? "bg-teal-200"
     : pctChange < 0
@@ -14,20 +14,31 @@ export const pnlColour = (pctChange) => {
     : "bg-gray-200";
 };
 
+export const pnlTextColor = (pctChange) => {
+  return pctChange > 0
+    ? "text-teal-200"
+    : pctChange < 0
+    ? "text-red-200"
+    : "text-brand";
+};
+
 export const logoUrl = (isin) => {
   if (isin.length <= 4) {
-    isin = tickerToISIN(isin)
+    isin = tickerToISIN(isin);
   }
   return `https://storage.googleapis.com/sociiinvest.appspot.com/logos/${isin}.png`;
-}
+};
 
 export const handleEnterKeyDown = (event, callback) => {
-    if (event.key === 'Enter') {
-      callback()
-    }
+  if (event.key === "Enter") {
+    callback();
   }
+};
 
-export const alphaVantageData = async (tickerSymbol, functionType = "TIME_SERIES_DAILY") => {
+export const alphaVantageData = async (
+  tickerSymbol,
+  functionType = "TIME_SERIES_DAILY"
+) => {
   const apiKey = "E9W8LZBTXVYZ31IO";
   const fetchUrl = `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`;
   const response = await fetch(fetchUrl);
@@ -41,8 +52,7 @@ export const alphaVantageData = async (tickerSymbol, functionType = "TIME_SERIES
     close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
     volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
   }));
-
-}
+};
 
 export function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

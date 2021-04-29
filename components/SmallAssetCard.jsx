@@ -1,4 +1,4 @@
-import { pnlColour } from "@utils/helper";
+import { pnlBackgroundColor } from "@utils/helper";
 
 export default function SmallAssetkCard(props) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
@@ -13,14 +13,14 @@ export default function SmallAssetkCard(props) {
           />
           <div className="p-2 h-auto w-auto text-center">
             <div
-              className={`${pnlColour(
+              className={`${pnlBackgroundColor(
                 props.dailyPctChange
               )} text-black text-tiny sm:text-xs px-2 mx-1 rounded-full font-semibold w-full text-center inline-block`}
             >
               D: {props.dailyPctChange.toFixed(2)}%
             </div>
             <div
-              className={`${pnlColour(
+              className={`${pnlBackgroundColor(
                 props.monthlyPctChange
               )} text-black text-tiny sm:text-xs px-2 mx-1 rounded-full font-semibold w-full text-center hidden sm:inline-block`}
             >

@@ -1,18 +1,12 @@
-import { pctChange } from "@utils/helper";
+import { pctChange, pnlTextColor } from "@utils/helper";
 import Link from "next/link";
 
 export default function CardSlider({ tickerSymbols }) {
-  const pnlColors = tickerSymbols.map(({ timeseries }) => {
-    const closeDelta = pctChange(
-      timeseries[0].close,
-      timeseries[timeseries.length - 1].close
-    );
-    return closeDelta > 0
-      ? "text-teal-200"
-      : closeDelta < 0
-      ? "text-red-200"
-      : "text-brand";
-  });
+  const pnlColors = tickerSymbols.map(({ timeseries }) =>
+    pnlTextColor(
+      pctChange(timeseries[0].close, timeseries[timeseries.length - 1].close)
+    )
+  );
   return (
     <section className="flex p-12 overflow-x-scroll bg-gray-50">
       {tickerSymbols.map(({ ticker, timeseries, sector }, index) => {
