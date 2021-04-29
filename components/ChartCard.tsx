@@ -1,6 +1,7 @@
 import { FlexibleXYPlot, LineSeries, Crosshair } from "react-vis";
 import "react-vis/dist/style.css";
 import { useRef, useEffect, useState } from "react";
+import { tailwindColorMap } from "@lib/constants";
 import { pctChange } from "@utils/helper";
 import Link from "next/link";
 
@@ -24,12 +25,6 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
 
   const pnlColor =
     closeDelta > 0 ? "bg-teal-200" : closeDelta < 0 ? "bg-red-200" : "bg-brand";
-
-  const tailwindColorMap = {
-    "bg-teal-200": "#99F6E4",
-    "bg-red-200": "#FECACA",
-    "bg-brand": "#0fa9e6",
-  };
 
   const lineSeriesProps = {
     animation: true,

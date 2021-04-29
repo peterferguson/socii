@@ -29,3 +29,8 @@ export const signInOptions = [
   { logo: FacebookLogo, provider: facebookAuthProvider },
 ];
 
+export const tailwindColorMap = {
+  "bg-teal-200": "#99F6E4",
+  "bg-red-200": "#FECACA",
+  "bg-brand": "#0fa9e6",
+};

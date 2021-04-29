@@ -91,6 +91,8 @@ function Dropdown() {
   const { user, username } = useContext(UserContext);
   const router = useRouter();
 
+  // TODO: Add bitcoin svg to navigate to crypto page
+  // TODO: Add navigation to stock page 
   const dropdownItems = [
     {
       name: "Invites",

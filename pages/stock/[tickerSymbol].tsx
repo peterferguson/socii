@@ -1,7 +1,12 @@
 import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
 import SmallAssetCard from "@components/SmallAssetCard";
-import { alphaVantageData, isBrowser, pctChange } from "@utils/helper";
+import {
+  alphaVantageData,
+  isBrowser,
+  pctChange,
+  pnlTextColor,
+} from "@utils/helper";
 import { firestore, tickerToISIN } from "@lib/firebase";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -100,7 +105,7 @@ export async function getStaticPaths(context) {
   // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 }
 
-export default function TickerPage(props) {
+export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -108,21 +113,39 @@ export default function TickerPage(props) {
   }
 
   const [showTradingView, setShowTradingView] = useState(false);
+  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0);
 
-  const previousClose = props.timeseries[0].close;
-  const twicePreviousClose = props.timeseries[1].close;
-  const previousMonthClose = props.timeseries[21].close;
+  timeseries = timeseries.map((d) => {
+    return {
+      x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
+      y: d.close,
+    };
+  });
 
-  const dailyPctChange = pctChange(previousClose, twicePreviousClose);
-  const monthlyPctChange = pctChange(previousClose, previousMonthClose);
+  const highlightedClose = timeseries[crosshairIndexValue].y;
+  let previousDayClose = highlightedClose;
+  let previousMonthClose = highlightedClose;
+  try {
+    previousDayClose = timeseries[crosshairIndexValue + 1].y;
+    previousMonthClose = timeseries[crosshairIndexValue + 21].y;
+  } catch (err) {}
+
+  const dailyPctChange = pctChange(highlightedClose, previousDayClose);
+  const monthlyPctChange = pctChange(highlightedClose, previousMonthClose);
+
+  // * Show the pct change of highlighted value versus today
+  const highlightedChange = pctChange(
+    timeseries[0].y,
+    highlightedClose
+  ).toFixed(2);
 
   return (
     <>
       <div className="flex flex-row w-full h-1/8 bg-gray-50">
         <SmallAssetCard
-          logoUrl={props.tickerData.logoUrl}
-          tickerSymbol={props.tickerSymbol}
-          shortName={props.tickerData.shortName}
+          logoUrl={tickerData.logoUrl}
+          tickerSymbol={tickerSymbol}
+          shortName={tickerData.shortName}
           dailyPctChange={dailyPctChange}
           monthlyPctChange={monthlyPctChange}
         />
@@ -130,7 +153,21 @@ export default function TickerPage(props) {
       <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
         <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
           <div className="flex justify-between w-full h-20">
-            <span className="z-50 w-12 text-2xl h-4">${previousClose}</span>
+            <span className="z-50 w-12 text-4xl h-4">
+              ${highlightedClose}
+              {highlightedChange && (
+                <span
+                  className={`flex w-32 text-sm text-gray-300 ${pnlTextColor(
+                    highlightedChange
+                  )}`}
+                >
+                  {`(${highlightedChange})%`}
+                </span>
+              )}
+              <span className="flex w-32 text-sm text-gray-300">
+                {`on ${timeseries[crosshairIndexValue].x.toLocaleDateString()}`}
+              </span>
+            </span>
             <div className="flex">
               <div className="px-4">
                 {!showTradingView ? "TradingView" : "socii Chart"}
@@ -156,11 +193,11 @@ export default function TickerPage(props) {
             </div>
           </div>
           {showTradingView ? (
-            <TradingViewChart tickerSymbol={props.tickerSymbol} />
-          ) : props.timeseries ? (
+            <TradingViewChart tickerSymbol={tickerSymbol} />
+          ) : timeseries ? (
             <LineChart
-              tickerSymbol={props.tickerSymbol}
-              data={props.timeseries}
+              setCrosshairIndexValue={setCrosshairIndexValue}
+              timeseries={timeseries}
             />
           ) : (
             <div>Loading</div>
