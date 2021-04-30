@@ -58,12 +58,14 @@ function Logo() {
 function SearchBar({ setShowSearchCard }) {
   return (
     <div
-      className="border-b-2 border-gray-200 flex-1 h-18 flex items-center \
+      className="flex-1 h-18 flex items-center \
                  justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8"
     >
       <button
         type="button"
-        className="group leading-6 font-medium flex items-center space-x-3 sm:space-x-4 hover:text-gray-600 transition-colors duration-200 w-full py-2"
+        className="group leading-6 font-medium flex items-center space-x-3 sm:space-x-4 \
+                 hover:text-gray-600 transition-colors duration-200 w-full py-2 \
+                 focus:outline-none"
         onClick={() => setShowSearchCard(true)}
       >
         <SearchIcon className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200" />
