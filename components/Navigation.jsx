@@ -96,7 +96,7 @@ function Dropdown() {
   const dropdownItems = [
     {
       name: "Invites",
-      description: "Invite yours friends to the alpha",
+      description: "Invite your friends to the alpha",
       href: "/user/invites",
       icon: AtIcon,
     },
@@ -134,7 +134,7 @@ function Dropdown() {
   ];
 
   return (
-    <Popover className="relative inline-block text-left p-4">
+    <Popover className="relative inline-block text-left p-4 z-50">
       {({ open }) => (
         <>
           <Popover.Button className="items-center justify-center w-full h-full focus:outline-none">

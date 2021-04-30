@@ -7,13 +7,23 @@ import {
 } from "react-vis";
 import { useWindowSize } from "@lib/hooks";
 import "react-vis/dist/style.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { tailwindColorMap } from "@lib/constants";
+import { pnlBackgroundColor, pctChange } from "@utils/helper";
 
-export default function LineChart({ timeseries, setCrosshairIndexValue }) {
+export default function LineChart({
+  timeseries,
+  crosshairIndexValue,
+  setCrosshairIndexValue,
+}) {
   const [width, height] = useWindowSize();
 
   const [crosshairValue, setCrosshairValue] = useState(false);
+  const [pctChangeValue, setPctChangeValue] = useState(0.0);
+
+  useEffect(() => {
+    setPctChangeValue(pctChange(timeseries[0].y, crosshairValue.y).toFixed(2));
+  }, [crosshairValue]);
 
   const lineSeriesProps = {
     animation: true,
@@ -27,19 +37,21 @@ export default function LineChart({ timeseries, setCrosshairIndexValue }) {
     },
   };
 
-  // const areaSeriesProps = {
-  //   animation: true,
-  //   color: tailwindColorMap[],
-  //   curve: "curveNatural",
-  //   opacityType: "literal",
-  //   strokeWidth: 2,
-  //   data: timeseries,
-  // };
+  // TODO: Add reactive area sizing based on the index of the crosshair and update color based on pnl
+  const areaSeriesProps = {
+    animation: true,
+    color: tailwindColorMap[pnlBackgroundColor(pctChangeValue)],
+    opacity: 0.75,
+    data: timeseries.slice(0, 1 + crosshairIndexValue),
+  };
 
   return (
     <div className="flex mx-auto items-center justify-center">
       <FlexibleXYPlot
-        onMouseLeave={() => setCrosshairIndexValue(0)}
+        onMouseLeave={() => {
+          setCrosshairValue(false);
+          setCrosshairIndexValue(0);
+        }}
         height={height * 0.6}
         width={width * 0.8}
         xType="time"
@@ -50,7 +62,7 @@ export default function LineChart({ timeseries, setCrosshairIndexValue }) {
           tickFormat={(d) => d.toLocaleDateString()}
         />
         <LineSeries {...lineSeriesProps} />
-        {/* {crosshairValue && <AreaSeries {...areaSeriesProps} />} */}
+        {crosshairValue && <AreaSeries {...areaSeriesProps} />}
         {crosshairValue && (
           <Crosshair
             values={[crosshairValue]}

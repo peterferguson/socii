@@ -153,7 +153,7 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
       <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
         <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
           <div className="flex justify-between w-full h-20">
-            <span className="z-50 w-12 text-4xl h-4">
+            <span className="z-10 w-12 text-4xl h-4">
               ${highlightedClose}
               {highlightedChange && (
                 <span
@@ -196,6 +196,7 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
             <TradingViewChart tickerSymbol={tickerSymbol} />
           ) : timeseries ? (
             <LineChart
+              crosshairIndexValue={crosshairIndexValue}
               setCrosshairIndexValue={setCrosshairIndexValue}
               timeseries={timeseries}
             />
