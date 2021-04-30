@@ -58,3 +58,18 @@ export function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
+
+export async function delayFetch(url, delayInMilliseconds = 1000) {
+
+  const someTimeoutAction = () => {
+    // Let's return a new Promise, promising to eventually return a value
+    return new Promise((resolve) => {
+      setTimeout(async () => {
+        const response = await fetch(url);
+        resolve(await response.json());
+      }, delayInMilliseconds);
+    });
+  };
+
+  return await someTimeoutAction();
+}

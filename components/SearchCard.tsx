@@ -6,13 +6,18 @@ import {
   Configure,
   connectStateResults,
 } from "react-instantsearch-dom";
-import React from "react";
+import { useEffect, useState } from "react";
 import algoliasearch from "algoliasearch/lite";
 import SearchIcon from "@icons/search.svg";
 import Loader from "@components/Loader";
 import Link from "next/link";
 import debounce from "lodash/debounce";
 import { Dialog } from "@headlessui/react";
+import { useRouter } from "next/router";
+import { delayFetch } from "@utils/helper";
+import IEXQuery from "@lib/iex";
+
+const iexClient = new IEXQuery();
 
 const algoliaClient = algoliasearch(
   process.env.ALGOLIA_ID,
@@ -73,33 +78,70 @@ const LoadingIndicator = connectStateResults(({ isSearchStalled }) => {
   return isSearchStalled ? <Loader show={isSearchStalled} /> : null;
 });
 
-const Hit = ({ hit }) => (
-  <Link href={`/stock/${hit.tickerSymbol}`}>
-    <div className="max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-10 w-full">
-      <img
-        src={`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${hit.ISIN}.png`}
-        alt=""
-        className="h-12 w-12 rounded-full border-brand border-double -mx-14 -my-8"
-      />
-      <Highlight attribute="name" hit={hit} />
-      <div className="flex pt-4">
-        <h4 className="text-xl flex-1 text-gray-900">{hit.tickerSymbol}</h4>
-        <p className="text-base inline text-right text-green-400">$ Price</p>
+const Hit = ({ hit }) => {
+  const [loadingTicker, setLoadingTicker] = useState(false);
+
+  var latestPrice = undefined;
+  var changePct = undefined;
+  // latestPrice = delayFetch(iexClient.stockPrice(hit.tickerSymbol));
+  // changePct = delayFetch(
+  //   iexClient.stockQuote(hit.tickerSymbol, "changePercent")
+  // );
+
+  const hitClickHandler = () => setLoadingTicker(!loadingTicker);
+
+  return (
+    <Link href={`/stock/${hit.tickerSymbol}`}>
+      <div
+        className="max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-10 w-full"
+        onClick={hitClickHandler}
+      >
+        <img
+          src={`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${hit.ISIN}.png`}
+          alt=""
+          className="h-12 w-12 rounded-full border-brand border-double -mx-14 -my-8"
+        />
+        <Highlight attribute="name" hit={hit} />
+        {loadingTicker && <Loader show={loadingTicker} className="z-50" />}
+        <div className="flex pt-4">
+          <h4 className="text-xl flex-1 text-gray-900">{hit.tickerSymbol}</h4>
+          {latestPrice ? (
+            <p className="text-base inline text-right text-green-400">
+              $ {latestPrice}
+            </p>
+          ) : (
+            <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+          )}
+        </div>
+        <div className="flex">
+          <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
+          {changePct ? (
+            <p className={"inline text-base text-right text-red-400"}>
+              {changePct}%
+            </p>
+          ) : (
+            <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+          )}
+        </div>
       </div>
-      <div className="flex">
-        <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
-        <p className="inline text-base text-right text-red-400">Change%</p>
-      </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
+
+// ! BUG: If a user navigates to the same page they are on the loader appears indefinitely
 export default function SearchCard({ showSearchCard, setShowSearchCard }) {
   const isOpen = showSearchCard;
   const setIsOpen = setShowSearchCard;
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsOpen(!isOpen);
+    }
+  }, [router.asPath]);
+
   // TODO Fix the dialog styling for mobile
-  // TODO Need to fix display coloring
-  // TODO Need to close on redirect
   return (
     <Dialog
       open={isOpen}
@@ -112,7 +154,7 @@ export default function SearchCard({ showSearchCard, setShowSearchCard }) {
       <InstantSearch {...searchProps}>
         <Configure hitsPerPage={1} />
         <DebouncedSearchBox delay={400} className="p-2 flex-1 max-w-sm" />
-        {/* <LoadingIndicator className="p-4" /> */}
+        <LoadingIndicator className="p-4" />
         <Hits
           hitComponent={Hit}
           className="py-4 px-8 rounded-lg my-10 w-full"

@@ -12,6 +12,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
 
+import { delayFetch } from "@utils/helper";
+import IEXQuery from "@lib/iex";
+import { useEffect } from "react";
+const iexClient = new IEXQuery();
+
 export async function getStaticProps({ params }) {
   // TODO add username section here based on the users portfolio
   const { tickerSymbol } = params;
@@ -138,6 +143,14 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
     timeseries[0].y,
     highlightedClose
   ).toFixed(2);
+
+  var latestPrice = undefined;
+  var changePct = undefined;
+
+  useEffect(() => {
+    latestPrice = delayFetch(iexClient.stockPrice(tickerSymbol));
+    changePct = delayFetch(iexClient.stockQuote(tickerSymbol, "changePercent"));
+  }, []);
 
   return (
     <>
