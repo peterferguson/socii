@@ -72,6 +72,10 @@ export default function Home() {
       <div className="w-full h-24">
         <TickerList />
       </div>
+      <div className="h-screen bg-teal-300 items-center justify-center flex">
+        <div className="text-8xl flex">ABout US <div className="p-32">Yuck ... Pure</div></div>
+      </div>
     </>
   );
 }
+

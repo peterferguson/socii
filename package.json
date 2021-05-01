@@ -18,13 +18,13 @@
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "^4.1.1",
     "moment": "^2.29.1",
-    "next": "^10.0.0",
+    "next": "^10.2.0",
     "postcss-preset-env": "^6.7.0",
-    "react": "^16.0.0",
+    "react": "^16.14.0",
     "react-async-hook": "^3.6.2",
     "react-backdrop-filter": "^2.1.0",
     "react-bootstrap": "^1.5.2",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.14.0",
     "react-fetch-hook": "^1.8.5",
     "react-firebase-hooks": "^3.0.3",
     "react-hook-form": "^6.15.5",
@@ -42,6 +42,7 @@
     "@types/react": "^17.0.3",
     "autoprefixer": "^10.2.5",
     "postcss": "^8.2.9",
-    "tailwindcss": "^2.1.1"
+    "tailwindcss": "^2.1.2",
+    "typescript": "^4.2.4"
   }
 }
