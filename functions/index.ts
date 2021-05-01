@@ -117,6 +117,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
   const optionalArgs = {
     executionCurrency: "GBP",
     assetType: "",
+    shortName: "",
   };
 
   // * Check for default args and assign them if they exist else end function with 422
@@ -136,6 +137,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
 
   requiredArgs.assetRef = assetRef;
   optionalArgs.assetType = assetData.get("assetType");
+  optionalArgs.shortName = assetData.get("shortName");
 
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
 
