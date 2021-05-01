@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["es2015", "dom"],
+    "module": "commonjs",
+    "target": "es2015",
+    "outDir": "lib",
+    "sourceMap": true,
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "isolatedModules": false,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

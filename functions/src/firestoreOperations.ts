@@ -1,24 +1,9 @@
-const algoliasearch = require("algoliasearch");
-const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const escapeHtml = require("escape-html");
 const serviceAccount = require("/Users/peter/Projects/socii/serviceAccountKey.json");
-const storageBucket = "sociiinvest.appspot.com";
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: storageBucket,
 });
-
-// Config var initialisation
-const ALGOLIA_ID = functions.config().algolia.app_id;
-const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
-const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
-const ALGOLIA_INDEX_NAME = "tickers";
-
-// Client Initialisation
-const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
-const firestore = admin.firestore();
-const storage = admin.storage();
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
@@ -39,58 +24,6 @@ const allKeysContainedIn = (object, other) => {
 };
 
 /**
- * Listens for new tickers added to /tickers/:documentId/ and updates
- * the search index every time a ticker is added to the database.
- */
-exports.onTickerCreated = functions.firestore
-  .document("ticker/{isin}")
-  .onCreate((snap, context) => {
-    // Get the ticker document
-    const ticker = snap.data();
-
-    // Add an 'objectID' field which Algolia requires
-    ticker.objectID = context.params.isin;
-
-    // Write to the algolia index
-    const index = client.initIndex(ticker);
-    return index.saveObject(ticker);
-  });
-
-/**
- * HTTP function to do an initial load of tickers in /tickers/:documentId/ to the
- * the search index.
- */
-exports.loadTickersToAlgolia = functions.https.onRequest(async (req, res) => {
-  // This array will contain all records to be indexed in Algolia.
-  // A record does not need to necessarily contain all properties of the Firestore
-  // document, only the relevant ones.
-  const algoliaRecords = [];
-  const indexName = "tickers"; // Ensure collection and index match in name
-  const collectionIndex = client.initIndex(indexName);
-
-  // Retrieve all documents from the tickers collection.
-  const querySnapshot = await firestore.collection(indexName).get();
-
-  querySnapshot.docs.slice(0, 3).forEach(async (doc) => {
-    const document = doc.data();
-
-    const record = {
-      objectID: doc.id, // use document id as the objectID
-      ISIN: document.ISIN,
-      longName: document.longName,
-      shortName: document.shortName,
-      tickerSymbol: document.tickerSymbol,
-    };
-
-    algoliaRecords.push(record);
-  });
-
-  collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
-    res.status(200).send("COLLECTION was indexed to Algolia successfully.");
-  });
-});
-
-/**
  * HTTP Cloud Function to store a purchases data in firebase.
  *
  * @param {Object} req Cloud Function request context.
@@ -105,7 +38,9 @@ exports.loadTickersToAlgolia = functions.https.onRequest(async (req, res) => {
  * @param {Object} res Cloud Function response context.
  *                     More info: https://expressjs.com/en/api.html#res
  */
-exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
+const tradeToFirestore = async (req, res) => {
+  const firestore = admin.firestore();
+
   const requiredArgs = {
     executorRef: null,
     assetRef: null,
@@ -118,6 +53,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
     executionCurrency: "GBP",
     assetType: "",
     shortName: "",
+    tickerSymbol: "",
   };
 
   // * Check for default args and assign them if they exist else end function with 422
@@ -138,6 +74,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
   requiredArgs.assetRef = assetRef;
   optionalArgs.assetType = assetData.get("assetType");
   optionalArgs.shortName = assetData.get("shortName");
+  optionalArgs.tickerSymbol = assetData.get("tickerSymbol");
 
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
 
@@ -146,8 +83,8 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
   const tradeRef = await firestore
     .collection(`${requiredArgs.executorRef}/trades`)
     .doc();
-  
-    var tradeData = {
+
+  var tradeData = {
     ...optionalArgs,
     ...requiredArgs,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
@@ -194,7 +131,7 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
       lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
     });
   } else {
-    functions.logger.log("Adding a new holding!");
+    // functions.logger.log("Adding a new holding!");
     batch.set(holdingRef, {
       assetRef,
       avgPrice: requiredArgs.price / requiredArgs.shares,
@@ -208,4 +145,6 @@ exports.tradeToFirestore = functions.https.onRequest(async (req, res) => {
 
   const batchResponse = await batch.commit();
   res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
-});
+};
+
+module.exports = tradeToFirestore;

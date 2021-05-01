@@ -1,0 +1,8 @@
+POST http://localhost:5001/sociiinvest/us-central1/generateToken
+content-type: application/json
+
+{
+    "username": "peterferguson"
+}
+
+### 
