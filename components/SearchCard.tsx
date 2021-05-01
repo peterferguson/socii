@@ -14,8 +14,9 @@ import Link from "next/link";
 import debounce from "lodash/debounce";
 import { Dialog } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { delayFetch } from "@utils/helper";
 import IEXQuery from "@lib/iex";
+import { useAsync } from "react-async-hook";
+import { fetchURL } from "utils/helper";
 
 const iexClient = new IEXQuery();
 
@@ -81,12 +82,12 @@ const LoadingIndicator = connectStateResults(({ isSearchStalled }) => {
 const Hit = ({ hit }) => {
   const [loadingTicker, setLoadingTicker] = useState(false);
 
-  var latestPrice = undefined;
-  var changePct = undefined;
-  // latestPrice = delayFetch(iexClient.stockPrice(hit.tickerSymbol));
-  // changePct = delayFetch(
-  //   iexClient.stockQuote(hit.tickerSymbol, "changePercent")
-  // );
+  const latestPrice = useAsync(fetchURL, [
+    iexClient.stockPrice(hit.tickerSymbol),
+  ]);
+  const changePct = useAsync(fetchURL, [
+    iexClient.stockQuote(hit.tickerSymbol, "changePercent"),
+  ]);
 
   const hitClickHandler = () => setLoadingTicker(!loadingTicker);
 
@@ -105,9 +106,9 @@ const Hit = ({ hit }) => {
         {loadingTicker && <Loader show={loadingTicker} className="z-50" />}
         <div className="flex pt-4">
           <h4 className="text-xl flex-1 text-gray-900">{hit.tickerSymbol}</h4>
-          {latestPrice ? (
+          {latestPrice.result ? (
             <p className="text-base inline text-right text-green-400">
-              $ {latestPrice}
+              $ {latestPrice.result}
             </p>
           ) : (
             <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
@@ -115,9 +116,9 @@ const Hit = ({ hit }) => {
         </div>
         <div className="flex">
           <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
-          {changePct ? (
+          {changePct.result ? (
             <p className={"inline text-base text-right text-red-400"}>
-              {changePct}%
+              {100 * changePct.result}%
             </p>
           ) : (
             <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />

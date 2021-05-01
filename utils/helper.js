@@ -59,17 +59,4 @@ export function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-export async function delayFetch(url, delayInMilliseconds = 1000) {
-
-  const someTimeoutAction = () => {
-    // Let's return a new Promise, promising to eventually return a value
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        const response = await fetch(url);
-        resolve(await response.json());
-      }, delayInMilliseconds);
-    });
-  };
-
-  return await someTimeoutAction();
-}
+export const fetchURL = async (url) => (await fetch(url)).json();

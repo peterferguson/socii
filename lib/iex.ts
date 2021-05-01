@@ -3,9 +3,16 @@ const apiversion = process.env.IEXCLOUD_API_VERSION;
 
 export default class IEXQuery {
   private endpointPath: string;
+  private sandbox: boolean;
 
-  public constructor(endpointPath = `https://cloud.iexapis.com/${apiversion}`) {
+  public constructor(
+    sandbox = false,
+    endpointPath = `https://${
+      sandbox ? "sandbox" : "cloud"
+    }.iexapis.com/${apiversion}`
+  ) {
     this.endpointPath = endpointPath;
+    this.sandbox = this.sandbox;
     this.request = this.request.bind(this); // tslint:disable-line:no-unsafe-any
   }
   /*

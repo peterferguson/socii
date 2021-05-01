@@ -37,24 +37,3 @@ export const useWindowSize = () => {
   }, []);
   return size;
 };
-
-export const useApi = (url) => {
-  const [state, setState] = useState({
-    loading: false,
-    error: "",
-    data: [],
-  });
-
-  const setPartialState = (partial) => setState({ ...state, ...partial });
-
-  useEffect(() => {
-    setPartialState({ loading: true });
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => setPartialState({ data }))
-      .catch(() => setPartialState({ error: "fetch failed" }))
-      .finally(() => setPartialState({ loading: false }));
-  }, []);
-
-  return state;
-};
