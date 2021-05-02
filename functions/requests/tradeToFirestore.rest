@@ -46,4 +46,28 @@ content-type: application/json
     "shares": 0.25
 }
 
+### Testing Selling without owning a stock (should fail!)
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/JPT",
+    "assetRef": "tickers/US67066G1040",
+    "orderType": "SELL",
+    "price": 500.00,
+    "shares": 0.25
+}
+
+###
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/JPT",
+    "assetRef": "tickers/US67066G1040",
+    "orderType": "BUY",
+    "price": 500.00,
+    "shares": 0.25
+}
+
 ###

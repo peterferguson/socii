@@ -20,6 +20,7 @@ export default function PieCard({ groupName, data, scaling, radius, text }) {
   );
 }
 
+
 export function PieCardSkeleton({ scaling, radius }) {
   const text = {
     main: (

@@ -4,7 +4,7 @@ import { firestore } from "@lib/firebase";
 
 export default function StockDisplay({ tickerSymbols }) {
   return (
-    <div className="">
+    <div className="bg-brand-light">
       <div className="font-bold uppercase text-3xl text-black px-4 pt-4 bg-gray-50">Popular Stocks</div>
       <CardSlider tickerSymbols={tickerSymbols}/>
       <div className="bg-gray-50 flex flex-col items-center justify-center min-h-screen">

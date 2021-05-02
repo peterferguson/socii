@@ -1,12 +1,3 @@
-// ! A portfolio page for the user to view their holdings
-
-// * This could be a homepage for the different groups the investor is apart of.
-// ? I am not sure it needs to be a dynamically routed page... maybe this can just take
-// ? place in the index.jsx
-
-// * A place for portfolio insights but not specific holdings
-// ! (The place for that is index.js)
-
 // TODOs (Page Features):
 // - Display the pie charts of each of the groups the user is part of but solely for their share
 // // - Create pie charts & skeleton loaders for those charts
@@ -25,28 +16,46 @@ import AuthCheck from "@components/AuthCheck";
 import PieCard, { PieCardSkeleton } from "@components/PieCard";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
-import { firestore } from "@lib/firebase";
+import { firestore, auth } from "@lib/firebase";
+import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
 import { useContext } from "react";
-import { useCollectionOnce } from "react-firebase-hooks/firestore";
+
+import IEXQuery from "@lib/iex";
+import { fetchURL } from "utils/helper";
+import { useState, useEffect } from "react";
+const iexClient = new IEXQuery();
+
+/**
+ *  * The page will need the following data to display the users stocks:
+ *   - First we need to fetch their groups
+ *   - Second we need to fetch their holdings
+ *   ? Maybe last few trades also?
+ *   ? If we make this a collection group query with the usernames of the users
+ *   ? attached to the trades then we could display last 5 trades of the user
+ *   ? regardless of group
+ *  - Thirdly we need the IEX latest price data
+ *
+ */
 
 export default function UserPage() {
   const router = useRouter();
   const pagename = router.query.username;
-  const { user, username } = useContext(UserContext);
-  const [groups, loading] = useCollectionOnce(
-    user
-      ? firestore
-          .collection(`users/${user.uid}/groups`)
-          .where("groupName", ">", "")
-      : null
-  );
+  const { username } = useContext(UserContext);
+
+  const userGroupsQuery = firestore
+    .collection(`users/${auth.currentUser?.uid}/groups`)
+    .where("groupName", ">", "");
+  const [groups, loading] = useCollectionDataOnce(userGroupsQuery);
 
   // TODO: Convert user photo to a default if none is present
   // TODO: (maybe create a component based on initials)
   return (
     <main>
       <div className="flex flex-row w-full">
-        <img src={user?.photoURL} className="m-4 rounded-full h-12 w-12" />
+        <img
+          src={auth.currentUser?.photoURL}
+          className="m-4 rounded-full h-12 w-12"
+        />
         <div className="p-4 text-xl font-poppins text-brand-light">
           {pagename}
         </div>
@@ -54,7 +63,7 @@ export default function UserPage() {
       <div className="text-3xl p-4 font-poppins">Groups</div>
       <div className="flex items-center justify-center">
         <div className="flex flex-wrap items-center justify-center">
-          {(!user || loading) && (
+          {(!auth.currentUser || loading) && (
             <>
               <PieCardSkeleton scaling={0.3} radius={250} />
               <PieCardSkeleton scaling={0.3} radius={250} />
@@ -63,23 +72,67 @@ export default function UserPage() {
           )}
           {username == pagename && (
             <AuthCheck>
-              {groups
-                ? groups.docs.map((data) => {
-                    return (
-                      <PieCard
-                        groupName={data?.id}
-                        data={[{ theta: 1.5 }, { theta: 2 }]}
-                        scaling={0.3}
-                        radius={250}
-                        text={{ main: "Price", sub: "%pct" }}
-                      />
-                    );
-                  })
-                : null}
+              {groups.map((data) => {
+                return <GroupPieCard groupName={data.groupName} />;
+              })}
             </AuthCheck>
           )}
         </div>
       </div>
     </main>
+  );
+}
+
+function GroupPieCard({ groupName }) {
+  const [currentPrices, setCurrentPrices] = useState([]);
+  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
+
+  const [holdings] = useCollectionDataOnce(holdingsRef);
+
+  useEffect(() => {
+    holdings?.map(({ tickerSymbol }) =>
+      fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
+        setCurrentPrices((previousState) => ({
+          ...previousState,
+          [tickerSymbol]: value,
+        }))
+      )
+    );
+  }, [holdings]);
+
+  const holdingData = holdings?.map(
+    ({ tickerSymbol, shortName, avgPrice, shares }) => {
+      return { tickerSymbol, shortName, avgPrice, shares };
+    }
+  );
+
+  const portfolioValue = holdingData
+    ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
+    .reduce((a, b) => a + b, 0);
+
+  const gain =
+    (holdingData
+      ?.map(({ avgPrice, shares }) => avgPrice * shares)
+      .reduce((a, b) => a + b, 0) *
+      100) /
+    portfolioValue;
+
+  const pieData = holdingData?.map(
+    ({ tickerSymbol, shortName, shares }) =>
+      ({
+        theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
+        label: shortName,
+        subLabel: tickerSymbol
+      })
+  );
+
+  return (
+      <PieCard
+        groupName={groupName}
+        data={pieData}
+        scaling={0.3}
+        radius={250}
+        text={{ main: `$${portfolioValue?.toFixed(2)}`, sub: `${gain.toFixed(2)}%` }}
+      />
   );
 }

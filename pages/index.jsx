@@ -1,7 +1,5 @@
-
 import { firestore, auth } from "@lib/firebase";
 import { logoUrl } from "@utils/helper";
-
 
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -18,7 +16,9 @@ function TickerList() {
 
   return (
     <>
-      <div className={`grid grid-cols-${numberOfTickers} p-4 grid-flow-row-dense bg-white h-24`}>
+      <div
+        className={`grid grid-cols-${numberOfTickers} p-4 grid-flow-row-dense bg-white h-24`}
+      >
         {tickers &&
           tickers.map((ticker) => {
             return (
@@ -53,7 +53,9 @@ export default function Home() {
           <div>
             <button
               className="btn btn-transition"
-              onClick={() => router.push( auth.currentUser ? "/stock" : "/enter")}
+              onClick={() =>
+                router.push(auth.currentUser ? "/stock" : "/enter")
+              }
             >
               Invest Now
             </button>
@@ -71,6 +73,10 @@ export default function Home() {
       </div>
       <div className="w-full h-24">
         <TickerList />
+      </div>
+      <div className="h-screen bg-brand-light items-center justify-center flex flex-col">
+        <div className="font-bold text-4xl leading-3 font-poppins text-white mt-8">About Us</div>
+        <div className=" h-2/4 flex-grow"></div>
       </div>
     </>
   );
