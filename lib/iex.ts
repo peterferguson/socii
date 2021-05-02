@@ -301,7 +301,7 @@ interface QuoteResponse {
  * There's no way to express 'date/<YYYYMMDD>' as a type outside of a generic
  * catch-all string.
  */
-type ChartRangeOption =
+export type ChartRangeOption =
   | "5y"
   | "2y"
   | "1y"

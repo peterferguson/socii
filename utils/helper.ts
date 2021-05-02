@@ -1,4 +1,5 @@
 import { tickerToISIN } from "@lib/firebase";
+import IEXQuery, { ChartRangeOption } from "@lib/iex";
 
 export const isBrowser = typeof window !== "undefined";
 
@@ -40,9 +41,9 @@ export const alphaVantageData = async (
   functionType = "TIME_SERIES_DAILY"
 ) => {
   const apiKey = "E9W8LZBTXVYZ31IO";
-  const fetchUrl = `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`;
-  const response = await fetch(fetchUrl);
-  const data = await response.json();
+  const data = fetchURL(
+    `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`
+  );
 
   const dates = Object.keys(data["Time Series (Daily)"]);
 
@@ -51,6 +52,24 @@ export const alphaVantageData = async (
     date: ts,
     close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
     volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
+  }));
+};
+
+// ! EXPENSIVE
+export const iexChartTimeseries = async (
+  tickerSymbol: string,
+  range: ChartRangeOption = "1mm"
+) => {
+  const iexClient = new IEXQuery();
+  const data = await fetchURL(iexClient.stockChart(tickerSymbol, range));
+
+  // console.log(data.map(({date}) => {return new Date(date).getTime()}));
+
+  // * Return close for each date as timeseries
+  return data.map(({ close, date, volume }) => ({
+    close,
+    volume,
+    timestamp: new Date(date).getTime(),
   }));
 };
 

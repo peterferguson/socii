@@ -3,6 +3,7 @@ import TradingViewChart from "@components/TradingViewChart";
 import SmallAssetCard from "@components/SmallAssetCard";
 import {
   alphaVantageData,
+  iexChartTimeseries,
   isBrowser,
   pctChange,
   pnlTextColor,
@@ -55,6 +56,9 @@ export async function getStaticProps({ params }) {
     return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
   });
 
+  // ! EXPENSIVE
+  // const timeseries = await iexChartTimeseries(tickerSymbol)
+  
   // * Get summary data from firestore
   const summaryRef = firestore.doc(
     `tickers/${tickerData.ISIN}/data/alphaVantage`
