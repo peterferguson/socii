@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { RadioGroup } from "@headlessui/react";
-import { firestore, serverTimestamp } from "@lib/firebase";
+import { firestore, serverTimestamp, arrayUnion } from "@lib/firebase";
 import { groupPrivacyOptions } from "@lib/constants";
 import { UserContext } from "@lib/context";
 
@@ -227,15 +227,14 @@ const createGroup = async (
 ) => {
   e.preventDefault();
   // const router = useRouter();
-  
-  const userGroupRef = firestore
-    .collection(`users/${user.uid}/groups/`)
-    .doc(groupName);
+
+  const userGroupRef = firestore.collection("users").doc(user.uid);
   const groupRef = firestore.collection("groups").doc(groupName);
   const investorsRef = groupRef.collection("investors").doc(username);
 
   const batch = firestore.batch();
-  batch.set(userGroupRef, { groupName, joinDate: serverTimestamp() });
+
+  batch.update(userGroupRef, { groups: arrayUnion(groupName) });
   batch.set(groupRef, {
     groupDescription,
     groupName,

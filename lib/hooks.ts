@@ -5,6 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 export function useUserData() {
   const [user] = useAuthState(auth);
   const [username, setUsername] = useState("");
+  const [userGroups, setUserGroups] = useState([]);
 
   useEffect(() => {
     // allows us to turn off the realtime data feed when finished
@@ -13,16 +14,18 @@ export function useUserData() {
     if (user) {
       const userRef = firestore.collection("users").doc(user.uid);
       unsubscribe = userRef.onSnapshot((doc) => {
-        // set username if exists
-        setUsername(doc.data()?.username);
+        const userData = doc.data();
+        setUsername(userData?.username);
+        setUserGroups(userGroups?.concat(userData?.groups));
       });
     } else {
       setUsername("");
+      setUserGroups([]);
     }
     return unsubscribe;
   }, [user]);
 
-  return { user, username };
+  return { user, username, userGroups };
 }
 
 export const useWindowSize = () => {

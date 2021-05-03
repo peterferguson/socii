@@ -14,16 +14,14 @@
 
 import AuthCheck from "@components/AuthCheck";
 import PieCard, { PieCardSkeleton } from "@components/PieCard";
-import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
 import { firestore, auth } from "@lib/firebase";
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
-import { useContext } from "react";
-
 import IEXQuery from "@lib/iex";
-import { fetchURL } from "utils/helper";
-import { useState, useEffect } from "react";
-const iexClient = new IEXQuery();
+import { fetchURL } from "@utils/helper";
+
+import { useRouter } from "next/router";
+import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
+import { useState, useEffect, useContext } from "react";
 
 /**
  *  * The page will need the following data to display the users stocks:
@@ -40,12 +38,7 @@ const iexClient = new IEXQuery();
 export default function UserPage() {
   const router = useRouter();
   const pagename = router.query.username;
-  const { username } = useContext(UserContext);
-
-  const userGroupsQuery = firestore
-    .collection(`users/${auth.currentUser?.uid}/groups`)
-    .where("groupName", ">", "");
-  const [groups, loading] = useCollectionDataOnce(userGroupsQuery);
+  const { username, userGroups } = useContext(UserContext);
 
   // TODO: Convert user photo to a default if none is present
   // TODO: (maybe create a component based on initials)
@@ -63,7 +56,7 @@ export default function UserPage() {
       <div className="text-3xl p-4 font-poppins">Groups</div>
       <div className="flex items-center justify-center">
         <div className="flex flex-wrap items-center justify-center">
-          {(!auth.currentUser || loading) && (
+          {(!auth.currentUser || !userGroups) && (
             <>
               <PieCardSkeleton scaling={0.3} radius={250} />
               <PieCardSkeleton scaling={0.3} radius={250} />
@@ -72,8 +65,8 @@ export default function UserPage() {
           )}
           {username == pagename && (
             <AuthCheck>
-              {groups.map((data) => {
-                return <GroupPieCard groupName={data.groupName} />;
+              {userGroups?.map((groupName) => {
+                return <GroupPieCard groupName={groupName} />;
               })}
             </AuthCheck>
           )}
@@ -87,17 +80,19 @@ function GroupPieCard({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([]);
   const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
 
-  const [holdings] = useCollectionDataOnce(holdingsRef);
+  const [holdings, loading] = useCollectionDataOnce(holdingsRef);
 
   useEffect(() => {
-    holdings?.map(({ tickerSymbol }) =>
+    holdings?.map(({ tickerSymbol }) => {
+      const iexClient = new IEXQuery();
+
       fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
         setCurrentPrices((previousState) => ({
           ...previousState,
           [tickerSymbol]: value,
         }))
-      )
-    );
+      );
+    });
   }, [holdings]);
 
   const holdingData = holdings?.map(
@@ -117,22 +112,28 @@ function GroupPieCard({ groupName }) {
       100) /
     portfolioValue;
 
-  const pieData = holdingData?.map(
-    ({ tickerSymbol, shortName, shares }) =>
-      ({
-        theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
-        label: shortName,
-        subLabel: tickerSymbol
-      })
-  );
+  const pieData = holdingData?.map(({ tickerSymbol, shortName, shares }) => ({
+    theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
+    label: shortName,
+    subLabel: tickerSymbol,
+  }));
 
   return (
-      <PieCard
-        groupName={groupName}
-        data={pieData}
-        scaling={0.3}
-        radius={250}
-        text={{ main: `$${portfolioValue?.toFixed(2)}`, sub: `${gain.toFixed(2)}%` }}
-      />
+    <>
+      {!loading ? (
+        <PieCard
+          groupName={groupName}
+          data={pieData}
+          scaling={0.3}
+          radius={250}
+          text={{
+            main: `$${portfolioValue?.toFixed(2)}`,
+            sub: `${gain.toFixed(2)}%`,
+          }}
+        />
+      ) : (
+        <PieCardSkeleton scaling={0.3} radius={250} />
+      )}
+    </>
   );
 }
