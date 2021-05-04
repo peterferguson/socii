@@ -63,8 +63,6 @@ export const iexChartTimeseries = async (
   const iexClient = new IEXQuery();
   const data = await fetchURL(iexClient.stockChart(tickerSymbol, range));
 
-  // console.log(data.map(({date}) => {return new Date(date).getTime()}));
-
   // * Return close for each date as timeseries
   return data.map(({ close, date, volume }) => ({
     close,

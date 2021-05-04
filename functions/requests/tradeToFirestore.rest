@@ -71,3 +71,15 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:5001/sociiinvest/us-central1/tradeToFirestore
+content-type: application/json
+
+{
+    "executorRef": "groups/Just Me",
+    "assetRef": "tickers/US64110L1061",
+    "orderType": "BUY",
+    "price": 500.00,
+    "shares": 1.25
+}
+
+###

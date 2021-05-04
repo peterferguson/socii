@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function PieCard({ groupName, data, scaling, radius, text }) {
   return (
-    <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-gray-50 rounded-none sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
+    <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
       <Link href={`/groups/${groupName}`}>
         <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10">
           {groupName}

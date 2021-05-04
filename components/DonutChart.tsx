@@ -34,12 +34,14 @@ export default function DonutChart({
     padAngle: 0.02,
     colorType: skeleton ? "literal" : "linear",
   };
-  
+
   return (
     <RadialChart {...chartProps}>
-      <div className="font-poppins text-xl -mt-44 mx-auto w-full text-center text-black z-1">
+      <div className="font-poppins text-xl -mt-44 mx-auto w-full text-center text-gray-600 z-1">
         {text.main}
-        <div className="font-poppins text-lg mx-auto">{text.sub}</div>
+        <div className="font-poppins text-lg mx-auto">
+          {text.sub}
+        </div>
       </div>
       {value !== false && skeleton === false && <Hint value={value} />}
     </RadialChart>

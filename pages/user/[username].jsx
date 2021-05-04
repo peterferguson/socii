@@ -14,7 +14,7 @@
 
 import AuthCheck from "@components/AuthCheck";
 import PieCard, { PieCardSkeleton } from "@components/PieCard";
-import { Link } from "next/link";
+import Link from "next/link";
 import { UserContext } from "@lib/context";
 import { firestore, auth } from "@lib/firebase";
 import IEXQuery from "@lib/iex";
@@ -23,18 +23,6 @@ import { fetchURL, logoUrl } from "@utils/helper";
 import { useRouter } from "next/router";
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
 import { useState, useEffect, useContext } from "react";
-
-/**
- *  * The page will need the following data to display the users stocks:
- *   - First we need to fetch their groups
- *   - Second we need to fetch their holdings
- *   ? Maybe last few trades also?
- *   ? If we make this a collection group query with the usernames of the users
- *   ? attached to the trades then we could display last 5 trades of the user
- *   ? regardless of group
- *  - Thirdly we need the IEX latest price data
- *
- */
 
 export default function UserPage() {
   const router = useRouter();
@@ -55,7 +43,7 @@ export default function UserPage() {
         </div>
       </div>
       <div className="text-3xl p-4 font-poppins">Groups</div>
-      <div className="flex flex-wrap items-center justify-center">
+      <div className="flex flex-wrap justify-center">
         {(!auth.currentUser || !userGroups) && (
           <>
             <PieCardSkeleton scaling={0.3} radius={250} />
@@ -66,7 +54,6 @@ export default function UserPage() {
         {username == pagename && (
           <AuthCheck>
             {userGroups?.map((groupName) => {
-              // return <GroupPieCard groupName={groupName} />;
               return <GroupColumn groupName={groupName} />;
             })}
           </AuthCheck>
@@ -76,7 +63,6 @@ export default function UserPage() {
   );
 }
 
-// TODO: Add holdings section below each of the groups
 function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([]);
   const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
@@ -97,85 +83,38 @@ function GroupColumn({ groupName }) {
   }, [holdings]);
 
   const holdingData = holdings?.map(
-    ({ tickerSymbol, shortName, avgPrice, shares }) => {
-      return { tickerSymbol, shortName, avgPrice, shares };
+    ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {
+      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares };
     }
   );
 
-  const portfolioValue = holdingData
-    ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
-    .reduce((a, b) => a + b, 0);
-
-  const gain =
-    (holdingData
-      ?.map(({ avgPrice, shares }) => avgPrice * shares)
-      .reduce((a, b) => a + b, 0) *
-      100) /
-    portfolioValue;
-
-  const pieData = holdingData?.map(({ tickerSymbol, shortName, shares }) => ({
-    theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
-    label: shortName,
-    subLabel: tickerSymbol,
-  }));
-
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center mx-auto">
       {!loading ? (
-        <PieCard
+        <GroupPieCard
           groupName={groupName}
-          data={pieData}
-          scaling={0.3}
-          radius={250}
-          text={{
-            main: `$${portfolioValue?.toFixed(2)}`,
-            sub: `${gain.toFixed(2)}%`,
-          }}
+          holdingData={holdingData}
+          currentPrices={currentPrices}
         />
       ) : (
         <PieCardSkeleton scaling={0.3} radius={250} />
       )}
       {!loading &&
         holdingData.map((holding) => {
-          return <StockCardSkeleton />;
-          // return currentPrices ? (
-          //   <StockCard
-          //     holding={holding}
-          //     latestPrice={currentPrices[holding.tickerSymbol]}
-          //   />
-          // ) : (
-          //   <StockCardSkeleton />
-          // );
+          return currentPrices ? (
+            <StockCard
+              holding={holding}
+              latestPrice={currentPrices[holding.tickerSymbol]}
+            />
+          ) : (
+            <StockCardSkeleton />
+          );
         })}
     </div>
   );
 }
 
-function GroupPieCard({ groupName }) {
-  const [currentPrices, setCurrentPrices] = useState([]);
-  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
-
-  const [holdings, loading] = useCollectionDataOnce(holdingsRef);
-
-  useEffect(() => {
-    holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery();
-
-      fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
-        setCurrentPrices((previousState) => ({
-          ...previousState,
-          [tickerSymbol]: value,
-        }))
-      );
-    });
-  }, [holdings]);
-
-  const holdingData = holdings?.map(
-    ({ tickerSymbol, shortName, avgPrice, shares }) => {
-      return { tickerSymbol, shortName, avgPrice, shares };
-    }
-  );
-
+function GroupPieCard({ groupName, holdingData, currentPrices }) {
   const portfolioValue = holdingData
     ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
     .reduce((a, b) => a + b, 0);
@@ -194,73 +133,72 @@ function GroupPieCard({ groupName }) {
   }));
 
   return (
-    <>
-      {!loading ? (
-        <PieCard
-          groupName={groupName}
-          data={pieData}
-          scaling={0.3}
-          radius={250}
-          text={{
-            main: `$${portfolioValue?.toFixed(2)}`,
-            sub: `${gain.toFixed(2)}%`,
-          }}
-        />
-      ) : (
-        <PieCardSkeleton scaling={0.3} radius={250} />
-      )}
-    </>
+    <PieCard
+      groupName={groupName}
+      data={pieData}
+      scaling={0.3}
+      radius={250}
+      text={{
+        main: `$${portfolioValue?.toFixed(2)}`,
+        sub: `${gain.toFixed(2)}%`,
+      }}
+    />
   );
 }
 
 function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
-  console.log(holding);
-  console.log(latestPrice);
   const tickerSymbol = holding.tickerSymbol;
-  console.log(tickerSymbol);
 
-  const pnl = (latestPrice - holding.avgPrice) / holding.avgPrice;
-  console.log(pnl);
+  const pnl = (100 * (latestPrice - holding.avgPrice)) / holding.avgPrice;
 
   return (
-    <div className="max-w-sm w-11/12 sm:w-1/2 lg:w-1/3 h-auto m-1">
-      <div className="bg-white shadow-2xl rounded-lg overflow-hidden flex h-20 p-2">
+    <div className="flex h-auto m-1">
+      <div className="flex bg-white shadow-2xl rounded-lg w-88 sm:w-96 h-20 p-2">
         <div className="flex-none mx-auto justify-center rounded-full w-20">
-          <Link href={`stock/${tickerSymbol}`}>
-            <a>
-              <img
-                className="shadow-lg rounded-full h-10 w-10 mx-auto"
-                src={logoUrl(tickerSymbol)}
-                alt={`${tickerSymbol} logo`}
-              />
-            </a>
-          </Link>
-          <Link href={`stock/${tickerSymbol}`}>
-            <a>
-              <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
-                {holding.shortName}
-              </div>
-            </a>
-          </Link>
-          <Link href={`stock/${tickerSymbol}`}>
-            <a>
-              <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
-                {tickerSymbol}
-              </div>
-            </a>
+          <Link href={`/stock/${tickerSymbol}`}>
+            <div>
+              <a>
+                <img
+                  className="shadow-lg rounded-full h-10 w-10 mx-auto"
+                  src={logoUrl(holding.ISIN)}
+                  alt={`${tickerSymbol} logo`}
+                />
+              </a>
+              <a>
+                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                  {holding.shortName}
+                </div>
+              </a>
+              <a>
+                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                  {tickerSymbol}
+                </div>
+              </a>
+            </div>
           </Link>
         </div>
-        <div className="flex flex-col items-center justify-center w-20">
-          <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider overflow-ellipsis overflow-hidden">
-            {currencySymbol}
-            {latestPrice * holding.shares}
+        <div className="flex-grow" />
+        <div className="flex flex-col items-center justify-center w-20 mr-4">
+          <div className="text-gray-600 text-tiny font-semibold overflow-ellipsis overflow-hidden">
+            {latestPrice ? (
+              `${holding.shares} Shares`
+            ) : (
+              <div className="animate-pulse bg-gray-200 w-12"></div>
+            )}
+          </div>
+          <div className="text-black uppercase text-md font-semibold tracking-wider overflow-ellipsis overflow-hidden">
+            {latestPrice ? (
+              `${currencySymbol}${latestPrice * holding.shares}`
+            ) : (
+              <div className="animate-pulse bg-gray-200 w-12"></div>
+            )}
           </div>
           <div
             className={`${
               pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
-            } text-black text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
+            } text-gray-700 text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
           >
-            {100 * pnl.toFixed(2)}
+            {pnl.toFixed(2)}%
           </div>
         </div>
       </div>
