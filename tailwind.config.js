@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       backdropFilter: {
-        'none': 'none',
-        'blur': 'blur(20px)',
+        none: "none",
+        blur: "blur(20px)",
       },
       colors: {
         brand: {
@@ -93,8 +93,17 @@ module.exports = {
       spacing: {
         0.5: "0.125rem",
       },
+      width: {
+        88: "22rem",
+        "1/7": "14.2857143%",
+        "2/7": "28.5714286%",
+        "3/7": "42.8571429%",
+        "4/7": "57.1428571%",
+        "5/7": "71.4285714%",
+        "6/7": "85.7142857%",
     },
   },
+},
   variants: {
     scale: ["responsive", "hover", "focus", "focus-within"],
     extend: {

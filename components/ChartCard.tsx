@@ -41,7 +41,7 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
   };
   return (
     <>
-      <div className="max-w-sm w-full sm:w-1/2 lg:w-1/3 h-auto m-1">
+      <div className="max-w-sm w-11/12 sm:w-1/2 lg:w-1/3 h-auto m-1">
         <div className="bg-white shadow-2xl rounded-lg overflow-hidden flex h-20 p-2">
           <div className="flex-none mx-auto justify-center rounded-full w-20">
             <Link href={`stock/${tickerSymbol}`}>
