@@ -1,4 +1,4 @@
-import { tickerToISIN } from "@lib/firebase";
+import { tickerToISIN, firestore } from "@lib/firebase";
 import IEXQuery, { ChartRangeOption } from "@lib/iex";
 
 export const isBrowser = typeof window !== "undefined";
@@ -77,3 +77,64 @@ export function validateEmail(email) {
 }
 
 export const fetchURL = async (url) => (await fetch(url)).json();
+
+export const stockProps = async (
+  tickerQuery,
+  subQueryField = "",
+  timeseriesLimit = 30
+) => {
+  const tickerDocs = await tickerQuery.get();
+
+  let tickerSymbols = [];
+  let sector;
+
+  for await (const tickerDoc of tickerDocs.docs) {
+    // * Get ticker company data
+    var ticker = await tickerDoc.data();
+    ticker["timestamp"] = JSON.stringify(ticker.timestamp.toDate());
+    ticker["timeseriesLastUpdated"] = JSON.stringify(
+      ticker.timeseriesLastUpdated.toDate()
+    );
+
+    const timeseries = await tickerTimeseries(tickerDoc.ref, timeseriesLimit);
+
+    if (subQueryField) {
+      sector = await tickerExistsSubquery(tickerDoc.ref, subQueryField);
+    }
+
+    tickerSymbols.push({ ticker, timeseries, sector });
+  }
+
+  return {
+    props: {
+      tickerSymbols,
+    },
+  };
+};
+
+export const tickerExistsSubquery = async (tickerRef, queryField) => {
+  // * Get sector & industry data
+  const sectorRef = tickerRef
+    .collection("data")
+    .where(queryField, ">", "''")
+    .orderBy(queryField, "asc")
+    .limit(1);
+
+  var sector = (await sectorRef.get()).docs[0].data();
+
+  return { ...sector, lastUpdate: sector.lastUpdate.toMillis() };
+};
+
+export const tickerTimeseries = async (tickerRef, limit = 30) => {
+  // * Get timeseries data
+  const timeseriesRef = tickerRef
+    .collection("timeseries")
+    .orderBy("timestamp", "desc")
+    .limit(limit);
+
+  var timeseriesDocs = (await timeseriesRef.get()).docs;
+
+  return timeseriesDocs.map((doc) => {
+    return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
+  });
+};

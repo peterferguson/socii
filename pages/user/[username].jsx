@@ -42,7 +42,7 @@ export default function UserPage() {
           {pagename}
         </div>
       </div>
-      <div className="text-3xl p-4 font-poppins">Groups</div>
+      <div className="text-5xl font-poppins m-8 mx-auto flex items-center justify-center">Groups</div>
       <div className="flex flex-wrap justify-center">
         {(!auth.currentUser || !userGroups) && (
           <>
