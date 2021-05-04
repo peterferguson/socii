@@ -1,12 +1,19 @@
 import ChartCard from "@components/ChartCard";
 import CardSlider from "@components/CardSlider";
+import RightChevron from "@icons/rightChevron.svg";
 import { firestore } from "@lib/firebase";
 
 export default function StockDisplay({ tickerSymbols }) {
+  // TODO: on click of chevron create a new view with only the popular stocks 
+  // TODO: large screen vertical cards - small horizontal cards
   return (
-    <div className="bg-brand-light">
-      <div className="font-bold uppercase text-3xl text-black px-4 pt-4 bg-gray-50">Popular Stocks</div>
-      <CardSlider tickerSymbols={tickerSymbols}/>
+    <div>
+      <div className="flex font-bold uppercase text-3xl text-black px-4 pt-4 bg-gray-50">
+        Popular Stocks
+        <div className="flex-grow"/>
+        <RightChevron className="mt-0.5 h-8" />
+      </div>
+      <CardSlider tickerSymbols={tickerSymbols} />
       <div className="bg-gray-50 flex flex-col items-center justify-center min-h-screen">
         {tickerSymbols.map(({ ticker, timeseries }) => {
           return (
@@ -53,16 +60,16 @@ export async function getStaticProps(context) {
     const timeseries = timeseriesDocs.map((doc) => {
       return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
     });
-    
+
     // * Get sector & industry data
     const sectorRef = tickerDoc.ref
-    .collection("data")
-    .where("industry", ">", "''")
-    .orderBy("industry", "asc")
-    .limit(1);
-    
+      .collection("data")
+      .where("industry", ">", "''")
+      .orderBy("industry", "asc")
+      .limit(1);
+
     var sector = (await sectorRef.get()).docs[0].data();
-    
+
     sector = { ...sector, lastUpdate: sector.lastUpdate.toMillis() };
 
     tickerSymbols.push({ ticker, timeseries, sector });
