@@ -1,33 +1,30 @@
-import ChartCard from "@components/ChartCard";
-import CardSlider from "@components/CardSlider";
-import RightChevron from "@icons/rightChevron.svg";
-import Link from "next/link";
+import { AssetCard } from "@components/AssetCards";
 import { firestore } from "@lib/firebase";
 
-export default function StockDisplay({ tickerSymbols }) {
-  // TODO: on click of chevron create a new view with only the popular stocks 
+export default function Popular({ tickerSymbols }) {
+  // TODO: on click of chevron create a new view with only the popular stocks
   // TODO: large screen vertical cards - small horizontal cards
   return (
     <div>
-        <Link href="/stock/popular">
-      <div className="flex font-bold uppercase text-3xl text-black px-4 pt-4  cursor-pointer">
-        Popular Stocks
-        <div className="flex-grow"/>
-        <RightChevron className="mt-0.5 h-8 cursor-pointer" />
+      <div className="flex mx-auto h-1/4 items-center justify-center">
+        <div className="flex font-bold uppercase text-6xl font-work-sans text-brand-dark px-4 pt-4 m-12">
+          Popular Stocks
+        </div>
       </div>
-        </Link>
-      <CardSlider tickerSymbols={tickerSymbols} />
-      <div className="bg-gray-50 flex flex-col items-center justify-center min-h-screen">
-        {tickerSymbols.map(({ ticker, timeseries }) => {
-          return (
-            <ChartCard
-              logoUrl={ticker.logoUrl}
-              tickerSymbol={ticker.tickerSymbol}
-              shortName={ticker.shortName}
-              data={timeseries}
-            />
-          );
-        })}
+      <div className="flex flex-wrap items-center justify-center">
+        <div className="flex flex-wrap items-center justify-center min-h-screen">
+          {tickerSymbols.map(({ ticker, timeseries, sector }) => {
+            return (
+              <div className="flex flex-col mx-auto my-4 bg-white p-4 rounded-lg shadow-lg w-52 sm:w-64">
+                <AssetCard
+                  ticker={ticker}
+                  timeseries={timeseries}
+                  sector={sector}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -37,8 +34,7 @@ export async function getStaticProps(context) {
   // * Get ticker name from firestore
   const tickerRef = firestore
     .collection("tickers")
-    .where("isPopular", "==", true)
-    .limit(5);
+    .where("isPopular", "==", true);
 
   const tickerDocs = await tickerRef.get();
 
@@ -56,7 +52,7 @@ export async function getStaticProps(context) {
     const timeseriesRef = tickerDoc.ref
       .collection("timeseries")
       .orderBy("timestamp", "desc")
-      .limit(30);
+      .limit(2);
 
     var timeseriesDocs = (await timeseriesRef.get()).docs;
 

@@ -43,6 +43,7 @@ export default function Enter(props) {
           >
             <div className="max-w-md mx-auto">
               <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
+                <div className="">Been Invited?</div>
                 Sign Up!
               </div>
               <div className="flex flex-col">
@@ -78,7 +79,7 @@ function SignInButtons({ verified }) {
           <option.logo
             className={`w-14 h-14 justify-center rounded m-2 p-2 \
             border-solid border-2 border-gray-900 ${
-              verified ? "btn-transition" : ""
+              verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
             }`}
             onClick={() => (verified ? signInPopUp(option.provider) : null)}
           />
@@ -224,7 +225,7 @@ function EmailSignUp({ verified, setVerified }) {
       <button
         type="submit"
         className={`${
-          verified ? "btn-transition" : ""
+          verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
         } rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full \
         text-white my-4 py-3 px-4 leading-tight font-bold`}
         disabled={false}

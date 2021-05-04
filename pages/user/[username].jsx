@@ -156,7 +156,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
       <div className="flex bg-white shadow-2xl rounded-lg w-88 sm:w-96 h-20 p-2">
         <div className="flex-none mx-auto justify-center rounded-full w-20">
           <Link href={`/stock/${tickerSymbol}`}>
-            <div>
+            <div className="cursor-pointer">
               <a>
                 <img
                   className="shadow-lg rounded-full h-10 w-10 mx-auto"
@@ -188,7 +188,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
           </div>
           <div className="text-black uppercase text-md font-semibold tracking-wider overflow-ellipsis overflow-hidden">
             {latestPrice ? (
-              `${currencySymbol}${latestPrice * holding.shares}`
+              `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
             ) : (
               <div className="animate-pulse bg-gray-200 w-12"></div>
             )}

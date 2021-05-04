@@ -1,6 +1,6 @@
 import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
-import SmallAssetCard from "@components/SmallAssetCard";
+import SmallAssetCard from "@components/AssetCards";
 import {
   alphaVantageData,
   iexChartTimeseries,
