@@ -11,7 +11,8 @@ export default function StockDisplay({ tickerSymbols }) {
   return (
     <div>
       <Link href="/stock/popular">
-        <div className="flex font-bold uppercase text-3xl text-black px-4 pt-4  cursor-pointer">
+        <div className="flex font-bold uppercase text-3xl font-work-sans px-4 pt-4 \
+                        cursor-pointer text-brand-dark">
           Popular Stocks
           <div className="flex-grow" />
           <RightChevron className="mt-0.5 h-8 cursor-pointer" />

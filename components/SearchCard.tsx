@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import algoliasearch from "algoliasearch/lite";
 import SearchIcon from "@icons/search.svg";
-import Loader from "@components/Loader";
+import LoadingIndicator from "@components/LoadingIndicator";
 import Link from "next/link";
 import debounce from "lodash/debounce";
 import { Dialog } from "@headlessui/react";
@@ -75,8 +75,8 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
   );
 });
 
-const LoadingIndicator = connectStateResults(({ isSearchStalled }) => {
-  return isSearchStalled ? <Loader show={isSearchStalled} /> : null;
+const Loading = connectStateResults(({ isSearchStalled }) => {
+  return isSearchStalled ? <LoadingIndicator show={isSearchStalled} /> : null;
 });
 
 const Hit = ({ hit }) => {
@@ -103,7 +103,7 @@ const Hit = ({ hit }) => {
           className="h-12 w-12 rounded-full border-brand border-double -mx-14 -my-8"
         />
         <Highlight attribute="name" hit={hit} />
-        {loadingTicker && <Loader show={loadingTicker} className="z-50" />}
+        {loadingTicker && <Loading show={loadingTicker} className="z-50" />}
         <div className="flex pt-4">
           <h4 className="text-xl flex-1 text-gray-900">{hit.tickerSymbol}</h4>
           {latestPrice.result ? (
@@ -118,7 +118,7 @@ const Hit = ({ hit }) => {
           <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
           {changePct.result ? (
             <p className={"inline text-base text-right text-red-400"}>
-              {100 * changePct.result}%
+              {(100 * changePct.result).toFixed(2)}%
             </p>
           ) : (
             <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
@@ -155,7 +155,7 @@ export default function SearchCard({ showSearchCard, setShowSearchCard }) {
       <InstantSearch {...searchProps}>
         <Configure hitsPerPage={1} />
         <DebouncedSearchBox delay={400} className="p-2 flex-1 max-w-sm" />
-        <LoadingIndicator className="p-4" />
+        <Loading className="p-4" />
         <Hits
           hitComponent={Hit}
           className="py-4 px-8 rounded-lg my-10 w-full"

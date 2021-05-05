@@ -42,7 +42,9 @@ export default function UserPage() {
           {pagename}
         </div>
       </div>
-      <div className="text-5xl font-poppins m-8 mx-auto flex items-center justify-center">Groups</div>
+      <div className="text-5xl font-poppins m-8 mx-auto flex items-center justify-center">
+        Groups
+      </div>
       <div className="flex flex-wrap justify-center">
         {(!auth.currentUser || !userGroups) && (
           <>
@@ -89,7 +91,7 @@ function GroupColumn({ groupName }) {
   );
 
   return (
-    <div className="flex flex-col items-center mx-auto">
+    <div className="flex flex-col items-center mx-auto mb-4">
       {!loading ? (
         <GroupPieCard
           groupName={groupName}
@@ -99,6 +101,11 @@ function GroupColumn({ groupName }) {
       ) : (
         <PieCardSkeleton scaling={0.3} radius={250} />
       )}
+      {!loading && <div className="w-full border-b py-3 border-gray-400 h-3.5 my-8 text-center">
+        <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
+          {holdings.length} Investments
+        </span>
+      </div>}
       {!loading &&
         holdingData.map((holding) => {
           return currentPrices ? (

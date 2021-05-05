@@ -5,10 +5,6 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      backdropFilter: {
-        none: "none",
-        blur: "blur(20px)",
-      },
       colors: {
         brand: {
           light: "#3fbaeb",
@@ -93,6 +89,9 @@ module.exports = {
       spacing: {
         0.5: "0.125rem",
       },
+      margin:{
+        "-46": "-11.5rem",
+      },
       width: {
         88: "22rem",
         "1/7": "14.2857143%",
@@ -110,5 +109,5 @@ module.exports = {
       backgroundColor: ["active"],
     },
   },
-  plugins: [require("tailwindcss-filters")],
+  plugins: [],
 };

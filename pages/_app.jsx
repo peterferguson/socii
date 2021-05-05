@@ -1,3 +1,4 @@
+import "stream-chat-react/dist/css/index.css";
 import "@styles/globals.css";
 import Head from "@components/Head";
 import Navigation from "@components/Navigation";

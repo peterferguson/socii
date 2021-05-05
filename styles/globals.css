@@ -55,7 +55,7 @@
 }
 
 
-/** Loader */
+/** LoadingIndicator */
 .loader {
   position: absolute;
   top: calc(50% - 4em);
