@@ -117,6 +117,7 @@ const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function*
             assetRef,
             avgPrice: requiredArgs.price / requiredArgs.shares,
             shares: admin.firestore.FieldValue.increment(sharesIncrement),
+            tickerSymbol: assetData.get("tickerSymbol"),
             shortName: assetData.get("shortName"),
             lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
         });
