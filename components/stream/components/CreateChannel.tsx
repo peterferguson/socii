@@ -1,16 +1,24 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Avatar, ChatContext } from 'stream-chat-react';
-import _debounce from 'lodash.debounce';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Avatar, ChatContext } from "stream-chat-react";
+import _debounce from "lodash.debounce";
 
-import { XButton, XButtonBackground } from '../assets';
+import { XButton, XButtonBackground } from "../assets";
 
 import "@styles/CreateChannel.module.css";
 
 const UserResult = ({ user }) => (
-  <li className='messaging-create-channel__user-result'>
+  <li className="messaging-create-channel__user-result">
     <Avatar image={user.image} size={40} />
-    {user.online && <div className='messaging-create-channel__user-result-online' />}
-    <div className='messaging-create-channel__user-result__details'>
+    {user.online && (
+      <div className="messaging-create-channel__user-result-online" />
+    )}
+    <div className="messaging-create-channel__user-result__details">
       <span>{user.name}</span>
       {/* <span className='messaging-create-channel__user-result__details__last-seen'>{user.online}</span> */}
     </div>
@@ -21,7 +29,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   const { client, setActiveChannel } = useContext(ChatContext);
 
   const [focusedUser, setFocusedUser] = useState(undefined);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [resultsOpen, setResultsOpen] = useState(false);
   const [searchEmpty, setSearchEmpty] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -31,7 +39,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   const inputRef = useRef();
 
   const clearState = () => {
-    setInputText('');
+    setInputText("");
     setResultsOpen(false);
     setSearchEmpty(false);
   };
@@ -41,9 +49,9 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
       if (resultsOpen) clearState();
     };
 
-    document.addEventListener('click', clickListener);
+    document.addEventListener("click", clickListener);
 
-    return () => document.removeEventListener('click', clickListener);
+    return () => document.removeEventListener("click", clickListener);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const findUsers = async () => {
@@ -56,11 +64,13 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
           id: { $ne: client.userID },
           $and: [
             { name: { $autocomplete: inputText } },
-            { name: { $nin: ['Daniel Smith', 'Kevin Rosen', 'Jen Alexander'] } },
+            {
+              name: { $nin: ["Daniel Smith", "Kevin Rosen", "Jen Alexander"] },
+            },
           ],
         },
         { id: 1 },
-        { limit: 6 },
+        { limit: 6 }
       );
 
       if (!response.users.length) {
@@ -93,7 +103,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
     if (!selectedUsersIds.length) return;
 
-    const conversation = await client.channel('messaging', {
+    const conversation = await client.channel("messaging", {
       members: [...selectedUsersIds, client.userID],
     });
 
@@ -111,7 +121,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
     setSelectedUsers([...selectedUsers, u]);
     setResultsOpen(false);
-    setInputText('');
+    setInputText("");
     inputRef.current.focus();
   };
 
@@ -144,29 +154,31 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
         }
       }
     },
-    [users, focusedUser], // eslint-disable-line
+    [users, focusedUser] // eslint-disable-line
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown, false);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown, false);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   return (
-    <div className='messaging-create-channel'>
+    <div className="messaging-create-channel">
       <header>
-        <div className='messaging-create-channel__left'>
-          <div className='messaging-create-channel__left-text'>To: </div>
-          <div className='users-input-container'>
+        <div className="messaging-create-channel__left">
+          <div className="messaging-create-channel__left-text">To: </div>
+          <div className="users-input-container">
             {!!selectedUsers?.length && (
-              <div className='messaging-create-channel__users'>
+              <div className="messaging-create-channel__users">
                 {selectedUsers.map((user) => (
                   <div
-                    className='messaging-create-channel__user'
+                    className="messaging-create-channel__user"
                     onClick={() => removeUser(user)}
                     key={user.id}
                   >
-                    <div className='messaging-create-channel__user-text'>{user.name}</div>
+                    <div className="messaging-create-channel__user-text">
+                      {user.name}
+                    </div>
                     <XButton />
                   </div>
                 ))}
@@ -178,29 +190,31 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                 ref={inputRef}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={!selectedUsers.length ? 'Start typing for suggestions' : ''}
-                type='text'
-                className='messaging-create-channel__input'
+                placeholder={
+                  !selectedUsers.length ? "Start typing for suggestions" : ""
+                }
+                type="text"
+                className="messaging-create-channel__input"
               />
             </form>
           </div>
-          <div className='close-mobile-create' onClick={() => toggleMobile()}>
+          <div className="close-mobile-create" onClick={() => toggleMobile()}>
             <XButtonBackground />
           </div>
         </div>
-        <button className='create-channel-button' onClick={createChannel}>
+        <button className="create-channel-button" onClick={createChannel}>
           Start chat
         </button>
       </header>
       {inputText && (
         <main>
-          <ul className='messaging-create-channel__user-results'>
+          <ul className="messaging-create-channel__user-results">
             {!!users?.length && !searchEmpty && (
               <div>
                 {users.map((user, i) => (
                   <div
                     className={`messaging-create-channel__user-result ${
-                      focusedUser === i && 'focused'
+                      focusedUser === i && "focused"
                     }`}
                     onClick={() => addUser(user)}
                     key={user.id}
@@ -216,7 +230,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                   inputRef.current.focus();
                   clearState();
                 }}
-                className='messaging-create-channel__user-result empty'
+                className="messaging-create-channel__user-result empty"
               >
                 No people found...
               </div>

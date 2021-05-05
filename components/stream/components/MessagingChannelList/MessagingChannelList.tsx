@@ -13,11 +13,8 @@ const MessagingChannelList = ({
   onCreateChannel,
 }) => {
   const { client, setActiveChannel } = useContext(ChatContext);
-  const {
-    id,
-    image = "@public/favicons/apple-touch-icon.png",
-    name = "Example User",
-  } = client.user || {};
+  const { id, name, image = "@public/favicons/apple-touch-icon.png" } =
+    client.user || {};
 
   useEffect(() => {
     const getDemoChannel = async (client) => {
@@ -34,25 +31,23 @@ const MessagingChannelList = ({
     }
   }, [loading]); // eslint-disable-line
 
-  const ListHeaderWrapper = ({ children }) => {
-    return (
-      <div className="messaging__channel-list">
-        <div className="messaging__channel-list__header">
-          <Avatar image={image} name={name} size={40} />
-          <div className="messaging__channel-list__header__name">
-            {name || id}
-          </div>
-          <button
-            className="messaging__channel-list__header__button"
-            onClick={onCreateChannel}
-          >
-            <CreateChannelIcon />
-          </button>
+  const ListHeaderWrapper = ({ children }) => (
+    <div className="messaging__channel-list">
+      <div className="messaging__channel-list__header">
+        <Avatar image={image} name={name} size={40} />
+        <div className="messaging__channel-list__header__name">
+          {name || id}
         </div>
-        {children}
+        <button
+          className="messaging__channel-list__header__button"
+          onClick={onCreateChannel}
+        >
+          <CreateChannelIcon />
+        </button>
       </div>
-    );
-  };
+      {children}
+    </div>
+  );
 
   if (error) {
     return (

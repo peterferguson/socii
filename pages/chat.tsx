@@ -44,18 +44,16 @@ const App = () => {
     const initChat = async () => {
       const client = StreamChat.getInstance(apiKey);
 
-      if (user) {
-        await client.connectUser(
-          { id: username, name: user?.displayName },
-          userToken
-        );
-      }
+      await client.connectUser(
+        { id: username, name: user?.displayName },
+        userToken
+      );
 
       setChatClient(client);
     };
 
     initChat();
-  }, [user]);
+  }, [username]);
 
   useEffect(() => {
     const handleThemeChange = ({ data }) => {
