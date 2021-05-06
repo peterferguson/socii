@@ -7,14 +7,12 @@ process.env.STREAM_API_SECRET = functions.config().stream.secret;
 process.env.STREAM_API_KEY = functions.config().stream.api_key;
 
 const streamChat = require("./streamChat.js");
-const firestoreOperations = require("./firestoreOperations.js");
+const trades = require("./trades.js");
 // const algoliaSearch = require("./algoliaSearch.js");
 
-const region = "europe-west2";
+const london = "europe-west2";
 
 module.exports = {
-  tradeToFirestore: functions
-    .region(region)
-    .https.onRequest(firestoreOperations),
-  generateToken: functions.region(region).https.onRequest(streamChat),
+  tradeToFirestore: functions.region(london).https.onRequest(trades),
+  generateToken: functions.region(london).https.onRequest(streamChat),
 };

@@ -1,9 +1,9 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("/Users/peter/Projects/socii/serviceAccountKey.json");
+const serviceAccount = require("../serviceAccountKey.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+adminConfig.credential = admin.credential.cert(serviceAccount);
+admin.initializeApp(adminConfig);
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {

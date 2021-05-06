@@ -8,10 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const admin = require("firebase-admin");
-const serviceAccount = require("/Users/peter/Projects/socii/serviceAccountKey.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
+const serviceAccount = require("../serviceAccountKey.json");
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+adminConfig.credential = admin.credential.cert(serviceAccount);
+admin.initializeApp(adminConfig);
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
     var keys = null;
@@ -127,4 +127,4 @@ const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function*
     res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
 });
 module.exports = tradeToFirestore;
-//# sourceMappingURL=firestoreOperations.js.map
+//# sourceMappingURL=trades.js.map
