@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ImagePreviewer, FilePreviewer } from 'react-file-utils';
 import { ChannelContext } from 'stream-chat-react';
 

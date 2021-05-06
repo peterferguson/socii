@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import { Avatar, ChatContext } from "stream-chat-react";
 
-import "@styles/MessagingChannelList.module.css";
+import styles from "@styles/MessagingChannelList.module.css";
 import { SkeletonLoader } from "./SkeletonLoader";
 
-import { CreateChannelIcon } from "../../assets";
+import CreateChannelIcon from "@icons/stream/createChannelIcon.svg";
 
 const MessagingChannelList = ({
   children,
@@ -32,17 +32,17 @@ const MessagingChannelList = ({
   }, [loading]); // eslint-disable-line
 
   const ListHeaderWrapper = ({ children }) => (
-    <div className="messaging__channel-list">
-      <div className="messaging__channel-list__header">
+    <div className={styles["messaging__channel-list"]}>
+      <div className={styles["messaging__channel-list__header"]}>
         <Avatar image={image} name={name} size={40} />
-        <div className="messaging__channel-list__header__name">
+        <div className={styles["messaging__channel-list__header__name"]}>
           {name || id}
         </div>
         <button
-          className="messaging__channel-list__header__button"
+          className={styles["messaging__channel-list__header__button"]}
           onClick={onCreateChannel}
         >
-          <CreateChannelIcon />
+          <CreateChannelIcon className="h-4 w-4"/>
         </button>
       </div>
       {children}
@@ -52,7 +52,7 @@ const MessagingChannelList = ({
   if (error) {
     return (
       <ListHeaderWrapper>
-        <div className="messaging__channel-list__message">
+        <div className={styles["messaging__channel-list__message"]}>
           Error loading conversations, please try again momentarily.
         </div>
       </ListHeaderWrapper>
@@ -62,7 +62,7 @@ const MessagingChannelList = ({
   if (loading) {
     return (
       <ListHeaderWrapper>
-        <div className="messaging__channel-list__message">
+        <div className={styles["messaging__channel-list__message"]}>
           <SkeletonLoader />
         </div>
       </ListHeaderWrapper>
@@ -72,4 +72,4 @@ const MessagingChannelList = ({
   return <ListHeaderWrapper>{children}</ListHeaderWrapper>;
 };
 
-export default React.memo(MessagingChannelList);
+export default memo(MessagingChannelList);

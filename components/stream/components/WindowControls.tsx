@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import styles from "@styles/WindowControls.module.css";
+import { useEffect } from 'react';
 
-import "@styles/WindowControls.module.css";
 
 const WindowControls = ({ theme, setTheme }) => {
   const darkClick = () => {
@@ -23,16 +23,16 @@ const WindowControls = ({ theme, setTheme }) => {
   }, [theme]);
 
   return (
-    <div className='window-controls__container'>
-      <div className={`window-controls__button-wrapper ${theme}`}>
+    <div className={styles['window-controls__container']}>
+      <div className={styles[`window-controls__button-wrapper ${theme}`]}>
         <div
-          className={`window-controls__button ${theme === 'dark' && 'selected'} ${theme}`}
+          className={styles[`window-controls__button ${theme === 'dark' && 'selected'} ${theme}`]}
           onClick={darkClick}
         >
           DARK UI
         </div>
         <div
-          className={`window-controls__button ${theme === 'light' && 'selected'} ${theme}`}
+          className={styles[`window-controls__button ${theme === 'light' && 'selected'} ${theme}`]}
           onClick={lightClick}
         >
           LIGHT UI

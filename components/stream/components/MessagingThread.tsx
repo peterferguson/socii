@@ -1,11 +1,9 @@
-import React from 'react';
 import { Thread } from 'stream-chat-react';
-
-import "@styles/MessagingThread.module.css";
-
 import { CustomMessage, MessagingInput } from './index';
-
 import { CloseThreadIcon } from '../assets';
+
+import styles from "@styles/MessagingThread.module.css";
+
 
 const ThreadHeader = ({ closeThread, thread }) => {
   const getReplyCount = () => {
@@ -15,10 +13,10 @@ const ThreadHeader = ({ closeThread, thread }) => {
   };
 
   return (
-    <div className='custom-thread-header'>
-      <div className='custom-thread-header__left'>
-        <p className='custom-thread-header__left-title'>Thread</p>
-        <p className='custom-thread-header__left-count'>{getReplyCount()}</p>
+    <div className={styles["custom-thread-header"]}>
+      <div className={styles["custom-thread-header__left"]}>
+        <p className={styles["custom-thread-header__left-title"]}>Thread</p>
+        <p className={styles["custom-thread-header__left-count"]}>{getReplyCount()}</p>
       </div>
       <CloseThreadIcon {...{ closeThread }} />
     </div>

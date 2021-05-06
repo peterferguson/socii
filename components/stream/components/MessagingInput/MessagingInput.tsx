@@ -1,22 +1,20 @@
-import React, { useCallback, useContext, useState } from 'react';
+import styles from "@styles/MessagingInput.module.css";
+import { memo, useCallback, useContext, useState } from 'react';
 import { ImageDropzone } from 'react-file-utils';
 import { logChatPromiseExecution } from 'stream-chat';
 import { ChannelContext, ChatAutoComplete, EmojiPicker, useMessageInput } from 'stream-chat-react';
 
-import "@styles/MessagingInput.module.css";
+import EmojiIcon from "@icons/stream/emoji.svg";
+import SendIcon from "@icons/stream/send.svg";
+import CommandIcon from "@icons/stream/command.svg";
+import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg";
 
-import {
-  // CommandIcon,
-  EmojiIcon,
-  LightningBoltSmall,
-  SendIcon,
-} from '../../assets';
 import { UploadsPreview } from './UploadsPreview';
 
 const GiphyIcon = () => (
-  <div className='giphy-icon__wrapper'>
+  <div className={styles['giphy-icon__wrapper']}>
     <LightningBoltSmall />
-    <p className='giphy-icon__text'>GIPHY</p>
+    <p className={styles['giphy-icon__text']}>GIPHY</p>
   </div>
 );
 
@@ -67,33 +65,33 @@ const MessagingInput = (props) => {
     [giphyState, messageInput],
   );
 
-  // const onClickCommand = () => {
-  //   messageInput.textareaRef.current.focus();
-  //   messageInput.handleChange({
-  //     target: { value: '/' },
-  //     preventDefault: () => null,
-  //   });
-  // };
+  const onClickCommand = () => {
+    messageInput.textareaRef.current.focus();
+    messageInput.handleChange({
+      target: { value: '/' },
+      preventDefault: () => null,
+    });
+  };
 
   return (
-    <div className='str-chat__messaging-input'>
+    <div className={styles['str-chat__messaging-input']}>
       <div
-        className='messaging-input__button emoji-button'
+        className={styles['messaging-input__button emoji-button']}
         role='button'
         aria-roledescription='button'
         onClick={messageInput.openEmojiPicker}
         ref={messageInput.emojiPickerRef}
       >
-        <EmojiIcon />
+        <EmojiIcon className="h-4 w-4"/>
       </div>
-      {/* <div
-        className="messaging-input__button"
+      <div
+        className={styles["messaging-input__button"]}
         role="button"
         aria-roledescription="button"
         onClick={onClickCommand}
       >
-        <CommandIcon />
-      </div> */}
+        <CommandIcon className="h-4 w-4"/>
+      </div>
       <ImageDropzone
         accept={acceptedFiles}
         handleFiles={messageInput.uploadNewFiles}
@@ -103,7 +101,7 @@ const MessagingInput = (props) => {
           giphyState
         }
       >
-        <div className='messaging-input__input-wrapper'>
+        <div className={styles['messaging-input__input-wrapper']}>
           {giphyState && !messageInput.numberOfUploads && <GiphyIcon />}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -125,16 +123,16 @@ const MessagingInput = (props) => {
         </div>
       </ImageDropzone>
       <div
-        className='messaging-input__button'
+        className={styles['messaging-input__button']}
         role='button'
         aria-roledescription='button'
         onClick={messageInput.handleSubmit}
       >
-        <SendIcon />
+        <SendIcon className="h-4 w-4"/>
       </div>
       <EmojiPicker {...messageInput} />
     </div>
   );
 };
 
-export default React.memo(MessagingInput);
+export default memo(MessagingInput);

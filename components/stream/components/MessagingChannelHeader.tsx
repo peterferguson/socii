@@ -1,16 +1,21 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Avatar, ChannelContext } from 'stream-chat-react';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Avatar, ChannelContext } from "stream-chat-react";
 
-import "@styles/MessagingChannelHeader.module.css";
+import styles from "@styles/MessagingChannelHeader.module.css";
 
-import { TypingIndicator } from './TypingIndicator';
+import { TypingIndicator } from "./TypingIndicator";
 
-import { ChannelInfoIcon, ChannelSaveIcon, getCleanImage, HamburgerIcon } from '../assets';
+import {
+  ChannelInfoIcon,
+  ChannelSaveIcon,
+  getCleanImage,
+  HamburgerIcon,
+} from "../assets";
 
 const getAvatarGroup = (members) => {
   if (members.length === 1) {
     return (
-      <div className='messaging__channel-header__avatars'>
+      <div className={styles["messaging__channel-header__avatars"]}>
         <Avatar image={getCleanImage(members[0])} size={40} />;
       </div>
     );
@@ -18,12 +23,12 @@ const getAvatarGroup = (members) => {
 
   if (members.length === 2) {
     return (
-      <div className='messaging__channel-header__avatars two'>
+      <div className={styles["messaging__channel-header__avatars two"]}>
         <span>
-          <Avatar image={getCleanImage(members[0])} shape='square' size={40} />
+          <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
         </span>
         <span>
-          <Avatar image={getCleanImage(members[1])} shape='square' size={40} />
+          <Avatar image={getCleanImage(members[1])} shape="square" size={40} />
         </span>
       </div>
     );
@@ -31,13 +36,13 @@ const getAvatarGroup = (members) => {
 
   if (members.length === 3) {
     return (
-      <div className='messaging__channel-header__avatars three'>
+      <div className={styles["messaging__channel-header__avatars three"]}>
         <span>
-          <Avatar image={getCleanImage(members[0])} shape='square' size={40} />
+          <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
         </span>
         <span>
-          <Avatar image={getCleanImage(members[1])} shape='square' size={20} />
-          <Avatar image={getCleanImage(members[2])} shape='square' size={20} />
+          <Avatar image={getCleanImage(members[1])} shape="square" size={20} />
+          <Avatar image={getCleanImage(members[2])} shape="square" size={20} />
         </span>
       </div>
     );
@@ -45,14 +50,30 @@ const getAvatarGroup = (members) => {
 
   if (members.length >= 4) {
     return (
-      <div className='messaging__channel-header__avatars four'>
+      <div className={styles["messaging__channel-header__avatars four"]}>
         <span>
-          <Avatar image={getCleanImage(members[members.length - 1])} shape='square' size={20} />
-          <Avatar image={getCleanImage(members[members.length - 2])} shape='square' size={20} />
+          <Avatar
+            image={getCleanImage(members[members.length - 1])}
+            shape="square"
+            size={20}
+          />
+          <Avatar
+            image={getCleanImage(members[members.length - 2])}
+            shape="square"
+            size={20}
+          />
         </span>
         <span>
-          <Avatar image={getCleanImage(members[members.length - 3])} shape='square' size={20} />
-          <Avatar image={getCleanImage(members[members.length - 4])} shape='square' size={20} />
+          <Avatar
+            image={getCleanImage(members[members.length - 3])}
+            shape="square"
+            size={20}
+          />
+          <Avatar
+            image={getCleanImage(members[members.length - 4])}
+            shape="square"
+            size={20}
+          />
         </span>
       </div>
     );
@@ -64,14 +85,14 @@ const getAvatarGroup = (members) => {
 const MessagingChannelHeader = (props) => {
   const { channel, client } = useContext(ChannelContext);
 
-  const [channelName, setChannelName] = useState(channel?.data.name || '');
+  const [channelName, setChannelName] = useState(channel?.data.name || "");
   const [isEditing, setIsEditing] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
 
   const inputRef = useRef();
 
   const members = Object.values(channel.state?.members || {}).filter(
-    (member) => member.user?.id !== client?.user?.id,
+    (member) => member.user?.id !== client?.user?.id
   );
 
   const updateChannel = async (e) => {
@@ -80,7 +101,7 @@ const MessagingChannelHeader = (props) => {
     if (channelName && channelName !== channel.data.name) {
       await channel.update(
         { name: channelName },
-        { text: `Channel name changed to ${channelName}` },
+        { text: `Channel name changed to ${channelName}` }
       );
     }
 
@@ -96,7 +117,11 @@ const MessagingChannelHeader = (props) => {
   useEffect(() => {
     if (!channelName) {
       setTitle(
-        members.map((member) => member.user?.name || member.user?.id || 'Unnamed User').join(', '),
+        members
+          .map(
+            (member) => member.user?.name || member.user?.id || "Unnamed User"
+          )
+          .join(", ")
       );
     }
   }, [channelName, members]);
@@ -111,10 +136,10 @@ const MessagingChannelHeader = (props) => {
     >
       <input
         autoFocus
-        className='channel-header__edit-input'
+        className={styles["channel-header__edit-input"]}
         onBlur={updateChannel}
         onChange={(e) => setChannelName(e.target.value)}
-        placeholder='Type a new name for the chat'
+        placeholder="Type a new name for the chat"
         ref={inputRef}
         value={channelName}
       />
@@ -122,20 +147,28 @@ const MessagingChannelHeader = (props) => {
   );
 
   return (
-    <div className='messaging__channel-header'>
-      <div id='mobile-nav-icon' className={`${props.theme}`} onClick={() => props.toggleMobile()}>
+    <div className={styles["messaging__channel-header"]}>
+      <div
+        id="mobile-nav-icon"
+        className={`${props.theme}`}
+        onClick={() => props.toggleMobile()}
+      >
         <HamburgerIcon />
       </div>
       {getAvatarGroup(members)}
       {!isEditing ? (
-        <div className='channel-header__name'>{channelName || title}</div>
+        <div className={styles["channel-header__name"]}>{channelName || title}</div>
       ) : (
         <EditHeader />
       )}
-      <div className='messaging__channel-header__right'>
+      <div className={styles["messaging__channel-header__right"]}>
         <TypingIndicator />
-        {channelName !== 'Social Demo' &&
-          (!isEditing ? <ChannelInfoIcon {...{ isEditing, setIsEditing }} /> : <ChannelSaveIcon />)}
+        {channelName !== "Social Demo" &&
+          (!isEditing ? (
+            <ChannelInfoIcon {...{ isEditing, setIsEditing }} />
+          ) : (
+            <ChannelSaveIcon />
+          ))}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ export default function AuthCheck(props) {
   const { username } = useContext(UserContext);
 
   return username
-    ? props.children // TODO: Create Skeleton children for pages which require auth and display these with the text below overlaid
+    ? props.children
     : props.fallback || (
         <div className="mx-auto flex items-center justify-center w-screen h-screen bg-gray-50">
           <Link href="/enter">

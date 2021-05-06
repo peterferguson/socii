@@ -1,4 +1,5 @@
-import React, {
+import {
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -10,17 +11,23 @@ import _debounce from "lodash.debounce";
 
 import { XButton, XButtonBackground } from "../assets";
 
-import "@styles/CreateChannel.module.css";
+import styles from "@styles/CreateChannel.module.css";
 
 const UserResult = ({ user }) => (
-  <li className="messaging-create-channel__user-result">
+  <li className={styles["messaging-create-channel__user-result"]}>
     <Avatar image={user.image} size={40} />
     {user.online && (
-      <div className="messaging-create-channel__user-result-online" />
+      <div className={styles["messaging-create-channel__user-result-online"]} />
     )}
-    <div className="messaging-create-channel__user-result__details">
+    <div className={styles["messaging-create-channel__user-result__details"]}>
       <span>{user.name}</span>
-      {/* <span className='messaging-create-channel__user-result__details__last-seen'>{user.online}</span> */}
+      <span
+        className={
+          styles["messaging-create-channel__user-result__details__last-seen"]
+        }
+      >
+        {user.online}
+      </span>
     </div>
   </li>
 );
@@ -163,20 +170,20 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   }, [handleKeyDown]);
 
   return (
-    <div className="messaging-create-channel">
+    <div className={styles["messaging-create-channel"]}>
       <header>
-        <div className="messaging-create-channel__left">
-          <div className="messaging-create-channel__left-text">To: </div>
-          <div className="users-input-container">
+        <div className={styles["messaging-create-channel__left"]}>
+          <div className={styles["messaging-create-channel__left-text"]}>To: </div>
+          <div className={styles["users-input-container"]}>
             {!!selectedUsers?.length && (
-              <div className="messaging-create-channel__users">
+              <div className={styles["messaging-create-channel__users"]}>
                 {selectedUsers.map((user) => (
                   <div
-                    className="messaging-create-channel__user"
+                    className={styles["messaging-create-channel__user"]}
                     onClick={() => removeUser(user)}
                     key={user.id}
                   >
-                    <div className="messaging-create-channel__user-text">
+                    <div className={styles["messaging-create-channel__user-text"]}>
                       {user.name}
                     </div>
                     <XButton />
@@ -194,26 +201,26 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                   !selectedUsers.length ? "Start typing for suggestions" : ""
                 }
                 type="text"
-                className="messaging-create-channel__input"
+                className={styles["messaging-create-channel__input"]}
               />
             </form>
           </div>
-          <div className="close-mobile-create" onClick={() => toggleMobile()}>
+          <div className={styles["close-mobile-create"]} onClick={() => toggleMobile()}>
             <XButtonBackground />
           </div>
         </div>
-        <button className="create-channel-button" onClick={createChannel}>
+        <button className={styles["create-channel-button"]} onClick={createChannel}>
           Start chat
         </button>
       </header>
       {inputText && (
         <main>
-          <ul className="messaging-create-channel__user-results">
+          <ul className={styles["messaging-create-channel__user-results"]}>
             {!!users?.length && !searchEmpty && (
               <div>
                 {users.map((user, i) => (
                   <div
-                    className={`messaging-create-channel__user-result ${
+                    className={`${styles["messaging-create-channel__user-result"]} ${
                       focusedUser === i && "focused"
                     }`}
                     onClick={() => addUser(user)}
@@ -230,7 +237,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                   inputRef.current.focus();
                   clearState();
                 }}
-                className="messaging-create-channel__user-result empty"
+                className={styles["messaging-create-channel__user-result empty"]}
               >
                 No people found...
               </div>
@@ -242,4 +249,4 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   );
 };
 
-export default React.memo(CreateChannel);
+export default memo(CreateChannel);

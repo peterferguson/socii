@@ -1,4 +1,6 @@
+import "stream-chat-react/dist/css/index.css";
 import LoadingIndicator from "@components/LoadingIndicator";
+import AuthCheck from "@components/AuthCheck";
 import { useContext, useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import {
@@ -19,6 +21,7 @@ import {
   MessagingInput,
   MessagingThread,
 } from "@components/stream/components";
+
 import { UserContext } from "@lib/context";
 
 const apiKey = process.env.REACT_APP_STREAM_KEY;
@@ -44,10 +47,12 @@ const App = () => {
     const initChat = async () => {
       const client = StreamChat.getInstance(apiKey);
 
-      await client.connectUser(
-        { id: username, name: user?.displayName },
-        userToken
-      );
+      if (username) {
+        await client.connectUser(
+          { id: username, name: user?.displayName },
+          userToken
+        );
+      }
 
       setChatClient(client);
     };
@@ -84,51 +89,58 @@ const App = () => {
   const toggleMobile = () => setMobileNav(!isMobileNavVisible);
 
   return (
-    <Chat client={chatClient} theme={`messaging ${theme}`}>
-      <div id="mobile-channel-list" onClick={toggleMobile}>
-        <ChannelList
-          filters={filters}
-          sort={sort}
-          options={options}
-          List={(props) => (
-            <MessagingChannelList
-              {...props}
-              onCreateChannel={() => setIsCreating(!isCreating)}
+    <AuthCheck>
+      {username && (
+        <Chat client={chatClient} theme={`messaging ${theme}`}>
+          <div id="mobile-channel-list" onClick={toggleMobile}>
+            <ChannelList
+              filters={filters}
+              sort={sort}
+              options={options}
+              List={(props) => (
+                <MessagingChannelList
+                  {...props}
+                  onCreateChannel={() => setIsCreating(!isCreating)}
+                />
+              )}
+              Preview={(props) => (
+                <MessagingChannelPreview {...props} {...{ setIsCreating }} />
+              )}
             />
-          )}
-          Preview={(props) => (
-            <MessagingChannelPreview {...props} {...{ setIsCreating }} />
-          )}
-        />
-      </div>
-      <div>
-        <Channel maxNumberOfFiles={10} multipleUploads={true}>
-          {isCreating && (
-            <CreateChannel
-              toggleMobile={toggleMobile}
-              onClose={() => setIsCreating(false)}
-            />
-          )}
-          <Window>
-            <MessagingChannelHeader theme={theme} toggleMobile={toggleMobile} />
-            <MessageList
-              messageActions={[
-                "edit",
-                "delete",
-                "flag",
-                "mute",
-                "react",
-                "reply",
-              ]}
-              Message={CustomMessage}
-              TypingIndicator={() => null}
-            />
-            <MessageInput focus Input={MessagingInput} />
-          </Window>
-          <MessagingThread />
-        </Channel>
-      </div>
-    </Chat>
+          </div>
+          <div>
+            <Channel maxNumberOfFiles={10} multipleUploads={true}>
+              {isCreating && (
+                <CreateChannel
+                  toggleMobile={toggleMobile}
+                  onClose={() => setIsCreating(false)}
+                />
+              )}
+              <Window>
+                <MessagingChannelHeader
+                  theme={theme}
+                  toggleMobile={toggleMobile}
+                />
+                <MessageList
+                  messageActions={[
+                    "edit",
+                    "delete",
+                    "flag",
+                    "mute",
+                    "react",
+                    "reply",
+                  ]}
+                  Message={CustomMessage}
+                  TypingIndicator={() => null}
+                />
+                <MessageInput focus Input={MessagingInput} />
+              </Window>
+              <MessagingThread />
+            </Channel>
+          </div>
+        </Chat>
+      )}
+    </AuthCheck>
   );
 };
 export default App;

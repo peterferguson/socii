@@ -15,6 +15,10 @@ module.exports = {
         back: {
           DEFAULT: "#0D5F78",
           light: "#0E7B82",
+          blue: "#005fff",
+        },
+        present: {
+          DEFAULT: "#20e070",
         },
         gray: colors.blueGray,
         teal: colors.teal,
@@ -92,6 +96,29 @@ module.exports = {
       },
       margin:{
         "-46": "-11.5rem",
+      },
+      borderRadius:{
+        "2.5xl": "20px",
+      },
+      padding:{
+        "1.5": "6px",
+      },
+      minHeight: {
+        '60px': '60px',
+      },
+      minWidth: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        '85': '85%',
+        '215': '215px',
+        '330': '330px',
+      },
+      maxWidth: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        '95': '95%',
       },
       width: {
         88: "22rem",

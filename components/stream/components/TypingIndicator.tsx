@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import styles from "@styles/TypingIndicator.module.css";
+import { useContext } from 'react';
 import { ChannelContext } from 'stream-chat-react';
 
-import "@styles/TypingIndicator.module.css";
 
 export const TypingIndicator = () => {
   const { client, typing } = useContext(ChannelContext);
@@ -23,12 +23,12 @@ export const TypingIndicator = () => {
   }
 
   return (
-    <div className='messaging__typing-indicator'>
+    <div className={styles['messaging__typing-indicator']}>
       {text && (
-        <div className='dots'>
-          <span className='dot' />
-          <span className='dot' />
-          <span className='dot' />
+        <div className={styles['dots']}>
+          <span className={styles['dot']} />
+          <span className={styles['dot']} />
+          <span className={styles['dot']} />
         </div>
       )}
       <div>{text}</div>
