@@ -36,11 +36,11 @@ const sort = {
   updated_at: -1,
 };
 
-const App = () => {
+const App = (mobileView=false) => {
   const { user, username } = useContext(UserContext);
   const [chatClient, setChatClient] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [isMobileNavVisible, setMobileNav] = useState(false);
+  const [isMobileNavVisible, setMobileNav] = useState(mobileView);
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {

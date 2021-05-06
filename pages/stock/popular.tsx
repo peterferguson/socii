@@ -1,4 +1,4 @@
-import { AssetCard } from "@components/AssetCards";
+import { AssetCard, BlockCard } from "@components/AssetCards";
 import { firestore } from "@lib/firebase";
 import { stockProps } from "@utils/helper";
 
@@ -16,13 +16,20 @@ export default function Popular({ tickerSymbols }) {
         <div className="flex flex-wrap items-center justify-center min-h-screen">
           {tickerSymbols.map(({ ticker, timeseries, sector }) => {
             return (
-              <div className="flex flex-col mx-auto my-4 bg-white p-4 rounded-lg shadow-lg w-88 sm:w-64">
-                <AssetCard
+              <>
+                <div className="flex flex-col mx-auto my-4 bg-white p-4 rounded-lg shadow-lg w-88 sm:w-64">
+                  <AssetCard
+                    ticker={ticker}
+                    timeseries={timeseries}
+                    sector={sector}
+                  />
+                </div>
+                {/* <BlockCard
                   ticker={ticker}
                   timeseries={timeseries}
                   sector={sector}
-                />
-              </div>
+                /> */}
+              </>
             );
           })}
         </div>

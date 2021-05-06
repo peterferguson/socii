@@ -138,3 +138,10 @@ export const tickerTimeseries = async (tickerRef, limit = 30) => {
     return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
   });
 };
+
+export const getRandomImage = () => {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const firstInitial = alphabet[Math.floor(Math.random() * 26)].toUpperCase();
+  const secondInitial = alphabet[Math.floor(Math.random() * 26)].toUpperCase();
+  return `https://getstream.imgix.net/images/random_svg/${firstInitial}${secondInitial}.png`;
+};

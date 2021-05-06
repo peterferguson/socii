@@ -27,7 +27,7 @@ export default function StockDisplay({ tickerSymbols }) {
               tickerSymbol={ticker.tickerSymbol}
               shortName={ticker.shortName}
               data={timeseries}
-            />
+              />
           );
         })}
       </div>
