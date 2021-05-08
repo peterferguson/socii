@@ -1,8 +1,9 @@
 import LineChart from "@components/LineChart";
 import TradingViewChart from "@components/TradingViewChart";
-import SmallAssetCard from "@components/SmallAssetCard";
+import SmallAssetCard from "@components/AssetCards";
 import {
   alphaVantageData,
+  iexChartTimeseries,
   isBrowser,
   pctChange,
   pnlTextColor,
@@ -55,6 +56,9 @@ export async function getStaticProps({ params }) {
     return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
   });
 
+  // ! EXPENSIVE
+  // const timeseries = await iexChartTimeseries(tickerSymbol)
+  
   // * Get summary data from firestore
   const summaryRef = firestore.doc(
     `tickers/${tickerData.ISIN}/data/alphaVantage`
@@ -122,9 +126,10 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
     };
   });
 
-  const highlightedClose = timeseries[crosshairIndexValue].y;
-  let previousDayClose = highlightedClose;
-  let previousMonthClose = highlightedClose;
+  const latestClose: number = timeseries[0].y;
+  const highlightedClose: number = timeseries[crosshairIndexValue].y;
+  let previousDayClose: number = highlightedClose;
+  let previousMonthClose: number = highlightedClose;
   try {
     previousDayClose = timeseries[crosshairIndexValue + 1].y;
     previousMonthClose = timeseries[crosshairIndexValue + 21].y;
@@ -134,10 +139,7 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
   const monthlyPctChange = pctChange(highlightedClose, previousMonthClose);
 
   // * Show the pct change of highlighted value versus today
-  const highlightedChange = pctChange(
-    timeseries[0].y,
-    highlightedClose
-  ).toFixed(2);
+  const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2);
 
   return (
     <>
@@ -149,10 +151,9 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
           dailyPctChange={dailyPctChange}
           monthlyPctChange={monthlyPctChange}
         />
-      </div>
-      <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
-        <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
-          <div className="flex justify-between w-full h-20">
+        <div className="flex-grow"></div>
+        <div className="flex-none pl-8 pt-4 bg-gray-50">
+          <div className="mr-4 bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52">
             <span className="z-10 w-12 text-4xl h-4">
               ${highlightedClose}
               {highlightedChange && (
@@ -168,6 +169,33 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
                 {`on ${timeseries[crosshairIndexValue].x.toLocaleDateString()}`}
               </span>
             </span>
+          </div>
+        </div>
+      </div>
+      <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
+        <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
+          <div className="flex justify-between w-full h-20">
+            {!showTradingView ? (
+              <div className="flex text-gray-600 text-3xl">
+                {`A $100 investment on ${timeseries[
+                  crosshairIndexValue
+                    ? crosshairIndexValue
+                    : timeseries.length - 1
+                ].x.toLocaleDateString()} would be worth $${(
+                  100 *
+                  (1 +
+                    pctChange(
+                      latestClose,
+                      crosshairIndexValue
+                        ? timeseries[crosshairIndexValue].y
+                        : timeseries[timeseries.length - 1].y
+                    ) /
+                      100)
+                ).toFixed(2)} today`}
+              </div>
+            ) : (
+              <div className="flex-grow"></div>
+            )}
             <div className="flex">
               <div className="px-4">
                 {!showTradingView ? "TradingView" : "socii Chart"}

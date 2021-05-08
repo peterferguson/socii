@@ -26,9 +26,10 @@ export const firestore = firebase.firestore();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
-export const increment = firebase.firestore.FieldValue.increment;
 export const recaptchaVerifier = firebase.auth.RecaptchaVerifier;
 export const credentialWithLink = firebase.auth.EmailAuthProvider.credentialWithLink;
+export const increment = firebase.firestore.FieldValue.increment;
+export const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

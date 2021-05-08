@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { firestore } from "@lib/firebase"
 
 export default function Invites() {
   return (
     <>
       <div className="p-4 font-bold text-md font-work-sans">
         Invite Friends
-        <span className="font-extrabold text-brand-dark">
+        <span className="font-extrabold text-brand-dark pl-1">
           (Think carefully you only have 2 invites!)
         </span>
       </div>

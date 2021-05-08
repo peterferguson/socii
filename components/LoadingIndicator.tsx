@@ -1,4 +1,4 @@
 // Loading Spinner
-export default function Loader({ show, className }) {
+export default function LoadingIndicator({ show=true, className="" }) {
   return show ? <div className={`loader ${className}`}></div> : null;
 }

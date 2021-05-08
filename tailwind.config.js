@@ -5,19 +5,20 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      backdropFilter: {
-        'none': 'none',
-        'blur': 'blur(20px)',
-      },
       colors: {
         brand: {
           light: "#3fbaeb",
           DEFAULT: "#0fa9e6",
           dark: "#0c87b8",
+          teal: "#a6fff8"
         },
         back: {
           DEFAULT: "#0D5F78",
           light: "#0E7B82",
+          blue: "#005fff",
+        },
+        present: {
+          DEFAULT: "#20e070",
         },
         gray: colors.blueGray,
         teal: colors.teal,
@@ -93,13 +94,48 @@ module.exports = {
       spacing: {
         0.5: "0.125rem",
       },
+      margin:{
+        "-46": "-11.5rem",
+      },
+      borderRadius:{
+        "2.5xl": "20px",
+      },
+      padding:{
+        "1.5": "6px",
+      },
+      minHeight: {
+        '60px': '60px',
+      },
+      minWidth: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        '85': '85%',
+        '215': '215px',
+        '330': '330px',
+      },
+      maxWidth: {
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        '95': '95%',
+      },
+      width: {
+        88: "22rem",
+        "1/7": "14.2857143%",
+        "2/7": "28.5714286%",
+        "3/7": "42.8571429%",
+        "4/7": "57.1428571%",
+        "5/7": "71.4285714%",
+        "6/7": "85.7142857%",
     },
   },
+},
   variants: {
     scale: ["responsive", "hover", "focus", "focus-within"],
     extend: {
       backgroundColor: ["active"],
     },
   },
-  plugins: [require("tailwindcss-filters")],
+  plugins: [],
 };
