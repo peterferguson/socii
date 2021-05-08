@@ -19,9 +19,12 @@ import { Fragment } from "react";
 export default function Navigation(props) {
   const { username } = useContext(UserContext);
   const router = useRouter();
-  
+
   return (
-    <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
+    <div
+      className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 \
+                    flex-none flex backdrop-filter backdrop-blur-lg bg-opacity-50"
+    >
       <Logo />
       <SearchBar {...props} />
       {username ? (
@@ -95,7 +98,7 @@ function Dropdown() {
   const router = useRouter();
 
   // TODO: Add bitcoin svg to navigate to crypto page
-  // TODO: Add navigation to stock page 
+  // TODO: Add navigation to stock page
   const dropdownItems = [
     {
       name: "Invites",
@@ -108,6 +111,7 @@ function Dropdown() {
       description: "Search the socii stock universe",
       href: "/stock",
       icon: DollarIcon,
+      // icon: <i className="far fa-chart-bar" />,
     },
     {
       name: "Porfolio",

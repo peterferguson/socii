@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { firestore, serverTimestamp, arrayUnion } from "@lib/firebase";
-import { groupPrivacyOptions } from "@lib/constants";
+import {
+  groupPrivacyOptions,
+  groupLumpSumOptions,
+  groupDepositOptions,
+} from "@lib/constants";
 import { UserContext } from "@lib/context";
 
 import CheckIcon from "@components/BackgroundCheck";
@@ -15,6 +19,8 @@ export default function Create() {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [privacyOption, setPrivacyOption] = useState(groupPrivacyOptions[1]);
+  const [depositOption, setDepositOption] = useState(groupDepositOptions[1]);
+  const [lumpSumOption, setLumpSumOption] = useState(groupLumpSumOptions[1]);
   const [isValidGroupName, setisValidGroupName] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -129,6 +135,33 @@ export default function Create() {
             privacyOption={privacyOption}
             setPrivacyOption={setPrivacyOption}
           />
+          <div className="p-4 font-bold text-md font-work-sans flex flex-col">
+            Initial Lump-Sum
+          </div>
+          <AmountOptions
+            AmountOptions={groupLumpSumOptions}
+            amountOption={lumpSumOption}
+            setAmountOption={setLumpSumOption}
+            srLabel={"Initial Lump Sum Amount"}
+          />
+          <div className="p-4 font-bold text-md font-work-sans flex flex-col">
+            Deposit Schedule
+            {/* 
+            // ! Legally the group members will have to ensure this balance is maintained.
+            // ! All we can do is raise warnings when their average balance is below 
+            // ! the cash holding of the group may not have enough 
+            */}
+            <span className="pl-4 pt-1 text-tiny uppercase text-emerald-500">
+              (a monthly deposit so that all members of the group have enough to
+              trade with)
+            </span>
+          </div>
+          <AmountOptions
+            AmountOptions={groupDepositOptions}
+            amountOption={depositOption}
+            setAmountOption={setDepositOption}
+            srLabel={"Monthly Deposit Amount"}
+          />
           <button
             className="btn w-11/12 my-8"
             onClick={(e) =>
@@ -149,6 +182,70 @@ export default function Create() {
         </div>
       </form>
     </main>
+  );
+}
+
+// TODO: Add dropdown for mobile view with input values also 
+function AmountOptions({
+  className,
+  AmountOptions,
+  amountOption,
+  setAmountOption,
+  srLabel,
+}) {
+  return (
+    <div
+      className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}
+    >
+      <RadioGroup value={amountOption} onChange={setAmountOption}>
+        <RadioGroup.Label className="sr-only">{srLabel}</RadioGroup.Label>
+        <div
+          className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
+                        sm:flex flex-col sm:flex-row"
+        >
+          {AmountOptions.map((option) => (
+            <RadioGroup.Option
+              key={option.amount}
+              value={option}
+              className={({ active }) =>
+                `${
+                  active
+                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
+                         ring-brand-light ring-opacity-60"
+                    : ""
+                }
+                     bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer \
+                     focus:outline-none flex-1`
+              }
+            >
+              {({ checked }) => (
+                <>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center">
+                      <div className="text-sm">
+                        <RadioGroup.Label
+                          as="p"
+                          className={`font-medium ${
+                            checked ? "text-brand-light" : "text-gray-900"
+                          }`}
+                        >
+                          {option.amount}
+                        </RadioGroup.Label>
+                      </div>
+                    </div>
+                    {checked && (
+                      <div className="flex-shrink-0 text-brand-light">
+                        <CheckIcon className="w-6 h-6" />
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </RadioGroup.Option>
+          ))}
+        </div>
+      </RadioGroup>
+    </div>
   );
 }
 
@@ -240,6 +337,9 @@ const createGroup = async (
     groupName,
     privacyOption,
     groupType: "", // TODO: Implement group types (dividend/active/value/growth)
+    cashBalance: depositOption + lumpSumOption,
+    joinFee: lumpSumOption,
+    membershipFee: depositOption,
     startDate: serverTimestamp(),
   });
   batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() });

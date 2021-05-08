@@ -1,145 +1,123 @@
-import React from "react";
+import { firestore } from "@lib/firebase";
+import IEXQuery from "@lib/iex";
+import { fetchURL } from "@utils/helper";
+import { PieCardSkeleton } from "@components/PieCard";
+import { GroupPieCard } from "@components/GroupCharts";
 
-import Navbar from "@components/temp/Navbar.js";
-import Sidebar from "@components/temp/Sidebar.js";
+import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
+import { useState, useEffect } from "react";
+
+import { useRouter } from "next/router";
+import { useContext } from "react";
+
 import LineChart from "@components/temp/LineChart.js";
-import BarChart from "@components/temp/BarChart.js";
 
 export default function Dashboard() {
+  // TODO: Sidebar with name, breakdown dashboard, activity feed & chat
+  // TODO: converting to a footer when in mobile view
+
+  const router = useRouter();
+  const groupName = router.query.groupName;
+  // const { username, userGroups } = useContext(UserContext);
+
+  const cards = [
+    {
+      title: "Portfolio Value",
+      subTitle: "350,907",
+      imgComponent: (
+        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
+          <i className="far fa-chart-bar"></i>
+        </div>
+      ),
+      headingColor: "text-emerald-500",
+      heading: (
+        <>
+          <i className="fas fa-arrow-up"></i> 3.48%
+        </>
+      ),
+      headingSubText: "Since last month",
+    },
+    {
+      title: (
+        <>
+          Top Performer: <span className="text-emerald-500">(TSLA)</span>
+        </>
+      ),
+      subTitle: "924",
+      imgComponent: (
+        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
+          <i className="fas fa-users"></i>
+        </div>
+      ),
+      headingColor: "text-red-500",
+      heading: (
+        <>
+          <i className="fas fa-arrow-down"></i> 1.10%
+        </>
+      ),
+      headingSubText: "Since last week",
+    },
+    {
+      title: (
+        <>
+          Latest Purchase: <span className="text-emerald-500">(TSLA)</span>
+        </>
+      ),
+      subTitle: "2,356",
+      imgComponent: (
+        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
+          <i className="fas fa-chart-pie"></i>
+        </div>
+      ),
+      headingColor: "text-emerald-500",
+      heading: (
+        <>
+          <i className="fas fa-arrow-up"></i> 3.48%
+        </>
+      ),
+      headingSubText: "Since last week",
+    },
+    {
+      title: "Performance vs. Market",
+      subTitle: "49,65%",
+      imgComponent: (
+        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-lightBlue-500">
+          <i className="fas fa-percent"></i>
+        </div>
+      ),
+      headingColor: "text-emerald-500",
+      heading: (
+        <>
+          <i className="fas fa-arrow-up"></i> 12%
+        </>
+      ),
+      headingSubText: "Since yesterday",
+    },
+  ];
+
   return (
     <>
       <div className="relative bg-blueGray-100">
         {/* Header */}
-        <div className="relative bg-brand-light md:pt-32 pb-32 pt-12">
+        <div className="relative bg-gradient-to-r from-green-300 to-brand-light md:pt-32 pb-32 pt-12">
           <div className="px-4 md:px-10 mx-auto w-full">
             <div>
               {/* Card stats */}
               <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
-                    <div className="flex-auto p-4">
-                      <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                          <h5 className="text-blueGray-400 uppercase font-bold text-xs">
-                            Traffic
-                          </h5>
-                          <span className="font-semibold text-xl text-blueGray-700">
-                            350,897
-                          </span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                          <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
-                            <i className="far fa-chart-bar"></i>
-                          </div>
-                        </div>
-                      </div>
-                        <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-emerald-500 mr-2">
-                          <i className="fas fa-arrow-up"></i> 3.48%
-                        </span>
-                        <span className="whitespace-nowrap">
-                          Since last month
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
-                    <div className="flex-auto p-4">
-                      <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                          <h5 className="text-blueGray-400 uppercase font-bold text-xs">
-                            New users
-                          </h5>
-                          <span className="font-semibold text-xl text-blueGray-700">
-                            2,356
-                          </span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                          <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
-                            <i className="fas fa-chart-pie"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-red-500 mr-2">
-                          <i className="fas fa-arrow-down"></i> 3.48%
-                        </span>
-                        <span className="whitespace-nowrap">
-                          Since last week
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
-                    <div className="flex-auto p-4">
-                      <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                          <h5 className="text-blueGray-400 uppercase font-bold text-xs">
-                            Sales
-                          </h5>
-                          <span className="font-semibold text-xl text-blueGray-700">
-                            924
-                          </span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                          <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
-                            <i className="fas fa-users"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-orange-500 mr-2">
-                          <i className="fas fa-arrow-down"></i> 1.10%
-                        </span>
-                        <span className="whitespace-nowrap">
-                          Since yesterday
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
-                    <div className="flex-auto p-4">
-                      <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                          <h5 className="text-blueGray-400 uppercase font-bold text-xs">
-                            Performance
-                          </h5>
-                          <span className="font-semibold text-xl text-blueGray-700">
-                            49,65%
-                          </span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                          <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-lightBlue-500">
-                            <i className="fas fa-percent"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-emerald-500 mr-2">
-                          <i className="fas fa-arrow-up"></i> 12%
-                        </span>
-                        <span className="whitespace-nowrap">
-                          Since last month
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {cards.map((props) => (
+                  <BlockCard {...props} />
+                ))}
               </div>
             </div>
           </div>
         </div>
-        <div className="px-4 md:px-10 mx-auto w-full">
+        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+          {/* Charts */}
           <div className="flex flex-wrap">
             <LineChart />
-            <BarChart />
+            <PieChart groupName={groupName} />
           </div>
+          {/* Tables */}
           <div className="flex flex-wrap mt-4">
             <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
               <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -150,7 +128,7 @@ export default function Dashboard() {
                         Page visits
                       </h3>
                     </div>
-                    <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                    {/* <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                       <button
                         className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
                         type="button"
@@ -158,7 +136,7 @@ export default function Dashboard() {
                       >
                         See all
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="block w-full overflow-x-auto">
@@ -410,13 +388,12 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          {/* Footer */}
           <footer className="block py-4">
             <div className="container mx-auto px-4">
               <hr className="mb-4 border-b-1 border-blueGray-200" />
               <div className="flex flex-wrap items-center md:justify-between justify-center">
-                <div className="w-full md:w-4/12 px-4">
-                  socii
-                </div>
+                <div className="w-full md:w-4/12 px-4">socii</div>
                 <div className="w-full md:w-8/12 px-4">
                   <ul className="flex flex-wrap list-none md:justify-end  justify-center">
                     <li>
@@ -429,18 +406,10 @@ export default function Dashboard() {
                     </li>
                     <li>
                       <a
-                        href="https://www.creative-tim.com/presentation"
+                        href="/"
                         className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                       >
                         About Us
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="http://blog.creative-tim.com"
-                        className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
-                      >
-                        Blog
                       </a>
                     </li>
                   </ul>
@@ -453,3 +422,115 @@ export default function Dashboard() {
     </>
   );
 }
+
+function BlockCard({
+  title,
+  subTitle,
+  imgComponent,
+  headingColor,
+  heading,
+  headingSubText,
+}) {
+  return (
+    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+        <div className="flex-auto p-4">
+          <div className="flex flex-wrap">
+            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+              <h5 className="text-blueGray-400 uppercase font-bold text-xs">
+                {title}
+              </h5>
+              <span className="font-semibold text-xl text-blueGray-700">
+                {subTitle}
+              </span>
+            </div>
+            <div className="relative w-auto pl-4 flex-initial">
+              {imgComponent}
+            </div>
+          </div>
+          <p className="text-sm text-blueGray-400 mt-4">
+            <span className={`${headingColor} mr-2`}>{heading}</span>
+            <span className="whitespace-nowrap">{headingSubText}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PieChart({ groupName }) {
+  const [currentPrices, setCurrentPrices] = useState([]);
+  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
+
+  const [holdings, loading] = useCollectionDataOnce(holdingsRef);
+
+  useEffect(() => {
+    holdings?.map(({ tickerSymbol }) => {
+      const iexClient = new IEXQuery();
+
+      fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
+        setCurrentPrices((previousState) => ({
+          ...previousState,
+          [tickerSymbol]: value,
+        }))
+      );
+    });
+  }, [holdings]);
+
+  const holdingData = holdings?.map(
+    ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {
+      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares };
+    }
+  );
+
+  return (
+    <>
+      <div className="w-full xl:w-4/12 px-4">
+        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+          <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+            <div className="flex flex-wrap items-center">
+              <div className="relative w-full max-w-full flex-grow flex-1">
+                <h6 className="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
+                  Holdings
+                </h6>
+                <h2 className="text-blueGray-700 text-xl font-semibold">
+                  Portfolio Allocation
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div className="p-4 flex-auto">
+            {/* Chart */}
+            {!loading ? (
+              <GroupPieCard
+                className={"bg-opacity-0 bg-gray-50"}
+                groupName={groupName}
+                holdingData={holdingData}
+                currentPrices={currentPrices}
+              />
+            ) : (
+              <PieCardSkeleton scaling={0.3} radius={250} />
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+{/* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
+<Link href={`/groups/${groupName}`}>
+  <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10 cursor-pointer">
+    {groupName}
+  </div>
+</Link>
+<DonutChart
+  className="z-0 -mt-8"
+  data={pieData}
+  scaling={0.35}
+  radius={250}
+  text={{
+    main: `$${portfolioValue?.toFixed(2)}`,
+    sub: `${gain.toFixed(2)}%`,
+  }}
+/>
+</div> */}

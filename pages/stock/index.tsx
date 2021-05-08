@@ -11,7 +11,7 @@ export default function StockDisplay({ tickerSymbols }) {
   return (
     <div>
       <Link href="/stock/popular">
-        <div className="flex font-bold uppercase text-3xl font-work-sans px-4 pt-4 \
+        <div className="flex font-bold uppercase text-3xl font-work-sans px-4 pt-4 mb-4 \
                         cursor-pointer text-brand-dark">
           Popular Stocks
           <div className="flex-grow" />
@@ -41,6 +41,5 @@ export async function getStaticProps(context) {
     .collection("tickers")
     .where("isPopular", "==", true)
     .limit(5);
-
   return await stockProps(tickerQuery, "industry");
 }

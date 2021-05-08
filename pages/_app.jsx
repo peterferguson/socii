@@ -1,4 +1,5 @@
 import "@styles/globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Head from "@components/Head";
 import Navigation from "@components/Navigation";
 import SearchCard from "@components/SearchCard";

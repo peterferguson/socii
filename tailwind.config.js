@@ -20,8 +20,10 @@ module.exports = {
         present: {
           DEFAULT: "#20e070",
         },
-        gray: colors.blueGray,
+        blueGray: colors.blueGray,
         teal: colors.teal,
+        emerald: colors.emerald,
+        lightBlue: colors.lightBlue,
         orange: colors.orange,
       },
       fontFamily: {

@@ -20,6 +20,48 @@ export const groupPrivacyOptions = [
 ];
 
 /*
+* Default Group Deposit Options
+*/
+export const groupDepositOptions = [
+  {
+    amount: "£0"
+  },
+  {
+    amount: "£10"
+  },
+  {
+    amount: "£25"
+  },
+  {
+    amount: "£50"
+  },
+  {
+    amount: "£100"
+  },
+];
+
+/*
+* Default Group Initial Lump-Sum Options
+*/
+export const groupLumpSumOptions = [
+  {
+    amount: "£0"
+  },
+  {
+    amount: "£25"
+  },
+  {
+    amount: "£50"
+  },
+  {
+    amount: "£100"
+  },
+  {
+    amount: "£250"
+  },
+];
+
+/*
  * Sign In Options & Logos for Entry Page
  */
 export const signInOptions = [

@@ -28,7 +28,7 @@ export default function DonutChart({
     width,
     height,
     innerRadius: radius * scaling,
-    radius: radius * 1.4 * scaling,
+    radius: radius * 1.2 * scaling,
     getAngle: (d) => d.theta,
     onValueMouseOver: (v) => setValue(v),
     onSeriesMouseOut: () => setValue(false),
