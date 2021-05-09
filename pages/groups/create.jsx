@@ -327,7 +327,7 @@ const createGroup = async (
   groupDescription
 ) => {
   e.preventDefault();
-  // const router = useRouter();
+  const router = useRouter();
 
   const userGroupRef = firestore.collection("users").doc(user.uid);
   const groupRef = firestore.collection("groups").doc(groupName);
@@ -341,14 +341,14 @@ const createGroup = async (
     groupName,
     privacyOption,
     groupType: "", // TODO: Implement group types (dividend/active/value/growth)
-    cashBalance: depositOption + lumpSumOption, //TODO: Add this to the payment ledger
-    joinFee: lumpSumOption,
-    membershipFee: depositOption,
+    cashBalance: depositOption.amount + lumpSumOption.amount, //TODO: Add this to the payment ledger
+    joinFee: lumpSumOption.amount,
+    membershipFee: depositOption.amount,
     startDate: serverTimestamp(),
   });
   batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() });
   await batch.commit();
 
   // Imperative navigation after doc is set
-  // router.push(`/groups/${groupName}`);
+  router.push(`/groups/${groupName}`);
 };
