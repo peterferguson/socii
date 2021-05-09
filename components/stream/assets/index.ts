@@ -1,7 +1,6 @@
 export { ChannelInfoIcon } from "./ChannelInfoIcon";
 export { ChannelSaveIcon } from "./ChannelSaveIcon";
 export { CloseThreadIcon } from "./CloseThreadIcon";
-export { HamburgerIcon } from "./HamburgerIcon";
 export { XButton } from "./XButton";
 export { XButtonBackground } from "./XButtonBackground";
 

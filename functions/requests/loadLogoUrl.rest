@@ -1,4 +1,4 @@
-POST http://localhost:5001/sociiinvest/us-central1/loadLogoUrl
+POST http://localhost:5001/sociiinvest/europe-west2/loadLogoUrl
 
 content-type: application/json
 

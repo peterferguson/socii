@@ -337,7 +337,7 @@ const createGroup = async (
     groupName,
     privacyOption,
     groupType: "", // TODO: Implement group types (dividend/active/value/growth)
-    cashBalance: depositOption + lumpSumOption,
+    cashBalance: depositOption + lumpSumOption, //TODO: Add this to the payment ledger
     joinFee: lumpSumOption,
     membershipFee: depositOption,
     startDate: serverTimestamp(),

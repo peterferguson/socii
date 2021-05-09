@@ -1,9 +1,4 @@
-const admin = require("firebase-admin");
-const serviceAccount = require("../serviceAccountKey.json");
-
-const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-adminConfig.credential = admin.credential.cert(serviceAccount);
-admin.initializeApp(adminConfig);
+import { firestore } from "./index.js";
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
@@ -39,8 +34,6 @@ const allKeysContainedIn = (object, other) => {
  *                     More info: https://expressjs.com/en/api.html#res
  */
 const tradeToFirestore = async (req, res) => {
-  const firestore = admin.firestore();
-
   const requiredArgs = {
     executorRef: null,
     assetRef: null,
@@ -87,7 +80,7 @@ const tradeToFirestore = async (req, res) => {
   var tradeData = {
     ...optionalArgs,
     ...requiredArgs,
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    timestamp: firestore.FieldValue.serverTimestamp(),
   };
 
   // * Update the holdings avgPrice & shares
@@ -127,18 +120,17 @@ const tradeToFirestore = async (req, res) => {
 
     batch.update(holdingRef, {
       avgPrice: newAvgPrice,
-      shares: admin.firestore.FieldValue.increment(sharesIncrement),
-      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+      shares: firestore.FieldValue.increment(sharesIncrement),
+      lastUpdated: firestore.FieldValue.serverTimestamp(),
     });
   } else {
-    // functions.logger.log("Adding a new holding!");
     batch.set(holdingRef, {
       assetRef,
       avgPrice: requiredArgs.price / requiredArgs.shares,
-      shares: admin.firestore.FieldValue.increment(sharesIncrement),
+      shares: firestore.FieldValue.increment(sharesIncrement),
       tickerSymbol: assetData.get("tickerSymbol"),
       shortName: assetData.get("shortName"),
-      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+      lastUpdated: firestore.FieldValue.serverTimestamp(),
     });
   }
 

@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/storage";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/functions";
 // import "firebase/performance"
 
 import toast from "react-hot-toast";
@@ -23,6 +24,7 @@ if (!firebase.apps.some(app => app.name_ == "[DEFAULT]")) {
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const firestore = firebase.firestore();
+export const functions = firebase.functions();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
@@ -30,6 +32,8 @@ export const recaptchaVerifier = firebase.auth.RecaptchaVerifier;
 export const credentialWithLink = firebase.auth.EmailAuthProvider.credentialWithLink;
 export const increment = firebase.firestore.FieldValue.increment;
 export const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+export const fromMillis = firebase.firestore.Timestamp.fromMillis;
+export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();
@@ -47,8 +51,6 @@ export async function getUserWithUsername(username) {
   return userDoc;
 }
 
-export const fromMillis = firebase.firestore.Timestamp.fromMillis;
-export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 // Get first name from firebase user
 /**`

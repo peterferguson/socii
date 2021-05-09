@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,11 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const admin = require("firebase-admin");
-const serviceAccount = require("../serviceAccountKey.json");
-const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-adminConfig.credential = admin.credential.cert(serviceAccount);
-admin.initializeApp(adminConfig);
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_js_1 = require("./index.js");
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
     var keys = null;
@@ -43,8 +41,7 @@ const allKeysContainedIn = (object, other) => {
  * @param {Object} res Cloud Function response context.
  *                     More info: https://expressjs.com/en/api.html#res
  */
-const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const firestore = admin.firestore();
+const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredArgs = {
         executorRef: null,
         assetRef: null,
@@ -65,7 +62,7 @@ const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function*
             .send(`Please ensure request has all of the following keys: ${JSON.stringify(Object.keys(requiredArgs))}`);
         return;
     }
-    const assetRef = firestore.doc(req.body.assetRef);
+    const assetRef = index_js_1.firestore.doc(req.body.assetRef);
     const assetData = yield assetRef.get();
     requiredArgs.assetRef = assetRef;
     optionalArgs.assetType = assetData.get("assetType");
@@ -73,13 +70,13 @@ const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function*
     optionalArgs.tickerSymbol = assetData.get("tickerSymbol");
     Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
     // * Add a new trade document with a generated id & update holdings
-    const batch = firestore.batch();
-    const tradeRef = yield firestore
+    const batch = index_js_1.firestore.batch();
+    const tradeRef = yield index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/trades`)
         .doc();
-    var tradeData = Object.assign(Object.assign(Object.assign({}, optionalArgs), requiredArgs), { timestamp: admin.firestore.FieldValue.serverTimestamp() });
+    var tradeData = Object.assign(Object.assign(Object.assign({}, optionalArgs), requiredArgs), { timestamp: index_js_1.firestore.FieldValue.serverTimestamp() });
     // * Update the holdings avgPrice & shares
-    const holdingRef = firestore
+    const holdingRef = index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/holdings`)
         .doc(assetData.get("ISIN"));
     const negativeEquityMultiplier = requiredArgs.orderType.includes("BUY")
@@ -107,19 +104,18 @@ const tradeToFirestore = (req, res) => __awaiter(this, void 0, void 0, function*
         }
         batch.update(holdingRef, {
             avgPrice: newAvgPrice,
-            shares: admin.firestore.FieldValue.increment(sharesIncrement),
-            lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+            shares: index_js_1.firestore.FieldValue.increment(sharesIncrement),
+            lastUpdated: index_js_1.firestore.FieldValue.serverTimestamp(),
         });
     }
     else {
-        // functions.logger.log("Adding a new holding!");
         batch.set(holdingRef, {
             assetRef,
             avgPrice: requiredArgs.price / requiredArgs.shares,
-            shares: admin.firestore.FieldValue.increment(sharesIncrement),
+            shares: index_js_1.firestore.FieldValue.increment(sharesIncrement),
             tickerSymbol: assetData.get("tickerSymbol"),
             shortName: assetData.get("shortName"),
-            lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+            lastUpdated: index_js_1.firestore.FieldValue.serverTimestamp(),
         });
     }
     batch.set(tradeRef, tradeData);

@@ -1,8 +1,5 @@
 const algoliasearch = require("algoliasearch");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+import { firestore } from "./index";
 
 // Config var initialisation
 const ALGOLIA_ID = process.env.ALGOLIA_ID;
@@ -15,54 +12,48 @@ const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
  * HTTP function to do an initial load of tickers in /tickers/:documentId/ to the
  * the search index.
  */
-exports.loadTickersToAlgolia = functions
-  .region("europe-west2")
-  .https.onRequest(async (req, res) => {
-    const firestore = admin.firestore();
-    // This array will contain all records to be indexed in Algolia.
-    // A record does not need to necessarily contain all properties of the Firestore
-    // document, only the relevant ones.
-    const algoliaRecords = [];
-    const indexName = "tickers"; // Ensure collection and index match in name
-    const collectionIndex = client.initIndex(indexName);
+exports.loadTickersToAlgolia = async (req, res) => {
+  // This array will contain all records to be indexed in Algolia.
+  // A record does not need to necessarily contain all properties of the Firestore
+  // document, only the relevant ones.
+  const algoliaRecords = [];
+  const indexName = "tickers"; // Ensure collection and index match in name
+  const collectionIndex = client.initIndex(indexName);
 
-    // Retrieve all documents from the tickers collection.
-    const querySnapshot = await firestore.collection(indexName).get();
+  // Retrieve all documents from the tickers collection.
+  const querySnapshot = await firestore.collection(indexName).get();
 
-    querySnapshot.docs.slice(0, 3).forEach(async (doc) => {
-      const document = doc.data();
+  querySnapshot.docs.slice(0, 3).forEach(async (doc) => {
+    const document = doc.data();
 
-      const record = {
-        objectID: doc.id, // use document id as the objectID
-        ISIN: document.ISIN,
-        longName: document.longName,
-        shortName: document.shortName,
-        tickerSymbol: document.tickerSymbol,
-      };
+    const record = {
+      objectID: doc.id, // use document id as the objectID
+      ISIN: document.ISIN,
+      longName: document.longName,
+      shortName: document.shortName,
+      tickerSymbol: document.tickerSymbol,
+    };
 
-      algoliaRecords.push(record);
-    });
-
-    collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
-      res.status(200).send("COLLECTION was indexed to Algolia successfully.");
-    });
+    algoliaRecords.push(record);
   });
+
+  collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
+    res.status(200).send("COLLECTION was indexed to Algolia successfully.");
+  });
+};
 
 /**
  * Listens for new tickers added to /tickers/:documentId/ and updates
  * the search index every time a ticker is added to the database.
  */
-exports.onTickerCreated = functions
-  .region("europe-west2")
-  .firestore.document("ticker/{isin}")
-  .onCreate((snap, context) => {
-    // Get the ticker document
-    const ticker = snap.data();
+exports.onTickerCreated = (snap, context) => {
+  // Get the ticker document
+  const ticker = snap.data();
 
-    // Add an 'objectID' field which Algolia requires
-    ticker.objectID = context.params.isin;
+  // Add an 'objectID' field which Algolia requires
+  ticker.objectID = context.params.isin;
 
-    // Write to the algolia index
-    const index = client.initIndex(JSON.stringify(ticker));
-    return index.saveObject(ticker);
-  });
+  // Write to the algolia index
+  const index = client.initIndex(JSON.stringify(ticker));
+  return index.saveObject(ticker);
+};

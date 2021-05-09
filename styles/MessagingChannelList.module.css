@@ -5,7 +5,7 @@
   overflow-y: auto;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 359px) {
   .messaging__channel-list {
     width: unset;
   }

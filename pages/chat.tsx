@@ -25,8 +25,6 @@ import {
 import { UserContext } from "@lib/context";
 
 const apiKey = process.env.REACT_APP_STREAM_KEY;
-const userToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicGV0ZXJmZXJndXNvbiJ9.xlZ7Odi4JAwXI-6-uNan3buTIC9iE3BARc1VsOqsEFU";
 
 const filters = { type: "messaging" };
 const options = { state: true, presence: true, limit: 10 };
@@ -36,21 +34,22 @@ const sort = {
   updated_at: -1,
 };
 
-const App = (mobileView=false) => {
-  const { user, username } = useContext(UserContext);
+const App = (mobileView = false) => {
+  const { user, username, userStreamToken } = useContext(UserContext);
   const [chatClient, setChatClient] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isMobileNavVisible, setMobileNav] = useState(mobileView);
   const [theme, setTheme] = useState("light");
+  console.log(userStreamToken);
 
   useEffect(() => {
     const initChat = async () => {
       const client = StreamChat.getInstance(apiKey);
 
-      if (username) {
+      if (username && userStreamToken) {
         await client.connectUser(
           { id: username, name: user?.displayName },
-          userToken
+          userStreamToken
         );
       }
 
@@ -58,7 +57,7 @@ const App = (mobileView=false) => {
     };
 
     initChat();
-  }, [username]);
+  }, [username, userStreamToken]);
 
   useEffect(() => {
     const handleThemeChange = ({ data }) => {
@@ -90,7 +89,7 @@ const App = (mobileView=false) => {
 
   return (
     <AuthCheck>
-      {username && (
+      {username && userStreamToken && (
         <Chat client={chatClient} theme={`messaging ${theme}`}>
           <div id="mobile-channel-list" onClick={toggleMobile}>
             <ChannelList

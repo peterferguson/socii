@@ -1,4 +1,4 @@
-import { auth, firestore } from "@lib/firebase";
+import { auth, firestore, functions } from "@lib/firebase";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useMediaQuery } from "react-responsive";
@@ -6,7 +6,24 @@ import { useMediaQuery } from "react-responsive";
 export function useUserData() {
   const [user] = useAuthState(auth);
   const [username, setUsername] = useState("");
+  const [userStreamToken, setUserStreamToken] = useState("");
   const [userGroups, setUserGroups] = useState([]);
+
+  let streamData;
+
+  const getStreamToken = async () => {
+    const tokenRef = firestore
+      .collection(`users/${user.uid}/stream`)
+      .doc(user.uid);
+    const snapshot = await tokenRef.get();
+    if (snapshot.exists) {
+      streamData = await snapshot.data();
+    } else {
+      functions.httpsCallable("generateToken")({ username });
+      streamData = await snapshot.data();
+    }
+    setUserStreamToken(streamData?.token);
+  };
 
   useEffect(() => {
     // allows us to turn off the realtime data feed when finished
@@ -19,6 +36,7 @@ export function useUserData() {
         setUsername(userData?.username);
         setUserGroups(userGroups?.concat(userData?.groups));
       });
+      getStreamToken();
     } else {
       setUsername("");
       setUserGroups([]);
@@ -26,7 +44,7 @@ export function useUserData() {
     return unsubscribe;
   }, [user]);
 
-  return { user, username, userGroups };
+  return { user, username, userStreamToken, userGroups };
 }
 
 export const useWindowSize = () => {

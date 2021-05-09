@@ -1,8 +1,16 @@
-POST http://localhost:5001/sociiinvest/us-central1/generateToken
+POST http://localhost:5001/sociiinvest/europe-west2/generateToken
 content-type: application/json
 
 {
-    "username": "peterferguson"
+    "data": {"username": "peterferguson"}
+}
+
+### 
+POST http://localhost:5001/sociiinvest/europe-west2/generateToken
+content-type: application/json
+
+{
+    "data": {"username": "nicholasjames"}
 }
 
 ### 

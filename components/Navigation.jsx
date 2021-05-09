@@ -110,8 +110,10 @@ function Dropdown() {
       name: "Stocks",
       description: "Search the socii stock universe",
       href: "/stock",
-      icon: DollarIcon,
-      // icon: <i className="far fa-chart-bar" />,
+      // icon: DollarIcon,
+      icon: ({ className }) => (
+        <i className={`fas fa-globe-europe fa-lg -mb-1 ${className}`}></i>
+      ),
     },
     {
       name: "Porfolio",

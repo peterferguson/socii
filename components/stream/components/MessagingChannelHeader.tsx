@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Avatar, ChannelContext } from "stream-chat-react";
 
 import styles from "@styles/MessagingChannelHeader.module.css";
+import Menu from "@icons/menu.svg"
 
 import { TypingIndicator } from "./TypingIndicator";
 
@@ -9,7 +10,6 @@ import {
   ChannelInfoIcon,
   ChannelSaveIcon,
   getCleanImage,
-  HamburgerIcon,
 } from "../assets";
 
 const getAvatarGroup = (members) => {
@@ -153,7 +153,7 @@ const MessagingChannelHeader = (props) => {
         className={`${props.theme}`}
         onClick={() => props.toggleMobile()}
       >
-        <HamburgerIcon />
+        <Menu className="h-3 w-4 m-3 cursor-pointer text-brand-light"/>
       </div>
       {getAvatarGroup(members)}
       {!isEditing ? (

@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,10 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const algoliasearch = require("algoliasearch");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
+const index_1 = require("./index");
 // Config var initialisation
 const ALGOLIA_ID = process.env.ALGOLIA_ID;
 const ALGOLIA_ADMIN_KEY = process.env.ALGOLIA_ADMIN_KEY;
@@ -20,10 +20,7 @@ const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
  * HTTP function to do an initial load of tickers in /tickers/:documentId/ to the
  * the search index.
  */
-exports.loadTickersToAlgolia = functions
-    .region("europe-west2")
-    .https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
-    const firestore = admin.firestore();
+exports.loadTickersToAlgolia = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // This array will contain all records to be indexed in Algolia.
     // A record does not need to necessarily contain all properties of the Firestore
     // document, only the relevant ones.
@@ -31,8 +28,8 @@ exports.loadTickersToAlgolia = functions
     const indexName = "tickers"; // Ensure collection and index match in name
     const collectionIndex = client.initIndex(indexName);
     // Retrieve all documents from the tickers collection.
-    const querySnapshot = yield firestore.collection(indexName).get();
-    querySnapshot.docs.slice(0, 3).forEach((doc) => __awaiter(this, void 0, void 0, function* () {
+    const querySnapshot = yield index_1.firestore.collection(indexName).get();
+    querySnapshot.docs.slice(0, 3).forEach((doc) => __awaiter(void 0, void 0, void 0, function* () {
         const document = doc.data();
         const record = {
             objectID: doc.id,
@@ -46,15 +43,12 @@ exports.loadTickersToAlgolia = functions
     collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
         res.status(200).send("COLLECTION was indexed to Algolia successfully.");
     });
-}));
+});
 /**
  * Listens for new tickers added to /tickers/:documentId/ and updates
  * the search index every time a ticker is added to the database.
  */
-exports.onTickerCreated = functions
-    .region("europe-west2")
-    .firestore.document("ticker/{isin}")
-    .onCreate((snap, context) => {
+exports.onTickerCreated = (snap, context) => {
     // Get the ticker document
     const ticker = snap.data();
     // Add an 'objectID' field which Algolia requires
@@ -62,5 +56,5 @@ exports.onTickerCreated = functions
     // Write to the algolia index
     const index = client.initIndex(JSON.stringify(ticker));
     return index.saveObject(ticker);
-});
+};
 //# sourceMappingURL=algoliaSearch.js.map

@@ -1,5 +1,6 @@
 import { firestore, auth } from "@lib/firebase";
 import { logoUrl } from "@utils/helper";
+// import bluryGradientBg from "@icons/bluryGradientBg.svg"
 
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -40,6 +41,7 @@ export default function Home() {
   return (
     <>
       <div className="grid grid-cols-2 bg-gray-50 h-screen">
+        {/* <bluryGradientBg className="bg-teal-400"/> */}
         <div className="grid-rows-4 z-40">
           <div className="text-7xl pt-24 sm:pt-32 px-4 font-poppins animate-fade-in-down">
             Invest Together.
