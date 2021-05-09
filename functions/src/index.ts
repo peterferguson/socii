@@ -7,6 +7,8 @@ adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(adminConfig);
 
 export const firestore = admin.firestore();
+export const increment = admin.firestore.FieldValue.increment;
+export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp;
 
 process.env.STREAM_API_SECRET = functions.config().stream.secret;
 process.env.STREAM_API_KEY = functions.config().stream.api_key;

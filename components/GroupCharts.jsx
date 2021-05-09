@@ -73,10 +73,9 @@ export function GroupPieCard({ className, groupName, holdingData, currentPrices 
     .reduce((a, b) => a + b, 0);
 
   const gain =
-    (holdingData
+    (portfolioValue - holdingData
       ?.map(({ avgPrice, shares }) => avgPrice * shares)
-      .reduce((a, b) => a + b, 0) *
-      100) /
+      .reduce((a, b) => a + b, 0))*100 /
     portfolioValue;
 
   const pieData = holdingData?.map(({ tickerSymbol, shortName, shares }) => ({
@@ -106,7 +105,7 @@ export function GroupPieCard({ className, groupName, holdingData, currentPrices 
 function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
     const tickerSymbol = holding.tickerSymbol;
   
-    const pnl = (100 * (latestPrice - holding.avgPrice)) / holding.avgPrice;
+    const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice;
   
     return (
       <div className="flex h-auto m-1">

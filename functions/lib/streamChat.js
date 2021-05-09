@@ -14,7 +14,7 @@ const index_1 = require("./index");
 const apiSecret = process.env.STREAM_API_SECRET;
 const apiKey = process.env.STREAM_API_KEY;
 const generateToken = (data, context) => __awaiter(void 0, void 0, void 0, function* () {
-    const uid = "KCsSSLPllgVi8C2TEctW7tjBSpV2";
+    const uid = context.auth.uid;
     const client = new StreamChat(apiKey, apiSecret);
     const token = client.createToken(data.username);
     const tokenDocRef = index_1.firestore

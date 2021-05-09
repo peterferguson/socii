@@ -74,7 +74,7 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const tradeRef = yield index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/trades`)
         .doc();
-    var tradeData = Object.assign(Object.assign(Object.assign({}, optionalArgs), requiredArgs), { timestamp: index_js_1.firestore.FieldValue.serverTimestamp() });
+    var tradeData = Object.assign(Object.assign(Object.assign({}, optionalArgs), requiredArgs), { timestamp: index_js_1.serverTimestamp() });
     // * Update the holdings avgPrice & shares
     const holdingRef = index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/holdings`)
@@ -104,18 +104,18 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
         }
         batch.update(holdingRef, {
             avgPrice: newAvgPrice,
-            shares: index_js_1.firestore.FieldValue.increment(sharesIncrement),
-            lastUpdated: index_js_1.firestore.FieldValue.serverTimestamp(),
+            shares: index_js_1.increment(sharesIncrement),
+            lastUpdated: index_js_1.serverTimestamp(),
         });
     }
     else {
         batch.set(holdingRef, {
             assetRef,
             avgPrice: requiredArgs.price / requiredArgs.shares,
-            shares: index_js_1.firestore.FieldValue.increment(sharesIncrement),
+            shares: index_js_1.increment(sharesIncrement),
             tickerSymbol: assetData.get("tickerSymbol"),
             shortName: assetData.get("shortName"),
-            lastUpdated: index_js_1.firestore.FieldValue.serverTimestamp(),
+            lastUpdated: index_js_1.serverTimestamp(),
         });
     }
     batch.set(tradeRef, tradeData);

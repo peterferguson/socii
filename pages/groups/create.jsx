@@ -172,6 +172,8 @@ export default function Create() {
                     username,
                     groupName,
                     privacyOption,
+                    depositOption,
+                    lumpSumOption,
                     groupDescription
                   )
                 : null
@@ -320,6 +322,8 @@ const createGroup = async (
   username,
   groupName,
   privacyOption,
+  depositOption,
+  lumpSumOption,
   groupDescription
 ) => {
   e.preventDefault();

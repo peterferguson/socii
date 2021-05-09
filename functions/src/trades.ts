@@ -1,4 +1,4 @@
-import { firestore } from "./index.js";
+import { firestore, serverTimestamp, increment } from "./index.js";
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
@@ -80,7 +80,7 @@ const tradeToFirestore = async (req, res) => {
   var tradeData = {
     ...optionalArgs,
     ...requiredArgs,
-    timestamp: firestore.FieldValue.serverTimestamp(),
+    timestamp: serverTimestamp(),
   };
 
   // * Update the holdings avgPrice & shares
@@ -120,17 +120,17 @@ const tradeToFirestore = async (req, res) => {
 
     batch.update(holdingRef, {
       avgPrice: newAvgPrice,
-      shares: firestore.FieldValue.increment(sharesIncrement),
-      lastUpdated: firestore.FieldValue.serverTimestamp(),
+      shares: increment(sharesIncrement),
+      lastUpdated: serverTimestamp(),
     });
   } else {
     batch.set(holdingRef, {
       assetRef,
       avgPrice: requiredArgs.price / requiredArgs.shares,
-      shares: firestore.FieldValue.increment(sharesIncrement),
+      shares: increment(sharesIncrement),
       tickerSymbol: assetData.get("tickerSymbol"),
       shortName: assetData.get("shortName"),
-      lastUpdated: firestore.FieldValue.serverTimestamp(),
+      lastUpdated: serverTimestamp(),
     });
   }
 
