@@ -44,7 +44,7 @@ const uploadLogo = (ticker) => {
 }
 
 const loadLogos = async () => {
-  var count = 0;
+  let count = 0;
   for await (const ticker of tickerMapping) {
     // Makes reference to the storage bucket location
     uploadLogo(ticker)

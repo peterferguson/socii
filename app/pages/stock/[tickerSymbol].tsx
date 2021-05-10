@@ -1,147 +1,21 @@
-import GroupSelectorRadioGroup from "@components/GroupSelector";
 import LineChart from "@components/LineChart";
-import TradingViewChart from "@components/TradingViewChart";
+import SelectGroupModal from "@components/SelectGroupModal";
+import TradingViewChart, {
+  TradingViewStockFundamentals,
+} from "@components/TradingViewChart";
 import { SmallAssetCard } from "@components/AssetCards";
-import {
-  alphaVantageData,
-  iexChartTimeseries,
-  isBrowser,
-  pctChange,
-  pnlTextColor,
-} from "@utils/helper";
+import { isBrowser, pctChange, pnlTextColor, stockProps } from "@utils/helper";
 import { UserContext, SelectedGroupContext } from "@lib/context";
 
-import { firestore, tickerToISIN } from "@lib/firebase";
+import { firestore } from "@lib/firebase";
 import { useRouter } from "next/router";
-import { useState, Fragment, useContext } from "react";
+import { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
-import { Dialog, Transition } from "@headlessui/react";
 
-export async function getStaticProps({ params }) {
-  // TODO add username section here based on the users portfolio
-  const { tickerSymbol } = params;
+export default function TickerPage({ tickerSymbols }) {
+  let { ticker, timeseries } = tickerSymbols[0];
 
-  // TODO:
-  // TODO:
-  // TODO:
-  // TODO:
-  // TODO:
-  // TODO: Convert this section to use the stock props helper functions
-  // TODO: Ensure these also have error handling and work for ssr fallbacks
-  // TODO:
-  // TODO:
-  // TODO:
-  // TODO:
-  // TODO:
-
-
-
-  const isin = await tickerToISIN(tickerSymbol);
-
-  // * Get ticker data from firestore
-  const tickerRef = firestore.doc(`tickers/${isin}`);
-  const tickerDoc = await tickerRef.get();
-
-  let tickerData;
-  try {
-    tickerData = tickerDoc.data();
-  } catch (e) {
-    return {
-      redirect: {
-        destination: "/404",
-        permanent: false,
-      },
-    };
-  }
-
-  // * Use the tickerAdded field to know when the symbol was added to the site
-  let tickerAdded;
-  if ("timestamp" in tickerData) {
-    tickerAdded = JSON.stringify(tickerData.timestamp.toDate());
-    delete tickerData.timestamp;
-  }
-  if ("timeseriesLastUpdated" in tickerData) {
-    delete tickerData.timeseriesLastUpdated;
-  }
-
-  const timeseriesRef = tickerRef
-    .collection("timeseries")
-    .orderBy("timestamp", "desc");
-
-  var timeseriesDocs = (await timeseriesRef.get()).docs;
-
-  let timeseries;
-  if (timeseriesDocs.length === 0) {
-    // * Get timeseries data from api
-    timeseries = await alphaVantageData(tickerSymbol);
-    // TODO: This is server-side so update firestore with the timeseries data onCall
-  } else {
-    timeseries = timeseriesDocs.map((doc) => ({
-      ...doc.data(),
-      timestamp: parseInt(doc.id) * 1000,
-    }));
-    // ! EXPENSIVE
-    // const timeseries = await iexChartTimeseries(tickerSymbol)
-  }
-
-  console.log(timeseries);
-
-  // * Get summary data from firestore
-  // TODO: If this doesnt exist we need to populate it on call
-  const summaryRef = firestore.doc(
-    `tickers/${tickerData.ISIN}/data/alphaVantage`
-  );
-
-  const tickerSummaryDoc = await summaryRef.get();
-
-  if (!tickerSummaryDoc) {
-    return {
-      redirect: {
-        destination: "/404",
-        permanent: false,
-      },
-    };
-  }
-
-  const tickerSummary = tickerSummaryDoc.data();
-
-  let summaryLastUpdated;
-  if ("lastUpdate" in tickerSummary) {
-    summaryLastUpdated = JSON.stringify(tickerSummary.lastUpdate.toDate());
-    delete tickerSummary.lastUpdate;
-  }
-
-  return {
-    props: {
-      timeseries,
-      tickerSymbol,
-      tickerData,
-      tickerSummary,
-      summaryLastUpdated,
-      tickerAdded,
-    },
-    // revalidate: 3000,
-  };
-}
-
-export async function getStaticPaths(context) {
-  const snapshot = await firestore
-    .collection("tickers")
-    .where("isPopular", "==", true)
-    .get();
-
-  const paths = snapshot.docs.map((doc) => {
-    const { tickerSymbol } = doc.data();
-    return {
-      params: { tickerSymbol },
-    };
-  });
-
-  return { paths, fallback: true };
-  // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
-}
-
-export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
+  const tickerSymbol = ticker.tickerSymbol;
   const router = useRouter();
 
   const { user, userGroups } = useContext(UserContext);
@@ -189,9 +63,9 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
     <>
       <div className="flex flex-row w-full bg-gray-50">
         <SmallAssetCard
-          logoUrl={tickerData.logoUrl}
+          logoUrl={ticker.logoUrl}
           tickerSymbol={tickerSymbol}
-          shortName={tickerData.shortName}
+          shortName={ticker.shortName}
           currentPrice={latestClose}
           monthlyPctChange={monthlyPctChange}
         />
@@ -231,6 +105,7 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
         setCrosshairIndexValue={setCrosshairIndexValue}
         latestClose={latestClose}
       />
+      {/* <TradingViewStockFundamentals tickerSymbol={tickerSymbol} /> */}
       {isBrowser && (
         <SelectedGroupContext.Provider
           value={{ selectedGroup, changeSelectedGroup }}
@@ -294,14 +169,14 @@ function Chart({
                 className={`${
                   showTradingView ? "bg-brand" : "bg-brand-light"
                 } relative inline-flex items-center h-6 rounded-full w-11 \
-              flex-shrink-0 h-[38px] w-[74px] border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+              flex-shrink-0 border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >
                 <span className="sr-only">Show Trading View Chart</span>
                 <span
                   className={`${
                     showTradingView ? "translate-x-6" : "translate-x-1"
                   } inline-block w-4 h-4 transform bg-white rounded-full \
-                pointer-events-none h-[34px] w-[34px] shadow-lg ring-0 transition ease-in-out duration-200`}
+                pointer-events-none shadow-lg ring-0 transition ease-in-out duration-200`}
                 />
               </Switch>
             )}
@@ -323,83 +198,46 @@ function Chart({
   );
 }
 
-function SelectGroupModal({
-  userGroups,
-  openGroupModal,
-  setOpenGroupModal,
-  goClickHandler = () => {},
-}) {
-  const closeModal = () => setOpenGroupModal(false);
+export async function getStaticProps({ params }) {
+  // TODO add username section here based on the users portfolio
+  const { tickerSymbol } = params;
+  let props;
 
-  const letsGoClickHander = () => {
-    closeModal();
-    goClickHandler();
+  const tickerQuery = firestore
+    .collection("tickers")
+    .where("tickerSymbol", "==", tickerSymbol)
+    .limit(1);
+
+  try {
+    props = await stockProps(tickerQuery);
+  } catch (e) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    ...props,
+    // revalidate: 3000,
   };
+}
 
-  return (
-    <Transition appear show={openGroupModal} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
-        open={openGroupModal}
-        onClose={closeModal}
-      >
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0" />
-          </Transition.Child>
+export async function getStaticPaths(context) {
+  const snapshot = await firestore
+    .collection("tickers")
+    .where("isPopular", "==", true)
+    .get();
 
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span
-            className="inline-block h-screen align-middle"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-              <Dialog.Title
-                as="h3"
-                className="text-lg font-medium text-gray-900 font-poppins pb-4"
-              >
-                Select a group to invest with:
-              </Dialog.Title>
-              <div className="mt-2">
-                <GroupSelectorRadioGroup groupNames={userGroups} />
-              </div>
-              <div className="flex mt-4">
-                <div className="flex-grow" />
-                <button
-                  type="button"
-                  className="flex-none justify-center px-4 py-2 text-sm font-medium \
-                  text-blue-900 bg-blue-100 border border-transparent rounded-md \
-                  hover:bg-blue-200 focus:outline-none focus-visible:ring-2 \
-                  focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={letsGoClickHander}
-                >
-                  Yes, Lets go! 🚀
-                </button>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition>
-  );
+  const paths = snapshot.docs.map((doc) => {
+    const { tickerSymbol } = doc.data();
+    return {
+      params: { tickerSymbol },
+    };
+  });
+
+  return { paths, fallback: true };
+  // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 }

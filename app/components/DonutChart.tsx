@@ -15,8 +15,8 @@ export default function DonutChart({
 }) {
   const [value, setValue] = useState(false);
 
-  var width = 350;
-  var height = 300;
+  let width = 350;
+  let height = 300;
 
   if (scaleToWindow) {
     [width, height] = useWindowSize();

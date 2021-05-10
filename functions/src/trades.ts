@@ -2,7 +2,7 @@ import { firestore, serverTimestamp, increment } from "./index.js";
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
-  var keys = null;
+  let keys = null;
 
   switch (typeof object) {
     case "object":
@@ -77,7 +77,7 @@ const tradeToFirestore = async (req, res) => {
     .collection(`${requiredArgs.executorRef}/trades`)
     .doc();
 
-  var tradeData = {
+  let tradeData = {
     ...optionalArgs,
     ...requiredArgs,
     timestamp: serverTimestamp(),

@@ -148,8 +148,8 @@ function EmailSignUp({ verified, setVerified }) {
         );
       })
       .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        let errorCode = error.code;
+        let errorMessage = error.message;
       });
 
     if (auth.isSignInWithEmailLink(window.location.href)) {
@@ -165,7 +165,7 @@ function EmailSignUp({ verified, setVerified }) {
         .catch((error) => {});
 
       // ! The following allows links to another verification type
-      // var credential = credentialWithLink(email, window.location.href);
+      // let credential = credentialWithLink(email, window.location.href);
 
       // // Link the credential to the current user.
       // auth.currentUser

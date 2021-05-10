@@ -86,17 +86,27 @@ export const stockProps = async (
   const tickerDocs = await tickerQuery.get();
 
   let tickerSymbols = [];
-  let sector;
+  let sector = null;
 
   for await (const tickerDoc of tickerDocs.docs) {
     // * Get ticker company data
-    var ticker = await tickerDoc.data();
-    ticker["timestamp"] = JSON.stringify(ticker.timestamp.toDate());
-    ticker["timeseriesLastUpdated"] = JSON.stringify(
-      ticker.timeseriesLastUpdated.toDate()
-    );
+    let ticker = await tickerDoc.data();
 
-    const timeseries = await tickerTimeseries(tickerDoc.ref, timeseriesLimit);
+    if ("timestamp" in ticker) {
+      ticker["timestamp"] = JSON.stringify(ticker?.timestamp.toDate());
+    }
+    
+    if ("timeseriesLastUpdated" in ticker) {
+      ticker["timeseriesLastUpdated"] = JSON.stringify(
+        ticker?.timeseriesLastUpdated.toDate()
+        );
+      }
+
+    const timeseries = await tickerTimeseries(
+      tickerDoc.ref,
+      timeseriesLimit,
+      ticker.tickerSymbol
+      );
 
     if (subQueryField) {
       sector = await tickerExistsSubquery(tickerDoc.ref, subQueryField);
@@ -120,23 +130,37 @@ export const tickerExistsSubquery = async (tickerRef, queryField) => {
     .orderBy(queryField, "asc")
     .limit(1);
 
-  var sector = (await sectorRef.get()).docs[0].data();
+  let sector = (await sectorRef.get()).docs[0].data() ?? null;
 
-  return { ...sector, lastUpdate: sector.lastUpdate.toMillis() };
+  return { ...sector, lastUpdate: sector?.lastUpdate.toMillis() ?? null };
 };
 
-export const tickerTimeseries = async (tickerRef, limit = 30) => {
+export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
   // * Get timeseries data
   const timeseriesRef = tickerRef
     .collection("timeseries")
     .orderBy("timestamp", "desc")
     .limit(limit);
 
-  var timeseriesDocs = (await timeseriesRef.get()).docs;
+  let timeseriesDocs = (await timeseriesRef.get()).docs;
 
-  return timeseriesDocs.map((doc) => {
-    return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
-  });
+  let timeseries;
+
+  if (timeseriesDocs.length === 0) {
+    // * Get timeseries data from api
+    timeseries = await alphaVantageData(tickerSymbol);
+    // TODO: This is server-side so update firestore with the timeseries data onCall
+  } else {
+    timeseries = timeseriesDocs.map((doc) => ({
+      ...doc.data(),
+      timestamp: parseInt(doc.id) * 1000,
+    }));
+  }
+    // ! EXPENSIVE
+    // timeseries = await iexChartTimeseries(tickerSymbol)
+
+
+  return timeseries
 };
 
 export const getRandomImage = (letters = "") => {
