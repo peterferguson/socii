@@ -21,6 +21,21 @@ export async function getStaticProps({ params }) {
   // TODO add username section here based on the users portfolio
   const { tickerSymbol } = params;
 
+  // TODO:
+  // TODO:
+  // TODO:
+  // TODO:
+  // TODO:
+  // TODO: Convert this section to use the stock props helper functions
+  // TODO: Ensure these also have error handling and work for ssr fallbacks
+  // TODO:
+  // TODO:
+  // TODO:
+  // TODO:
+  // TODO:
+
+
+
   const isin = await tickerToISIN(tickerSymbol);
 
   // * Get ticker data from firestore
@@ -40,9 +55,14 @@ export async function getStaticProps({ params }) {
   }
 
   // * Use the tickerAdded field to know when the symbol was added to the site
-  const tickerAdded = JSON.stringify(tickerData.timestamp.toDate());
-  delete tickerData.timestamp;
-  delete tickerData.timeseriesLastUpdated;
+  let tickerAdded;
+  if ("timestamp" in tickerData) {
+    tickerAdded = JSON.stringify(tickerData.timestamp.toDate());
+    delete tickerData.timestamp;
+  }
+  if ("timeseriesLastUpdated" in tickerData) {
+    delete tickerData.timeseriesLastUpdated;
+  }
 
   const timeseriesRef = tickerRef
     .collection("timeseries")
@@ -54,16 +74,20 @@ export async function getStaticProps({ params }) {
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
     timeseries = await alphaVantageData(tickerSymbol);
+    // TODO: This is server-side so update firestore with the timeseries data onCall
+  } else {
+    timeseries = timeseriesDocs.map((doc) => ({
+      ...doc.data(),
+      timestamp: parseInt(doc.id) * 1000,
+    }));
+    // ! EXPENSIVE
+    // const timeseries = await iexChartTimeseries(tickerSymbol)
   }
 
-  timeseries = timeseriesDocs.map((doc) => {
-    return { ...doc.data(), timestamp: parseInt(doc.id) * 1000 };
-  });
-
-  // ! EXPENSIVE
-  // const timeseries = await iexChartTimeseries(tickerSymbol)
+  console.log(timeseries);
 
   // * Get summary data from firestore
+  // TODO: If this doesnt exist we need to populate it on call
   const summaryRef = firestore.doc(
     `tickers/${tickerData.ISIN}/data/alphaVantage`
   );
@@ -80,8 +104,12 @@ export async function getStaticProps({ params }) {
   }
 
   const tickerSummary = tickerSummaryDoc.data();
-  const summaryLastUpdated = JSON.stringify(tickerSummary.lastUpdate.toDate());
-  delete tickerSummary.lastUpdate;
+
+  let summaryLastUpdated;
+  if ("lastUpdate" in tickerSummary) {
+    summaryLastUpdated = JSON.stringify(tickerSummary.lastUpdate.toDate());
+    delete tickerSummary.lastUpdate;
+  }
 
   return {
     props: {
@@ -212,7 +240,7 @@ export default function TickerPage({ timeseries, tickerData, tickerSymbol }) {
             openGroupModal={openGroupModal}
             setOpenGroupModal={setOpenGroupModal}
             goClickHandler={() => {
-              router.push(`/groups/${selectedGroup}`)
+              router.push(`/groups/${selectedGroup}`);
             }}
           />
         </SelectedGroupContext.Provider>
