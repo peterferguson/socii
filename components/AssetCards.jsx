@@ -1,7 +1,7 @@
 import { pnlBackgroundColor, pctChange, pnlTextColor } from "@utils/helper";
 import Link from "next/link";
 
-export default function SmallAssetCard({
+export default function SmallAssetPctChangeCard({
   logoUrl,
   tickerSymbol,
   dailyPctChange,
@@ -10,7 +10,7 @@ export default function SmallAssetCard({
 }) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="flex-none pl-8 pt-4 bg-gray-50">
+    <div className="flex-none pl-4 sm:pl-8 pt-4 bg-gray-50">
       <div className="bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52">
         <div className="items-center justify-center sm:flex">
           <img
@@ -40,6 +40,54 @@ export default function SmallAssetCard({
         <div
           className="ml-2 text-gray-600 uppercase text-xs w-full inline-block \
                 font-semibold tracking-wider overflow-ellipsis overflow-hidden"
+        >
+          {tickerSymbol} &bull; {shortName}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SmallAssetCard({
+  logoUrl,
+  tickerSymbol,
+  currentPrice,
+  monthlyPctChange,
+  shortName,
+  currencySymbol = "$",
+}) {
+  // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
+  return (
+    <div className="flex-none pl-4 sm:pl-8 pt-4 bg-gray-50">
+      <div className="bg-white p-4 rounded-lg shadow-lg h-full sm:h-36 w-40 sm:w-52">
+        <div className="items-center justify-center sm:flex">
+          <img
+            className="shadow-lg rounded-full h-auto w-14 mx-auto"
+            src={logoUrl}
+            alt={`${tickerSymbol} logo`}
+          />
+          <div className="p-1 h-auto w-auto text-center">
+            <div
+              className={
+                "text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block"
+              }
+            >
+              {currencySymbol}
+              {currentPrice?.toFixed(2)}
+            </div>
+            <div
+              className={`${pnlBackgroundColor(
+                monthlyPctChange
+              )} text-black text-tiny sm:text-xs px-2 mx-1 mt-0 sm:mt-2 rounded-full font-semibold \
+                w-full text-center`}
+            >
+              M: {monthlyPctChange?.toFixed(2)}%
+            </div>
+          </div>
+        </div>
+        <div
+          className="ml-2 mt-2 sm:mt-4 text-gray-600 uppercase text-xs w-full inline-block \
+                font-semibold tracking-wider overflow-ellipsis"
         >
           {tickerSymbol} &bull; {shortName}
         </div>
@@ -97,7 +145,7 @@ export function AssetCard({ ticker, timeseries, sector }) {
   );
 }
 
-export function BlockCard({ ticker, timeseries, sector }) {
+export function BlockCard({ ticker, timeseries }) {
   return (
     <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
       <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">

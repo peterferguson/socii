@@ -92,6 +92,7 @@ function SearchBar({ setShowSearchCard }) {
 }
 
 function Dropdown() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   // const [openSettings, setOpenSettings] = useState(false);
   const { user, username } = useContext(UserContext);
   const router = useRouter();
@@ -176,7 +177,7 @@ function Dropdown() {
                 </div>
                 <div className="p-4 bg-gray-50">
                   {grayedDropdownItems.map((item) => (
-                    <DropdownItem item={item} />
+                    <DropdownItem item={item} open={open} />
                   ))}
                 </div>
               </div>
@@ -188,12 +189,20 @@ function Dropdown() {
   );
 }
 
+const closePopover = (open) => (open = !open);
+
 function DropdownItem({ item }) {
+  const onClickHandler = () => {
+    if ("onClick" in item) {
+      item?.onClick();
+    }
+    return closePopover(open);
+  };
   return (
     <Link href={item.href}>
       <a
         key={item.name}
-        onClick={item.onClick}
+        onClick={() => onClickHandler()}
         className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
       >
         <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">

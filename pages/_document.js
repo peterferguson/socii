@@ -8,7 +8,10 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="en" className="max-h-full max-w-full h-full w-full bg-gray-50">
+      <Html
+        lang="en"
+        className="max-h-full max-w-screen overflow-x-hidden h-full w-full bg-gray-50 md:no-scrollbar"
+      >
         <Head>
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
@@ -33,7 +36,11 @@ class MyDocument extends Document {
             href="public/favicon-16x16.png"
           />
           <link rel="manifest" href="public/site.webmanifest" />
-          <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#00aba9" />
+          <link
+            rel="mask-icon"
+            href="public/safari-pinned-tab.svg"
+            color="#00aba9"
+          />
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#ffffff" />

@@ -6,3 +6,8 @@ export const UserContext = createContext({
   userStreamToken: null,
   userGroups: null,
 });
+
+export const SelectedGroupContext = createContext({
+  selectedGroup: null,
+  changeSelectedGroup: (selectedGroup) => {},
+});

@@ -21,6 +21,7 @@ module.exports = {
           DEFAULT: "#20e070",
         },
         blueGray: colors.blueGray,
+        trueGray: colors.trueGray,
         teal: colors.teal,
         emerald: colors.emerald,
         lightBlue: colors.lightBlue,

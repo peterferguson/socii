@@ -12,7 +12,6 @@
 // TODOs (Page UI Features):
 // - Portfolio graph & value card (with close to real-time updates?)
 // - Option of comparision against leading markets (and leading groups in segment)
-// - Cards of holdings
 // - Portfolio Analysis (partnership with the likes of atom or simply wall st?)
 // - Investor section with description of joining date (etc... this should not be the focus!)
 // -
@@ -54,6 +53,9 @@ import {
   MessageList,
   Window,
 } from "stream-chat-react";
+import Custom404 from "../../404";
+import { firestore } from "@lib/firebase";
+import { useDocumentOnce } from "react-firebase-hooks/firestore";
 
 const apiKey = process.env.REACT_APP_STREAM_KEY;
 
@@ -61,6 +63,13 @@ export default function Group() {
   const router = useRouter();
 
   const groupName = router.query.groupName;
+
+  const groupRef = firestore.collection("groups").doc(groupName);
+  const [snapshot] = useDocumentOnce(groupRef);
+
+  if (!snapshot?.exists) {
+    return <Custom404 />
+  }
 
   const { user, username, userStreamToken } = useContext(UserContext);
   const [channel, setChannel] = useState(null);
@@ -70,23 +79,20 @@ export default function Group() {
   useEffect(() => {
     const initChat = async () => {
       const client = StreamChat.getInstance(apiKey);
-
       if (username && userStreamToken) {
         await client.connectUser(
           { id: username, name: user?.displayName },
           userStreamToken
         );
         setChannel(
-          client.channel("messaging", groupName, {
+          client.channel("messaging", groupName.split(" ").join("-"), {
             image: getRandomImage(getInitials(groupName)),
             name: `${groupName} Group Chat`,
           })
         );
       }
-
       setChatClient(client);
     };
-
     initChat();
   }, [username, userStreamToken]);
 
@@ -102,11 +108,13 @@ export default function Group() {
         <AuthCheck>
           {username && userStreamToken && (
             <Chat client={chatClient} theme={`messaging ${theme}`}>
-              <Channel channel={channel} maxNumberOfFiles={10} multipleUploads={true}>
+              <Channel
+                channel={channel}
+                maxNumberOfFiles={10}
+                multipleUploads={true}
+              >
                 <Window>
-                  <MessagingChannelHeader
-                    theme={theme}
-                  />
+                  <MessagingChannelHeader theme={theme} />
                   <MessageList
                     messageActions={[
                       "edit",

@@ -53,7 +53,7 @@ export default function MyApp({ Component, pageProps }) {
     <UserContext.Provider value={userData}>
       <Head />
       {!userData.user && (
-        <div className="w-full h-20 bg-gradient-to-r to-brand-light from-teal-400 text-white font-work-sans text-lg text-center align-middle p-4">
+        <div className="w-full h-20 bg-gradient-to-r to-brand-light from-teal-400 text-white font-work-sans leading-6 sm:leading-0 text-sm sm:text-lg text-center align-middle p-4">
           👋 socii is currently in private pre-alpha mode.
           <div className="-mt-1">You will need an invite!</div>
         </div>
