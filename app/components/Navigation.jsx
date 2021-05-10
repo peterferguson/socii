@@ -153,7 +153,7 @@ function Dropdown() {
       {({ open }) => (
         <>
           <Popover.Button className="items-center justify-center w-full h-full focus:outline-none">
-            <MenuIcon className=" w-6 h-6 text-gray-300" />
+            <MenuIcon className=" w-6 h-6 text-brand-light" />
           </Popover.Button>
           <Transition
             show={open}
