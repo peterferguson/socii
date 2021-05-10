@@ -40,7 +40,6 @@ const App = (mobileView = false) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isMobileNavVisible, setMobileNav] = useState(mobileView);
   const [theme, setTheme] = useState("light");
-  console.log(userStreamToken);
 
   useEffect(() => {
     const initChat = async () => {

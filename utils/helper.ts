@@ -139,9 +139,18 @@ export const tickerTimeseries = async (tickerRef, limit = 30) => {
   });
 };
 
-export const getRandomImage = () => {
+export const getRandomImage = (letters = "") => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  const firstInitial = alphabet[Math.floor(Math.random() * 26)].toUpperCase();
-  const secondInitial = alphabet[Math.floor(Math.random() * 26)].toUpperCase();
-  return `https://getstream.imgix.net/images/random_svg/${firstInitial}${secondInitial}.png`;
+  const baseUrl = "https://getstream.imgix.net/images/random_svg/";
+  const extension = ".png";
+
+  if (!letters) {
+    const randomLetter = () => alphabet[Math.floor(Math.random() * 26)].toUpperCase();
+    letters = randomLetter() + randomLetter();
+  }
+  return `${baseUrl}${letters}${extension}`;
 };
+
+export const getInitials = (slug) => {
+  return slug.split(" ").map((word) => word[0]).join("")
+}

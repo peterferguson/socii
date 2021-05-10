@@ -5,7 +5,6 @@ import CogIcon from "@icons/cog.svg";
 import PieIcon from "@icons/pie.svg";
 import AtIcon from "@icons/at.svg";
 import LogoutIcon from "@icons/logout.svg";
-import DollarIcon from "@icons/dollar.svg";
 import GroupIcon from "@icons/group.svg";
 import RightChevronIcon from "@icons/rightChevron.svg";
 import MenuIcon from "@icons/menu.svg";
@@ -108,7 +107,7 @@ function Dropdown() {
     },
     {
       name: "Stocks",
-      description: "Search the socii stock universe",
+      description: "Search the our stock universe",
       href: "/stock",
       // icon: DollarIcon,
       icon: ({ className }) => (

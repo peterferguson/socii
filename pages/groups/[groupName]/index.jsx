@@ -32,161 +32,100 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
+import "stream-chat-react/dist/css/index.css";
+import LoadingIndicator from "@components/LoadingIndicator";
+import AuthCheck from "@components/AuthCheck";
+import {
+  CustomMessage,
+  MessagingChannelHeader,
+  MessagingInput,
+  MessagingThread,
+} from "@components/stream/components";
+import { getInitials, getRandomImage } from "@utils/helper";
+import { UserContext } from "@lib/context";
+
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import ChatApp from "../../chat";
+import { StreamChat } from "stream-chat";
+import {
+  Channel,
+  Chat,
+  MessageInput,
+  MessageList,
+  Window,
+} from "stream-chat-react";
 
-// import "stream-chat-react/dist/css/index.css";
-// import LoadingIndicator from "@components/LoadingIndicator";
-// import AuthCheck from "@components/AuthCheck";
-// import { useContext, useEffect, useState } from "react";
-// import { StreamChat } from "stream-chat";
-// import {
-//   Channel,
-//   ChannelList,
-//   Chat,
-//   MessageInput,
-//   MessageList,
-//   Window,
-// } from "stream-chat-react";
-
-// import {
-//   CreateChannel,
-//   CustomMessage,
-//   MessagingChannelHeader,
-//   MessagingChannelList,
-//   MessagingChannelPreview,
-//   MessagingInput,
-//   MessagingThread,
-// } from "@components/stream/components";
-
-// import { UserContext } from "@lib/context";
-
-// const apiKey = process.env.REACT_APP_STREAM_KEY;
-// const userToken =
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicGV0ZXJmZXJndXNvbiJ9.xlZ7Odi4JAwXI-6-uNan3buTIC9iE3BARc1VsOqsEFU";
-
-// const filters = { type: "messaging" };
-// const options = { state: true, presence: true, limit: 10 };
-// const sort = {
-//   cid: 1,
-//   last_message_at: -1,
-//   updated_at: -1,
-// };
+const apiKey = process.env.REACT_APP_STREAM_KEY;
 
 export default function Group() {
   const router = useRouter();
 
   const groupName = router.query.groupName;
 
-  //   const { user, username } = useContext(UserContext);
-  //   const [chatClient, setChatClient] = useState(null);
-  //   const [isCreating, setIsCreating] = useState(false);
-  //   const [isMobileNavVisible, setMobileNav] = useState(true);
-  //   const [theme, setTheme] = useState("light");
+  const { user, username, userStreamToken } = useContext(UserContext);
+  const [channel, setChannel] = useState(null);
+  const [chatClient, setChatClient] = useState(null);
+  const [theme, setTheme] = useState("light");
 
-  //   useEffect(() => {
-  //     const initChat = async () => {
-  //       const client = StreamChat.getInstance(apiKey);
+  useEffect(() => {
+    const initChat = async () => {
+      const client = StreamChat.getInstance(apiKey);
 
-  //       if (username) {
-  //         await client.connectUser(
-  //           { id: username, name: user?.displayName },
-  //           userToken
-  //         );
-  //       }
+      if (username && userStreamToken) {
+        await client.connectUser(
+          { id: username, name: user?.displayName },
+          userStreamToken
+        );
+        setChannel(
+          client.channel("messaging", groupName, {
+            image: getRandomImage(getInitials(groupName)),
+            name: `${groupName} Group Chat`,
+          })
+        );
+      }
 
-  //       setChatClient(client);
-  //     };
+      setChatClient(client);
+    };
 
-  //     initChat();
-  //   }, [username]);
+    initChat();
+  }, [username, userStreamToken]);
 
-  //   useEffect(() => {
-  //     const handleThemeChange = ({ data }) => {
-  //       if (data === "light" || data === "dark") {
-  //         setTheme(data);
-  //       }
-  //     };
-
-  //     window.addEventListener("message", handleThemeChange);
-  //     return () => window.removeEventListener("message", handleThemeChange);
-  //   }, []);
-
-  //   useEffect(() => {
-  //     const mobileChannelList = document.querySelector("#mobile-channel-list");
-  //     if (isMobileNavVisible && mobileChannelList) {
-  //       mobileChannelList.classList.add("show");
-  //       document.body.style.overflow = "hidden";
-  //     } else if (!isMobileNavVisible && mobileChannelList) {
-  //       mobileChannelList.classList.remove("show");
-  //       document.body.style.overflow = "auto";
-  //     }
-  //   }, [isMobileNavVisible]);
-
-  //   if (!chatClient) {
-  //     return <LoadingIndicator />;
-  //   }
-
-  //   const toggleMobile = () => setMobileNav(!isMobileNavVisible);
+  if (!chatClient) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <div className="flex">
       <div className="w-1/3">{groupName}</div>
       <div className="w-1/3">{groupName}</div>
       <div className="w-1/3">
-        <ChatApp mobileView={true}/>
-        {/* <AuthCheck>
-      {username && (
-        <Chat client={chatClient} theme={`messaging ${theme}`}>
-          <div id="mobile-channel-list" onClick={toggleMobile}>
-            <ChannelList
-              filters={filters}
-              sort={sort}
-              options={options}
-              List={(props) => (
-                <MessagingChannelList
-                  {...props}
-                  onCreateChannel={() => setIsCreating(!isCreating)}
-                />
-              )}
-              Preview={(props) => (
-                <MessagingChannelPreview {...props} {...{ setIsCreating }} />
-              )}
-            />
-          </div>
-          <div>
-            <Channel maxNumberOfFiles={10} multipleUploads={true}>
-              {isCreating && (
-                <CreateChannel
-                  toggleMobile={toggleMobile}
-                  onClose={() => setIsCreating(false)}
-                />
-              )}
-              <Window>
-                <MessagingChannelHeader
-                  theme={theme}
-                  toggleMobile={toggleMobile}
-                />
-                <MessageList
-                  messageActions={[
-                    "edit",
-                    "delete",
-                    "flag",
-                    "mute",
-                    "react",
-                    "reply",
-                  ]}
-                  Message={CustomMessage}
-                  TypingIndicator={() => null}
-                />
-                <MessageInput focus Input={MessagingInput} />
-              </Window>
-              <MessagingThread />
-            </Channel>
-          </div>
-        </Chat>
-      )}
-    </AuthCheck> */}
+        <AuthCheck>
+          {username && userStreamToken && (
+            <Chat client={chatClient} theme={`messaging ${theme}`}>
+              <Channel channel={channel} maxNumberOfFiles={10} multipleUploads={true}>
+                <Window>
+                  <MessagingChannelHeader
+                    theme={theme}
+                  />
+                  <MessageList
+                    messageActions={[
+                      "edit",
+                      "delete",
+                      "flag",
+                      "mute",
+                      "react",
+                      "reply",
+                    ]}
+                    Message={CustomMessage}
+                    TypingIndicator={() => null}
+                  />
+                  <MessageInput focus Input={MessagingInput} />
+                </Window>
+                <MessagingThread />
+              </Channel>
+            </Chat>
+          )}
+        </AuthCheck>
       </div>
     </div>
   );
