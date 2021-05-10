@@ -1,7 +1,7 @@
 const tickerMapping = require('/Users/peter/Projects/socii/temp/t212_tickers.json');
 
 const admin = require("firebase-admin");
-const serviceAccount = require("../serviceAccountKey.json");
+const serviceAccount = require("../app/serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
