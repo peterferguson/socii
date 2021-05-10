@@ -62,13 +62,13 @@ const apiKey = process.env.REACT_APP_STREAM_KEY;
 export default function Group() {
   const router = useRouter();
 
-  const groupName = router.query.groupName;
+  const { groupName } = router.query;
 
   const groupRef = firestore.collection("groups").doc(groupName);
   const [snapshot] = useDocumentOnce(groupRef);
 
   if (!snapshot?.exists) {
-    return <Custom404 />
+    return <Custom404 />;
   }
 
   const { user, username, userStreamToken } = useContext(UserContext);
