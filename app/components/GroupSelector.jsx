@@ -5,14 +5,19 @@ import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { RadioGroup } from "@headlessui/react";
 import CheckIcon from "@components/BackgroundCheck";
 
-export default function GroupSelectorRadioGroup({ groupNames, className="" }) {
-  const { selectedGroup, changeSelectedGroup } = useContext(SelectedGroupContext);
+export default function GroupSelectorRadioGroup({
+  groupNames,
+  className = "",
+}) {
+  const { selectedGroup, changeSelectedGroup } = useContext(
+    SelectedGroupContext
+  );
   const [groupSelected, setGroupSelected] = useState(selectedGroup);
 
   const setSelectedGroup = (group) => {
-    changeSelectedGroup(group.groupName)
-    setGroupSelected(group)
-  }
+    changeSelectedGroup(group.name);
+    setGroupSelected(group.name);
+  };
 
   const groups = groupNames.map((name) => {
     const docRef = firestore.doc(`groups/${name}`);
