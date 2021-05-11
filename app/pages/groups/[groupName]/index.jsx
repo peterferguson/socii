@@ -63,11 +63,9 @@ export default function Group() {
   const router = useRouter();
 
   const { groupName } = router.query;
+  const { userGroups } = useContext(UserContext);
 
-  const groupRef = firestore.collection("groups").doc(groupName);
-  const [snapshot] = useDocumentOnce(groupRef);
-
-  if (!snapshot?.exists) {
+  if (!userGroups.includes(groupName)) {
     return <Custom404 />;
   }
 
