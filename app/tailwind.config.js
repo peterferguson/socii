@@ -1,7 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -11,7 +11,7 @@ module.exports = {
           light: "#3fbaeb",
           DEFAULT: "#0fa9e6",
           dark: "#0c87b8",
-          teal: "#a6fff8"
+          teal: "#a6fff8",
         },
         back: {
           DEFAULT: "#0D5F78",
@@ -98,31 +98,31 @@ module.exports = {
       spacing: {
         0.5: "0.125rem",
       },
-      margin:{
+      margin: {
         "-46": "-11.5rem",
       },
-      borderRadius:{
+      borderRadius: {
         "2.5xl": "20px",
       },
-      padding:{
-        "1.5": "6px",
+      padding: {
+        1.5: "6px",
       },
       minHeight: {
-        '60px': '60px',
+        "60px": "60px",
       },
       minWidth: {
-        '1/4': '25%',
-        '1/2': '50%',
-        '3/4': '75%',
-        '85': '85%',
-        '215': '215px',
-        '330': '330px',
+        "1/4": "25%",
+        "1/2": "50%",
+        "3/4": "75%",
+        85: "85%",
+        215: "215px",
+        330: "330px",
       },
       maxWidth: {
-        '1/4': '25%',
-        '1/2': '50%',
-        '3/4': '75%',
-        '95': '95%',
+        "1/4": "25%",
+        "1/2": "50%",
+        "3/4": "75%",
+        95: "95%",
       },
       width: {
         88: "22rem",
@@ -132,14 +132,14 @@ module.exports = {
         "4/7": "57.1428571%",
         "5/7": "71.4285714%",
         "6/7": "85.7142857%",
+      },
     },
   },
-},
   variants: {
     scale: ["responsive", "hover", "focus", "focus-within"],
     extend: {
       backgroundColor: ["active"],
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
