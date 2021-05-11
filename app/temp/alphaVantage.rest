@@ -7,3 +7,5 @@ GET https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=TSLA&
 GET https://www.alphavantage.co/query?function=OVERVIEW&symbol=TSLA&apikey=E9W8LZBTXVYZ31IO
 ###
 GET https://www.alphavantage.co/query?function=OVERVIEW&apikey=E9W8LZBTXVYZ31IO&symbol=TSLA
+###
+GET https://www.alphavantage.co/query?function=OVERVIEW&symbol=TSLA&apikey=E9W8LZBTXVYZ31IO

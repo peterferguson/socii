@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "lib": ["es2015", "dom"],
+    "lib": ["es2019", "dom"],
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es2019",
     "outDir": "lib",
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],

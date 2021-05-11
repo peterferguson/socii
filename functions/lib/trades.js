@@ -1,18 +1,9 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_js_1 = require("./index.js");
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
-    var keys = null;
+    let keys = null;
     switch (typeof object) {
         case "object":
             if (Array.isArray(object)) {
@@ -41,7 +32,7 @@ const allKeysContainedIn = (object, other) => {
  * @param {Object} res Cloud Function response context.
  *                     More info: https://expressjs.com/en/api.html#res
  */
-const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const tradeToFirestore = async (req, res) => {
     const requiredArgs = {
         executorRef: null,
         assetRef: null,
@@ -63,7 +54,7 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
         return;
     }
     const assetRef = index_js_1.firestore.doc(req.body.assetRef);
-    const assetData = yield assetRef.get();
+    const assetData = await assetRef.get();
     requiredArgs.assetRef = assetRef;
     optionalArgs.assetType = assetData.get("assetType");
     optionalArgs.shortName = assetData.get("shortName");
@@ -71,10 +62,14 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
     Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
     // * Add a new trade document with a generated id & update holdings
     const batch = index_js_1.firestore.batch();
-    const tradeRef = yield index_js_1.firestore
+    const tradeRef = await index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/trades`)
         .doc();
-    var tradeData = Object.assign(Object.assign(Object.assign({}, optionalArgs), requiredArgs), { timestamp: index_js_1.serverTimestamp() });
+    let tradeData = {
+        ...optionalArgs,
+        ...requiredArgs,
+        timestamp: index_js_1.serverTimestamp(),
+    };
     // * Update the holdings avgPrice & shares
     const holdingRef = index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/holdings`)
@@ -88,7 +83,7 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
     // ! On selling shares the cost basis is not affected & so only the shares is changed
     const sharesIncrement = negativeEquityMultiplier * requiredArgs.shares;
     // * Check if the holding already exists
-    const doc = yield holdingRef.get();
+    const doc = await holdingRef.get();
     if (doc.exists) {
         const currentShares = doc.get("shares");
         const currentAvgPrice = doc.get("avgPrice");
@@ -119,8 +114,8 @@ const tradeToFirestore = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     batch.set(tradeRef, tradeData);
-    const batchResponse = yield batch.commit();
+    const batchResponse = await batch.commit();
     res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
-});
+};
 module.exports = tradeToFirestore;
 //# sourceMappingURL=trades.js.map

@@ -5,9 +5,9 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix ../functions run build"
+      "npm --prefix ./functions run build"
     ],
-    "source": "functions"
+    "source": "./functions/"
   },
   "storage": {
     "rules": "storage.rules"

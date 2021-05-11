@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const algoliasearch = require("algoliasearch");
 const index_1 = require("./index");
@@ -20,7 +11,7 @@ const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
  * HTTP function to do an initial load of tickers in /tickers/:documentId/ to the
  * the search index.
  */
-exports.loadTickersToAlgolia = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.loadTickersToAlgolia = async (req, res) => {
     // This array will contain all records to be indexed in Algolia.
     // A record does not need to necessarily contain all properties of the Firestore
     // document, only the relevant ones.
@@ -28,8 +19,8 @@ exports.loadTickersToAlgolia = (req, res) => __awaiter(void 0, void 0, void 0, f
     const indexName = "tickers"; // Ensure collection and index match in name
     const collectionIndex = client.initIndex(indexName);
     // Retrieve all documents from the tickers collection.
-    const querySnapshot = yield index_1.firestore.collection(indexName).get();
-    querySnapshot.docs.slice(0, 3).forEach((doc) => __awaiter(void 0, void 0, void 0, function* () {
+    const querySnapshot = await index_1.firestore.collection(indexName).get();
+    querySnapshot.docs.slice(0, 3).forEach(async (doc) => {
         const document = doc.data();
         const record = {
             objectID: doc.id,
@@ -39,11 +30,11 @@ exports.loadTickersToAlgolia = (req, res) => __awaiter(void 0, void 0, void 0, f
             tickerSymbol: document.tickerSymbol,
         };
         algoliaRecords.push(record);
-    }));
+    });
     collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
         res.status(200).send("COLLECTION was indexed to Algolia successfully.");
     });
-});
+};
 /**
  * Listens for new tickers added to /tickers/:documentId/ and updates
  * the search index every time a ticker is added to the database.
