@@ -41,7 +41,7 @@ export const alphaVantageData = async (
   functionType = "TIME_SERIES_DAILY"
 ) => {
   const apiKey = "E9W8LZBTXVYZ31IO";
-  const data = fetchURL(
+  const data = await fetchURL(
     `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`
   );
 
@@ -49,7 +49,7 @@ export const alphaVantageData = async (
 
   // * Return close for each date as timeseries
   return dates.map((ts) => ({
-    date: ts,
+    timestamp: ts,
     close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
     volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
   }));
@@ -95,18 +95,18 @@ export const stockProps = async (
     if ("timestamp" in ticker) {
       ticker["timestamp"] = JSON.stringify(ticker?.timestamp.toDate());
     }
-    
+
     if ("timeseriesLastUpdated" in ticker) {
       ticker["timeseriesLastUpdated"] = JSON.stringify(
         ticker?.timeseriesLastUpdated.toDate()
-        );
-      }
+      );
+    }
 
     const timeseries = await tickerTimeseries(
       tickerDoc.ref,
       timeseriesLimit,
       ticker.tickerSymbol
-      );
+    );
 
     if (subQueryField) {
       sector = await tickerExistsSubquery(tickerDoc.ref, subQueryField);
@@ -156,11 +156,10 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
       timestamp: parseInt(doc.id) * 1000,
     }));
   }
-    // ! EXPENSIVE
-    // timeseries = await iexChartTimeseries(tickerSymbol)
+  // ! EXPENSIVE
+  // timeseries = await iexChartTimeseries(tickerSymbol)
 
-
-  return timeseries
+  return timeseries;
 };
 
 export const getRandomImage = (letters = "") => {
@@ -169,12 +168,16 @@ export const getRandomImage = (letters = "") => {
   const extension = ".png";
 
   if (!letters) {
-    const randomLetter = () => alphabet[Math.floor(Math.random() * 26)].toUpperCase();
+    const randomLetter = () =>
+      alphabet[Math.floor(Math.random() * 26)].toUpperCase();
     letters = randomLetter() + randomLetter();
   }
   return `${baseUrl}${letters}${extension}`;
 };
 
 export const getInitials = (slug) => {
-  return slug.split(" ").map((word) => word[0]).join("")
-}
+  return slug
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
+};

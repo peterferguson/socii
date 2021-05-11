@@ -54,10 +54,6 @@ import {
   Window,
 } from "stream-chat-react";
 import Custom404 from "../../404";
-import { firestore } from "@lib/firebase";
-import { useDocumentOnce } from "react-firebase-hooks/firestore";
-
-const apiKey = process.env.REACT_APP_STREAM_KEY;
 
 export default function Group() {
   const router = useRouter();

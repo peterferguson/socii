@@ -1,3 +1,4 @@
+import Custom404 from "../404";
 import LineChart from "@components/LineChart";
 import SelectGroupModal from "@components/SelectGroupModal";
 import TradingViewChart, {
@@ -6,13 +7,16 @@ import TradingViewChart, {
 import { SmallAssetCard } from "@components/AssetCards";
 import { isBrowser, pctChange, pnlTextColor, stockProps } from "@utils/helper";
 import { UserContext, SelectedGroupContext } from "@lib/context";
-
 import { firestore } from "@lib/firebase";
 import { useRouter } from "next/router";
 import { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
 
 export default function TickerPage({ tickerSymbols }) {
+  if (!tickerSymbols) {
+    return <Custom404 />;
+  }
+
   let { ticker, timeseries } = tickerSymbols[0];
 
   const tickerSymbol = ticker.tickerSymbol;
@@ -209,7 +213,7 @@ export async function getStaticProps({ params }) {
     .limit(1);
 
   try {
-    props = await stockProps(tickerQuery);
+    props = await stockProps(tickerQuery, "", 100);
   } catch (e) {
     return {
       redirect: {
