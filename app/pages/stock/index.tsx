@@ -23,7 +23,7 @@ export default function StockDisplay({ tickerSymbols }) {
         {tickerSymbols.map(({ ticker, timeseries }) => {
           return (
             <ChartCard
-              logoUrl={ticker.logoUrl}
+              logoUrl={logoUrl(ticker.ISIN)}
               tickerSymbol={ticker.tickerSymbol}
               shortName={ticker.shortName}
               data={timeseries}

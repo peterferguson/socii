@@ -1,4 +1,4 @@
-import { tickerToISIN, firestore } from "@lib/firebase";
+import { tickerToISIN } from "@lib/firebase";
 import IEXQuery, { ChartRangeOption } from "@lib/iex";
 
 export const isBrowser = typeof window !== "undefined";

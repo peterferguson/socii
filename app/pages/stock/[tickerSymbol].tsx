@@ -5,7 +5,7 @@ import TradingViewChart, {
   TradingViewStockFundamentals,
 } from "@components/TradingViewChart";
 import { SmallAssetCard } from "@components/AssetCards";
-import { isBrowser, pctChange, pnlTextColor, stockProps } from "@utils/helper";
+import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper";
 import { UserContext, SelectedGroupContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
 import { useRouter } from "next/router";
@@ -67,7 +67,7 @@ export default function TickerPage({ tickerSymbols }) {
     <>
       <div className="flex flex-row w-full bg-gray-50">
         <SmallAssetCard
-          logoUrl={ticker.logoUrl}
+          logoUrl={logoUrl(ticker.ISIN)}
           tickerSymbol={tickerSymbol}
           shortName={ticker.shortName}
           currentPrice={latestClose}

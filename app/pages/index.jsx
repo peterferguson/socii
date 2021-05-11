@@ -1,36 +1,28 @@
 import { firestore, auth } from "@lib/firebase";
 import { logoUrl } from "@utils/helper";
-// import bluryGradientBg from "@icons/bluryGradientBg.svg"
 
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { useState } from "react";
 
 function TickerList() {
-  const [numberOfTickers, setNumberOfTickers] = useState(8);
   const query = firestore
     .collection("tickers")
     .where("isPopular", "==", true)
-    .limit(numberOfTickers);
   const [querySnapshot] = useCollection(query);
   const tickers = querySnapshot?.docs.map((doc) => doc.data());
 
   return (
     <>
-      <div
-        className={`grid grid-cols-${numberOfTickers} p-4 grid-flow-row-dense bg-white h-24`}
-      >
-        {tickers &&
-          tickers.map((ticker) => {
-            return (
+      {tickers &&
+        tickers.map((ticker) => {
+          return (
               <img
-                className="shadow-lg rounded-full h-auto w-16 ml-4 sm:ml-0 btn-transition"
+                className="flex shadow-lg rounded-full h-16 w-16 ml-4 sm:ml-0 btn-transition"
                 src={logoUrl(ticker.ISIN)}
                 alt={`${ticker.tickerSymbol} logo`}
               />
-            );
-          })}
-      </div>
+          );
+        })}
     </>
   );
 }
@@ -73,11 +65,13 @@ export default function Home() {
           </svg>
         </div>
       </div>
-      <div className="w-full h-24">
+      <div className="w-full h-24 flex flex-row items-center justify-between bg-white overflow-y-hidden">
         <TickerList />
       </div>
       <div className="h-screen bg-brand-light items-center justify-center flex flex-col">
-        <div className="font-bold text-4xl leading-3 font-poppins text-white mt-8">About Us</div>
+        <div className="font-bold text-4xl leading-3 font-poppins text-white mt-8">
+          About Us
+        </div>
         <div className=" h-2/4 flex-grow"></div>
       </div>
     </>

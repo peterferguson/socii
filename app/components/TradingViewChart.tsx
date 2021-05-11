@@ -4,6 +4,12 @@ import TradingViewWidget, {
 } from "react-tradingview-widget";
 import { useWindowSize } from "@lib/hooks";
 
+const marketMapping = {
+  NCM: "NASDAQ", 
+  NMS: "NASDAQ", 
+  NYQ: "NYSE", 
+}
+
 export default function TradingViewChart({ tickerSymbol, market = "NASDAQ" }) {
   const tradingViewSymbol = `${market}:${tickerSymbol}`;
   const [width, height] = useWindowSize();

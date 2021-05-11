@@ -1,4 +1,9 @@
-import { pnlBackgroundColor, pctChange, pnlTextColor } from "@utils/helper";
+import {
+  pnlBackgroundColor,
+  pctChange,
+  pnlTextColor,
+  logoUrl,
+} from "@utils/helper";
 import Link from "next/link";
 
 export default function SmallAssetPctChangeCard({
@@ -107,7 +112,7 @@ export function AssetCard({ ticker, timeseries, sector }) {
           <header className="flex flex-nowrap mb-auto">
             <img
               className="flex-none w-12 rounded"
-              src={ticker.logoUrl}
+              src={logoUrl(ticker.ISIN)}
               alt={`${ticker.tickerSymbol} logo`}
             />
             <p className="truncate p-2">{ticker.shortName}</p>
@@ -163,7 +168,7 @@ export function BlockCard({ ticker, timeseries }) {
               <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
                 <img
                   className="flex-none w-12 rounded"
-                  src={ticker.logoUrl}
+                  src={logoUrl(ticker.ISIN)}
                   alt={`${ticker.tickerSymbol} logo`}
                 />
                 <p className="truncate p-2">{ticker.shortName}</p>
