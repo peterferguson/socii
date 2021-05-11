@@ -1,16 +1,27 @@
 import Custom404 from "../404";
 import LineChart from "@components/LineChart";
+import MultiSelect from "@components/MultiSelect";
 import SelectGroupModal from "@components/SelectGroupModal";
 import TradingViewChart, {
   TradingViewStockFundamentals,
 } from "@components/TradingViewChart";
 import { SmallAssetCard } from "@components/AssetCards";
-import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper";
+import {
+  isBrowser,
+  logoUrl,
+  pctChange,
+  pnlTextColor,
+  stockProps,
+} from "@utils/helper";
+import { alphaVantageQueryOptions } from "@lib/constants";
 import { UserContext, SelectedGroupContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
 import { useRouter } from "next/router";
 import { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
+
+import { Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 
 export default function TickerPage({ tickerSymbols }) {
   if (!tickerSymbols) {
@@ -25,9 +36,10 @@ export default function TickerPage({ tickerSymbols }) {
   const { user, userGroups } = useContext(UserContext);
 
   const [openGroupModal, setOpenGroupModal] = useState(false);
+  const [openStockSharingModal, setOpenStockSharingModal] = useState(false);
   const [showTradingView, setShowTradingView] = useState(false);
   const [crosshairIndexValue, setCrosshairIndexValue] = useState(0);
-  const [selectedGroup, setSelectedGroup] = useState(userGroups?.slice(0));
+  const [selectedGroup, setSelectedGroup] = useState(userGroups[0]);
 
   const changeSelectedGroup = (groupName) => setSelectedGroup(groupName);
 
@@ -111,18 +123,25 @@ export default function TickerPage({ tickerSymbols }) {
       />
       {/* <TradingViewStockFundamentals tickerSymbol={tickerSymbol} /> */}
       {isBrowser && (
-        <SelectedGroupContext.Provider
-          value={{ selectedGroup, changeSelectedGroup }}
-        >
-          <SelectGroupModal
-            userGroups={userGroups}
-            openGroupModal={openGroupModal}
-            setOpenGroupModal={setOpenGroupModal}
-            goClickHandler={() => {
-              router.push(`/groups/${selectedGroup}`);
-            }}
+        <>
+          <SelectedGroupContext.Provider
+            value={{ selectedGroup, changeSelectedGroup }}
+          >
+            <SelectGroupModal
+              userGroups={userGroups}
+              openGroupModal={openGroupModal}
+              setOpenGroupModal={setOpenGroupModal}
+              goClickHandler={() => setOpenStockSharingModal(true)}
+            />
+          </SelectedGroupContext.Provider>
+          <ShareStockInformationModal
+            selectedGroup={selectedGroup}
+            tickerSymbol={tickerSymbol}
+            openStockSharingModal={openStockSharingModal}
+            setOpenStockSharingModal={setOpenStockSharingModal}
+            goClickHandler={() => setOpenStockSharingModal(true)}
           />
-        </SelectedGroupContext.Provider>
+        </>
       )}
     </>
   );
@@ -199,6 +218,91 @@ function Chart({
         )}
       </div>
     </div>
+  );
+}
+
+function ShareStockInformationModal({
+  selectedGroup,
+  tickerSymbol,
+  openStockSharingModal,
+  setOpenStockSharingModal,
+  goClickHandler = () => {},
+}) {
+  const closeModal = () => setOpenStockSharingModal(false);
+
+  const letsGoClickHander = () => {
+    closeModal();
+    goClickHandler();
+  };
+
+  return (
+    <Transition appear show={openStockSharingModal} as={Fragment}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
+        open={openStockSharingModal}
+        onClose={closeModal}
+      >
+        <div className="min-h-screen px-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0" />
+          </Transition.Child>
+
+          {/* This element is to trick the browser into centering the modal contents. */}
+          <span
+            className="inline-block h-screen align-middle"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium text-gray-900 font-poppins pb-4"
+              >
+                {`Tell ${selectedGroup} about ${tickerSymbol}!`}
+              </Dialog.Title>
+              <div className="mt-2">
+                <div className="font-poppins text-sm text-blueGray-500">Select some data to tell your friends about!</div>
+                <MultiSelect items={alphaVantageQueryOptions} />
+                <div className="font-poppins text-sm text-blueGray-500">Tell them your thoughts!</div>
+
+              </div>
+              <div className="flex mt-4">
+                <div className="flex-grow" />
+                <button
+                  type="button"
+                  className="flex-none justify-center px-4 py-2 text-sm font-medium \
+                  text-teal-900 bg-teal-100 border border-transparent rounded-md \
+                  hover:bg-teal-200 focus:outline-none focus-visible:ring-2 \
+                  focus-visible:ring-offset-2 focus-visible:ring-teal-500"
+                  onClick={letsGoClickHander}
+                >
+                  To the moon 🌕
+                </button>
+              </div>
+            </div>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
   );
 }
 
