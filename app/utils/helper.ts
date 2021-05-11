@@ -181,3 +181,10 @@ export const getInitials = (slug) => {
     .map((word) => word[0])
     .join("");
 };
+
+export const uncamelCase = (str) =>
+  str
+    .replace(/^./, (s) => s.toUpperCase())
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z])([a-z])/g, " $1$2")
+    .replace(/\ +/g, " ");

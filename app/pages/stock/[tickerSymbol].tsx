@@ -1,5 +1,6 @@
 import Custom404 from "../404";
 import LineChart from "@components/LineChart";
+import PriceInput from "@components/PriceInput";
 import MultiSelect from "@components/MultiSelect";
 import SelectGroupModal from "@components/SelectGroupModal";
 import TradingViewChart, {
@@ -140,6 +141,7 @@ export default function TickerPage({ tickerSymbols }) {
             openStockSharingModal={openStockSharingModal}
             setOpenStockSharingModal={setOpenStockSharingModal}
             goClickHandler={() => setOpenStockSharingModal(true)}
+            pricePlaceholder={latestClose.toString()}
           />
         </>
       )}
@@ -227,6 +229,7 @@ function ShareStockInformationModal({
   openStockSharingModal,
   setOpenStockSharingModal,
   goClickHandler = () => {},
+  pricePlaceholder = "0.00",
 }) {
   const closeModal = () => setOpenStockSharingModal(false);
 
@@ -275,15 +278,37 @@ function ShareStockInformationModal({
             <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium text-gray-900 font-poppins pb-4"
+                className="text-lg font-medium text-gray-900 font-poppins"
               >
                 {`Tell ${selectedGroup} about ${tickerSymbol}!`}
               </Dialog.Title>
               <div className="mt-2">
-                <div className="font-poppins text-sm text-blueGray-500">Select some data to tell your friends about!</div>
+                <div className="font-poppins text-sm text-blueGray-500">
+                  Select some data to tell your friends about!
+                </div>
                 <MultiSelect items={alphaVantageQueryOptions} />
-                <div className="font-poppins text-sm text-blueGray-500">Tell them your thoughts!</div>
-
+                <div className="font-poppins text-sm text-blueGray-500">
+                  Got a price in mind?
+                </div>
+                <div className="pt-1 pb-2">
+                  <PriceInput
+                    showPrice={false}
+                    pricePlaceholder={pricePlaceholder}
+                  />
+                </div>
+                <div className="font-poppins text-sm text-blueGray-500">
+                  Tell them your thoughts!
+                </div>
+                <div className="mb-3 pt-2">
+                  <textarea
+                    className="form-textarea px-3 py-4 w-full placeholder-blueGray-300 text-blueGray-600 \
+                    relative bg-white rounded-md text-sm border-gray-300 \
+                    shadow-sm focus:outline-none focus:ring-teal-500 \
+                    focus:border-teal-500 "
+                    rows="4"
+                    placeholder="Bruh the wallstreetbets bros love it!"
+                  />
+                </div>
               </div>
               <div className="flex mt-4">
                 <div className="flex-grow" />

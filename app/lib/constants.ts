@@ -4,6 +4,11 @@ import TwitterLogo from "@icons/twitter.svg";
 import GoogleLogo from "@icons/google.svg";
 import { googleAuthProvider, facebookAuthProvider } from "@lib/firebase";
 
+export const currencySymbols = {
+  USD: "$",
+  GBP: "£",
+  EUR: "€",
+};
 
 /*
  * Group Privacy Settings
@@ -20,44 +25,44 @@ export const groupPrivacyOptions = [
 ];
 
 /*
-* Default Group Deposit Options
-*/
+ * Default Group Deposit Options
+ */
 export const groupDepositOptions = [
   {
-    amount: "£0"
+    amount: "£0",
   },
   {
-    amount: "£10"
+    amount: "£10",
   },
   {
-    amount: "£25"
+    amount: "£25",
   },
   {
-    amount: "£50"
+    amount: "£50",
   },
   {
-    amount: "£100"
+    amount: "£100",
   },
 ];
 
 /*
-* Default Group Initial Lump-Sum Options
-*/
+ * Default Group Initial Lump-Sum Options
+ */
 export const groupLumpSumOptions = [
   {
-    amount: "£0"
+    amount: "£0",
   },
   {
-    amount: "£25"
+    amount: "£25",
   },
   {
-    amount: "£50"
+    amount: "£50",
   },
   {
-    amount: "£100"
+    amount: "£100",
   },
   {
-    amount: "£250"
+    amount: "£250",
   },
 ];
 
@@ -139,5 +144,5 @@ export const alphaVantageQueryOptions = [
   "dividendDate",
   "exDividendDate",
   "lastSplitFactor",
-  "lastSplitDate"
-]
+  "lastSplitDate",
+];

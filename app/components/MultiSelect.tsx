@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { uncamelCase } from "@utils/helper";
 
 const Multiselect = ({ items }) => {
   const [dropdown, setDropdown] = useState(false);
@@ -9,10 +10,7 @@ const Multiselect = ({ items }) => {
 
   // adds new item to multiselect
   const addTag = (item) => {
-    console.log(dropdownItems);
-
     setDropdownItems(dropdownItems.filter((e) => e !== item));
-    console.log(dropdownItems);
     setSelectedItems(selectedItems.concat(item));
     setDropdown(false);
   };
@@ -28,7 +26,7 @@ const Multiselect = ({ items }) => {
       <div className="w-full">
         <div className="flex flex-col items-center relative">
           <div className="w-full ">
-            <div className="my-2 p-1 flex border border-gray-200 bg-white rounded ">
+            <div className="my-2 p-1 flex border border-gray-300 shadow-sm bg-white rounded-md">
               <div className="flex flex-auto flex-wrap">
                 {selectedItems.map((tag, index) => {
                   return (
@@ -55,7 +53,7 @@ const Multiselect = ({ items }) => {
                 </div>
               </div>
               <div
-                className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200"
+                className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-300"
                 onClick={toggleDropdown}
               >
                 <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
@@ -74,28 +72,26 @@ const Multiselect = ({ items }) => {
 };
 
 const Dropdown = ({ items, addItem }) => {
+  // tODO: Add dropdown open on dropdown funcitonality
   return (
     <div
       id="dropdown"
-      className="absolute shadow top-100 bg-white z-40 w-full lef-0 rounded max-h-select overflow-y-auto "
+      className="absolute ml-6 -mt-2 shadow top-100 bg-white z-40 w-10/12 left-0 \
+                 rounded max-h-56 overflow-y-auto h-full"
     >
-      <div className="flex flex-col w-full">
-        {items.map((item, key) => {
-          return (
-            <div
-              key={key}
-              className="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
-              onClick={() => addItem(item)}
-            >
-              <div className="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100">
-                <div className="w-full items-center flex">
-                  <div className="mx-2 leading-6">{item}</div>
-                </div>
-              </div>
+      {items.sort().map((item) => {
+        return (
+          <div
+            className="cursor-pointer w-full border-gray-100 rounded-t border-b \
+                     hover:bg-teal-100"
+            onClick={() => addItem(item)}
+          >
+            <div className="flex mx-2 leading-6 p-2 relative hover:border-teal-100">
+              {uncamelCase(item)}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
