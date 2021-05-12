@@ -1,8 +1,12 @@
-import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { alphaVantageQueryOptions } from "@lib/constants";
+import { UserContext } from "@lib/context";
 import PriceInput from "@components/PriceInput";
 import MultiSelect from "@components/MultiSelect";
+import { streamClient } from "@lib/stream";
+
+import { Fragment, useState, useContext } from "react";
+import { logoUrl } from "@utils/helper";
 
 export default function ShareStockInformationModal({
   selectedGroup,
@@ -13,10 +17,43 @@ export default function ShareStockInformationModal({
   pricePlaceholder = "0.00",
 }) {
   const closeModal = () => setOpenStockSharingModal(false);
+  const { user, username, userStreamToken } = useContext(UserContext);
+  const [message, setMessage] = useState("");
+  const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder));
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const letsGoClickHander = () => {
+  const attachments = [
+    {
+      image: logoUrl(tickerSymbol),
+      name: tickerSymbol,
+      type: "stock",
+      url: `http://localhost:3000/stock/${tickerSymbol}`,
+    },
+  ];
+
+  const letsGoClickHander = async () => {
     closeModal();
     goClickHandler();
+
+    if (username && userStreamToken) {
+      await streamClient.connectUser(
+        { id: username, name: user?.displayName },
+        userStreamToken
+      );
+    }
+    const channel = streamClient.getChannelById(
+      "messaging",
+      selectedGroup?.split(" ").join("-")
+    );
+    const message = await channel.sendMessage({
+      text: `
+        message: ${message} 
+        targetPrice: ${targetPrice} 
+        selectedItems: ${JSON.stringify(selectedItems)} 
+      `,
+      attachments,
+      skip_push: true,
+    });
   };
 
   return (
@@ -62,23 +99,30 @@ export default function ShareStockInformationModal({
                 className="text-lg font-medium text-gray-900 font-poppins"
               >
                 Tell{" "}
-                <span className="font-bold text-brand-light">{selectedGroup}</span>{" "}
+                <span className="font-bold text-brand-light">
+                  {selectedGroup}
+                </span>{" "}
                 about{" "}
                 <span span className="font-bold text-teal-300">
                   {tickerSymbol}
                 </span>
-                !{/* {`Tell ${selectedGroup} about ${tickerSymbol}!`} */}
+                !
               </Dialog.Title>
               <div className="mt-2">
                 <div className="font-poppins text-sm text-blueGray-500">
                   Select some data to tell your friends about!
                 </div>
-                <MultiSelect items={alphaVantageQueryOptions} />
+                <MultiSelect
+                  items={alphaVantageQueryOptions}
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                />
                 <div className="font-poppins text-sm text-blueGray-500">
                   Got a price in mind?
                 </div>
                 <div className="pt-1 pb-2">
                   <PriceInput
+                    setPrice={setTargetPrice}
                     showPrice={false}
                     pricePlaceholder={pricePlaceholder}
                   />
@@ -94,6 +138,7 @@ export default function ShareStockInformationModal({
                       focus:border-teal-500 "
                     rows="4"
                     placeholder="Bruh the wallstreetbets bros love it!"
+                    onChange={(e) => setMessage(e.target.value)}
                   />
                 </div>
               </div>

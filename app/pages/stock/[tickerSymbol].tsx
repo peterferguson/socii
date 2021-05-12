@@ -136,7 +136,7 @@ export default function TickerPage({ tickerSymbols }) {
             tickerSymbol={tickerSymbol}
             openStockSharingModal={openStockSharingModal}
             setOpenStockSharingModal={setOpenStockSharingModal}
-            goClickHandler={() => setOpenStockSharingModal(true)}
+            goClickHandler={() => {}}
             pricePlaceholder={latestClose.toString()}
           />
         </>

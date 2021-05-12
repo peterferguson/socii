@@ -2,14 +2,13 @@ import { useState } from "react";
 import { currencySymbols } from "@lib/constants";
 
 export default function PriceInput({
+  setPrice,
   pricePlaceholder = "0.00",
   defaultCurrency="USD",
   textStyling = "font-poppins text-sm text-blueGray-500",
   showPrice=true
 }) {
   const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency);
-
-  console.log(selectedCurrency);
 
   return (
     <div className="text-blueGray-500">
@@ -30,6 +29,7 @@ export default function PriceInput({
           id="price"
           className="focus:ring-teal-500 focus:border-teal-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
           placeholder={pricePlaceholder}
+          onChange={e => setPrice(e.target.value)}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           <label htmlFor="currency" className="sr-only">

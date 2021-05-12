@@ -1,3 +1,4 @@
+import "stream-chat-react/dist/css/index.css";
 import "@styles/globals.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Head from "@components/Head";

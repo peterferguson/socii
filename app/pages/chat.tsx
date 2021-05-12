@@ -1,8 +1,7 @@
-import "stream-chat-react/dist/css/index.css";
 import LoadingIndicator from "@components/LoadingIndicator";
 import AuthCheck from "@components/AuthCheck";
+import { streamClient } from "@lib/stream";
 import { useContext, useEffect, useState } from "react";
-import { StreamChat } from "stream-chat";
 import {
   Channel,
   ChannelList,
@@ -14,6 +13,7 @@ import {
 
 import {
   CreateChannel,
+  CustomAttachment,
   CustomMessage,
   MessagingChannelHeader,
   MessagingChannelList,
@@ -23,8 +23,7 @@ import {
 } from "@components/stream/components";
 
 import { UserContext } from "@lib/context";
-
-const apiKey = process.env.REACT_APP_STREAM_KEY;
+import { isBrowser } from "@utils/helper";
 
 const filters = { type: "messaging" };
 const options = { state: true, presence: true, limit: 10 };
@@ -43,7 +42,7 @@ const App = (mobileView = false) => {
 
   useEffect(() => {
     const initChat = async () => {
-      const client = StreamChat.getInstance(apiKey);
+      const client = streamClient;
 
       if (username && userStreamToken) {
         await client.connectUser(
@@ -88,7 +87,7 @@ const App = (mobileView = false) => {
 
   return (
     <AuthCheck>
-      {username && userStreamToken && (
+      {isBrowser && username && userStreamToken && (
         <Chat client={chatClient} theme={`messaging ${theme}`}>
           <div id="mobile-channel-list" onClick={toggleMobile}>
             <ChannelList
@@ -107,7 +106,11 @@ const App = (mobileView = false) => {
             />
           </div>
           <div>
-            <Channel maxNumberOfFiles={10} multipleUploads={true}>
+            <Channel
+              maxNumberOfFiles={10}
+              multipleUploads={true}
+              Attachment={CustomAttachment}
+            >
               {isCreating && (
                 <CreateChannel
                   toggleMobile={toggleMobile}

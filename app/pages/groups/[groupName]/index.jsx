@@ -31,21 +31,21 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import "stream-chat-react/dist/css/index.css";
 import LoadingIndicator from "@components/LoadingIndicator";
 import AuthCheck from "@components/AuthCheck";
 import {
+  CustomAttachment,
   CustomMessage,
   MessagingChannelHeader,
   MessagingInput,
   MessagingThread,
 } from "@components/stream/components";
-import { getInitials, getRandomImage } from "@utils/helper";
+import { getInitials, getRandomImage, isBrowser } from "@utils/helper";
 import { UserContext } from "@lib/context";
+import { streamClient } from "@lib/stream";
 
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { StreamChat } from "stream-chat";
 import {
   Channel,
   Chat,
@@ -72,7 +72,7 @@ export default function Group() {
 
   useEffect(() => {
     const initChat = async () => {
-      const client = StreamChat.getInstance(apiKey);
+      const client = streamClient;
       if (username && userStreamToken) {
         await client.connectUser(
           { id: username, name: user?.displayName },
@@ -100,12 +100,13 @@ export default function Group() {
       <div className="w-1/3">{groupName}</div>
       <div className="w-1/3">
         <AuthCheck>
-          {username && userStreamToken && (
+          {isBrowser && username && userStreamToken && (
             <Chat client={chatClient} theme={`messaging ${theme}`}>
               <Channel
                 channel={channel}
                 maxNumberOfFiles={10}
                 multipleUploads={true}
+                Attachment={CustomAttachment}
               >
                 <Window>
                   <MessagingChannelHeader theme={theme} />

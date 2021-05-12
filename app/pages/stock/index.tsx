@@ -3,7 +3,7 @@ import CardSlider from "@components/CardSlider";
 import RightChevron from "@icons/rightChevron.svg";
 import Link from "next/link";
 import { firestore } from "@lib/firebase";
-import { stockProps } from "@utils/helper";
+import { logoUrl, stockProps } from "@utils/helper";
 
 export default function StockDisplay({ tickerSymbols }) {
   // TODO: on click of chevron create a new view with only the popular stocks

@@ -141,8 +141,5 @@ module.exports = {
       backgroundColor: ["active"],
     },
   },
-  plugins: [
-    require("@tailwindcss/forms"),
-    require('@tailwindcss/custom-forms')
-  ],
+  plugins: [require("@tailwindcss/forms")],
 };
