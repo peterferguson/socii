@@ -10,8 +10,8 @@ const marketMapping = {
   NYQ: "NYSE", 
 }
 
-export default function TradingViewChart({ tickerSymbol, market = "NASDAQ" }) {
-  const tradingViewSymbol = `${market}:${tickerSymbol}`;
+export default function TradingViewChart({ tickerSymbol, exchange = "NASDAQ" }) {
+  const tradingViewSymbol = `${exchange}:${tickerSymbol}`;
   const [width, height] = useWindowSize();
   return (
     <TradingViewWidget

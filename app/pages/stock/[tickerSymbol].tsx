@@ -29,8 +29,9 @@ export default function TickerPage({ tickerSymbols }) {
 
   let { ticker, timeseries } = tickerSymbols[0];
   const [tickerLogoUrl, setTickerLogoUrl] = useState("");
-
+  
   const tickerSymbol = ticker.tickerSymbol;
+  const exchange = ticker.exchange
 
   useEffect(() => {
     const setLogoUrl = async () => {
@@ -124,7 +125,7 @@ export default function TickerPage({ tickerSymbols }) {
       <Chart
         showTradingView={showTradingView}
         setShowTradingView={setShowTradingView}
-        tickerSymbol={tickerSymbol}
+        ticker={ticker}
         timeseries={timeseries}
         crosshairIndexValue={crosshairIndexValue}
         setCrosshairIndexValue={setCrosshairIndexValue}
@@ -165,12 +166,12 @@ export default function TickerPage({ tickerSymbols }) {
 function Chart({
   showTradingView,
   setShowTradingView,
-  tickerSymbol,
+  ticker,
   timeseries,
   crosshairIndexValue,
   setCrosshairIndexValue,
   latestClose,
-}) {
+}) {  
   return (
     <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
       <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
@@ -221,7 +222,7 @@ function Chart({
           </div>
         </div>
         {showTradingView ? (
-          <TradingViewChart tickerSymbol={tickerSymbol} />
+          <TradingViewChart tickerSymbol={ticker?.tickerSymbol} exchange={ticker?.exchange} />
         ) : timeseries ? (
           <LineChart
             crosshairIndexValue={crosshairIndexValue}
