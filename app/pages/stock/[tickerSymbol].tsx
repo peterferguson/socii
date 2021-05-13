@@ -3,7 +3,10 @@ import LineChart from "@components/LineChart";
 import ShareStockInformationModal from "@components/ShareStockInformationModal";
 import SelectGroupModal from "@components/SelectGroupModal";
 import TradingViewChart, {
-  TradingViewStockFundamentals,
+  TradingViewStockTechnicalAnalysisWidget,
+  TradingViewStockProfile,
+  TradingViewStockFinancials,
+  TradingViewStockPrice,
 } from "@components/TradingViewChart";
 import { SmallAssetCard } from "@components/AssetCards";
 import {
@@ -20,6 +23,7 @@ import { useRouter } from "next/router";
 import { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
 import { useEffect } from "react";
+import { useWindowSize } from "@lib/hooks";
 
 export default function TickerPage({ tickerSymbols }) {
   if (!tickerSymbols) {
@@ -29,9 +33,10 @@ export default function TickerPage({ tickerSymbols }) {
 
   let { ticker, timeseries } = tickerSymbols[0];
   const [tickerLogoUrl, setTickerLogoUrl] = useState("");
-  
+
   const tickerSymbol = ticker.tickerSymbol;
-  const exchange = ticker.exchange
+
+  const [width, height] = useWindowSize();
 
   useEffect(() => {
     const setLogoUrl = async () => {
@@ -95,6 +100,11 @@ export default function TickerPage({ tickerSymbols }) {
           currentPrice={latestClose}
           monthlyPctChange={monthlyPctChange}
         />
+        {/* <TradingViewStockPrice
+          tickerSymbol={tickerSymbol}
+          exchange={ticker.exchange}
+          className="p-4"
+        /> */}
         <div className="hidden sm:block flex-grow"></div>
         <div className="flex-none px-4 sm:pl-8 pt-4 bg-gray-50">
           <div className="bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52 items-center justify-center">
@@ -131,7 +141,6 @@ export default function TickerPage({ tickerSymbols }) {
         setCrosshairIndexValue={setCrosshairIndexValue}
         latestClose={latestClose}
       />
-      {/* <TradingViewStockFundamentals tickerSymbol={tickerSymbol} /> */}
       {isBrowser && (
         <>
           <SelectedGroupContext.Provider
@@ -159,6 +168,22 @@ export default function TickerPage({ tickerSymbols }) {
           )}
         </>
       )}
+      <div className="flex flex-row md:flex-col md:items-center md:justify-center">
+        <TradingViewStockProfile
+          tickerSymbol={tickerSymbol}
+          exchange={ticker.exchange}
+          className="p-4 m-4"
+          // height={height}
+          // width={width * 0.5}
+        />
+        <TradingViewStockFinancials
+          tickerSymbol={tickerSymbol}
+          exchange={ticker.exchange}
+          // height={height}
+          // width={width * 0.5}
+          className="p-4 m-4 mb-12"
+        />
+      </div>
     </>
   );
 }
@@ -171,7 +196,7 @@ function Chart({
   crosshairIndexValue,
   setCrosshairIndexValue,
   latestClose,
-}) {  
+}) {
   return (
     <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
       <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
@@ -222,7 +247,10 @@ function Chart({
           </div>
         </div>
         {showTradingView ? (
-          <TradingViewChart tickerSymbol={ticker?.tickerSymbol} exchange={ticker?.exchange} />
+          <TradingViewChart
+            tickerSymbol={ticker?.tickerSymbol}
+            exchange={ticker?.exchange}
+          />
         ) : timeseries ? (
           <LineChart
             crosshairIndexValue={crosshairIndexValue}

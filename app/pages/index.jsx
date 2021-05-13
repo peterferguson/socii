@@ -5,9 +5,7 @@ import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 function TickerList() {
-  const query = firestore
-    .collection("tickers")
-    .where("isPopular", "==", true)
+  const query = firestore.collection("tickers").where("isPopular", "==", true);
   const [querySnapshot] = useCollection(query);
   const tickers = querySnapshot?.docs.map((doc) => doc.data());
 
@@ -16,11 +14,11 @@ function TickerList() {
       {tickers &&
         tickers.map((ticker) => {
           return (
-              <img
-                className="flex shadow-lg rounded-full h-16 w-16 ml-4 sm:ml-0 btn-transition"
-                src={logoUrl(ticker.ISIN)}
-                alt={`${ticker.tickerSymbol} logo`}
-              />
+            <img
+              className="flex shadow-lg rounded-full h-16 w-16 ml-4 sm:ml-0 btn-transition"
+              src={logoUrl(ticker.ISIN)}
+              alt={`${ticker.tickerSymbol} logo`}
+            />
           );
         })}
     </>
@@ -72,7 +70,7 @@ export default function Home() {
         <div className="font-bold text-4xl leading-3 font-poppins text-white mt-8">
           About Us
         </div>
-        <div className=" h-2/4 flex-grow"></div>
+        <div className=" h-2/4 flex-grow" />
       </div>
     </>
   );

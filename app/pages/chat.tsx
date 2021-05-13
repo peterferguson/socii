@@ -25,14 +25,6 @@ import {
 import { UserContext } from "@lib/context";
 import { isBrowser } from "@utils/helper";
 
-const filters = { type: "messaging" };
-const options = { state: true, presence: true, limit: 10 };
-const sort = {
-  cid: 1,
-  last_message_at: -1,
-  updated_at: -1,
-};
-
 const App = (mobileView = false) => {
   const { user, username, userStreamToken } = useContext(UserContext);
   const [chatClient, setChatClient] = useState(null);
@@ -91,9 +83,9 @@ const App = (mobileView = false) => {
         <Chat client={chatClient} theme={`messaging ${theme}`}>
           <div id="mobile-channel-list" onClick={toggleMobile}>
             <ChannelList
-              filters={filters}
-              sort={sort}
-              options={options}
+              filters={{ type: "messaging" }}
+              sort={{ last_message_at: -1 }}
+              options={{ state: true, presence: true, limit: 10 }}
               List={(props) => (
                 <MessagingChannelList
                   {...props}
