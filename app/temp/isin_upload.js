@@ -51,7 +51,8 @@ async function deleteEmptyTicker() {
     const logoUrl = fileUrl(ticker);
     // * Delete the logo
     const file = bucket.file(logoUrl);
-    file.exists()
+    file
+      .exists()
       .then(await file.delete((err, apiResponse) => {}))
       .catch(console.log(`No logo existed at ${logoUrl}`));
 
@@ -68,3 +69,19 @@ async function deleteEmptyTicker() {
 }
 
 // deleteEmptyTicker();
+
+async function addExchangeToTicker() {
+  const tickersWithDataRef = firestore.collectionGroup("data");
+
+  const tickersWithDataDocs = (await tickersWithDataRef.get()).docs;
+  for await (const doc of tickersWithDataDocs) {
+    const data = doc.data();
+    if ("exchange" in data) {
+      console.log(data.symbol);
+      const tickerRef = firestore.doc(doc.ref.path.split("/data")[0]);
+      tickerRef.update({ exchange: data.exchange });
+    }
+  }
+}
+
+// addExchangeToTicker();
