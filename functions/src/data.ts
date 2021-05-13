@@ -72,6 +72,7 @@ const alphaVantageQuery = async (data, context) => {
     .limit(1);
 
   const tickerSnapshot = await query.get();
+  const tickerRef = await tickerSnapshot.docs[0].ref;
   const ticker = await tickerSnapshot.docs[0].data();
 
   const dataRef = firestore.doc(`tickers/${ticker.ISIN}/data/alphaVantage`);
@@ -82,13 +83,21 @@ const alphaVantageQuery = async (data, context) => {
     return filterKeys(await dataSnapshot.data(), data.queryFields);
   } else {
     const response = await alphaVantageSummary(data.tickerSymbol);
+    const exchange = response?.Exchange;
+    
     const cleanResponse = cleanJsonResponse(response);
 
     // * Store result in firestore
-    dataRef.set({
+    const batch = firestore.batch();
+
+    batch.update(tickerRef, { exchange: exchange });
+
+    batch.set(dataRef, {
       ...cleanResponse,
       lastUpdate: serverTimestamp(),
     });
+
+    batch.commit();
     return filterKeys(cleanResponse, data.queryFields);
   }
 };
