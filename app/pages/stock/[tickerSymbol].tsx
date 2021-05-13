@@ -168,7 +168,7 @@ export default function TickerPage({ tickerSymbols }) {
           )}
         </>
       )}
-      <div className="flex flex-row md:flex-col md:items-center md:justify-center">
+      <div className="flex flex-col sm:flex-row items-center justify-center">
         <TradingViewStockProfile
           tickerSymbol={tickerSymbol}
           exchange={ticker.exchange}
@@ -181,7 +181,7 @@ export default function TickerPage({ tickerSymbols }) {
           exchange={ticker.exchange}
           // height={height}
           // width={width * 0.5}
-          className="p-4 m-4 mb-12"
+          className="p-4 m-4 mb-12 sm:mb-4"
         />
       </div>
     </>
