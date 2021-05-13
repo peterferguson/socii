@@ -69,9 +69,9 @@ export default function TickerPage({ tickerSymbols }) {
     };
   });
 
-  const latestClose: number = timeseries[0].y;
-  const highlightedClose: number = timeseries[crosshairIndexValue].y;
-  let previousMonthClose: number = highlightedClose;
+  const latestClose = timeseries[0].y;
+  const highlightedClose = timeseries[crosshairIndexValue].y;
+  let previousMonthClose = highlightedClose;
 
   try {
     previousMonthClose = timeseries[crosshairIndexValue + 21].y;

@@ -6,11 +6,8 @@ import { GroupPieCard } from "@components/GroupCharts";
 
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
 import { useState, useEffect } from "react";
-
 import { useRouter } from "next/router";
-import { useContext } from "react";
 
-import LineChart from "@components/temp/LineChart.js";
 
 export default function Dashboard() {
   // TODO: Sidebar with name, breakdown dashboard, activity feed & chat
@@ -114,7 +111,6 @@ export default function Dashboard() {
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           {/* Charts */}
           <div className="flex flex-wrap">
-            <LineChart />
             <PieChart groupName={groupName} />
           </div>
           {/* Tables */}
@@ -517,7 +513,8 @@ function PieChart({ groupName }) {
     </>
   );
 }
-{/* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
+{
+  /* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
 <Link href={`/groups/${groupName}`}>
   <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10 cursor-pointer">
     {groupName}
@@ -533,4 +530,5 @@ function PieChart({ groupName }) {
     sub: `${gain.toFixed(2)}%`,
   }}
 />
-</div> */}
+</div> */
+}
