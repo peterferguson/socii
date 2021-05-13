@@ -12,11 +12,7 @@
     }
 
     .btn:focus {
-        @apply ring-brand-light ring-opacity-50;
-    }
-    
-    .btn:active {
-        @apply bg-brand-dark;
+        @apply ring-teal-300 border-teal-300;
     }
 
     .btn-transition {

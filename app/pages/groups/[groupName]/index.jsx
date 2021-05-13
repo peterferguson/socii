@@ -97,8 +97,8 @@ export default function Group() {
   return (
     <div className="flex">
       <div className="w-1/3">{groupName}</div>
-      <div className="w-1/3">{groupName}</div>
-      <div className="w-1/3">
+      {/* <div className="w-1/3">{groupName}</div> */}
+      <div className="w-2/3">
         <AuthCheck>
           {isBrowser && username && userStreamToken && (
             <Chat client={chatClient} theme={`messaging ${theme}`}>

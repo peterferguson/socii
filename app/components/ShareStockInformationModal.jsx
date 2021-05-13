@@ -1,59 +1,75 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { alphaVantageQueryOptions } from "@lib/constants";
-import { UserContext } from "@lib/context";
 import PriceInput from "@components/PriceInput";
 import MultiSelect from "@components/MultiSelect";
 import { streamClient } from "@lib/stream";
+import { alphaVantageQuery } from "@lib/firebase";
 
-import { Fragment, useState, useContext } from "react";
-import { logoUrl } from "@utils/helper";
+import { Fragment, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function ShareStockInformationModal({
   selectedGroup,
   tickerSymbol,
+  tickerLogoUrl,
   openStockSharingModal,
   setOpenStockSharingModal,
   goClickHandler = () => {},
   pricePlaceholder = "0.00",
 }) {
+
+  const router = useRouter();
   const closeModal = () => setOpenStockSharingModal(false);
-  const { user, username, userStreamToken } = useContext(UserContext);
   const [message, setMessage] = useState("");
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder));
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const attachments = [
-    {
-      image: logoUrl(tickerSymbol),
-      name: tickerSymbol,
-      type: "stock",
-      url: `http://localhost:3000/stock/${tickerSymbol}`,
-    },
-  ];
-
-  const letsGoClickHander = async () => {
+  const sendMessageClickHandler = async () => {
     closeModal();
     goClickHandler();
 
-    if (username && userStreamToken) {
-      await streamClient.connectUser(
-        { id: username, name: user?.displayName },
-        userStreamToken
+    const requiredQueryFields = ["name", "industry", "exchange"]
+    
+    if (streamClient.user) {
+      
+      const channel = streamClient.getChannelById(
+        "messaging",
+        selectedGroup?.split(" ").join("-")
       );
+
+      const asset = await alphaVantageQuery(
+        {
+          tickerSymbol,
+          queryFields: [...new Set([...requiredQueryFields, ...selectedItems])],
+        },
+        {}
+      );
+
+      console.log(asset);
+      const attachments = [
+        {
+          image: tickerLogoUrl,
+          name: tickerSymbol,
+          type: "stock",
+          url: `http://localhost:3000/stock/${tickerSymbol}`,
+          targetPrice,
+          asset: asset.data,
+        },
+      ];
+      const mainMessage = await channel.sendMessage({
+        text: message || `Hey I think we should check out ${tickerSymbol}!`,
+        // attachments,
+        skip_push: true,
+      });
+      const threadMessage = await channel.sendMessage({
+        text: "",
+        attachments,
+        parent_id: mainMessage.message.id,
+        show_in_channel: false,
+        skip_push: true,
+      });
     }
-    const channel = streamClient.getChannelById(
-      "messaging",
-      selectedGroup?.split(" ").join("-")
-    );
-    const message = await channel.sendMessage({
-      text: `
-        message: ${message} 
-        targetPrice: ${targetPrice} 
-        selectedItems: ${JSON.stringify(selectedItems)} 
-      `,
-      attachments,
-      skip_push: true,
-    });
+    router.push(`/groups/${selectedGroup}`);
   };
 
   return (
@@ -150,7 +166,7 @@ export default function ShareStockInformationModal({
                     text-teal-900 bg-teal-100 border border-transparent rounded-md \
                     hover:bg-teal-200 focus:outline-none focus-visible:ring-2 \
                     focus-visible:ring-offset-2 focus-visible:ring-teal-500"
-                  onClick={letsGoClickHander}
+                  onClick={sendMessageClickHandler}
                 >
                   To the moon 🌕
                 </button>

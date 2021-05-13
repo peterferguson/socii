@@ -17,6 +17,8 @@ export const firebaseConfig = {
   measurementId: "G-F7JH023N5Q",
 };
 
+const londonRegion = "europe-west2";
+
 if (!firebase.apps.some(app => app.name_ == "[DEFAULT]")) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -24,7 +26,7 @@ if (!firebase.apps.some(app => app.name_ == "[DEFAULT]")) {
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const firestore = firebase.firestore();
-export const functions = firebase.functions();
+export const functions = firebase.app().functions(londonRegion);
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
@@ -34,6 +36,7 @@ export const increment = firebase.firestore.FieldValue.increment;
 export const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 export const fromMillis = firebase.firestore.Timestamp.fromMillis;
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+export const alphaVantageQuery = functions.httpsCallable('alphaVantageQuery');
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

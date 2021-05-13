@@ -1,4 +1,5 @@
 import { auth, firestore, functions } from "@lib/firebase";
+import { streamClient } from "@lib/stream";
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useMediaQuery } from "react-responsive";
@@ -43,6 +44,19 @@ export function useUserData() {
     }
     return unsubscribe;
   }, [user]);
+
+  useEffect(() => {
+    const connectStreamUser = async () => {
+      if (username && userStreamToken) {
+        await streamClient.connectUser(
+          { id: username, name: user?.displayName },
+          userStreamToken
+        );
+      }
+    };
+
+    connectStreamUser();
+  }, [username, userStreamToken]);
 
   return { user, username, userStreamToken, userGroups };
 }

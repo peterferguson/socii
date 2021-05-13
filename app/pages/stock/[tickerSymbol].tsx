@@ -15,19 +15,31 @@ import {
 } from "@utils/helper";
 import { UserContext, SelectedGroupContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
+
 import { useRouter } from "next/router";
 import { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
-
+import { useEffect } from "react";
 
 export default function TickerPage({ tickerSymbols }) {
   if (!tickerSymbols) {
+    // TODO: Replace with skeleton loaders
     return <Custom404 />;
   }
 
   let { ticker, timeseries } = tickerSymbols[0];
+  const [tickerLogoUrl, setTickerLogoUrl] = useState("");
 
   const tickerSymbol = ticker.tickerSymbol;
+
+  useEffect(() => {
+    const setLogoUrl = async () => {
+      setTickerLogoUrl(ticker.logoUrl || (await logoUrl(ticker.ISIN)));
+    };
+
+    setLogoUrl();
+  }, [ticker]);
+
   const router = useRouter();
 
   const { user, userGroups } = useContext(UserContext);
@@ -76,7 +88,7 @@ export default function TickerPage({ tickerSymbols }) {
     <>
       <div className="flex flex-row w-full bg-gray-50">
         <SmallAssetCard
-          logoUrl={logoUrl(ticker.ISIN)}
+          logoUrl={tickerLogoUrl}
           tickerSymbol={tickerSymbol}
           shortName={ticker.shortName}
           currentPrice={latestClose}
@@ -124,21 +136,26 @@ export default function TickerPage({ tickerSymbols }) {
           <SelectedGroupContext.Provider
             value={{ selectedGroup, changeSelectedGroup }}
           >
-            <SelectGroupModal
-              userGroups={userGroups}
-              openGroupModal={openGroupModal}
-              setOpenGroupModal={setOpenGroupModal}
-              goClickHandler={() => setOpenStockSharingModal(true)}
-            />
+            {openGroupModal && (
+              <SelectGroupModal
+                userGroups={userGroups}
+                openGroupModal={openGroupModal}
+                setOpenGroupModal={setOpenGroupModal}
+                goClickHandler={() => setOpenStockSharingModal(true)}
+              />
+            )}
           </SelectedGroupContext.Provider>
-          <ShareStockInformationModal
-            selectedGroup={selectedGroup}
-            tickerSymbol={tickerSymbol}
-            openStockSharingModal={openStockSharingModal}
-            setOpenStockSharingModal={setOpenStockSharingModal}
-            goClickHandler={() => {}}
-            pricePlaceholder={latestClose.toString()}
-          />
+          {openStockSharingModal && (
+            <ShareStockInformationModal
+              selectedGroup={selectedGroup}
+              tickerSymbol={tickerSymbol}
+              tickerLogoUrl={tickerLogoUrl}
+              openStockSharingModal={openStockSharingModal}
+              setOpenStockSharingModal={setOpenStockSharingModal}
+              goClickHandler={() => {}}
+              pricePlaceholder={latestClose.toString()}
+            />
+          )}
         </>
       )}
     </>

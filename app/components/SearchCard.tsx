@@ -68,7 +68,8 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
         onChange={onChangeDebounced}
         placeholder="Search: TSLA"
         type="search"
-        className="rounded-full w-full text-center p-2 focus:outline-none"
+        className="rounded-full w-full text-center p-2 focus:outline-none \
+                 focus:border-brand-light focus:ring-brand-light"
       />
       <SearchIcon className="-my-8 mx-4 text-gray-400" />
     </div>
