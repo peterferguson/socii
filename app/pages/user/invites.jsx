@@ -49,7 +49,10 @@ function PhoneInvite() {
           </div>
           <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
           <input
-            className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none"
+            className="bg-white w-2/3 sm:w-full flex-grow appearance-none 
+            border-transparent h-[28px]  focus:border-none focus:outline-none
+            focus:ring-0
+            "
             type="tel"
             maxLength={10}
             placeholder="7912345678"
