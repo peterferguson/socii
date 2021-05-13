@@ -1,7 +1,7 @@
 import { tickerToISIN } from "@lib/firebase";
 import IEXQuery, { ChartRangeOption } from "@lib/iex";
 
-export const isBrowser = typeof window !== "undefined";
+export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 export const pctChange = (first: number, second: number): number => {
   return ((first - second) * 100) / second;
