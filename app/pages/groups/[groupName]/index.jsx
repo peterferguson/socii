@@ -33,101 +33,42 @@
 
 import LoadingIndicator from "@components/LoadingIndicator";
 import AuthCheck from "@components/AuthCheck";
-import {
-  CustomAttachment,
-  CustomMessage,
-  MessagingChannelHeader,
-  MessagingInput,
-  MessagingThread,
-} from "@components/stream/components";
-import { getInitials, getRandomImage, isBrowser } from "@utils/helper";
-import { UserContext } from "@lib/context";
-import { streamClient } from "@lib/stream";
-
-import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import {
-  Channel,
-  Chat,
-  MessageInput,
-  MessageList,
-  Window,
-} from "stream-chat-react";
 import Custom404 from "../../404";
+import { UserContext } from "@lib/context";
+
+import { useContext } from "react";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+
+const StreamChatWindowWithNoSSR = dynamic(
+  () =>
+    import("@components/stream/components/Chat").then(
+      (mod) => mod.StreamChatWindow
+    ),
+  { ssr: false }
+);
 
 export default function Group() {
   const router = useRouter();
 
   const { groupName } = router.query;
-  const { userGroups } = useContext(UserContext);
+  const { userGroups, streamClient } = useContext(UserContext);
 
-  if (!userGroups.includes(groupName)) {
+  if (groupName && !userGroups.includes(groupName)) {
     return <Custom404 />;
   }
 
-  const { user, username, userStreamToken } = useContext(UserContext);
-  const [channel, setChannel] = useState(null);
-  const [chatClient, setChatClient] = useState(null);
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    const initChat = async () => {
-      const client = streamClient;
-      if (username && userStreamToken) {
-        await client.connectUser(
-          { id: username, name: user?.displayName },
-          userStreamToken
-        );
-        setChannel(
-          client.channel("messaging", groupName.split(" ").join("-"), {
-            image: getRandomImage(getInitials(groupName)),
-            name: `${groupName} Group Chat`,
-          })
-        );
-      }
-      setChatClient(client);
-    };
-    initChat();
-  }, [username, userStreamToken]);
-
-  if (!chatClient) {
+  if (!streamClient.user) {
+    // TODO: Use skeleton loaders for chat
     return <LoadingIndicator />;
   }
 
   return (
     <div className="flex">
       <div className="w-1/3">{groupName}</div>
-      {/* <div className="w-1/3">{groupName}</div> */}
       <div className="w-2/3">
         <AuthCheck>
-          {isBrowser && username && userStreamToken && (
-            <Chat client={chatClient} theme={`messaging ${theme}`}>
-              <Channel
-                channel={channel}
-                maxNumberOfFiles={10}
-                multipleUploads={true}
-                Attachment={CustomAttachment}
-              >
-                <Window>
-                  <MessagingChannelHeader theme={theme} />
-                  <MessageList
-                    messageActions={[
-                      "edit",
-                      "delete",
-                      "flag",
-                      "mute",
-                      "react",
-                      "reply",
-                    ]}
-                    Message={CustomMessage}
-                    TypingIndicator={() => null}
-                  />
-                  <MessageInput focus Input={MessagingInput} />
-                </Window>
-                <MessagingThread />
-              </Channel>
-            </Chat>
-          )}
+          <StreamChatWindowWithNoSSR groupName={groupName} />
         </AuthCheck>
       </div>
     </div>

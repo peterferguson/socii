@@ -110,7 +110,6 @@ function Dropdown() {
       name: "Stocks",
       description: "Search the our stock universe",
       href: "/stock",
-      // icon: DollarIcon,
       icon: ({ className }) => (
         <i className={`fas fa-globe-europe fa-lg -mb-1 ${className}`}></i>
       ),
@@ -120,6 +119,14 @@ function Dropdown() {
       description: "Keep track of your growth",
       href: `/user/${username}`,
       icon: PieIcon,
+    },
+    {
+      name: "Chat",
+      description: "Chat with friends about investments!",
+      href: "/chat",
+      icon: ({ className }) => (
+        <i className={`fas fa-envelope fa-lg -mb-1 ${className}`}></i>
+      ),
     },
     {
       name: "Groups",

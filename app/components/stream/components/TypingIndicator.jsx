@@ -1,9 +1,8 @@
 import styles from "@styles/TypingIndicator.module.css";
-import { useContext } from 'react';
-import { ChannelContext } from 'stream-chat-react';
+import { useContext } from "react";
+import { ChannelContext } from "stream-chat-react";
 
-
-export const TypingIndicator = () => {
+const TypingIndicator = () => {
   const { client, typing } = useContext(ChannelContext);
 
   if (!client || !typing) return null;
@@ -12,7 +11,7 @@ export const TypingIndicator = () => {
     .filter(({ user }) => user?.id !== client.user?.id)
     .map(({ user }) => user.name || user.id);
 
-  let text = '';
+  let text = "";
 
   if (users.length === 1) {
     text = `${users[0]} is typing`;
@@ -23,15 +22,17 @@ export const TypingIndicator = () => {
   }
 
   return (
-    <div className={styles['messaging__typing-indicator']}>
+    <div className={styles["messaging__typing-indicator"]}>
       {text && (
-        <div className={styles['dots']}>
-          <span className={styles['dot']} />
-          <span className={styles['dot']} />
-          <span className={styles['dot']} />
+        <div className={styles["dots"]}>
+          <span className={styles["dot"]} />
+          <span className={styles["dot"]} />
+          <span className={styles["dot"]} />
         </div>
       )}
       <div>{text}</div>
     </div>
   );
 };
+
+export default TypingIndicator;

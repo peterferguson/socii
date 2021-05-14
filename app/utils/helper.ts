@@ -1,7 +1,8 @@
 import { tickerToISIN } from "@lib/firebase";
 import IEXQuery, { ChartRangeOption } from "@lib/iex";
 
-export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+export const isBrowser =
+  typeof window !== "undefined" && typeof window.document !== "undefined";
 
 export const pctChange = (first: number, second: number): number => {
   return ((first - second) * 100) / second;
@@ -72,7 +73,8 @@ export const iexChartTimeseries = async (
 };
 
 export function validateEmail(email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
@@ -177,7 +179,7 @@ export const getRandomImage = (letters = "") => {
 
 export const getInitials = (slug) => {
   return slug
-    .split(" ")
+    ?.split(" ")
     .map((word) => word[0])
     .join("");
 };

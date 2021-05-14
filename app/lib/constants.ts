@@ -146,3 +146,32 @@ export const alphaVantageQueryOptions = [
   "lastSplitFactor",
   "lastSplitDate",
 ];
+
+export const toastProps = {
+  position: "top-center",
+  reverseOrder: false,
+  toastOptions: {
+    style: {
+      margin: "40px",
+      background: "#363636",
+      color: "#fff",
+      zIndex: 1,
+    },
+    duration: 500,
+    // Default options for specific types
+    success: {
+      duration: 5000,
+      theme: {
+        primary: "green",
+        secondary: "black",
+      },
+    },
+    error: {
+      duration: 5000,
+      theme: {
+        primary: "green",
+        secondary: "black",
+      },
+    },
+  },
+};

@@ -1,11 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { alphaVantageQueryOptions } from "@lib/constants";
+import { UserContext } from "@lib/context";
 import PriceInput from "@components/PriceInput";
 import MultiSelect from "@components/MultiSelect";
-import { streamClient } from "@lib/stream";
 import { alphaVantageQuery } from "@lib/firebase";
 
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 export default function ShareStockInformationModal({
@@ -17,21 +17,21 @@ export default function ShareStockInformationModal({
   goClickHandler = () => {},
   pricePlaceholder = "0.00",
 }) {
-
   const router = useRouter();
-  const closeModal = () => setOpenStockSharingModal(false);
+  const { streamClient } = useContext(UserContext);
   const [message, setMessage] = useState("");
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder));
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const closeModal = () => setOpenStockSharingModal(false);
 
   const sendMessageClickHandler = async () => {
     closeModal();
     goClickHandler();
 
-    const requiredQueryFields = ["name", "industry", "exchange"]
-    
-    if (streamClient.user) {
-      
+    const requiredQueryFields = ["name", "industry", "exchange"];
+
+    if (streamClient && streamClient.user) {
       const channel = streamClient.getChannelById(
         "messaging",
         selectedGroup?.split(" ").join("-")
@@ -45,7 +45,6 @@ export default function ShareStockInformationModal({
         {}
       );
 
-      console.log(asset);
       const attachments = [
         {
           image: tickerLogoUrl,

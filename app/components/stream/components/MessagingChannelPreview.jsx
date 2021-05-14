@@ -106,7 +106,7 @@ const getChannelName = (members) => {
 };
 
 const MessagingChannelPreview = (props) => {
-  const { channel, latestMessage, setActiveChannel, setIsCreating } = props;
+  const { channel, latestMessage, setActiveChannel, closeIsCreating } = props;
 
   const { channel: activeChannel, client } = useContext(ChatContext);
 
@@ -122,7 +122,7 @@ const MessagingChannelPreview = (props) => {
           : styles["channel-preview__container"]
       }
       onClick={() => {
-        setIsCreating(false);
+        closeIsCreating();
         setActiveChannel(channel);
       }}
     >

@@ -21,8 +21,8 @@ import { fetchURL } from "utils/helper";
 const iexClient = new IEXQuery();
 
 const algoliaClient = algoliasearch(
-  process.env.ALGOLIA_ID,
-  process.env.ALGOLIA_SEARCH_KEY
+  process.env.NEXT_PUBLIC_ALGOLIA_ID,
+  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
 );
 
 const searchClient = {

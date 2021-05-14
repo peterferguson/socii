@@ -1,6 +1,7 @@
-import { memo, useContext, useEffect } from "react";
-import { Avatar, ChatContext } from "stream-chat-react";
-
+import { memo } from "react";
+import { Avatar } from "stream-chat-react";
+import { useContext } from "react";
+import { UserContext } from "@lib/context";
 import styles from "@styles/MessagingChannelList.module.css";
 import { SkeletonLoader } from "./SkeletonLoader";
 
@@ -12,24 +13,9 @@ const MessagingChannelList = ({
   loading,
   onCreateChannel,
 }) => {
-  const { client, setActiveChannel } = useContext(ChatContext);
-  const { id, name, image = "@public/favicons/apple-touch-icon.png" } =
-    client.user || {};
+  const { streamClient } = useContext(UserContext);
 
-  useEffect(() => {
-    const getDemoChannel = async (client) => {
-      const channel = client.channel("messaging", "first", {
-        name: "Social Demo",
-      });
-      await channel.watch();
-      await channel.addMembers([client.user.id]);
-      setActiveChannel(channel);
-    };
-
-    if (!loading && !children?.props?.children?.length) {
-      getDemoChannel(client);
-    }
-  }, [loading]); // eslint-disable-line
+  const { id, name, image } = streamClient.user || {};
 
   const ListHeaderWrapper = ({ children }) => (
     <div className={styles["messaging__channel-list"]}>
@@ -42,7 +28,7 @@ const MessagingChannelList = ({
           className={styles["messaging__channel-list__header__button"]}
           onClick={onCreateChannel}
         >
-          <CreateChannelIcon className="h-4 w-4"/>
+          <CreateChannelIcon className="h-4 w-4" />
         </button>
       </div>
       {children}
@@ -59,7 +45,7 @@ const MessagingChannelList = ({
     );
   }
 
-  if (loading) {
+  if (loading || !streamClient.user) {
     return (
       <ListHeaderWrapper>
         <div className={styles["messaging__channel-list__message"]}>

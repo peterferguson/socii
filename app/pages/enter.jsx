@@ -193,7 +193,7 @@ function EmailSignUp({ verified, setVerified }) {
         />
         <input
           className="bg-gray-100 flex flex-grow w-2/3 sm:w-full appearance-none \
-                      focus:outline-none "
+                      focus:outline-none border-none -mt-1 focus:ring-0"
           type="email"
           placeholder="warren@buffet.com"
           onChange={(e) => {

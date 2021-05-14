@@ -1,16 +1,36 @@
 import { auth, firestore, functions } from "@lib/firebase";
-import { streamClient } from "@lib/stream";
+
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useMediaQuery } from "react-responsive";
+import { StreamChat } from "stream-chat";
+
+const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY;
 
 export function useUserData() {
   const [user] = useAuthState(auth);
+
   const [username, setUsername] = useState("");
-  const [userStreamToken, setUserStreamToken] = useState("");
   const [userGroups, setUserGroups] = useState([]);
+  const [userStreamToken, setUserStreamToken] = useState("");
+
+  const streamClient = StreamChat.getInstance(apiKey);
 
   let streamData;
+
+  const getUsername = () => {
+    // allows us to turn off the realtime data feed when finished
+    let unsubscribe;
+
+    const userRef = firestore.collection("users").doc(user.uid);
+    unsubscribe = userRef.onSnapshot((doc) => {
+      const userData = doc.data();
+      setUsername(userData?.username);
+      setUserGroups(userGroups?.concat(userData?.groups));
+    });
+
+    return unsubscribe;
+  };
 
   const getStreamToken = async () => {
     const tokenRef = firestore
@@ -27,38 +47,30 @@ export function useUserData() {
   };
 
   useEffect(() => {
-    // allows us to turn off the realtime data feed when finished
-    let unsubscribe;
-
     if (user) {
-      const userRef = firestore.collection("users").doc(user.uid);
-      unsubscribe = userRef.onSnapshot((doc) => {
-        const userData = doc.data();
-        setUsername(userData?.username);
-        setUserGroups(userGroups?.concat(userData?.groups));
-      });
+      getUsername();
       getStreamToken();
     } else {
       setUsername("");
       setUserGroups([]);
+      setUserStreamToken("");
     }
-    return unsubscribe;
   }, [user]);
 
   useEffect(() => {
     const connectStreamUser = async () => {
-      if (username && userStreamToken) {
-        await streamClient.connectUser(
-          { id: username, name: user?.displayName },
-          userStreamToken
-        );
-      }
+      await streamClient.connectUser(
+        { id: username, name: user?.displayName },
+        userStreamToken
+      );
     };
 
-    connectStreamUser();
-  }, [username, userStreamToken]);
+    if (user && username && userStreamToken) {
+      connectStreamUser();
+    }
+  }, [user, username, userStreamToken]);
 
-  return { user, username, userStreamToken, userGroups };
+  return { user, username, userGroups, streamClient };
 }
 
 export const useWindowSize = () => {

@@ -1,5 +1,5 @@
-const token = process.env.IEXCLOUD_SECRET_KEY;
-const apiversion = process.env.IEXCLOUD_API_VERSION;
+const token = process.env.NEXT_PUBLIC_IEXCLOUD_SECRET_KEY;
+const apiversion = process.env.NEXT_PUBLIC_IEXCLOUD_API_VERSION;
 
 export default class IEXQuery {
   private endpointPath: string;

@@ -3,10 +3,8 @@ import LineChart from "@components/LineChart";
 import ShareStockInformationModal from "@components/ShareStockInformationModal";
 import SelectGroupModal from "@components/SelectGroupModal";
 import TradingViewChart, {
-  TradingViewStockTechnicalAnalysisWidget,
   TradingViewStockProfile,
   TradingViewStockFinancials,
-  TradingViewStockPrice,
 } from "@components/TradingViewChart";
 import { SmallAssetCard } from "@components/AssetCards";
 import {
@@ -288,7 +286,7 @@ export async function getStaticProps({ params }) {
 
   return {
     ...props,
-    // revalidate: 3000,
+    revalidate: 3000,
   };
 }
 

@@ -39,10 +39,6 @@ export default function Head(props) {
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css"
       />
-      <link
-        rel="stylesheet"
-        href="node_modules/@glidejs/glide/dist/css/glide.core.min.css"
-      />
     </NextHead>
   );
 }
