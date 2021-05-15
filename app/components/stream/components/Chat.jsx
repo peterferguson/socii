@@ -21,12 +21,12 @@ import {
 
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "@lib/context";
+import { useHasMounted } from "@lib/hooks";
 import { getInitials, getRandomImage, isBrowser } from "@utils/helper";
 
-export default function StreamChat() {
+export default function StreamChat({ theme = "light" }) {
   const { username, streamClient } = useContext(UserContext);
   const [isCreating, setIsCreating] = useState(false);
-  const [theme, setTheme] = useState("light");
 
   return (
     <>
@@ -39,7 +39,6 @@ export default function StreamChat() {
           <StreamChatWindow
             isCreating={isCreating}
             setIsCreating={setIsCreating}
-            theme={theme}
           />
         </Chat>
       )}
@@ -56,32 +55,17 @@ export function StreamChatWindow({
 }) {
   const onClose = () => setIsCreating(false);
   const { username, streamClient } = useContext(UserContext);
- 
-  // TODO: Fix the group chat on group page 
 
-  // const [channel, setChannel] = useState(null);
+  // TODO: Fix the group chat on group page
 
-  // const groupChatName = groupName?.split(" ").join("-");
+  const [channel, setChannel] = useState(undefined);
+  const mounted = useHasMounted();
 
-  // useEffect(() => {
-  //   const initChat = async () => {
-  //     setChannel(
-  //       await streamClient.channel("messaging", groupChatName, {
-  //         image: getRandomImage(getInitials(groupName)),
-  //         name: `${groupName} Group Chat`,
-  //       })
-  //     );
-  //   };
-  //   initChat();
-  // }, [username, streamClient.user]);
+  const groupChatName = groupName?.split(" ").join("-");
 
-  return (
-    <div>
-      <Channel
-        maxNumberOfFiles={10}
-        multipleUploads={true}
-        Attachment={CustomAttachment}
-      >
+  function ChannelChildren() {
+    return (
+      <>
         {isCreating && (
           <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
         )}
@@ -102,6 +86,48 @@ export function StreamChatWindow({
           <MessageInput focus Input={MessagingInput} />
         </Window>
         <MessagingThread />
+      </>
+    );
+  }
+
+  useEffect(() => {
+    const initChat = async () => {
+      if (mounted && groupChatName) {
+        setChannel(
+          await streamClient.channel("messaging", groupChatName, {
+            image: getRandomImage(getInitials(groupName)),
+            name: `${groupName} Group Chat`,
+          })
+        );
+      }
+    };
+    initChat();
+  }, [mounted, username, streamClient.user]);
+
+  if (channel) {
+    return (
+      <Chat client={streamClient} theme={`messaging ${theme}`}>
+        <div>
+          <Channel
+            channel={channel}
+            maxNumberOfFiles={10}
+            multipleUploads={true}
+            Attachment={CustomAttachment}
+          >
+            <ChannelChildren />
+          </Channel>
+        </div>
+      </Chat>
+    );
+  }
+  return (
+    <div>
+      <Channel
+        maxNumberOfFiles={10}
+        multipleUploads={true}
+        Attachment={CustomAttachment}
+      >
+        <ChannelChildren />
       </Channel>
     </div>
   );

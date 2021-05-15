@@ -1,5 +1,6 @@
 import { UserContext } from "@lib/context";
 
+import ClientOnly from "@components/ClientOnly";
 import LoadingIndicator from "@components/LoadingIndicator";
 import AuthCheck from "@components/AuthCheck";
 
@@ -20,7 +21,9 @@ export default function Chat() {
 
   return (
     <AuthCheck>
-      <StreamChatWithNoSSR />
+      <ClientOnly>
+        <StreamChatWithNoSSR />
+      </ClientOnly>
     </AuthCheck>
   );
 }
