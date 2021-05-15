@@ -109,8 +109,8 @@ function WhySocii() {
             <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-brand-light font-poppins pr-1">
               ii
             </span>
-            you dont have to worry about of these. <br />
-            We handle everything in individual accounts.
+            you dont have to worry about these. We handle
+            <span className="font-bold"> everything</span> for you!
           </p>
         </div>
       </div>
