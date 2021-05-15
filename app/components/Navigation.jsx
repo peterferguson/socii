@@ -1,4 +1,5 @@
 import { UserContext } from "@lib/context";
+import Logo from "@components/Logo";
 import { userFirstName, signOut } from "@lib/firebase";
 import SearchIcon from "@icons/search.svg";
 import CogIcon from "@icons/cog.svg";
@@ -20,11 +21,10 @@ export default function Navigation(props) {
   const router = useRouter();
 
   return (
-    <div
-      className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 \
-                    flex-none flex backdrop-filter backdrop-blur-lg bg-opacity-50"
-    >
-      <Logo />
+    <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
+      <div className="p-4">
+        <Logo className="text-4xl" />
+      </div>
       <SearchBar {...props} />
       {username ? (
         <Dropdown />
@@ -36,24 +36,6 @@ export default function Navigation(props) {
           Login
         </button>
       )}
-    </div>
-  );
-}
-
-function Logo() {
-  return (
-    <div className="p-4">
-      <Link href="/">
-        <a className="text-4xl font-poppins">soc</a>
-      </Link>
-      <Link href="/">
-        <a
-          className="text-4xl bg-clip-text text-transparent \
-                     bg-gradient-to-r from-green-400 to-brand-light font-poppins"
-        >
-          ii
-        </a>
-      </Link>
     </div>
   );
 }
