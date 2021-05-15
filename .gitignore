@@ -109,3 +109,7 @@ yarn-error.log*
 
 # env in next.config
 next.config.js
+
+# Package json
+package.json
+package-lock.json
