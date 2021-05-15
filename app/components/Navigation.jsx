@@ -206,26 +206,25 @@ function DropdownItem({ item }) {
     return closePopover(open);
   };
   return (
-    <Link href={item.href}>
-      <a
-        key={item.name}
-        onClick={() => onClickHandler()}
-        className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
-      >
-        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-          <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
-        </div>
-        <div className="ml-4 flex-grow">
-          <p className="text-sm font-medium text-gray-900">{item.name}</p>
-          <p className="text-sm text-gray-500">{item.description}</p>
-        </div>
-        {item.rightIcon && (
-          <item.rightIcon
-            className="flex-none h-6 w-6 text-brand-light"
-            aria-hidden="true"
-          />
-        )}
-      </a>
-    </Link>
+    <a
+      key={item.name}
+      href={item.href}
+      onClick={() => onClickHandler()}
+      className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
+    >
+      <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
+        <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
+      </div>
+      <div className="ml-4 flex-grow">
+        <p className="text-sm font-medium text-gray-900">{item.name}</p>
+        <p className="text-sm text-gray-500">{item.description}</p>
+      </div>
+      {item.rightIcon && (
+        <item.rightIcon
+          className="flex-none h-6 w-6 text-brand-light"
+          aria-hidden="true"
+        />
+      )}
+    </a>
   );
 }
