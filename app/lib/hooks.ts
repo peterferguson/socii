@@ -17,7 +17,9 @@ export function useUserData() {
   const streamClient = StreamChat.getInstance(apiKey);
 
   let streamData;
-
+  
+  // TODO: This happens every so often which is causing extra reads for the groups & 
+  // TODO: replication is stopped by the set but it is still unnessecary reads! 
   const getUsername = () => {
     // allows us to turn off the realtime data feed when finished
     let unsubscribe;
@@ -26,7 +28,7 @@ export function useUserData() {
     unsubscribe = userRef.onSnapshot((doc) => {
       const userData = doc.data();
       setUsername(userData?.username);
-      setUserGroups(userGroups?.concat(userData?.groups));
+      setUserGroups([...new Set([...userGroups, ...userData?.groups])]);
     });
 
     return unsubscribe;
