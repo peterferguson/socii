@@ -101,7 +101,7 @@ const MessagingInput = (props) => {
           giphyState
         }
       >
-        <div className={styles['messaging-input__input-wrapper']}>
+        <div className={'messaging-input__input-wrapper'}>
           {giphyState && !messageInput.numberOfUploads && <GiphyIcon />}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
