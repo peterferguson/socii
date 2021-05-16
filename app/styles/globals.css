@@ -49,6 +49,10 @@
   .messaging-input__input-wrapper:focus-within {
     @apply border-[#005fff];
   }
+
+  .str-chat__messaging-input {
+    @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center
+  }
 }
 
 
@@ -103,4 +107,32 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+/* Stream chat global css */
+.str-chat__textarea {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border: none !important;
+  outline: none !important;
+}
+
+.str-chat__textarea textarea {
+  background: #ffffff;
+  font-size: 14px;
+  line-height: 16px;
+  min-height: 0px;
+  border: none !important;
+  outline: none !important;
+  transition: box-shadow 0.2s ease-in-out;
+  color: rgba(0, 0, 0, 0.9);
+  border-radius: 20px;
+}
+
+.str-chat__textarea textarea:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }

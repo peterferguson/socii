@@ -37,16 +37,16 @@
   border-radius: 20px;
 }
 
-.str-chat.dark .str-chat__messaging-input .str-chat__textarea textarea {
-  background: #323437;
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  color: rgba(255, 255, 255, 0.9);
-}
-
 .str-chat__textarea textarea:focus {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+
+.str-chat.dark .str-chat__messaging-input .str-chat__textarea textarea {
+  background: #323437;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .messaging-input__button {
