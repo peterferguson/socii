@@ -17,3 +17,12 @@
   - Either a vercel or gcp cloud function in either python or NodeJS
 - [ ] Repurpose giphy functionality for `/buy` & `/sell` commands or `/trade` (or `/invest` to stick to company ethos) leaning on orderType arg
   - giphy command comes with send, shuffle & cancel functionality. In this space we could present a asset card with the (real-time) purchase price, orderType selector & cancel option. As a starting point.
+
+
+### Notes
+##### Giphy Command Generalisation
+The giphy command works off of two key aspects in the MessagingInput custom stream component. Those are two custom handlers
+  1) overrideSubmitHanler
+    - handles the state for giphy icon input on submission of the `/giphy` command 
+  2) onChange
+    - handles the state for removing the giphy icon on deletion key

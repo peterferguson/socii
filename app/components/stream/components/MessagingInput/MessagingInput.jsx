@@ -17,15 +17,15 @@ import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg";
 import { UploadsPreview } from "./UploadsPreview";
 
 const GiphyIcon = () => (
-  <div className={styles["giphy-icon__wrapper"]}>
+  <div className={"giphy-icon__wrapper"}>
     <LightningBoltSmall className="h-4 w-4 text-white -mr-1.5" />
-    <p className={styles["giphy-icon__text"]}>GIPHY</p>
+    <p className={"giphy-icon__text"}>GIPHY</p>
   </div>
 );
 
 const EmojiButton = ({ emojiButton }) => (
   <div
-    className={styles["messaging-input__button"]}
+    className={"messaging-input__button"}
     role="button"
     aria-roledescription="button"
     onClick={emojiButton.onClick}

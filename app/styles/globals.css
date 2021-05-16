@@ -136,3 +136,54 @@
   outline: none !important;
   box-shadow: none !important;
 }
+
+.giphy-icon__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 24px;
+  width: 63px;
+  background: #005fff;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+.giphy-icon__text {
+  font-family: Helvetica Neue, sans-serif;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 8px;
+  color: #ffffff;
+}
+
+.messaging-input__button {
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.messaging-input__button svg path {
+  transition: fill 0.2s ease-in-out;
+  fill: black;
+}
+
+.messaging-input__button:hover {
+  opacity: 1;
+}
+
+.messaging-input__button:hover svg path {
+  fill: #005fff !important;
+}
+
+.str-chat__input--emojipicker {
+  z-index: 100;
+  left: 36px;
+}
+
+.str-chat__thread .str-chat__input--emojipicker {
+  position: fixed;
+  top: 25% !important;
+  right: 330px;
+  left: auto;
+}
