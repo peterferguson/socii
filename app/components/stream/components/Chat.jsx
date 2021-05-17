@@ -27,11 +27,22 @@ import { getInitials, getRandomImage, isBrowser } from "@utils/helper";
 export default function StreamChat({ theme = "light" }) {
   const { username, streamClient } = useContext(UserContext);
   const [isCreating, setIsCreating] = useState(false);
+  // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
 
   return (
     <>
       {isBrowser && username && streamClient && (
         <Chat client={streamClient} theme={`messaging ${theme}`}>
+          {/* {showNotificationToast && (
+            <div class="alert">
+              <p>
+                socii needs your permission to
+                <button onClick={grantPermission}>
+                  enable desktop notifications to execute trades!
+                </button>
+              </p>
+            </div>
+          )} */}
           <StreamChannelList
             isCreating={isCreating}
             setIsCreating={setIsCreating}
@@ -156,3 +167,25 @@ export function StreamChannelList({
     </div>
   );
 }
+
+// function grantPermission() {
+//   if (Notification.permission === 'granted') {
+//     new Notification('You are already subscribed to web notifications');
+//     return;
+//   }
+
+//   if (
+//     Notification.permission !== 'denied' ||
+//     Notification.permission === 'default'
+//   ) {
+//     Notification.requestPermission().then(result => {
+//       if (result === 'granted') {
+//         new Notification('New message from Stream', {
+//           body: 'Nice, notifications are now enabled!',
+//         });
+//       }
+//     });
+//   }
+
+//   setShowNotificationBanner(false);
+// }
