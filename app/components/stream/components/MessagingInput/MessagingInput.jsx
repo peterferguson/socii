@@ -148,13 +148,7 @@ const MessagingInput = (props) => {
 
   const [
     command,
-    {
-      reinstateCommand,
-      removeCommand,
-      firstWordIsCommand,
-      enterCommandMode,
-      exitCommandMode,
-    },
+    { reinstateCommand, firstWordIsCommand, enterCommandMode, exitCommandMode },
   ] = useCommand();
 
   const overrideSubmitHandler = (message) => {
