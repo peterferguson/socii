@@ -9,7 +9,8 @@ import {
 import { Avatar, ChatContext } from "stream-chat-react";
 import _debounce from "lodash.debounce";
 
-import { XButton, XButtonBackground } from "../assets";
+import XButton from  "@icons/stream/XButton.svg";
+import XButtonBackground from  "@icons/stream/XButtonBackground.svg";
 
 import styles from "@styles/CreateChannel.module.css";
 
@@ -186,7 +187,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                     <div className={styles["messaging-create-channel__user-text"]}>
                       {user.name}
                     </div>
-                    <XButton />
+                    <XButton className="h-2 w-2"/>
                   </div>
                 ))}
               </div>
@@ -206,7 +207,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
             </form>
           </div>
           <div className={styles["close-mobile-create"]} onClick={() => toggleMobile()}>
-            <XButtonBackground />
+            <XButtonBackground className="h-4 w-4 bg-brand-teal" />
           </div>
         </div>
         <button className={styles["create-channel-button"]} onClick={createChannel}>

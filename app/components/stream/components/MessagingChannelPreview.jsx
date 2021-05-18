@@ -1,7 +1,8 @@
 import styles from "@styles/MessagingChannelPreview.module.css";
 import { useContext } from "react";
 import { Avatar, ChatContext } from "stream-chat-react";
-import { getCleanImage } from "../assets";
+
+import { getCleanImage } from "@utils/helper";
 
 const getAvatarGroup = (members) => {
   if (members.length === 1) {

@@ -3,10 +3,12 @@ import { Avatar, ChannelContext } from "stream-chat-react";
 
 import styles from "@styles/MessagingChannelHeader.module.css";
 import Menu from "@icons/menu.svg";
+import ChannelInfoIcon from "@icons/stream/channelInfoIcon.svg";
+import ChannelSaveIcon from "@icons/stream/channelSaveIcon.svg";
+
+import { getCleanImage } from "@utils/helper";
 
 import TypingIndicator from "./TypingIndicator";
-
-import { ChannelInfoIcon, ChannelSaveIcon, getCleanImage } from "../assets";
 
 const getAvatarGroup = (members) => {
   if (members.length === 1) {
@@ -163,9 +165,16 @@ const MessagingChannelHeader = (props) => {
         <TypingIndicator />
         {channelName !== "Social Demo" &&
           (!isEditing ? (
-            <ChannelInfoIcon {...{ isEditing, setIsEditing }} />
+            <ChannelInfoIcon
+              className="cursor-pointer ml-4 bg-brand"
+              onClick={() => {
+                if (!isEditing) {
+                  setIsEditing(true);
+                }
+              }}
+            />
           ) : (
-            <ChannelSaveIcon />
+            <ChannelSaveIcon className="cursor-pointer ml-4 bg-brand-teal" />
           ))}
       </div>
     </div>

@@ -190,3 +190,8 @@ export const uncamelCase = (str) =>
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/([A-Z])([a-z])/g, " $1$2")
     .replace(/\ +/g, " ");
+
+export const getCleanImage = (member) => {
+  if (!member?.user.image) return getRandomImage();
+  return member.user.image;
+};
