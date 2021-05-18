@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from "react";
+import { memo, useCallback, useContext, useReducer } from "react";
 import { ImageDropzone } from "react-file-utils";
 import { logChatPromiseExecution } from "stream-chat";
 import {
@@ -30,46 +30,40 @@ import { UploadsPreview } from "./UploadsPreview";
 // ! BUG: definitely be a future feature. So we need to test for this & handle it.
 // ! BUG: As an example feature consider the /buy /ticker command combination
 
-// * Initial state has the following structure
-// * {commandMode: false, command: "", commandIcon: null, messageText: ""}
-// * submitHandler checks the state and either removes or reinstates the command
-// * i.e. submitHandler handles the text being sent
-// * onChange checks the state and updates it based on deletion or command presence
-// * i.e. onChange handles state updates
-
 // 1 Is currently handled by the overrideSubmitHandler. Since we check for commands on submission
 // ? This could be changed in the future for some autodetection (which may be necessary for good command chaining UX)
 // ? Downside of this would be turning commands such as `/ticker TSLA` into two stage UX rather than one!
 
 // 2 Is handled in the onChange function (Maybe move all handling in here)
 
-const CommandIcon = ({ type }) => (
+const CommandIcon = ({ text }) => (
   <div className={"giphy-icon__wrapper"}>
     <LightningBoltSmall className="h-4 w-4 text-white -mr-1.5" />
-    <p className={"giphy-icon__text"}>{type}</p>
+    <p className={"giphy-icon__text"}>{text}</p>
   </div>
 );
 
 const commandTypes = {
   GIPHY: {
     name: "giphy",
-    icon: <CommandIcon type="GIPHY" />,
+    icon: <CommandIcon text="GIPHY" />,
   },
   INVEST: {
     name: "invest",
-    icon: <CommandIcon type="INVEST" />,
+    icon: <CommandIcon text="INVEST" />,
   },
   BUY: {
     name: "buy",
-    icon: <CommandIcon type="BUY" />,
+    icon: <CommandIcon text="BUY" />,
   },
   SELL: {
     name: "sell",
-    icon: <CommandIcon type="SELL" />,
+    icon: <CommandIcon text="SELL" />,
   },
   // TICKER: AssetLogo, //TODO: Create a component to get a asset logo as a icon
-  // STOCK: AssetLogo, //TODO: Create a component to get a asset logo as a icon
-  // CRYPTO: AssetLogo, //TODO: Create a component to get a asset logo as a icon
+  // STOCK: AssetLogo,
+  // CRYPTO: AssetLogo,
+  // ETF: AssetLogo,
 };
 
 // * Icons for buttons in input section
@@ -79,28 +73,56 @@ const emojiButtons = {
   submit: { icon: SendIcon },
 };
 
-const MessagingInput = (props) => {
-  const { acceptedFiles, maxNumberOfFiles, multipleUploads, sendMessage } =
-    useContext(ChannelContext);
-
+const useCommand = () => {
   const defaultCommand = { mode: false, name: "", icon: null };
-  const [command, setCommand] = useState(defaultCommand);
+
+  const commandReducer = (command, action) => {
+    const { mode, name, icon } = command;
+    const { type, newCommand } = action;
+
+    switch (type) {
+      case "FOUND_COMMAND": {
+        return {
+          mode,
+          name: newCommand.name,
+          icon: newCommand.icon,
+        };
+      }
+      case "SET_COMMAND_MODE": {
+        return { mode: true, name, icon };
+      }
+      case "EXIT_COMMAND_MODE": {
+        return defaultCommand;
+      }
+      default:
+        throw new Error(`Unhandled action type ${type}`);
+    }
+  };
+
+  const [command, dispatch] = useReducer(commandReducer, defaultCommand);
+
+  const setNewCommand = (newCommand) => {
+    dispatch({ type: "FOUND_COMMAND", newCommand });
+  };
+  const enterCommandMode = () => dispatch({ type: "SET_COMMAND_MODE" });
+  const exitCommandMode = () => dispatch({ type: "EXIT_COMMAND_MODE" });
 
   // * Check if the text starts with a command from the commandTypes enum
-  const containsCommand = (text) => {
+  const firstWordIsCommand = (text) => {
     const firstWord = text.split(" ")[0];
+
     switch (firstWord.replace("/", "").toLowerCase()) {
       case commandTypes.GIPHY.name:
-        setCommand((command) => ({ ...command, ...commandTypes.GIPHY }));
+        setNewCommand(commandTypes.GIPHY);
         return true;
       case commandTypes.INVEST.name:
-        setCommand((command) => ({ ...command, ...commandTypes.INVEST }));
+        setNewCommand(commandTypes.INVEST);
         return true;
       case commandTypes.BUY.name:
-        setCommand((command) => ({ ...command, ...commandTypes.BUY }));
+        setNewCommand(commandTypes.BUY);
         return true;
       case commandTypes.SELL.name:
-        setCommand((command) => ({ ...command, ...commandTypes.SELL }));
+        setNewCommand(commandTypes.SELL);
         return true;
       default:
         return false;
@@ -108,16 +130,40 @@ const MessagingInput = (props) => {
   };
 
   const reinstateCommand = (text) => `/${command.name} ${text}`;
-  const removeCommand = (text) => text.replace(`/${command.name}`, "");
+
+  return [
+    command,
+    {
+      reinstateCommand,
+      firstWordIsCommand,
+      enterCommandMode,
+      exitCommandMode,
+    },
+  ];
+};
+
+const MessagingInput = (props) => {
+  const { acceptedFiles, maxNumberOfFiles, multipleUploads, sendMessage } =
+    useContext(ChannelContext);
+
+  const [
+    command,
+    {
+      reinstateCommand,
+      removeCommand,
+      firstWordIsCommand,
+      enterCommandMode,
+      exitCommandMode,
+    },
+  ] = useCommand();
 
   const overrideSubmitHandler = (message) => {
+    if (!message.text || message.text === " ") return;
     let updatedMessage;
-    // if (!message.text) return;
 
     // - detect command & if it exists update the displayed input
-    if (containsCommand(message.text) && message.attachments.length) {
-      const updatedText = removeCommand(message.text);
-      updatedMessage = { ...message, text: updatedText };
+    if (firstWordIsCommand(message.text) && message.attachments.length) {
+      updatedMessage = { ...message, text: " " };
     }
 
     // - In command state reinstate the command before submission
@@ -128,7 +174,7 @@ const MessagingInput = (props) => {
 
     const sendMessagePromise = sendMessage(updatedMessage || message);
     logChatPromiseExecution(sendMessagePromise, "send message");
-    setCommand((command) => ({ ...command, mode: false }));
+    exitCommandMode();
   };
 
   const messageInput = useMessageInput({ ...props, overrideSubmitHandler });
@@ -140,20 +186,21 @@ const MessagingInput = (props) => {
         e.nativeEvent?.inputType === "deleteContentBackward";
 
       // - In command mode detect empty deletion & exit command mode
-      if (messageInput.text.length === 1 && deletePressed) {
-        setCommand((command) => ({ ...command, mode: false }));
+      if (value.length <= 1 && deletePressed) {
+        exitCommandMode();
       }
 
       // - Check for command & enter command mode if found
       // - Updating displayed input based on command removal
       if (
         !command.mode &&
-        containsCommand(messageInput.text) &&
+        firstWordIsCommand(value) &&
         !messageInput.numberOfUploads
       ) {
-        e.target.value = removeCommand(value);
-        setCommand((command) => ({ ...command, mode: true }));
+        e.target.value = " ";
+        enterCommandMode();
       }
+
       messageInput.handleChange(e);
     },
     [command.name, messageInput]
