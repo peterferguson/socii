@@ -1,11 +1,11 @@
 import { firestore } from "@lib/firebase";
 import IEXQuery from "@lib/iex";
-import { fetchURL } from "@utils/helper";
+import { fetchJSON } from "@utils/helper";
 import { PieCardSkeleton } from "@components/PieCard";
 import { GroupPieCard } from "@components/GroupCharts";
 
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 
@@ -22,7 +22,7 @@ export default function Dashboard() {
       title: "Portfolio Value",
       subTitle: "350,907",
       imgComponent: (
-        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
+        <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-red-500 rounded-full shadow-lg">
           <i className="far fa-chart-bar"></i>
         </div>
       ),
@@ -42,7 +42,7 @@ export default function Dashboard() {
       ),
       subTitle: "924",
       imgComponent: (
-        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
+        <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-pink-500 rounded-full shadow-lg">
           <i className="fas fa-users"></i>
         </div>
       ),
@@ -62,7 +62,7 @@ export default function Dashboard() {
       ),
       subTitle: "2,356",
       imgComponent: (
-        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
+        <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-orange-500 rounded-full shadow-lg">
           <i className="fas fa-chart-pie"></i>
         </div>
       ),
@@ -78,7 +78,7 @@ export default function Dashboard() {
       title: "Performance vs. Market",
       subTitle: "49,65%",
       imgComponent: (
-        <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-lightBlue-500">
+        <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white rounded-full shadow-lg bg-lightBlue-500">
           <i className="fas fa-percent"></i>
         </div>
       ),
@@ -96,8 +96,8 @@ export default function Dashboard() {
     <>
       <div className="relative bg-blueGray-100">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-green-300 to-brand-light md:pt-32 pb-32 pt-12">
-          <div className="px-4 md:px-10 mx-auto w-full">
+        <div className="relative pt-12 pb-32 bg-gradient-to-r from-green-300 to-brand-light md:pt-32">
+          <div className="w-full px-4 mx-auto md:px-10">
             <div>
               {/* Card stats */}
               <div className="flex flex-wrap">
@@ -108,19 +108,19 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+        <div className="w-full px-4 mx-auto -m-24 md:px-10">
           {/* Charts */}
           <div className="flex flex-wrap">
             <PieChart groupName={groupName} />
           </div>
           {/* Tables */}
           <div className="flex flex-wrap mt-4">
-            <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-                <div className="rounded-t mb-0 px-4 py-3 border-0">
+            <div className="w-full px-4 mb-12 xl:w-8/12 xl:mb-0">
+              <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
+                <div className="px-4 py-3 mb-0 border-0 rounded-t">
                   <div className="flex flex-wrap items-center">
-                    <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                      <h3 className="font-semibold text-base text-blueGray-700">
+                    <div className="relative flex-1 flex-grow w-full max-w-full px-4">
+                      <h3 className="text-base font-semibold text-blueGray-700">
                         Page visits
                       </h3>
                     </div>
@@ -140,93 +140,93 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead>
                       <tr>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Page name
                         </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Visitors
                         </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Unique users
                         </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Bounce rate
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           /argon/
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           4,569
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           340
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                          <i className="mr-4 fas fa-arrow-up text-emerald-500"></i>
                           46,53%
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           /argon/index.html
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           3,985
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           319
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <i className="fas fa-arrow-down text-orange-500 mr-4"></i>
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                          <i className="mr-4 text-orange-500 fas fa-arrow-down"></i>
                           46,53%
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           /argon/charts.html
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           3,513
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           294
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <i className="fas fa-arrow-down text-orange-500 mr-4"></i>
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                          <i className="mr-4 text-orange-500 fas fa-arrow-down"></i>
                           36,49%
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           /argon/tables.html
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           2,050
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           147
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                          <i className="mr-4 fas fa-arrow-up text-emerald-500"></i>
                           50,87%
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           /argon/profile.html
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           1,795
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           190
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <i className="fas fa-arrow-down text-red-500 mr-4"></i>
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
+                          <i className="mr-4 text-red-500 fas fa-arrow-down"></i>
                           46,53%
                         </td>
                       </tr>
@@ -235,18 +235,18 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="w-full xl:w-4/12 px-4">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-                <div className="rounded-t mb-0 px-4 py-3 border-0">
+            <div className="w-full px-4 xl:w-4/12">
+              <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
+                <div className="px-4 py-3 mb-0 border-0 rounded-t">
                   <div className="flex flex-wrap items-center">
-                    <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                      <h3 className="font-semibold text-base text-blueGray-700">
+                    <div className="relative flex-1 flex-grow w-full max-w-full px-4">
+                      <h3 className="text-base font-semibold text-blueGray-700">
                         Social traffic
                       </h3>
                     </div>
-                    <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                    <div className="relative flex-1 flex-grow w-full max-w-full px-4 text-right">
                       <button
-                        className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                        className="px-3 py-1 mb-1 mr-1 text-xs font-bold text-white uppercase bg-indigo-500 rounded outline-none active:bg-indigo-600 focus:outline-none"
                         type="button"
                         style={{ transition: "all .15s ease" }}
                       >
@@ -260,34 +260,34 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead className="thead-light">
                       <tr>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Referral
                         </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Visitors
                         </th>
                         <th
-                          className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                          className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap"
                           style={{ minWidth: "140px" }}
                         ></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           Facebook
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           1,480
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="mr-2">60%</span>
                             <div className="relative w-full">
-                              <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
+                              <div className="flex h-2 overflow-hidden text-xs bg-red-200 rounded">
                                 <div
                                   style={{ width: "60%" }}
-                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
+                                  className="flex flex-col justify-center text-center text-white bg-red-500 shadow-none whitespace-nowrap"
                                 ></div>
                               </div>
                             </div>
@@ -295,20 +295,20 @@ export default function Dashboard() {
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           Facebook
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           5,480
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="mr-2">70%</span>
                             <div className="relative w-full">
-                              <div className="overflow-hidden h-2 text-xs flex rounded bg-emerald-200">
+                              <div className="flex h-2 overflow-hidden text-xs rounded bg-emerald-200">
                                 <div
                                   style={{ width: "70%" }}
-                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-emerald-500"
+                                  className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
                                 ></div>
                               </div>
                             </div>
@@ -316,20 +316,20 @@ export default function Dashboard() {
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           Google
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           4,807
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="mr-2">80%</span>
                             <div className="relative w-full">
-                              <div className="overflow-hidden h-2 text-xs flex rounded bg-purple-200">
+                              <div className="flex h-2 overflow-hidden text-xs bg-purple-200 rounded">
                                 <div
                                   style={{ width: "80%" }}
-                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500"
+                                  className="flex flex-col justify-center text-center text-white bg-purple-500 shadow-none whitespace-nowrap"
                                 ></div>
                               </div>
                             </div>
@@ -337,20 +337,20 @@ export default function Dashboard() {
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           Instagram
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           3,678
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="mr-2">75%</span>
                             <div className="relative w-full">
-                              <div className="overflow-hidden h-2 text-xs flex rounded bg-lightBlue-200">
+                              <div className="flex h-2 overflow-hidden text-xs rounded bg-lightBlue-200">
                                 <div
                                   style={{ width: "75%" }}
-                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-lightBlue-500"
+                                  className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-lightBlue-500"
                                 ></div>
                               </div>
                             </div>
@@ -358,20 +358,20 @@ export default function Dashboard() {
                         </td>
                       </tr>
                       <tr>
-                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <th className="p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           twitter
                         </th>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           2,645
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="mr-2">30%</span>
                             <div className="relative w-full">
-                              <div className="overflow-hidden h-2 text-xs flex rounded bg-orange-200">
+                              <div className="flex h-2 overflow-hidden text-xs bg-orange-200 rounded">
                                 <div
                                   style={{ width: "30%" }}
-                                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-emerald-500"
+                                  className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
                                 ></div>
                               </div>
                             </div>
@@ -386,16 +386,16 @@ export default function Dashboard() {
           </div>
           {/* Footer */}
           <footer className="block py-4">
-            <div className="container mx-auto px-4">
+            <div className="container px-4 mx-auto">
               <hr className="mb-4 border-b-1 border-blueGray-200" />
-              <div className="flex flex-wrap items-center md:justify-between justify-center">
-                <div className="w-full md:w-4/12 px-4">socii</div>
-                <div className="w-full md:w-8/12 px-4">
-                  <ul className="flex flex-wrap list-none md:justify-end  justify-center">
+              <div className="flex flex-wrap items-center justify-center md:justify-between">
+                <div className="w-full px-4 md:w-4/12">socii</div>
+                <div className="w-full px-4 md:w-8/12">
+                  <ul className="flex flex-wrap justify-center list-none md:justify-end">
                     <li>
                       <a
                         href="/"
-                        className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                        className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
                       >
                         Home
                       </a>
@@ -403,7 +403,7 @@ export default function Dashboard() {
                     <li>
                       <a
                         href="/"
-                        className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
+                        className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
                       >
                         About Us
                       </a>
@@ -428,23 +428,23 @@ function BlockCard({
   headingSubText,
 }) {
   return (
-    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+    <div className="w-full px-4 lg:w-6/12 xl:w-3/12">
+      <div className="relative flex flex-col min-w-0 mb-6 break-words bg-white rounded shadow-lg xl:mb-0">
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
-            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <h5 className="text-blueGray-400 uppercase font-bold text-xs">
+            <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
+              <h5 className="text-xs font-bold uppercase text-blueGray-400">
                 {title}
               </h5>
-              <span className="font-semibold text-xl text-blueGray-700">
+              <span className="text-xl font-semibold text-blueGray-700">
                 {subTitle}
               </span>
             </div>
-            <div className="relative w-auto pl-4 flex-initial">
+            <div className="relative flex-initial w-auto pl-4">
               {imgComponent}
             </div>
           </div>
-          <p className="text-sm text-blueGray-400 mt-4">
+          <p className="mt-4 text-sm text-blueGray-400">
             <span className={`${headingColor} mr-2`}>{heading}</span>
             <span className="whitespace-nowrap">{headingSubText}</span>
           </p>
@@ -464,7 +464,7 @@ function PieChart({ groupName }) {
     holdings?.map(({ tickerSymbol }) => {
       const iexClient = new IEXQuery();
 
-      fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
+      fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
         setCurrentPrices((previousState) => ({
           ...previousState,
           [tickerSymbol]: value,
@@ -481,21 +481,21 @@ function PieChart({ groupName }) {
 
   return (
     <>
-      <div className="w-full xl:w-4/12 px-4">
-        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-          <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div className="w-full px-4 xl:w-4/12">
+        <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
+          <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
             <div className="flex flex-wrap items-center">
-              <div className="relative w-full max-w-full flex-grow flex-1">
-                <h6 className="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
+              <div className="relative flex-1 flex-grow w-full max-w-full">
+                <h6 className="mb-1 text-xs font-semibold uppercase text-blueGray-400">
                   Holdings
                 </h6>
-                <h2 className="text-blueGray-700 text-xl font-semibold">
+                <h2 className="text-xl font-semibold text-blueGray-700">
                   Portfolio Allocation
                 </h2>
               </div>
             </div>
           </div>
-          <div className="p-4 flex-auto">
+          <div className="flex-auto p-4">
             {/* Chart */}
             {!loading ? (
               <GroupPieCard

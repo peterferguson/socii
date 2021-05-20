@@ -7,8 +7,8 @@ export default function Popular({ tickerSymbols }) {
   // TODO: large screen vertical cards - small horizontal cards
   return (
     <div>
-      <div className="flex mx-auto h-80 items-center justify-center bg-gradient-to-r from-teal-400 to-brand-light">
-        <div className="flex font-bold uppercase text-center text-6xl font-work-sans text-gray-50 px-4 pt-4 m-12">
+      <div className="flex items-center justify-center mx-auto h-80 bg-gradient-to-r from-teal-400 to-brand-light">
+        <div className="flex px-4 pt-4 m-12 text-6xl font-bold text-center uppercase font-work-sans text-gray-50">
           Popular Stocks
         </div>
       </div>
@@ -17,7 +17,7 @@ export default function Popular({ tickerSymbols }) {
           {tickerSymbols.map(({ ticker, timeseries, sector }) => {
             return (
               <>
-                <div className="flex flex-col mx-auto my-4 bg-white p-4 rounded-lg shadow-lg w-88 sm:w-64">
+                <div className="flex flex-col p-4 mx-auto my-4 bg-white rounded-lg shadow-lg w-88 sm:w-64">
                   <AssetCard
                     ticker={ticker}
                     timeseries={timeseries}

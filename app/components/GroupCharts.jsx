@@ -1,12 +1,12 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard";
 import { firestore } from "@lib/firebase";
 import IEXQuery from "@lib/iex";
-import { fetchURL } from "@utils/helper";
+import { fetchJSON } from "@utils/helper";
 import Link from "next/link";
 import { logoUrl } from "@utils/helper";
 
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([]);
@@ -18,7 +18,7 @@ export default function GroupColumn({ groupName }) {
     holdings?.map(({ tickerSymbol }) => {
       const iexClient = new IEXQuery();
 
-      fetchURL(iexClient.stockPrice(tickerSymbol)).then((value) =>
+      fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
         setCurrentPrices((previousState) => ({
           ...previousState,
           [tickerSymbol]: value,

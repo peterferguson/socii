@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { uncamelCase } from "@utils/helper";
 
 const Multiselect = ({ items, selectedItems, setSelectedItems }) => {

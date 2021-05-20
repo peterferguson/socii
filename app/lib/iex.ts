@@ -1,4 +1,4 @@
-const token = process.env.NEXT_PUBLIC_IEXCLOUD_SECRET_KEY;
+const token = process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY;
 const apiversion = process.env.NEXT_PUBLIC_IEXCLOUD_API_VERSION;
 
 export default class IEXQuery {

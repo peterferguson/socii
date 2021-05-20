@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 
 import { UserContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
@@ -6,7 +6,6 @@ import CheckIcon from "@components/BackgroundCheck";
 import debounce from "lodash/debounce";
 import CrossIcon from "@icons/cross.svg";
 import toast from "react-hot-toast";
-import { useContext } from "react";
 
 export default function Username(props) {
   const { user } = useContext(UserContext);
@@ -62,26 +61,19 @@ export default function Username(props) {
   );
 
   return (
-    <main className="bg-gray-50 h-screen w-screen justify-center items-center flex">
-      <form className="w-full sm:w-2/3 my-16">
+    <main className="flex items-center justify-center w-screen h-screen bg-gray-50">
+      <form className="w-full my-16 sm:w-2/3">
         <div
-          className="appearance-none bg-brand-light bg-opacity-10 \
-                      text-gray-700 border border-gray-300 rounded-xl py-3 px-4 m-4 sm:mb-3 \
-                      leading-tight focus:outline-none focus:bg-gray-50 \
-                      focus:border-gray-500"
+          className="px-4 py-3 m-4 leading-tight text-gray-700 border border-gray-300 appearance-none bg-brand-light bg-opacity-10 rounded-xl sm:mb-3 focus:outline-none focus:bg-gray-50 focus:border-gray-500"
         >
-          <div className="p-4 font-bold text-xl font-work-sans">
+          <div className="p-4 text-xl font-bold font-work-sans">
             Choose a username
           </div>
           <div
-            className="appearance-none flex w-11/12 bg-white text-gray-700 
-                       border border-brand-dark border-opacity-30 \
-                       rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
-                       active:border-opacity-100 active:border-brand-light
-                       focus:border-opacity-100 focus:border-brand-light"
+            className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light"
           >
             <input
-              className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none"
+              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none"
               type="text"
               placeholder="ElonMuskett"
               onChange={onChange}
@@ -102,7 +94,7 @@ export default function Username(props) {
             </div>
           </div>
           <button
-            className="btn w-11/12 my-4"
+            className="w-11/12 my-4 btn"
             onClick={(e) =>
               isValidUsername ? createUsername(e, user, username) : null
             }

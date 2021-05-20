@@ -5,7 +5,7 @@ import PriceInput from "@components/PriceInput";
 import MultiSelect from "@components/MultiSelect";
 import { alphaVantageQuery } from "@lib/firebase";
 
-import { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 export default function ShareStockInformationModal({

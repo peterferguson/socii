@@ -19,7 +19,7 @@ import {
   TypingIndicator,
 } from "@components/stream/components";
 
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "@lib/context";
 import { useHasMounted } from "@lib/hooks";
 import { getInitials, getRandomImage, isBrowser } from "@utils/helper";

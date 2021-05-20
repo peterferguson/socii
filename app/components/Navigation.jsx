@@ -11,8 +11,7 @@ import RightChevronIcon from "@icons/rightChevron.svg";
 import MenuIcon from "@icons/menu.svg";
 import { Transition, Popover } from "@headlessui/react";
 
-import Link from "next/link";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 
@@ -21,7 +20,7 @@ export default function Navigation(props) {
   const router = useRouter();
 
   return (
-    <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-gray-50 flex-none flex">
+    <div className="sticky top-0 z-50 flex flex-none w-full mx-auto max-w-8xl bg-gray-50">
       <div className="p-4">
         <Logo className="text-4xl" />
       </div>
@@ -30,7 +29,7 @@ export default function Navigation(props) {
         <Dropdown />
       ) : (
         <button
-          className="btn btn-transition flex-none"
+          className="flex-none btn btn-transition"
           onClick={() => router.push("/enter")}
         >
           Login
@@ -42,22 +41,17 @@ export default function Navigation(props) {
 
 function SearchBar({ setShowSearchCard }) {
   return (
-    <div
-      className="flex-1 h-18 flex items-center \
-                 justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8"
-    >
+    <div className="flex items-center justify-between flex-1 px-4 h-18 \ sm:px-6 lg:mx-6 lg:px-0 xl:mx-8">
       <button
         type="button"
-        className="group leading-6 font-medium flex items-center space-x-3 sm:space-x-4 \
-                 hover:text-gray-600 transition-colors duration-200 w-full py-2 \
-                 focus:outline-none"
+        className="flex items-center w-full py-2 font-medium group leading-6 space-x-3 sm:space-x-4 \ hover:text-gray-600 transition-colors duration-200 focus:outline-none"
         onClick={() => setShowSearchCard(true)}
       >
         <SearchIcon className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200" />
         <span className="text-gray-400">
-          Search<span className="hidden sm:inline text-gray-400">: TSLA</span>
+          Search<span className="hidden text-gray-400 sm:inline">: TSLA</span>
         </span>
-        <span className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
+        <span className="hidden text-sm text-gray-400 border border-gray-300 sm:block leading-5 py-0.5 px-1.5 rounded-md">
           <span className="sr-only">Press </span>
           <kbd className="font-sans">
             <abbr title="Command" className="no-underline">
@@ -138,7 +132,7 @@ function Dropdown() {
   ];
 
   return (
-    <Popover className="relative inline-block text-left p-4 z-50">
+    <Popover className="relative z-50 inline-block p-4 text-left">
       {({ open }) => (
         <>
           <Popover.Button className="items-center justify-center w-full h-full focus:outline-none">
@@ -156,17 +150,21 @@ function Dropdown() {
           >
             <Popover.Panel
               static
-              className="absolute z-10 w-max px-6 mt-20 -top-0.5 right-2 sm:px-0 lg:max-w-3xl"
+              className="absolute z-10 px-6 mt-20 w-max -top-0.5 right-2 sm:px-0 lg:max-w-3xl"
             >
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="relative grid gap-8 bg-white p-7">
+                <div className="relative bg-white grid gap-8 p-7">
                   {dropdownItems.map((item) => (
-                    <DropdownItem item={item} />
+                    <DropdownItem key={`key-${item.name}`} item={item} />
                   ))}
                 </div>
                 <div className="p-4 bg-gray-50">
                   {grayedDropdownItems.map((item) => (
-                    <DropdownItem item={item} open={open} />
+                    <DropdownItem
+                      key={`key-${item.name}`}
+                      item={item}
+                      open={open}
+                    />
                   ))}
                 </div>
               </div>
@@ -192,18 +190,18 @@ function DropdownItem({ item }) {
       key={item.name}
       href={item.href}
       onClick={() => onClickHandler()}
-      className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none"
+      className="flex items-center p-2 -m-3 rounded-lg transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none"
     >
       <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
         <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
       </div>
-      <div className="ml-4 flex-grow">
+      <div className="flex-grow ml-4">
         <p className="text-sm font-medium text-gray-900">{item.name}</p>
         <p className="text-sm text-gray-500">{item.description}</p>
       </div>
       {item.rightIcon && (
         <item.rightIcon
-          className="flex-none h-6 w-6 text-brand-light"
+          className="flex-none w-6 h-6 text-brand-light"
           aria-hidden="true"
         />
       )}

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useReducer } from "react";
+import React, { memo, useCallback, useContext, useReducer } from "react";
 import { ImageDropzone } from "react-file-utils";
 import { logChatPromiseExecution } from "stream-chat";
 import {
@@ -38,7 +38,7 @@ import { UploadsPreview } from "./UploadsPreview";
 
 const CommandIcon = ({ text }) => (
   <div className={"giphy-icon__wrapper"}>
-    <LightningBoltSmall className="h-4 w-4 text-white -mr-1.5" />
+    <LightningBoltSmall className="w-4 h-4 text-white -mr-1.5" />
     <p className={"giphy-icon__text"}>{text}</p>
   </div>
 );
@@ -197,7 +197,7 @@ const MessagingInput = (props) => {
 
       messageInput.handleChange(e);
     },
-    [command.name, messageInput]
+    [command.mode, enterCommandMode, exitCommandMode, firstWordIsCommand, messageInput]
   );
 
   const onClickCommand = () => {

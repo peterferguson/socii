@@ -6,7 +6,7 @@ import {
   Configure,
   connectStateResults,
 } from "react-instantsearch-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import algoliasearch from "algoliasearch/lite";
 import SearchIcon from "@icons/search.svg";
 import LoadingIndicator from "@components/LoadingIndicator";
@@ -16,7 +16,7 @@ import { Dialog } from "@headlessui/react";
 import { useRouter } from "next/router";
 import IEXQuery from "@lib/iex";
 import { useAsync } from "react-async-hook";
-import { fetchURL } from "utils/helper";
+import { fetchJSON } from "utils/helper";
 
 const iexClient = new IEXQuery();
 
@@ -83,10 +83,10 @@ const Loading = connectStateResults(({ isSearchStalled }) => {
 const Hit = ({ hit }) => {
   const [loadingTicker, setLoadingTicker] = useState(false);
 
-  const latestPrice = useAsync(fetchURL, [
+  const latestPrice = useAsync(fetchJSON, [
     iexClient.stockPrice(hit.tickerSymbol),
   ]);
-  const changePct = useAsync(fetchURL, [
+  const changePct = useAsync(fetchJSON, [
     iexClient.stockQuote(hit.tickerSymbol, "changePercent"),
   ]);
 

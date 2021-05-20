@@ -18,7 +18,7 @@ import { UserContext, SelectedGroupContext } from "@lib/context";
 import { firestore } from "@lib/firebase";
 
 import { useRouter } from "next/router";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Switch } from "@headlessui/react";
 import { useEffect } from "react";
 import { useWindowSize } from "@lib/hooks";
@@ -103,10 +103,10 @@ export default function TickerPage({ tickerSymbols }) {
           exchange={ticker.exchange}
           className="p-4"
         /> */}
-        <div className="hidden sm:block flex-grow"></div>
-        <div className="flex-none px-4 sm:pl-8 pt-4 bg-gray-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52 items-center justify-center">
-            <span className="z-10 w-12 text-3xl sm:text-4xl h-4">
+        <div className="flex-grow hidden sm:block"></div>
+        <div className="flex-none px-4 pt-4 sm:pl-8 bg-gray-50">
+          <div className="items-center justify-center w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
+            <span className="z-10 w-12 h-4 text-3xl sm:text-4xl">
               ${highlightedClose}
               {highlightedChange && (
                 <span
@@ -123,10 +123,10 @@ export default function TickerPage({ tickerSymbols }) {
             </span>
           </div>
           <div
-            className="btn m-2 ml-0 mt-6 mb-0 text-center w-40 sm:w-52"
+            className="w-40 m-2 mt-6 mb-0 ml-0 text-center btn sm:w-52"
             onClick={() => handleInvest()}
           >
-            <span className="z-10 w-12 text-4xl h-4">Invest</span>
+            <span className="z-10 w-12 h-4 text-4xl">Invest</span>
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function TickerPage({ tickerSymbols }) {
           )}
         </>
       )}
-      <div className="flex flex-col sm:flex-row items-center justify-center">
+      <div className="flex flex-col items-center justify-center sm:flex-row">
         <TradingViewStockProfile
           tickerSymbol={tickerSymbol}
           exchange={ticker.exchange}
@@ -196,11 +196,11 @@ function Chart({
   latestClose,
 }) {
   return (
-    <div className="flex w-full h-2/3 bg-gray-50 justify-center items-center">
-      <div className="w-full rounded-xl shadow-lg p-2 m-4 bg-white">
+    <div className="flex items-center justify-center w-full h-2/3 bg-gray-50">
+      <div className="w-full p-2 m-4 bg-white shadow-lg rounded-xl">
         <div className="flex justify-between w-full h-20">
           {!showTradingView ? (
-            <div className="flex text-gray-600 text-2xl sm:text-3xl">
+            <div className="flex text-2xl text-gray-600 sm:text-3xl">
               {`A $100 investment on ${timeseries[
                 crosshairIndexValue
                   ? crosshairIndexValue

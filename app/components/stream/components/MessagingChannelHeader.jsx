@@ -151,7 +151,7 @@ const MessagingChannelHeader = (props) => {
         className={`${props.theme}`}
         onClick={() => props.toggleMobile()}
       >
-        <Menu className="h-3 w-4 m-3 cursor-pointer text-brand-light" />
+        <Menu className="w-4 h-3 m-3 cursor-pointer text-brand-light" />
       </div>
       {getAvatarGroup(members)}
       {!isEditing ? (
@@ -163,19 +163,19 @@ const MessagingChannelHeader = (props) => {
       )}
       <div className={styles["messaging__channel-header__right"]}>
         <TypingIndicator />
-        {channelName !== "Social Demo" &&
+        {/* {channelName !== "Social Demo" &&
           (!isEditing ? (
             <ChannelInfoIcon
-              className="cursor-pointer ml-4 bg-brand"
+              className="ml-4 cursor-pointer bg-brand"
               onClick={() => {
                 if (!isEditing) {
                   setIsEditing(true);
                 }
               }}
             />
-          ) : (
-            <ChannelSaveIcon className="cursor-pointer ml-4 bg-brand-teal" />
-          ))}
+          ) : ( */}
+            {/* <ChannelSaveIcon className="ml-4 cursor-pointer bg-brand-teal" /> */}
+          {/* ))} */}
       </div>
     </div>
   );

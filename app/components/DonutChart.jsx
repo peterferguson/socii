@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { RadialChart, Hint } from "react-vis";
 import { useWindowSize } from "@lib/hooks";
 import "react-vis/dist/style.css";

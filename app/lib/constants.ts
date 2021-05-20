@@ -5,10 +5,16 @@ import GoogleLogo from "@icons/google.svg";
 import { googleAuthProvider, facebookAuthProvider } from "@lib/firebase";
 
 export const currencySymbols = {
-  USD: "$",
-  GBP: "£",
+  AUD: "$",
+  CAD: "$",
+  CHF: "CHF",
   EUR: "€",
+  GBP: "£",
+  JPY: "¥",
+  USD: "$",
 };
+
+export type CurrencyCode = "AUD" | "CAD" | "CHF" | "EUR" | "GBP" | "JPY" | "USD";
 
 /*
  * Group Privacy Settings

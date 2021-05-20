@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-
+import React from "react";
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
@@ -10,7 +10,7 @@ class MyDocument extends Document {
     return (
       <Html
         lang="en"
-        className="max-h-full max-w-screen overflow-x-hidden h-full w-full bg-gray-50 md:no-scrollbar"
+        className="w-full h-full max-h-full overflow-x-hidden max-w-screen bg-gray-50 md:no-scrollbar"
       >
         <Head>
           <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -21,21 +21,21 @@ class MyDocument extends Document {
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="public/apple-touch-icon.png"
+            href="public/icons/apple-touch-icon.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="public/favicon-32x32.png"
+            href="public/icons/favicon-32x32.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="public/favicon-16x16.png"
+            href="public/icons/favicon-16x16.png"
           />
-          <link rel="manifest" href="public/site.webmanifest" />
+          <link rel="manifest" href="public/manifest.json" />
           <link
             rel="mask-icon"
             href="public/safari-pinned-tab.svg"
@@ -44,7 +44,9 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="theme-color" content="#ffffff" />
+          {/* <!-- this sets the color of url bar  --> */}
+          <meta name="theme-color" content="#3fbaeb" />
+          {/* <meta name="theme-color" content="#ffffff" /> */}
         </Head>
         <body>
           <Main />

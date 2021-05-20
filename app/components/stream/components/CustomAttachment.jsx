@@ -1,5 +1,8 @@
 import { Attachment } from "stream-chat-react";
 import StockDisplayAttachment from "@components/stream/components/CustomAttachments/StockDisplayAttachment";
+import InvestCommandAttachment from "./CustomAttachments/InvestCommandAttachment";
+import React from "react";
+import { useTickerPriceData } from "@lib/hooks";
 
 export default function CustomAttachment(props) {
   const { attachments } = props;
@@ -7,17 +10,9 @@ export default function CustomAttachment(props) {
 
   switch (attachment?.type) {
     case "stock":
-      const tickerSymbol = attachment.name;
-      const { name, exchange, ...asset } = attachment?.asset;
-
-      return (
-        <StockDisplayAttachment
-          attachment={attachment}
-          tickerSymbol={tickerSymbol}
-          exchange={exchange}
-          asset={asset}
-        />
-      );
+      return <StockDisplayAttachment attachment={attachment} />;
+    case "mml":
+      return <InvestCommandAttachment attachment={attachment} />;
     default:
       break;
   }

@@ -1,5 +1,8 @@
 import { tickerToISIN } from "@lib/firebase";
 import IEXQuery, { ChartRangeOption } from "@lib/iex";
+import { CurrencyCode } from "@lib/constants";
+
+const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY;
 
 export const isBrowser =
   typeof window !== "undefined" && typeof window.document !== "undefined";
@@ -16,7 +19,7 @@ export const pnlBackgroundColor = (pctChange) => {
     : "bg-gray-200";
 };
 
-export const pnlTextColor = (pctChange) => {
+export const pnlTextColor = (pctChange: number): string => {
   return pctChange > 0
     ? "text-teal-200"
     : pctChange < 0
@@ -37,14 +40,55 @@ export const handleEnterKeyDown = (event, callback) => {
   }
 };
 
-export const alphaVantageData = async (
-  tickerSymbol,
-  functionType = "TIME_SERIES_DAILY"
-) => {
-  const apiKey = "E9W8LZBTXVYZ31IO";
-  const data = await fetchURL(
-    `https://www.alphavantage.co/query?function=${functionType}&symbol=${tickerSymbol}&apikey=${apiKey}`
+export const alphaVantageQuery = async (queryType: string, params: object) => {
+  const queryParmsString: string = Object.keys(params)
+    .map((key) => `&${key}=${params[key]}`)
+    .join();
+
+  return await fetchJSON(
+    `https://www.alphavantage.co/query?function=${queryType}${queryParmsString}&apikey=${alphaVantageApiKey}`
   );
+};
+
+export const currencyConversion = async (
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode
+) => {
+  /*
+   *   Alpha Vantage Query Return Type
+   *   {
+   *      "Realtime Currency Exchange Rate": {
+   *          "1. From_Currency Code": "USD",
+   *          "2. From_Currency Name": "United States Dollar",
+   *          "3. To_Currency Code": "JPY",
+   *          "4. To_Currency Name": "Japanese Yen",
+   *          "5. Exchange Rate": "108.91000000",
+   *          "6. Last Refreshed": "2021-05-19 13:34:30",
+   *          "7. Time Zone": "UTC",
+   *          "8. Bid Price": "108.90800000",
+   *          "9. Ask Price": "108.91200000"
+   *      }
+   *   }
+   */
+  const data = await alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
+    from_currency: fromCurrency,
+    to_currency: toCurrency,
+  });
+
+  console.log(data);
+
+  const exchangeRate =
+    data["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
+  const lastUpdated =
+    data["Realtime Currency Exchange Rate"]["6. Last Refreshed"];
+
+  return { rate: exchangeRate, lastRefresh: lastUpdated };
+};
+
+export const alphaVantageData = async (tickerSymbol) => {
+  const data = await alphaVantageQuery("TIME_SERIES_DAILY", {
+    symbol: tickerSymbol,
+  });
 
   const dates = Object.keys(data["Time Series (Daily)"]);
 
@@ -62,7 +106,7 @@ export const iexChartTimeseries = async (
   range: ChartRangeOption = "1mm"
 ) => {
   const iexClient = new IEXQuery();
-  const data = await fetchURL(iexClient.stockChart(tickerSymbol, range));
+  const data = await fetchJSON(iexClient.stockChart(tickerSymbol, range));
 
   // * Return close for each date as timeseries
   return data.map(({ close, date, volume }) => ({
@@ -78,7 +122,7 @@ export function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-export const fetchURL = async (url) => (await fetch(url)).json();
+export const fetchJSON = async (url) => (await fetch(url)).json();
 
 export const stockProps = async (
   tickerQuery,
@@ -189,9 +233,30 @@ export const uncamelCase = (str) =>
     .replace(/^./, (s) => s.toUpperCase())
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/([A-Z])([a-z])/g, " $1$2")
-    .replace(/\ +/g, " ");
+    .replace(/ +/g, " ");
 
 export const getCleanImage = (member) => {
   if (!member?.user.image) return getRandomImage();
   return member.user.image;
 };
+
+export const localCostPerShare = async (
+  price: string | number,
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode
+) => {
+  const input = typeof price !== "number" ? parseFloat(price) : price;
+  if (isNaN(input)) {
+    return {};
+  }
+  const { rate, lastRefresh } = await currencyConversion(
+    fromCurrency,
+    toCurrency
+  );
+  return { costPerShare: rate * input, lastRefresh, exchangeRate: rate };
+};
+
+export const currencyFormatter = (number, currency) =>
+  new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(
+    number
+  );

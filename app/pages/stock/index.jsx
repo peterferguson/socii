@@ -35,16 +35,15 @@ export default function StockDisplay({ tickerSymbols }) {
       <div>
         <Link href="/stock/popular">
           <div
-            className="flex font-bold uppercase text-3xl font-work-sans px-4 pt-8 mb-4 \
-                        cursor-pointer text-brand-dark"
+            className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans \ text-brand-dark"
           >
             Popular Stocks
             <div className="flex-grow" />
-            <RightChevron className="mt-0.5 h-8 cursor-pointer" />
+            <RightChevron className="h-8 cursor-pointer mt-0.5" />
           </div>
         </Link>
         <CardSlider tickerSymbols={tickerSymbols} />
-        <div className="bg-gray-50 flex flex-col items-center min-h-screen mt-8">
+        <div className="flex flex-col items-center min-h-screen mt-8 bg-gray-50">
           {tickerSymbols.map(({ ticker, timeseries }) => {
             return (
               <ChartCard

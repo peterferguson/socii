@@ -1,6 +1,6 @@
 import { FlexibleXYPlot, LineSeries, Crosshair } from "react-vis";
 import "react-vis/dist/style.css";
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { tailwindColorMap } from "@lib/constants";
 import { pctChange } from "@utils/helper";
 import Link from "next/link";

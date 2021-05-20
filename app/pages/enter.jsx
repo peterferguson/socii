@@ -1,7 +1,7 @@
 import { auth, userFirstName, firestore } from "@lib/firebase";
 import { signInOptions } from "@lib/constants";
 import { UserContext } from "@lib/context";
-import { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { handleEnterKeyDown, validateEmail } from "@utils/helper";
 
 import MailIcon from "@icons/mail.svg";
@@ -34,15 +34,14 @@ export default function Enter(props) {
   const [verified, setVerified] = useState(null);
 
   return (
-    <main className="bg-gray-50 h-screen">
+    <main className="h-screen bg-gray-50">
       <div className="flex items-center justify-center min-h-screen">
-        <div className="py-3 max-w-xl mx-6 sm:mx-auto">
+        <div className="max-w-xl py-3 mx-6 sm:mx-auto">
           <div
-            className="px-6 sm:px-4 py-8 bg-white shadow-lg rounded-3xl \
-                       bg-clip-padding bg-opacity-60 border border-gray-200"
+            className="px-6 py-8 bg-white border border-gray-200 shadow-lg sm:px-4 rounded-3xl \ bg-clip-padding bg-opacity-60"
           >
             <div className="max-w-md mx-auto">
-              <div className="w-full text-center p-8 text-3xl font-bold font-work-sans">
+              <div className="w-full p-8 text-3xl font-bold text-center font-work-sans">
                 <div className="">Been Invited?</div>
                 Sign Up!
               </div>
@@ -53,8 +52,8 @@ export default function Enter(props) {
                 <EmailSignUp verified={verified} setVerified={setVerified} />
               </div>
               <div className="leading-6 sm:text-lg sm:leading-7"></div>
-              <div className="w-full border-b py-3 border-gray-400 h-3.5 text-center">
-                <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
+              <div className="w-full py-3 text-center border-b border-gray-400 h-3.5">
+                <span className="py-0 text-gray-400 px-2.5 bg-gray-50">
                   Or continue with
                 </span>
               </div>
@@ -183,17 +182,13 @@ function EmailSignUp({ verified, setVerified }) {
   return (
     <form onSubmit={() => emailSignInHandler(email)}>
       <div
-        className="appearance-none flex flex-none w-full bg-gray-100 text-gray-700 border
-         border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
-         focus:bg-gray-50 focus:border-gray-500"
+        className="flex flex-none w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-gray-50 focus:border-gray-500"
       >
         <MailIcon
-          className="bg-gray-100 h-full text-sm sm:text-base text-gray-400 /
-                      pt-0.5 mr-2 align-middle w-8"
+          className="w-8 h-full mr-2 text-sm text-gray-400 align-middle bg-gray-100 sm:text-base / pt-0.5"
         />
         <input
-          className="bg-gray-100 flex flex-grow w-2/3 sm:w-full appearance-none \
-                      focus:outline-none border-none -mt-1 focus:ring-0"
+          className="flex flex-grow w-2/3 -mt-1 bg-gray-100 border-none appearance-none sm:w-full \ focus:outline-none focus:ring-0"
           type="email"
           placeholder="warren@buffet.com"
           onChange={(e) => {

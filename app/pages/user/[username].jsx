@@ -19,7 +19,7 @@ import { UserContext } from "@lib/context";
 import { auth } from "@lib/firebase";
 
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import React, { useContext } from "react";
 
 export default function UserPage() {
   const router = useRouter();
@@ -33,13 +33,13 @@ export default function UserPage() {
       <div className="flex flex-row w-full">
         <img
           src={auth.currentUser?.photoURL}
-          className="m-4 rounded-full h-12 w-12"
+          className="w-12 h-12 m-4 rounded-full"
         />
         <div className="p-4 text-xl font-poppins text-brand-light">
           {pagename}
         </div>
       </div>
-      <div className="text-5xl font-poppins m-8 mx-auto flex items-center justify-center">
+      <div className="flex items-center justify-center m-8 mx-auto text-5xl font-poppins">
         Groups
       </div>
       <div className="flex flex-wrap justify-center">

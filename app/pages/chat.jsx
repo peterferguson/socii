@@ -4,7 +4,7 @@ import ClientOnly from "@components/ClientOnly";
 import LoadingIndicator from "@components/LoadingIndicator";
 import AuthCheck from "@components/AuthCheck";
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import dynamic from "next/dynamic";
 
 const StreamChatWithNoSSR = dynamic(

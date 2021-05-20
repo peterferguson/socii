@@ -1,7 +1,9 @@
+import React from "react";
+
 export default function Portfolio() {
   return (
     <section
-      className="fixed inset-0 overflow-hidden p-8 m-32"
+      className="fixed inset-0 p-8 m-32 overflow-hidden"
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
@@ -22,7 +24,7 @@ export default function Portfolio() {
           aria-hidden="true"
         ></div>
 
-        <div className="absolute inset-y-0 right-0 pl-10 max-w-full flex">
+        <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
           {/* <!--
         Slide-over panel, show/hide based on slide-over state.
 
@@ -44,12 +46,12 @@ export default function Portfolio() {
             From: "opacity-100"
             To: "opacity-0"
         --> */}
-            <div className="absolute top-0 left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4">
-              <button className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+            <div className="absolute top-0 left-0 flex pt-4 pr-2 -ml-8 sm:-ml-10 sm:pr-4">
+              <button className="text-gray-300 rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
                 <span className="sr-only">Close panel</span>
                 {/* <!-- Heroicon name: outline/x --> */}
                 <svg
-                  className="h-6 w-6"
+                  className="w-6 h-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -57,16 +59,16 @@ export default function Portfolio() {
                   aria-hidden="true"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
             </div>
 
-            <div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
+            <div className="flex flex-col h-full py-6 overflow-y-scroll bg-white shadow-xl">
               <div className="px-4 sm:px-6">
                 <h2
                   className="text-lg font-medium text-gray-900"
@@ -75,11 +77,11 @@ export default function Portfolio() {
                   Search
                 </h2>
               </div>
-              <div className="mt-6 relative flex-1 px-4 sm:px-6">
+              <div className="relative flex-1 px-4 mt-6 sm:px-6">
                 {/* <!-- Replace with your content --> */}
-                <span class="flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                <span className="flex w-3 h-3">
+                    <span className="absolute inline-flex w-full h-full bg-purple-400 rounded-full opacity-75 animate-ping"></span>
+                    <span className="relative inline-flex w-3 h-3 bg-purple-500 rounded-full"></span>
                 </span>
                 {/* <!-- /End replace --> */}
               </div>

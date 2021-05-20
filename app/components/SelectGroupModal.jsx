@@ -1,6 +1,6 @@
 
 import GroupSelectorRadioGroup from "@components/GroupSelector";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function SelectGroupModal({

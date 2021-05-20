@@ -1,6 +1,6 @@
 import { firestore } from "@lib/firebase";
 import { SelectedGroupContext } from "@lib/context";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { RadioGroup } from "@headlessui/react";
 import CheckIcon from "@components/BackgroundCheck";

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { firestore, serverTimestamp, arrayUnion } from "@lib/firebase";
 import {
@@ -72,26 +72,19 @@ export default function Create() {
   );
 
   return (
-    <main className="bg-gray-50 h-screen w-screen justify-center items-center flex">
-      <form className="w-full sm:w-2/3 my-16">
+    <main className="flex items-center justify-center w-screen h-screen bg-gray-50">
+      <form className="w-full my-16 sm:w-2/3">
         <div
-          className="appearance-none bg-brand-light bg-opacity-10 \
-                    text-gray-700 border border-gray-300 rounded-t-3xl sm:rounded-xl py-3 px-4 mb-3 \
-                    leading-tight focus:outline-none focus:bg-gray-50 \
-                    focus:border-gray-500"
+          className="px-4 py-3 mb-3 leading-tight text-gray-700 border border-gray-300 appearance-none bg-brand-light bg-opacity-10 \ rounded-t-3xl sm:rounded-xl focus:outline-none focus:bg-gray-50 focus:border-gray-500"
         >
-          <div className="p-4 font-bold text-xl font-work-sans">
+          <div className="p-4 text-xl font-bold font-work-sans">
             Create an Investment Group
           </div>
           <div
-            className="appearance-none flex w-11/12 bg-white text-gray-700 
-                     border border-brand-dark border-opacity-30 \
-                     rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
-                     active:border-opacity-100 active:border-brand-light
-                     focus:border-opacity-100 focus:border-brand-light"
+            className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light"
           >
             <input
-              className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none"
+              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none"
               type="text"
               placeholder="Investment Group Name"
               onChange={onChange}
@@ -111,18 +104,14 @@ export default function Create() {
               )}
             </div>
           </div>
-          <div className="py-4 px-6 font-bold text-md font-work-sans">
+          <div className="px-6 py-4 font-bold text-md font-work-sans">
             Add a short description
           </div>
           <div
-            className="appearance-none flex w-11/12 bg-white text-gray-700 
-                     border border-brand-dark border-opacity-30 \
-                     rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
-                     active:border-opacity-100 active:border-brand-light
-                     focus:border-opacity-100 focus:border-brand-light"
+            className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light"
           >
             <input
-              className="bg-white w-2/3 sm:w-full flex-grow appearance-none focus:outline-none text-tiny sm:text-base"
+              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none text-tiny sm:text-base"
               type="text"
               placeholder="Best active value/dividend/growth investment club around!"
               onChange={(e) => setGroupDescription(e.target.value)}
@@ -135,7 +124,7 @@ export default function Create() {
             privacyOption={privacyOption}
             setPrivacyOption={setPrivacyOption}
           />
-          <div className="p-4 font-bold text-md font-work-sans flex flex-col">
+          <div className="flex flex-col p-4 font-bold text-md font-work-sans">
             Initial Lump-Sum
           </div>
           <AmountOptions
@@ -144,14 +133,14 @@ export default function Create() {
             setAmountOption={setLumpSumOption}
             srLabel={"Initial Lump Sum Amount"}
           />
-          <div className="p-4 font-bold text-md font-work-sans flex flex-col">
+          <div className="flex flex-col p-4 font-bold text-md font-work-sans">
             Deposit Schedule
             {/* 
             // ! Legally the group members will have to ensure this balance is maintained.
             // ! All we can do is raise warnings when their average balance is below 
             // ! the cash holding of the group may not have enough 
             */}
-            <span className="pl-4 pt-1 text-tiny uppercase text-emerald-500">
+            <span className="pt-1 pl-4 uppercase text-tiny text-emerald-500">
               (a monthly deposit so that all members of the group have enough to
               trade with)
             </span>
@@ -163,7 +152,7 @@ export default function Create() {
             srLabel={"Monthly Deposit Amount"}
           />
           <button
-            className="btn w-11/12 my-8"
+            className="w-11/12 my-8 btn"
             onClick={(e) =>
               isValidGroupName
                 ? createGroup(
@@ -202,8 +191,7 @@ function AmountOptions({
       <RadioGroup value={amountOption} onChange={setAmountOption}>
         <RadioGroup.Label className="sr-only">{srLabel}</RadioGroup.Label>
         <div
-          className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
-                        sm:flex flex-col sm:flex-row"
+          className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \ sm:flex sm:flex-row"
         >
           {AmountOptions.map((option) => (
             <RadioGroup.Option
@@ -259,8 +247,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
       <RadioGroup value={privacyOption} onChange={setPrivacyOption}>
         <RadioGroup.Label className="sr-only">Privacy option</RadioGroup.Label>
         <div
-          className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
-                        sm:flex flex-col sm:flex-row"
+          className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \ sm:flex sm:flex-row"
         >
           {groupPrivacyOptions.map((option) => (
             <RadioGroup.Option

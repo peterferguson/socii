@@ -12,19 +12,32 @@
     }
 
     .btn:focus {
-        @apply ring-teal-300 border-teal-300;
+        @apply ring-teal-300 border-teal-300 outline-none;  
     }
-
+    
     .btn-transition {
-        @apply transform transition;
+      @apply transform transition;
     }
     .btn-transition:hover {
-        @apply -translate-y-0.5;
+      @apply -translate-y-0.5;
+    }
+    
+    .outline-btn {
+      @apply bg-transparent mr-auto text-brand-light rounded shadow p-2 border 
+      border-brand-light font-work-sans;
+    }
+    
+    .outline-btn:hover {
+      @apply bg-teal-500 text-white shadow-lg border-transparent;
+    }
+    
+    .outline-btn:focus {
+      @apply outline-none;  
     }
 
     .slide-card {
         @apply flex flex-col transition relative m-0 h-80 w-96 min-w-min p-6 
-        rounded-2xl bg-white clear-both shadow-left
+        rounded-2xl bg-white clear-both shadow-left;
     }
 
     .slidecard:focus-within~.slide-card, .slide-card:hover~.slide-card {
@@ -186,4 +199,20 @@
   top: 25% !important;
   right: 330px;
   left: auto;
+}
+
+/* Blue hightlighting fix */
+button,
+textarea,
+input,
+select,
+a{
+ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+ -webkit-tap-highlight-color: transparent;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+  user-select: none;
+
 }

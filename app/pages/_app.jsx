@@ -8,7 +8,7 @@ import { UserContext } from "@lib/context";
 import { useUserData } from "@lib/hooks";
 import { isBrowser } from "@utils/helper";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { toastProps } from "@lib/constants";
 
@@ -27,9 +27,7 @@ export default function MyApp({ Component, pageProps }) {
       <Head />
       {!userData.user && (
         <div
-          className="w-full h-20 bg-gradient-to-r to-brand-light from-teal-400 
-                      text-white font-work-sans leading-6 sm:leading-0 text-sm 
-                        sm:text-lg text-center align-middle p-4"
+          className="w-full h-20 p-4 text-sm text-center text-white align-middle bg-gradient-to-r to-brand-light from-teal-400 font-work-sans leading-6 sm:leading-0 sm:text-lg"
         >
           👋 socii is currently in private pre-alpha mode.
           <div className="-mt-1">You will need an invite!</div>

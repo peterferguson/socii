@@ -1,41 +1,42 @@
 import { firestore } from "@lib/firebase";
+import { UserContext } from "@lib/context";
 import { logoUrl } from "@utils/helper";
 import Logo from "@components/Logo";
 import OutlineButton from "@components/OutlineButton";
 
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
+import React, { useContext } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const { user } = useContext(UserContext);
   return (
     <>
-      <div className="grid grid-cols-2 bg-gray-50 h-screen">
+      <div className="h-screen grid grid-cols-2 bg-gray-50">
         {/* <bluryGradientBg className="bg-teal-400"/> */}
-        <div className="grid-rows-4 z-40">
-          <div className="text-7xl pt-24 sm:pt-32 px-4 font-poppins animate-fade-in-down">
+        <div className="z-40 grid-rows-4">
+          <div className="px-4 pt-24 text-7xl sm:pt-32 font-poppins animate-fade-in-down">
             Invest Together.
           </div>
-          <div className="text-2xl sm:text-4xl pt-4 px-4 font-poppins animate-fade-in-up">
+          <div className="px-4 pt-4 text-2xl sm:text-4xl font-poppins animate-fade-in-up">
             Secure Your Financial
           </div>
-          <div className="text-2xl sm:text-4xl pb-4 px-4 font-poppins animate-fade-in-up">
+          <div className="px-4 pb-4 text-2xl sm:text-4xl font-poppins animate-fade-in-up">
             Future With Friends.
           </div>
           <div>
             <button
               className="btn btn-transition"
-              onClick={() =>
-                router.push(auth.currentUser ? "/stock" : "/enter")
-              }
+              onClick={() => router.push(user ? "/stock" : "/enter")}
             >
               Invest Now
             </button>
           </div>
         </div>
-        <div className="flex bg-gradient-to-r from-green-300 to-brand-light z-0 animate-fade-in-right">
+        <div className="z-0 flex bg-gradient-to-r from-green-300 to-brand-light animate-fade-in-right">
           <svg
-            className="fill-current text-gray-50 h-full w-32 -ml-16 z-1"
+            className="w-32 h-full -ml-16 fill-current text-gray-50 z-1"
             preserveAspectRatio="none"
             viewBox="0 0 100 100"
           >
@@ -43,7 +44,7 @@ export default function Home() {
           </svg>
         </div>
       </div>
-      <div className="w-full h-24 flex flex-row items-center justify-between overflow-y-hidden">
+      <div className="flex flex-row items-center justify-between w-full h-24 overflow-y-hidden">
         <TickerList />
       </div>
 
@@ -51,13 +52,13 @@ export default function Home() {
       <FeatureSlider />
 
       {/* Contact Us */}
-      <div className="max-w-5xl px-6 py-16 mx-auto h-1/2 items-center justify-center flex">
+      <div className="flex items-center justify-center max-w-5xl px-6 py-16 mx-auto h-1/2">
         <div className="px-8 py-12 bg-teal-500 rounded-md md:px-20">
           <div>
             <h3 className="text-2xl font-semibold text-white">
               Want to be part of the alpha?
             </h3>
-            <p className="max-w-md mt-4 text-teal-900 pb-2">Drop us a line!</p>
+            <p className="max-w-md pb-2 mt-4 text-teal-900">Drop us a line!</p>
           </div>
           <input
             className="w-full p-4 rounded-md"
@@ -81,7 +82,8 @@ function TickerList() {
         tickers.map((ticker) => {
           return (
             <img
-              className="flex shadow-lg rounded-full h-16 w-16 ml-4 sm:ml-0 btn-transition"
+              key={ticker.ISIN}
+              className="flex w-16 h-16 ml-4 rounded-full shadow-lg sm:ml-0 btn-transition"
               src={logoUrl(ticker.ISIN)}
               alt={`${ticker.tickerSymbol} logo`}
             />
@@ -93,9 +95,9 @@ function TickerList() {
 
 function WhySocii() {
   return (
-    <section className="h-screen bg-brand flex items-center justify-center">
+    <section className="flex items-center justify-center h-screen bg-brand">
       <div className="max-w-5xl py-16 pl-4 sm:p-0">
-        <h2 className="text-3xl text-gray-100 font-poppins font-extrabold">
+        <h2 className="text-3xl font-extrabold text-gray-100 font-poppins">
           Investing with friends has never been easier!
         </h2>
         <div className="max-w-lg mx-auto mt-4 text-white leading-6">
@@ -106,7 +108,7 @@ function WhySocii() {
             <br />
             <br />
             With soc
-            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-brand-light font-poppins pr-1">
+            <span className="pr-1 font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-brand-light font-poppins">
               ii
             </span>
             you dont have to worry about these. We handle
@@ -145,29 +147,30 @@ function FeatureSlider() {
   ];
   return (
     <>
-      <div className="bg-brand-teal text-black py-8">
-        <div className="container mx-auto flex flex-col items-start md:flex-row my-12 md:my-24">
-          <div className="flex flex-col w-full sticky md:top-36 lg:w-1/3 mt-2 md:mt-12 px-8">
-            <p className="text-xs text-brand-light uppercase tracking-loose font-poppins">
+      <div className="py-8 text-black bg-brand-teal">
+        <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
+          <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
+            <p className="text-xs uppercase text-brand-light tracking-loose font-poppins">
               Social Investing
             </p>
-            <p className="text-3xl md:text-4xl leading-normal md:leading-relaxed mb-2 font-poppins font-extrabold">
+            <p className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-poppins">
               What is <Logo className="text-3xl md:text-4xl" />?
             </p>
-            <p className="text-sm md:text-base text-black mb-4"></p>
+            <p className="mb-4 text-sm text-black md:text-base"></p>
             <OutlineButton href="#" text="Explore Now" />
           </div>
           {/* Feature Slider */}
-          <div className="ml-0 md:ml-12 lg:w-2/3 sticky">
-            <div className="container mx-auto w-full h-full">
-              <div className="relative wrap overflow-hidden p-10 h-full">
+          <div className="sticky ml-0 md:ml-12 lg:w-2/3">
+            <div className="container w-full h-full mx-auto">
+              <div className="relative h-full p-10 overflow-hidden wrap">
                 {/* Center Line */}
-                <div className="border-2-2 border-teal-300 absolute h-full border-2 right-1/2"></div>
-                <div className="border-2-2 border-teal-300 absolute h-full border-2 left-1/2"></div>
+                <div className="absolute h-full border-2 border-teal-300 border-2-2 right-1/2"></div>
+                <div className="absolute h-full border-2 border-teal-300 border-2-2 left-1/2"></div>
                 {/* Headings */}
                 {timelineHeadings.map((item, index) => {
                   return (
                     <div
+                      key={`feature-${index}`}
                       className={`mb-8 flex justify-between ${
                         index % 2 == 0 ? "flex-row-reverse" : ""
                       } items-center w-full`}
@@ -177,10 +180,10 @@ function FeatureSlider() {
                         <p className="mb-3 text-sm text-brand-light font-poppins">
                           {item.supTitle}
                         </p>
-                        <h4 className="mb-3 font-bold text-lg md:text-2xl font-poppins">
+                        <h4 className="mb-3 text-lg font-bold md:text-2xl font-poppins">
                           {item.title}
                         </h4>
-                        <p className="text-xs md:text-base leading-snug text-gray-500 font-work-sans">
+                        <p className="text-xs leading-snug text-gray-500 md:text-base font-work-sans">
                           {item.description}
                         </p>
                       </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { firestore } from "@lib/firebase"
 
 export default function Invites() {
@@ -6,11 +6,11 @@ export default function Invites() {
     <>
       <div className="p-4 font-bold text-md font-work-sans">
         Invite Friends
-        <span className="font-extrabold text-brand-dark pl-1">
+        <span className="pl-1 font-extrabold text-brand-dark">
           (Think carefully you only have 2 invites!)
         </span>
       </div>
-      <p className="text-base font-semibold pb-2 px-4 font-work-sans">
+      <p className="px-4 pb-2 text-base font-semibold font-work-sans">
         Enter a UK Phone Number
       </p>
       <PhoneInvite className="px-4" />
@@ -39,20 +39,14 @@ function PhoneInvite() {
     <div>
       <fieldset>
         <div
-          className="appearance-none flex w-11/12 bg-white text-gray-700 
-                       border border-brand-dark border-opacity-30 \
-                       rounded-lg py-3 px-4 mb-3 ml-4 leading-tight focus:outline-none \
-                       focus:border-opacity-100 focus:border-brand-light"
+          className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none focus:border-opacity-100 focus:border-brand-light"
         >
-          <div className="bg-white h-full text-sm sm:text-base text-black pt-1 sm:pt-0.5 align-middle">
+          <div className="h-full pt-1 text-sm text-black align-middle bg-white sm:text-base sm:pt-0.5">
             +44
           </div>
-          <div className="border-l w-1 h-7 border-gray-400 ml-2 pr-2"></div>
+          <div className="w-1 pr-2 ml-2 border-l border-gray-400 h-7"></div>
           <input
-            className="bg-white w-2/3 sm:w-full flex-grow appearance-none 
-            border-transparent h-[28px]  focus:border-none focus:outline-none
-            focus:ring-0
-            "
+            className="flex-grow w-2/3 bg-white border-transparent appearance-none sm:w-full h-[28px] focus:border-none focus:outline-none focus:ring-0"
             type="tel"
             maxLength={10}
             placeholder="7912345678"

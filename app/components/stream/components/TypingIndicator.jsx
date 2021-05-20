@@ -1,5 +1,5 @@
 import styles from "@styles/TypingIndicator.module.css";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { ChannelContext } from "stream-chat-react";
 
 const TypingIndicator = () => {

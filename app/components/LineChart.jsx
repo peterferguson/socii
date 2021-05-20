@@ -7,7 +7,7 @@ import {
 } from "react-vis";
 import { useWindowSize } from "@lib/hooks";
 import "react-vis/dist/style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { tailwindColorMap } from "@lib/constants";
 import { pnlBackgroundColor, pctChange } from "@utils/helper";
 

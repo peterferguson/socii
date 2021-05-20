@@ -38,7 +38,7 @@ import { StreamChatWindow } from "@components/stream/components/Chat";
 import Custom404 from "../../404";
 import { UserContext } from "@lib/context";
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 
 export default function Group() {

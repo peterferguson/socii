@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { UserContext } from "@lib/context";
-import { useContext } from "react";
+import React, { useContext } from "react";
 
 export default function AuthCheck(props) {
   const { username } = useContext(UserContext);
