@@ -33,5 +33,6 @@ module.exports = {
         .region(london)
         .firestore.document("ticker/{isin}")
         .onCreate(algoliaSearch.onTickerCreated),
+    investCommand: functions.region(london).https.onRequest(streamChat.invest),
 };
 //# sourceMappingURL=index.js.map
