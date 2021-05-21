@@ -1,34 +1,34 @@
-import { FlexibleXYPlot, LineSeries, Crosshair } from "react-vis";
-import "react-vis/dist/style.css";
-import React, { useRef, useEffect, useState } from "react";
-import { tailwindColorMap } from "@lib/constants";
-import { pctChange } from "@utils/helper";
-import Link from "next/link";
+import { FlexibleXYPlot, LineSeries, Crosshair } from 'react-vis'
+import 'react-vis/dist/style.css'
+import React, { useRef, useEffect, useState } from 'react'
+import { tailwindColorMap } from '@lib/constants'
+import { pctChange } from '@utils/helper'
+import Link from 'next/link'
 
 export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
-  const [height, setHeight] = useState(null);
-  const [width, setWidth] = useState(null);
-  const [crosshairValue, setCrosshairValue] = useState(false);
-  const strokeWidth = 2;
+  const [height, setHeight] = useState(null)
+  const [width, setWidth] = useState(null)
+  const [crosshairValue, setCrosshairValue] = useState(false)
+  const strokeWidth = 2
 
-  const middleDivRef = useRef(null);
+  const middleDivRef = useRef(null)
 
   // TODO: Convert this into a useContainerSize hook
   useEffect(() => {
     if (middleDivRef.current) {
-      setHeight(middleDivRef.current.offsetHeight);
-      setWidth(middleDivRef.current.offsetWidth);
+      setHeight(middleDivRef.current.offsetHeight)
+      setWidth(middleDivRef.current.offsetWidth)
     }
-  }, [middleDivRef]);
+  }, [middleDivRef])
 
-  const closeDelta = pctChange(data[0].close, data[data.length - 1].close);
+  const closeDelta = pctChange(data[0].close, data[data.length - 1].close)
 
   const pnlColor =
-    closeDelta > 0 ? "bg-teal-200" : closeDelta < 0 ? "bg-red-200" : "bg-brand";
+    closeDelta > 0 ? 'bg-teal-200' : closeDelta < 0 ? 'bg-red-200' : 'bg-brand'
 
   const lineSeriesProps = {
     animation: true,
-    opacityType: "literal",
+    opacityType: 'literal',
     color: tailwindColorMap[pnlColor],
     strokeWidth,
     onNearestX: (d) => setCrosshairValue(d),
@@ -36,9 +36,9 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
       return {
         x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
         y: d.close,
-      };
+      }
     }),
-  };
+  }
   return (
     <>
       <div className="max-w-sm w-11/12 sm:w-1/2 lg:w-1/3 h-auto m-1">
@@ -81,10 +81,10 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
                 <Crosshair
                   values={[crosshairValue]}
                   titleFormat={(d) => ({
-                    title: "Date",
+                    title: 'Date',
                     value: new Date(d[0].x).toLocaleDateString(),
                   })}
-                  itemsFormat={(d) => [{ title: "Close price", value: d[0].y }]}
+                  itemsFormat={(d) => [{ title: 'Close price', value: d[0].y }]}
                 />
               )}
             </FlexibleXYPlot>
@@ -102,5 +102,5 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
         </div>
       </div>
     </>
-  );
+  )
 }

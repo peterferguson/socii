@@ -1,17 +1,26 @@
-import router from "next/router";
-import Button from "./MMLButton";
-import { pnlBackgroundColor, currencyFormatter } from "@utils/helper";
-import { useTickerPriceData, useCostPerShare } from "@lib/hooks";
-import React from "react";
+import router from 'next/router'
+import Button from './MMLButton'
+import { pnlBackgroundColor, currencyFormatter } from '@utils/helper'
+import {
+  useTickerPriceData,
+  useShareCost,
+  useLocalCurrency,
+  useExchangeRate,
+} from '@lib/hooks'
+import React from 'react'
 
-import { MML } from "mml-react";
+import { MML } from 'mml-react'
 
+// WARN: IEX called for each instance of a invest command message
+// WARN: Should think about some how collecting the tickers referenced on the message list
+// WARN: And passing these so we then call the api less
 
-// WARN: This component is rendered twice maybe worth putting api calls in refs if they get expensive
 const InvestCommandAttachment = ({ attachment }) => {
-  const tickerSymbol = "TSLA";
-  const tickerState = useTickerPriceData({tickerSymbol});
-  console.log(tickerState);
+  const tickerSymbol = 'TSLA'
+  const tickerState = useTickerPriceData({ tickerSymbol })
+  const [localCurrency] = useLocalCurrency()
+  const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
+  const localCostPerShare = tickerState.price * exchangeRate?.rate
 
   const converters = {
     invest: (tag) => {
@@ -19,44 +28,33 @@ const InvestCommandAttachment = ({ attachment }) => {
         <InvestMMLConverter
           {...tag.node.attributes}
           key={tag.key}
-          costPerShare={tickerState.localCostPerShare}
+          costPerShare={localCostPerShare}
         />
-      );
+      )
     },
-  };
+  }
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
-      <LogoPriceHeader
-        tickerSymbol={tickerSymbol}
-        price={tickerState.price}
-        priceChange={tickerState.priceChange}
-        assetCurrency={tickerState.assetCurrency}
-      />
+      <LogoPriceHeader tickerSymbol={tickerSymbol} tickerState={tickerState} />
       <MML converters={converters} source={attachment.mml} />
     </div>
-  );
-};
+  )
+}
 
-const LogoPriceHeader = ({
-  tickerSymbol,
-  priceChange,
-  price,
-  assetCurrency,
-}) => {
-  console.log(tickerSymbol);
-  console.log(price);
-  const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2));
+const LogoPriceHeader = ({ tickerSymbol, tickerState }) => {
+  const { priceChange, price, assetCurrency } = tickerState
+  const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
   const pnlColors = `${pnlBgColor} ${pnlBgColor
-    .replace("bg", "text")
-    .replace("200", "700")}`;
+    .replace('bg', 'text')
+    .replace('200', '700')}`
 
   return (
     <div className="cursor-pointer">
       <img
         className="h-auto mx-auto rounded-full shadow-lg w-14"
         src={
-          "https://storage.googleapis.com/sociiinvest.appspot.com/logos/US88160R1014.png"
+          'https://storage.googleapis.com/sociiinvest.appspot.com/logos/US88160R1014.png'
         }
         alt={`${tickerSymbol} logo`}
         //   onClick={() => router.push(attachment.url)}
@@ -64,8 +62,8 @@ const LogoPriceHeader = ({
       <div className="w-auto h-auto p-1 text-center">
         <div
           className={
-            "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
-            inline-block font-poppins mt-1 text-blueGray-400"
+            'text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
+            inline-block font-poppins mt-1 text-blueGray-400'
           }
         >
           ${tickerSymbol} &bull; {currencyFormatter(price, assetCurrency)}
@@ -78,25 +76,22 @@ const LogoPriceHeader = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const InvestMMLConverter = ({ key, costPerShare }) => {
-  const [cost, onShareChange, onCostChange, toShares] =
-    useCostPerShare(costPerShare);
-
-  console.log(cost);
+  const [cost, onShareChange, onCostChange, toShares] = useShareCost(costPerShare)
 
   return (
     <div className="flex flex-col">
       <MMLNumberInput
-        text={"Shares"}
+        text={'Shares'}
         key={`${key}-shares`}
         value={toShares(cost)}
         onChange={onShareChange}
       />
       <MMLNumberInput
-        text={"Cost"}
+        text={'Cost'}
         key={`${key}-cost`}
         value={cost}
         onChange={onCostChange}
@@ -116,8 +111,8 @@ const InvestMMLConverter = ({ key, costPerShare }) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
 const MMLNumberInput = ({ text, key, value, onChange }) => (
   <div className="flex flex-row m-2 border rounded shadow">
@@ -137,6 +132,6 @@ const MMLNumberInput = ({ text, key, value, onChange }) => (
       onChange={onChange}
     />
   </div>
-);
+)
 
-export default InvestCommandAttachment;
+export default InvestCommandAttachment

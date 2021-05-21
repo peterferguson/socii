@@ -1,38 +1,37 @@
-import { firestore } from "@lib/firebase";
-import IEXQuery from "@lib/iex";
-import { fetchJSON } from "@utils/helper";
-import { PieCardSkeleton } from "@components/PieCard";
-import { GroupPieCard } from "@components/GroupCharts";
+import { firestore } from '@lib/firebase'
+import IEXQuery from '@lib/iex'
+import { fetchJSON } from '@utils/helper'
+import { PieCardSkeleton } from '@components/PieCard'
+import { GroupPieCard } from '@components/GroupCharts'
 
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Dashboard() {
   // TODO: Sidebar with name, breakdown dashboard, activity feed & chat
   // TODO: converting to a footer when in mobile view
 
-  const router = useRouter();
-  const groupName = router.query.groupName;
+  const router = useRouter()
+  const groupName = router.query.groupName
   // const { username, userGroups } = useContext(UserContext);
 
   const cards = [
     {
-      title: "Portfolio Value",
-      subTitle: "350,907",
+      title: 'Portfolio Value',
+      subTitle: '350,907',
       imgComponent: (
         <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-red-500 rounded-full shadow-lg">
           <i className="far fa-chart-bar"></i>
         </div>
       ),
-      headingColor: "text-emerald-500",
+      headingColor: 'text-emerald-500',
       heading: (
         <>
           <i className="fas fa-arrow-up"></i> 3.48%
         </>
       ),
-      headingSubText: "Since last month",
+      headingSubText: 'Since last month',
     },
     {
       title: (
@@ -40,19 +39,19 @@ export default function Dashboard() {
           Top Performer: <span className="text-emerald-500">(TSLA)</span>
         </>
       ),
-      subTitle: "924",
+      subTitle: '924',
       imgComponent: (
         <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-pink-500 rounded-full shadow-lg">
           <i className="fas fa-users"></i>
         </div>
       ),
-      headingColor: "text-red-500",
+      headingColor: 'text-red-500',
       heading: (
         <>
           <i className="fas fa-arrow-down"></i> 1.10%
         </>
       ),
-      headingSubText: "Since last week",
+      headingSubText: 'Since last week',
     },
     {
       title: (
@@ -60,37 +59,37 @@ export default function Dashboard() {
           Latest Purchase: <span className="text-emerald-500">(TSLA)</span>
         </>
       ),
-      subTitle: "2,356",
+      subTitle: '2,356',
       imgComponent: (
         <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-orange-500 rounded-full shadow-lg">
           <i className="fas fa-chart-pie"></i>
         </div>
       ),
-      headingColor: "text-emerald-500",
+      headingColor: 'text-emerald-500',
       heading: (
         <>
           <i className="fas fa-arrow-up"></i> 3.48%
         </>
       ),
-      headingSubText: "Since last week",
+      headingSubText: 'Since last week',
     },
     {
-      title: "Performance vs. Market",
-      subTitle: "49,65%",
+      title: 'Performance vs. Market',
+      subTitle: '49,65%',
       imgComponent: (
         <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white rounded-full shadow-lg bg-lightBlue-500">
           <i className="fas fa-percent"></i>
         </div>
       ),
-      headingColor: "text-emerald-500",
+      headingColor: 'text-emerald-500',
       heading: (
         <>
           <i className="fas fa-arrow-up"></i> 12%
         </>
       ),
-      headingSubText: "Since yesterday",
+      headingSubText: 'Since yesterday',
     },
-  ];
+  ]
 
   return (
     <>
@@ -248,7 +247,7 @@ export default function Dashboard() {
                       <button
                         className="px-3 py-1 mb-1 mr-1 text-xs font-bold text-white uppercase bg-indigo-500 rounded outline-none active:bg-indigo-600 focus:outline-none"
                         type="button"
-                        style={{ transition: "all .15s ease" }}
+                        style={{ transition: 'all .15s ease' }}
                       >
                         See all
                       </button>
@@ -268,7 +267,7 @@ export default function Dashboard() {
                         </th>
                         <th
                           className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap"
-                          style={{ minWidth: "140px" }}
+                          style={{ minWidth: '140px' }}
                         ></th>
                       </tr>
                     </thead>
@@ -286,7 +285,7 @@ export default function Dashboard() {
                             <div className="relative w-full">
                               <div className="flex h-2 overflow-hidden text-xs bg-red-200 rounded">
                                 <div
-                                  style={{ width: "60%" }}
+                                  style={{ width: '60%' }}
                                   className="flex flex-col justify-center text-center text-white bg-red-500 shadow-none whitespace-nowrap"
                                 ></div>
                               </div>
@@ -307,7 +306,7 @@ export default function Dashboard() {
                             <div className="relative w-full">
                               <div className="flex h-2 overflow-hidden text-xs rounded bg-emerald-200">
                                 <div
-                                  style={{ width: "70%" }}
+                                  style={{ width: '70%' }}
                                   className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
                                 ></div>
                               </div>
@@ -328,7 +327,7 @@ export default function Dashboard() {
                             <div className="relative w-full">
                               <div className="flex h-2 overflow-hidden text-xs bg-purple-200 rounded">
                                 <div
-                                  style={{ width: "80%" }}
+                                  style={{ width: '80%' }}
                                   className="flex flex-col justify-center text-center text-white bg-purple-500 shadow-none whitespace-nowrap"
                                 ></div>
                               </div>
@@ -349,7 +348,7 @@ export default function Dashboard() {
                             <div className="relative w-full">
                               <div className="flex h-2 overflow-hidden text-xs rounded bg-lightBlue-200">
                                 <div
-                                  style={{ width: "75%" }}
+                                  style={{ width: '75%' }}
                                   className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-lightBlue-500"
                                 ></div>
                               </div>
@@ -370,7 +369,7 @@ export default function Dashboard() {
                             <div className="relative w-full">
                               <div className="flex h-2 overflow-hidden text-xs bg-orange-200 rounded">
                                 <div
-                                  style={{ width: "30%" }}
+                                  style={{ width: '30%' }}
                                   className="flex flex-col justify-center text-center text-white shadow-none whitespace-nowrap bg-emerald-500"
                                 ></div>
                               </div>
@@ -416,7 +415,7 @@ export default function Dashboard() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 function BlockCard({
@@ -433,16 +432,12 @@ function BlockCard({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
-              <h5 className="text-xs font-bold uppercase text-blueGray-400">
-                {title}
-              </h5>
+              <h5 className="text-xs font-bold uppercase text-blueGray-400">{title}</h5>
               <span className="text-xl font-semibold text-blueGray-700">
                 {subTitle}
               </span>
             </div>
-            <div className="relative flex-initial w-auto pl-4">
-              {imgComponent}
-            </div>
+            <div className="relative flex-initial w-auto pl-4">{imgComponent}</div>
           </div>
           <p className="mt-4 text-sm text-blueGray-400">
             <span className={`${headingColor} mr-2`}>{heading}</span>
@@ -451,33 +446,33 @@ function BlockCard({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function PieChart({ groupName }) {
-  const [currentPrices, setCurrentPrices] = useState([]);
-  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
+  const [currentPrices, setCurrentPrices] = useState([])
+  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`)
 
-  const [holdings, loading] = useCollectionDataOnce(holdingsRef);
+  const [holdings, loading] = useCollectionDataOnce(holdingsRef)
 
   useEffect(() => {
     holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery();
+      const iexClient = new IEXQuery()
 
       fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
         setCurrentPrices((previousState) => ({
           ...previousState,
           [tickerSymbol]: value,
         }))
-      );
-    });
-  }, [holdings]);
+      )
+    })
+  }, [holdings])
 
   const holdingData = holdings?.map(
     ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {
-      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares };
+      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
     }
-  );
+  )
 
   return (
     <>
@@ -499,7 +494,7 @@ function PieChart({ groupName }) {
             {/* Chart */}
             {!loading ? (
               <GroupPieCard
-                className={"bg-opacity-0 bg-gray-50"}
+                className={'bg-opacity-0 bg-gray-50'}
                 groupName={groupName}
                 holdingData={holdingData}
                 currentPrices={currentPrices}
@@ -511,7 +506,7 @@ function PieChart({ groupName }) {
         </div>
       </div>
     </>
-  );
+  )
 }
 {
   /* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">

@@ -5,25 +5,25 @@ import {
   connectSearchBox,
   Configure,
   connectStateResults,
-} from "react-instantsearch-dom";
-import React, { useEffect, useState } from "react";
-import algoliasearch from "algoliasearch/lite";
-import SearchIcon from "@icons/search.svg";
-import LoadingIndicator from "@components/LoadingIndicator";
-import Link from "next/link";
-import debounce from "lodash/debounce";
-import { Dialog } from "@headlessui/react";
-import { useRouter } from "next/router";
-import IEXQuery from "@lib/iex";
-import { useAsync } from "react-async-hook";
-import { fetchJSON } from "utils/helper";
+} from 'react-instantsearch-dom'
+import React, { useEffect, useState } from 'react'
+import algoliasearch from 'algoliasearch/lite'
+import SearchIcon from '@icons/search.svg'
+import LoadingIndicator from '@components/LoadingIndicator'
+import Link from 'next/link'
+import debounce from 'lodash/debounce'
+import { Dialog } from '@headlessui/react'
+import { useRouter } from 'next/router'
+import IEXQuery from '@lib/iex'
+import { useAsync } from 'react-async-hook'
+import { fetchJSON } from 'utils/helper'
 
-const iexClient = new IEXQuery();
+const iexClient = new IEXQuery()
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
-);
+)
 
 const searchClient = {
   search(requests) {
@@ -36,31 +36,31 @@ const searchClient = {
           page: 0,
           processingTimeMS: 0,
         })),
-      });
+      })
     }
 
-    return algoliaClient.search(requests);
+    return algoliaClient.search(requests)
   },
-};
+}
 
 const searchProps = {
-  indexName: "tickers",
+  indexName: 'tickers',
   searchClient,
   searchFunction: function (helper) {
     if (helper.state.query.length < 2) {
-      return; // no search if less than 2 character
+      return // no search if less than 2 character
     }
-    helper.search();
+    helper.search()
   },
-};
+}
 
 const DebouncedSearchBox = connectSearchBox(({ refine }) => {
-  const debouncedSearch = debounce((e) => refine(e.target.value), 200);
+  const debouncedSearch = debounce((e) => refine(e.target.value), 200)
 
   const onChangeDebounced = (e) => {
-    e.persist();
-    debouncedSearch(e, e.eventTarget);
-  };
+    e.persist()
+    debouncedSearch(e, e.eventTarget)
+  }
 
   return (
     <div className="w-full p-2 m-8 ">
@@ -73,24 +73,22 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
       />
       <SearchIcon className="-my-8 mx-4 text-gray-400" />
     </div>
-  );
-});
+  )
+})
 
 const Loading = connectStateResults(({ isSearchStalled }) => {
-  return isSearchStalled ? <LoadingIndicator show={isSearchStalled} /> : null;
-});
+  return isSearchStalled ? <LoadingIndicator show={isSearchStalled} /> : null
+})
 
 const Hit = ({ hit }) => {
-  const [loadingTicker, setLoadingTicker] = useState(false);
+  const [loadingTicker, setLoadingTicker] = useState(false)
 
-  const latestPrice = useAsync(fetchJSON, [
-    iexClient.stockPrice(hit.tickerSymbol),
-  ]);
+  const latestPrice = useAsync(fetchJSON, [iexClient.stockPrice(hit.tickerSymbol)])
   const changePct = useAsync(fetchJSON, [
-    iexClient.stockQuote(hit.tickerSymbol, "changePercent"),
-  ]);
+    iexClient.stockQuote(hit.tickerSymbol, 'changePercent'),
+  ])
 
-  const hitClickHandler = () => setLoadingTicker(!loadingTicker);
+  const hitClickHandler = () => setLoadingTicker(!loadingTicker)
 
   return (
     <Link href={`/stock/${hit.tickerSymbol}`}>
@@ -118,7 +116,7 @@ const Hit = ({ hit }) => {
         <div className="flex">
           <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
           {changePct.result ? (
-            <p className={"inline text-base text-right text-red-400"}>
+            <p className={'inline text-base text-right text-red-400'}>
               {(100 * changePct.result).toFixed(2)}%
             </p>
           ) : (
@@ -127,21 +125,21 @@ const Hit = ({ hit }) => {
         </div>
       </div>
     </Link>
-  );
-};
+  )
+}
 
 // ! BUG: If a user navigates to the same page they are on the loader appears indefinitely
 export default function SearchCard({ showSearchCard, setShowSearchCard }) {
-  const isOpen = showSearchCard;
-  const setIsOpen = setShowSearchCard;
+  const isOpen = showSearchCard
+  const setIsOpen = setShowSearchCard
 
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     if (isOpen) {
-      setIsOpen(!isOpen);
+      setIsOpen(!isOpen)
     }
-  }, [router.asPath]);
+  }, [router.asPath])
 
   // TODO Fix the dialog styling for mobile
   return (
@@ -157,12 +155,9 @@ export default function SearchCard({ showSearchCard, setShowSearchCard }) {
         <Configure hitsPerPage={1} />
         <DebouncedSearchBox delay={400} className="p-2 flex-1 max-w-sm" />
         <Loading className="p-4" />
-        <Hits
-          hitComponent={Hit}
-          className="py-4 px-8 rounded-lg my-10 w-full"
-        />
+        <Hits hitComponent={Hit} className="py-4 px-8 rounded-lg my-10 w-full" />
         {/* <PoweredBy /> */}
       </InstantSearch>
     </Dialog>
-  );
+  )
 }

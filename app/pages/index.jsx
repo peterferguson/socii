@@ -1,16 +1,16 @@
-import { firestore } from "@lib/firebase";
-import { UserContext } from "@lib/context";
-import { logoUrl } from "@utils/helper";
-import Logo from "@components/Logo";
-import OutlineButton from "@components/OutlineButton";
+import { firestore } from '@lib/firebase'
+import { UserContext } from '@lib/context'
+import { logoUrl } from '@utils/helper'
+import Logo from '@components/Logo'
+import OutlineButton from '@components/OutlineButton'
 
-import { useRouter } from "next/router";
-import { useCollection } from "react-firebase-hooks/firestore";
-import React, { useContext } from "react";
+import { useRouter } from 'next/router'
+import { useCollection } from 'react-firebase-hooks/firestore'
+import React, { useContext } from 'react'
 
 export default function Home() {
-  const router = useRouter();
-  const { user } = useContext(UserContext);
+  const router = useRouter()
+  const { user } = useContext(UserContext)
   return (
     <>
       <div className="h-screen grid grid-cols-2 bg-gray-50">
@@ -28,7 +28,7 @@ export default function Home() {
           <div>
             <button
               className="btn btn-transition"
-              onClick={() => router.push(user ? "/stock" : "/enter")}
+              onClick={() => router.push(user ? '/stock' : '/enter')}
             >
               Invest Now
             </button>
@@ -68,13 +68,13 @@ export default function Home() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 function TickerList() {
-  const query = firestore.collection("tickers").where("isPopular", "==", true);
-  const [querySnapshot] = useCollection(query);
-  const tickers = querySnapshot?.docs.map((doc) => doc.data());
+  const query = firestore.collection('tickers').where('isPopular', '==', true)
+  const [querySnapshot] = useCollection(query)
+  const tickers = querySnapshot?.docs.map((doc) => doc.data())
 
   return (
     <>
@@ -87,10 +87,10 @@ function TickerList() {
               src={logoUrl(ticker.ISIN)}
               alt={`${ticker.tickerSymbol} logo`}
             />
-          );
+          )
         })}
     </>
-  );
+  )
 }
 
 function WhySocii() {
@@ -102,9 +102,9 @@ function WhySocii() {
         </h2>
         <div className="max-w-lg mx-auto mt-4 text-white leading-6">
           <p className="pr-4 font-thin">
-            Investing with friends <span className="font-bold">used</span> to
-            mean setting up an investment club, a cumbersome process filled with
-            legal, tax & audit issues to worry about.
+            Investing with friends <span className="font-bold">used</span> to mean
+            setting up an investment club, a cumbersome process filled with legal, tax &
+            audit issues to worry about.
             <br />
             <br />
             With soc
@@ -117,34 +117,33 @@ function WhySocii() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 function FeatureSlider() {
   const timelineHeadings = [
     {
-      supTitle: "Social Investment Platform",
-      title: "Find & Share Investment Ideas",
+      supTitle: 'Social Investment Platform',
+      title: 'Find & Share Investment Ideas',
       description:
-        "Chat with friends in group chats & forums about potential investments",
+        'Chat with friends in group chats & forums about potential investments',
     },
     {
-      supTitle: "Group Trade Execution",
-      title: "Execute Trades Directly From Chat",
-      description: "Use chat bot to set up & execute trades",
+      supTitle: 'Group Trade Execution',
+      title: 'Execute Trades Directly From Chat',
+      description: 'Use chat bot to set up & execute trades',
     },
     {
-      supTitle: "Competitive Leagues",
-      title: "Public Group Leaderboards",
-      description:
-        "Go head to head with and gain investment ideas from other groups",
+      supTitle: 'Competitive Leagues',
+      title: 'Public Group Leaderboards',
+      description: 'Go head to head with and gain investment ideas from other groups',
     },
     {
-      supTitle: "Incorporation Free",
-      title: "No Incorporation",
-      description: "No need to create a company just to invest with friends!",
+      supTitle: 'Incorporation Free',
+      title: 'No Incorporation',
+      description: 'No need to create a company just to invest with friends!',
     },
-  ];
+  ]
   return (
     <>
       <div className="py-8 text-black bg-brand-teal">
@@ -172,7 +171,7 @@ function FeatureSlider() {
                     <div
                       key={`feature-${index}`}
                       className={`mb-8 flex justify-between ${
-                        index % 2 == 0 ? "flex-row-reverse" : ""
+                        index % 2 == 0 ? 'flex-row-reverse' : ''
                       } items-center w-full`}
                     >
                       <div className="order-1 w-5/12"></div>
@@ -188,7 +187,7 @@ function FeatureSlider() {
                         </p>
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -196,5 +195,5 @@ function FeatureSlider() {
         </div>
       </div>
     </>
-  );
+  )
 }

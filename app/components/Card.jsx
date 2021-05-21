@@ -1,15 +1,15 @@
-import { string } from "prop-types";
-import React from "react";
+import { string } from 'prop-types'
+import React from 'react'
 
 SmallCardComponent.propTypes = {
   imageUrl: string,
   headerText: string,
   message: string,
-};
+}
 
 // TODO: set up propTypes Requires at least imageUrl to be passed
 export default function SmallCardComponent(props) {
-  return(
+  return (
     <div className="flex max-w-sm p-6 mx-auto rounded-lg shadow-xl bg-gray-50">
       <div className="flex-shrink-0">
         <img src={`${props.imageUrl}`} alt="" className="w-12 h-12" />
@@ -19,5 +19,5 @@ export default function SmallCardComponent(props) {
         <p className="text-base text-gray-600">props.message</p>
       </div>
     </div>
-  );
+  )
 }

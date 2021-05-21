@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { uncamelCase } from "@utils/helper";
+import React, { useState } from 'react'
+import { uncamelCase } from '@utils/helper'
 
 const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
-  const [dropdown, setDropdown] = useState(false);
-  const [dropdownItems, setDropdownItems] = useState(items);
+  const [dropdown, setDropdown] = useState(false)
+  const [dropdownItems, setDropdownItems] = useState(items)
 
-  const toggleDropdown = () => setDropdown(!dropdown);
+  const toggleDropdown = () => setDropdown(!dropdown)
 
   // adds new item to multiselect
   const addTag = (item) => {
-    setDropdownItems(dropdownItems.filter((e) => e !== item));
-    setSelectedItems(selectedItems.concat(item));
-    setDropdown(false);
-  };
+    setDropdownItems(dropdownItems.filter((e) => e !== item))
+    setSelectedItems(selectedItems.concat(item))
+    setDropdown(false)
+  }
 
   // removes item from multiselect
   const removeTag = (item) => {
-    setSelectedItems(selectedItems.filter((e) => e !== item));
-    setDropdownItems(dropdownItems.concat(item));
-  };
+    setSelectedItems(selectedItems.filter((e) => e !== item))
+    setDropdownItems(dropdownItems.concat(item))
+  }
 
   return (
     <div className="w-full flex flex-col items-center mx-auto ">
@@ -44,7 +44,7 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
                       </div>
                     </div>
                   </div>
-                );
+                )
               })}
               {/* // TODO: Allow input to search the options   */}
               {/* <div className="flex-1">
@@ -64,13 +64,11 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
             </div>
           </div>
         </div>
-        {dropdown ? (
-          <Dropdown items={dropdownItems} addItem={addTag}></Dropdown>
-        ) : null}
+        {dropdown ? <Dropdown items={dropdownItems} addItem={addTag}></Dropdown> : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const Dropdown = ({ items, addItem }) => {
   // tODO: Add dropdown open on dropdown funcitonality
@@ -91,11 +89,11 @@ const Dropdown = ({ items, addItem }) => {
               {uncamelCase(item)}
             </div>
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
 const X = () => (
   <svg
@@ -113,7 +111,7 @@ const X = () => (
     <line x1="18" y1="6" x2="6" y2="18"></line>
     <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
-);
+)
 
 const Chevron = () => (
   <svg
@@ -130,6 +128,6 @@ const Chevron = () => (
   >
     <polyline points="18 15 12 9 6 15"></polyline>
   </svg>
-);
+)
 
-export default Multiselect;
+export default Multiselect

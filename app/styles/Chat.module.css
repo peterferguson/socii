@@ -69,7 +69,9 @@ body::-webkit-scrollbar-thumb {
   padding: 20px 0 0 0px;
 }
 
-.str-chat-channel.messaging .str-chat__main-panel:not(:last-child) .messaging__channel-header {
+.str-chat-channel.messaging
+  .str-chat__main-panel:not(:last-child)
+  .messaging__channel-header {
   border-radius: 10px 0px 0px 0px;
 }
 
@@ -106,9 +108,9 @@ body::-webkit-scrollbar-thumb {
     top: 0;
     left: 0;
     transform: translate3d(-100vw, 0, 0);
-    transition: transform .3s cubic-bezier(0, .52, 0, 1);
+    transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
   }
-  
+
   #mobile-channel-list.show {
     transform: translate3d(0vw, 0, 0);
     z-index: 1000;

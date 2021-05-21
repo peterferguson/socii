@@ -8,5 +8,5 @@ export default function ComingSoon({ className }) {
     >
       Coming Soon
     </div>
-  );
+  )
 }

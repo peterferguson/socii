@@ -12,32 +12,27 @@
 // -
 // -
 
-import AuthCheck from "@components/AuthCheck";
-import { PieCardSkeleton } from "@components/PieCard";
-import GroupColumn from "@components/GroupCharts";
-import { UserContext } from "@lib/context";
-import { auth } from "@lib/firebase";
+import AuthCheck from '@components/AuthCheck'
+import { PieCardSkeleton } from '@components/PieCard'
+import GroupColumn from '@components/GroupCharts'
+import { UserContext } from '@lib/context'
+import { auth } from '@lib/firebase'
 
-import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import { useRouter } from 'next/router'
+import React, { useContext } from 'react'
 
 export default function UserPage() {
-  const router = useRouter();
-  const pagename = router.query.username;
-  const { username, userGroups } = useContext(UserContext);
+  const router = useRouter()
+  const pagename = router.query.username
+  const { username, userGroups } = useContext(UserContext)
 
   // TODO: Convert user photo to a default if none is present
   // TODO: (maybe create a component based on initials)
   return (
     <main>
       <div className="flex flex-row w-full">
-        <img
-          src={auth.currentUser?.photoURL}
-          className="w-12 h-12 m-4 rounded-full"
-        />
-        <div className="p-4 text-xl font-poppins text-brand-light">
-          {pagename}
-        </div>
+        <img src={auth.currentUser?.photoURL} className="w-12 h-12 m-4 rounded-full" />
+        <div className="p-4 text-xl font-poppins text-brand-light">{pagename}</div>
       </div>
       <div className="flex items-center justify-center m-8 mx-auto text-5xl font-poppins">
         Groups
@@ -53,11 +48,11 @@ export default function UserPage() {
         {username == pagename && (
           <AuthCheck>
             {userGroups?.map((groupName) => {
-              return <GroupColumn groupName={groupName} />;
+              return <GroupColumn groupName={groupName} />
             })}
           </AuthCheck>
         )}
       </div>
     </main>
-  );
+  )
 }

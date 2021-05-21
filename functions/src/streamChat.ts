@@ -1,37 +1,37 @@
-const StreamChat = require("stream-chat").StreamChat;
-import { firestore } from "./index";
+const StreamChat = require('stream-chat').StreamChat
+import { firestore } from './index'
 
-import { investFormMML, confirmInvestmentMML } from "./commands/invest/invest";
+import { investFormMML, confirmInvestmentMML } from './commands/invest/invest'
 
-const apiSecret = process.env.STREAM_API_SECRET;
-const apiKey = process.env.STREAM_API_KEY;
+const apiSecret = process.env.STREAM_API_SECRET
+const apiKey = process.env.STREAM_API_KEY
 
 const generateToken = async (data, context) => {
-  const uid = context.auth.uid;
-  const client = new StreamChat(apiKey, apiSecret);
-  const token = client.createToken(data.username);
+  const uid = context.auth.uid
+  const client = new StreamChat(apiKey, apiSecret)
+  const token = client.createToken(data.username)
 
-  const tokenDocRef = firestore.collection(`users/${uid}/stream`).doc(uid);
+  const tokenDocRef = firestore.collection(`users/${uid}/stream`).doc(uid)
 
-  tokenDocRef.set({ token });
-};
+  tokenDocRef.set({ token })
+}
 
 const createGroup = async (data, context) => {
-  const client = new StreamChat(apiKey, apiSecret);
+  const client = new StreamChat(apiKey, apiSecret)
 
-  const admin = { id: "admin" };
-  const channel = client.channel("team", "group-chat", {
+  const admin = { id: 'admin' }
+  const channel = client.channel('team', 'group-chat', {
     name: data.groupName,
     created_by: admin,
-  });
+  })
 
   try {
-    await channel.create();
-    await channel.addMembers([...data.memberUsernames, "admin"]);
+    await channel.create()
+    await channel.addMembers([...data.memberUsernames, 'admin'])
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-};
+}
 
 /*
  * COMMANDS
@@ -45,14 +45,14 @@ const createGroup = async (data, context) => {
 
 const invest = async (req, res) => {
   // show a nice error if you send a GET request
-  if (req.method === "GET") {
+  if (req.method === 'GET') {
     res.status(400).json({
-      body: { error: "Invalid request, only POST requests are allowed" },
-    });
-    return;
+      body: { error: 'Invalid request, only POST requests are allowed' },
+    })
+    return
   }
   // // important: validate that the request came from Stream
-  const client = new StreamChat(apiKey, apiSecret);
+  const client = new StreamChat(apiKey, apiSecret)
   // const valid = client.verifyWebhook(req.body, req.headers["x-signature"]);
   // if (!valid) {
   //   // ! Unauthorized
@@ -68,21 +68,21 @@ const invest = async (req, res) => {
   // const channelID = cID.split(":")[1];
 
   // the body of the message we will modify based on user interactions
-  let message = req.body.message;
+  let message = req.body.message
 
   // form_data will only be present once the user starts interacting
-  const formData = req.body.form_data || {};
-  const action = formData["action"];
-  const user = req.body.user;
+  const formData = req.body.form_data || {}
+  const action = formData['action']
+  const user = req.body.user
 
   // * Dissect the intent
-  let intent;
+  let intent
 
   // // if we understand this intend, send a reply
   // const channel = client.channel(channelType, channelID);
   // const botUser = { id: "mrbot", name: "MR Bot" };
 
-  const channel = client.channel("messaging", "JPT");
+  const channel = client.channel('messaging', 'JPT')
   //   const mmlstring = `
   //     <mml type="card">
   //       <input name="answer" label="Enter your phone number" placeholder="e.g. 999-999-9999"></input>
@@ -93,52 +93,52 @@ const invest = async (req, res) => {
     <mml type="card">
      <invest></invest>
     </mml>
-`;
+`
   const mmlmessage = {
-    user_id: "peterferguson",
-    attachments: [{ type: "mml", mml: mmlstring }],
-  };
-  const response = await channel.sendMessage(mmlmessage);
+    user_id: 'peterferguson',
+    attachments: [{ type: 'mml', mml: mmlstring }],
+  }
+  const response = await channel.sendMessage(mmlmessage)
 
   console.log(
     `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
-  );
+  )
 
   switch (action) {
-    case "confirm":
-      const reportedBy = formData["reported_by"];
-      message.type = "regular";
-      message.mml = confirmInvestmentMML(message.args, reportedBy);
-      message.attachments = null;
-      break;
-    case "cancel":
-      message = null;
-      break;
+    case 'confirm':
+      const reportedBy = formData['reported_by']
+      message.type = 'regular'
+      message.mml = confirmInvestmentMML(message.args, reportedBy)
+      message.attachments = null
+      break
+    case 'cancel':
+      message = null
+      break
     // - Catch all commands sent by user not by action
     default:
       // - Error on missing command args
-      if (message.args.trim() === "") {
-        message.type = "error";
-        message.text = "missing ticket description";
-        message.mml = null;
-        break;
+      if (message.args.trim() === '') {
+        message.type = 'error'
+        message.text = 'missing ticket description'
+        message.mml = null
+        break
       }
       // - Present MML for user to make a choice
-      message.type = "ephemeral";
-      message.mml = investFormMML(message.args, user.name);
+      message.type = 'ephemeral'
+      message.mml = investFormMML(message.args, user.name)
   }
 
   if (message.mml !== null) {
     message.text =
-      "this message contains Message Markup Language, you might need to upgrade your stream-chat-react library.";
+      'this message contains Message Markup Language, you might need to upgrade your stream-chat-react library.'
   }
 
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify({ message }));
-};
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify({ message }))
+}
 
 module.exports = {
   generateToken,
   createGroup,
   invest,
-};
+}

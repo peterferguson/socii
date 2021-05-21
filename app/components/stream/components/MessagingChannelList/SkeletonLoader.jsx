@@ -1,4 +1,4 @@
-import styles from "@styles/MessagingChannelList.module.css";
+import styles from '@styles/MessagingChannelList.module.css'
 
 export const SkeletonLoader = () => {
   return (
@@ -41,5 +41,5 @@ export const SkeletonLoader = () => {
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}

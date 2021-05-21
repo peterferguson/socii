@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { currencySymbols } from "@lib/constants";
+import React, { useState } from 'react'
+import { currencySymbols } from '@lib/constants'
 
 export default function PriceInput({
   setPrice,
-  pricePlaceholder = "0.00",
-  defaultCurrency="USD",
-  textStyling = "font-poppins text-sm text-blueGray-500",
-  showPrice=true
+  pricePlaceholder = '0.00',
+  defaultCurrency = 'USD',
+  textStyling = 'font-poppins text-sm text-blueGray-500',
+  showPrice = true,
 }) {
-  const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency);
+  const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency)
 
   return (
     <div className="text-blueGray-500">
@@ -29,7 +29,7 @@ export default function PriceInput({
           id="price"
           className="focus:ring-teal-500 focus:border-teal-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
           placeholder={pricePlaceholder}
-          onChange={e => setPrice(e.target.value)}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           <label htmlFor="currency" className="sr-only">
@@ -38,17 +38,17 @@ export default function PriceInput({
           <select
             id="currency"
             name="currency"
-            onChange={(e) => {setSelectedCurrency(e.target.value)}}
+            onChange={(e) => {
+              setSelectedCurrency(e.target.value)
+            }}
             className="focus:ring-teal-500 focus:border-teal-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
           >
             {Object.keys(currencySymbols).map((currency) => (
-              <option value={currency}>
-                {currency}
-              </option>
+              <option value={currency}>{currency}</option>
             ))}
           </select>
         </div>
       </div>
     </div>
-  );
+  )
 }

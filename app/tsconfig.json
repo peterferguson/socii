@@ -29,7 +29,8 @@
     "custom.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.jsx"
-, "components/stream/components/MessagingInput/MessagingInput.jsx"  ],
+    "pages/_app.jsx",
+    "components/stream/components/MessagingInput/MessagingInput.jsx"
+  ],
   "exclude": ["node_modules"]
 }

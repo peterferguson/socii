@@ -1,92 +1,86 @@
-import Custom404 from "../404";
-import LineChart from "@components/LineChart";
-import ShareStockInformationModal from "@components/ShareStockInformationModal";
-import SelectGroupModal from "@components/SelectGroupModal";
+import Custom404 from '../404'
+import LineChart from '@components/LineChart'
+import ShareStockInformationModal from '@components/ShareStockInformationModal'
+import SelectGroupModal from '@components/SelectGroupModal'
 import TradingViewChart, {
   TradingViewStockProfile,
   TradingViewStockFinancials,
-} from "@components/TradingViewChart";
-import { SmallAssetCard } from "@components/AssetCards";
-import {
-  isBrowser,
-  logoUrl,
-  pctChange,
-  pnlTextColor,
-  stockProps,
-} from "@utils/helper";
-import { UserContext, SelectedGroupContext } from "@lib/context";
-import { firestore } from "@lib/firebase";
+} from '@components/TradingViewChart'
+import { SmallAssetCard } from '@components/AssetCards'
+import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from '@utils/helper'
+import { UserContext, SelectedGroupContext } from '@lib/context'
+import { firestore } from '@lib/firebase'
 
-import { useRouter } from "next/router";
-import React, { useState, useContext } from "react";
-import { Switch } from "@headlessui/react";
-import { useEffect } from "react";
-import { useWindowSize } from "@lib/hooks";
+import { useRouter } from 'next/router'
+import React, { useState, useContext } from 'react'
+import { Switch } from '@headlessui/react'
+import { useEffect } from 'react'
+import { useWindowSize } from '@lib/hooks'
 
 export default function TickerPage({ tickerSymbols }) {
   if (!tickerSymbols) {
     // TODO: Replace with skeleton loaders
-    return <Custom404 />;
+    return <Custom404 />
   }
 
-  let { ticker, timeseries } = tickerSymbols[0];
-  const [tickerLogoUrl, setTickerLogoUrl] = useState("");
+  let { ticker, timeseries } = tickerSymbols[0]
+  const [tickerLogoUrl, setTickerLogoUrl] = useState('')
 
-  const tickerSymbol = ticker.tickerSymbol;
+  const tickerSymbol = ticker.tickerSymbol
 
-  const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize()
 
   useEffect(() => {
     const setLogoUrl = async () => {
-      setTickerLogoUrl(ticker.logoUrl || (await logoUrl(ticker.ISIN)));
-    };
+      setTickerLogoUrl(ticker.logoUrl || (await logoUrl(ticker.ISIN)))
+    }
 
-    setLogoUrl();
-  }, [ticker]);
+    setLogoUrl()
+  }, [ticker])
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const { user, userGroups } = useContext(UserContext);
+  const { user, userGroups } = useContext(UserContext)
 
-  const [openGroupModal, setOpenGroupModal] = useState(false);
-  const [openStockSharingModal, setOpenStockSharingModal] = useState(false);
-  const [showTradingView, setShowTradingView] = useState(false);
-  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0);
-  const [selectedGroup, setSelectedGroup] = useState(userGroups[0]);
+  const [openGroupModal, setOpenGroupModal] = useState(false)
+  const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
+  const [showTradingView, setShowTradingView] = useState(false)
+  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
+  const [selectedGroup, setSelectedGroup] = useState(userGroups[0])
 
-  const changeSelectedGroup = (groupName) => setSelectedGroup(groupName);
+  const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   timeseries = timeseries.map((d) => {
     return {
       x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
       y: d.close,
-    };
-  });
+    }
+  })
 
-  const latestClose = timeseries[0].y;
-  const highlightedClose = timeseries[crosshairIndexValue].y;
-  let previousMonthClose = highlightedClose;
+  const latestClose = timeseries[0].y
+  const highlightedClose = timeseries[crosshairIndexValue].y
+  let previousMonthClose = highlightedClose
 
   try {
-    previousMonthClose = timeseries[crosshairIndexValue + 21].y;
+    previousMonthClose = timeseries[crosshairIndexValue + 21].y
   } catch (err) {}
 
-  const monthlyPctChange = pctChange(highlightedClose, previousMonthClose);
+  const monthlyPctChange = pctChange(highlightedClose, previousMonthClose)
 
   // * Show the pct change of highlighted value versus today
-  const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2);
+  const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
 
   const handleInvest = () => {
     if (!user) {
-      router.push("/enter");
+      router.push('/enter')
     } else {
-      setOpenGroupModal(true);
+      setOpenGroupModal(true)
     }
-  };
+  }
 
   return (
     <>
@@ -141,9 +135,7 @@ export default function TickerPage({ tickerSymbols }) {
       />
       {isBrowser && (
         <>
-          <SelectedGroupContext.Provider
-            value={{ selectedGroup, changeSelectedGroup }}
-          >
+          <SelectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
             {openGroupModal && (
               <SelectGroupModal
                 userGroups={userGroups}
@@ -183,7 +175,7 @@ export default function TickerPage({ tickerSymbols }) {
         />
       </div>
     </>
-  );
+  )
 }
 
 function Chart({
@@ -202,9 +194,7 @@ function Chart({
           {!showTradingView ? (
             <div className="flex text-2xl text-gray-600 sm:text-3xl">
               {`A $100 investment on ${timeseries[
-                crosshairIndexValue
-                  ? crosshairIndexValue
-                  : timeseries.length - 1
+                crosshairIndexValue ? crosshairIndexValue : timeseries.length - 1
               ].x.toLocaleDateString()} would be worth $${(
                 100 *
                 (1 +
@@ -222,21 +212,21 @@ function Chart({
           )}
           <div className="flex">
             <div className="px-4">
-              {!showTradingView ? "TradingView" : "socii Chart"}
+              {!showTradingView ? 'TradingView' : 'socii Chart'}
             </div>
             {isBrowser && (
               <Switch
                 checked={showTradingView}
                 onChange={setShowTradingView}
                 className={`${
-                  showTradingView ? "bg-brand" : "bg-brand-light"
+                  showTradingView ? 'bg-brand' : 'bg-brand-light'
                 } relative inline-flex items-center h-6 rounded-full w-11 \
               flex-shrink-0 border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >
                 <span className="sr-only">Show Trading View Chart</span>
                 <span
                   className={`${
-                    showTradingView ? "translate-x-6" : "translate-x-1"
+                    showTradingView ? 'translate-x-6' : 'translate-x-1'
                   } inline-block w-4 h-4 transform bg-white rounded-full \
                 pointer-events-none shadow-lg ring-0 transition ease-in-out duration-200`}
                 />
@@ -260,49 +250,49 @@ function Chart({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 export async function getStaticProps({ params }) {
   // TODO add username section here based on the users portfolio
-  const { tickerSymbol } = params;
-  let props;
+  const { tickerSymbol } = params
+  let props
 
   const tickerQuery = firestore
-    .collection("tickers")
-    .where("tickerSymbol", "==", tickerSymbol)
-    .limit(1);
+    .collection('tickers')
+    .where('tickerSymbol', '==', tickerSymbol)
+    .limit(1)
 
   try {
-    props = await stockProps(tickerQuery, "", 100);
+    props = await stockProps(tickerQuery, '', 100)
   } catch (e) {
     return {
       redirect: {
-        destination: "/404",
+        destination: '/404',
         permanent: false,
       },
-    };
+    }
   }
 
   return {
     ...props,
     revalidate: 3000,
-  };
+  }
 }
 
 export async function getStaticPaths(context) {
   const snapshot = await firestore
-    .collection("tickers")
-    .where("isPopular", "==", true)
-    .get();
+    .collection('tickers')
+    .where('isPopular', '==', true)
+    .get()
 
   const paths = snapshot.docs.map((doc) => {
-    const { tickerSymbol } = doc.data();
+    const { tickerSymbol } = doc.data()
     return {
       params: { tickerSymbol },
-    };
-  });
+    }
+  })
 
-  return { paths, fallback: true };
+  return { paths, fallback: true }
   // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 }

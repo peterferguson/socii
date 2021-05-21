@@ -3,59 +3,60 @@
 @tailwind utilities;
 
 @layer components {
-    .btn {
-        @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand-light;
-    }
+  .btn {
+    @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand-light;
+  }
 
-    .btn:hover {
-        @apply bg-brand;
-    }
+  .btn:hover {
+    @apply bg-brand;
+  }
 
-    .btn:focus {
-        @apply ring-teal-300 border-teal-300 outline-none;  
-    }
-    
-    .btn-transition {
-      @apply transform transition;
-    }
-    .btn-transition:hover {
-      @apply -translate-y-0.5;
-    }
-    
-    .outline-btn {
-      @apply bg-transparent mr-auto text-brand-light rounded shadow p-2 border 
+  .btn:focus {
+    @apply ring-teal-300 border-teal-300 outline-none;
+  }
+
+  .btn-transition {
+    @apply transform transition;
+  }
+  .btn-transition:hover {
+    @apply -translate-y-0.5;
+  }
+
+  .outline-btn {
+    @apply bg-transparent mr-auto text-brand-light rounded shadow p-2 border 
       border-brand-light font-work-sans;
-    }
-    
-    .outline-btn:hover {
-      @apply bg-teal-500 text-white shadow-lg border-transparent;
-    }
-    
-    .outline-btn:focus {
-      @apply outline-none;  
-    }
+  }
 
-    .slide-card {
-        @apply flex flex-col transition relative m-0 h-80 w-96 min-w-min p-6 
+  .outline-btn:hover {
+    @apply bg-teal-500 text-white shadow-lg border-transparent;
+  }
+
+  .outline-btn:focus {
+    @apply outline-none;
+  }
+
+  .slide-card {
+    @apply flex flex-col transition relative m-0 h-80 w-96 min-w-min p-6 
         rounded-2xl bg-white clear-both shadow-left;
-    }
+  }
 
-    .slidecard:focus-within~.slide-card, .slide-card:hover~.slide-card {
-        transform: translateX(50px);
-    }
-    
-    .slide-card:hover {
-        transform: translateY(-1rem);
-    }
+  .slidecard:focus-within ~ .slide-card,
+  .slide-card:hover ~ .slide-card {
+    transform: translateX(50px);
+  }
 
-    .slide-card:not(:first-child) {
-        margin-left: -50px;
-    }
+  .slide-card:hover {
+    transform: translateY(-1rem);
+  }
+
+  .slide-card:not(:first-child) {
+    margin-left: -50px;
+  }
 }
 
 @layer components {
   .messaging-input__input-wrapper {
-    @apply  flex items-center w-full min-h-60px min-w-330 h-fit z-[100] rounded-3xl 
+    @apply flex items-center w-full min-h-60px min-w-330 h-fit z-[100] rounded-3xl 
     bg-white border-2 border-gray-400;
   }
 
@@ -64,36 +65,34 @@
   }
 
   .str-chat__messaging-input {
-    @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center
+    @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center;
   }
 }
 
-
 @layer utilities {
-    @variants responsive {
-      /* Chrome, Safari and Opera */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-  
-      .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-      }
+  @variants responsive {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
     }
   }
+}
 
 /* 
  * Needed to remove the border line around the hits
  */
 .ais-Hits-item {
-    width: 100%;
-    border-width: 0px;
-    --tw-shadow: 0 0 #0000;
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-
+  width: 100%;
+  border-width: 0px;
+  --tw-shadow: 0 0 #0000;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
 }
-
 
 /** LoadingIndicator */
 .loader {
@@ -121,7 +120,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 /* Stream chat global css */
 .str-chat__textarea {
@@ -206,13 +204,12 @@ button,
 textarea,
 input,
 select,
-a{
- -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
- -webkit-tap-highlight-color: transparent;
- -webkit-user-select: none;
- -khtml-user-select: none;
- -moz-user-select: none;
- -ms-user-select: none;
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
-
 }

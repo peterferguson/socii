@@ -191,11 +191,14 @@
   transition: background, border 0.1s ease-in-out;
 }
 
-.messaging-create-channel__user-result:hover .messaging-create-channel__user-result-online {
+.messaging-create-channel__user-result:hover
+  .messaging-create-channel__user-result-online {
   border-color: #ffffff;
 }
 
-.str-chat.dark .messaging-create-channel__user-result:hover .messaging-create-channel__user-result-online {
+.str-chat.dark
+  .messaging-create-channel__user-result:hover
+  .messaging-create-channel__user-result-online {
   border-color: #3e3e41;
 }
 

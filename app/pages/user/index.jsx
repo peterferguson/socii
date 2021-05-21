@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default function Portfolio() {
   return (
@@ -70,18 +70,15 @@ export default function Portfolio() {
 
             <div className="flex flex-col h-full py-6 overflow-y-scroll bg-white shadow-xl">
               <div className="px-4 sm:px-6">
-                <h2
-                  className="text-lg font-medium text-gray-900"
-                  id="slide-over-title"
-                >
+                <h2 className="text-lg font-medium text-gray-900" id="slide-over-title">
                   Search
                 </h2>
               </div>
               <div className="relative flex-1 px-4 mt-6 sm:px-6">
                 {/* <!-- Replace with your content --> */}
                 <span className="flex w-3 h-3">
-                    <span className="absolute inline-flex w-full h-full bg-purple-400 rounded-full opacity-75 animate-ping"></span>
-                    <span className="relative inline-flex w-3 h-3 bg-purple-500 rounded-full"></span>
+                  <span className="absolute inline-flex w-full h-full bg-purple-400 rounded-full opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex w-3 h-3 bg-purple-500 rounded-full"></span>
                 </span>
                 {/* <!-- /End replace --> */}
               </div>
@@ -90,5 +87,5 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
-  );
+  )
 }

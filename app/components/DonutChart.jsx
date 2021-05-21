@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { RadialChart, Hint } from "react-vis";
-import { useWindowSize } from "@lib/hooks";
-import "react-vis/dist/style.css";
-import { pnlTextColor } from "@utils/helper";
+import React, { useState } from 'react'
+import { RadialChart, Hint } from 'react-vis'
+import { useWindowSize } from '@lib/hooks'
+import 'react-vis/dist/style.css'
+import { pnlTextColor } from '@utils/helper'
 
 export default function DonutChart({
   data,
@@ -13,13 +13,13 @@ export default function DonutChart({
   scaleToWindow = false,
   skeleton = false,
 }) {
-  const [value, setValue] = useState(false);
+  const [value, setValue] = useState(false)
 
-  let width = 350;
-  let height = 300;
+  let width = 350
+  let height = 300
 
   if (scaleToWindow) {
-    [width, height] = useWindowSize();
+    ;[width, height] = useWindowSize()
   }
 
   const chartProps = {
@@ -33,9 +33,8 @@ export default function DonutChart({
     onValueMouseOver: (v) => setValue(v),
     onSeriesMouseOut: () => setValue(false),
     padAngle: 0.02,
-    colorType: skeleton ? "literal" : "linear",
-  };
-
+    colorType: skeleton ? 'literal' : 'linear',
+  }
 
   // TODO: Add skeleton ternary for the portfolio header
   return (
@@ -43,11 +42,15 @@ export default function DonutChart({
       <div className="font-poppins text-xl -mt-46 mx-auto w-full text-center text-gray-600 z-1">
         <div className="uppercase text-tiny leading-4 ">portfolio</div>
         {text.main}
-        <div className={`font-poppins text-lg mx-auto ${pnlTextColor(parseFloat(text.sub))}`}>
+        <div
+          className={`font-poppins text-lg mx-auto ${pnlTextColor(
+            parseFloat(text.sub)
+          )}`}
+        >
           {text.sub}
         </div>
       </div>
       {value !== false && skeleton === false && <Hint value={value} />}
     </RadialChart>
-  );
+  )
 }

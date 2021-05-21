@@ -1,15 +1,15 @@
-import ChartCard from "@components/ChartCard";
-import CardSlider from "@components/CardSlider";
-import RightChevron from "@icons/rightChevron.svg";
-import { firestore } from "@lib/firebase";
-import { logoUrl, stockProps, isBrowser } from "@utils/helper";
+import ChartCard from '@components/ChartCard'
+import CardSlider from '@components/CardSlider'
+import RightChevron from '@icons/rightChevron.svg'
+import { firestore } from '@lib/firebase'
+import { logoUrl, stockProps, isBrowser } from '@utils/helper'
 import {
   TradingViewStockFundamentals,
   TradingViewStockTickerQuotes,
   TradingViewStockTickerTape,
-} from "@components/TradingViewChart";
+} from '@components/TradingViewChart'
 
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function StockDisplay({ tickerSymbols }) {
   // TODO: on click of chevron create a new view with only the popular stocks
@@ -19,9 +19,9 @@ export default function StockDisplay({ tickerSymbols }) {
       return {
         proName: `${ticker.exchange}:${ticker.tickerSymbol}`,
         title: ticker.tickerSymbol,
-      };
+      }
     }),
-  };
+  }
   return (
     <>
       <div className="flex flex-col">
@@ -34,9 +34,7 @@ export default function StockDisplay({ tickerSymbols }) {
       </div>
       <div>
         <Link href="/stock/popular">
-          <div
-            className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans \ text-brand-dark"
-          >
+          <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans \ text-brand-dark">
             Popular Stocks
             <div className="flex-grow" />
             <RightChevron className="h-8 cursor-pointer mt-0.5" />
@@ -53,19 +51,19 @@ export default function StockDisplay({ tickerSymbols }) {
                 shortName={ticker.shortName}
                 data={timeseries}
               />
-            );
+            )
           })}
         </div>
       </div>
     </>
-  );
+  )
 }
 
 export async function getStaticProps(context) {
   // * Get ticker name from firestore
   const tickerQuery = firestore
-    .collection("tickers")
-    .where("isPopular", "==", true)
-    .limit(5);
-  return await stockProps(tickerQuery, "industry");
+    .collection('tickers')
+    .where('isPopular', '==', true)
+    .limit(5)
+  return await stockProps(tickerQuery, 'industry')
 }

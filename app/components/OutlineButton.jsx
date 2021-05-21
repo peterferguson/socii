@@ -1,4 +1,4 @@
-export default function OutlineButton({ href, text, className}) {
+export default function OutlineButton({ href, text, className }) {
   return (
     <a
       href={href}
@@ -6,5 +6,5 @@ export default function OutlineButton({ href, text, className}) {
     >
       {text}
     </a>
-  );
+  )
 }

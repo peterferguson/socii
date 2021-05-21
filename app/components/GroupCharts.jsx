@@ -1,37 +1,37 @@
-import PieCard, { PieCardSkeleton } from "@components/PieCard";
-import { firestore } from "@lib/firebase";
-import IEXQuery from "@lib/iex";
-import { fetchJSON } from "@utils/helper";
-import Link from "next/link";
-import { logoUrl } from "@utils/helper";
+import PieCard, { PieCardSkeleton } from '@components/PieCard'
+import { firestore } from '@lib/firebase'
+import IEXQuery from '@lib/iex'
+import { fetchJSON } from '@utils/helper'
+import Link from 'next/link'
+import { logoUrl } from '@utils/helper'
 
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
-import React, { useState, useEffect } from "react";
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
+import React, { useState, useEffect } from 'react'
 
 export default function GroupColumn({ groupName }) {
-  const [currentPrices, setCurrentPrices] = useState([]);
-  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`);
+  const [currentPrices, setCurrentPrices] = useState([])
+  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`)
 
-  const [holdings, loading] = useCollectionDataOnce(holdingsRef);
+  const [holdings, loading] = useCollectionDataOnce(holdingsRef)
 
   useEffect(() => {
     holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery();
+      const iexClient = new IEXQuery()
 
       fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
         setCurrentPrices((previousState) => ({
           ...previousState,
           [tickerSymbol]: value,
         }))
-      );
-    });
-  }, [holdings]);
+      )
+    })
+  }, [holdings])
 
   const holdingData = holdings?.map(
     ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {
-      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares };
+      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
     }
-  );
+  )
 
   return (
     <div className="flex flex-col items-center mx-auto mb-4">
@@ -60,21 +60,21 @@ export default function GroupColumn({ groupName }) {
             />
           ) : (
             <StockCardSkeleton />
-          );
+          )
         })}
     </div>
-  );
+  )
 }
 
 export function GroupPieCard({
   groupName,
   holdingData,
   currentPrices,
-  className="",
+  className = '',
 }) {
   const portfolioValue = holdingData
     ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
-    .reduce((a, b) => a + b, 0);
+    .reduce((a, b) => a + b, 0)
 
   const gain =
     ((portfolioValue -
@@ -82,13 +82,13 @@ export function GroupPieCard({
         ?.map(({ avgPrice, shares }) => avgPrice * shares)
         .reduce((a, b) => a + b, 0)) *
       100) /
-    portfolioValue;
+    portfolioValue
 
   const pieData = holdingData?.map(({ tickerSymbol, shortName, shares }) => ({
     theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
     label: shortName,
     subLabel: tickerSymbol,
-  }));
+  }))
 
   return (
     <PieCard
@@ -102,13 +102,13 @@ export function GroupPieCard({
         sub: `${gain.toFixed(2)}%`,
       }}
     />
-  );
+  )
 }
 
-function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
-  const tickerSymbol = holding.tickerSymbol;
+function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
+  const tickerSymbol = holding.tickerSymbol
 
-  const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice;
+  const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   return (
     <div className="flex h-auto m-1">
@@ -154,7 +154,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
           </div>
           <div
             className={`${
-              pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
+              pnl > 0 ? 'bg-teal-200' : pnl < 0 ? 'bg-red-200' : 'bg-brand'
             } text-gray-700 text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
           >
             {pnl.toFixed(2)}%
@@ -162,7 +162,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function StockCardSkeleton() {
@@ -180,5 +180,5 @@ function StockCardSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,30 +1,27 @@
-import NextHead from "next/head";
-import { string } from "prop-types";
-import React from "react";
+import NextHead from 'next/head'
+import { string } from 'prop-types'
+import React from 'react'
 
 Head.propTypes = {
   title: string,
   description: string,
   url: string,
   ogImage: string,
-};
+}
 
-const defaultDescription = "";
-const defaultOGURL = "";
-const defaultOGImage = "";
+const defaultDescription = ''
+const defaultOGURL = ''
+const defaultOGImage = ''
 
 export default function Head(props) {
   return (
     <NextHead>
       <meta charSet="UTF-8" />
-      <title>{props.title || ""}</title>
-      <meta
-        name="description"
-        content={props.description || defaultDescription}
-      />
+      <title>{props.title || ''}</title>
+      <meta name="description" content={props.description || defaultDescription} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta property="og:url" content={props.url || defaultOGURL} />
-      <meta property="og:title" content={props.title || ""} />
+      <meta property="og:title" content={props.title || ''} />
       <meta
         property="og:description"
         content={props.description || defaultDescription}
@@ -40,5 +37,5 @@ export default function Head(props) {
         href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css"
       />
     </NextHead>
-  );
+  )
 }

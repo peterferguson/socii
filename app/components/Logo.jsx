@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link'
 export default function Logo({ className }) {
   return (
     <>
@@ -14,5 +14,5 @@ export default function Logo({ className }) {
         </a>
       </Link>
     </>
-  );
+  )
 }

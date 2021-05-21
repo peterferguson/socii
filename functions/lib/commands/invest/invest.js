@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 // ! MML Components for `/invest` command
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.confirmFormMML = exports.investFormMML = void 0;
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.confirmFormMML = exports.investFormMML = void 0
 const investFormMML = (investMode, asset) => {
-    return `
+  return `
         <mml name="invest_form">
             <text>
             something like hey you want to buy {shortName}?
@@ -17,14 +17,14 @@ const investFormMML = (investMode, asset) => {
                     <input type="text" name="asset_name" value="${asset}" />
                 </column>
             </row>
-        </mml>`;
-};
-exports.investFormMML = investFormMML;
+        </mml>`
+}
+exports.investFormMML = investFormMML
 const confirmFormMML = (description, reportedBy) => {
-    return `
+  return `
         <mml>
             <text>ticket created about "${description}" by ${reportedBy}</text>
-        </mml>`;
-};
-exports.confirmFormMML = confirmFormMML;
+        </mml>`
+}
+exports.confirmFormMML = confirmFormMML
 //# sourceMappingURL=invest.js.map

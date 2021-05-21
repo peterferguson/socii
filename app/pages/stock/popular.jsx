@@ -1,6 +1,6 @@
-import { AssetCard, BlockCard } from "@components/AssetCards";
-import { firestore } from "@lib/firebase";
-import { stockProps } from "@utils/helper";
+import { AssetCard, BlockCard } from '@components/AssetCards'
+import { firestore } from '@lib/firebase'
+import { stockProps } from '@utils/helper'
 
 export default function Popular({ tickerSymbols }) {
   // TODO: on click of chevron create a new view with only the popular stocks
@@ -18,11 +18,7 @@ export default function Popular({ tickerSymbols }) {
             return (
               <>
                 <div className="flex flex-col p-4 mx-auto my-4 bg-white rounded-lg shadow-lg w-88 sm:w-64">
-                  <AssetCard
-                    ticker={ticker}
-                    timeseries={timeseries}
-                    sector={sector}
-                  />
+                  <AssetCard ticker={ticker} timeseries={timeseries} sector={sector} />
                 </div>
                 {/* <BlockCard
                   ticker={ticker}
@@ -30,19 +26,17 @@ export default function Popular({ tickerSymbols }) {
                   sector={sector}
                 /> */}
               </>
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export async function getStaticProps(context) {
   // * Get ticker name from firestore
-  const tickerQuery = firestore
-    .collection("tickers")
-    .where("isPopular", "==", true);
+  const tickerQuery = firestore.collection('tickers').where('isPopular', '==', true)
 
-  return await stockProps(tickerQuery, "industry", 2);
+  return await stockProps(tickerQuery, 'industry', 2)
 }

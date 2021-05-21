@@ -1,22 +1,22 @@
-import { firestore, serverTimestamp, increment } from "./index.js";
+import { firestore, serverTimestamp, increment } from './index.js'
 
 // Helper prototype methods for checking http request constraints
 const allKeysContainedIn = (object, other) => {
-  let keys = null;
+  let keys = null
 
   switch (typeof object) {
-    case "object":
+    case 'object':
       if (Array.isArray(object)) {
-        keys = object;
+        keys = object
       } else {
-        keys = Object.keys(object);
+        keys = Object.keys(object)
       }
-      break;
+      break
   }
 
   // Ensure that the object has all of the keys in `other`
-  return keys.every((key) => key in other);
-};
+  return keys.every((key) => key in other)
+}
 
 /**
  * HTTP Cloud Function to store a purchases data in firebase.
@@ -40,14 +40,14 @@ const tradeToFirestore = async (req, res) => {
     orderType: null,
     price: null,
     shares: null,
-  };
+  }
 
   const optionalArgs = {
-    executionCurrency: "GBP",
-    assetType: "",
-    shortName: "",
-    tickerSymbol: "",
-  };
+    executionCurrency: 'GBP',
+    assetType: '',
+    shortName: '',
+    tickerSymbol: '',
+  }
 
   // * Check for default args and assign them if they exist else end function with 422
   if (!allKeysContainedIn(requiredArgs, req.body)) {
@@ -57,40 +57,38 @@ const tradeToFirestore = async (req, res) => {
         `Please ensure request has all of the following keys: ${JSON.stringify(
           Object.keys(requiredArgs)
         )}`
-      );
-    return;
+      )
+    return
   }
 
-  const assetRef = firestore.doc(req.body.assetRef);
-  const assetData = await assetRef.get();
+  const assetRef = firestore.doc(req.body.assetRef)
+  const assetData = await assetRef.get()
 
-  requiredArgs.assetRef = assetRef;
-  optionalArgs.assetType = assetData.get("assetType");
-  optionalArgs.shortName = assetData.get("shortName");
-  optionalArgs.tickerSymbol = assetData.get("tickerSymbol");
+  requiredArgs.assetRef = assetRef
+  optionalArgs.assetType = assetData.get('assetType')
+  optionalArgs.shortName = assetData.get('shortName')
+  optionalArgs.tickerSymbol = assetData.get('tickerSymbol')
 
-  Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
+  Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]))
 
   // * Add a new trade document with a generated id & update holdings
-  const batch = firestore.batch();
+  const batch = firestore.batch()
   const tradeRef = await firestore
     .collection(`${requiredArgs.executorRef}/trades`)
-    .doc();
+    .doc()
 
   let tradeData = {
     ...optionalArgs,
     ...requiredArgs,
     timestamp: serverTimestamp(),
-  };
+  }
 
   // * Update the holdings avgPrice & shares
   const holdingRef = firestore
     .collection(`${requiredArgs.executorRef}/holdings`)
-    .doc(assetData.get("ISIN"));
+    .doc(assetData.get('ISIN'))
 
-  const negativeEquityMultiplier = requiredArgs.orderType.includes("BUY")
-    ? 1
-    : -1;
+  const negativeEquityMultiplier = requiredArgs.orderType.includes('BUY') ? 1 : -1
 
   // ! We keep holdings which have zero shares in order to easily identify all previous
   // ! holdings of the client without needing to count over trades. This is imposed in the
@@ -98,46 +96,45 @@ const tradeToFirestore = async (req, res) => {
 
   // ! On selling shares the cost basis is not affected & so only the shares is changed
 
-  const sharesIncrement = negativeEquityMultiplier * requiredArgs.shares;
+  const sharesIncrement = negativeEquityMultiplier * requiredArgs.shares
 
   // * Check if the holding already exists
-  const doc = await holdingRef.get();
+  const doc = await holdingRef.get()
   if (doc.exists) {
-    const currentShares = doc.get("shares");
-    const currentAvgPrice = doc.get("avgPrice");
+    const currentShares = doc.get('shares')
+    const currentAvgPrice = doc.get('avgPrice')
     const newAvgPrice =
       negativeEquityMultiplier + 1
-        ? (currentAvgPrice * currentShares +
-            requiredArgs.price * requiredArgs.shares) /
+        ? (currentAvgPrice * currentShares + requiredArgs.price * requiredArgs.shares) /
           (currentShares + requiredArgs.shares)
-        : currentAvgPrice;
+        : currentAvgPrice
 
     // * Add profit to a sell trade on a current holding
     if (!(negativeEquityMultiplier + 1)) {
-      tradeData["pnlPercentage"] =
-        (100 * (requiredArgs.price - currentAvgPrice)) / currentAvgPrice;
+      tradeData['pnlPercentage'] =
+        (100 * (requiredArgs.price - currentAvgPrice)) / currentAvgPrice
     }
 
     batch.update(holdingRef, {
       avgPrice: newAvgPrice,
       shares: increment(sharesIncrement),
       lastUpdated: serverTimestamp(),
-    });
+    })
   } else {
     batch.set(holdingRef, {
       assetRef,
       avgPrice: requiredArgs.price / requiredArgs.shares,
       shares: increment(sharesIncrement),
-      tickerSymbol: assetData.get("tickerSymbol"),
-      shortName: assetData.get("shortName"),
+      tickerSymbol: assetData.get('tickerSymbol'),
+      shortName: assetData.get('shortName'),
       lastUpdated: serverTimestamp(),
-    });
+    })
   }
 
-  batch.set(tradeRef, tradeData);
+  batch.set(tradeRef, tradeData)
 
-  const batchResponse = await batch.commit();
-  res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
-};
+  const batchResponse = await batch.commit()
+  res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`)
+}
 
-module.exports = tradeToFirestore;
+module.exports = tradeToFirestore

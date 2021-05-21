@@ -1,9 +1,9 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import React from "react";
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+import React from 'react'
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
+    const initialProps = await Document.getInitialProps(ctx)
+    return { ...initialProps }
   }
 
   render() {
@@ -36,11 +36,7 @@ class MyDocument extends Document {
             href="public/icons/favicon-16x16.png"
           />
           <link rel="manifest" href="public/manifest.json" />
-          <link
-            rel="mask-icon"
-            href="public/safari-pinned-tab.svg"
-            color="#00aba9"
-          />
+          <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#00aba9" />
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#ffffff" />
@@ -53,8 +49,8 @@ class MyDocument extends Document {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default MyDocument;
+export default MyDocument

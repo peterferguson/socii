@@ -7,14 +7,14 @@ module.exports = {
         issuer: {
           test: /\.(js|ts)x?$/,
         },
-        use: ["@svgr/webpack"],
+        use: ['@svgr/webpack'],
       },
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        loader: require.resolve("url-loader"),
+        loader: require.resolve('url-loader'),
       }
-    );
+    )
 
-    return config;
+    return config
   },
-};
+}

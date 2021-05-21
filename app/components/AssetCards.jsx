@@ -1,10 +1,6 @@
-import {
-  pnlBackgroundColor,
-  pctChange,
-  pnlTextColor,
-  logoUrl,
-} from "@utils/helper";
-import Link from "next/link";
+import { pnlBackgroundColor, pctChange, pnlTextColor, logoUrl } from '@utils/helper'
+import Link from 'next/link'
+import React from 'react'
 
 export default function SmallAssetPctChangeCard({
   logoUrl,
@@ -15,15 +11,15 @@ export default function SmallAssetPctChangeCard({
 }) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="flex-none pl-4 sm:pl-8 pt-4 bg-gray-50">
-      <div className="bg-white p-4 rounded-lg shadow-lg w-40 sm:w-52">
+    <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
+      <div className="w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
         <div className="items-center justify-center sm:flex">
           <img
-            className="shadow-lg rounded-full h-auto w-16 mx-auto"
+            className="w-16 h-auto mx-auto rounded-full shadow-lg"
             src={logoUrl}
             alt={`${tickerSymbol} logo`}
           />
-          <div className="p-2 h-auto w-auto text-center">
+          <div className="w-auto h-auto p-2 text-center">
             <div
               className={`${pnlBackgroundColor(
                 dailyPctChange
@@ -42,15 +38,12 @@ export default function SmallAssetPctChangeCard({
             </div>
           </div>
         </div>
-        <div
-          className="ml-2 text-gray-600 uppercase text-xs w-full inline-block \
-                font-semibold tracking-wider overflow-ellipsis overflow-hidden"
-        >
+        <div className="inline-block w-full ml-2 overflow-hidden text-xs font-semibold tracking-wider text-gray-600 uppercase \ overflow-ellipsis">
           {tickerSymbol} &bull; {shortName}
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function SmallAssetCard({
@@ -59,22 +52,22 @@ export function SmallAssetCard({
   currentPrice,
   monthlyPctChange,
   shortName,
-  currencySymbol = "$",
+  currencySymbol = '$',
 }) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="flex-none pl-4 sm:pl-8 pt-4 bg-gray-50">
-      <div className="bg-white p-4 rounded-lg shadow-lg h-full sm:h-36 w-40 sm:w-52">
+    <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
+      <div className="w-40 h-full p-4 bg-white rounded-lg shadow-lg sm:h-36 sm:w-52">
         <div className="items-center justify-center sm:flex">
           <img
-            className="shadow-lg rounded-full h-auto w-14 mx-auto"
+            className="h-auto mx-auto rounded-full shadow-lg w-14"
             src={logoUrl}
             alt={`${tickerSymbol} logo`}
           />
-          <div className="p-1 h-auto w-auto text-center">
+          <div className="w-auto h-auto p-1 text-center">
             <div
               className={
-                "text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block"
+                'text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block'
               }
             >
               {currencySymbol}
@@ -90,38 +83,35 @@ export function SmallAssetCard({
             </div>
           </div>
         </div>
-        <div
-          className="ml-2 mt-2 sm:mt-4 text-gray-600 uppercase text-xs w-full inline-block \
-                font-semibold tracking-wider overflow-ellipsis"
-        >
+        <div className="inline-block w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-gray-600 uppercase sm:mt-4 \ overflow-ellipsis">
           {tickerSymbol} &bull; {shortName}
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function AssetCard({ ticker, timeseries, sector }) {
   const pnlColor = pnlTextColor(
     pctChange(timeseries[0].close, timeseries[timeseries.length - 1].close)
-  );
+  )
   return (
     <>
       <Link href={`/stock/${ticker.tickerSymbol}`}>
         <a href={ticker.tickerSymbol}>
-          <header className="flex flex-nowrap mb-auto">
+          <header className="flex mb-auto flex-nowrap">
             <img
               className="flex-none w-12 rounded"
               src={logoUrl(ticker.ISIN)}
               alt={`${ticker.tickerSymbol} logo`}
             />
-            <p className="truncate p-2">{ticker.shortName}</p>
+            <p className="p-2 truncate">{ticker.shortName}</p>
           </header>
         </a>
       </Link>
       <Link href={`/stock/${ticker.tickerSymbol}`}>
-        <div className="py-8 mx-3 grid align-middle relative grid-cols-none">
-          <h1 className="font-bold text-xl">{ticker.tickerSymbol}</h1>
+        <div className="relative py-8 mx-3 align-middle grid grid-cols-none">
+          <h1 className="text-xl font-bold">{ticker.tickerSymbol}</h1>
 
           <div className="bpx-border">
             <div className={`font-bold text-3xl ${pnlColor}`}>
@@ -130,53 +120,51 @@ export function AssetCard({ ticker, timeseries, sector }) {
           </div>
         </div>
       </Link>
-      <div className="flex flex-col justify -mt-2 mb-8 pt-2 pb-4 leading-8">
+      <div className="flex flex-col pt-2 pb-4 mb-8 -mt-2 justify leading-8">
         <a
-          className="font-bold w-36 h-8 align-middle text-tiny truncate text-gray-400 \
-                     uppercase border-2 rounded-3xl px-3"
+          className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
           href={ticker.tickerSymbol}
         >
           {sector.sector}
         </a>
         <a
-          className="font-bold w-36 h-8 align-middle text-tiny truncate text-gray-400 \
-                     uppercase border-2 rounded-3xl px-3"
+          className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
           href={ticker.tickerSymbol}
         >
           {sector.industry}
         </a>
       </div>
     </>
-  );
+  )
 }
 
 export function BlockCard({ ticker, timeseries }) {
   return (
-    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+    <div className="w-full px-4 lg:w-6/12 xl:w-3/12">
+      <div className="relative flex flex-col min-w-0 mb-6 break-words bg-white rounded shadow-lg xl:mb-0">
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
-            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <h5 className="text-blueGray-400 uppercase font-bold text-xs">
+            <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
+              <h5 className="text-xs font-bold uppercase text-blueGray-400">
                 {ticker.tickerSymbol}
               </h5>
-              <span className="font-semibold text-xl text-blueGray-700">
+              <span className="text-xl font-semibold text-blueGray-700">
                 ${timeseries[timeseries.length - 1].close}
               </span>
             </div>
-            <div className="relative w-auto pl-4 flex-initial">
-              <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
+            <div className="relative flex-initial w-auto pl-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-red-500 rounded-full shadow-lg">
                 <img
                   className="flex-none w-12 rounded"
                   src={logoUrl(ticker.ISIN)}
                   alt={`${ticker.tickerSymbol} logo`}
                 />
-                <p className="truncate p-2">{ticker.shortName}</p>
+                <p className="p-2 truncate">{ticker.shortName}</p>
               </div>
             </div>
           </div>
-          <p className="text-sm text-blueGray-400 mt-4">
-            <span className="text-emerald-500 mr-2">
+          <p className="mt-4 text-sm text-blueGray-400">
+            <span className="mr-2 text-emerald-500">
               <i className="fas fa-arrow-up"></i> 3.48%
             </span>
             <span className="whitespace-nowrap">Since last month</span>
@@ -184,5 +172,5 @@ export function BlockCard({ ticker, timeseries }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -31,28 +31,28 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import LoadingIndicator from "@components/LoadingIndicator";
-import AuthCheck from "@components/AuthCheck";
-import ClientOnly from "@components/ClientOnly";
-import { StreamChatWindow } from "@components/stream/components/Chat";
-import Custom404 from "../../404";
-import { UserContext } from "@lib/context";
+import LoadingIndicator from '@components/LoadingIndicator'
+import AuthCheck from '@components/AuthCheck'
+import ClientOnly from '@components/ClientOnly'
+import { StreamChatWindow } from '@components/stream/components/Chat'
+import Custom404 from '../../404'
+import { UserContext } from '@lib/context'
 
-import React, { useContext } from "react";
-import { useRouter } from "next/router";
+import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Group() {
-  const router = useRouter();
-  const { groupName } = router.query;
-  const { userGroups, streamClient } = useContext(UserContext);
+  const router = useRouter()
+  const { groupName } = router.query
+  const { userGroups, streamClient } = useContext(UserContext)
 
   if (groupName && !userGroups.includes(groupName)) {
-    return <Custom404 />;
+    return <Custom404 />
   }
 
   if (!streamClient.user) {
     // TODO: Use skeleton loaders for chat
-    return <LoadingIndicator />;
+    return <LoadingIndicator />
   }
 
   return (
@@ -66,5 +66,5 @@ export default function Group() {
         </AuthCheck>
       </div>
     </div>
-  );
+  )
 }

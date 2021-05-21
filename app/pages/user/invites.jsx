@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { firestore } from "@lib/firebase"
+import React, { useState, useEffect } from 'react'
+import { firestore } from '@lib/firebase'
 
 export default function Invites() {
   return (
@@ -16,31 +16,29 @@ export default function Invites() {
       <PhoneInvite className="px-4" />
       <PhoneInvite className="px-4" />
     </>
-  );
+  )
 }
 
 // * Phone sign up & invite system
 function PhoneInvite() {
-  const [digits, setDigits] = useState("");
-  const [previouslyInvited, setPreviouslyInvited] = useState(false);
-  const phoneNumber = `+44${digits}`;
+  const [digits, setDigits] = useState('')
+  const [previouslyInvited, setPreviouslyInvited] = useState(false)
+  const phoneNumber = `+44${digits}`
 
   // Step 1 - Verify Invite is not already invited
   useEffect(() => {
     if (phoneNumber.length === 13) {
-      const ref = firestore.collection("invites").doc(phoneNumber);
+      const ref = firestore.collection('invites').doc(phoneNumber)
       ref.get().then(({ exists }) => {
-        setPreviouslyInvited(exists);
-      });
+        setPreviouslyInvited(exists)
+      })
     }
-  }, [phoneNumber]);
+  }, [phoneNumber])
 
   return (
     <div>
       <fieldset>
-        <div
-          className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none focus:border-opacity-100 focus:border-brand-light"
-        >
+        <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none focus:border-opacity-100 focus:border-brand-light">
           <div className="h-full pt-1 text-sm text-black align-middle bg-white sm:text-base sm:pt-0.5">
             +44
           </div>
@@ -55,8 +53,8 @@ function PhoneInvite() {
           <div
             className={`bg-white text-md sm:text-md pt-1 sm:pt-0.5 ${
               phoneNumber.length === 13
-                ? "text-brand-light btn-transition"
-                : "text-red-400"
+                ? 'text-brand-light btn-transition'
+                : 'text-red-400'
             } p-0.5 align-middle`}
             onClick={phoneNumber.length === 13 ? null : null}
             onKeyDown={phoneNumber.length === 13 ? null : null}
@@ -66,22 +64,22 @@ function PhoneInvite() {
         </div>
       </fieldset>
     </div>
-  );
+  )
 }
 
 // TODO: Implement function to send invites by text
 // TODO: Maybe send a email link or some sharable link with query referencing referral user id
 function SendInvites({ user }) {
-  const numberOfInvites = 2; // * The number of invites available to each user
-  const query = firestore.collection(`users/${user.uid}/invites`);
-  const [invites] = useCollectionData(query);
+  const numberOfInvites = 2 // * The number of invites available to each user
+  const query = firestore.collection(`users/${user.uid}/invites`)
+  const [invites] = useCollectionData(query)
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('')
 
   const sendInvite = async () => {
-    const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc();
-    await inviteRef.set({ email });
-  };
+    const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc()
+    await inviteRef.set({ email })
+  }
 
   return (
     <div>
@@ -97,14 +95,14 @@ function SendInvites({ user }) {
         </>
       )}
     </div>
-  );
+  )
 }
 
 // TODO: Implement this for invitation buttons
 // TODO: Create a firestore read on each users invites so that if they return to this screen the phone numbers are prefilled
 // TODO: ... This will act to disable new invitations and allow users to see who they invited
 function Invited(previouslyInvited) {
-  let [isOpen, setIsOpen] = useState(true);
+  let [isOpen, setIsOpen] = useState(true)
 
   return (
     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
@@ -119,5 +117,5 @@ function Invited(previouslyInvited) {
 
       <button onClick={() => setIsOpen(false)}>Ok</button>
     </Dialog>
-  );
+  )
 }

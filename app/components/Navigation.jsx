@@ -1,23 +1,23 @@
-import { UserContext } from "@lib/context";
-import Logo from "@components/Logo";
-import { userFirstName, signOut } from "@lib/firebase";
-import SearchIcon from "@icons/search.svg";
-import CogIcon from "@icons/cog.svg";
-import PieIcon from "@icons/pie.svg";
-import AtIcon from "@icons/at.svg";
-import LogoutIcon from "@icons/logout.svg";
-import GroupIcon from "@icons/group.svg";
-import RightChevronIcon from "@icons/rightChevron.svg";
-import MenuIcon from "@icons/menu.svg";
-import { Transition, Popover } from "@headlessui/react";
+import { UserContext } from '@lib/context'
+import Logo from '@components/Logo'
+import { userFirstName, signOut } from '@lib/firebase'
+import SearchIcon from '@icons/search.svg'
+import CogIcon from '@icons/cog.svg'
+import PieIcon from '@icons/pie.svg'
+import AtIcon from '@icons/at.svg'
+import LogoutIcon from '@icons/logout.svg'
+import GroupIcon from '@icons/group.svg'
+import RightChevronIcon from '@icons/rightChevron.svg'
+import MenuIcon from '@icons/menu.svg'
+import { Transition, Popover } from '@headlessui/react'
 
-import React, { useContext, useState } from "react";
-import { useRouter } from "next/router";
-import { Fragment } from "react";
+import React, { useContext, useState } from 'react'
+import { useRouter } from 'next/router'
+import { Fragment } from 'react'
 
 export default function Navigation(props) {
-  const { username } = useContext(UserContext);
-  const router = useRouter();
+  const { username } = useContext(UserContext)
+  const router = useRouter()
 
   return (
     <div className="sticky top-0 z-50 flex flex-none w-full mx-auto max-w-8xl bg-gray-50">
@@ -30,13 +30,13 @@ export default function Navigation(props) {
       ) : (
         <button
           className="flex-none btn btn-transition"
-          onClick={() => router.push("/enter")}
+          onClick={() => router.push('/enter')}
         >
           Login
         </button>
       )}
     </div>
-  );
+  )
 }
 
 function SearchBar({ setShowSearchCard }) {
@@ -64,72 +64,72 @@ function SearchBar({ setShowSearchCard }) {
         </span>
       </button>
     </div>
-  );
+  )
 }
 
 function Dropdown() {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   // const [openSettings, setOpenSettings] = useState(false);
-  const { user, username } = useContext(UserContext);
-  const router = useRouter();
+  const { user, username } = useContext(UserContext)
+  const router = useRouter()
 
   // TODO: Add bitcoin svg to navigate to crypto page
   // TODO: Add navigation to stock page
   const dropdownItems = [
     {
-      name: "Invites",
-      description: "Invite your friends to the alpha",
-      href: "/user/invites",
+      name: 'Invites',
+      description: 'Invite your friends to the alpha',
+      href: '/user/invites',
       icon: AtIcon,
     },
     {
-      name: "Stocks",
-      description: "Search the our stock universe",
-      href: "/stock",
+      name: 'Stocks',
+      description: 'Search the our stock universe',
+      href: '/stock',
       icon: ({ className }) => (
         <i className={`fas fa-globe-europe fa-lg -mb-1 ${className}`}></i>
       ),
     },
     {
-      name: "Porfolio",
-      description: "Keep track of your growth",
+      name: 'Porfolio',
+      description: 'Keep track of your growth',
       href: `/user/${username}`,
       icon: PieIcon,
     },
     {
-      name: "Chat",
-      description: "Chat with friends about investments!",
-      href: "/chat",
+      name: 'Chat',
+      description: 'Chat with friends about investments!',
+      href: '/chat',
       icon: ({ className }) => (
         <i className={`fas fa-envelope fa-lg -mb-1 ${className}`}></i>
       ),
     },
     {
-      name: "Groups",
-      description: "View all of your Groups",
-      href: "",
+      name: 'Groups',
+      description: 'View all of your Groups',
+      href: '',
       icon: GroupIcon,
       rightIcon: RightChevronIcon,
       // onClick: () => setOpenSettings(!openSettings),
     },
     {
-      name: "Settings",
-      description: "Adjust your settings",
-      href: "",
+      name: 'Settings',
+      description: 'Adjust your settings',
+      href: '',
       icon: CogIcon,
       rightIcon: RightChevronIcon,
     },
-  ];
+  ]
 
   const grayedDropdownItems = [
     {
-      name: "Sign Out",
-      description: "",
-      href: "",
+      name: 'Sign Out',
+      description: '',
+      href: '',
       icon: LogoutIcon,
       onClick: () => signOut(router, userFirstName(user)),
     },
-  ];
+  ]
 
   return (
     <Popover className="relative z-50 inline-block p-4 text-left">
@@ -160,11 +160,7 @@ function Dropdown() {
                 </div>
                 <div className="p-4 bg-gray-50">
                   {grayedDropdownItems.map((item) => (
-                    <DropdownItem
-                      key={`key-${item.name}`}
-                      item={item}
-                      open={open}
-                    />
+                    <DropdownItem key={`key-${item.name}`} item={item} open={open} />
                   ))}
                 </div>
               </div>
@@ -173,18 +169,18 @@ function Dropdown() {
         </>
       )}
     </Popover>
-  );
+  )
 }
 
-const closePopover = (open) => (open = !open);
+const closePopover = (open) => (open = !open)
 
 function DropdownItem({ item }) {
   const onClickHandler = () => {
-    if ("onClick" in item) {
-      item?.onClick();
+    if ('onClick' in item) {
+      item?.onClick()
     }
-    return closePopover(open);
-  };
+    return closePopover(open)
+  }
   return (
     <a
       key={item.name}
@@ -193,7 +189,7 @@ function DropdownItem({ item }) {
       className="flex items-center p-2 -m-3 rounded-lg transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none"
     >
       <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-        <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
+        <item.icon className={'w-6 h-6 mr-2 text-brand'} aria-hidden="true" />
       </div>
       <div className="flex-grow ml-4">
         <p className="text-sm font-medium text-gray-900">{item.name}</p>
@@ -206,5 +202,5 @@ function DropdownItem({ item }) {
         />
       )}
     </a>
-  );
+  )
 }

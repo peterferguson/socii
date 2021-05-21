@@ -1,4 +1,4 @@
-import { AssetCard } from "@components/AssetCards";
+import { AssetCard } from '@components/AssetCards'
 
 export default function CardSlider({ tickerSymbols }) {
   return (
@@ -8,8 +8,8 @@ export default function CardSlider({ tickerSymbols }) {
           <article className="slide-card">
             <AssetCard ticker={ticker} timeseries={timeseries} sector={sector} />
           </article>
-        );
+        )
       })}
     </section>
-  );
+  )
 }
