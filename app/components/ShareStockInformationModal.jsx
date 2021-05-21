@@ -105,7 +105,7 @@ export default function ShareStockInformationModal({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
               <Dialog.Title
                 as="h3"
                 className="text-lg font-medium text-gray-900 font-poppins"
@@ -118,15 +118,15 @@ export default function ShareStockInformationModal({
                 !
               </Dialog.Title>
               <div className="mt-2">
-                <div className="font-poppins text-sm text-blueGray-500">
+                <div className="text-sm font-poppins text-blueGray-500">
                   Select some data to tell your friends about!
                 </div>
-                <MultiSelect
+                <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
                   items={alphaVantageQueryOptions}
                   selectedItems={selectedItems}
                   setSelectedItems={setSelectedItems}
                 />
-                <div className="font-poppins text-sm text-blueGray-500">
+                <div className="text-sm font-poppins text-blueGray-500">
                   Got a price in mind?
                 </div>
                 <div className="pt-1 pb-2">
@@ -136,15 +136,12 @@ export default function ShareStockInformationModal({
                     pricePlaceholder={pricePlaceholder}
                   />
                 </div>
-                <div className="font-poppins text-sm text-blueGray-500">
+                <div className="text-sm font-poppins text-blueGray-500">
                   Tell them your thoughts!
                 </div>
-                <div className="mb-3 pt-2">
+                <div className="pt-2 mb-3">
                   <textarea
-                    className="form-textarea px-3 py-4 w-full placeholder-blueGray-300 text-blueGray-600 \
-                      relative bg-white rounded-md text-sm border-gray-300 \
-                      shadow-sm focus:outline-none focus:ring-teal-500 \
-                      focus:border-teal-500 "
+                    className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 \ rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                     rows="4"
                     placeholder="Bruh the wallstreetbets bros love it!"
                     onChange={(e) => setMessage(e.target.value)}
@@ -155,10 +152,7 @@ export default function ShareStockInformationModal({
                 <div className="flex-grow" />
                 <button
                   type="button"
-                  className="flex-none justify-center px-4 py-2 text-sm font-medium \
-                    text-teal-900 bg-teal-100 border border-transparent rounded-md \
-                    hover:bg-teal-200 focus:outline-none focus-visible:ring-2 \
-                    focus-visible:ring-offset-2 focus-visible:ring-teal-500"
+                  className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent \ rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
                   onClick={sendMessageClickHandler}
                 >
                   To the moon 🌕
