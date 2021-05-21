@@ -16,11 +16,14 @@ import { MML } from 'mml-react'
 // WARN: And passing these so we then call the api less
 
 const InvestCommandAttachment = ({ attachment }) => {
-  const tickerSymbol = 'TSLA'
-  const tickerState = useTickerPriceData({ tickerSymbol })
+  const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
-  const localCostPerShare = tickerState.price * exchangeRate?.rate
+  const localCostPerShare = exchangeRate
+    ? tickerState.price * exchangeRate?.rate
+    : tickerState.price
+
+  console.log(localCostPerShare)
 
   const converters = {
     invest: (tag) => {
@@ -36,7 +39,10 @@ const InvestCommandAttachment = ({ attachment }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
-      <LogoPriceHeader tickerSymbol={tickerSymbol} tickerState={tickerState} />
+      <LogoPriceHeader
+        tickerSymbol={attachment.tickerSymbol}
+        tickerState={tickerState}
+      />
       <MML converters={converters} source={attachment.mml} />
     </div>
   )
@@ -82,18 +88,24 @@ const LogoPriceHeader = ({ tickerSymbol, tickerState }) => {
 const InvestMMLConverter = ({ key, costPerShare }) => {
   const [cost, onShareChange, onCostChange, toShares] = useShareCost(costPerShare)
 
+  const displayCost = parseFloat(cost)
+  const displayShares = parseFloat(toShares(displayCost))
+
+  console.log(`cost: ${cost}`)
+  console.log(`display: ${displayCost}`)
+  console.log(`shares: ${displayShares}`)
   return (
     <div className="flex flex-col">
       <MMLNumberInput
         text={'Shares'}
         key={`${key}-shares`}
-        value={toShares(cost)}
+        value={displayShares.toFixed(5)}
         onChange={onShareChange}
       />
       <MMLNumberInput
         text={'Cost'}
         key={`${key}-cost`}
-        value={cost}
+        value={displayCost.toFixed(2)}
         onChange={onCostChange}
       />
       <div className="flex flex-row mt-1">

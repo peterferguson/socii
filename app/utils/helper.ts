@@ -67,10 +67,13 @@ export const currencyConversion = async (
     to_currency: toCurrency,
   })
 
-  const exchangeRate = data['Realtime Currency Exchange Rate']['5. Exchange Rate']
-  const lastUpdated = data['Realtime Currency Exchange Rate']['6. Last Refreshed']
+  if ('Realtime Currency Exchange Rate' in data) {
+    const exchangeRate = data['Realtime Currency Exchange Rate']['5. Exchange Rate']
+    const lastUpdated = data['Realtime Currency Exchange Rate']['6. Last Refreshed']
+    return { rate: exchangeRate, lastRefresh: lastUpdated }
+  }
 
-  return { rate: exchangeRate, lastRefresh: lastUpdated }
+  return {}
 }
 
 export const alphaVantageData = async (tickerSymbol) => {

@@ -8,6 +8,7 @@ import { StreamChat } from 'stream-chat'
 import { currencyConversion, fetchJSON, localCostPerShare } from '@utils/helper'
 import { CurrencyCode } from '@lib/constants'
 import IEXQuery from '@lib/iex'
+import { useAsync } from 'react-async-hook'
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 const iexClient = new IEXQuery()
@@ -243,26 +244,20 @@ export function useTickerPriceData({ tickerSymbol }) {
 }
 
 export const useShareCost = (costPerShare) => {
-  const [cost, setCost] = useState(costPerShare?.toString())
+  const [cost, setCost] = useState(costPerShare)
 
   const toShares = (cost) => cost / costPerShare
   const toCost = (shares) => costPerShare * shares
 
-  function tryConvert(cost, convert) {
-    const input = parseFloat(cost)
-
-    if (isNaN(input)) return ''
-
-    const output = convert(input)
-    const rounded = Math.round(output * 1000) / 1000 // 3 d.p
-    return rounded.toString()
+  const onShareChange = (e) => {
+    console.log(`share value: ${e.target.value}`)
+    setCost(toCost(Number(e.target.value)))
   }
 
-  const onShareChange = (e) =>
-    setCost(tryConvert(Number(e.target.value).toString(), toCost))
-
-  const onCostChange = (e) =>
-    setCost(tryConvert(Number(e.target.value).toString(), (v) => v))
+  const onCostChange = (e) => {
+    console.log(`cost value: ${e.target.value}`)
+    setCost(e.target.value)
+  }
 
   return [cost, onCostChange, onShareChange, toShares]
 }
@@ -293,8 +288,14 @@ export const useExchangeRate = (
   const setConversion = async () => {
     rateRef.current = await currencyConversion(fromCurrency, toCurrency)
   }
+  useEffect(() => {
+    if (!rateRef.current) {
+      setConversion()
+    }
+  }, [fromCurrency])
 
-  useInterval(() => setConversion(), 60 * 1000)
+  // Add this for polling the exhange rate
+  // useInterval(() => setConversion(), 60 * 1000)
 
   return rateRef.current
 }
