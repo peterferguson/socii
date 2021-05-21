@@ -5,10 +5,9 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useMediaQuery } from 'react-responsive'
 import { StreamChat } from 'stream-chat'
 
-import { currencyConversion, fetchJSON, localCostPerShare } from '@utils/helper'
+import { currencyConversion, fetchJSON, round } from '@utils/helper'
 import { CurrencyCode } from '@lib/constants'
 import IEXQuery from '@lib/iex'
-import { useAsync } from 'react-async-hook'
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 const iexClient = new IEXQuery()
@@ -244,22 +243,28 @@ export function useTickerPriceData({ tickerSymbol }) {
 }
 
 export const useShareCost = (costPerShare) => {
-  const [cost, setCost] = useState(costPerShare)
+  const [shares, setShares] = useState(1)
 
   const toShares = (cost) => cost / costPerShare
   const toCost = (shares) => costPerShare * shares
 
-  const onShareChange = (e) => {
-    console.log(`share value: ${e.target.value}`)
-    setCost(toCost(Number(e.target.value)))
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target
 
-  const onCostChange = (e) => {
-    console.log(`cost value: ${e.target.value}`)
-    setCost(e.target.value)
-  }
+    const input = parseFloat(value)
+    if (isNaN(input)) {
+      setShares(1)
+      return
+    }
 
-  return [cost, onCostChange, onShareChange, toShares]
+    if (name.toLowerCase() === 'shares') {
+      setShares(input)//.toString())
+      return
+    } else {
+      setShares(toShares(round(input, 2)))//.toString())
+    }
+  }
+  return [shares, handleChange, toCost]
 }
 
 export const useInterval = (callback, delay) => {

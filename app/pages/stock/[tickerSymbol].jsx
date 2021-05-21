@@ -9,13 +9,14 @@ import TradingViewChart, {
 import { SmallAssetCard } from '@components/AssetCards'
 import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from '@utils/helper'
 import { UserContext, SelectedGroupContext } from '@lib/context'
+import { useWindowSize } from '@lib/hooks'
 import { firestore } from '@lib/firebase'
+
 
 import { useRouter } from 'next/router'
 import React, { useState, useContext } from 'react'
 import { Switch } from '@headlessui/react'
 import { useEffect } from 'react'
-import { useWindowSize } from '@lib/hooks'
 
 export default function TickerPage({ tickerSymbols }) {
   if (!tickerSymbols) {

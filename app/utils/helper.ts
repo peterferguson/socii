@@ -245,3 +245,6 @@ export const localCostPerShare = async (
 
 export const currencyFormatter = (number, currency) =>
   new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(number)
+
+export const round = (num: number, places: number) =>
+  Math.round((num + Number.EPSILON) * 10 ** places) / 10 ** places
