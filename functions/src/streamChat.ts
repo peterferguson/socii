@@ -1,7 +1,5 @@
-const StreamChat = require('stream-chat').StreamChat
-import { firestore } from './index'
-
-import { investFormMML, confirmInvestmentMML } from './commands/invest/invest'
+const StreamChat = require("stream-chat").StreamChat
+import { firestore } from "./index"
 
 const apiSecret = process.env.STREAM_API_SECRET
 const apiKey = process.env.STREAM_API_KEY
@@ -19,15 +17,15 @@ const generateToken = async (data, context) => {
 const createGroup = async (data, context) => {
   const client = new StreamChat(apiKey, apiSecret)
 
-  const admin = { id: 'admin' }
-  const channel = client.channel('team', 'group-chat', {
+  const admin = { id: "admin" }
+  const channel = client.channel("team", "group-chat", {
     name: data.groupName,
     created_by: admin,
   })
 
   try {
     await channel.create()
-    await channel.addMembers([...data.memberUsernames, 'admin'])
+    await channel.addMembers([...data.memberUsernames, "admin"])
   } catch (err) {
     console.log(err)
   }
@@ -45,9 +43,9 @@ const createGroup = async (data, context) => {
 
 const invest = async (req, res) => {
   // show a nice error if you send a GET request
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     res.status(400).json({
-      body: { error: 'Invalid request, only POST requests are allowed' },
+      body: { error: "Invalid request, only POST requests are allowed" },
     })
     return
   }
@@ -69,20 +67,22 @@ const invest = async (req, res) => {
 
   // the body of the message we will modify based on user interactions
   let message = req.body.message
+  const args = message.args.split(" ")
 
   // form_data will only be present once the user starts interacting
   const formData = req.body.form_data || {}
-  const action = formData['action']
+  const action = formData["action"]
   const user = req.body.user
 
   // * Dissect the intent
-  let intent
+  const intent = args[0]
+  const tickerSymbol = args[1]
 
   // // if we understand this intend, send a reply
   // const channel = client.channel(channelType, channelID);
   // const botUser = { id: "mrbot", name: "MR Bot" };
 
-  const channel = client.channel('messaging', 'JPT')
+  const channel = client.channel("messaging", "JPT")
   //   const mmlstring = `
   //     <mml type="card">
   //       <input name="answer" label="Enter your phone number" placeholder="e.g. 999-999-9999"></input>
@@ -95,8 +95,8 @@ const invest = async (req, res) => {
     </mml>
 `
   const mmlmessage = {
-    user_id: 'peterferguson',
-    attachments: [{ type: 'mml', mml: mmlstring }],
+    user_id: "peterferguson",
+    attachments: [{ type: "invest", mml: mmlstring, intent: intent, tickerSymbol: tickerSymbol}],
   }
   const response = await channel.sendMessage(mmlmessage)
 
@@ -104,29 +104,29 @@ const invest = async (req, res) => {
     `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
   )
 
-  switch (action) {
-    case 'confirm':
-      const reportedBy = formData['reported_by']
-      message.type = 'regular'
-      message.mml = confirmInvestmentMML(message.args, reportedBy)
-      message.attachments = null
-      break
-    case 'cancel':
-      message = null
-      break
-    // - Catch all commands sent by user not by action
-    default:
-      // - Error on missing command args
-      if (message.args.trim() === '') {
-        message.type = 'error'
-        message.text = 'missing ticket description'
-        message.mml = null
-        break
-      }
-      // - Present MML for user to make a choice
-      message.type = 'ephemeral'
-      message.mml = investFormMML(message.args, user.name)
-  }
+  // switch (action) {
+  //   case 'confirm':
+  //     const reportedBy = formData['reported_by']
+  //     message.type = 'regular'
+  //     message.mml = confirmInvestmentMML(message.args, reportedBy)
+  //     message.attachments = null
+  //     break
+  //   case 'cancel':
+  //     message = null
+  //     break
+  //   // - Catch all commands sent by user not by action
+  //   default:
+  //     // - Error on missing command args
+  //     if (message.args.trim() === '') {
+  //       message.type = 'error'
+  //       message.text = 'missing ticket description'
+  //       message.mml = null
+  //       break
+  //     }
+  //     // - Present MML for user to make a choice
+      // message.type = 'ephemeral'
+      // message.mml = investFormMML(message.args, user.name)
+  // }
 
   if (message.mml !== null) {
     message.text =

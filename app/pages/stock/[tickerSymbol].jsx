@@ -33,7 +33,7 @@ export default function TickerPage({ tickerSymbols }) {
 
   useEffect(() => {
     const setLogoUrl = async () => {
-      setTickerLogoUrl(ticker.logoUrl || (await logoUrl(ticker.ISIN)))
+      setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
     }
 
     setLogoUrl()

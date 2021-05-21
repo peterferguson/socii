@@ -13,6 +13,35 @@ content-type: application/json
       "command": "invest", 
       "args": "buy TSLA", 
       "html":"", 
+      "type":"ephemeral", 
+      "attachments":[], 
+      "latest_reactions":[], 
+      "own_reactions":[], 
+      "reaction_counts":null, 
+      "reaction_scores":null, 
+      "reply_count":0, 
+      "mentioned_users":[], 
+      "silent":false 
+   }, 
+   "user":{ 
+     "id":"peterferguson", 
+     "role":"user", 
+     "banned":false, 
+     "online":true 
+   }, 
+   "form_data":{} 
+}
+###
+POST http://localhost:5001/sociiinvest/europe-west2/investCommand
+content-type: application/json
+
+{ 
+   "message":{ 
+      "id":"", 
+      "text":"/invest buy AAPL", 
+      "command": "invest", 
+      "args": "buy AAPL", 
+      "html":"", 
       "type":"regular", 
       "attachments":[], 
       "latest_reactions":[], 

@@ -69,7 +69,7 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   const tickerRef = firestore.collection('tickers')
   const query = tickerRef.where('tickerSymbol', '==', ticker).limit(1)
   const tickerDoc = (await query.get()).docs[0]
-  return tickerDoc.id
+  return await tickerDoc.id
 }
 
 export function signOut(router, firstname) {

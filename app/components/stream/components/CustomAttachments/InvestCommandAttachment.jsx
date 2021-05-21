@@ -1,7 +1,7 @@
 import router from "next/router"
 import Button from "./MMLButton"
 import { currencyIcons } from "@lib/constants"
-import { pnlBackgroundColor, currencyFormatter } from "@utils/helper"
+import { pnlBackgroundColor, currencyFormatter, logoUrl } from "@utils/helper"
 
 import { FaArrowUp, FaArrowDown } from "react-icons/FA"
 import {
@@ -10,7 +10,7 @@ import {
   useLocalCurrency,
   useExchangeRate,
 } from "@lib/hooks"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { MML } from "mml-react"
 
 // WARN: IEX called for each instance of a invest command message
@@ -25,19 +25,15 @@ const InvestCommandAttachment = ({ attachment }) => {
     ? tickerState.price * exchangeRate?.rate
     : tickerState.price
 
-  console.log(localCostPerShare)
-
   const converters = {
-    invest: (tag) => {
-      return (
-        <InvestMMLConverter
-          {...tag.node.attributes}
-          key={tag.key}
-          localCostPerShare={localCostPerShare}
-          localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
-        />
-      )
-    },
+    invest: (tag) => (
+      <InvestMMLConverter
+        {...tag.node.attributes}
+        key={tag.key}
+        localCostPerShare={localCostPerShare}
+        localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
+      />
+    ),
   }
 
   return (
@@ -58,13 +54,22 @@ const LogoPriceHeader = ({ tickerSymbol, tickerState }) => {
     .replace("bg", "text")
     .replace("200", "700")}`
 
+  const logo = useRef(null);
+
+  useEffect(() => {
+    const getLogo = async () => {
+      logo.current = await logoUrl(tickerSymbol)
+    }
+    getLogo()
+  }, [tickerSymbol])
+
+  console.log(logo.current);
+
   return (
     <div className="cursor-pointer">
       <img
         className="h-auto mx-auto rounded-full shadow-lg w-14"
-        src={
-          "https://storage.googleapis.com/sociiinvest.appspot.com/logos/US88160R1014.png"
-        }
+        src={logo.current}
         alt={`${tickerSymbol} logo`}
         //   onClick={() => router.push(attachment.url)}
       />
@@ -134,7 +139,7 @@ const MMLNumberInput = ({ key, value, onChange, name, currencyIcon = null }) => 
         className="flex items-center px-3 font-bold rounded rounded-r-none font-poppins bg-grey-200 text-grey-400"
       >
         {name}
-        {currencyIcon && <currencyIcon.icon className="ml-2 mb-0.5"/>}
+        {currencyIcon && <currencyIcon.icon className="ml-2 mb-0.5" />}
       </span>
       <input
         type="number"

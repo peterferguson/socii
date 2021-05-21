@@ -20,10 +20,12 @@ export const pnlTextColor = (pctChange: number): string => {
 }
 
 export const logoUrl = (isin) => {
+  const baseUrl = (endpoint) => (`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${endpoint}.png`) 
   if (isin.length <= 4) {
-    isin = tickerToISIN(isin)
+    const url = tickerToISIN(isin).then(r => baseUrl(r))
+    return url
   }
-  return `https://storage.googleapis.com/sociiinvest.appspot.com/logos/${isin}.png`
+  return baseUrl(isin)
 }
 
 export const handleEnterKeyDown = (event, callback) => {
