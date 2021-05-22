@@ -83,21 +83,34 @@ const invest = async (req, res) => {
   // const botUser = { id: "mrbot", name: "MR Bot" };
 
   const channel = client.channel("messaging", "JPT")
-  //   const mmlstring = `
-  //     <mml type="card">
-  //       <input name="answer" label="Enter your phone number" placeholder="e.g. 999-999-9999"></input>
-  //       <button name="action" value="submit">Submit</button>
-  //     </mml>
-  // `;
-  const mmlstring = `
-    <mml type="card">
-     <invest></invest>
-    </mml>
-`
+
+  const mmlstring = `<mml type="card"><invest></invest></mml>`
   const mmlmessage = {
     user_id: "peterferguson",
-    attachments: [{ type: "invest", mml: mmlstring, intent: intent, tickerSymbol: tickerSymbol}],
+    attachments: [
+      {
+        type: "invest",
+        mml: mmlstring,
+        intent: intent,
+        tickerSymbol: tickerSymbol,
+        actions: [
+          {
+            name: "action",
+            text: "Submit",
+            type: "button",
+            value: "submit",
+          },
+          {
+            name: "action",
+            text: "Cancel",
+            type: "button",
+            value: "cancel",
+          },
+        ],
+      },
+    ],
   }
+
   const response = await channel.sendMessage(mmlmessage)
 
   console.log(
@@ -124,16 +137,16 @@ const invest = async (req, res) => {
   //       break
   //     }
   //     // - Present MML for user to make a choice
-      // message.type = 'ephemeral'
-      // message.mml = investFormMML(message.args, user.name)
+  // message.type = 'ephemeral'
+  // message.mml = investFormMML(message.args, user.name)
   // }
 
   if (message.mml !== null) {
     message.text =
-      'this message contains Message Markup Language, you might need to upgrade your stream-chat-react library.'
+      "this message contains Message Markup Language, you might need to upgrade your stream-chat-react library."
   }
 
-  res.setHeader('Content-Type', 'application/json')
+  res.setHeader("Content-Type", "application/json")
   res.end(JSON.stringify({ message }))
 }
 

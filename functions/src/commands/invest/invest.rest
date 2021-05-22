@@ -41,16 +41,9 @@ content-type: application/json
       "text":"/invest buy AAPL", 
       "command": "invest", 
       "args": "buy AAPL", 
-      "html":"", 
-      "type":"regular", 
-      "attachments":[], 
-      "latest_reactions":[], 
-      "own_reactions":[], 
-      "reaction_counts":null, 
-      "reaction_scores":null, 
-      "reply_count":0, 
-      "mentioned_users":[], 
-      "silent":false 
+      "html":"",
+      "attachments":[],
+      "mentioned_users":[]
    }, 
    "user":{ 
      "id":"peterferguson", 
