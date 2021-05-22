@@ -1,13 +1,13 @@
-import { auth, firestore, functions } from '@lib/firebase'
+import { auth, firestore, functions } from "@lib/firebase"
 
-import { useState, useEffect, useLayoutEffect, useRef, useReducer } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useMediaQuery } from 'react-responsive'
-import { StreamChat } from 'stream-chat'
+import { useState, useEffect, useLayoutEffect, useRef, useReducer } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { useMediaQuery } from "react-responsive"
+import { StreamChat } from "stream-chat"
 
-import { currencyConversion, fetchJSON, round } from '@utils/helper'
-import { CurrencyCode } from '@lib/constants'
-import IEXQuery from '@lib/iex'
+import { currencyConversion, fetchJSON, round } from "@utils/helper"
+import { CurrencyCode } from "@lib/constants"
+import IEXQuery from "@lib/iex"
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 const iexClient = new IEXQuery()
@@ -15,9 +15,9 @@ const iexClient = new IEXQuery()
 export function useUserData() {
   const [user] = useAuthState(auth)
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("")
   const [userGroups, setUserGroups] = useState([])
-  const [userStreamToken, setUserStreamToken] = useState('')
+  const [userStreamToken, setUserStreamToken] = useState("")
 
   const streamClient = StreamChat.getInstance(apiKey)
 
@@ -34,7 +34,7 @@ export function useUserData() {
     // allows us to turn off the realtime data feed when finished
     let unsubscribe
 
-    const userRef = firestore.collection('users').doc(user.uid)
+    const userRef = firestore.collection("users").doc(user.uid)
     unsubscribe = userRef.onSnapshot((doc) => {
       const userData = doc.data()
       setUsername(userData?.username)
@@ -50,7 +50,7 @@ export function useUserData() {
     if (snapshot.exists) {
       streamData = await snapshot.data()
     } else {
-      functions.httpsCallable('generateToken')({ username })
+      functions.httpsCallable("generateToken")({ username })
       streamData = await snapshot.data()
     }
     setUserStreamToken(streamData?.token)
@@ -85,9 +85,9 @@ export const useWindowSize = () => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight])
     }
-    window.addEventListener('resize', updateSize)
+    window.addEventListener("resize", updateSize)
     updateSize()
-    return () => window.removeEventListener('resize', updateSize)
+    return () => window.removeEventListener("resize", updateSize)
   }, [])
   return size
 }
@@ -98,22 +98,22 @@ export const useScreenType = () => {
   const is1Cols = useMediaQuery({ minWidth: 800 })
 
   if (is3Cols) {
-    return '3-cols'
+    return "3-cols"
   }
   if (is2Cols) {
-    return '2-cols'
+    return "2-cols"
   }
   if (is1Cols) {
-    return '1-cols'
+    return "1-cols"
   }
 
-  return 'fullscreen'
+  return "fullscreen"
 }
 
 export const useIntersectionObserver = ({
   threshold = 0,
   root = null,
-  rootMargin = '0%',
+  rootMargin = "0%",
 }) => {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
   const [node, setNode] = useState<HTMLElement | null>(null)
@@ -159,7 +159,7 @@ export function useHasMounted() {
 
 function TickerPriceDataReducer(state, action) {
   switch (action.type) {
-    case 'UPDATE_PRICE': {
+    case "UPDATE_PRICE": {
       return {
         ...state,
         price: action.price,
@@ -167,19 +167,19 @@ function TickerPriceDataReducer(state, action) {
         priceLastUpdated: action.priceLastUpdated,
       }
     }
-    case 'UPDATE_TICKER': {
+    case "UPDATE_TICKER": {
       return {
         ...state,
         ticker: action.ticker,
       }
     }
-    case 'UPDATE_COST_PER_SHARE': {
+    case "UPDATE_COST_PER_SHARE": {
       return {
         ...state,
         costPerShare: action.costPerShare,
       }
     }
-    case 'UPDATE_ASSET_CURRENCY': {
+    case "UPDATE_ASSET_CURRENCY": {
       return {
         ...state,
         assetCurrency: action.assetCurrency,
@@ -195,10 +195,10 @@ function TickerPriceDataReducer(state, action) {
 // TODO Add update dispatches to call updates to the values?
 export function useTickerPriceData({ tickerSymbol }) {
   const [state, dispatch] = useReducer(TickerPriceDataReducer, {
-    assetCurrency: 'USD',
+    assetCurrency: "USD",
     price: 0.0,
     priceChange: 0.0,
-    priceLastUpdated: '',
+    priceLastUpdated: "",
     ticker: null,
   })
   // TODO: REFACTOR ONLY TICKER DATA & CREATE EXCHANGE RATE HOOK
@@ -209,10 +209,10 @@ export function useTickerPriceData({ tickerSymbol }) {
 
     const callIEX = async () => {
       stockPrice = await fetchJSON(iexClient.stockPrice(tickerSymbol))
-      changePct = await fetchJSON(iexClient.stockQuote(tickerSymbol, 'changePercent'))
+      changePct = await fetchJSON(iexClient.stockQuote(tickerSymbol, "changePercent"))
 
       dispatch({
-        type: 'UPDATE_PRICE',
+        type: "UPDATE_PRICE",
         price: stockPrice,
         priceChange: changePct,
         priceLastUpdated: new Date().toLocaleString(),
@@ -224,13 +224,13 @@ export function useTickerPriceData({ tickerSymbol }) {
       // WARN: alot more data than necessary to be passed ...
       // TODO: Move it into the ticker collection
       const tickerQuery = firestore
-        .collectionGroup('data')
-        .where('symbol', '==', tickerSymbol)
+        .collectionGroup("data")
+        .where("symbol", "==", tickerSymbol)
         .limit(1)
       const ticker = await (await tickerQuery.get()).docs[0].data()
-      dispatch({ type: 'UPDATE_TICKER', ticker })
+      dispatch({ type: "UPDATE_TICKER", ticker })
       dispatch({
-        type: 'UPDATE_ASSET_CURRENCY',
+        type: "UPDATE_ASSET_CURRENCY",
         assetCurrency: ticker.currency,
       })
     }
@@ -257,18 +257,18 @@ export const useShareCost = (costPerShare) => {
       return
     }
 
-    if (name.toLowerCase() === 'shares') {
-      setShares(input)//.toString())
+    if (name.toLowerCase() === "shares") {
+      setShares(input) //.toString())
       return
     } else {
-      setShares(toShares(round(input, 2)))//.toString())
+      setShares(toShares(round(input, 2))) //.toString())
     }
   }
   return [shares, handleChange, toCost]
 }
 
 export const useInterval = (callback, delay) => {
-  const savedCallback = useRef()
+  const savedCallback = useRef(null)
 
   useEffect(() => {
     savedCallback.current = callback
@@ -317,5 +317,5 @@ export const usePersistentState = (defaultValue, key) => {
 }
 
 export const useLocalCurrency = () => {
-  return usePersistentState('GBP', 'localCurrency')
+  return usePersistentState("GBP", "localCurrency")
 }
