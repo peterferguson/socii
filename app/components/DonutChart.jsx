@@ -39,7 +39,7 @@ export default function DonutChart({
   // TODO: Add skeleton ternary for the portfolio header
   return (
     <RadialChart {...chartProps}>
-      <div className="font-poppins text-xl -mt-46 mx-auto w-full text-center text-gray-600 z-1">
+      <div className="w-full mx-auto text-xl text-center text-gray-600 font-poppins -mt-46 z-1">
         <div className="uppercase text-tiny leading-4 ">portfolio</div>
         {text.main}
         <div

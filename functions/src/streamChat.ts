@@ -117,29 +117,29 @@ const invest = async (req, res) => {
     `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
   )
 
-  // switch (action) {
-  //   case 'confirm':
-  //     const reportedBy = formData['reported_by']
-  //     message.type = 'regular'
-  //     message.mml = confirmInvestmentMML(message.args, reportedBy)
-  //     message.attachments = null
-  //     break
-  //   case 'cancel':
-  //     message = null
-  //     break
-  //   // - Catch all commands sent by user not by action
-  //   default:
-  //     // - Error on missing command args
-  //     if (message.args.trim() === '') {
-  //       message.type = 'error'
-  //       message.text = 'missing ticket description'
-  //       message.mml = null
-  //       break
-  //     }
-  //     // - Present MML for user to make a choice
-  // message.type = 'ephemeral'
-  // message.mml = investFormMML(message.args, user.name)
-  // }
+  switch (action) {
+    case 'confirm':
+      const reportedBy = formData['reported_by']
+      message.type = 'regular'
+      message.mml = confirmInvestmentMML(message.args, reportedBy)
+      message.attachments = null
+      break
+    case 'cancel':
+      message = null
+      break
+    // - Catch all commands sent by user not by action
+    default:
+      // - Error on missing command args
+      if (message.args.trim() === '') {
+        message.type = 'error'
+        message.text = 'missing ticket description'
+        message.mml = null
+        break
+      }
+      // - Present MML for user to make a choice
+  message.type = 'ephemeral'
+  message.mml = investFormMML(message.args, user.name)
+  }
 
   if (message.mml !== null) {
     message.text =

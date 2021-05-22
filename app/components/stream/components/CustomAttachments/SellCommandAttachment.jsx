@@ -16,7 +16,7 @@ import { MML } from "mml-react"
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
 
-const BuyCommandAttachment = ({ attachment }) => {
+const SellCommandAttachment = ({ attachment }) => {
   const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
@@ -26,7 +26,7 @@ const BuyCommandAttachment = ({ attachment }) => {
 
   const converters = {
     buy: (tag) => (
-      <BuyMMLConverter
+      <SellMMLConverter
         {...tag.node.attributes}
         key={tag.key}
         localCostPerShare={localCostPerShare}
@@ -47,7 +47,7 @@ const BuyCommandAttachment = ({ attachment }) => {
 }
 
 
-const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
+const SellMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)
 
   return (
@@ -76,7 +76,7 @@ const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
           key={`buy-button`}
           name="buy"
           className="flex-grow mx-2 outline-btn btn-transition"
-          text="Buy"
+          text="Sell"
         />
       </div>
     </div>
@@ -109,4 +109,4 @@ const MMLNumberInput = ({ key, value, onChange, name, currencyIcon = null }) => 
   )
 }
 
-export default BuyCommandAttachment
+export default SellCommandAttachment

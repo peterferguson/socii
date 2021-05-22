@@ -45,8 +45,8 @@ export default function GroupColumn({ groupName }) {
         <PieCardSkeleton scaling={0.3} radius={250} />
       )}
       {!loading && (
-        <div className="w-full border-b py-3 border-gray-400 h-3.5 my-8 text-center">
-          <span className="py-0 px-2.5 bg-gray-50 text-gray-400">
+        <div className="w-full py-3 my-8 text-center border-b border-gray-400 h-3.5">
+          <span className="py-0 text-gray-400 px-2.5 bg-gray-50">
             {holdings.length} Investments
           </span>
         </div>
@@ -112,24 +112,24 @@ function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
 
   return (
     <div className="flex h-auto m-1">
-      <div className="flex bg-white shadow-2xl rounded-lg w-88 sm:w-96 h-20 p-2">
-        <div className="flex-none mx-auto justify-center rounded-full w-20">
+      <div className="flex h-20 p-2 bg-white rounded-lg shadow-2xl w-88 sm:w-96">
+        <div className="justify-center flex-none w-20 mx-auto rounded-full">
           <Link href={`/stock/${tickerSymbol}`}>
             <div className="cursor-pointer">
               <a>
                 <img
-                  className="shadow-lg rounded-full h-10 w-10 mx-auto"
+                  className="w-10 h-10 mx-auto rounded-full shadow-lg"
                   src={logoUrl(holding.ISIN)}
                   alt={`${tickerSymbol} logo`}
                 />
               </a>
               <a>
-                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                   {holding.shortName}
                 </div>
               </a>
               <a>
-                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                   {tickerSymbol}
                 </div>
               </a>
@@ -138,18 +138,18 @@ function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
         </div>
         <div className="flex-grow" />
         <div className="flex flex-col items-center justify-center w-20 mr-4">
-          <div className="text-gray-600 text-tiny font-semibold overflow-ellipsis overflow-hidden">
+          <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">
             {latestPrice ? (
               `${holding.shares} Shares`
             ) : (
-              <div className="animate-pulse bg-gray-200 w-12"></div>
+              <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div>
-          <div className="text-black uppercase text-md font-semibold tracking-wider overflow-ellipsis overflow-hidden">
+          <div className="overflow-hidden font-semibold tracking-wider text-black uppercase text-md overflow-ellipsis">
             {latestPrice ? (
               `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
             ) : (
-              <div className="animate-pulse bg-gray-200 w-12"></div>
+              <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div>
           <div
@@ -168,15 +168,15 @@ function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
 function StockCardSkeleton() {
   return (
     <div className="flex h-auto m-1">
-      <div className="flex bg-white shadow-2xl rounded-lg w-88 sm:w-96 h-20 p-2">
-        <div className="flex-none mx-auto justify-center rounded-full w-20">
-          <div className="shadow-lg rounded-full h-10 w-10 mx-auto bg-gray-200 animate-pulse" />
-          <div className="mx-auto bg-gray-200 animate-pulse rounded h-3 w-8 my-2" />
+      <div className="flex h-20 p-2 bg-white rounded-lg shadow-2xl w-88 sm:w-96">
+        <div className="justify-center flex-none w-20 mx-auto rounded-full">
+          <div className="w-10 h-10 mx-auto bg-gray-200 rounded-full shadow-lg animate-pulse" />
+          <div className="w-8 h-3 mx-auto my-2 bg-gray-200 rounded animate-pulse" />
         </div>
         <div className="flex-grow w-80"></div>
         <div className="flex flex-col items-center justify-center w-20">
-          <div className="h-3 w-12 mx-auto my-2 bg-gray-200 animate-pulse px-2 rounded-full" />
-          <div className="h-3 w-12 mx-auto my-2 bg-gray-200 animate-pulse" />
+          <div className="w-12 h-3 px-2 mx-auto my-2 bg-gray-200 rounded-full animate-pulse" />
+          <div className="w-12 h-3 mx-auto my-2 bg-gray-200 animate-pulse" />
         </div>
       </div>
     </div>

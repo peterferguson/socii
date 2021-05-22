@@ -4,24 +4,28 @@ import router from "next/router"
 import React, { useEffect, useRef } from "react"
 import { FaArrowUp, FaArrowDown } from "react-icons/FA"
 
-export default function LogoPriceCardHeader({ tickerSymbol, tickerState }) {
-    const { priceChange, price, assetCurrency } = tickerState
-    const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
-    const pnlColors = `${pnlBgColor} ${pnlBgColor
-      .replace("bg", "text")
-      .replace("200", "700")}`
-  
-    const logo = useRef(null)
-  
-    useEffect(() => {
-      const getLogo = async () => {
-        logo.current = await logoUrl(tickerSymbol)
-      }
-      getLogo()
-    }, [tickerSymbol])
-  
-    return (
-      <div className="cursor-pointer">
+export default function LogoPriceCardHeader({
+  tickerSymbol,
+  tickerState,
+  className = "",
+}) {
+  const { priceChange, price, assetCurrency } = tickerState
+  const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
+  const pnlColors = `${pnlBgColor} ${pnlBgColor
+    .replace("bg", "text")
+    .replace("200", "700")}`
+
+  const logo = useRef(null)
+
+  useEffect(() => {
+    const getLogo = async () => {
+      logo.current = await logoUrl(tickerSymbol)
+    }
+    getLogo()
+  }, [tickerSymbol])
+
+  return (
+    <div className={`cursor-pointer ${className}`}>
         <img
           className="h-auto mx-auto rounded-full shadow-lg w-14"
           src={logo.current}
@@ -47,5 +51,5 @@ export default function LogoPriceCardHeader({ tickerSymbol, tickerState }) {
           </div>
         </div>
       </div>
-    )
-  }
+  )
+}
