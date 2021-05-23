@@ -46,13 +46,8 @@ export default function StreamChat({ theme = "light" }) {
               </p>
             </div>
           )} */}
-            <StreamChannelList
-              mobile={mobile}
-              toggleMobile={toggleMobile}
-              isCreating={isCreating}
-              setIsCreating={setIsCreating}
-            />
           <StreamChatWindow
+            mobile={mobile}
             toggleMobile={toggleMobile}
             isCreating={isCreating}
             setIsCreating={setIsCreating}
@@ -64,6 +59,7 @@ export default function StreamChat({ theme = "light" }) {
 }
 
 export function StreamChatWindow({
+  mobile = false,
   toggleMobile = () => {},
   theme = "light",
   isCreating = false,
@@ -112,7 +108,6 @@ export function StreamChatWindow({
     initChat()
   }, [mounted, username, streamClient.user]) // eslint-disable-line react-hooks/exhaustive-dep
 
-
   if (channel) {
     return (
       <Chat client={streamClient} theme={`messaging ${theme}`}>
@@ -130,7 +125,7 @@ export function StreamChatWindow({
     )
   }
   return (
-    <div>
+    <>
       <Channel
         maxNumberOfFiles={10}
         multipleUploads={true}
@@ -138,21 +133,22 @@ export function StreamChatWindow({
       >
         <ChannelChildren />
       </Channel>
-    </div>
+      <StreamChannelList
+        mobile={mobile}
+        toggleMobile={toggleMobile}
+        isCreating={isCreating}
+        setIsCreating={setIsCreating}
+      />
+    </>
   )
 }
 
-export function StreamChannelList({
-  toggleMobile = () => {},
-  mobile,
-  isCreating,
-  setIsCreating,
-}) {
+export function StreamChannelList({ mobile, isCreating, setIsCreating }) {
   const onCreateChannel = () => setIsCreating(!isCreating)
   const onClose = () => setIsCreating(false)
   return (
     <div
-      className={`absolute inset-y-0 left-0 transform ${
+      className={`absolute inset-y-0 right-0 transform ${
         mobile ? "-translate-x-full" : "md:translate-x-0"
       }  md:relative  transition duration-500 ease-in-out`}
     >

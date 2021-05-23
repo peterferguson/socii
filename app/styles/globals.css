@@ -132,9 +132,11 @@
 
 .str-chat__textarea textarea {
   background: #ffffff;
+  padding: 0px 16px;
+  vertical-align: middle;
   font-size: 14px;
   line-height: 16px;
-  min-height: 0px;
+  min-height: 12px;
   border: none !important;
   outline: none !important;
   transition: box-shadow 0.2s ease-in-out;
