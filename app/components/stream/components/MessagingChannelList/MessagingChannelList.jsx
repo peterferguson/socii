@@ -1,11 +1,10 @@
-import { memo } from 'react'
-import { Avatar } from 'stream-chat-react'
-import { useContext } from 'react'
-import { UserContext } from '@lib/context'
-import styles from '@styles/MessagingChannelList.module.css'
-import { SkeletonLoader } from './SkeletonLoader'
+import React, { memo } from "react"
+import { Avatar } from "stream-chat-react"
+import { useContext } from "react"
+import { UserContext } from "@lib/context"
+import { SkeletonLoader } from "./SkeletonLoader"
 
-import CreateChannelIcon from '@icons/stream/createChannelIcon.svg'
+import { MdChatBubbleOutline } from "react-icons/MD"
 
 const MessagingChannelList = ({
   children,
@@ -18,17 +17,15 @@ const MessagingChannelList = ({
   const { id, name, image } = streamClient.user || {}
 
   const ListHeaderWrapper = ({ children }) => (
-    <div className={styles['messaging__channel-list']}>
-      <div className={styles['messaging__channel-list__header']}>
+    <div className="h-full px-3 py-3 pt-5 overflow-y-auto w-80">
+      <div className="flex items-center py-3 pl-5 mb-5">
         <Avatar image={image} name={name} size={40} />
-        <div className={styles['messaging__channel-list__header__name']}>
-          {name || id}
-        </div>
+        <div className="flex text-base font-extrabold font-poppins">{name || id}</div>
         <button
-          className={styles['messaging__channel-list__header__button']}
+          className="flex items-center justify-center w-10 h-10 ml-auto mr-5 bg-white border-0 rounded-full shadow-2xl cursor-pointer focus:outline-none"
           onClick={onCreateChannel}
         >
-          <CreateChannelIcon className="h-4 w-4" />
+          <MdChatBubbleOutline className="w-5 h-5 text-brand" />
         </button>
       </div>
       {children}
@@ -38,7 +35,7 @@ const MessagingChannelList = ({
   if (error) {
     return (
       <ListHeaderWrapper>
-        <div className={styles['messaging__channel-list__message']}>
+        <div className="mt-8 ml-8">
           Error loading conversations, please try again momentarily.
         </div>
       </ListHeaderWrapper>
@@ -48,7 +45,7 @@ const MessagingChannelList = ({
   if (loading || !streamClient.user) {
     return (
       <ListHeaderWrapper>
-        <div className={styles['messaging__channel-list__message']}>
+        <div className="mt-8 ml-8">
           <SkeletonLoader />
         </div>
       </ListHeaderWrapper>

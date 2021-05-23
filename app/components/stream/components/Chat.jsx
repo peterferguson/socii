@@ -5,7 +5,7 @@ import {
   MessageInput,
   MessageList,
   Window,
-} from 'stream-chat-react'
+} from "stream-chat-react"
 
 import {
   CreateChannel,
@@ -17,16 +17,19 @@ import {
   MessagingInput,
   MessagingThread,
   TypingIndicator,
-} from '@components/stream/components'
+} from "@components/stream/components"
 
-import React, { useState, useContext, useEffect } from 'react'
-import { UserContext } from '@lib/context'
-import { useHasMounted } from '@lib/hooks'
-import { getInitials, getRandomImage, isBrowser } from '@utils/helper'
+import React, { useState, useContext, useEffect } from "react"
+import { UserContext } from "@lib/context"
+import { useHasMounted } from "@lib/hooks"
+import { getInitials, getRandomImage, isBrowser } from "@utils/helper"
 
-export default function StreamChat({ theme = 'light' }) {
+export default function StreamChat({ theme = "light" }) {
   const { username, streamClient } = useContext(UserContext)
   const [isCreating, setIsCreating] = useState(false)
+  const [mobile, setMobile] = useState(false)
+
+  const toggleMobile = () => setMobile(!mobile)
   // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
 
   return (
@@ -43,8 +46,17 @@ export default function StreamChat({ theme = 'light' }) {
               </p>
             </div>
           )} */}
-          <StreamChannelList isCreating={isCreating} setIsCreating={setIsCreating} />
-          <StreamChatWindow isCreating={isCreating} setIsCreating={setIsCreating} />
+            <StreamChannelList
+              mobile={mobile}
+              toggleMobile={toggleMobile}
+              isCreating={isCreating}
+              setIsCreating={setIsCreating}
+            />
+          <StreamChatWindow
+            toggleMobile={toggleMobile}
+            isCreating={isCreating}
+            setIsCreating={setIsCreating}
+          />
         </Chat>
       )}
     </>
@@ -53,7 +65,7 @@ export default function StreamChat({ theme = 'light' }) {
 
 export function StreamChatWindow({
   toggleMobile = () => {},
-  theme = 'light',
+  theme = "light",
   isCreating = false,
   setIsCreating = () => {},
   groupName = null,
@@ -66,7 +78,7 @@ export function StreamChatWindow({
   const [channel, setChannel] = useState(undefined)
   const mounted = useHasMounted()
 
-  const groupChatName = groupName?.split(' ').join('-')
+  const groupChatName = groupName?.split(" ").join("-")
 
   function ChannelChildren() {
     return (
@@ -75,7 +87,7 @@ export function StreamChatWindow({
         <Window>
           <MessagingChannelHeader theme={theme} toggleMobile={toggleMobile} />
           <MessageList
-            messageActions={['edit', 'delete', 'flag', 'mute', 'react', 'reply']}
+            messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
             Message={CustomMessage}
             TypingIndicator={TypingIndicator}
           />
@@ -90,7 +102,7 @@ export function StreamChatWindow({
     const initChat = async () => {
       if (mounted && groupChatName) {
         setChannel(
-          await streamClient.channel('messaging', groupChatName, {
+          await streamClient.channel("messaging", groupChatName, {
             image: getRandomImage(getInitials(groupName)),
             name: `${groupName} Group Chat`,
           })
@@ -98,7 +110,8 @@ export function StreamChatWindow({
       }
     }
     initChat()
-  }, [mounted, username, streamClient.user])
+  }, [mounted, username, streamClient.user]) // eslint-disable-line react-hooks/exhaustive-dep
+
 
   if (channel) {
     return (
@@ -131,15 +144,20 @@ export function StreamChatWindow({
 
 export function StreamChannelList({
   toggleMobile = () => {},
+  mobile,
   isCreating,
   setIsCreating,
 }) {
   const onCreateChannel = () => setIsCreating(!isCreating)
   const onClose = () => setIsCreating(false)
   return (
-    <div id="mobile-channel-list" onClick={toggleMobile}>
+    <div
+      className={`absolute inset-y-0 left-0 transform ${
+        mobile ? "-translate-x-full" : "md:translate-x-0"
+      }  md:relative  transition duration-500 ease-in-out`}
+    >
       <ChannelList
-        filters={{ type: 'messaging' }}
+        filters={{ type: "messaging" }}
         sort={{ last_message_at: -1 }}
         options={{ state: true, presence: true, limit: 10 }}
         List={(props) => (

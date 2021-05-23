@@ -1,25 +1,26 @@
-import { memo, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { Avatar, ChatContext } from 'stream-chat-react'
-import _debounce from 'lodash.debounce'
+import React, {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import { Avatar, ChatContext } from "stream-chat-react"
+import _debounce from "lodash.debounce"
 
-import XButton from '@icons/stream/XButton.svg'
-import XButtonBackground from '@icons/stream/XButtonBackground.svg'
-
-import styles from '@styles/CreateChannel.module.css'
+import XButton from "@icons/stream/XButton.svg"
+import XButtonBackground from "@icons/stream/XButtonBackground.svg"
 
 const UserResult = ({ user }) => (
-  <li className={styles['messaging-create-channel__user-result']}>
+  <li className="flex items-center justify-between h-12 p-2 m-0 cursor-pointer focus:bg-white">
     <Avatar image={user.image} size={40} />
     {user.online && (
-      <div className={styles['messaging-create-channel__user-result-online']} />
+      <div className="relative w-4 h-4 rounded-lg right-7 bottom-[14px] border-gray-50 transition-colors ease-in-out duration-100 hover:border-white" />
     )}
-    <div className={styles['messaging-create-channel__user-result__details']}>
+    <div className="flex flex-col">
       <span>{user.name}</span>
-      <span
-        className={styles['messaging-create-channel__user-result__details__last-seen']}
-      >
-        {user.online}
-      </span>
+      <span className=" text-xs font-normal">{user.online}</span>
     </div>
   </li>
 )
@@ -28,7 +29,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   const { client, setActiveChannel } = useContext(ChatContext)
 
   const [focusedUser, setFocusedUser] = useState(undefined)
-  const [inputText, setInputText] = useState('')
+  const [inputText, setInputText] = useState("")
   const [resultsOpen, setResultsOpen] = useState(false)
   const [searchEmpty, setSearchEmpty] = useState(false)
   const [searching, setSearching] = useState(false)
@@ -38,7 +39,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   const inputRef = useRef()
 
   const clearState = () => {
-    setInputText('')
+    setInputText("")
     setResultsOpen(false)
     setSearchEmpty(false)
   }
@@ -48,9 +49,11 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
       if (resultsOpen) clearState()
     }
 
-    document.addEventListener('click', clickListener)
+    inputRef.current.focus()
 
-    return () => document.removeEventListener('click', clickListener)
+    document.addEventListener("click", clickListener)
+
+    return () => document.removeEventListener("click", clickListener)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const findUsers = async () => {
@@ -64,7 +67,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
           $and: [
             { name: { $autocomplete: inputText } },
             {
-              name: { $nin: ['Daniel Smith', 'Kevin Rosen', 'Jen Alexander'] },
+              name: { $nin: ["Daniel Smith", "Kevin Rosen", "Jen Alexander"] },
             },
           ],
         },
@@ -102,7 +105,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
     if (!selectedUsersIds.length) return
 
-    const conversation = await client.channel('messaging', {
+    const conversation = await client.channel("messaging", {
       members: [...selectedUsersIds, client.userID],
     })
 
@@ -120,7 +123,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
 
     setSelectedUsers([...selectedUsers, u])
     setResultsOpen(false)
-    setInputText('')
+    setInputText("")
     inputRef.current.focus()
   }
 
@@ -157,63 +160,62 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   )
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown, false)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown, false)
+    return () => document.removeEventListener("keydown", handleKeyDown)
   }, [handleKeyDown])
 
   return (
-    <div className={styles['messaging-create-channel']}>
-      <header>
-        <div className={styles['messaging-create-channel__left']}>
-          <div className={styles['messaging-create-channel__left-text']}>To: </div>
-          <div className={styles['users-input-container']}>
+    <div className="flex-col flex-1 block w-screen mx-5 my-1 bg-white shadow-2xl sm:flex h-[unset] sm:h-screen rounded-xl">
+      <header className="flex items-center justify-between pl-6 rounded-b-none bg-gray-50 shadow-4xl rounded-xl pr-2.5">
+        <div className="flex items-center flex-1">
+          <div className="text-lg opacity-50 mr-2.5 font-work-sans">To: </div>
+          <div className=" min-w-85 mt-1.5 -mb-1.5">
             {!!selectedUsers?.length && (
-              <div className={styles['messaging-create-channel__users']}>
+              <div className="flex flex-wrap px-2 max-w-95">
                 {selectedUsers.map((user) => (
                   <div
-                    className={styles['messaging-create-channel__user']}
+                    className="flex items-center justify-between px-3 bg-gray-200 rounded-full cursor-pointer opacity-90 py-1.5"
                     onClick={() => removeUser(user)}
                     key={user.id}
                   >
-                    <div className={styles['messaging-create-channel__user-text']}>
-                      {user.name}
-                    </div>
-                    <XButton className="h-2 w-2" />
+                    <div className="mr-2">{user.name}</div>
+                    <XButton className="w-2 h-2" />
                   </div>
                 ))}
               </div>
             )}
-            <form onSubmit={addUser}>
+            <form onSubmit={addUser} className="flex items-center h-12 pb-2">
               <input
                 autoFocus
                 ref={inputRef}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={
-                  !selectedUsers.length ? 'Start typing for suggestions' : ''
-                }
+                placeholder={!selectedUsers.length ? "Type for suggestions" : ""}
                 type="text"
-                className={styles['messaging-create-channel__input']}
+                className="max-w-xs border-none focus:outline-none bg-gray-50"
               />
             </form>
           </div>
-          <div className={styles['close-mobile-create']} onClick={() => toggleMobile()}>
-            <XButtonBackground className="h-4 w-4 bg-brand-teal" />
+          <div className="sm:hidden" onClick={() => toggleMobile()}>
+            <XButtonBackground className="w-4 h-4 bg-brand-teal" />
           </div>
         </div>
-        <button className={styles['create-channel-button']} onClick={createChannel}>
-          Start chat
+        <button
+          className="flex-1 h-10 text-lg font-extrabold text-white border-none outline-none cursor-pointer rounded-3xl right-3 min-w-[76px] max-w-[111px] bg-brand-light font-poppins"
+          onClick={createChannel}
+        >
+          Chat
         </button>
       </header>
       {inputText && (
-        <main>
-          <ul className={styles['messaging-create-channel__user-results']}>
+        <main className="flex-1">
+          <ul className="flex flex-col max-w-xs p-0 mt-1 ml-1 overflow-y-auto list-none shadow-2xl opacity-90 rounded-xl">
             {!!users?.length && !searchEmpty && (
               <div>
                 {users.map((user, i) => (
                   <div
-                    className={`${styles['messaging-create-channel__user-result']} ${
-                      focusedUser === i && 'focused'
+                    className={` h-14 flex items-center justify-between m-0 p-2 cursor-pointer ${
+                      focusedUser === i && "bg-white"
                     }`}
                     onClick={() => addUser(user)}
                     key={user.id}
@@ -229,7 +231,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
                   inputRef.current.focus()
                   clearState()
                 }}
-                className={styles['messaging-create-channel__user-result empty']}
+                className="pl-4"
               >
                 No people found...
               </div>

@@ -1,19 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Avatar, ChannelContext } from 'stream-chat-react'
+import React, { useContext, useEffect, useRef, useState } from "react"
+import { Avatar, ChannelContext } from "stream-chat-react"
 
-import styles from '@styles/MessagingChannelHeader.module.css'
-import Menu from '@icons/menu.svg'
-import ChannelInfoIcon from '@icons/stream/channelInfoIcon.svg'
-import ChannelSaveIcon from '@icons/stream/channelSaveIcon.svg'
+import styles from "@styles/MessagingChannelHeader.module.css"
 
-import { getCleanImage } from '@utils/helper'
+import { FaList } from "react-icons/FA"
+import { MdEdit, MdSave} from "react-icons/MD"
+import { getCleanImage } from "@utils/helper"
 
-import TypingIndicator from './TypingIndicator'
+import TypingIndicator from "./TypingIndicator"
 
 const getAvatarGroup = (members) => {
   if (members.length === 1) {
     return (
-      <div className={styles['messaging__channel-header__avatars']}>
+      <div className={styles["messaging__channel-header__avatars"]}>
         <Avatar image={getCleanImage(members[0])} size={40} />;
       </div>
     )
@@ -21,7 +20,7 @@ const getAvatarGroup = (members) => {
 
   if (members.length === 2) {
     return (
-      <div className={styles['messaging__channel-header__avatars two']}>
+      <div className={styles["messaging__channel-header__avatars two"]}>
         <span>
           <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
         </span>
@@ -34,7 +33,7 @@ const getAvatarGroup = (members) => {
 
   if (members.length === 3) {
     return (
-      <div className={styles['messaging__channel-header__avatars three']}>
+      <div className={styles["messaging__channel-header__avatars three"]}>
         <span>
           <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
         </span>
@@ -48,7 +47,7 @@ const getAvatarGroup = (members) => {
 
   if (members.length >= 4) {
     return (
-      <div className={styles['messaging__channel-header__avatars four']}>
+      <div className={styles["messaging__channel-header__avatars four"]}>
         <span>
           <Avatar
             image={getCleanImage(members[members.length - 1])}
@@ -83,9 +82,9 @@ const getAvatarGroup = (members) => {
 const MessagingChannelHeader = (props) => {
   const { channel, client } = useContext(ChannelContext)
 
-  const [channelName, setChannelName] = useState(channel?.data.name || '')
+  const [channelName, setChannelName] = useState(channel?.data.name || "")
   const [isEditing, setIsEditing] = useState(false)
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState("")
 
   const inputRef = useRef()
 
@@ -116,15 +115,15 @@ const MessagingChannelHeader = (props) => {
     if (!channelName) {
       setTitle(
         members
-          .map((member) => member.user?.name || member.user?.id || 'Unnamed User')
-          .join(', ')
+          .map((member) => member.user?.name || member.user?.id || "Unnamed User")
+          .join(", ")
       )
     }
   }, [channelName, members])
 
   const EditHeader = () => (
     <form
-      style={{ flex: 1 }}
+      className="flex-1"
       onSubmit={(e) => {
         e.preventDefault()
         inputRef.current.blur()
@@ -132,7 +131,7 @@ const MessagingChannelHeader = (props) => {
     >
       <input
         autoFocus
-        className={styles['channel-header__edit-input']}
+        className="w-full ml-6 font-bold outline-none font-poppins"
         onBlur={updateChannel}
         onChange={(e) => setChannelName(e.target.value)}
         placeholder="Type a new name for the chat"
@@ -143,35 +142,27 @@ const MessagingChannelHeader = (props) => {
   )
 
   return (
-    <div className={styles['messaging__channel-header']}>
-      <div
-        id="mobile-nav-icon"
-        className={`${props.theme}`}
+    <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
+      <FaList
+        className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
         onClick={() => props.toggleMobile()}
-      >
-        <Menu className="w-4 h-3 m-3 cursor-pointer text-brand-light" />
-      </div>
+      />
       {getAvatarGroup(members)}
-      {!isEditing ? (
-        <div className={styles['channel-header__name']}>{channelName || title}</div>
-      ) : (
-        <EditHeader />
-      )}
-      <div className={styles['messaging__channel-header__right']}>
+      {!isEditing ? <div className="font-bold font-poppins">{channelName || title}</div> : <EditHeader />}
+      <div className="">
         <TypingIndicator />
-        {/* {channelName !== "Social Demo" &&
-          (!isEditing ? (
-            <ChannelInfoIcon
-              className="ml-4 cursor-pointer bg-brand"
-              onClick={() => {
-                if (!isEditing) {
-                  setIsEditing(true);
-                }
-              }}
-            />
-          ) : ( */}
-        {/* <ChannelSaveIcon className="ml-4 cursor-pointer bg-brand-teal" /> */}
-        {/* ))} */}
+        {!isEditing ? (
+          <MdEdit
+            className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+            onClick={() => {
+              if (!isEditing) {
+                setIsEditing(true)
+              }
+            }}
+          />
+        ) : (
+          <MdSave className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition" />
+        )}
       </div>
     </div>
   )

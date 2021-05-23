@@ -37,9 +37,9 @@ import { UploadsPreview } from './UploadsPreview'
 // 2 Is handled in the onChange function (Maybe move all handling in here)
 
 const CommandIcon = ({ text }) => (
-  <div className={'giphy-icon__wrapper'}>
+  <div className="flex items-center w-16 h-6 ml-2 rounded-xl justify-evenly bg-brand">
     <LightningBoltSmall className="w-4 h-4 text-white -mr-1.5" />
-    <p className={'giphy-icon__text'}>{text}</p>
+    <p className="text-xs font-bold text-white font-work-sans">{text}</p>
   </div>
 )
 
@@ -203,7 +203,7 @@ const MessagingInput = (props) => {
     })
   }
   return (
-    <div className={'str-chat__messaging-input'}>
+    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-md">
       <EmojiButton
         emojiButton={emojiButtons.emoji}
         onClick={messageInput.openEmojiPicker}
@@ -220,7 +220,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className={'messaging-input__input-wrapper'}>
+        <div className="flex items-center bg-white border-2 border-gray-400 w-52 sm:w-96 z-[100] rounded-3xl focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -250,16 +250,16 @@ const MessagingInput = (props) => {
   )
 }
 
-const EmojiButton = ({ emojiButton }) => (
+const EmojiButton = ({ emojiButton, onClick }) => (
   <div
-    className={'messaging-input__button'}
+    className="px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
     role="button"
     aria-roledescription="button"
-    onClick={emojiButton.onClick}
+    onClick={onClick}
     ref={emojiButton.ref ? emojiButton.ref : null}
   >
     <emojiButton.icon
-      className={`h-8 w-8 sm:h-6 sm:w-6 ${
+      className={`h-8 w-8 md:h-5 md:w-5 ${
         emojiButton?.className ? emojiButton?.className : ''
       }`}
     />

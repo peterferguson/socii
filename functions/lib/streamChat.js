@@ -70,12 +70,12 @@ const invest = async (req, res) => {
     // const channel = client.channel(channelType, channelID);
     // const botUser = { id: "mrbot", name: "MR Bot" };
     const channel = client.channel("messaging", "JPT");
-    const mmlstring = `<mml type="card"><invest></invest></mml>`;
+    const mmlstring = `<mml type="card"><buy></buy></mml>`;
     const mmlmessage = {
         user_id: "peterferguson",
         attachments: [
             {
-                type: "invest",
+                type: "buy",
                 mml: mmlstring,
                 intent: intent,
                 tickerSymbol: tickerSymbol,
@@ -83,14 +83,12 @@ const invest = async (req, res) => {
                     {
                         name: "action",
                         text: "Submit",
-                        style: "primary",
                         type: "button",
                         value: "submit",
                     },
                     {
                         name: "action",
                         text: "Cancel",
-                        style: "default",
                         type: "button",
                         value: "cancel",
                     },

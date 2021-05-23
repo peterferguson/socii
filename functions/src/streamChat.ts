@@ -84,12 +84,12 @@ const invest = async (req, res) => {
 
   const channel = client.channel("messaging", "JPT")
 
-  const mmlstring = `<mml type="card"><invest></invest></mml>`
+  const mmlstring = `<mml type="card"><buy></buy></mml>`
   const mmlmessage = {
     user_id: "peterferguson",
     attachments: [
       {
-        type: "invest",
+        type: "buy",
         mml: mmlstring,
         intent: intent,
         tickerSymbol: tickerSymbol,
@@ -117,29 +117,29 @@ const invest = async (req, res) => {
     `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
   )
 
-  switch (action) {
-    case 'confirm':
-      const reportedBy = formData['reported_by']
-      message.type = 'regular'
-      message.mml = confirmInvestmentMML(message.args, reportedBy)
-      message.attachments = null
-      break
-    case 'cancel':
-      message = null
-      break
-    // - Catch all commands sent by user not by action
-    default:
-      // - Error on missing command args
-      if (message.args.trim() === '') {
-        message.type = 'error'
-        message.text = 'missing ticket description'
-        message.mml = null
-        break
-      }
-      // - Present MML for user to make a choice
-  message.type = 'ephemeral'
-  message.mml = investFormMML(message.args, user.name)
-  }
+  // switch (action) {
+  //   case 'confirm':
+  //     const reportedBy = formData['reported_by']
+  //     message.type = 'regular'
+  //     message.mml = confirmInvestmentMML(message.args, reportedBy)
+  //     message.attachments = null
+  //     break
+  //   case 'cancel':
+  //     message = null
+  //     break
+  //   // - Catch all commands sent by user not by action
+  //   default:
+  //     // - Error on missing command args
+  //     if (message.args.trim() === '') {
+  //       message.type = 'error'
+  //       message.text = 'missing ticket description'
+  //       message.mml = null
+  //       break
+  //     }
+  //     // - Present MML for user to make a choice
+  // message.type = 'ephemeral'
+  // message.mml = investFormMML(message.args, user.name)
+  // }
 
   if (message.mml !== null) {
     message.text =

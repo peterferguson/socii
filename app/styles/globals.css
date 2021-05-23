@@ -56,12 +56,12 @@
 
 @layer components {
   .messaging-input__input-wrapper {
-    @apply flex items-center w-full min-h-60px min-w-330 h-fit z-[100] rounded-3xl 
+    @apply flex items-center min-h-60px min-w-[200px] max-w-[400px]  h-fit z-[100] rounded-3xl 
     bg-white border-2 border-gray-400;
   }
 
   .messaging-input__input-wrapper:focus-within {
-    @apply border-[#005fff];
+    @apply border-brand;
   }
 
   .str-chat__messaging-input {
@@ -148,45 +148,6 @@
   box-shadow: none !important;
 }
 
-.giphy-icon__wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  height: 24px;
-  width: 63px;
-  background: #005fff;
-  border-radius: 12px;
-  margin-left: 8px;
-}
-
-.giphy-icon__text {
-  font-family: Helvetica Neue, sans-serif;
-  font-weight: bold;
-  font-size: 11px;
-  line-height: 8px;
-  color: #ffffff;
-}
-
-.messaging-input__button {
-  opacity: 0.5;
-  cursor: pointer;
-  padding: 0 4px;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.messaging-input__button svg path {
-  transition: fill 0.2s ease-in-out;
-  fill: black;
-}
-
-.messaging-input__button:hover {
-  opacity: 1;
-}
-
-.messaging-input__button:hover svg path {
-  fill: #005fff !important;
-}
-
 .str-chat__input--emojipicker {
   z-index: 100;
   left: 36px;
@@ -197,6 +158,27 @@
   top: 25% !important;
   right: 330px;
   left: auto;
+}
+
+.str-chat {
+  box-sizing: border-box; }
+  .str-chat *,
+  .str-chat *::after,
+  .str-chat *::before {
+    box-sizing: inherit;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.str-chat-channel.messaging .str-chat__main-panel {
+  padding: 25px 5px 0px 5px;
+}
+
+.str-chat {
+  height: calc(100vh - 72px);
+  max-height: calc(100vh - 72px);
+}
+
+.str-chat-channel .str-chat__container {
+  height: calc(100vh - 72px);
 }
 
 /* Blue hightlighting fix */

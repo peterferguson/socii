@@ -53,3 +53,25 @@ content-type: application/json
    }, 
    "form_data":{} 
 }
+###
+POST http://localhost:5001/sociiinvest/europe-west2/investCommand
+content-type: application/json
+
+{ 
+   "message":{ 
+      "id":"", 
+      "text":"/buy TSLA", 
+      "command": "buy", 
+      "args": "buy TSLA", 
+      "html":"",
+      "attachments":[],
+      "mentioned_users":[]
+   }, 
+   "user":{ 
+     "id":"peterferguson", 
+     "role":"user", 
+     "banned":false, 
+     "online":true 
+   }, 
+   "form_data":{} 
+}
