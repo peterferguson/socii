@@ -8,7 +8,7 @@ import React, { useContext } from 'react'
 import dynamic from 'next/dynamic'
 
 const StreamChatWithNoSSR = dynamic(
-  () => import('@components/stream/components/Chat'),
+  () => import('@components/stream/Chat'),
   { ssr: false }
 )
 

@@ -220,7 +220,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="flex items-center align-middle bg-white border-2 border-gray-400 w-52 sm:w-96 min-h-[32px] z-[100] rounded-3xl focus-within:border-brand">
+        <div className="flex items-center h-10 bg-white border-2 border-gray-400 w-52 sm:w-96 min-h-[32px] z-[100] rounded-3xl focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete

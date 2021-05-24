@@ -34,12 +34,18 @@
 import LoadingIndicator from '@components/LoadingIndicator'
 import AuthCheck from '@components/AuthCheck'
 import ClientOnly from '@components/ClientOnly'
-import { StreamChatWindow } from '@components/stream/components/Chat'
 import Custom404 from '../../404'
 import { UserContext } from '@lib/context'
 
 import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
+
+const StreamChatWithNoSSR = dynamic(
+  () => import('@components/stream/Chat'),
+  { ssr: false }
+)
+
 
 export default function Group() {
   const router = useRouter()
@@ -61,7 +67,7 @@ export default function Group() {
       <div className="w-2/3">
         <AuthCheck>
           <ClientOnly>
-            <StreamChatWindow groupName={groupName} />
+            <StreamChatWithNoSSR groupName={groupName} />
           </ClientOnly>
         </AuthCheck>
       </div>

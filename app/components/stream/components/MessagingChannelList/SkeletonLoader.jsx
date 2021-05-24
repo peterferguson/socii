@@ -1,44 +1,19 @@
-import styles from '@styles/MessagingChannelList.module.css'
+import styles from "@styles/MessagingChannelListLoader.module.css"
+import React from "react"
 
 export const SkeletonLoader = () => {
   return (
-    <div style={{ position: 'relative' }}>
-      <ul className={styles['skeleton-loader__list']}>
-        <li>
-          <div className={styles['skeleton-loader__avatar']}></div>
-          <div className={styles['skeleton-loader__text']}>
-            <div></div>
-            <div></div>
-          </div>
-        </li>
-        <li>
-          <div className={styles['skeleton-loader__avatar']}></div>
-          <div className={styles['skeleton-loader__text']}>
-            <div></div>
-            <div></div>
-          </div>
-        </li>
-        <li>
-          <div className={styles['skeleton-loader__avatar']}></div>
-          <div className={styles['skeleton-loader__text']}>
-            <div></div>
-            <div></div>
-          </div>
-        </li>
-        <li>
-          <div className={styles['skeleton-loader__avatar']}></div>
-          <div className={styles['skeleton-loader__text']}>
-            <div></div>
-            <div></div>
-          </div>
-        </li>
-        <li>
-          <div className={styles['skeleton-loader__avatar']}></div>
-          <div className={styles['skeleton-loader__text']}>
-            <div></div>
-            <div></div>
-          </div>
-        </li>
+    <div className="relative">
+      <ul className={styles["skeleton-loader__list"]}>
+        {[1, 2, 3, 4].map((key) => (
+          <li key={`loader-list-element-${key}`}>
+            <div className={styles["skeleton-loader__avatar"]} />
+            <div className={styles["skeleton-loader__text"]}>
+              <div />
+              <div />
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   )
