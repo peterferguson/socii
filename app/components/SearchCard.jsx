@@ -63,15 +63,14 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
   }
 
   return (
-    <div className="w-full p-2 m-8 ">
+    <div className="w-full p-2 mx-auto">
       <input
         onChange={onChangeDebounced}
         placeholder="Search: TSLA"
         type="search"
-        className="rounded-full w-full text-center p-2 focus:outline-none \
-                 focus:border-brand-light focus:ring-brand-light"
+        className="w-full p-2 text-center rounded-full focus:outline-none \ focus:border-brand-light focus:ring-brand-light"
       />
-      <SearchIcon className="-my-8 mx-4 text-gray-400" />
+      <SearchIcon className="mx-4 -my-8 text-gray-400" />
     </div>
   )
 })
@@ -93,34 +92,34 @@ const Hit = ({ hit }) => {
   return (
     <Link href={`/stock/${hit.tickerSymbol}`}>
       <div
-        className="max-w-md py-4 px-8 bg-white shadow-lg rounded-lg my-10 w-full"
+        className="w-full max-w-md px-8 py-4 my-2 bg-white rounded-lg shadow-lg sm:my-0"
         onClick={hitClickHandler}
       >
         <img
           src={`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${hit.ISIN}.png`}
           alt=""
-          className="h-12 w-12 rounded-full border-brand border-double -mx-14 -my-8"
+          className="w-12 h-12 -my-8 border-double rounded-full border-brand -mx-14"
         />
         <Highlight attribute="name" hit={hit} />
         {loadingTicker && <Loading show={loadingTicker} className="z-50" />}
         <div className="flex pt-4">
-          <h4 className="text-xl flex-1 text-gray-900">{hit.tickerSymbol}</h4>
+          <h4 className="flex-1 text-xl text-gray-900">{hit.tickerSymbol}</h4>
           {latestPrice.result ? (
-            <p className="text-base inline text-right text-green-400">
+            <p className="inline text-base text-right text-green-400">
               $ {latestPrice.result}
             </p>
           ) : (
-            <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+            <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
           )}
         </div>
         <div className="flex">
-          <p className="text-base flex-1 text-gray-600">{hit.longName}</p>
+          <p className="flex-1 text-base text-gray-600">{hit.longName}</p>
           {changePct.result ? (
             <p className={'inline text-base text-right text-red-400'}>
               {(100 * changePct.result).toFixed(2)}%
             </p>
           ) : (
-            <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+            <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
           )}
         </div>
       </div>
@@ -147,15 +146,15 @@ export default function SearchCard({ showSearchCard, setShowSearchCard }) {
       open={isOpen}
       onClose={setIsOpen}
       as="div"
-      className={`fixed inset-1 overflow-y-auto w-11/12 p-24 m-8 bg-gray-200 \
+      className={`fixed inset-0 overflow-y-auto h-2/3 w-11/12 p-8 sm:p-24 my-auto sm:my-8 mx-auto bg-gray-200 \
                   rounded-lg shadow-xl backdrop-filter backdrop-blur-lg \
                   bg-opacity-50 bg-clip-padding z-50`}
     >
       <InstantSearch {...searchProps}>
-        <Configure hitsPerPage={1} />
-        <DebouncedSearchBox delay={400} className="p-2 flex-1 max-w-sm" />
+        <Configure hitsPerPage={3} />
+        <DebouncedSearchBox delay={400} className="flex-1 max-w-sm p-2" />
         <Loading className="p-4" />
-        <Hits hitComponent={Hit} className="py-4 px-8 rounded-lg my-10 w-full" />
+        <Hits hitComponent={Hit} className="w-full my-16 rounded-lg sm:my-24" />
         {/* <PoweredBy /> */}
       </InstantSearch>
     </Dialog>

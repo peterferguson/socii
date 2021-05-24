@@ -87,7 +87,9 @@
  * Needed to remove the border line around the hits
  */
 .ais-Hits-item {
-  width: 100%;
+  width: 75%;
+  padding: 4px 0px;
+  margin: auto;
   border-width: 0px;
   --tw-shadow: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
