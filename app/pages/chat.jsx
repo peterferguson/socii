@@ -1,19 +1,20 @@
-import { UserContext } from '@lib/context'
+import { UserContext } from "@lib/context"
 
-import ClientOnly from '@components/ClientOnly'
-import LoadingIndicator from '@components/LoadingIndicator'
-import AuthCheck from '@components/AuthCheck'
+import ClientOnly from "@components/ClientOnly"
+import LoadingIndicator from "@components/LoadingIndicator"
+import AuthCheck from "@components/AuthCheck"
 
-import React, { useContext } from 'react'
-import dynamic from 'next/dynamic'
+import React, { useContext } from "react"
+import dynamic from "next/dynamic"
 
-const StreamChatWithNoSSR = dynamic(
-  () => import('@components/stream/Chat'),
-  { ssr: false }
-)
+const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
+  ssr: false,
+})
 
 export default function Chat() {
   const { streamClient } = useContext(UserContext)
+
+  console.log(streamClient);
 
   if (!streamClient) {
     return <LoadingIndicator />
@@ -22,7 +23,7 @@ export default function Chat() {
   return (
     <AuthCheck>
       <ClientOnly>
-        <StreamChatWithNoSSR />
+        <StreamChatWithNoSSR client={streamClient} />
       </ClientOnly>
     </AuthCheck>
   )

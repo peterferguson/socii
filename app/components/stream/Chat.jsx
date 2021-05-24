@@ -4,6 +4,7 @@ import {
   Chat,
   MessageInput,
   MessageList,
+  useChatContext,
   Window,
 } from "stream-chat-react"
 
@@ -19,18 +20,17 @@ import {
   TypingIndicator,
 } from "@components/stream/components"
 
-import React, { useState, useContext, useEffect } from "react"
-import { UserContext } from "@lib/context"
+import React, { useState, useEffect } from "react"
+
 import { useHasMounted } from "@lib/hooks"
 import { getInitials, getRandomImage, isBrowser } from "@utils/helper"
 
-export default function StreamChat({ theme = "light", groupName = null }) {
-  const { username, streamClient } = useContext(UserContext)
+export default function StreamChat({ client, theme = "light", groupName = null }) {
   const mounted = useHasMounted()
 
   const [isCreating, setIsCreating] = useState(false)
   const [mobile, setMobile] = useState(false)
-  const [channel, setChannel] = useState(undefined)
+  const { setActiveChannel } = useChatContext()
   // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
 
   const onClose = () => setIsCreating(false)
@@ -41,35 +41,43 @@ export default function StreamChat({ theme = "light", groupName = null }) {
   // ? Think we need to look back at all the useEffect hooks and try to extract logic which
   // ? relies on some prior state into a reducer.
 
-  // TODO: REFACTOR to a reducer
   useEffect(() => {
-    const initChat = async () => {
-      const groupChatName = groupName?.split(" ").join("-")
+    const listChannels = async () => {
+      const filter = { type: "messaging", members: { $in: [client.userID] } }
+      const sort = [{ last_message_at: -1 }]
 
-      if (mounted && groupChatName) {
-        setChannel(
-          await streamClient.channel("messaging", groupChatName, {
-            image: getRandomImage(getInitials(groupName)),
-            name: `${groupName} Group Chat`,
-          })
-        )
-      }
+      const channels = await client.queryChannels(filter, sort, {
+        watch: true, // this is the default
+        state: true,
+      })
+
+      if (setActiveChannel) setActiveChannel(channels[0])
     }
-    initChat()
-  }, [mounted, username, streamClient.user]) // eslint-disable-line react-hooks/exhaustive-dep
+    listChannels()
+  }, [client, setActiveChannel])
 
-  const channelProps = {
-    maxNumberOfFiles: 10,
-    multipleUploads: true,
-    Attachment: CustomAttachment,
-  }
+  // // TODO: REFACTOR to a reducer
+  // useEffect(() => {
+  //   const initChat = async () => {
+  //     const groupChatName = groupName?.split(" ").join("-")
 
-  if (channel) channelProps["channel"] = channel
+  //     if (mounted && groupChatName) {
+  //       console.log(groupChatName)
+  //       setActiveChannel(
+  //         await client.channel("messaging", groupChatName, {
+  //           image: getRandomImage(getInitials(groupName)),
+  //           name: `${groupName} Group Chat`,
+  //         })
+  //       )
+  //     }
+  //   }
+  //   initChat()
+  // }, []) // eslint-disable-line react-hooks/exhaustive-dep
 
   return (
     <>
-      {isBrowser && username && streamClient && (
-        <Chat client={streamClient} theme={`messaging ${theme}`}>
+      {isBrowser && client && client.userID && (
+        <Chat client={client} theme={`messaging ${theme}`}>
           {/* {showNotificationToast && (
             <div class="alert">
               <p>
@@ -80,7 +88,11 @@ export default function StreamChat({ theme = "light", groupName = null }) {
               </p>
             </div>
           )} */}
-          <Channel>
+          <Channel
+            maxNumberOfFiles={10}
+            multipleUploads={true}
+            Attachment={CustomAttachment}
+          >
             <Window>
               <MessagingChannelHeader theme={theme} toggleMobile={toggleMobile} />
               <MessageList
@@ -91,16 +103,15 @@ export default function StreamChat({ theme = "light", groupName = null }) {
               <MessageInput focus Input={MessagingInput} />
             </Window>
             <MessagingThread />
-            {isCreating && (
+            {/* {isCreating && (
               <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
             )}
-            {!channel && (
-              <StreamChannelList
-                mobile={mobile}
-                onClose={onClose}
-                onCreateChannel={onCreateChannel}
-              />
-            )}
+            <StreamChannelList
+              username={username}
+              mobile={mobile}
+              onClose={onClose}
+              onCreateChannel={onCreateChannel}
+            /> */}
           </Channel>
         </Chat>
       )}
@@ -115,7 +126,7 @@ const StreamChannelList = ({ mobile, onCreateChannel, onClose }) => (
     }  md:relative  transition duration-500 ease-in-out`}
   >
     <ChannelList
-      filters={{ type: "messaging" }}
+      filters={{ type: "messaging", members: { $in: [client.userID] } }}
       sort={{ last_message_at: -1 }}
       options={{ state: true, presence: true, limit: 10 }}
       List={(props) => (
