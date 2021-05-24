@@ -95,7 +95,7 @@ const getTimeStamp = (channel) => {
 }
 
 const getChannelName = (members) => {
-  const defaultName = "Johnny Blaze"
+  const defaultName = "Invest Social"
 
   if (!members.length || members.length === 1) {
     return members[0]?.user.name || defaultName
