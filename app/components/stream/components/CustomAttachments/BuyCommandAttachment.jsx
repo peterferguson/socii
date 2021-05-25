@@ -1,5 +1,5 @@
 import MMLButton from "./MMLButton"
-import { currencyIcons } from "@lib/constants"
+// import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 
 
@@ -15,6 +15,18 @@ import { MML } from "mml-react"
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
+
+
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/FA"
+export const currencyIcons = {
+  AUD: { icon: FaDollarSign },
+  CAD: { icon: FaDollarSign },
+  // CHF: "CHF",
+  EUR: { icon: FaEuroSign },
+  GBP: { icon: FaPoundSign },
+  JPY: { icon: FaYenSign },
+  USD: { icon: FaDollarSign },
+}
 
 const BuyCommandAttachment = ({ attachment }) => {
   const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
