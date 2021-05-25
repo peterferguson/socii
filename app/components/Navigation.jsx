@@ -1,8 +1,8 @@
 import { UserContext } from "@lib/context"
 import Logo from "@components/Logo"
 import { userFirstName, signOut } from "@lib/firebase"
-import { FaGlobeEurope, FaBitcoin } from "react-icons/lib/FA"
-import { VscSignOut } from "react-icons/lib/vsc"
+import { FaGlobeEurope, FaBitcoin } from "react-icons/FA"
+import { VscSignOut } from "react-icons/vsc"
 import {
   HiOutlineUserGroup,
   HiOutlineChat,
@@ -12,7 +12,7 @@ import {
   HiOutlineSearch,
   HiOutlineChevronRight,
   HiOutlineChartPie,
-} from "react-icons/lib/HI"
+} from "react-icons/HI"
 import { Transition, Popover } from "@headlessui/react"
 
 import React, { useContext, useState } from "react"

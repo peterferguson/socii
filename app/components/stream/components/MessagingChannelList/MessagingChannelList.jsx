@@ -4,7 +4,7 @@ import { StreamContext } from "@lib/context"
 import { getRandomImage, getInitials } from "@utils/helper"
 import { SkeletonLoader } from "./SkeletonLoader"
 
-import { MdChatBubbleOutline } from "react-icons/lib/MD"
+import { MdChatBubbleOutline } from "react-icons/MD"
 
 const MessagingChannelList = ({
   children,

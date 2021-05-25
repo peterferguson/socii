@@ -3,7 +3,7 @@ import FacebookLogo from "@icons/fb.svg"
 import TwitterLogo from "@icons/twitter.svg"
 import GoogleLogo from "@icons/google.svg"
 import { googleAuthProvider, facebookAuthProvider } from "@lib/firebase"
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/lib/FA"
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/FA"
 
 export const currencySymbols = {
   AUD: "$",
