@@ -4,7 +4,7 @@ import { StreamContext } from "@lib/context"
 import { getRandomImage, getInitials } from "@utils/helper"
 import { SkeletonLoader } from "./SkeletonLoader"
 
-import { MdChatBubbleOutline } from "react-icons/MD"
+import { MdChatBubbleOutline } from "react-icons/lib/MD"
 
 const MessagingChannelList = ({
   children,
@@ -15,7 +15,7 @@ const MessagingChannelList = ({
   const { streamClient } = useContext(StreamContext)
 
   const { id, name } = streamClient.user || {}
-  const image =  getRandomImage(getInitials(name))
+  const image = getRandomImage(getInitials(name))
 
   const ListHeaderWrapper = ({ children }) => (
     <div className="h-full px-3 py-3 pt-5 overflow-y-auto w-80">
