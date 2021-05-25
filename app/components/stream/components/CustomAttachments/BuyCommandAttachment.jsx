@@ -2,7 +2,6 @@ import MMLButton from "./MMLButton"
 // import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 
-
 import {
   useTickerPriceData,
   useShareCost,
@@ -16,8 +15,7 @@ import { MML } from "mml-react"
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
 
-
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/FA"
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
 export const currencyIcons = {
   AUD: { icon: FaDollarSign },
   CAD: { icon: FaDollarSign },
@@ -53,11 +51,14 @@ const BuyCommandAttachment = ({ attachment }) => {
         tickerSymbol={attachment.tickerSymbol}
         tickerState={tickerState}
       />
-      <MML converters={converters} source={attachment.mml} onSubmit={e => console.log(e)}/>
+      <MML
+        converters={converters}
+        source={attachment.mml}
+        onSubmit={(e) => console.log(e)}
+      />
     </div>
   )
 }
-
 
 const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)

@@ -17,7 +17,7 @@ import { MML } from "mml-react"
 // WARN: And passing these so we then call the api less
 
 
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/FA"
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
 export const currencyIcons = {
   AUD: { icon: FaDollarSign },
   CAD: { icon: FaDollarSign },

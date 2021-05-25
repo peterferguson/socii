@@ -2,8 +2,8 @@ import TypingIndicator from "./TypingIndicator"
 
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { ChannelContext } from "stream-chat-react"
-import { FaList } from "react-icons/FA"
-import { MdEdit, MdSave } from "react-icons/MD"
+import { FaList } from "react-icons/fa"
+import { MdEdit, MdSave } from "react-icons/md"
 import AvatarGroup from "@components/stream/components/AvatarGroup"
 import styles from "@styles/MessagingChannelHeader.module.css"
 
