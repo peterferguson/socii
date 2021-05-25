@@ -183,6 +183,22 @@
   height: calc(100vh - 72px);
 }
 
+.messaging.str-chat .str-chat__thread {
+  border-left: 1px solid #f1f1f1;
+  padding: 0px;
+  /* width: 400px; */
+  margin: 25px 5px 0px;
+  background: #ffffff;
+}
+
+.messaging.str-chat .str-chat__thread-list .str-chat__message {
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-bottom: 0px;
+}
+
+
+
 /* Blue hightlighting fix */
 button,
 textarea,

@@ -5,7 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
 
-import { currencyConversion, fetchJSON, round } from "@utils/helper"
+import { currencyConversion, fetchJSON, isBrowser, round } from "@utils/helper"
 import { CurrencyCode } from "@lib/constants"
 import IEXQuery from "@lib/iex"
 
@@ -50,8 +50,7 @@ export const useStream = (uid, username, displayName) => {
   useEffect(() => {
     let userStreamToken
 
-    streamClient.current = StreamChat.getInstance(apiKey)
-
+    streamClient.current = StreamChat.getInstance(apiKey, {timeout: 1000})
 
     const connectStreamUser = async () => {
       const tokenRef = firestore.collection(`users/${uid}/stream`).doc(uid)
@@ -63,18 +62,16 @@ export const useStream = (uid, username, displayName) => {
         ? (await snapshot.data())?.token
         : functions.httpsCallable("generateToken")({ username })
 
-      if (userStreamToken) {
+      if (userStreamToken && isBrowser) {
         await streamClient.current?.connectUser(
           { id: username, name: displayName },
           userStreamToken
         )
-        console.log(`Connected user ${streamClient.current?.userID} to Stream!`);
-        
+        console.log(`Connected user ${streamClient.current?.userID} to Stream!`)
       }
     }
 
     if (uid && username && !streamClient.current?.user) connectStreamUser()
-    
   }, [uid, username, displayName])
 
   return { streamClient: streamClient.current }

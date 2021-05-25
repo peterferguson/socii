@@ -36,6 +36,7 @@ import AuthCheck from "@components/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
 import Custom404 from "../../404"
 import { StreamContext, UserContext } from "@lib/context"
+import GroupColumn from "@components/GroupCharts"
 
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
@@ -50,26 +51,28 @@ export default function Group() {
   const { groupName } = router.query
   const { userGroups } = useContext(UserContext)
   const { streamClient } = useContext(StreamContext)
-
-  if (groupName && userGroups && !userGroups.includes(groupName)) {
-    return <Custom404 />
-  }
-
-  if (!streamClient?.user) {
-    // TODO: Use skeleton loaders for chat
-    return <LoadingIndicator />
-  }
+  // TODO: Use skeleton loaders for chat
 
   return (
-    <div className="flex">
-      <div className="w-1/3">{groupName}</div>
-      <div className="w-2/3">
-        <AuthCheck>
-          <ClientOnly>
-            <StreamChatWithNoSSR groupName={groupName} />
-          </ClientOnly>
-        </AuthCheck>
-      </div>
-    </div>
+    <>
+      {groupName && userGroups && !userGroups.includes(groupName) && <Custom404 />}
+      {!streamClient ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="flex">
+          <div className="w-1/3 p-8">
+            <div className="text-3xl font-extrabold tracking-wider text-center uppercase font-poppins text-brand">holdings</div>
+            <GroupColumn groupName={groupName} />
+          </div>
+          <div className="w-2/3">
+            <AuthCheck>
+              <ClientOnly>
+                <StreamChatWithNoSSR client={streamClient} groupName={groupName} />
+              </ClientOnly>
+            </AuthCheck>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

@@ -5,7 +5,7 @@ import LoadingIndicator from "@components/LoadingIndicator"
 import AuthCheck from "@components/AuthCheck"
 
 import dynamic from "next/dynamic"
-import React, { useContext} from "react"
+import React, { useContext } from "react"
 
 const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
   ssr: false,
@@ -14,14 +14,14 @@ const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
 export default function Chat() {
   const { streamClient } = useContext(StreamContext)
 
-  if (!streamClient?.userID) {
-    return <LoadingIndicator />
-  }
-
   return (
     <AuthCheck>
       <ClientOnly>
-        <StreamChatWithNoSSR client={streamClient}/>
+        {!streamClient ? (
+          <LoadingIndicator />
+        ) : (
+          <StreamChatWithNoSSR client={streamClient} />
+          )}
       </ClientOnly>
     </AuthCheck>
   )
