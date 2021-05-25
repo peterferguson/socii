@@ -5,6 +5,8 @@ import { ChannelContext } from "stream-chat-react"
 import { FaList } from "react-icons/FA"
 import { MdEdit, MdSave} from "react-icons/MD"
 import AvatarGroup from "@components/stream/components/AvatarGroup"
+import styles from "@styles/MessagingChannelHeader.module.css"
+
 
 const MessagingChannelHeader = (props) => {
   const { channel, client } = useContext(ChannelContext)
@@ -74,7 +76,7 @@ const MessagingChannelHeader = (props) => {
         className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
         onClick={() => props.toggleMobile()}
       />
-      {AvatarGroup(members)}
+      {AvatarGroup(members, styles)}
       {!isEditing ? <div className="flex-1 pl-4 font-bold font-poppins">{channelName || title}</div> : <EditHeader />}
       <div className="">
         <TypingIndicator />

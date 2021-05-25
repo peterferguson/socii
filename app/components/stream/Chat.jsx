@@ -20,13 +20,11 @@ import {
   TypingIndicator,
 } from "@components/stream/components"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 
-import { useHasMounted } from "@lib/hooks"
-import { getInitials, getRandomImage, isBrowser } from "@utils/helper"
+import { isBrowser } from "@utils/helper"
 
 export default function StreamChat({ client, theme = "light", groupName = null }) {
-
   const [isCreating, setIsCreating] = useState(false)
   const [mobile, setMobile] = useState(false)
   const { setActiveChannel } = useChatContext()
@@ -36,24 +34,30 @@ export default function StreamChat({ client, theme = "light", groupName = null }
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleMobile = () => setMobile(!mobile)
 
-  // ? Needing this probably shows we are thinking about the lifecycle the wrong way
-  // ? Think we need to look back at all the useEffect hooks and try to extract logic which
-  // ? relies on some prior state into a reducer.
-
   useEffect(() => {
     const listChannels = async () => {
-      const filter = { type: "messaging", members: { $in: [client.userID] } }
+      console.log(client)
+      const filter = { type: "messaging", members: { $in: [client?.userID] } }
       const sort = [{ last_message_at: -1 }]
 
-      const channels = await client.queryChannels(filter, sort, {
+      const channels = await client?.queryChannels(filter, sort, {
         watch: true, // this is the default
         state: true,
       })
 
+      if (groupName) {
+        console.log(groupName)
+        console.log(channels)
+        const groupChannel = channels?.filter(
+          ({ id }) => id === groupName?.split(" ").join("-")
+        )
+        console.log(groupChannel)
+      }
+
       if (setActiveChannel) setActiveChannel(channels[0])
     }
     listChannels()
-  }, [client, setActiveChannel])
+  }, [client, client?.userID, setActiveChannel, groupName])
 
   // // TODO: REFACTOR to a reducer
   // useEffect(() => {
@@ -87,12 +91,21 @@ export default function StreamChat({ client, theme = "light", groupName = null }
               </p>
             </div>
           )} */}
+          <StreamChannelList
+            client={client}
+            mobile={mobile}
+            onClose={onClose}
+            onCreateChannel={onCreateChannel}
+          />
           <Channel
             maxNumberOfFiles={10}
             multipleUploads={true}
             Attachment={CustomAttachment}
           >
             <Window>
+              {isCreating && (
+                <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
+              )}
               <MessagingChannelHeader theme={theme} toggleMobile={toggleMobile} />
               <MessageList
                 messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
@@ -102,16 +115,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
               <MessageInput focus Input={MessagingInput} />
             </Window>
             <MessagingThread />
-            {isCreating && (
-              <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
-            )}
           </Channel>
-            <StreamChannelList
-              client={client}
-              mobile={mobile}
-              onClose={onClose}
-              onCreateChannel={onCreateChannel}
-            />
         </Chat>
       )}
     </>

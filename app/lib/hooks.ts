@@ -51,8 +51,7 @@ export const useStream = (uid, username, displayName) => {
     let userStreamToken
 
     streamClient.current = StreamChat.getInstance(apiKey)
-    console.log(`before: ${JSON.stringify(streamClient.current)}`);
-    
+
 
     const connectStreamUser = async () => {
       const tokenRef = firestore.collection(`users/${uid}/stream`).doc(uid)

@@ -13,8 +13,6 @@ const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
 
 export default function Chat() {
   const { streamClient } = useContext(StreamContext)
-  
-  console.log(streamClient);
 
   if (!streamClient?.userID) {
     return <LoadingIndicator />
@@ -23,7 +21,7 @@ export default function Chat() {
   return (
     <AuthCheck>
       <ClientOnly>
-        <StreamChatWithNoSSR client={streamClient} />
+        <StreamChatWithNoSSR client={streamClient}/>
       </ClientOnly>
     </AuthCheck>
   )

@@ -1,14 +1,13 @@
-import styles from "@styles/MessagingChannelHeader.module.css"
 import { getRandomImage, getInitials } from "@utils/helper"
 
 import React from "react"
 import { Avatar } from "stream-chat-react"
 
-export default function AvatarGroup(members) {
+export default function AvatarGroup(members, styles) {
   if (members.length === 1) {
     return (
       <div className={styles["messaging__channel-header__avatars"]}>
-        <Avatar image={getRandomImage(getInitials(members[0]?.user.name))} size={40} />;
+        <Avatar image={getRandomImage(getInitials(members[0]?.user.name))} size={40} />
       </div>
     )
   }

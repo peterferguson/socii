@@ -1,4 +1,4 @@
-
+import styles from "@styles/MessagingChannelPreview.module.css"
 import AvatarGroup from "@components/stream/components/AvatarGroup"
 import { getTimeStamp } from "@utils/helper";
 
@@ -41,7 +41,7 @@ const MessagingChannelPreview = (props) => {
         setActiveChannel(channel)
       }}
     >
-      {AvatarGroup(members)}
+      {AvatarGroup(members, styles)}
       <div className="flex flex-col items-center w-full mx-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
           <p className="m-0 overflow-hidden text-base font-medium text-black font-work-sans max-w-[158px] overflow-ellipsis whitespace-nowrap">
