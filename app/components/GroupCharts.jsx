@@ -1,12 +1,12 @@
-import PieCard, { PieCardSkeleton } from '@components/PieCard'
-import { firestore } from '@lib/firebase'
-import IEXQuery from '@lib/iex'
-import { fetchJSON } from '@utils/helper'
-import Link from 'next/link'
-import { logoUrl } from '@utils/helper'
+import PieCard, { PieCardSkeleton } from "@components/PieCard"
+import { firestore } from "@lib/firebase"
+import IEXQuery from "@lib/iex"
+import { fetchJSON } from "@utils/helper"
+import Link from "next/link"
+import { logoUrl } from "@utils/helper"
 
-import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
-import React, { useState, useEffect } from 'react'
+import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
+import React, { useState, useEffect } from "react"
 
 export default function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([])
@@ -52,9 +52,10 @@ export default function GroupColumn({ groupName }) {
         </div>
       )}
       {!loading &&
-        holdingData.map((holding) => {
+        holdingData.map((holding, index) => {
           return currentPrices ? (
             <StockCard
+              key={`holding-${index}`}
               holding={holding}
               latestPrice={currentPrices[holding.tickerSymbol]}
             />
@@ -70,7 +71,7 @@ export function GroupPieCard({
   groupName,
   holdingData,
   currentPrices,
-  className = '',
+  className = "",
 }) {
   const portfolioValue = holdingData
     ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
@@ -105,7 +106,7 @@ export function GroupPieCard({
   )
 }
 
-function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
+function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
   const tickerSymbol = holding.tickerSymbol
 
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
@@ -154,7 +155,7 @@ function StockCard({ holding, latestPrice, currencySymbol = '$' }) {
           </div>
           <div
             className={`${
-              pnl > 0 ? 'bg-teal-200' : pnl < 0 ? 'bg-red-200' : 'bg-brand'
+              pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
             } text-gray-700 text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
           >
             {pnl.toFixed(2)}%

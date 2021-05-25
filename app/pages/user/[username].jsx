@@ -12,14 +12,13 @@
 // -
 // -
 
-import AuthCheck from '@components/AuthCheck'
-import { PieCardSkeleton } from '@components/PieCard'
-import GroupColumn from '@components/GroupCharts'
-import { UserContext } from '@lib/context'
-import { auth } from '@lib/firebase'
+import { PieCardSkeleton } from "@components/PieCard"
+import GroupColumn from "@components/GroupCharts"
+import { UserContext } from "@lib/context"
+import { auth } from "@lib/firebase"
 
-import { useRouter } from 'next/router'
-import React, { useContext } from 'react'
+import { useRouter } from "next/router"
+import React, { useContext } from "react"
 
 export default function UserPage() {
   const router = useRouter()
@@ -38,20 +37,14 @@ export default function UserPage() {
         Groups
       </div>
       <div className="flex flex-wrap justify-center">
-        {(!auth.currentUser || !userGroups) && (
-          <>
-            <PieCardSkeleton scaling={0.3} radius={250} />
-            <PieCardSkeleton scaling={0.3} radius={250} />
-            <PieCardSkeleton scaling={0.3} radius={250} />
-          </>
-        )}
-        {username == pagename && (
-          <AuthCheck>
-            {userGroups?.map((groupName) => {
-              return <GroupColumn groupName={groupName} />
-            })}
-          </AuthCheck>
-        )}
+        {(!auth.currentUser || !userGroups) &&
+          [1, 2, 3].map((i) => (
+            <PieCardSkeleton key={`skeleton-${i}`} scaling={0.3} radius={250} />
+          ))}
+        {username == pagename &&
+          userGroups?.map((groupName, index) => {
+            return <GroupColumn key={`group-${index}`} groupName={groupName} />
+          })}
       </div>
     </main>
   )

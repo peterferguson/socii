@@ -12,6 +12,8 @@ const generateToken = async (data, context) => {
   const tokenDocRef = firestore.collection(`users/${uid}/stream`).doc(uid)
 
   tokenDocRef.set({ token })
+
+  return token
 }
 
 const createGroup = async (data, context) => {

@@ -6,6 +6,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      blur: {
+        "tiny": "1px",
+        "xs": "2px"
+      },
       colors: {
         brand: {
           light: "#3fbaeb",

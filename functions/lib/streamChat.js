@@ -10,6 +10,7 @@ const generateToken = async (data, context) => {
     const token = client.createToken(data.username);
     const tokenDocRef = index_1.firestore.collection(`users/${uid}/stream`).doc(uid);
     tokenDocRef.set({ token });
+    return token;
 };
 const createGroup = async (data, context) => {
     const client = new StreamChat(apiKey, apiSecret);

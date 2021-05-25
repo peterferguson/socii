@@ -31,32 +31,31 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import LoadingIndicator from '@components/LoadingIndicator'
-import AuthCheck from '@components/AuthCheck'
-import ClientOnly from '@components/ClientOnly'
-import Custom404 from '../../404'
-import { UserContext } from '@lib/context'
+import LoadingIndicator from "@components/LoadingIndicator"
+import AuthCheck from "@components/AuthCheck"
+import ClientOnly from "@components/ClientOnly"
+import Custom404 from "../../404"
+import { StreamContext, UserContext } from "@lib/context"
 
-import React, { useContext } from 'react'
-import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
+import React, { useContext } from "react"
+import { useRouter } from "next/router"
+import dynamic from "next/dynamic"
 
-const StreamChatWithNoSSR = dynamic(
-  () => import('@components/stream/Chat'),
-  { ssr: false }
-)
-
+const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
+  ssr: false,
+})
 
 export default function Group() {
   const router = useRouter()
   const { groupName } = router.query
-  const { userGroups, streamClient } = useContext(UserContext)
+  const { userGroups } = useContext(UserContext)
+  const { streamClient } = useContext(StreamContext)
 
-  if (groupName && !userGroups.includes(groupName)) {
+  if (groupName && userGroups && !userGroups.includes(groupName)) {
     return <Custom404 />
   }
 
-  if (!streamClient.user) {
+  if (!streamClient?.user) {
     // TODO: Use skeleton loaders for chat
     return <LoadingIndicator />
   }

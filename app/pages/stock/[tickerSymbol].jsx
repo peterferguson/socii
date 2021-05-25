@@ -1,35 +1,40 @@
-import Custom404 from '../404'
-import LineChart from '@components/LineChart'
-import ShareStockInformationModal from '@components/ShareStockInformationModal'
-import SelectGroupModal from '@components/SelectGroupModal'
+import Custom404 from "../404"
+import LineChart from "@components/LineChart"
+import ShareStockInformationModal from "@components/ShareStockInformationModal"
+import SelectGroupModal from "@components/SelectGroupModal"
 import TradingViewChart, {
   TradingViewStockProfile,
   TradingViewStockFinancials,
-} from '@components/TradingViewChart'
-import { SmallAssetCard } from '@components/AssetCards'
-import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from '@utils/helper'
-import { UserContext, SelectedGroupContext } from '@lib/context'
-import { useWindowSize } from '@lib/hooks'
-import { firestore } from '@lib/firebase'
+} from "@components/TradingViewChart"
+import { SmallAssetCard } from "@components/AssetCards"
+import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper"
+import { UserContext, SelectedGroupContext } from "@lib/context"
+import { firestore } from "@lib/firebase"
 
-
-import { useRouter } from 'next/router'
-import React, { useState, useContext } from 'react'
-import { Switch } from '@headlessui/react'
-import { useEffect } from 'react'
+import { useRouter } from "next/router"
+import React, { useState, useContext } from "react"
+import { Switch } from "@headlessui/react"
+import { useEffect } from "react"
 
 export default function TickerPage({ tickerSymbols }) {
-  if (!tickerSymbols) {
-    // TODO: Replace with skeleton loaders
-    return <Custom404 />
-  }
+  const router = useRouter()
 
+  const { user, userGroups } = useContext(UserContext)
   let { ticker, timeseries } = tickerSymbols[0]
-  const [tickerLogoUrl, setTickerLogoUrl] = useState('')
 
-  const tickerSymbol = ticker.tickerSymbol
+  timeseries = timeseries.map((d) => {
+    return {
+      x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
+      y: d.close,
+    }
+  })
 
-  const [width, height] = useWindowSize()
+  const [openGroupModal, setOpenGroupModal] = useState(false)
+  const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
+  const [tickerLogoUrl, setTickerLogoUrl] = useState("")
+  const [selectedGroup, setSelectedGroup] = useState(userGroups ? userGroups[0] : null)
+
+  const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
   useEffect(() => {
     const setLogoUrl = async () => {
@@ -39,28 +44,84 @@ export default function TickerPage({ tickerSymbols }) {
     setLogoUrl()
   }, [ticker])
 
-  const router = useRouter()
-
-  const { user, userGroups } = useContext(UserContext)
-
-  const [openGroupModal, setOpenGroupModal] = useState(false)
-  const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
-  const [showTradingView, setShowTradingView] = useState(false)
-  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
-  const [selectedGroup, setSelectedGroup] = useState(userGroups[0])
-
-  const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
   if (router.isFallback) {
     return <div>Loading...</div>
   }
 
-  timeseries = timeseries.map((d) => {
-    return {
-      x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
-      y: d.close,
-    }
-  })
+  if (!tickerSymbols) {
+    // TODO: Replace with skeleton loaders
+    return <Custom404 />
+  }
+
+  return (
+    <>
+      <TickerComponents
+        user={user}
+        ticker={ticker}
+        timeseries={timeseries}
+        tickerLogoUrl={tickerLogoUrl}
+        router={router}
+        setOpenGroupModal={setOpenGroupModal}
+      />
+      {isBrowser && timeseries && (
+        <>
+          <SelectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
+            {openGroupModal && (
+              <SelectGroupModal
+                userGroups={userGroups}
+                openGroupModal={openGroupModal}
+                setOpenGroupModal={setOpenGroupModal}
+                goClickHandler={() => setOpenStockSharingModal(true)}
+              />
+            )}
+          </SelectedGroupContext.Provider>
+          {openStockSharingModal && (
+            <ShareStockInformationModal
+              selectedGroup={selectedGroup}
+              tickerSymbol={ticker.tickerSymbol}
+              tickerLogoUrl={tickerLogoUrl}
+              openStockSharingModal={openStockSharingModal}
+              setOpenStockSharingModal={setOpenStockSharingModal}
+              goClickHandler={() => {}}
+              pricePlaceholder={timeseries[0]?.y.toString()}
+            />
+          )}
+        </>
+      )}
+      <div className="flex flex-col items-center justify-center sm:flex-row">
+        {/* // TODO: repsonive view */}
+        <TradingViewStockProfile
+          tickerSymbol={ticker.tickerSymbol}
+          exchange={ticker.exchange}
+          className="p-4 m-4"
+          // height={height}
+          // width={width * 0.5}
+        />
+        <TradingViewStockFinancials
+          tickerSymbol={ticker.tickerSymbol}
+          exchange={ticker.exchange}
+          // height={height}
+          // width={width * 0.5}
+          className="p-4 m-4 mb-12 sm:mb-4"
+        />
+      </div>
+    </>
+  )
+}
+
+function TickerComponents({
+  user,
+  ticker,
+  timeseries,
+  tickerLogoUrl,
+  router,
+  setOpenGroupModal,
+}) {
+  const tickerSymbol = ticker.tickerSymbol
+
+  const [showTradingView, setShowTradingView] = useState(false) 
+  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
 
   const latestClose = timeseries[0].y
   const highlightedClose = timeseries[crosshairIndexValue].y
@@ -77,12 +138,11 @@ export default function TickerPage({ tickerSymbols }) {
 
   const handleInvest = () => {
     if (!user) {
-      router.push('/enter')
+      router.push("/enter")
     } else {
       setOpenGroupModal(true)
     }
   }
-
   return (
     <>
       <div className="flex flex-row w-full bg-gray-50">
@@ -93,12 +153,7 @@ export default function TickerPage({ tickerSymbols }) {
           currentPrice={latestClose}
           monthlyPctChange={monthlyPctChange}
         />
-        {/* <TradingViewStockPrice
-          tickerSymbol={tickerSymbol}
-          exchange={ticker.exchange}
-          className="p-4"
-        /> */}
-        <div className="flex-grow hidden sm:block"></div>
+        <div className="flex-grow hidden sm:block" />
         <div className="flex-none px-4 pt-4 sm:pl-8 bg-gray-50">
           <div className="items-center justify-center w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
             <span className="z-10 w-12 h-4 text-3xl sm:text-4xl">
@@ -134,47 +189,6 @@ export default function TickerPage({ tickerSymbols }) {
         setCrosshairIndexValue={setCrosshairIndexValue}
         latestClose={latestClose}
       />
-      {isBrowser && (
-        <>
-          <SelectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
-            {openGroupModal && (
-              <SelectGroupModal
-                userGroups={userGroups}
-                openGroupModal={openGroupModal}
-                setOpenGroupModal={setOpenGroupModal}
-                goClickHandler={() => setOpenStockSharingModal(true)}
-              />
-            )}
-          </SelectedGroupContext.Provider>
-          {openStockSharingModal && (
-            <ShareStockInformationModal
-              selectedGroup={selectedGroup}
-              tickerSymbol={tickerSymbol}
-              tickerLogoUrl={tickerLogoUrl}
-              openStockSharingModal={openStockSharingModal}
-              setOpenStockSharingModal={setOpenStockSharingModal}
-              goClickHandler={() => {}}
-              pricePlaceholder={latestClose.toString()}
-            />
-          )}
-        </>
-      )}
-      <div className="flex flex-col items-center justify-center sm:flex-row">
-        <TradingViewStockProfile
-          tickerSymbol={tickerSymbol}
-          exchange={ticker.exchange}
-          className="p-4 m-4"
-          // height={height}
-          // width={width * 0.5}
-        />
-        <TradingViewStockFinancials
-          tickerSymbol={tickerSymbol}
-          exchange={ticker.exchange}
-          // height={height}
-          // width={width * 0.5}
-          className="p-4 m-4 mb-12 sm:mb-4"
-        />
-      </div>
     </>
   )
 }
@@ -213,21 +227,21 @@ function Chart({
           )}
           <div className="flex">
             <div className="px-4">
-              {!showTradingView ? 'TradingView' : 'socii Chart'}
+              {!showTradingView ? "TradingView" : "socii Chart"}
             </div>
             {isBrowser && (
               <Switch
                 checked={showTradingView}
                 onChange={setShowTradingView}
                 className={`${
-                  showTradingView ? 'bg-brand' : 'bg-brand-light'
+                  showTradingView ? "bg-brand" : "bg-brand-light"
                 } relative inline-flex items-center h-6 rounded-full w-11 \
               flex-shrink-0 border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >
                 <span className="sr-only">Show Trading View Chart</span>
                 <span
                   className={`${
-                    showTradingView ? 'translate-x-6' : 'translate-x-1'
+                    showTradingView ? "translate-x-6" : "translate-x-1"
                   } inline-block w-4 h-4 transform bg-white rounded-full \
                 pointer-events-none shadow-lg ring-0 transition ease-in-out duration-200`}
                 />
@@ -260,16 +274,16 @@ export async function getStaticProps({ params }) {
   let props
 
   const tickerQuery = firestore
-    .collection('tickers')
-    .where('tickerSymbol', '==', tickerSymbol)
+    .collection("tickers")
+    .where("tickerSymbol", "==", tickerSymbol)
     .limit(1)
 
   try {
-    props = await stockProps(tickerQuery, '', 100)
+    props = await stockProps(tickerQuery, "", 100)
   } catch (e) {
     return {
       redirect: {
-        destination: '/404',
+        destination: "/404",
         permanent: false,
       },
     }
@@ -283,8 +297,8 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths(context) {
   const snapshot = await firestore
-    .collection('tickers')
-    .where('isPopular', '==', true)
+    .collection("tickers")
+    .where("isPopular", "==", true)
     .get()
 
   const paths = snapshot.docs.map((doc) => {

@@ -14,14 +14,8 @@ const iexClient = new IEXQuery()
 
 export function useUserData() {
   const [user] = useAuthState(auth)
-
-  const [username, setUsername] = useState("")
-  const [userGroups, setUserGroups] = useState([])
-  const [userStreamToken, setUserStreamToken] = useState("")
-
-  const streamClient = StreamChat.getInstance(apiKey)
-
-  let streamData
+  const [username, setUsername] = useState(null)
+  const [userGroups, setUserGroups] = useState(null)
 
   // TODO: This happens every so often which is causing extra reads for the groups &
   // TODO: replication is stopped by the set but it is still unnessecary reads!
@@ -30,53 +24,61 @@ export function useUserData() {
   // ! CHAT APP PROBABLY DUE TO USE OF STREAM TOKEN DEFINITION HERE. NEED TO CREATE
   // ! `useStream` HOOK
 
-  const getUsername = () => {
-    // allows us to turn off the realtime data feed when finished
-    let unsubscribe
-
-    const userRef = firestore.collection("users").doc(user.uid)
-    unsubscribe = userRef.onSnapshot((doc) => {
-      const userData = doc.data()
-      setUsername(userData?.username)
-      setUserGroups([...new Set([...userGroups, ...userData?.groups])])
-    })
-
-    return unsubscribe
-  }
-
-  const getStreamToken = async () => {
-    const tokenRef = firestore.collection(`users/${user.uid}/stream`).doc(user.uid)
-    const snapshot = await tokenRef.get()
-    if (snapshot.exists) {
-      streamData = await snapshot.data()
-    } else {
-      functions.httpsCallable("generateToken")({ username })
-      streamData = await snapshot.data()
-    }
-    setUserStreamToken(streamData?.token)
-  }
-
   useEffect(() => {
-    if (user) {
-      getUsername()
-      getStreamToken()
+    const getUserData = () => {
+      // allows us to turn off the realtime data feed when finished
+      let unsubscribe
+
+      const userRef = firestore.collection("users").doc(user.uid)
+      unsubscribe = userRef.onSnapshot((doc) => {
+        const userData = doc.data()
+        setUsername(userData?.username)
+        setUserGroups(userData?.groups)
+      })
+
+      return unsubscribe
     }
+    if (user) getUserData()
   }, [user])
 
+  return { user, username, userGroups }
+}
+
+export const useStream = (uid, username, displayName) => {
+  const streamClient = useRef(null)
+
   useEffect(() => {
+    let userStreamToken
+
+    streamClient.current = StreamChat.getInstance(apiKey)
+    console.log(`before: ${JSON.stringify(streamClient.current)}`);
+    
+
     const connectStreamUser = async () => {
-      await streamClient.connectUser(
-        { id: username, name: user?.displayName },
-        userStreamToken
-      )
+      const tokenRef = firestore.collection(`users/${uid}/stream`).doc(uid)
+      const snapshot = await tokenRef.get()
+
+      // TODO: TEST THIS WITH NEW USER
+      // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
+      userStreamToken = snapshot.exists
+        ? (await snapshot.data())?.token
+        : functions.httpsCallable("generateToken")({ username })
+
+      if (userStreamToken) {
+        await streamClient.current?.connectUser(
+          { id: username, name: displayName },
+          userStreamToken
+        )
+        console.log(`Connected user ${streamClient.current?.userID} to Stream!`);
+        
+      }
     }
 
-    if (user && username && userStreamToken) {
-      connectStreamUser()
-    }
-  }, [user, username, userStreamToken, streamClient])
+    if (uid && username && !streamClient.current?.user) connectStreamUser()
+    
+  }, [uid, username, displayName])
 
-  return { user, username, userGroups, streamClient }
+  return { streamClient: streamClient.current }
 }
 
 export const useWindowSize = () => {

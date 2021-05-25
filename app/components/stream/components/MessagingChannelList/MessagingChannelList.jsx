@@ -1,7 +1,7 @@
-import React, { memo } from "react"
+import React, { memo, useContext } from "react"
 import { Avatar } from "stream-chat-react"
-import { useContext } from "react"
-import { UserContext } from "@lib/context"
+import { StreamContext } from "@lib/context"
+import { getRandomImage, getInitials } from "@utils/helper"
 import { SkeletonLoader } from "./SkeletonLoader"
 
 import { MdChatBubbleOutline } from "react-icons/MD"
@@ -12,9 +12,10 @@ const MessagingChannelList = ({
   loading,
   onCreateChannel,
 }) => {
-  const { streamClient } = useContext(UserContext)
+  const { streamClient } = useContext(StreamContext)
 
-  const { id, name, image } = streamClient.user || {}
+  const { id, name } = streamClient.user || {}
+  const image =  getRandomImage(getInitials(name))
 
   const ListHeaderWrapper = ({ children }) => (
     <div className="h-full px-3 py-3 pt-5 overflow-y-auto w-80">

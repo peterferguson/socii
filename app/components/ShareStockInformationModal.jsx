@@ -1,12 +1,12 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { alphaVantageQueryOptions } from '@lib/constants'
-import { UserContext } from '@lib/context'
-import PriceInput from '@components/PriceInput'
-import MultiSelect from '@components/MultiSelect'
-import { alphaVantageQuery } from '@lib/firebase'
+import { Dialog, Transition } from "@headlessui/react"
+import { alphaVantageQueryOptions } from "@lib/constants"
+import { StreamContext } from "@lib/context"
+import PriceInput from "@components/PriceInput"
+import MultiSelect from "@components/MultiSelect"
+import { alphaVantageQuery } from "@lib/firebase"
 
-import React, { Fragment, useContext, useState } from 'react'
-import { useRouter } from 'next/router'
+import React, { Fragment, useContext, useState } from "react"
+import { useRouter } from "next/router"
 
 export default function ShareStockInformationModal({
   selectedGroup,
@@ -15,11 +15,11 @@ export default function ShareStockInformationModal({
   openStockSharingModal,
   setOpenStockSharingModal,
   goClickHandler = () => {},
-  pricePlaceholder = '0.00',
+  pricePlaceholder = "0.00",
 }) {
   const router = useRouter()
-  const { streamClient } = useContext(UserContext)
-  const [message, setMessage] = useState('')
+  const { streamClient } = useContext(StreamContext)
+  const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
 
@@ -29,12 +29,12 @@ export default function ShareStockInformationModal({
     closeModal()
     goClickHandler()
 
-    const requiredQueryFields = ['name', 'industry', 'exchange']
+    const requiredQueryFields = ["name", "industry", "exchange"]
 
     if (streamClient && streamClient.user) {
       const channel = streamClient.getChannelById(
-        'messaging',
-        selectedGroup?.split(' ').join('-')
+        "messaging",
+        selectedGroup?.split(" ").join("-")
       )
 
       const asset = await alphaVantageQuery(
@@ -49,7 +49,7 @@ export default function ShareStockInformationModal({
         {
           image: tickerLogoUrl,
           name: tickerSymbol,
-          type: 'stock',
+          type: "stock",
           url: `/stock/${tickerSymbol}`,
           targetPrice,
           asset: asset.data,
@@ -61,7 +61,7 @@ export default function ShareStockInformationModal({
         skip_push: true,
       })
       const threadMessage = await channel.sendMessage({
-        text: '',
+        text: "",
         attachments,
         parent_id: mainMessage.message.id,
         show_in_channel: false,
@@ -110,8 +110,8 @@ export default function ShareStockInformationModal({
                 as="h3"
                 className="text-lg font-medium text-gray-900 font-poppins"
               >
-                Tell <span className="font-bold text-brand-light">{selectedGroup}</span>{' '}
-                about{' '}
+                Tell <span className="font-bold text-brand-light">{selectedGroup}</span>{" "}
+                about{" "}
                 <span span className="font-bold text-teal-300">
                   {tickerSymbol}
                 </span>

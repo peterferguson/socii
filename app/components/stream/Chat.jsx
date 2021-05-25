@@ -26,7 +26,6 @@ import { useHasMounted } from "@lib/hooks"
 import { getInitials, getRandomImage, isBrowser } from "@utils/helper"
 
 export default function StreamChat({ client, theme = "light", groupName = null }) {
-  const mounted = useHasMounted()
 
   const [isCreating, setIsCreating] = useState(false)
   const [mobile, setMobile] = useState(false)
@@ -76,7 +75,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
 
   return (
     <>
-      {isBrowser && client && client.userID && (
+      {isBrowser && client && (
         <Chat client={client} theme={`messaging ${theme}`}>
           {/* {showNotificationToast && (
             <div class="alert">
@@ -103,26 +102,26 @@ export default function StreamChat({ client, theme = "light", groupName = null }
               <MessageInput focus Input={MessagingInput} />
             </Window>
             <MessagingThread />
-            {/* {isCreating && (
+            {isCreating && (
               <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
             )}
+          </Channel>
             <StreamChannelList
-              username={username}
+              client={client}
               mobile={mobile}
               onClose={onClose}
               onCreateChannel={onCreateChannel}
-            /> */}
-          </Channel>
+            />
         </Chat>
       )}
     </>
   )
 }
 
-const StreamChannelList = ({ mobile, onCreateChannel, onClose }) => (
+const StreamChannelList = ({ client, mobile, onCreateChannel, onClose }) => (
   <div
     className={`absolute inset-y-0 right-0 transform ${
-      mobile ? "translate-x-full w-0" : "md:translate-x-0"
+      mobile ? "-translate-x-full w-0" : "md:translate-x-0"
     }  md:relative  transition duration-500 ease-in-out`}
   >
     <ChannelList

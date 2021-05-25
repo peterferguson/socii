@@ -1,5 +1,6 @@
-import DonutChart from '@components/DonutChart'
-import Link from 'next/link'
+import DonutChart from "@components/DonutChart"
+import Link from "next/link"
+import React from "react"
 
 export default function PieCard({ className, groupName, data, scaling, radius, text }) {
   return (
@@ -10,9 +11,11 @@ export default function PieCard({ className, groupName, data, scaling, radius, t
     `}
     >
       <Link href={`/groups/${groupName}`}>
-        <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10 cursor-pointer">
-          {groupName}
-        </div>
+        <a>
+          <div className="relative z-10 text-4xl text-center cursor-pointer top-2 text-brand font-poppins">
+            {groupName}
+          </div>
+        </a>
       </Link>
       <DonutChart
         className="z-0 -mt-8"
@@ -28,20 +31,20 @@ export default function PieCard({ className, groupName, data, scaling, radius, t
 export function PieCardSkeleton({ scaling, radius }) {
   const text = {
     main: (
-      <div className="h-4 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+      <div className="w-16 h-4 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
     ),
-    sub: <div className="h-4 w-12 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />,
+    sub: <div className="w-12 h-4 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />,
   }
   return (
-    <div className="bg-gray-50 rounded-none sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
-      <div className="text-xl font-poppins text-center pt-4 -mb-8">
-        <div className="h-6 w-16 mx-auto rounded-sm bg-gray-200 animate-pulse mb-4" />
+    <div className="m-0 mb-2 rounded-none shadow-2xl bg-gray-50 sm:rounded-xl sm:m-4 sm:mb-4">
+      <div className="pt-4 -mb-8 text-xl text-center font-poppins">
+        <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
       </div>
       <DonutChart
         className="z-0 animate-pulse"
         data={[
-          { theta: 1, color: '#E5E7EB' },
-          { theta: 2, color: '#E5E7EB' },
+          { theta: 1, color: "#E5E7EB" },
+          { theta: 2, color: "#E5E7EB" },
         ]}
         scaling={scaling}
         radius={radius}
