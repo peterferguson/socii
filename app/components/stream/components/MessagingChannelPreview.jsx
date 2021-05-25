@@ -1,7 +1,6 @@
 import styles from "@styles/MessagingChannelPreview.module.css"
 import AvatarGroup from "@components/stream/components/AvatarGroup"
-import { getTimeStamp } from "@utils/helper";
-
+import { getTimeStamp } from "@utils/helper"
 
 import React, { useContext } from "react"
 import { ChatContext } from "stream-chat-react"
@@ -10,10 +9,10 @@ const getChannelName = (members) => {
   const defaultName = "Invest Social"
 
   if (!members.length || members.length === 1) {
-    return members[0]?.user.name || defaultName
+    return members?.[0]?.user.name || defaultName
   }
 
-  return `${members[0]?.user.name || defaultName}, ${
+  return `${members?.[0]?.user.name || defaultName}, ${
     members[1]?.user.name || defaultName
   }`
 }

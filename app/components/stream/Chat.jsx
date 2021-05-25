@@ -74,9 +74,9 @@ export default function StreamChat({ client, theme = "light", groupName = null }
 
 const StreamChannelList = ({ mobile, onCreateChannel, onClose, groupName }) => {
   const { client } = useChatContext()
-  const filter = { type: "messaging", members: { $in: [client?.userID] } }
+  const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
-
+  const options = { state: true, presence: true, limit: 5 }
   return (
     <div
       className={`absolute inset-y-0 right-0 transform ${
@@ -86,7 +86,7 @@ const StreamChannelList = ({ mobile, onCreateChannel, onClose, groupName }) => {
       <ChannelList
         filter={filter}
         sort={sort}
-        options={{ state: true, presence: true, limit: 10 }}
+        options={options}
         // channelRenderFilterFn={channelFilter}
         customActiveChannel={groupName?.split(" ").join("-") || ""}
         List={(props) => (

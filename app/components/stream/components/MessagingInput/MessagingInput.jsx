@@ -1,19 +1,19 @@
-import React, { memo, useCallback, useContext, useReducer } from 'react'
-import { ImageDropzone } from 'react-file-utils'
-import { logChatPromiseExecution } from 'stream-chat'
+import React, { memo, useCallback, useContext, useReducer } from "react"
+import { ImageDropzone } from "react-file-utils"
+import { logChatPromiseExecution } from "stream-chat"
 import {
   ChannelContext,
   ChatAutoComplete,
   EmojiPicker,
   useMessageInput,
-} from 'stream-chat-react'
+} from "stream-chat-react"
 
-import EmojiIcon from '@icons/stream/emoji.svg'
-import SendIcon from '@icons/stream/send.svg'
-import UseCommandIcon from '@icons/stream/command.svg'
-import LightningBoltSmall from '@icons/stream/lightningBoltSmall.svg'
+import EmojiIcon from "@icons/stream/emoji.svg"
+import SendIcon from "@icons/stream/send.svg"
+import UseCommandIcon from "@icons/stream/command.svg"
+import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
 
-import { UploadsPreview } from './UploadsPreview'
+import { UploadsPreview } from "./UploadsPreview"
 
 // * Actions split by state
 
@@ -45,19 +45,19 @@ const CommandIcon = ({ text }) => (
 
 const commandTypes = {
   GIPHY: {
-    name: 'giphy',
+    name: "giphy",
     icon: <CommandIcon text="GIPHY" />,
   },
   INVEST: {
-    name: 'invest',
+    name: "invest",
     icon: <CommandIcon text="INVEST" />,
   },
   BUY: {
-    name: 'buy',
+    name: "buy",
     icon: <CommandIcon text="BUY" />,
   },
   SELL: {
-    name: 'sell',
+    name: "sell",
     icon: <CommandIcon text="SELL" />,
   },
   // TICKER: AssetLogo, //TODO: Create a component to get a asset logo as a icon
@@ -74,24 +74,24 @@ const emojiButtons = {
 }
 
 const useCommand = () => {
-  const defaultCommand = { mode: false, name: '', icon: null }
+  const defaultCommand = { mode: false, name: "", icon: null }
 
   const commandReducer = (command, action) => {
     const { mode, name, icon } = command
     const { type, newCommand } = action
 
     switch (type) {
-      case 'FOUND_COMMAND': {
+      case "FOUND_COMMAND": {
         return {
           mode,
           name: newCommand.name,
           icon: newCommand.icon,
         }
       }
-      case 'SET_COMMAND_MODE': {
+      case "SET_COMMAND_MODE": {
         return { mode: true, name, icon }
       }
-      case 'EXIT_COMMAND_MODE': {
+      case "EXIT_COMMAND_MODE": {
         return defaultCommand
       }
       default:
@@ -102,16 +102,16 @@ const useCommand = () => {
   const [command, dispatch] = useReducer(commandReducer, defaultCommand)
 
   const setNewCommand = (newCommand) => {
-    dispatch({ type: 'FOUND_COMMAND', newCommand })
+    dispatch({ type: "FOUND_COMMAND", newCommand })
   }
-  const enterCommandMode = () => dispatch({ type: 'SET_COMMAND_MODE' })
-  const exitCommandMode = () => dispatch({ type: 'EXIT_COMMAND_MODE' })
+  const enterCommandMode = () => dispatch({ type: "SET_COMMAND_MODE" })
+  const exitCommandMode = () => dispatch({ type: "EXIT_COMMAND_MODE" })
 
   // * Check if the text starts with a command from the commandTypes enum
   const firstWordIsCommand = (text) => {
-    const firstWord = text.split(' ')[0]
+    const firstWord = text.split(" ")?.[0]
 
-    switch (firstWord.replace('/', '').toLowerCase()) {
+    switch (firstWord.replace("/", "").toLowerCase()) {
       case commandTypes.GIPHY.name:
         setNewCommand(commandTypes.GIPHY)
         return true
@@ -152,12 +152,12 @@ const MessagingInput = (props) => {
   ] = useCommand()
 
   const overrideSubmitHandler = (message) => {
-    if (!message.text || message.text === ' ') return
+    if (!message.text || message.text === " ") return
     let updatedMessage
 
     // - detect command & if it exists update the displayed input
     if (firstWordIsCommand(message.text) && message.attachments.length) {
-      updatedMessage = { ...message, text: ' ' }
+      updatedMessage = { ...message, text: " " }
     }
 
     // - In command state reinstate the command before submission
@@ -167,7 +167,7 @@ const MessagingInput = (props) => {
     }
 
     const sendMessagePromise = sendMessage(updatedMessage || message)
-    logChatPromiseExecution(sendMessagePromise, 'send message')
+    logChatPromiseExecution(sendMessagePromise, "send message")
     exitCommandMode()
   }
 
@@ -176,7 +176,7 @@ const MessagingInput = (props) => {
   const onChange = useCallback(
     (e) => {
       const { value } = e.target
-      const deletePressed = e.nativeEvent?.inputType === 'deleteContentBackward'
+      const deletePressed = e.nativeEvent?.inputType === "deleteContentBackward"
 
       // - In command mode detect empty deletion & exit command mode
       if (value.length <= 1 && deletePressed) {
@@ -186,7 +186,7 @@ const MessagingInput = (props) => {
       // - Check for command & enter command mode if found
       // - Updating displayed input based on command removal
       if (!command.mode && firstWordIsCommand(value) && !messageInput.numberOfUploads) {
-        e.target.value = ' '
+        e.target.value = " "
         enterCommandMode()
       }
 
@@ -198,7 +198,7 @@ const MessagingInput = (props) => {
   const onClickCommand = () => {
     messageInput.textareaRef.current.focus()
     messageInput.handleChange({
-      target: { value: '/' },
+      target: { value: "/" },
       preventDefault: () => null,
     })
   }
@@ -220,7 +220,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="flex items-center h-10 bg-white border-2 border-gray-400 w-52 sm:w-96 min-h-[32px] z-[100] rounded-3xl focus-within:border-brand">
+        <div className="flex items-center bg-white border-2 border-gray-400 w-52 md:w-60 lg:w-[400px]  min-h-[40px] z-[100] rounded-3xl focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -260,7 +260,7 @@ const EmojiButton = ({ emojiButton, onClick }) => (
   >
     <emojiButton.icon
       className={`h-8 w-8 md:h-5 md:w-5 ${
-        emojiButton?.className ? emojiButton?.className : ''
+        emojiButton?.className ? emojiButton?.className : ""
       }`}
     />
   </div>

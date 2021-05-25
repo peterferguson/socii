@@ -50,7 +50,7 @@ export const useStream = (uid, username, displayName) => {
   useEffect(() => {
     let userStreamToken
 
-    streamClient.current = StreamChat.getInstance(apiKey, {timeout: 1000})
+    streamClient.current = StreamChat.getInstance(apiKey, { timeout: 1000 })
 
     const connectStreamUser = async () => {
       const tokenRef = firestore.collection(`users/${uid}/stream`).doc(uid)
@@ -225,7 +225,7 @@ export function useTickerPriceData({ tickerSymbol }) {
         .collectionGroup("data")
         .where("symbol", "==", tickerSymbol)
         .limit(1)
-      const ticker = await (await tickerQuery.get()).docs[0].data()
+      const ticker = await (await tickerQuery.get()).docs?.[0].data()
       dispatch({ type: "UPDATE_TICKER", ticker })
       dispatch({
         type: "UPDATE_ASSET_CURRENCY",

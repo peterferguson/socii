@@ -170,7 +170,7 @@ export const tickerExistsSubquery = async (tickerRef, queryField) => {
     .orderBy(queryField, "asc")
     .limit(1)
 
-  let sector = (await sectorRef.get()).docs[0].data() ?? null
+  let sector = (await sectorRef.get()).docs?.[0].data() ?? null
 
   return { ...sector, lastUpdate: sector?.lastUpdate.toMillis() ?? null }
 }
@@ -217,7 +217,7 @@ export const getRandomImage = (letters = "") => {
 export const getInitials = (slug) => {
   return slug
     ?.split(" ")
-    .map((word) => word[0])
+    .map((word) => word?.[0])
     .join("")
 }
 

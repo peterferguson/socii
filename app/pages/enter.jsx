@@ -1,15 +1,15 @@
-import { auth, userFirstName, firestore } from '@lib/firebase'
-import { signInOptions } from '@lib/constants'
-import { UserContext } from '@lib/context'
-import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { handleEnterKeyDown, validateEmail } from '@utils/helper'
+import { auth, userFirstName, firestore } from "@lib/firebase"
+import { signInOptions } from "@lib/constants"
+import { UserContext } from "@lib/context"
+import React, { useState, useEffect, useCallback, useContext } from "react"
+import { handleEnterKeyDown, validateEmail } from "@utils/helper"
 
-import MailIcon from '@icons/mail.svg'
-import CheckIcon from '@icons/check.svg'
-import CrossIcon from '@icons/cross.svg'
-import toast from 'react-hot-toast'
-import debounce from 'lodash.debounce'
-import router from 'next/router'
+import MailIcon from "@icons/mail.svg"
+import CheckIcon from "@icons/check.svg"
+import CrossIcon from "@icons/cross.svg"
+import toast from "react-hot-toast"
+import debounce from "lodash.debounce"
+import router from "next/router"
 
 // ? Should we REQUIRE that the user login with email
 // TODO: Add user info to users colleciton on sign up
@@ -75,7 +75,7 @@ function SignInButtons({ verified }) {
           <option.logo
             className={`w-14 h-14 justify-center rounded m-2 p-2 \
             border-solid border-2 border-gray-900 ${
-              verified ? 'btn-transition cursor-pointer' : 'cursor-not-allowed'
+              verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
             }`}
             onClick={() => (verified ? signInPopUp(option.provider) : null)}
           />
@@ -92,27 +92,27 @@ function EmailSignUp({ verified, setVerified }) {
   const validateUser = useCallback(
     debounce(async (email) => {
       const inviteRef = firestore
-        .collectionGroup('invites')
-        .where('email', '==', email)
+        .collectionGroup("invites")
+        .where("email", "==", email)
         .limit(1)
 
-      const userRef = firestore.collection('users').where('email', '==', email).limit(1)
+      const userRef = firestore.collection("users").where("email", "==", email).limit(1)
 
       const verified = Promise.all([inviteRef.get(), userRef.get()]).then((values) => {
-        const isInvited = !(values[0].empty ?? false)
+        const isInvited = !(values?.[0].empty ?? false)
         const isUser = !(values[1].empty ?? false)
         setVerified(isUser || isInvited)
         if (!(isUser || isInvited)) {
-          throw 'nope'
+          throw "nope"
         }
       })
 
       toast.promise(verified, {
-        loading: 'Checking...',
-        success: 'Hey you have been invited!',
+        loading: "Checking...",
+        success: "Hey you have been invited!",
         error:
-          'Sorry this is a pre-Alpha (version 0.0) limited release. \
-          You have to be invited 😞.',
+          "Sorry this is a pre-Alpha (version 0.0) limited release. \
+          You have to be invited 😞.",
         // TODO buttons here to ask for an invite?
       })
     }, 250),
@@ -134,8 +134,8 @@ function EmailSignUp({ verified, setVerified }) {
       })
       .then(() => {
         toast(
-          '👋 Thanks for signing up! Please verify your email address and \
-            we will see you very soon!'
+          "👋 Thanks for signing up! Please verify your email address and \
+            we will see you very soon!"
         )
       })
       .catch((error) => {
@@ -145,7 +145,7 @@ function EmailSignUp({ verified, setVerified }) {
 
     if (auth.isSignInWithEmailLink(window.location.href)) {
       if (!email) {
-        email = window.prompt('Please provide your email for confirmation')
+        email = window.prompt("Please provide your email for confirmation")
       }
       auth
         .signInWithEmailLink(email, window.location.href)
@@ -188,8 +188,8 @@ function EmailSignUp({ verified, setVerified }) {
         <div
           className={`flex flex-none bg-gray-100 text-sm sm:text-tiny ${
             validateEmail(email) && verified
-              ? 'text-green-400 btn-transition'
-              : 'text-red-400'
+              ? "text-green-400 btn-transition"
+              : "text-red-400"
           } p-0.5 align-middle`}
           onKeyDown={(e) => handleEnterKeyDown(e, () => emailSignInHandler(email))}
         >
@@ -203,7 +203,7 @@ function EmailSignUp({ verified, setVerified }) {
       <button
         type="submit"
         className={`${
-          verified ? 'btn-transition cursor-pointer' : 'cursor-not-allowed'
+          verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
         } rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full \
         text-white my-4 py-3 px-4 leading-tight font-bold`}
         disabled={false}

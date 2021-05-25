@@ -20,9 +20,9 @@ export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
 
   const { user, userGroups } = useContext(UserContext)
-  let { ticker, timeseries } = tickerSymbols[0]
+  let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
-  timeseries = timeseries.map((d) => {
+  timeseries = timeseries?.map((d) => {
     return {
       x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
       y: d.close,
@@ -32,7 +32,9 @@ export default function TickerPage({ tickerSymbols }) {
   const [openGroupModal, setOpenGroupModal] = useState(false)
   const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
   const [tickerLogoUrl, setTickerLogoUrl] = useState("")
-  const [selectedGroup, setSelectedGroup] = useState(userGroups ? userGroups[0] : null)
+  const [selectedGroup, setSelectedGroup] = useState(
+    userGroups ? userGroups?.[0] : null
+  )
 
   const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
@@ -43,7 +45,6 @@ export default function TickerPage({ tickerSymbols }) {
 
     setLogoUrl()
   }, [ticker])
-
 
   if (router.isFallback) {
     return <div>Loading...</div>
@@ -84,7 +85,7 @@ export default function TickerPage({ tickerSymbols }) {
               openStockSharingModal={openStockSharingModal}
               setOpenStockSharingModal={setOpenStockSharingModal}
               goClickHandler={() => {}}
-              pricePlaceholder={timeseries[0]?.y.toString()}
+              pricePlaceholder={timeseries?.[0]?.y.toString()}
             />
           )}
         </>
@@ -118,17 +119,17 @@ function TickerComponents({
   router,
   setOpenGroupModal,
 }) {
-  const tickerSymbol = ticker.tickerSymbol
+  const tickerSymbol = ticker?.tickerSymbol
 
-  const [showTradingView, setShowTradingView] = useState(false) 
+  const [showTradingView, setShowTradingView] = useState(false)
   const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
 
-  const latestClose = timeseries[0].y
-  const highlightedClose = timeseries[crosshairIndexValue].y
+  const latestClose = timeseries?.[0]?.y
+  const highlightedClose = timeseries[crosshairIndexValue]?.y
   let previousMonthClose = highlightedClose
 
   try {
-    previousMonthClose = timeseries[crosshairIndexValue + 21].y
+    previousMonthClose = timeseries[crosshairIndexValue + 21]?.y
   } catch (err) {}
 
   const monthlyPctChange = pctChange(highlightedClose, previousMonthClose)
@@ -301,7 +302,7 @@ export async function getStaticPaths(context) {
     .where("isPopular", "==", true)
     .get()
 
-  const paths = snapshot.docs.map((doc) => {
+  const paths = snapshot.docs?.map((doc) => {
     const { tickerSymbol } = doc.data()
     return {
       params: { tickerSymbol },

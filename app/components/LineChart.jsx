@@ -1,9 +1,9 @@
-import { FlexibleXYPlot, XAxis, LineSeries, AreaSeries, Crosshair } from 'react-vis'
-import { useWindowSize } from '@lib/hooks'
-import 'react-vis/dist/style.css'
-import React, { useEffect, useState } from 'react'
-import { tailwindColorMap } from '@lib/constants'
-import { pnlBackgroundColor, pctChange } from '@utils/helper'
+import { FlexibleXYPlot, XAxis, LineSeries, AreaSeries, Crosshair } from "react-vis"
+import { useWindowSize } from "@lib/hooks"
+import "react-vis/dist/style.css"
+import React, { useEffect, useState } from "react"
+import { tailwindColorMap } from "@lib/constants"
+import { pnlBackgroundColor, pctChange } from "@utils/helper"
 
 export default function LineChart({
   timeseries,
@@ -16,13 +16,13 @@ export default function LineChart({
   const [pctChangeValue, setPctChangeValue] = useState(0.0)
 
   useEffect(() => {
-    setPctChangeValue(pctChange(timeseries[0].y, crosshairValue.y).toFixed(2))
+    setPctChangeValue(pctChange(timeseries?.[0].y, crosshairValue.y).toFixed(2))
   }, [crosshairValue])
 
   const lineSeriesProps = {
     animation: true,
-    color: '#0fa9e6',
-    opacityType: 'literal',
+    color: "#0fa9e6",
+    opacityType: "literal",
     strokeWidth: 2,
     data: timeseries,
     onNearestX: (data, { index }) => {
@@ -58,10 +58,10 @@ export default function LineChart({
           <Crosshair
             values={[crosshairValue]}
             titleFormat={(d) => ({
-              title: 'Date',
-              value: new Date(d[0].x).toLocaleDateString(),
+              title: "Date",
+              value: new Date(d?.[0].x).toLocaleDateString(),
             })}
-            itemsFormat={(d) => [{ title: 'Close price', value: d[0].y }]}
+            itemsFormat={(d) => [{ title: "Close price", value: d?.[0].y }]}
           />
         )}
       </FlexibleXYPlot>

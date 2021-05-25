@@ -21,7 +21,7 @@ def willItFloat(string: str) -> Union[str, float]:
 
 def camelCase(string: str) -> str:
     return (
-        string[0].lower() + string[1:]
+        string?.[0].lower() + string[1:]
         if not all(x.isupper() for x in string[:2])
         else string
     )
@@ -59,7 +59,7 @@ def yahooData(isin: str, exchanges=yq.get_exchanges().to_dict("records")):
 
     markets = [market for market in exchanges if "." + suffix == market["Suffix"]]
     market = (
-        markets[0]
+        markets?.[0]
         if markets
         else {
             "Country": "United States of America",
@@ -126,7 +126,7 @@ def alphaVantageTimeseriesToFirestore(
         print(f"API call limit reached for {ticker}")
         return
 
-    timeseries_key = [key for key in data.keys() if "time series" in key.lower()][0]
+    timeseries_key = [key for key in data.keys() if "time series" in key.lower()]?.[0]
 
     timeseries = data[timeseries_key]
 
@@ -237,13 +237,13 @@ def trading212TickersToFireStore():
 def tickerToISIN(ticker: str) -> str:
     query = client.collection("tickers").where("tickerSymbol", "==", ticker).limit(1)
     results = query.get()
-    return results[0].to_dict()["ISIN"] if results else None
+    return results?.[0].to_dict()["ISIN"] if results else None
 
 
 def isinToTicker(isin: str) -> str:
     query = client.collection("tickers").where("ISIN", "==", isin).limit(1)
     results = query.get()
-    return results[0].to_dict()["tickerSymbol"] if results else None
+    return results?.[0].to_dict()["tickerSymbol"] if results else None
 
 
 def makeLogoPublic(isin: str):

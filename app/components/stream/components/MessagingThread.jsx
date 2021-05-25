@@ -30,6 +30,7 @@ const MessagingThread = () => {
       Message={CustomMessage}
       MessageInput={MessagingInput}
       ThreadHeader={ThreadHeader}
+      fullWidth={true}
     />
   )
 }

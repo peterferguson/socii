@@ -7,7 +7,10 @@ export default function AvatarGroup(members, styles) {
   if (members.length === 1) {
     return (
       <div className={styles["messaging__channel-header__avatars"]}>
-        <Avatar image={getRandomImage(getInitials(members[0]?.user.name))} size={40} />
+        <Avatar
+          image={getRandomImage(getInitials(members?.[0]?.user.name))}
+          size={40}
+        />
       </div>
     )
   }
@@ -17,7 +20,7 @@ export default function AvatarGroup(members, styles) {
       <div className={styles["messaging__channel-header__avatars two"]}>
         <span>
           <Avatar
-            image={getRandomImage(getInitials(members[0]?.user.name))}
+            image={getRandomImage(getInitials(members?.[0]?.user.name))}
             shape="square"
             size={40}
           />
@@ -38,7 +41,7 @@ export default function AvatarGroup(members, styles) {
       <div className={styles["messaging__channel-header__avatars three"]}>
         <span>
           <Avatar
-            image={getRandomImage(getInitials(members[0]?.user.name))}
+            image={getRandomImage(getInitials(members?.[0]?.user.name))}
             shape="square"
             size={40}
           />
