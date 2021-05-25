@@ -20,16 +20,17 @@ import {
   TypingIndicator,
 } from "@components/stream/components"
 
+import { useMediaQuery } from "react-responsive"
 import React, { useState } from "react"
 
 export default function StreamChat({ client, theme = "light", groupName = null }) {
   const [isCreating, setIsCreating] = useState(false)
-  const [mobile, setMobile] = useState(false)
+  const [hideChannelList, setHideChannelList] = useState(false)
   // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
 
   const onClose = () => setIsCreating(false)
   const onCreateChannel = () => setIsCreating(!isCreating)
-  const toggleMobile = () => setMobile(!mobile)
+  const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
   return (
     <Chat client={client} theme={`messaging ${theme}`}>
@@ -44,7 +45,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
         </div>
       )} */}
       <StreamChannelList
-        mobile={mobile}
+        hideChannelList={hideChannelList}
         onClose={onClose}
         onCreateChannel={onCreateChannel}
         groupName={groupName}
@@ -54,12 +55,19 @@ export default function StreamChat({ client, theme = "light", groupName = null }
         multipleUploads={true}
         Attachment={CustomAttachment}
       >
-        <Window>
+        <Window onClick={hideChannelList ? toggleHideChannelList : null}>
           {isCreating && (
-            <CreateChannel toggleMobile={toggleMobile} onClose={onClose} />
+            <CreateChannel
+              toggleHideChannelList={toggleHideChannelList}
+              onClose={onClose}
+            />
           )}
-          <MessagingChannelHeader theme={theme} toggleMobile={toggleMobile} />
+          <MessagingChannelHeader
+            theme={theme}
+            toggleHideChannelList={toggleHideChannelList}
+          />
           <MessageList
+            onClick={hideChannelList ? toggleHideChannelList : null}
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
             Message={CustomMessage}
             TypingIndicator={TypingIndicator}
@@ -72,17 +80,30 @@ export default function StreamChat({ client, theme = "light", groupName = null }
   )
 }
 
-const StreamChannelList = ({ mobile, onCreateChannel, onClose, groupName }) => {
+const StreamChannelList = ({
+  hideChannelList,
+  onCreateChannel,
+  onClose,
+  groupName,
+}) => {
   const { client } = useChatContext()
   const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
   const options = { state: true, presence: true, limit: 5 }
+  const is1Cols = useMediaQuery({ minWidth: 800 })
   return (
     <div
-      className={`absolute inset-y-0 right-0 transform ${
-        mobile ? "-translate-x-full w-0" : "md:translate-x-0"
-      }  md:relative  transition duration-1000 ease-in-out`}
-    >
+      className={
+        `absolute inset-y-16 md:inset-y-0 left-none md:left-0 -right-16 md:right-none transform md:relative transition 
+        duration-300 ease-in-out 
+        ${hideChannelList && is1Cols &&  "-translate-x-full flex h-0"}
+        ${!hideChannelList && is1Cols &&  "translate-x-0 z-40"}
+        ${hideChannelList && !is1Cols &&  "-translate-x-full hidden"}
+        ${!hideChannelList && !is1Cols &&  "translate-x-0 z-40"}
+      } `} 
+        //  : "hidden md:flex md:h-0"                                         // - toggled off 
+        //   : "md:translate-x-0 z-40 md:z-0"               // - toggled on 
+      >
       <ChannelList
         filter={filter}
         sort={sort}
@@ -99,6 +120,27 @@ const StreamChannelList = ({ mobile, onCreateChannel, onClose, groupName }) => {
     </div>
   )
 }
+
+/*
+1 Large screen functionality:
+* Channel list shown immediately but togglible. On toggle close with animation 
+* & resize message list container
+2 Small screen functionality:
+* Channel list hidden immediately but togglible. On toggle close with animation 
+* & don't resize message list container but allow clicking to toggle
+* -
+? Large screen & toggled off
+- Hide & resize (add hidden & translate out)
+? Large screen & toggled on
+- reshow (remove hidden & translate in)
+? Small screen & toggled off
+- Hide (add translate out & z-40)
+? Small screen & toggled on
+- Show over the top of the chat (translate in & z-40)
+* 
+*
+*
+*/
 
 // function grantPermission() {
 //   if (Notification.permission === 'granted') {

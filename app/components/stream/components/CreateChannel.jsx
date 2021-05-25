@@ -25,7 +25,7 @@ const UserResult = ({ user }) => (
   </li>
 )
 
-const CreateChannel = ({ onClose, toggleMobile }) => {
+const CreateChannel = ({ onClose, toggleHideChannelList }) => {
   const { client, setActiveChannel } = useContext(ChatContext)
 
   const [focusedUser, setFocusedUser] = useState(undefined)
@@ -196,7 +196,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
               />
             </form>
           </div>
-          <div className="sm:hidden" onClick={() => toggleMobile()}>
+          <div className="sm:hidden" onClick={() => toggleHideChannelList()}>
             <XButtonBackground className="w-4 h-4 bg-brand-teal" />
           </div>
         </div>
