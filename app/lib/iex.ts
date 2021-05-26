@@ -1,5 +1,5 @@
 const token = process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY
-const apiversion = process.env.NEXT_PUBLIC_IEXCLOUD_API_VERSION
+const apiversion = "stable" 
 
 export default class IEXQuery {
   private endpointPath: string
