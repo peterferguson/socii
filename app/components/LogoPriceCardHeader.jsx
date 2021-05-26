@@ -9,7 +9,7 @@ export default function LogoPriceCardHeader({
   tickerState,
   className = "",
 }) {
-  const { priceChange, price, assetCurrency } = tickerState
+  const { priceChange, price, assetCurrency } = tickerState || {}
   const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
   const pnlColors = `${pnlBgColor} ${pnlBgColor
     .replace("bg", "text")

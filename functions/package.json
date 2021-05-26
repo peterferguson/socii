@@ -5,7 +5,7 @@
     "start-up": "./start-up.bash",
     "dev": "firebase emulators:start --import socii-firestore-backup",
     "build": "tsc",
-    "serve": "firebase emulators:start --only functions",
+    "functions": "tsc && firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",

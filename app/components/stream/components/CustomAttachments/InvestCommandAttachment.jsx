@@ -1,7 +1,7 @@
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
+import { useTickerPriceData } from "@lib/hooks"
 
-import { useTickerPriceData, useLocalCurrency, useExchangeRate } from "@lib/hooks"
 import React from "react"
 import { MML } from "mml-react"
 
@@ -16,7 +16,7 @@ const InvestCommandAttachment = ({ attachment }) => {
     invest: (tag) => (
       <InvestMMLConverter
         {...tag.node.attributes}
-        canSell={true}
+        canSell={true} // - futureproofing for breaking if the group holds the asset
         tickerSymbol={attachment.tickerSymbol}
         tickerState={tickerState}
       />

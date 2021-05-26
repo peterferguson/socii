@@ -1,9 +1,9 @@
 # ! Should Fail
 
-GET http://localhost:5001/sociiinvest/europe-west2/investCommand
+GET http://localhost:5001/sociiinvest/europe-west2/buyCommand
 
 ###
-POST http://localhost:5001/sociiinvest/europe-west2/investCommand
+POST http://localhost:5001/sociiinvest/europe-west2/buyCommand
 content-type: application/json
 
 { 
@@ -32,7 +32,7 @@ content-type: application/json
    "form_data":{} 
 }
 ###
-POST http://localhost:5001/sociiinvest/europe-west2/investCommand
+POST http://localhost:5001/sociiinvest/europe-west2/buyCommand
 content-type: application/json
 
 { 
@@ -53,8 +53,9 @@ content-type: application/json
    }, 
    "form_data":{} 
 }
+# Buy command initial message
 ###
-POST http://localhost:5001/sociiinvest/europe-west2/investCommand
+POST http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
 content-type: application/json
 
 { 
@@ -74,4 +75,31 @@ content-type: application/json
      "online":true 
    }, 
    "form_data":{} 
+}
+# Buy command first response
+###
+POST http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
+content-type: application/json
+
+{ 
+   "message":{ 
+      "id":"", 
+      "text":"/buy TSLA", 
+      "command": "buy", 
+      "args": "buy TSLA", 
+      "html":"",
+      "attachments":[],
+      "mentioned_users":[]
+   }, 
+   "user":{ 
+     "id":"peterferguson", 
+     "role":"user", 
+     "banned":false, 
+     "online":true 
+   }, 
+   "form_data": {
+      "shares": "1",
+      "cost": "604.69",
+      "action": "buy"
+      } 
 }

@@ -31,6 +31,6 @@
     "**/*.tsx",
     "pages/_app.jsx",
     "components/stream/components/MessagingInput/MessagingInput.jsx"
-  ],
+, "pages/api/commands.js"  ],
   "exclude": ["node_modules"]
 }

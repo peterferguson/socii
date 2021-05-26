@@ -1,13 +1,13 @@
 import MMLButton from "./MMLButton"
 // import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-
 import {
   useTickerPriceData,
   useShareCost,
   useLocalCurrency,
   useExchangeRate,
 } from "@lib/hooks"
+
 import React from "react"
 import { MML } from "mml-react"
 
@@ -43,10 +43,18 @@ const BuyCommandAttachment = ({ attachment }) => {
         localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
       />
     ),
+    tradeConfirmation: (tag) => (
+      <InvestConfirmationMMLConverter
+        {...tag.node.attributes}
+        key={tag.key}
+        localCostPerShare={localCostPerShare}
+        localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
+      />
+    ),
   }
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg">
+    <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
       <LogoPriceCardHeader
         tickerSymbol={attachment.tickerSymbol}
         tickerState={tickerState}
@@ -54,7 +62,10 @@ const BuyCommandAttachment = ({ attachment }) => {
       <MML
         converters={converters}
         source={attachment.mml}
-        onSubmit={(e) => console.log(e)}
+        onSubmit={(e) => {
+          const { buy, cancel, ...data } = e // - remove buy & cancel
+          return { ...data, action: "buy" in e ? "buy" : "cancel" }
+        }}
       />
     </div>
   )
@@ -121,5 +132,24 @@ const MMLNumberInput = ({ key, value, onChange, name, currencyIcon = null }) => 
     </div>
   )
 }
+
+const InvestConfirmationMMLConverter = () => (
+  <>
+    <div className="flex items-center justify-center w-full mx-auto space-x-2">
+      <MMLButton
+        key={`cancel-button`}
+        name="cancel"
+        className="w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400"
+        text="Cancel"
+      />
+      <MMLButton
+        key={`buy-button`}
+        name="buy"
+        className="w-1/2 mx-2 outline-btn btn-transition"
+        text={"Buy"}
+      />
+    </div>
+  </>
+)
 
 export default BuyCommandAttachment

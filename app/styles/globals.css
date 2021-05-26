@@ -226,6 +226,17 @@
   max-width: 100%;
 }
 
+.mml-container {
+  display: flex;
+  padding-bottom: 4px;
+  padding-top: 0.25rem;
+}
+
+.mml-wrap {
+  display: block;
+  width: 100%;
+}
+
 /* Blue hightlighting fix */
 button,
 textarea,

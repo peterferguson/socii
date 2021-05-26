@@ -246,8 +246,8 @@ export const localCostPerShare = async (
   return { costPerShare: rate * input, lastRefresh, exchangeRate: rate }
 }
 
-export const currencyFormatter = (number, currency) =>
-  new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(number)
+export const currencyFormatter = (number: number, currency: string = "GBP"): string =>
+  new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(number || 0)
 
 export const round = (num: number, places: number) =>
   Math.round((num + Number.EPSILON) * 10 ** places) / 10 ** places
@@ -274,4 +274,22 @@ export const getTimeStamp = (channel) => {
   }
 
   return `${lastHours}:${lastMinutes} ${half}`
+}
+
+export function singleLineTemplateString(strings, ...values) {
+  // Interweave the strings with the
+  // substitution vars first.
+  let output = '';
+  for (let i = 0; i < values.length; i++) {
+    output += strings[i] + values[i];
+  }
+  output += strings[values.length];
+
+  // Split on newlines.
+  let lines = output.split(/(?:\r\n|\n|\r)/);
+
+  // Rip out the leading whitespace.
+  return lines.map((line) => {
+    return line.replace(/^\s+/gm, '');
+  }).join(' ').trim();
 }
