@@ -43,8 +43,8 @@ const createGroup = async (data, context) => {
 // TODO: Figure out how to send on the executorRef etc to the api
 // TODO: It may be a case of letting the user also pick the group within the chat
 
-const invest = async (req, res) => {
-  // show a nice error if you send a GET request
+const buy = async (req, res) => {
+  // * show a nice error if you send a GET request
   if (req.method === "GET") {
     res.status(400).json({
       body: { error: "Invalid request, only POST requests are allowed" },
@@ -62,90 +62,69 @@ const invest = async (req, res) => {
   //   return;
   // }
 
-  // const messageText = req.body.message.text;
-  // const cID = req.body.cid;
-  // const channelType = cID.split(":")[0];
-  // const channelID = cID.split(":")[1];
+  // - This is the executorGroupRef 
+  // ? Maybe will also want to store the individual executor also which will be the username from streamchat
+  const channelID = req.body.cid.split(":")[1]; 
 
-  // the body of the message we will modify based on user interactions
+  // * the body of the message will be modified based on user interactions
   let message = req.body.message
   const args = message.args.split(" ")
+  const username = req.body.user.id
 
-  // form_data will only be present once the user starts interacting
+  // * form_data will only be present once the user starts interacting
   const formData = req.body.form_data || {}
   const action = formData["action"]
-  const user = req.body.user
 
-  // * Dissect the intent
+  // * Dissect the intent 
+  // TODO: Need to create commands with description of input order in Stream
   const intent = args[0]
   const tickerSymbol = args[1]
 
-  // // if we understand this intend, send a reply
-  // const channel = client.channel(channelType, channelID);
-  // const botUser = { id: "mrbot", name: "MR Bot" };
+  
+  // * if we understand this intent then send a reply
+  const channel = client.channel("messaging", channelID)
+  // const botUser = { id: "investbot", name: "Invest Bot" };
 
-  const channel = client.channel("messaging", "JPT")
-
-  const mmlstring = `<mml type="card"><buy></buy></mml>`
-  const mmlmessage = {
-    user_id: "peterferguson",
-    attachments: [
-      {
-        type: "buy",
-        mml: mmlstring,
-        intent: intent,
-        tickerSymbol: tickerSymbol,
-        actions: [
-          {
-            name: "action",
-            text: "Submit",
-            type: "button",
-            value: "submit",
-          },
-          {
-            name: "action",
-            text: "Cancel",
-            type: "button",
-            value: "cancel",
-          },
-        ],
-      },
-    ],
-  }
-
-  const response = await channel.sendMessage(mmlmessage)
-
-  console.log(
-    `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
-  )
-
-  // switch (action) {
-  //   case 'confirm':
-  //     const reportedBy = formData['reported_by']
-  //     message.type = 'regular'
-  //     message.mml = confirmInvestmentMML(message.args, reportedBy)
-  //     message.attachments = null
-  //     break
-  //   case 'cancel':
-  //     message = null
-  //     break
-  //   // - Catch all commands sent by user not by action
-  //   default:
-  //     // - Error on missing command args
-  //     if (message.args.trim() === '') {
-  //       message.type = 'error'
-  //       message.text = 'missing ticket description'
-  //       message.mml = null
-  //       break
-  //     }
-  //     // - Present MML for user to make a choice
-  // message.type = 'ephemeral'
-  // message.mml = investFormMML(message.args, user.name)
-  // }
-
-  if (message.mml !== null) {
-    message.text =
-      "this message contains Message Markup Language, you might need to upgrade your stream-chat-react library."
+  switch (action) {
+    case 'confirm': // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
+      const executedBy = formData['executed_by'] // ? could use username as this needs to be sent to the rest of the group
+      // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
+      // TODO: Could also mention members in their own messages in a thread under the buy command message
+      /* 
+      ?   The fields available from the messsage will allow us to simply send a message with a 
+      ?   timed response (counting down in the ui). Then as users react to the message we could 
+      ?   detect when the reaction_count (or latest_reaction count to exclude the executor)
+      ?   === member count and execute based on the reactions. 
+      ?
+      ?       "attachments":[], 
+      ?       "latest_reactions":[], 
+      ?       "own_reactions":[], 
+      ?       "reaction_counts":null, 
+      ?       "reaction_scores":null, 
+      ?       "reply_count":0, 
+      ?       "mentioned_users":[],
+      ?
+      */
+      // message.type = 'regular'
+      // message.mml = confirmInvestmentMML(message.args, executedBy)
+      // message.attachments = null
+      break
+    case 'cancel': // 2 Simply cancel the buy action. 
+      message = null
+      break
+    // - Catch all commands sent by user not by action
+    default:
+      // - Error on missing command args
+      if (message.args.trim() === '') {
+        message.type = 'error'
+        message.text = 'Please provide the ticker symbol & amount of shares you want to purchase'
+        message.mml = null
+        break
+      }
+      // - Present MML for user to make a choice on cost & share amount
+      message.type = 'ephemeral'
+      message.mml = investFormMML(message.args, user.name)
+      await channel.sendMessage(mmlmessage)
   }
 
   res.setHeader("Content-Type", "application/json")
@@ -155,5 +134,5 @@ const invest = async (req, res) => {
 module.exports = {
   generateToken,
   createGroup,
-  invest,
+  buy,
 }
