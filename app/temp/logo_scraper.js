@@ -1,12 +1,12 @@
 // Load T212 ISIN mapping
-const tickerMapping = require('/Users/peter/Projects/socii/app/temp/t212_tickers.json')
-const bent = require('bent')
-const admin = require('firebase-admin')
-const serviceAccount = require('/Users/peter/Projects/socii/app/serviceAccountKey.json')
+const tickerMapping = require("/Users/peter/Projects/socii/app/temp/t212_tickers.json")
+const bent = require("bent")
+const admin = require("firebase-admin")
+const serviceAccount = require("/Users/peter/Projects/socii/app/serviceAccountKey.json")
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'sociiinvest.appspot.com/',
+  storageBucket: "sociiinvest.appspot.com/",
 })
 
 async function makePublic(file) {
@@ -19,7 +19,7 @@ makePublic().catch(console.error)
 
 const downloadLogo = async (instrumentCode) => {
   uri = `https://trading212equities.s3.eu-central-1.amazonaws.com/${instrumentCode}.png`
-  const getBuffer = bent('buffer')
+  const getBuffer = bent("buffer")
   return await getBuffer(uri)
 }
 
@@ -33,7 +33,7 @@ const uploadLogo = (ticker) => {
   const bucket = admin.storage().bucket()
   const file = bucket.file(fileUrl)
   file.exists().then(async (data) => {
-    const exists = data[0]
+    const exists = data?.[0]
     if (exists) {
       console.log(`File ${fileUrl} was already exists`)
       makePublic(file)
@@ -70,7 +70,7 @@ const loadLogos = async () => {
 
 const popularTickersLogos = async () => {
   uploaded = []
-  const tickers = tickerMapping.filter((ticker) => ticker.isin?.includes('US'))
+  const tickers = tickerMapping.filter((ticker) => ticker.isin?.includes("US"))
   for await (const ticker of tickers) {
     if (!uploaded.includes(ticker.isin)) {
       uploadLogo(ticker)

@@ -1,35 +1,36 @@
-import { tickerToISIN } from '@lib/firebase'
-import IEXQuery, { ChartRangeOption } from '@lib/iex'
-import { CurrencyCode } from '@lib/constants'
+import { tickerToISIN } from "@lib/firebase"
+import IEXQuery, { ChartRangeOption } from "@lib/iex"
+import { CurrencyCode } from "@lib/constants"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
 export const isBrowser =
-  typeof window !== 'undefined' && typeof window.document !== 'undefined'
+  typeof window !== "undefined" && typeof window.document !== "undefined"
 
 export const pctChange = (first: number, second: number): number => {
   return ((first - second) * 100) / second
 }
 
 export const pnlBackgroundColor = (pctChange) => {
-  return pctChange > 0 ? 'bg-teal-200' : pctChange < 0 ? 'bg-red-200' : 'bg-gray-200'
+  return pctChange > 0 ? "bg-teal-200" : pctChange < 0 ? "bg-red-200" : "bg-gray-200"
 }
 
 export const pnlTextColor = (pctChange: number): string => {
-  return pctChange > 0 ? 'text-teal-200' : pctChange < 0 ? 'text-red-200' : 'text-brand'
+  return pctChange > 0 ? "text-teal-200" : pctChange < 0 ? "text-red-200" : "text-brand"
 }
 
 export const logoUrl = (isin) => {
-  const baseUrl = (endpoint) => (`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${endpoint}.png`) 
+  const baseUrl = (endpoint) =>
+    `https://storage.googleapis.com/sociiinvest.appspot.com/logos/${endpoint}.png`
   if (isin.length <= 4) {
-    const url = tickerToISIN(isin).then(r => baseUrl(r))
+    const url = tickerToISIN(isin).then((r) => baseUrl(r))
     return url
   }
   return baseUrl(isin)
 }
 
 export const handleEnterKeyDown = (event, callback) => {
-  if (event.key === 'Enter') {
+  if (event.key === "Enter") {
     callback()
   }
 }
@@ -37,7 +38,7 @@ export const handleEnterKeyDown = (event, callback) => {
 export const alphaVantageQuery = async (queryType: string, params: object) => {
   const queryParmsString: string = Object.keys(params)
     .map((key) => `&${key}=${params[key]}`)
-    .join('')
+    .join("")
 
   return await fetchJSON(
     `https://www.alphavantage.co/query?function=${queryType}${queryParmsString}&apikey=${alphaVantageApiKey}`
@@ -64,14 +65,14 @@ export const currencyConversion = async (
    *      }
    *   }
    */
-  const data = await alphaVantageQuery('CURRENCY_EXCHANGE_RATE', {
+  const data = await alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
     from_currency: fromCurrency,
     to_currency: toCurrency,
   })
 
-  if ('Realtime Currency Exchange Rate' in data) {
-    const exchangeRate = data['Realtime Currency Exchange Rate']['5. Exchange Rate']
-    const lastUpdated = data['Realtime Currency Exchange Rate']['6. Last Refreshed']
+  if ("Realtime Currency Exchange Rate" in data) {
+    const exchangeRate = data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+    const lastUpdated = data["Realtime Currency Exchange Rate"]["6. Last Refreshed"]
     return { rate: exchangeRate, lastRefresh: lastUpdated }
   }
 
@@ -79,24 +80,24 @@ export const currencyConversion = async (
 }
 
 export const alphaVantageData = async (tickerSymbol) => {
-  const data = await alphaVantageQuery('TIME_SERIES_DAILY', {
+  const data = await alphaVantageQuery("TIME_SERIES_DAILY", {
     symbol: tickerSymbol,
   })
 
-  const dates = Object.keys(data['Time Series (Daily)'])
+  const dates = Object.keys(data["Time Series (Daily)"])
 
   // * Return close for each date as timeseries
   return dates.map((ts) => ({
     timestamp: ts,
-    close: parseFloat(data['Time Series (Daily)'][ts]['4. close']),
-    volume: parseFloat(data['Time Series (Daily)'][ts]['5. volume']),
+    close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
+    volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
   }))
 }
 
 // ! EXPENSIVE
 export const iexChartTimeseries = async (
   tickerSymbol: string,
-  range: ChartRangeOption = '1mm'
+  range: ChartRangeOption = "1mm"
 ) => {
   const iexClient = new IEXQuery()
   const data = await fetchJSON(iexClient.stockChart(tickerSymbol, range))
@@ -119,7 +120,7 @@ export const fetchJSON = async (url) => (await fetch(url)).json()
 
 export const stockProps = async (
   tickerQuery,
-  subQueryField = '',
+  subQueryField = "",
   timeseriesLimit = 30
 ) => {
   const tickerDocs = await tickerQuery.get()
@@ -131,12 +132,12 @@ export const stockProps = async (
     // * Get ticker company data
     let ticker = await tickerDoc.data()
 
-    if ('timestamp' in ticker) {
-      ticker['timestamp'] = JSON.stringify(ticker?.timestamp.toDate())
+    if ("timestamp" in ticker) {
+      ticker["timestamp"] = JSON.stringify(ticker?.timestamp.toDate())
     }
 
-    if ('timeseriesLastUpdated' in ticker) {
-      ticker['timeseriesLastUpdated'] = JSON.stringify(
+    if ("timeseriesLastUpdated" in ticker) {
+      ticker["timeseriesLastUpdated"] = JSON.stringify(
         ticker?.timeseriesLastUpdated.toDate()
       )
     }
@@ -164,12 +165,12 @@ export const stockProps = async (
 export const tickerExistsSubquery = async (tickerRef, queryField) => {
   // * Get sector & industry data
   const sectorRef = tickerRef
-    .collection('data')
-    .where(queryField, '>', "''")
-    .orderBy(queryField, 'asc')
+    .collection("data")
+    .where(queryField, ">", "''")
+    .orderBy(queryField, "asc")
     .limit(1)
 
-  let sector = (await sectorRef.get()).docs[0].data() ?? null
+  let sector = (await sectorRef.get()).docs?.[0].data() ?? null
 
   return { ...sector, lastUpdate: sector?.lastUpdate.toMillis() ?? null }
 }
@@ -177,8 +178,8 @@ export const tickerExistsSubquery = async (tickerRef, queryField) => {
 export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
   // * Get timeseries data
   const timeseriesRef = tickerRef
-    .collection('timeseries')
-    .orderBy('timestamp', 'desc')
+    .collection("timeseries")
+    .orderBy("timestamp", "desc")
     .limit(limit)
 
   let timeseriesDocs = (await timeseriesRef.get()).docs
@@ -201,10 +202,10 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
   return timeseries
 }
 
-export const getRandomImage = (letters = '') => {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-  const baseUrl = 'https://getstream.imgix.net/images/random_svg/'
-  const extension = '.png'
+export const getRandomImage = (letters = "") => {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz"
+  const baseUrl = "https://getstream.imgix.net/images/random_svg/"
+  const extension = ".png"
 
   if (!letters) {
     const randomLetter = () => alphabet[Math.floor(Math.random() * 26)].toUpperCase()
@@ -215,17 +216,17 @@ export const getRandomImage = (letters = '') => {
 
 export const getInitials = (slug) => {
   return slug
-    ?.split(' ')
-    .map((word) => word[0])
-    .join('')
+    ?.split(" ")
+    .map((word) => word?.[0])
+    .join("")
 }
 
 export const uncamelCase = (str) =>
   str
     .replace(/^./, (s) => s.toUpperCase())
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/([A-Z])([a-z])/g, ' $1$2')
-    .replace(/ +/g, ' ')
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z])([a-z])/g, " $1$2")
+    .replace(/ +/g, " ")
 
 export const getCleanImage = (member) => {
   if (!member?.user.image) return getRandomImage()
@@ -237,7 +238,7 @@ export const localCostPerShare = async (
   fromCurrency: CurrencyCode,
   toCurrency: CurrencyCode
 ) => {
-  const input = typeof price !== 'number' ? parseFloat(price) : price
+  const input = typeof price !== "number" ? parseFloat(price) : price
   if (isNaN(input)) {
     return {}
   }
@@ -246,7 +247,31 @@ export const localCostPerShare = async (
 }
 
 export const currencyFormatter = (number, currency) =>
-  new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(number)
+  new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(number)
 
 export const round = (num: number, places: number) =>
   Math.round((num + Number.EPSILON) * 10 ** places) / 10 ** places
+
+export const getTimeStamp = (channel) => {
+  let lastHours = channel.state.last_message_at?.getHours()
+  let lastMinutes = channel.state.last_message_at?.getMinutes()
+  let half = "AM"
+
+  if (lastHours === undefined || lastMinutes === undefined) {
+    return ""
+  }
+
+  if (lastHours > 12) {
+    lastHours = lastHours - 12
+    half = "PM"
+  }
+
+  if (lastHours === 0) lastHours = 12
+  if (lastHours === 12) half = "PM"
+
+  if (lastMinutes.toString().length === 1) {
+    lastMinutes = `0${lastMinutes}`
+  }
+
+  return `${lastHours}:${lastMinutes} ${half}`
+}

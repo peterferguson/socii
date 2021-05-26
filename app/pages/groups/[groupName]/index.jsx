@@ -31,40 +31,48 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import LoadingIndicator from '@components/LoadingIndicator'
-import AuthCheck from '@components/AuthCheck'
-import ClientOnly from '@components/ClientOnly'
-import { StreamChatWindow } from '@components/stream/components/Chat'
-import Custom404 from '../../404'
-import { UserContext } from '@lib/context'
+import LoadingIndicator from "@components/LoadingIndicator"
+import AuthCheck from "@components/AuthCheck"
+import ClientOnly from "@components/ClientOnly"
+import Custom404 from "../../404"
+import { StreamContext, UserContext } from "@lib/context"
+import GroupColumn from "@components/GroupCharts"
 
-import React, { useContext } from 'react'
-import { useRouter } from 'next/router'
+import React, { useContext } from "react"
+import { useRouter } from "next/router"
+import dynamic from "next/dynamic"
+
+const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
+  ssr: false,
+})
 
 export default function Group() {
   const router = useRouter()
   const { groupName } = router.query
-  const { userGroups, streamClient } = useContext(UserContext)
-
-  if (groupName && !userGroups.includes(groupName)) {
-    return <Custom404 />
-  }
-
-  if (!streamClient.user) {
-    // TODO: Use skeleton loaders for chat
-    return <LoadingIndicator />
-  }
+  const { userGroups } = useContext(UserContext)
+  const { streamClient } = useContext(StreamContext)
+  // TODO: Use skeleton loaders for chat
 
   return (
-    <div className="flex">
-      <div className="w-1/3">{groupName}</div>
-      <div className="w-2/3">
-        <AuthCheck>
-          <ClientOnly>
-            <StreamChatWindow groupName={groupName} />
-          </ClientOnly>
-        </AuthCheck>
-      </div>
-    </div>
+    <>
+      {groupName && userGroups && !userGroups.includes(groupName) && <Custom404 />}
+      {!streamClient ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="flex">
+          <div className="w-1/3 p-8">
+            <div className="text-3xl font-extrabold tracking-wider text-center uppercase font-poppins text-brand">holdings</div>
+            <GroupColumn groupName={groupName} />
+          </div>
+          <div className="w-2/3">
+            <AuthCheck>
+              <ClientOnly>
+                <StreamChatWithNoSSR client={streamClient} groupName={groupName} />
+              </ClientOnly>
+            </AuthCheck>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

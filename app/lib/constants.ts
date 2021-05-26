@@ -3,7 +3,6 @@ import FacebookLogo from "@icons/fb.svg"
 import TwitterLogo from "@icons/twitter.svg"
 import GoogleLogo from "@icons/google.svg"
 import { googleAuthProvider, facebookAuthProvider } from "@lib/firebase"
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/FA"
 
 export const currencySymbols = {
   AUD: "$",
@@ -15,15 +14,6 @@ export const currencySymbols = {
   USD: "$",
 }
 
-export const currencyIcons = {
-  AUD: {icon: FaDollarSign},
-  CAD: {icon: FaDollarSign},
-  // CHF: "CHF",
-  EUR: {icon: FaEuroSign},
-  GBP: {icon: FaPoundSign},
-  JPY: {icon: FaYenSign},
-  USD: {icon: FaDollarSign},
-}
 
 export type CurrencyCode = "AUD" | "CAD" | "CHF" | "EUR" | "GBP" | "JPY" | "USD"
 

@@ -1,24 +1,23 @@
-import { Thread } from 'stream-chat-react'
-import { CustomMessage, MessagingInput } from './index'
-import CloseThreadIcon from '@icons/stream/closeThreadIcon.svg'
-
-import styles from '@styles/MessagingThread.module.css'
+import { Thread } from "stream-chat-react"
+import React from "react"
+import { CustomMessage, MessagingInput } from "./index"
+import CloseThreadIcon from "@icons/stream/closeThreadIcon.svg"
 
 const ThreadHeader = ({ closeThread, thread }) => {
   const getReplyCount = () => {
-    if (!thread?.reply_count) return ''
-    if (thread.reply_count === 1) return '1 reply'
+    if (!thread?.reply_count) return ""
+    if (thread.reply_count === 1) return "1 reply"
     return `${thread.reply_count} Replies`
   }
 
   return (
-    <div className={styles['custom-thread-header']}>
-      <div className={styles['custom-thread-header__left']}>
-        <p className={styles['custom-thread-header__left-title']}>Thread</p>
-        <p className={styles['custom-thread-header__left-count']}>{getReplyCount()}</p>
+    <div className="flex items-center justify-between h-16 bg-white border-b-2 border-gray-200 rounded-b-none shadow-xl md:h-16 rounded-xl border-opacity-25">
+      <div className="flex items-center ml-5">
+        <p className="mr-5 text-lg font-bold font-poppins">Thread</p>
+        <p className="opacity-50 font-work-sans">{getReplyCount()}</p>
       </div>
       <CloseThreadIcon
-        className="cursor-pointer mr-2 h-8 w-8"
+        className="w-8 h-8 mr-2 cursor-pointer"
         onClick={(e) => closeThread(e)}
       />
     </div>
@@ -31,6 +30,7 @@ const MessagingThread = () => {
       Message={CustomMessage}
       MessageInput={MessagingInput}
       ThreadHeader={ThreadHeader}
+      fullWidth={true}
     />
   )
 }

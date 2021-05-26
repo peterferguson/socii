@@ -1,85 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { Avatar, ChannelContext } from "stream-chat-react"
-
-import styles from "@styles/MessagingChannelHeader.module.css"
-
-import { FaList } from "react-icons/FA"
-import { MdEdit, MdSave} from "react-icons/MD"
-import { getCleanImage } from "@utils/helper"
-
 import TypingIndicator from "./TypingIndicator"
 
-const getAvatarGroup = (members) => {
-  if (members.length === 1) {
-    return (
-      <div className={styles["messaging__channel-header__avatars"]}>
-        <Avatar image={getCleanImage(members[0])} size={40} />;
-      </div>
-    )
-  }
+import React, { useContext, useEffect, useRef, useState } from "react"
+import { ChannelContext } from "stream-chat-react"
+import { FaList } from "react-icons/fa"
+import { MdEdit, MdSave } from "react-icons/md"
+import AvatarGroup from "@components/stream/components/AvatarGroup"
+import styles from "@styles/MessagingChannelHeader.module.css"
 
-  if (members.length === 2) {
-    return (
-      <div className={styles["messaging__channel-header__avatars two"]}>
-        <span>
-          <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
-        </span>
-        <span>
-          <Avatar image={getCleanImage(members[1])} shape="square" size={40} />
-        </span>
-      </div>
-    )
-  }
-
-  if (members.length === 3) {
-    return (
-      <div className={styles["messaging__channel-header__avatars three"]}>
-        <span>
-          <Avatar image={getCleanImage(members[0])} shape="square" size={40} />
-        </span>
-        <span>
-          <Avatar image={getCleanImage(members[1])} shape="square" size={20} />
-          <Avatar image={getCleanImage(members[2])} shape="square" size={20} />
-        </span>
-      </div>
-    )
-  }
-
-  if (members.length >= 4) {
-    return (
-      <div className={styles["messaging__channel-header__avatars four"]}>
-        <span>
-          <Avatar
-            image={getCleanImage(members[members.length - 1])}
-            shape="square"
-            size={20}
-          />
-          <Avatar
-            image={getCleanImage(members[members.length - 2])}
-            shape="square"
-            size={20}
-          />
-        </span>
-        <span>
-          <Avatar
-            image={getCleanImage(members[members.length - 3])}
-            shape="square"
-            size={20}
-          />
-          <Avatar
-            image={getCleanImage(members[members.length - 4])}
-            shape="square"
-            size={20}
-          />
-        </span>
-      </div>
-    )
-  }
-
-  return null
-}
-
-const MessagingChannelHeader = (props) => {
+const MessagingChannelHeader = ({ toggleHideChannelList }) => {
   const { channel, client } = useContext(ChannelContext)
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
@@ -145,10 +73,14 @@ const MessagingChannelHeader = (props) => {
     <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
       <FaList
         className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-        onClick={() => props.toggleMobile()}
+        onClick={toggleHideChannelList}
       />
-      {getAvatarGroup(members)}
-      {!isEditing ? <div className="font-bold font-poppins">{channelName || title}</div> : <EditHeader />}
+      {AvatarGroup(members, styles)}
+      {!isEditing ? (
+        <div className="flex-1 pl-4 font-bold font-poppins">{channelName || title}</div>
+      ) : (
+        <EditHeader />
+      )}
       <div className="">
         <TypingIndicator />
         {!isEditing ? (

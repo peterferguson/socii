@@ -1,12 +1,12 @@
-const tickerMapping = require('/Users/peter/Projects/socii/app/temp/t212_tickers.json')
+const tickerMapping = require("/Users/peter/Projects/socii/app/temp/t212_tickers.json")
 
-const fs = require('fs')
-const admin = require('firebase-admin')
-const serviceAccount = require('../serviceAccountKey.json')
+const fs = require("fs")
+const admin = require("firebase-admin")
+const serviceAccount = require("../serviceAccountKey.json")
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'sociiinvest.appspot.com/',
+  storageBucket: "sociiinvest.appspot.com/",
 })
 
 firestore = admin.firestore()
@@ -20,10 +20,10 @@ const storeData = (data, path) => {
 }
 
 async function uploadTickerISIN() {
-  const tickersRef = firestore.collection('tickers')
+  const tickersRef = firestore.collection("tickers")
 
   for await (const ticker of tickerMapping) {
-    await tickersRef.doc(ticker.isin).set({ tickerSymbol: '' })
+    await tickersRef.doc(ticker.isin).set({ tickerSymbol: "" })
   }
 }
 
@@ -31,8 +31,8 @@ async function uploadTickerISIN() {
 
 async function deleteEmptyTicker() {
   const tickersRef = firestore
-    .collection('tickers')
-    .where('exchangeAbbreviation', '==', '')
+    .collection("tickers")
+    .where("exchangeAbbreviation", "==", "")
 
   const emptyTickers = (await tickersRef.get()).docs
 
@@ -62,20 +62,20 @@ async function deleteEmptyTicker() {
 
   console.log(tickerInfo)
 
-  storeData(tickerInfo, '/Users/peter/Projects/socii/app/temp/deletedTickers.json')
+  storeData(tickerInfo, "/Users/peter/Projects/socii/app/temp/deletedTickers.json")
 }
 
 // deleteEmptyTicker();
 
 async function addExchangeToTicker() {
-  const tickersWithDataRef = firestore.collectionGroup('data')
+  const tickersWithDataRef = firestore.collectionGroup("data")
 
   const tickersWithDataDocs = (await tickersWithDataRef.get()).docs
   for await (const doc of tickersWithDataDocs) {
     const data = doc.data()
-    if ('exchange' in data) {
+    if ("exchange" in data) {
       console.log(data.symbol)
-      const tickerRef = firestore.doc(doc.ref.path.split('/data')[0])
+      const tickerRef = firestore.doc(doc.ref.path.split("/data")?.[0])
       tickerRef.update({ exchange: data.exchange })
     }
   }

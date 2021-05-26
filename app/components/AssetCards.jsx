@@ -1,6 +1,6 @@
-import { pnlBackgroundColor, pctChange, pnlTextColor, logoUrl } from '@utils/helper'
-import Link from 'next/link'
-import React from 'react'
+import { pnlBackgroundColor, pctChange, pnlTextColor, logoUrl } from "@utils/helper"
+import Link from "next/link"
+import React from "react"
 
 export default function SmallAssetPctChangeCard({
   logoUrl,
@@ -52,7 +52,7 @@ export function SmallAssetCard({
   currentPrice,
   monthlyPctChange,
   shortName,
-  currencySymbol = '$',
+  currencySymbol = "$",
 }) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
@@ -67,7 +67,7 @@ export function SmallAssetCard({
           <div className="w-auto h-auto p-1 text-center">
             <div
               className={
-                'text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block'
+                "text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block"
               }
             >
               {currencySymbol}
@@ -93,7 +93,7 @@ export function SmallAssetCard({
 
 export function AssetCard({ ticker, timeseries, sector }) {
   const pnlColor = pnlTextColor(
-    pctChange(timeseries[0].close, timeseries[timeseries.length - 1].close)
+    pctChange(timeseries?.[0].close, timeseries[timeseries.length - 1].close)
   )
   return (
     <>

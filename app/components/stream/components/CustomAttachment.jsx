@@ -9,8 +9,6 @@ export default function CustomAttachment(props) {
   const { attachments } = props
   const [attachment] = attachments || []
 
-  console.log(attachment)
-
   switch (attachment?.type) {
     case "stock":
       return <StockDisplayAttachment attachment={attachment} />

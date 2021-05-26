@@ -25,7 +25,7 @@ const UserResult = ({ user }) => (
   </li>
 )
 
-const CreateChannel = ({ onClose, toggleMobile }) => {
+const CreateChannel = ({ onClose, toggleHideChannelList }) => {
   const { client, setActiveChannel } = useContext(ChatContext)
 
   const [focusedUser, setFocusedUser] = useState(undefined)
@@ -165,7 +165,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
   }, [handleKeyDown])
 
   return (
-    <div className="flex-col flex-1 block w-screen mx-5 my-1 bg-white shadow-2xl sm:flex h-[unset] sm:h-screen rounded-xl">
+    <div className="flex-col flex-1 w-full my-1 bg-white shadow-2xl sm:flex h-[unset] sm:h-screen rounded-xl">
       <header className="flex items-center justify-between pl-6 rounded-b-none bg-gray-50 shadow-4xl rounded-xl pr-2.5">
         <div className="flex items-center flex-1">
           <div className="text-lg opacity-50 mr-2.5 font-work-sans">To: </div>
@@ -196,7 +196,7 @@ const CreateChannel = ({ onClose, toggleMobile }) => {
               />
             </form>
           </div>
-          <div className="sm:hidden" onClick={() => toggleMobile()}>
+          <div className="sm:hidden" onClick={() => toggleHideChannelList()}>
             <XButtonBackground className="w-4 h-4 bg-brand-teal" />
           </div>
         </div>

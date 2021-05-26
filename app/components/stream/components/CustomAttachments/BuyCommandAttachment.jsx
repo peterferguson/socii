@@ -1,7 +1,6 @@
 import MMLButton from "./MMLButton"
-import { currencyIcons } from "@lib/constants"
+// import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-
 
 import {
   useTickerPriceData,
@@ -15,6 +14,17 @@ import { MML } from "mml-react"
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
+
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
+export const currencyIcons = {
+  AUD: { icon: FaDollarSign },
+  CAD: { icon: FaDollarSign },
+  // CHF: "CHF",
+  EUR: { icon: FaEuroSign },
+  GBP: { icon: FaPoundSign },
+  JPY: { icon: FaYenSign },
+  USD: { icon: FaDollarSign },
+}
 
 const BuyCommandAttachment = ({ attachment }) => {
   const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
@@ -41,11 +51,14 @@ const BuyCommandAttachment = ({ attachment }) => {
         tickerSymbol={attachment.tickerSymbol}
         tickerState={tickerState}
       />
-      <MML converters={converters} source={attachment.mml} onSubmit={e => console.log(e)}/>
+      <MML
+        converters={converters}
+        source={attachment.mml}
+        onSubmit={(e) => console.log(e)}
+      />
     </div>
   )
 }
-
 
 const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)

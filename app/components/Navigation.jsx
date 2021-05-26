@@ -1,20 +1,24 @@
-import { UserContext } from '@lib/context'
-import Logo from '@components/Logo'
-import { userFirstName, signOut } from '@lib/firebase'
-import SearchIcon from '@icons/search.svg'
-import CogIcon from '@icons/cog.svg'
-import PieIcon from '@icons/pie.svg'
-import AtIcon from '@icons/at.svg'
-import LogoutIcon from '@icons/logout.svg'
-import GroupIcon from '@icons/group.svg'
-import RightChevronIcon from '@icons/rightChevron.svg'
-import MenuIcon from '@icons/menu.svg'
-import { Transition, Popover } from '@headlessui/react'
+import { UserContext } from "@lib/context"
+import Logo from "@components/Logo"
+import { userFirstName, signOut } from "@lib/firebase"
+import { FaGlobeEurope, FaBitcoin } from "react-icons/fa"
+import { VscSignOut } from "react-icons/vsc"
+import {
+  HiOutlineUserGroup,
+  HiOutlineChat,
+  HiOutlineCog,
+  HiMenu,
+  HiOutlineAtSymbol,
+  HiOutlineSearch,
+  HiOutlineChevronRight,
+  HiOutlineChartPie,
+} from "react-icons/hi"
+import { Transition, Popover } from "@headlessui/react"
 
-import React, { useContext, useState } from 'react'
-import { useRouter } from 'next/router'
-import { Fragment } from 'react'
-
+import React, { useContext, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { Fragment } from "react"
 export default function Navigation(props) {
   const { username } = useContext(UserContext)
   const router = useRouter()
@@ -30,7 +34,7 @@ export default function Navigation(props) {
       ) : (
         <button
           className="flex-none btn btn-transition"
-          onClick={() => router.push('/enter')}
+          onClick={() => router.push("/enter")}
         >
           Login
         </button>
@@ -47,7 +51,7 @@ function SearchBar({ setShowSearchCard }) {
         className="flex items-center w-full py-2 font-medium group leading-6 space-x-3 sm:space-x-4 \ hover:text-gray-600 transition-colors duration-200 focus:outline-none"
         onClick={() => setShowSearchCard(true)}
       >
-        <SearchIcon className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200" />
+        <HiOutlineSearch className="w-6 h-6 text-gray-400 group-hover:text-gray-500 transition-colors duration-200" />
         <span className="text-gray-400">
           Search<span className="hidden text-gray-400 sm:inline">: TSLA</span>
         </span>
@@ -74,59 +78,63 @@ function Dropdown() {
   const router = useRouter()
 
   // TODO: Add bitcoin svg to navigate to crypto page
-  // TODO: Add navigation to stock page
   const dropdownItems = [
     {
-      name: 'Invites',
-      description: 'Invite your friends to the alpha',
-      href: '/user/invites',
-      icon: AtIcon,
+      name: "Invites",
+      description: "Invite your friends to the alpha",
+      href: "/user/invites",
+      icon: HiOutlineAtSymbol,
     },
     {
-      name: 'Stocks',
-      description: 'Search the our stock universe',
-      href: '/stock',
-      icon: ({ className }) => (
-        <i className={`fas fa-globe-europe fa-lg -mb-1 ${className}`}></i>
-      ),
+      name: "Stocks",
+      description: "Search the our stock universe",
+      href: "/stock",
+      icon: ({ className }) => <FaGlobeEurope className={`-mb-1 ${className}`} />,
     },
     {
-      name: 'Porfolio',
-      description: 'Keep track of your growth',
+      name: "Crypto",
+      description: "Search the our crypto universe",
+      href: "/crypto",
+      icon: ({ className }) => <FaBitcoin className={`-mb-1 ${className}`} />,
+      disabled: true,
+    },
+    {
+      name: "Porfolio",
+      description: "Keep track of your growth",
       href: `/user/${username}`,
-      icon: PieIcon,
+      icon: HiOutlineChartPie,
     },
     {
-      name: 'Chat',
-      description: 'Chat with friends about investments!',
-      href: '/chat',
-      icon: ({ className }) => (
-        <i className={`fas fa-envelope fa-lg -mb-1 ${className}`}></i>
-      ),
+      name: "Chat",
+      description: "Chat with friends about investments!",
+      href: "/chat",
+      icon: ({ className }) => <HiOutlineChat className={`-mb-1 ${className}`} />,
     },
     {
-      name: 'Groups',
-      description: 'View all of your Groups',
-      href: '',
-      icon: GroupIcon,
-      rightIcon: RightChevronIcon,
+      name: "Groups",
+      description: "View all of your Groups",
+      href: "",
+      icon: HiOutlineUserGroup,
+      rightIcon: HiOutlineChevronRight,
+      disabled: true,
       // onClick: () => setOpenSettings(!openSettings),
     },
     {
-      name: 'Settings',
-      description: 'Adjust your settings',
-      href: '',
-      icon: CogIcon,
-      rightIcon: RightChevronIcon,
+      name: "Settings",
+      description: "Adjust your settings",
+      href: "",
+      icon: HiOutlineCog,
+      rightIcon: HiOutlineChevronRight,
+      disabled: true,
     },
   ]
 
   const grayedDropdownItems = [
     {
-      name: 'Sign Out',
-      description: '',
-      href: '',
-      icon: LogoutIcon,
+      name: "Sign Out",
+      description: "",
+      href: "",
+      icon: VscSignOut,
       onClick: () => signOut(router, userFirstName(user)),
     },
   ]
@@ -136,7 +144,7 @@ function Dropdown() {
       {({ open }) => (
         <>
           <Popover.Button className="items-center justify-center w-full h-full focus:outline-none">
-            <MenuIcon className=" w-6 h-6 text-brand-light" />
+            <HiMenu className=" w-6 h-6 text-brand-light" />
           </Popover.Button>
           <Transition
             show={open}
@@ -176,31 +184,39 @@ const closePopover = (open) => (open = !open)
 
 function DropdownItem({ item }) {
   const onClickHandler = () => {
-    if ('onClick' in item) {
-      item?.onClick()
-    }
+    if ("onClick" in item) item?.onClick()
     return closePopover(open)
   }
   return (
-    <a
-      key={item.name}
-      href={item.href}
-      onClick={() => onClickHandler()}
-      className="flex items-center p-2 -m-3 rounded-lg transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none"
-    >
-      <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-        <item.icon className={'w-6 h-6 mr-2 text-brand'} aria-hidden="true" />
-      </div>
-      <div className="flex-grow ml-4">
-        <p className="text-sm font-medium text-gray-900">{item.name}</p>
-        <p className="text-sm text-gray-500">{item.description}</p>
-      </div>
-      {item.rightIcon && (
-        <item.rightIcon
-          className="flex-none w-6 h-6 text-brand-light"
-          aria-hidden="true"
-        />
-      )}
-    </a>
+    <>
+      <Link href={item.href}>
+        <a
+          key={item.name}
+          onClick={() => onClickHandler()}
+          className="z-0 flex items-center p-2 -m-3 rounded-lg transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none"
+        >
+          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
+            <item.icon className={"w-6 h-6 mr-2 text-brand"} aria-hidden="true" />
+          </div>
+          <div className="flex-grow ml-4">
+            <p className="text-sm font-medium text-gray-900">{item.name}</p>
+            <p className="text-sm text-gray-500">{item.description}</p>
+          </div>
+          {item.rightIcon && (
+            <item.rightIcon
+              className="flex-none w-6 h-6 text-brand-light"
+              aria-hidden="true"
+            />
+          )}
+        </a>
+      </Link>
+      {/* {item?.disabled && (
+        <>
+          <div className="z-10 h-12 -mt-20 font-extrabold text-right uppercase w-30 backdrop-filter backdrop-blur-sm font-poppin text-opacity-40">
+            Coming soon{" "}
+          </div>
+        </>
+      )} */}
+    </>
   )
 }
