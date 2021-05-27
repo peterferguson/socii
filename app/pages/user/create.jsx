@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from "react"
 
 import { UserContext } from "@lib/context"
-import { firestore, functions } from "@lib/firebase"
+import { firestore } from "@lib/firebase"
 import CheckIcon from "@components/BackgroundCheck"
 import debounce from "lodash/debounce"
 import CrossIcon from "@icons/cross.svg"

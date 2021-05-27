@@ -5,9 +5,21 @@ service cloud.firestore {
       allow read, write: if
           request.time < timestamp.date(2021, 4, 30);
         
+      match /tickers/{ISIN} {
+      	allow read;
+        allow write: if false;
+      }
+
       match /users/{userId} {
       	allow read;
         allow create: if isValidUser(userId);
+        allow delete: if false;
+        allow update: if false;
+        
+        match /invites/{referralCode} {
+          allow read, update, create: if request.auth != null && request.auth.uid == userId;
+          allow delete: if false;
+        }
       }
       
       match /usernames/{username} {
@@ -16,33 +28,27 @@ service cloud.firestore {
       }
       
       match /groups/{groupId} {
-        allow read, create: if request.time < timestamp.date(2021, 4, 30);
+        allow read, write: if isGroupMember(groupId);
 
           // Explicitly define rules for the 'trades' subcollection
           // TODO: Create function to choose who can update these rather than anyone as below
           // TODO: ... see canCreatePost in https://github.com/fireship-io/next-firebase-course/blob/4fab05128a2ae5e9c6d51557922642e7daa41260/firestore.rules
           // * Trades ledger
           match /trades/{tradeId} {
-            allow read, create: if request.auth != null && request.auth.uid == userId;
-            allow delete: if false;
-            allow update: if false;
+            allow read, write: if false;
+            // allow read, create: if request.auth != null && request.auth.uid == userId;
+            // allow delete: if false;
+            // allow update: if false;
           }
           // TODO Add requirements that the assetRef exists, price > 0 & shares > 0
           
           // Explicitly define rules for the 'holdings' subcollection
           match /holdings/{assetId} {
-            allow read, update, create: if request.auth != null && request.auth.uid == userId;
-            allow delete: if false;
+            allow read, write: if false;
+            // allow read, update, create: if request.auth != null && request.auth.uid == userId;
+            // allow delete: if false;
+
           }
-      }
-
-      match /users/{userId} {
-        allow read, create: if request.time < timestamp.date(2021, 4, 30);
-
-        match /invites/{referralCode} {
-          allow read, update, create: if request.auth != null && request.auth.uid == userId;
-          allow delete: if false;
-        }
       }
 
       // // * Payment ledger
@@ -54,6 +60,9 @@ service cloud.firestore {
       //                 && request.resource.data.count > 0;
       //   allow update: if false;
       //   allow delete: if false;
+
+      /* Helper functions */
+
 
       // Users
 
@@ -71,6 +80,12 @@ service cloud.firestore {
         let isValidUserDoc = getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.username == username;
         
         return isOwner && isValidLength && isValidUserDoc;     
+      }
+
+      function isGroupMember(groupId) {
+        let username = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username;
+        let investorExists = exists(/databases/$(database)/documents/groups/$(groupId)/investors/$(username));
+        return investorExists;
       }
 
     }
