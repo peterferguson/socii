@@ -1,12 +1,13 @@
 import { auth, userFirstName, firestore } from "@lib/firebase"
 import { signInOptions } from "@lib/constants"
 import { UserContext } from "@lib/context"
-import React, { useState, useEffect, useCallback, useContext, useRef } from "react"
+import React, { useState, useEffect, useCallback, useContext } from "react"
 import { handleEnterKeyDown, validateEmail } from "@utils/helper"
 
 import MailIcon from "@icons/mail.svg"
 import CheckIcon from "@icons/check.svg"
 import CrossIcon from "@icons/cross.svg"
+
 import toast from "react-hot-toast"
 import debounce from "lodash.debounce"
 import router from "next/router"
@@ -26,7 +27,7 @@ export default function Enter(props) {
       toast.dismiss()
       // TODO: If a user already belongs to a group redirect there first
       // TODO: Check the group first since if they are in a group they will already have a username
-      router.push(`/user/${username}`)
+      router.push(`/user/${username ? username : "create"}`)
       toast.success(`Welcome ${userFirstName(user)}`)
     }
   }, [username])
@@ -208,7 +209,6 @@ function EmailSignUp({ verified, setVerified }) {
           verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
         } rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full \
         text-white my-4 py-3 px-4 leading-tight font-bold`}
-        disabled={false}
         onClick={() => emailSignInHandler(email)}
       >
         Sign in

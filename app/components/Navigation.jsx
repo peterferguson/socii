@@ -20,7 +20,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { Fragment } from "react"
 export default function Navigation(props) {
-  const { username } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const router = useRouter()
 
   return (
@@ -29,7 +29,7 @@ export default function Navigation(props) {
         <Logo className="text-4xl" />
       </div>
       <SearchBar {...props} />
-      {username ? (
+      {user ? (
         <Dropdown />
       ) : (
         <button

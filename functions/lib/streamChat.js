@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = require("firebase-functions/lib/logger");
 const index_1 = require("./index");
 const StreamChat = require("stream-chat").StreamChat;
-const generateToken = async (data, context) => {
-    const uid = context.auth.uid;
+const generateToken = async (snap, context) => {
+    // Get an object representing the user document
+    const { username } = snap.data();
+    const uid = context.params.userId;
+    logger_1.log(`Creating a Stream User Token for ${username}`);
     const streamClient = new StreamChat(process.env.STREAM_API_KEY, process.env.STREAM_API_SECRET);
-    const token = streamClient.createToken(data.username);
     const tokenDocRef = index_1.firestore.collection(`users/${uid}/stream`).doc(uid);
-    tokenDocRef.set({ token });
-    return token;
+    tokenDocRef.set({ token: streamClient.createToken(username) });
 };
 const createGroup = async (data, context) => {
     const admin = { id: "admin" };

@@ -24,7 +24,10 @@ const london = "europe-west2"
 module.exports = {
   tradeToFirestore: functions.region(london).https.onRequest(trades),
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
-  generateToken: functions.region(london).https.onCall(streamChat.generateToken),
+  generateToken: functions
+    .region(london)
+    .firestore.document("users/{userId}")
+    .onCreate(streamChat.generateToken),
   createGroup: functions.region(london).https.onCall(streamChat.createGroup),
   loadTickersToAlgolia: functions
     .region(london)

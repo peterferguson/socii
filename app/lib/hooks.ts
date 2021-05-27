@@ -48,19 +48,13 @@ export const useStream = (uid, username, displayName) => {
   const streamClient = useRef(null)
 
   useEffect(() => {
-    let userStreamToken
-
     streamClient.current = StreamChat.getInstance(apiKey, { timeout: 1000 })
 
+    // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
     const connectStreamUser = async () => {
       const tokenRef = firestore.collection(`users/${uid}/stream`).doc(uid)
       const snapshot = await tokenRef.get()
-
-      // TODO: TEST THIS WITH NEW USER
-      // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
-      userStreamToken = snapshot.exists
-        ? (await snapshot.data())?.token
-        : functions.httpsCallable("generateToken")({ username })
+      const userStreamToken = (await snapshot.data())?.token
 
       if (userStreamToken && isBrowser) {
         await streamClient.current?.connectUser(

@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from "react"
 
-import { UserContext } from '@lib/context'
-import { firestore } from '@lib/firebase'
-import CheckIcon from '@components/BackgroundCheck'
-import debounce from 'lodash/debounce'
-import CrossIcon from '@icons/cross.svg'
-import toast from 'react-hot-toast'
+import { UserContext } from "@lib/context"
+import { firestore, functions } from "@lib/firebase"
+import CheckIcon from "@components/BackgroundCheck"
+import debounce from "lodash/debounce"
+import CrossIcon from "@icons/cross.svg"
+import toast from "react-hot-toast"
+import { useRouter } from "next/router"
 
 export default function Username(props) {
   const { user } = useContext(UserContext)
-  const [username, setUsername] = useState('')
+  const router = useRouter()
+  const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -24,7 +26,7 @@ export default function Username(props) {
       setLoading(false)
       setisValidUsername(false)
     } else {
-      setUsername('')
+      setUsername("")
       setisValidUsername(false)
     }
 
@@ -44,7 +46,7 @@ export default function Username(props) {
   const checkUsername = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {
-        const nameQuery = firestore.collection('users').where('username', '==', name)
+        const nameQuery = firestore.collection("users").where("username", "==", name)
 
         const { empty } = await nameQuery.get()
 
@@ -65,15 +67,15 @@ export default function Username(props) {
           <div className="p-4 text-xl font-bold font-work-sans">Choose a username</div>
           <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light">
             <input
-              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none"
+              className="flex-grow w-2/3 p-0 bg-white border-none appearance-none focus:ring-0 focus:outline-none sm:w-full"
               type="text"
               placeholder="ElonMuskett"
               onChange={onChange}
             />
             <div
               className={`bg-white text-sm sm:text-tiny ${
-                isValidUsername ? 'text-brand-light btn-transition' : 'text-red-400'
-              } p-0.5 align-middle`}
+                isValidUsername ? "text-brand-light btn-transition" : "text-red-400"
+              } align-middle`}
               onKeyDown={null}
             >
               {isValidUsername ? (
@@ -86,7 +88,7 @@ export default function Username(props) {
           <button
             className="w-11/12 my-4 btn"
             onClick={(e) =>
-              isValidUsername ? createUsername(e, user, username) : null
+              isValidUsername ? createUsername(e, user, username, router) : null
             }
           >
             Choose!
@@ -97,12 +99,11 @@ export default function Username(props) {
   )
 }
 
-const createUsername = async (e, user, username) => {
-  //   const router = useRouter();
+const createUsername = (e, user, username, router) => {
   e.preventDefault()
 
   const userRef = firestore.collection(`users`).doc(user.uid)
-  const usernameRef = firestore.collection('usernames').doc(username)
+  const usernameRef = firestore.collection("usernames").doc(username)
 
   const batch = firestore.batch()
   batch.set(userRef, {
@@ -114,8 +115,6 @@ const createUsername = async (e, user, username) => {
     phoneNumber: user.phoneNumber,
   })
   batch.set(usernameRef, { uid: user.uid })
-  await batch.commit()
 
-  //   // Imperative navigation after doc is set
-  //   router.push(`/username/${username}`);
+  batch.commit().then(() => router.push(`/username/${username}`))
 }
