@@ -61,7 +61,7 @@ export default function Group() {
       ) : (
         <div className="flex">
           <div className="w-1/3 p-8">
-            <div className="text-3xl font-extrabold tracking-wider text-center uppercase font-poppins text-brand">holdings</div>
+            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">holdings</div>
             <GroupColumn groupName={groupName} />
           </div>
           <div className="w-2/3">

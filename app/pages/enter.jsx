@@ -1,7 +1,7 @@
 import { auth, userFirstName, firestore } from "@lib/firebase"
 import { signInOptions } from "@lib/constants"
 import { UserContext } from "@lib/context"
-import React, { useState, useEffect, useCallback, useContext } from "react"
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react"
 import { handleEnterKeyDown, validateEmail } from "@utils/helper"
 
 import MailIcon from "@icons/mail.svg"
@@ -70,9 +70,10 @@ function SignInButtons({ verified }) {
 
   return (
     <div className="flex justify-center p-8 space-x-8">
-      {signInOptions.map((option) => {
+      {signInOptions.map((option, index) => {
         return (
           <option.logo
+            key={`logo-${index}`}
             className={`w-14 h-14 justify-center rounded m-2 p-2 \
             border-solid border-2 border-gray-900 ${
               verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
@@ -173,10 +174,11 @@ function EmailSignUp({ verified, setVerified }) {
 
   return (
     <form onSubmit={() => emailSignInHandler(email)}>
-      <div className="flex flex-none w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-gray-50 focus:border-gray-500">
-        <MailIcon className="w-8 h-full mr-2 text-sm text-gray-400 align-middle bg-gray-100 sm:text-base / pt-0.5" />
+      <div className="flex flex-none w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border border-gray-300 rounded appearance-none max-h-14 focus:outline-none focus:bg-gray-50 focus:border-gray-500">
+        <MailIcon className="w-8 h-full mr-2 text-sm text-gray-400 align-middle bg-gray-100 sm:text-base pt-0.5" />
         <input
-          className="flex flex-grow w-2/3 -mt-1 bg-gray-100 border-none appearance-none sm:w-full \ focus:outline-none focus:ring-0"
+          autoFocus
+          className="flex flex-grow w-2/3 -mt-1 bg-gray-100 border-none appearance-none sm:w-full focus:outline-none focus:ring-0"
           type="email"
           placeholder="warren@buffet.com"
           onChange={(e) => {

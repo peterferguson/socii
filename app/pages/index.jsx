@@ -1,12 +1,12 @@
-import { firestore } from '@lib/firebase'
-import { UserContext } from '@lib/context'
-import { logoUrl } from '@utils/helper'
-import Logo from '@components/Logo'
-import OutlineButton from '@components/OutlineButton'
+import { firestore } from "@lib/firebase"
+import { UserContext } from "@lib/context"
+import { logoUrl } from "@utils/helper"
+import Logo from "@components/Logo"
+import OutlineButton from "@components/OutlineButton"
 
-import { useRouter } from 'next/router'
-import { useCollection } from 'react-firebase-hooks/firestore'
-import React, { useContext } from 'react'
+import { useRouter } from "next/router"
+import { useCollection } from "react-firebase-hooks/firestore"
+import React, { useContext } from "react"
 
 export default function Home() {
   const router = useRouter()
@@ -28,7 +28,7 @@ export default function Home() {
           <div>
             <button
               className="btn btn-transition"
-              onClick={() => router.push(user ? '/stock' : '/enter')}
+              onClick={() => router.push(user ? "/stock" : "/enter")}
             >
               Invest Now
             </button>
@@ -72,30 +72,28 @@ export default function Home() {
 }
 
 function TickerList() {
-  const query = firestore.collection('tickers').where('isPopular', '==', true)
+  const query = firestore.collection("tickers").where("isPopular", "==", true)
   const [querySnapshot] = useCollection(query)
   const tickers = querySnapshot?.docs.map((doc) => doc.data())
 
   return (
     <>
       {tickers &&
-        tickers.map((ticker) => {
-          return (
-            <img
-              key={ticker.ISIN}
-              className="flex w-16 h-16 ml-4 rounded-full shadow-lg sm:ml-0 btn-transition"
-              src={logoUrl(ticker.ISIN)}
-              alt={`${ticker.tickerSymbol} logo`}
-            />
-          )
-        })}
+        tickers.map((ticker) => (
+          <img
+            key={ticker.ISIN}
+            className="flex w-16 h-16 ml-4 rounded-full shadow-lg sm:ml-0 btn-transition"
+            src={logoUrl(ticker.ISIN)}
+            alt={`${ticker.tickerSymbol} logo`}
+          />
+        ))}
     </>
   )
 }
 
 function WhySocii() {
   return (
-    <section className="flex items-center justify-center h-screen bg-brand">
+    <section className="flex items-center justify-center h-screen bg-gradient-to-br from-brand-light to-brand">
       <div className="max-w-5xl py-16 pl-4 sm:p-0">
         <h2 className="text-3xl font-extrabold text-gray-100 font-poppins">
           Investing with friends has never been easier!
@@ -123,30 +121,30 @@ function WhySocii() {
 function FeatureSlider() {
   const timelineHeadings = [
     {
-      supTitle: 'Social Investment Platform',
-      title: 'Find & Share Investment Ideas',
+      supTitle: "Social Investment Platform",
+      title: "Find & Share Investment Ideas",
       description:
-        'Chat with friends in group chats & forums about potential investments',
+        "Chat with friends in group chats & forums about potential investments",
     },
     {
-      supTitle: 'Group Trade Execution',
-      title: 'Execute Trades Directly From Chat',
-      description: 'Use chat bot to set up & execute trades',
+      supTitle: "Group Trade Execution",
+      title: "Execute Trades Directly From Chat",
+      description: "Use chat bot to set up & execute trades",
     },
     {
-      supTitle: 'Competitive Leagues',
-      title: 'Public Group Leaderboards',
-      description: 'Go head to head with and gain investment ideas from other groups',
+      supTitle: "Competitive Leagues",
+      title: "Public Group Leaderboards",
+      description: "Go head to head with and gain investment ideas from other groups",
     },
     {
-      supTitle: 'Incorporation Free',
-      title: 'No Incorporation',
-      description: 'No need to create a company just to invest with friends!',
+      supTitle: "Incorporation Free",
+      title: "No Incorporation",
+      description: "No need to create a company just to invest with friends!",
     },
   ]
   return (
     <>
-      <div className="py-8 text-black bg-brand-teal">
+      <div className="py-8 text-black bg-gradient-to-t from-brand-teal to to-brand-lightGreen">
         <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
           <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
             <p className="text-xs uppercase text-brand-light tracking-loose font-poppins">
@@ -171,7 +169,7 @@ function FeatureSlider() {
                     <div
                       key={`feature-${index}`}
                       className={`mb-8 flex justify-between ${
-                        index % 2 == 0 ? 'flex-row-reverse' : ''
+                        index % 2 == 0 ? "flex-row-reverse" : ""
                       } items-center w-full`}
                     >
                       <div className="order-1 w-5/12"></div>
