@@ -4,6 +4,7 @@ import {
   Chat,
   MessageInput,
   MessageList,
+  MessageSimple,
   useChatContext,
   Window,
 } from "stream-chat-react"
@@ -11,7 +12,7 @@ import {
 import {
   CreateChannel,
   CustomAttachment,
-  CustomMessage,
+  // CustomMessage,
   MessagingChannelHeader,
   MessagingChannelList,
   MessagingChannelPreview,
@@ -55,7 +56,10 @@ export default function StreamChat({ client, theme = "light", groupName = null }
         multipleUploads={true}
         Attachment={CustomAttachment}
       >
-        <Window onClick={hideChannelList ? toggleHideChannelList : null}>
+        <Window
+          hideOnThread={true}
+          onClick={hideChannelList ? toggleHideChannelList : null}
+        >
           {isCreating && (
             <CreateChannel
               toggleHideChannelList={toggleHideChannelList}
@@ -69,7 +73,6 @@ export default function StreamChat({ client, theme = "light", groupName = null }
           <MessageList
             onClick={hideChannelList ? toggleHideChannelList : null}
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-            Message={CustomMessage}
             TypingIndicator={TypingIndicator}
           />
           <MessageInput focus Input={MessagingInput} />
@@ -93,23 +96,20 @@ const StreamChannelList = ({
   const is1Cols = useMediaQuery({ minWidth: 800 })
   return (
     <div
-      className={
-        `absolute inset-y-16 md:inset-y-0 left-none md:left-0 -right-16 md:right-none transform md:relative transition 
+      className={`absolute inset-y-16 md:inset-y-0 left-none md:left-0 -right-16 md:right-none transform md:relative transition 
         duration-300 ease-in-out 
-        ${hideChannelList && is1Cols &&  "-translate-x-full flex h-0"}
-        ${!hideChannelList && is1Cols &&  "translate-x-0 z-40"}
-        ${hideChannelList && !is1Cols &&  "-translate-x-full hidden"}
-        ${!hideChannelList && !is1Cols &&  "translate-x-0 z-40"}
-      } `} 
-        //  : "hidden md:flex md:h-0"                                         // - toggled off 
-        //   : "md:translate-x-0 z-40 md:z-0"               // - toggled on 
-      >
+        ${hideChannelList && is1Cols && "-translate-x-full flex h-0"}
+        ${!hideChannelList && is1Cols && "translate-x-0 z-40"}
+        ${hideChannelList && !is1Cols && "-translate-x-full hidden"}
+        ${!hideChannelList && !is1Cols && "translate-x-0 z-40"}
+        `}
+    >
       <ChannelList
         filter={filter}
         sort={sort}
         options={options}
-        // channelRenderFilterFn={channelFilter}
         customActiveChannel={groupName?.split(" ").join("-") || ""}
+        // channelRenderFilterFn={channelFilter}
         List={(props) => (
           <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
         )}
@@ -122,6 +122,7 @@ const StreamChannelList = ({
 }
 
 /*
+? Convert this functionality to use the headlessui Transition component for clarity?
 1 Large screen functionality:
 * Channel list shown immediately but togglible. On toggle close with animation 
 * & resize message list container

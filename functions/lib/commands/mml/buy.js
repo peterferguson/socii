@@ -7,6 +7,7 @@ const buyMML = ({ username, tickerSymbol }) => {
     const mmlmessage = {
         user_id: username,
         text: "How much you would like to buy?",
+        command: "buy",
         attachments: [
             {
                 type: "buy",
@@ -40,9 +41,10 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, })
     Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
     for ${cost}. Do you agree that the group should execute this trade?
     `,
+        command: "buy",
         attachments: [
             {
-                type: "buy",
+                type: "confirm",
                 mml: mmlstring,
                 tickerSymbol: tickerSymbol,
                 actions: [
@@ -88,11 +90,14 @@ const buy = async (client, body) => {
     // * Dissect the intent
     // TODO: Need to create commands with description of input order in Stream
     const intent = args === null || args === void 0 ? void 0 : args[0]; // ? Should be buy since we send to the buy webhook ... maybe just do a check on this?
-    const tickerSymbol = args === null || args === void 0 ? void 0 : args[1];
+    const tickerSymbol = args === null || args === void 0 ? void 0 : args[1].toUpperCase();
     // * if we understand this intent then send a reply
     const channel = client.channel("messaging", channelID);
     // const botUser = { id: "investbot", name: "Invest Bot" };
+    logger.log(`POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`);
     switch (action) {
+        case "confirm":
+            logger.log(`POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`);
         case "buy":
             // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
             // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
@@ -113,11 +118,8 @@ const buy = async (client, body) => {
             ?
             */
             // message.type = 'ephemeral'
-            message = {
-                ...message,
-                ...exports.confirmInvestmentMML({ ...formData, username, tickerSymbol }),
-            };
-            await sendTradeMessages({ channel, message, username });
+            message = updateMessage(message, exports.confirmInvestmentMML({ ...formData, username, tickerSymbol }));
+            return await sendTradeMessages({ channel, message, username });
             break;
         case "cancel":
             // 2 Simply cancel the buy action.
@@ -136,26 +138,28 @@ const buy = async (client, body) => {
             // - Present MML for user to make a choice on cost & share amount
             // message.type = 'ephemeral'
             // ! This is apparently an old api & we no longer have access to ephemeral command types
-            message = { ...message, ...exports.buyMML({ username, tickerSymbol }) };
-            await channel.sendMessage(message);
+            message = updateMessage(message, exports.buyMML({ username, tickerSymbol }));
+            logger.log(JSON.stringify({ message }));
+            return await channel.sendMessage(message);
     }
-    logger.log(JSON.stringify({ message }));
-    return JSON.stringify({ message });
 };
 exports.buy = buy;
 const sendTradeMessages = async ({ channel, message, username }) => {
+    console.log(message);
     const members = await channel.queryMembers({});
-    members.members
+    return Promise.all(members.members
         .filter((member) => member.name !== username)
-        .map(async (member) => {
-        console.log({ ...message, user_id: member.name });
-        await channel.sendMessage({ ...message, user_id: member.user_id });
-    });
+        .map(async (member) => await channel.sendMessage(updateMessage(message, {
+        id: "",
+        user_id: member.user_id,
+        parent_id: message.id,
+        show_in_channel: false,
+    }))));
 };
 function singleLineTemplateString(strings, ...values) {
     // Interweave the strings with the
     // substitution vars first.
-    let output = '';
+    let output = "";
     for (let i = 0; i < values.length; i++) {
         output += strings[i] + values[i];
     }
@@ -163,8 +167,15 @@ function singleLineTemplateString(strings, ...values) {
     // Split on newlines.
     let lines = output.split(/(?:\r\n|\n|\r)/);
     // Rip out the leading whitespace.
-    return lines.map((line) => {
-        return line.replace(/^\s+/gm, '');
-    }).join(' ').trim();
+    return lines
+        .map((line) => {
+        return line.replace(/^\s+/gm, "");
+    })
+        .join(" ")
+        .trim();
 }
+const updateMessage = (message, newAttrs) => {
+    const { latest_reactions, own_reactions, reply_count, type, ...msg } = message;
+    return { ...msg, ...newAttrs };
+};
 //# sourceMappingURL=buy.js.map

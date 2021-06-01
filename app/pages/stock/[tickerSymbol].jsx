@@ -43,7 +43,9 @@ export default function TickerPage({ tickerSymbols }) {
       setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
     }
 
-    setLogoUrl()
+    if (ticker) {
+      setLogoUrl()
+    }
   }, [ticker])
 
   if (router.isFallback) {

@@ -2,15 +2,22 @@ import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useTickerPriceData } from "@lib/hooks"
 
-import React from "react"
-import { MML } from "mml-react"
+import { LoadingIndicator } from "stream-chat-react"
+import React, { Suspense } from "react"
+
+const MML = React.lazy(async () => {
+  const mml = await import("mml-react")
+  return { default: mml.MML }
+})
 
 // WARN: IEX called for each instance of a invest command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
 
 const InvestCommandAttachment = ({ attachment }) => {
-  const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
+  const tickerState = useTickerPriceData({
+    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+  })
 
   const converters = {
     invest: (tag) => (
@@ -25,11 +32,9 @@ const InvestCommandAttachment = ({ attachment }) => {
 
   return (
     <div className="py-4 pl-4 bg-white rounded-lg shadow-lg">
-      <MML
-        converters={converters}
-        source={attachment.mml}
-        onSubmit={(e) => console.log(e)}
-      />
+      <Suspense fallback={<LoadingIndicator />}>
+        <MML converters={converters} source={attachment.mml} />
+      </Suspense>
     </div>
   )
 }

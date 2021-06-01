@@ -2,7 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-
+			match /data/{serviceId} {
+        allow read;
+        allow write: if false;
+      }
       match /tickers/{ISIN} {
       	allow read;
         allow write: if false;
@@ -16,6 +19,10 @@ service cloud.firestore {
           allow read;
           allow write: if false;
         }
+      }
+    	match /invites/{referralCode} {
+        allow read;
+        allow delete: if false;
       }
 
       match /users/{userId} {
@@ -57,7 +64,7 @@ service cloud.firestore {
           
           // Explicitly define rules for the 'holdings' subcollection
           match /holdings/{assetId} {
-            allow read: if isGroupMember(groupId);
+          	allow read;
             allow write: if false;
             // allow read, update, create: if request.auth != null && request.auth.uid == userId;
             // allow delete: if false;
@@ -105,3 +112,4 @@ service cloud.firestore {
     }
   }
 }
+

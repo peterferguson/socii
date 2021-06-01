@@ -1,6 +1,6 @@
-import { MessageSimple } from 'stream-chat-react'
+import { MessageSimple } from "stream-chat-react"
 
-import styles from '@styles/CustomMessage.module.css'
+import styles from "@styles/CustomMessage.module.css"
 
 const CustomMessage = (props) => {
   return (

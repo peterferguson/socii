@@ -1,5 +1,5 @@
-import MMLButton from "./MMLButton"
 // import { currencyIcons } from "@lib/constants"
+import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import {
   useTickerPriceData,
@@ -7,9 +7,15 @@ import {
   useLocalCurrency,
   useExchangeRate,
 } from "@lib/hooks"
+import { UserContext } from "@lib/context"
 
-import React from "react"
-import { MML } from "mml-react"
+import { LoadingIndicator } from "stream-chat-react"
+import React, { Suspense, useContext } from "react"
+
+const MML = React.lazy(async () => {
+  const mml = await import("mml-react")
+  return { default: mml.MML }
+})
 
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
@@ -26,8 +32,11 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const BuyCommandAttachment = ({ attachment }) => {
-  const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
+const BuyCommandAttachment = ({ attachment, actionHandler }) => {
+  const { username } = useContext(UserContext)
+  const tickerState = useTickerPriceData({
+    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+  })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
   const localCostPerShare = exchangeRate
@@ -53,23 +62,63 @@ const BuyCommandAttachment = ({ attachment }) => {
     ),
   }
 
+  const buySubmission = async (actions, tickerSymbol) => {
+    // TODO: This leaves us open to attacks ...
+    // ! need to handle this
+    await fetch("http://localhost:5001/sociiinvest/europe-west2/commands?type=buy", {
+      method: "POST",
+      body: JSON.stringify({
+        message: {
+          id: "",
+          text: `/buy ${tickerSymbol}`,
+          command: "buy",
+          args: `buy ${tickerSymbol}`,
+          html: "",
+          attachments: [],
+          mentioned_users: [],
+        },
+        user: {
+          id: username,
+          role: "user",
+          banned: false,
+          online: true,
+        },
+        form_data: { ...actions, action: "buy" },
+      }),
+    })
+  }
+
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
       <LogoPriceCardHeader
-        tickerSymbol={attachment.tickerSymbol}
+        tickerSymbol={attachment?.tickerSymbol.toUpperCase()}
         tickerState={tickerState}
       />
-      <MML
-        converters={converters}
-        source={attachment.mml}
-        onSubmit={(e) => {
-          const { buy, cancel, ...data } = e // - remove buy & cancel
-          return { ...data, action: "buy" in e ? "buy" : "cancel" }
-        }}
-      />
+      <Suspense fallback={<LoadingIndicator />}>
+        <MML
+          converters={converters}
+          source={attachment.mml}
+          onSubmit={(data) => {
+            const { buy, cancel, ...actions } = data // - remove buy & cancel
+
+            if ("buy" in data) {
+              buySubmission(actions, attachment?.tickerSymbol.toUpperCase())
+            }
+            if ("yes" in data) {
+              // TODO: tradeSubmission function: Write to a firestore collection
+              // TODO: collection trigger function to implement the trade based on the 
+              // TODO: choosen group selection process. Defaults to uanimous decision.
+              // tradeSubmission(actions, attachment?.tickerSymbol.toUpperCase())
+            }
+          }}
+          Loading={LoadingIndicator}
+        />
+      </Suspense>
     </div>
   )
 }
+
+/* Converters */
 
 const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)
@@ -137,16 +186,16 @@ const InvestConfirmationMMLConverter = () => (
   <>
     <div className="flex items-center justify-center w-full mx-auto space-x-2">
       <MMLButton
-        key={`cancel-button`}
-        name="cancel"
+        key={`no-button`}
+        name="no"
         className="w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400"
-        text="Cancel"
+        text="No"
       />
       <MMLButton
-        key={`buy-button`}
-        name="buy"
+        key={`yes-button`}
+        name="yes"
         className="w-1/2 mx-2 outline-btn btn-transition"
-        text={"Buy"}
+        text={"Yes"}
       />
     </div>
   </>

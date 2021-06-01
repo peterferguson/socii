@@ -6,18 +6,29 @@ import InvestCommandAttachment from "./CustomAttachments/InvestCommandAttachment
 import React from "react"
 
 export default function CustomAttachment(props) {
-  const { attachments } = props
+  const { attachments, actionHandler } = props
   const [attachment] = attachments || []
 
   switch (attachment?.type) {
     case "stock":
-      return <StockDisplayAttachment attachment={attachment} />
+      return (
+        <StockDisplayAttachment attachment={attachment} actionHandler={actionHandler} />
+      )
     case "invest":
-      return <InvestCommandAttachment attachment={attachment} />
+      return (
+        <InvestCommandAttachment
+          attachment={attachment}
+          actionHandler={actionHandler}
+        />
+      )
     case "buy":
-      return <BuyCommandAttachment attachment={attachment} />
+      return (
+        <BuyCommandAttachment attachment={attachment} actionHandler={actionHandler} />
+      )
     case "sell":
-      return <SellCommandAttachment attachment={attachment} />
+      return (
+        <SellCommandAttachment attachment={attachment} actionHandler={actionHandler} />
+      )
     default:
       break
   }

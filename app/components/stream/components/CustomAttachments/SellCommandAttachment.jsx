@@ -2,20 +2,24 @@ import MMLButton from "./MMLButton"
 // import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 
-
 import {
   useTickerPriceData,
   useShareCost,
   useLocalCurrency,
   useExchangeRate,
 } from "@lib/hooks"
-import React from "react"
-import { MML } from "mml-react"
+
+import { LoadingIndicator } from "stream-chat-react"
+import React, { Suspense } from "react"
+
+const MML = React.lazy(async () => {
+  const mml = await import("mml-react")
+  return { default: mml.MML }
+})
 
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
-
 
 import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
 export const currencyIcons = {
@@ -28,9 +32,10 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-
 const SellCommandAttachment = ({ attachment }) => {
-  const tickerState = useTickerPriceData({ tickerSymbol: attachment?.tickerSymbol })
+  const tickerState = useTickerPriceData({
+    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+  })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
   const localCostPerShare = exchangeRate
@@ -54,11 +59,12 @@ const SellCommandAttachment = ({ attachment }) => {
         tickerSymbol={attachment.tickerSymbol}
         tickerState={tickerState}
       />
-      <MML converters={converters} source={attachment.mml} onSubmit={e => console.log(e)}/>
+      <Suspense fallback={<LoadingIndicator />}>
+        <MML converters={converters} source={attachment.mml} />
+      </Suspense>
     </div>
   )
 }
-
 
 const SellMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)

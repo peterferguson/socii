@@ -1,15 +1,15 @@
 import { buy } from "./mml/buy"
 const StreamChat = require("stream-chat").StreamChat
 
+
 // * Function to route the commands to the correct function based on the type query param
-const handleCommand = (req, res) => {
+const handleCommand = async (req, res) => {
   const { query, method, body } = req
   const type = query?.type
 
   // * show a nice error if you send a GET request
   if (method !== "POST") {
     res.status(405).end(`Method ${method} Not Allowed`)
-    res.setHeader("Allow", ["POST"])
   }
 
   //   // Important: validate that the request came from Stream
@@ -28,17 +28,13 @@ const handleCommand = (req, res) => {
         process.env.STREAM_API_KEY,
         process.env.STREAM_API_SECRET
       )
-      const buy_response = buy(streamClient, body)
-      //   res.setHeader("Content-Type", "application/json")
+      const payload = typeof body === "string" ? JSON.parse(body) : body
+      const buy_response = await buy(streamClient, payload)
       res.status(200).end(`${type} command executed: ${JSON.stringify(buy_response)}`)
       break
     default:
       res.status(400).end(`Please send a correct command type`)
   }
-}
-
-const commands = {
-  buy: "https://europe-west2-sociiinvest.cloudfunctions.net/buyCommand",
 }
 
 export { handleCommand }

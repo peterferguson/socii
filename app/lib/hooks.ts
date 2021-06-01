@@ -227,8 +227,10 @@ export function useTickerPriceData({ tickerSymbol }) {
       })
     }
 
-    callIEX()
-    getTickerData()
+    if (tickerSymbol) {
+      callIEX()
+      getTickerData()
+    }
   }, [tickerSymbol])
 
   return state

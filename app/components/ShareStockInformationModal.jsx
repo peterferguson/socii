@@ -32,6 +32,7 @@ export default function ShareStockInformationModal({
     const requiredQueryFields = ["name", "industry", "exchange"]
 
     if (streamClient && streamClient.user) {
+      console.log(streamClient);
       const channel = streamClient?.getChannelById(
         "messaging",
         selectedGroup?.split(" ").join("-")

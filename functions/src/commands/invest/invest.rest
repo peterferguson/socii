@@ -1,9 +1,9 @@
 # ! Should Fail
 
-GET http://localhost:5001/sociiinvest/europe-west2/buyCommand
+GET http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
 
 ###
-POST http://localhost:5001/sociiinvest/europe-west2/buyCommand
+POST http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
 content-type: application/json
 
 { 
@@ -32,7 +32,7 @@ content-type: application/json
    "form_data":{} 
 }
 ###
-POST http://localhost:5001/sociiinvest/europe-west2/buyCommand
+POST http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
 content-type: application/json
 
 { 
@@ -82,7 +82,7 @@ POST http://localhost:5001/sociiinvest/europe-west2/commands?type=buy
 content-type: application/json
 
 { 
-   "message":{ 
+   "message": { 
       "id":"", 
       "text":"/buy TSLA", 
       "command": "buy", 
