@@ -44,7 +44,7 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, })
         command: "buy",
         attachments: [
             {
-                type: "confirm",
+                type: "buy",
                 mml: mmlstring,
                 tickerSymbol: tickerSymbol,
                 actions: [
@@ -84,6 +84,7 @@ const buy = async (client, body) => {
     // * the body of the message will be modified based on user interactions
     let message = body.message;
     const args = (_b = message.args) === null || _b === void 0 ? void 0 : _b.split(" ");
+    // TODO: trim the args or the actions / tickers
     // * form_data will only be present once the user starts interacting
     const formData = body.form_data || {};
     const action = formData["action"];
@@ -96,8 +97,6 @@ const buy = async (client, body) => {
     // const botUser = { id: "investbot", name: "Invest Bot" };
     logger.log(`POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`);
     switch (action) {
-        case "confirm":
-            logger.log(`POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`);
         case "buy":
             // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
             // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it

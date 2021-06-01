@@ -91,6 +91,8 @@ export const buy = async (client, body) => {
 
   const args = message.args?.split(" ")
 
+  // TODO: trim the args or the actions / tickers
+
   // * form_data will only be present once the user starts interacting
   const formData = body.form_data || {}
   const action = formData["action"]
