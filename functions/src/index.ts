@@ -14,6 +14,7 @@ export const HttpsError = functions.https.HttpsError
 
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
+const london = "europe-west2"
 
 const streamChat = require("./streamChat.js")
 const commands = require("./commands/index.js")
@@ -21,7 +22,6 @@ const algoliaSearch = require("./algoliaSearch.js")
 const trades = require("./trades.js")
 const data = require("./data.js")
 
-const london = "europe-west2"
 
 module.exports = {
   tradeToFirestore: functions.region(london).https.onRequest(trades),

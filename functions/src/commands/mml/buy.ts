@@ -110,7 +110,7 @@ export const buy = async (client, body) => {
     `POST /${message.command} "${message.args}" => ${JSON.stringify(formData)}`
   )
 
-  switch (action) {      
+  switch (action) {
     case "buy":
       // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
       // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
@@ -164,6 +164,18 @@ const sendTradeMessages = async ({ channel, message, username }) => {
   console.log(message)
 
   const members = await channel.queryMembers({})
+  members.members
+    .filter((member) => member.name !== username)
+    .map(async (member) =>
+      logger.log(
+        updateMessage(message, {
+          id: "",
+          user_id: member.user_id,
+          parent_id: message.id,
+          show_in_channel: false,
+        })
+      )
+    )
   return Promise.all(
     members.members
       .filter((member) => member.name !== username)
@@ -182,8 +194,6 @@ const sendTradeMessages = async ({ channel, message, username }) => {
 }
 
 function singleLineTemplateString(strings, ...values) {
-  // Interweave the strings with the
-  // substitution vars first.
   let output = ""
   for (let i = 0; i < values.length; i++) {
     output += strings[i] + values[i]
@@ -203,6 +213,7 @@ function singleLineTemplateString(strings, ...values) {
 }
 
 const updateMessage = (message, newAttrs) => {
+  // - remove restricted attrs
   const { latest_reactions, own_reactions, reply_count, type, ...msg } = message
   return { ...msg, ...newAttrs }
 }

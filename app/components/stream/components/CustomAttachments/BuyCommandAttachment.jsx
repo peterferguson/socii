@@ -40,7 +40,7 @@ const BuyCommandAttachment = ({ attachment, actionHandler }) => {
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
   const localCostPerShare = exchangeRate
-    ? tickerState.price * exchangeRate?.rate?.toFixed(2)
+    ? (tickerState.price * exchangeRate?.rate).toFixed(2)
     : tickerState.price
 
   const converters = {

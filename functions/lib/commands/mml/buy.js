@@ -146,6 +146,14 @@ exports.buy = buy;
 const sendTradeMessages = async ({ channel, message, username }) => {
     console.log(message);
     const members = await channel.queryMembers({});
+    members.members
+        .filter((member) => member.name !== username)
+        .map(async (member) => logger.log(updateMessage(message, {
+        id: "",
+        user_id: member.user_id,
+        parent_id: message.id,
+        show_in_channel: false,
+    })));
     return Promise.all(members.members
         .filter((member) => member.name !== username)
         .map(async (member) => await channel.sendMessage(updateMessage(message, {
@@ -156,8 +164,6 @@ const sendTradeMessages = async ({ channel, message, username }) => {
     }))));
 };
 function singleLineTemplateString(strings, ...values) {
-    // Interweave the strings with the
-    // substitution vars first.
     let output = "";
     for (let i = 0; i < values.length; i++) {
         output += strings[i] + values[i];
@@ -174,6 +180,7 @@ function singleLineTemplateString(strings, ...values) {
         .trim();
 }
 const updateMessage = (message, newAttrs) => {
+    // - remove restricted attrs
     const { latest_reactions, own_reactions, reply_count, type, ...msg } = message;
     return { ...msg, ...newAttrs };
 };

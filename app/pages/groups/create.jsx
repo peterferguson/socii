@@ -312,6 +312,7 @@ const createGroup = async (
     joinFee: lumpSumOption.amount,
     membershipFee: depositOption.amount,
     startDate: serverTimestamp(),
+    investorCount: 1, // TODO: Increment this on addition of new investors
   })
   batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() })
   await batch.commit()

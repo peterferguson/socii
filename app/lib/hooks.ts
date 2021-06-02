@@ -1,4 +1,4 @@
-import { auth, firestore, functions } from "@lib/firebase"
+import { auth, firestore } from "@lib/firebase"
 
 import { useState, useEffect, useLayoutEffect, useRef, useReducer } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -252,10 +252,10 @@ export const useShareCost = (costPerShare) => {
     }
 
     if (name.toLowerCase() === "shares") {
-      setShares(input) //.toString())
+      setShares(input)
       return
     } else {
-      setShares(toShares(round(input, 2))) //.toString())
+      setShares(toShares(round(input, 2)))
     }
   }
   return [shares, handleChange, toCost]
