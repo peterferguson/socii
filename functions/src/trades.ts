@@ -6,24 +6,6 @@ import {
   arrayUnion,
 } from "./index.js"
 
-// Helper prototype methods for checking http request constraints
-const allKeysContainedIn = (object, other) => {
-  let keys = null
-
-  switch (typeof object) {
-    case "object":
-      if (Array.isArray(object)) {
-        keys = object
-      } else {
-        keys = Object.keys(object)
-      }
-      break
-  }
-
-  // Ensure that the object has all of the keys in `other`
-  return keys.every((key) => key in other)
-}
-
 /**
  * HTTP Cloud Function to store a purchases data in firebase.
  *
@@ -171,6 +153,112 @@ const tradeSubmission = async (data, context) => {
   // * Store initial trade data
 }
 
+const tradeConfirmation = async (data, context) => {
+  verifyUser(context)
+
+  const { messageId } = data
+
+  const groupRef = await firestore.collection(`${data.groupRef}`)
+  const tradesRef = await firestore.collection(`${data.groupRef}/trades`).doc(messageId)
+
+  const { cashBalance, investorCount } = await groupRef.get()
+  const tradeData = await tradesRef.get()
+
+  const ISIN = tradeData.assetRef.split("/")[-1]
+
+  if (tradeData.agreesToTrade.length === investorCount - 1) {
+    // ! Execute Trade
+    // 1. Batch update holdings
+
+    const holdingDocRef = firestore.collection(`${groupRef}/holdings`).doc(ISIN)
+    const batch = firestore.batch()
+    const { type, holdingData, updateTradeData } = await upsertHolding({
+      holdingDocRef,
+      tradeData,
+    })
+
+    switch (type) {
+      case "update": {
+        batch.update(holdingDocRef, holdingData)
+      }
+      case "set": {
+        batch.set(holdingDocRef, holdingData)
+      }
+    }
+
+    batch.update(tradesRef, {
+      agreesToTrade: arrayUnion(context.auth.uid),
+      ...updateTradeData,
+    })
+
+    await batch.commit()
+    // 2. send a message with the finalised price
+  } else {
+    tradesRef.update({ agreesToTrade: arrayUnion(context.auth.uid) })
+  }
+}
+
+/*
+ * Helper Functions
+ */
+
+const upsertHolding = async ({ holdingDocRef, tradeData }) => {
+  const { orderType, shares, price, assetRef, tickerSymbol, shortName } = tradeData
+
+  // TODO: get latest price and execute as close as possible to the total number of
+  // TODO: shares and cost based on the available cash of the group 
+  // TODO: Ensure price is within a specificied range of the original price agreed
+  // TODO: Allow this to be set as a group level setting
+
+  const negativeEquityMultiplier = orderType.toLowerCase().includes("buy") ? 1 : -1
+
+  // - Assumptions:
+  // 1. We keep zero share holdings to easily identify all previous holdings.
+  // ? Could this be imposed in the firestore rules.
+  // 2: On selling shares the cost basis is not affected & so only the shares is changed
+
+  const sharesIncrement = negativeEquityMultiplier * shares
+
+  // * Check if the holding already exists
+  const holding = await holdingDocRef.get()
+  const outputData = { type: "", holdingData: {}, updateTradeData: {} }
+
+  if (holding.exists) {
+    const currentShares = holding.get("shares")
+    const currentAvgPrice = holding.get("avgPrice")
+    const newAvgPrice =
+      negativeEquityMultiplier + 1
+        ? (currentAvgPrice * currentShares + price * shares) / (currentShares + shares)
+        : currentAvgPrice
+
+    // * Add profit to a sell trade on a current holding
+    if (!(negativeEquityMultiplier + 1)) {
+      outputData.tradeData = {
+        pnlPercentage: (100 * (price - currentAvgPrice)) / currentAvgPrice,
+      }
+    }
+
+    outputData.type = "update"
+    outputData.holdingData = {
+      avgPrice: newAvgPrice,
+      shares: increment(sharesIncrement),
+      lastUpdated: serverTimestamp(),
+    }
+  } else {
+    outputData.type = "set"
+
+    outputData.holdingData = {
+      assetRef,
+      tickerSymbol,
+      shortName,
+      avgPrice: price / shares,
+      shares: increment(sharesIncrement),
+      lastUpdated: serverTimestamp(),
+    }
+  }
+  return outputData
+}
+
 const verifyUser = (context) => {
   // * Checking that the user is authenticated.
   if (!context.auth) {
@@ -227,25 +315,21 @@ const verifyContent = async (data, context) => {
   return { ...requiredArgs, ...optionalArgs }
 }
 
-const tradeConfirmation = async (data, context) => {
-  verifyUser(context)
+const allKeysContainedIn = (object, other) => {
+  let keys = null
 
-  const { messageId } = data
-
-  const tradesRef = await firestore.collection(`${data.groupRef}/trades`).doc(messageId)
-  const groupRef = await firestore.collection(`${data.groupRef}`)
-
-  const { investorCount } = await groupRef.get()
-
-  tradesRef.update({
-    agreesToTrade: arrayUnion(context.auth.uid),
-  })
-
-  const investorsOnboard: string[] = (await tradesRef.get()).get("agreesToTrade")
-
-  if (investorsOnboard.length === investorCount) {
-    // ! executeTrade - will update holdings and send a message with the finalised price
+  switch (typeof object) {
+    case "object":
+      if (Array.isArray(object)) {
+        keys = object
+      } else {
+        keys = Object.keys(object)
+      }
+      break
   }
+
+  // Ensure that the object has all of the keys in `other`
+  return keys.every((key) => key in other)
 }
 
 module.exports = tradeToFirestore
