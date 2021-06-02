@@ -9,6 +9,8 @@ admin.initializeApp(adminConfig)
 export const firestore = admin.firestore()
 export const increment = admin.firestore.FieldValue.increment
 export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp
+export const arrayUnion = admin.firestore.FieldValue.arrayUnion
+export const HttpsError = functions.https.HttpsError
 
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
