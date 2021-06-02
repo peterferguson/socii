@@ -1,4 +1,4 @@
-import { firestore, serverTimestamp, increment } from './index.js'
+import { firestore, serverTimestamp } from './index.js'
 const bent = require('bent')
 
 // - Helper functions

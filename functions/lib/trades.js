@@ -5,7 +5,7 @@ const index_js_1 = require("./index.js");
 const allKeysContainedIn = (object, other) => {
     let keys = null;
     switch (typeof object) {
-        case 'object':
+        case "object":
             if (Array.isArray(object)) {
                 keys = object;
             }
@@ -41,10 +41,10 @@ const tradeToFirestore = async (req, res) => {
         shares: null,
     };
     const optionalArgs = {
-        executionCurrency: 'GBP',
-        assetType: '',
-        shortName: '',
-        tickerSymbol: '',
+        executionCurrency: "GBP",
+        assetType: "",
+        shortName: "",
+        tickerSymbol: "",
     };
     // * Check for default args and assign them if they exist else end function with 422
     if (!allKeysContainedIn(requiredArgs, req.body)) {
@@ -56,9 +56,9 @@ const tradeToFirestore = async (req, res) => {
     const assetRef = index_js_1.firestore.doc(req.body.assetRef);
     const assetData = await assetRef.get();
     requiredArgs.assetRef = assetRef;
-    optionalArgs.assetType = assetData.get('assetType');
-    optionalArgs.shortName = assetData.get('shortName');
-    optionalArgs.tickerSymbol = assetData.get('tickerSymbol');
+    optionalArgs.assetType = assetData.get("assetType");
+    optionalArgs.shortName = assetData.get("shortName");
+    optionalArgs.tickerSymbol = assetData.get("tickerSymbol");
     Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]));
     // * Add a new trade document with a generated id & update holdings
     const batch = index_js_1.firestore.batch();
@@ -73,8 +73,8 @@ const tradeToFirestore = async (req, res) => {
     // * Update the holdings avgPrice & shares
     const holdingRef = index_js_1.firestore
         .collection(`${requiredArgs.executorRef}/holdings`)
-        .doc(assetData.get('ISIN'));
-    const negativeEquityMultiplier = requiredArgs.orderType.includes('BUY') ? 1 : -1;
+        .doc(assetData.get("ISIN"));
+    const negativeEquityMultiplier = requiredArgs.orderType.includes("BUY") ? 1 : -1;
     // ! We keep holdings which have zero shares in order to easily identify all previous
     // ! holdings of the client without needing to count over trades. This is imposed in the
     // ! firestore rules.
@@ -83,15 +83,15 @@ const tradeToFirestore = async (req, res) => {
     // * Check if the holding already exists
     const doc = await holdingRef.get();
     if (doc.exists) {
-        const currentShares = doc.get('shares');
-        const currentAvgPrice = doc.get('avgPrice');
+        const currentShares = doc.get("shares");
+        const currentAvgPrice = doc.get("avgPrice");
         const newAvgPrice = negativeEquityMultiplier + 1
             ? (currentAvgPrice * currentShares + requiredArgs.price * requiredArgs.shares) /
                 (currentShares + requiredArgs.shares)
             : currentAvgPrice;
         // * Add profit to a sell trade on a current holding
         if (!(negativeEquityMultiplier + 1)) {
-            tradeData['pnlPercentage'] =
+            tradeData["pnlPercentage"] =
                 (100 * (requiredArgs.price - currentAvgPrice)) / currentAvgPrice;
         }
         batch.update(holdingRef, {
@@ -105,14 +105,92 @@ const tradeToFirestore = async (req, res) => {
             assetRef,
             avgPrice: requiredArgs.price / requiredArgs.shares,
             shares: index_js_1.increment(sharesIncrement),
-            tickerSymbol: assetData.get('tickerSymbol'),
-            shortName: assetData.get('shortName'),
+            tickerSymbol: assetData.get("tickerSymbol"),
+            shortName: assetData.get("shortName"),
             lastUpdated: index_js_1.serverTimestamp(),
         });
     }
     batch.set(tradeRef, tradeData);
     const batchResponse = await batch.commit();
     res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`);
+};
+/*
+- tradeSubmission
+1. Verify that the data has been sent with all the correct keys
+2. Add the trade to the trade collection in firestore properties include all of the above
+2. and also a agreement list for each investor
+
+- tradeConfirmation
+1. Add the uid/username of the agreesToTrade array
+2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update
+2. holdings and send confirmation message with the price at which the asset was purchased
+*/
+const tradeSubmission = async (data, context) => {
+    verifyUser(context);
+    const args = await verifyContent(data, context);
+    const { messageId } = data;
+    // * Create trade document
+    const tradeRef = await index_js_1.firestore.collection(`${args.groupRef}/trades`).doc(messageId);
+    tradeRef.set({
+        ...args,
+        agreesToTrade: [args.executorRef],
+        timestamp: index_js_1.serverTimestamp(),
+    });
+    // * Store initial trade data
+};
+const verifyUser = (context) => {
+    // * Checking that the user is authenticated.
+    if (!context.auth) {
+        throw new index_js_1.HttpsError("failed-precondition", "This function must be called while authenticated.");
+    }
+};
+const verifyContent = async (data, context) => {
+    const requiredArgs = {
+        groupRef: "",
+        assetRef: "",
+        orderType: "",
+        price: 0,
+        shares: 0,
+        // This will allow us to track whether the trade has already been submitted
+        // (until epheremal messages work). Also we can use a collectionGroup query
+        // to find the particular trade in question for each message.
+        messageId: "",
+        //
+        executionCurrency: "GBP",
+        executorRef: context.auth.uid,
+    };
+    const optionalArgs = {
+        assetType: "",
+        shortName: "",
+        tickerSymbol: "",
+    };
+    // * Check for default args and assign them if they exist
+    if (!allKeysContainedIn(requiredArgs, data)) {
+        throw new index_js_1.HttpsError("invalid-argument", `Please ensure request has all of the following keys: ${JSON.stringify(Object.keys(requiredArgs))}`);
+    }
+    const assetRef = index_js_1.firestore.doc(data.assetRef);
+    const assetData = await assetRef.get();
+    requiredArgs.assetRef = assetRef;
+    optionalArgs.assetType = assetData.get("assetType");
+    optionalArgs.shortName = assetData.get("shortName");
+    optionalArgs.tickerSymbol = assetData.get("tickerSymbol");
+    // * Inject data into requiredArgs
+    Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]));
+    return { ...requiredArgs, ...optionalArgs };
+};
+const tradeConfirmation = async (data, context) => {
+    verifyUser(context);
+    const { messageId } = data;
+    const tradesRef = await index_js_1.firestore.collection(`${data.groupRef}/trades`).doc(messageId);
+    const groupRef = await index_js_1.firestore.collection(`${data.groupRef}`);
+    const { investorCount } = await groupRef.get();
+    tradesRef.update({
+        agreesToTrade: index_js_1.arrayUnion(context.auth.uid),
+    });
+    const investorsOnboard = (await tradesRef.get()).get("agreesToTrade");
+    if (investorsOnboard.length === investorCount) {
+        // ! executeTrade - will update holdings and send a message with the finalised price
+    }
 };
 module.exports = tradeToFirestore;
 //# sourceMappingURL=trades.js.map

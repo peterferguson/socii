@@ -156,18 +156,15 @@ const tradeToFirestore = async (req, res) => {
 */
 const tradeSubmission = async (data, context) => {
   verifyUser(context)
-  const [requiredArgs, optionalArgs] = await verifyContent(data, context)
+  const args = await verifyContent(data, context)
   const { messageId } = data
 
   // * Create trade document
-  const tradeRef = await firestore
-    .collection(`${requiredArgs.groupRef}/trades`)
-    .doc(messageId)
+  const tradeRef = await firestore.collection(`${args.groupRef}/trades`).doc(messageId)
 
   tradeRef.set({
-    ...optionalArgs,
-    ...requiredArgs,
-    agreesToTrade: [requiredArgs.executorRef],
+    ...args,
+    agreesToTrade: [args.executorRef],
     timestamp: serverTimestamp(),
   })
 
@@ -227,7 +224,7 @@ const verifyContent = async (data, context) => {
   // * Inject data into requiredArgs
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))
 
-  return [requiredArgs, optionalArgs]
+  return { ...requiredArgs, ...optionalArgs }
 }
 
 const tradeConfirmation = async (data, context) => {
@@ -249,8 +246,6 @@ const tradeConfirmation = async (data, context) => {
   if (investorsOnboard.length === investorCount) {
     // ! executeTrade - will update holdings and send a message with the finalised price
   }
-
-
 }
 
 module.exports = tradeToFirestore

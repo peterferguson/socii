@@ -21,7 +21,7 @@ const commands = require("./commands/index.js")
 const algoliaSearch = require("./algoliaSearch.js")
 const trades = require("./trades.js")
 const data = require("./data.js")
-
+const documentListeners = require("./documentListeners.js")
 
 module.exports = {
   tradeToFirestore: functions.region(london).https.onRequest(trades),
@@ -34,6 +34,10 @@ module.exports = {
   loadTickersToAlgolia: functions
     .region(london)
     .https.onRequest(algoliaSearch.loadTickersToAlgolia),
+  incrementInvestors: functions
+    .region(london)
+    .firestore.document("groups/{groupName}/investors/{investorUsername}")
+    .onWrite(documentListeners.incrementInvestors),
   onTickerCreated: functions
     .region(london)
     .firestore.document("ticker/{isin}")
