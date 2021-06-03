@@ -193,8 +193,6 @@ export function useTickerPriceData({ tickerSymbol }) {
     priceLastUpdated: "",
     ticker: null,
   })
-  // TODO: REFACTOR ONLY TICKER DATA & CREATE EXCHANGE RATE HOOK
-
   useEffect(() => {
     let stockPrice
     let changePct
