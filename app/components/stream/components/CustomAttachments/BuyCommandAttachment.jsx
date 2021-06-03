@@ -8,7 +8,7 @@ import {
   useExchangeRate,
 } from "@lib/hooks"
 import { UserContext } from "@lib/context"
-import { tradeSubmission, tickerToISIN } from "@lib/firebase"
+import { tradeSubmission, firestore } from "@lib/firebase"
 
 import {
   LoadingIndicator,
@@ -50,8 +50,9 @@ const BuyCommandAttachment = ({ attachment }) => {
     ? (tickerState.price * exchangeRate?.rate).toFixed(2)
     : tickerState.price
 
-  const tickerISIN = tickerState?.ticker?.ISIN
+  const groupName = channel.cid.split(":").pop()
 
+  // TODO: Add different views of the buy card for users who did not submit it
   const converters = {
     buy: (tag) => (
       <BuyMMLConverter
@@ -81,10 +82,11 @@ const BuyCommandAttachment = ({ attachment }) => {
       method: "POST",
       body: JSON.stringify({
         message: {
-          id: "",
           text: `/buy ${tickerSymbol}`,
           command: "buy",
           args: `buy ${tickerSymbol}`,
+          parent_id: message.id,
+          show_in_channel: false,
           html: "",
           attachments: [],
           mentioned_users: [],
@@ -114,22 +116,22 @@ const BuyCommandAttachment = ({ attachment }) => {
             const { buy, cancel, ...actions } = data // - remove buy & cancel
 
             if ("buy" in data) {
-              buySubmission(actions, attachment?.tickerSymbol.toUpperCase())
+              // - Write to firestore & send confirmation message in thread
+              tradeSubmission({
+                username,
+                groupName,
+                tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+                assetRef: `tickers/${tickerState.ticker.ISIN}`,
+                orderType: "BUY",
+                messageId: message.id,
+                ...actions, // TODO: NEED TO ENSURE THESE ARE NOT NULL
+              })
             }
             if ("yes" in data) {
               // ! Trade is based on the groups selection process.
               // ! Defaults to uanimous decision.
-              const groupName = channel.cid.split(":").pop()
-              tradeSubmission({
-                groupRef: `groups/${groupName}`,
-                assetRef: `tickers/${tickerState.ticker.ISIN}`,
-                orderType: "BUY",
-                price: parseFloat(message.text.split("for ").pop().split(". Do")[0]),
-                shares: parseFloat(
-                  message.text.split("buy ").pop().split(" shares")[0]
-                ),
-                messageId: message.id,
-              })
+              agreesToTrade()
+              // tradeConfirmation() // TODO: Refactor into a client-side update of the agreesToTrade array & convert tradeConfirmation fn to a doc listener!
             }
           }}
           Loading={LoadingIndicator}
@@ -137,6 +139,10 @@ const BuyCommandAttachment = ({ attachment }) => {
       </Suspense>
     </div>
   )
+}
+
+const agreesToTrade = () => {
+  const tradeRef = firestore.collection(`groups/${groupname}/`)
 }
 
 /* Converters */

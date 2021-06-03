@@ -43,6 +43,7 @@ export const fromMillis = firebase.firestore.Timestamp.fromMillis
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const alphaVantageQuery = functions.httpsCallable("alphaVantageQuery")
 export const tradeSubmission = functions.httpsCallable("tradeSubmission")
+export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();
@@ -74,7 +75,7 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   const tickerSymbol = ticker.toUpperCase()
   const tickerRef = firestore.collection("tickers")
   const query = tickerRef.where("tickerSymbol", "==", tickerSymbol).limit(1)
-  const tickerDoc = (await query.get()).docs?.[0]
+  const tickerDoc = (await query.get()).docs?.pop()
   return await tickerDoc.id
 }
 

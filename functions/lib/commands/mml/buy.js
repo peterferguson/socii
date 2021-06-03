@@ -34,7 +34,7 @@ const buyMML = ({ username, tickerSymbol }) => {
     return mmlmessage;
 };
 exports.buyMML = buyMML;
-const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, }) => {
+const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, parent_id, show_in_channel, }) => {
     const mmlstring = `<mml><tradeConfirmation></tradeConfirmation></mml>`;
     const mmlmessage = {
         user_id: username,
@@ -65,7 +65,7 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, })
             },
         ],
     };
-    return mmlmessage;
+    return !parent_id ? mmlmessage : { ...mmlmessage, parent_id, show_in_channel };
 };
 exports.confirmInvestmentMML = confirmInvestmentMML;
 /*
@@ -84,11 +84,14 @@ const buy = async (client, body) => {
     const username = body.user.id;
     // * the body of the message will be modified based on user interactions
     let message = body.message;
+    const { parent_id, show_in_channel } = message;
     const args = (_b = message.args) === null || _b === void 0 ? void 0 : _b.split(" ");
     // TODO: trim the args or the actions / tickers
     // * form_data will only be present once the user starts interacting
     const formData = body.form_data || {};
     const action = formData["action"];
+    logger.log(`action: ${action}`);
+    logger.log(`parent_id: ${parent_id}`);
     // * Dissect the intent
     // TODO: Need to create commands with description of input order in Stream
     const intent = args === null || args === void 0 ? void 0 : args[0]; // ? Should be buy since we send to the buy webhook ... maybe just do a check on this?
@@ -102,23 +105,15 @@ const buy = async (client, body) => {
             // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
             // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
             // TODO: Could also mention members in their own messages in a thread under the buy command message
-            /*
-            ?   The fields available from the messsage will allow us to simply send a message with a
-            ?   timed response (counting down in the ui). Then as users react to the message we could
-            ?   detect when the reaction_count - own_reactions.length === members.length - 1
-            ?   (excluding the executor) and execute based on the reactions.
-            ?
-            ?       "attachments":[],
-            ?       "latest_reactions":[],
-            ?       "own_reactions":[],
-            ?       "reaction_counts":null,
-            ?       "reaction_scores":null,
-            ?       "reply_count":0,
-            ?       "mentioned_users":[],
-            ?
-            */
             // message.type = 'ephemeral'
-            message = updateMessage(message, exports.confirmInvestmentMML({ ...formData, username, tickerSymbol }));
+            message = updateMessage(message, exports.confirmInvestmentMML({
+                ...formData,
+                username,
+                tickerSymbol,
+                parent_id,
+                show_in_channel,
+            }));
+            logger.log(message);
             return await sendTradeMessages({ channel, message, username });
             break;
         case "cancel":
@@ -146,14 +141,6 @@ const buy = async (client, body) => {
 exports.buy = buy;
 const sendTradeMessages = async ({ channel, message, username }) => {
     const members = await channel.queryMembers({});
-    members.members
-        .filter((member) => member.name !== username)
-        .map(async (member) => logger.log(updateMessage(message, {
-        id: "",
-        user_id: member.user_id,
-        parent_id: message.id,
-        show_in_channel: false,
-    })));
     return Promise.all(members.members
         .filter((member) => member.name !== username)
         .map(async (member) => await channel.sendMessage(updateMessage(message, {

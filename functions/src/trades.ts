@@ -13,125 +13,6 @@ import {
   StreamChatClient,
 } from "./utils/helper.js"
 
-/**
- * HTTP Cloud Function to store a purchases data in firebase.
- *
- * @param {Object} req Cloud Function request context.
- *                     More info: https://expressjs.com/en/api.html#req
- *
- *                     Request body must include the following attributes:
- *                      executorRef: Firestore reference to the user or group which executed the trade,
- *                      assetRef:   Firestore reference (also gives assetType)
- *                      orderType:  This will be from a set of order types so should ensure it is within those too
- *                      price:      Purchase amount (assumed to be in GBP unless currency is passed explicitly)
- *                      shares:     Float defining proportion of asset aquired
- * @param {Object} res Cloud Function response context.
- *                     More info: https://expressjs.com/en/api.html#res
- */
-const tradeToFirestore = async (req, res) => {
-  const requiredArgs = {
-    executorRef: null,
-    assetRef: null,
-    orderType: null,
-    price: null,
-    shares: null,
-  }
-
-  const optionalArgs = {
-    executionCurrency: "GBP",
-    assetType: "",
-    shortName: "",
-    tickerSymbol: "",
-  }
-
-  // * Check for default args and assign them if they exist else end function with 422
-  if (!allKeysContainedIn(requiredArgs, req.body)) {
-    res
-      .status(422)
-      .send(
-        `Please ensure request has all of the following keys: ${JSON.stringify(
-          Object.keys(requiredArgs)
-        )}`
-      )
-    return
-  }
-
-  const assetRef = firestore.doc(req.body.assetRef)
-  const assetData = await assetRef.get()
-
-  requiredArgs.assetRef = assetRef
-  optionalArgs.assetType = assetData.get("assetType")
-  optionalArgs.shortName = assetData.get("shortName")
-  optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
-
-  Object.keys(requiredArgs).map((key) => (requiredArgs[key] = req.body[key]))
-
-  // * Add a new trade document with a generated id & update holdings
-  const batch = firestore.batch()
-  const tradeRef = await firestore
-    .collection(`${requiredArgs.executorRef}/trades`)
-    .doc()
-
-  let tradeData = {
-    ...optionalArgs,
-    ...requiredArgs,
-    timestamp: serverTimestamp(),
-  }
-
-  // * Update the holdings avgPrice & shares
-  const holdingRef = firestore
-    .collection(`${requiredArgs.executorRef}/holdings`)
-    .doc(assetData.get("ISIN"))
-
-  const negativeEquityMultiplier = requiredArgs.orderType.includes("BUY") ? 1 : -1
-
-  // ! We keep holdings which have zero shares in order to easily identify all previous
-  // ! holdings of the client without needing to count over trades. This is imposed in the
-  // ! firestore rules.
-
-  // ! On selling shares the cost basis is not affected & so only the shares is changed
-
-  const sharesIncrement = negativeEquityMultiplier * requiredArgs.shares
-
-  // * Check if the holding already exists
-  const doc = await holdingRef.get()
-  if (doc.exists) {
-    const currentShares = doc.get("shares")
-    const currentAvgPrice = doc.get("avgPrice")
-    const newAvgPrice =
-      negativeEquityMultiplier + 1
-        ? (currentAvgPrice * currentShares + requiredArgs.price * requiredArgs.shares) /
-          (currentShares + requiredArgs.shares)
-        : currentAvgPrice
-
-    // * Add profit to a sell trade on a current holding
-    if (!(negativeEquityMultiplier + 1)) {
-      tradeData["pnlPercentage"] =
-        (100 * (requiredArgs.price - currentAvgPrice)) / currentAvgPrice
-    }
-
-    batch.update(holdingRef, {
-      avgPrice: newAvgPrice,
-      shares: increment(sharesIncrement),
-      lastUpdated: serverTimestamp(),
-    })
-  } else {
-    batch.set(holdingRef, {
-      assetRef,
-      avgPrice: requiredArgs.price / requiredArgs.shares,
-      shares: increment(sharesIncrement),
-      tickerSymbol: assetData.get("tickerSymbol"),
-      shortName: assetData.get("shortName"),
-      lastUpdated: serverTimestamp(),
-    })
-  }
-
-  batch.set(tradeRef, tradeData)
-
-  const batchResponse = await batch.commit()
-  res.status(200).send(`Document written at: ${JSON.stringify(batchResponse)}`)
-}
-
 /*
 - tradeSubmission
 1. Verify that the data has been sent with all the correct keys
@@ -148,10 +29,10 @@ const tradeSubmission = async (data, context) => {
   const args = await verifyContent(data, context)
   const { messageId } = data
 
-  logger.log(messageId)
-  logger.log(args)
   // * Create trade document
-  const tradeRef = await firestore.collection(`${args.groupRef}/trades`).doc(messageId)
+  const tradeRef = await firestore
+    .collection(`groups/${args.groupName}/trades`)
+    .doc(messageId)
 
   // * Store initial trade data
   tradeRef.set({
@@ -159,16 +40,23 @@ const tradeSubmission = async (data, context) => {
     agreesToTrade: [args.executorRef],
     timestamp: serverTimestamp(),
   })
+
+  // * Send confirmation message into chat
+  const message = confirmInvestmentMML({
+    ...data,
+    parent_id: messageId,
+    show_in_channel: false,
+  })
 }
 
+// TODO: Convert to doc listener
 const tradeConfirmation = async (data, context) => {
   verifyUser(context)
 
-  const groupName = data.groupRef.split("/")[-1]
-  const { messageId } = data
+  const { groupName, messageId } = data
 
-  const groupRef = await firestore.collection(`${data.groupRef}`)
-  const tradesRef = await firestore.collection(`${data.groupRef}/trades`).doc(messageId)
+  const groupRef = await firestore.collection(`groups/${groupName}`)
+  const tradesRef = await firestore.collection(`groups/${groupName}/trades`).doc(messageId)
 
   const { cashBalance, investorCount } = await groupRef.get()
   const tradeData = await tradesRef.get()
@@ -310,7 +198,7 @@ const verifyUser = (context) => {
 
 const verifyContent = async (data, context) => {
   const requiredArgs = {
-    groupRef: "",
+    groupName: "",
     assetRef: "",
     orderType: "",
     price: 0,
@@ -382,6 +270,50 @@ const investmentReceiptMML = (tradeData) => {
         type: "receipt",
         mml: mmlstring,
         tickerSymbol: tradeData.tickerSymbol,
+      },
+    ],
+  }
+  return mmlmessage
+}
+
+export const confirmInvestmentMML = ({
+  username,
+  action,
+  tickerSymbol,
+  cost,
+  shares,
+  parent_id,
+  show_in_channel,
+}) => {
+  const mmlstring = `<mml><tradeConfirmation></tradeConfirmation></mml>`
+  const mmlmessage = {
+    user_id: username,
+    text: singleLineTemplateString`
+    Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
+    for ${cost}. Do you agree that the group should execute this trade?
+    `,
+    command: "buy",
+    parent_id: parent_id || null,
+    show_in_channel: show_in_channel || null,
+    attachments: [
+      {
+        tickerSymbol,
+        type: "buy",
+        mml: mmlstring,
+        actions: [
+          {
+            name: "action",
+            text: "Yes",
+            type: "button",
+            value: "yes",
+          },
+          {
+            name: "action",
+            text: "No",
+            type: "button",
+            value: "no",
+          },
+        ],
       },
     ],
   }

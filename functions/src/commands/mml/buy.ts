@@ -32,46 +32,6 @@ export const buyMML = ({ username, tickerSymbol }) => {
   return mmlmessage
 }
 
-export const confirmInvestmentMML = ({
-  username,
-  action,
-  tickerSymbol,
-  cost,
-  shares,
-}) => {
-  const mmlstring = `<mml><tradeConfirmation></tradeConfirmation></mml>`
-  const mmlmessage = {
-    user_id: username,
-    text: singleLineTemplateString`
-    Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
-    for ${cost}. Do you agree that the group should execute this trade?
-    `,
-    command: "buy",
-    attachments: [
-      {
-        tickerSymbol,
-        type: "buy",
-        mml: mmlstring,
-        actions: [
-          {
-            name: "action",
-            text: "Yes",
-            type: "button",
-            value: "yes",
-          },
-          {
-            name: "action",
-            text: "No",
-            type: "button",
-            value: "no",
-          },
-        ],
-      },
-    ],
-  }
-  return mmlmessage
-}
-
 /*
  * COMMANDS
  */
@@ -90,6 +50,8 @@ export const buy = async (client, body) => {
   // * the body of the message will be modified based on user interactions
   let message = body.message
 
+  const { parent_id, show_in_channel } = message
+
   const args = message.args?.split(" ")
 
   // TODO: trim the args or the actions / tickers
@@ -97,6 +59,9 @@ export const buy = async (client, body) => {
   // * form_data will only be present once the user starts interacting
   const formData = body.form_data || {}
   const action = formData["action"]
+
+  logger.log(`action: ${action}`)
+  logger.log(`parent_id: ${parent_id}`)
 
   // * Dissect the intent
   // TODO: Need to create commands with description of input order in Stream
@@ -116,12 +81,8 @@ export const buy = async (client, body) => {
       // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
       // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
       // TODO: Could also mention members in their own messages in a thread under the buy command message
+      // ! Moved to tradeSubmission function
       // message.type = 'ephemeral'
-      message = updateMessage(
-        message,
-        confirmInvestmentMML({ ...formData, username, tickerSymbol })
-      )
-      return await sendTradeMessages({ channel, message, username })
       break
     case "cancel":
       // 2 Simply cancel the buy action.
@@ -146,25 +107,20 @@ export const buy = async (client, body) => {
   }
 }
 
-const sendTradeMessages = async ({ channel, message, username }) => {
-  const members = await channel.queryMembers({})
+// const sendTradeMessages = async ({ channel, message, username }) => {
+//   const members = await channel.queryMembers({})
 
-  return Promise.all(
-    members.members
-      .filter((member) => member.name !== username)
-      .map(
-        async (member) =>
-          await channel.sendMessage(
-            updateMessage(message, {
-              id: "",
-              user_id: member.user_id,
-              parent_id: message.id,
-              show_in_channel: false,
-            })
-          )
-      )
-  )
-}
+//   return Promise.all(
+//     members.members
+//       .filter((member) => member.name !== username)
+//       .map(
+//         async (member) =>
+//           await channel.sendMessage(
+//             updateMessage(message, { id: "", user_id: member.user_id })
+//           )
+//       )
+//   )
+// }
 
 const updateMessage = (message, newAttrs) => {
   // - remove restricted attrs

@@ -84,9 +84,12 @@ content-type: application/json
 { 
    "message": { 
       "id":"", 
-      "text":"/buy TSLA", 
+      "text":"/buy AAPL", 
+      "parent_id": "peterferguson-b446bd88-a10b-4185-a6bc-05f4504fd07d",
+      "show_in_channel": false,
+      "skip_push": true,
       "command": "buy", 
-      "args": "buy TSLA", 
+      "args": "buy AAPL", 
       "html":"",
       "attachments":[],
       "mentioned_users":[]
@@ -99,7 +102,7 @@ content-type: application/json
    }, 
    "form_data": {
       "shares": "1",
-      "cost": "604.69",
+      "cost": "123.69",
       "action": "buy"
       } 
 }

@@ -263,7 +263,7 @@ const verifyContent = async (data, context) => {
         shortName: "",
         tickerSymbol: "",
         executionCurrency: "GBP",
-        executorRef: context.auth.uid,
+        executorRef: `users/${context.auth.uid}`,
     };
     // * Check for default args and assign them if they exist
     if (!allKeysContainedIn(requiredArgs, data)) {
