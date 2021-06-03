@@ -87,13 +87,13 @@ function Dropdown() {
     },
     {
       name: "Stocks",
-      description: "Search the our stock universe",
+      description: "Search our stock universe",
       href: "/stock",
       icon: ({ className }) => <FaGlobeEurope className={`-mb-1 ${className}`} />,
     },
     {
       name: "Crypto",
-      description: "Search the our crypto universe",
+      description: "Search our crypto universe",
       href: "/crypto",
       icon: ({ className }) => <FaBitcoin className={`-mb-1 ${className}`} />,
       disabled: true,
