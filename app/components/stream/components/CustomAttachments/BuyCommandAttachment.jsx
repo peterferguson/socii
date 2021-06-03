@@ -8,8 +8,13 @@ import {
   useExchangeRate,
 } from "@lib/hooks"
 import { UserContext } from "@lib/context"
+import { tradeSubmission, tickerToISIN } from "@lib/firebase"
 
-import { LoadingIndicator } from "stream-chat-react"
+import {
+  LoadingIndicator,
+  useMessageContext,
+  useChannelStateContext,
+} from "stream-chat-react"
 import React, { Suspense, useContext } from "react"
 
 const MML = React.lazy(async () => {
@@ -32,22 +37,26 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const BuyCommandAttachment = ({ attachment, actionHandler }) => {
+const BuyCommandAttachment = ({ attachment }) => {
   const { username } = useContext(UserContext)
   const tickerState = useTickerPriceData({
     tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
   })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
+  const { channel } = useChannelStateContext()
+  const { message } = useMessageContext()
   const localCostPerShare = exchangeRate
     ? (tickerState.price * exchangeRate?.rate).toFixed(2)
     : tickerState.price
+
+  const tickerISIN = tickerState?.ticker?.ISIN
 
   const converters = {
     buy: (tag) => (
       <BuyMMLConverter
         {...tag.node.attributes}
-        key={tag.key}
+        tagKey={tag.key}
         localCostPerShare={localCostPerShare}
         localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
       />
@@ -55,7 +64,7 @@ const BuyCommandAttachment = ({ attachment, actionHandler }) => {
     tradeConfirmation: (tag) => (
       <InvestConfirmationMMLConverter
         {...tag.node.attributes}
-        key={tag.key}
+        tagKey={tag.key}
         localCostPerShare={localCostPerShare}
         localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
       />
@@ -65,6 +74,9 @@ const BuyCommandAttachment = ({ attachment, actionHandler }) => {
   const buySubmission = async (actions, tickerSymbol) => {
     // TODO: This leaves us open to attacks ...
     // ! need to handle this
+    // TODO:
+    // ? Could just move away from calling the command function & reach directly for the
+    // ? tradeSubmission function. Then also handle the mml message sending there.
     await fetch("http://localhost:5001/sociiinvest/europe-west2/commands?type=buy", {
       method: "POST",
       body: JSON.stringify({
@@ -105,10 +117,19 @@ const BuyCommandAttachment = ({ attachment, actionHandler }) => {
               buySubmission(actions, attachment?.tickerSymbol.toUpperCase())
             }
             if ("yes" in data) {
-              // TODO: tradeSubmission function: Write to a firestore collection
-              // TODO: collection trigger function to implement the trade based on the 
-              // TODO: choosen group selection process. Defaults to uanimous decision.
-              // tradeSubmission(actions, attachment?.tickerSymbol.toUpperCase())
+              // ! Trade is based on the groups selection process.
+              // ! Defaults to uanimous decision.
+              const groupName = channel.cid.split(":").pop()
+              tradeSubmission({
+                groupRef: `groups/${groupName}`,
+                assetRef: `tickers/${tickerState.ticker.ISIN}`,
+                orderType: "BUY",
+                price: parseFloat(message.text.split("for ").pop().split(". Do")[0]),
+                shares: parseFloat(
+                  message.text.split("buy ").pop().split(" shares")[0]
+                ),
+                messageId: message.id,
+              })
             }
           }}
           Loading={LoadingIndicator}
@@ -120,20 +141,20 @@ const BuyCommandAttachment = ({ attachment, actionHandler }) => {
 
 /* Converters */
 
-const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
+const BuyMMLConverter = ({ tagKey, localCostPerShare, localCurrency }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)
 
   return (
     <div className="flex flex-col">
       <MMLNumberInput
         name={"Shares"}
-        key={`${key}-shares`}
+        key={`${tagKey}-shares`}
         value={shares}
         onChange={handleChange}
       />
       <MMLNumberInput
         name={"Cost"}
-        key={`${key}-cost`}
+        key={`${tagKey}-cost`}
         value={toCost(shares)}
         onChange={handleChange}
         currencyIcon={currencyIcons[localCurrency]}
@@ -156,11 +177,11 @@ const BuyMMLConverter = ({ key, localCostPerShare, localCurrency }) => {
   )
 }
 
-const MMLNumberInput = ({ key, value, onChange, name, currencyIcon = null }) => {
+const MMLNumberInput = ({ tagKey, value, onChange, name, currencyIcon = null }) => {
   return (
     <div className="flex flex-row m-2 border rounded shadow">
       <span
-        key={key}
+        key={tagKey}
         className="flex items-center px-3 font-bold rounded rounded-r-none font-poppins bg-grey-200 text-grey-400"
       >
         {name}

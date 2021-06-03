@@ -1,4 +1,5 @@
 const logger = require("firebase-functions").logger
+import { singleLineTemplateString } from "../../utils/helper.js"
 
 export const buyMML = ({ username, tickerSymbol }) => {
   const mmlstring = `<mml type="card"><buy></buy></mml>`
@@ -48,9 +49,9 @@ export const confirmInvestmentMML = ({
     command: "buy",
     attachments: [
       {
+        tickerSymbol,
         type: "buy",
         mml: mmlstring,
-        tickerSymbol: tickerSymbol,
         actions: [
           {
             name: "action",
@@ -115,21 +116,6 @@ export const buy = async (client, body) => {
       // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
       // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
       // TODO: Could also mention members in their own messages in a thread under the buy command message
-      /* 
-      ?   The fields available from the messsage will allow us to simply send a message with a 
-      ?   timed response (counting down in the ui). Then as users react to the message we could 
-      ?   detect when the reaction_count - own_reactions.length === members.length - 1
-      ?   (excluding the executor) and execute based on the reactions. 
-      ?
-      ?       "attachments":[], 
-      ?       "latest_reactions":[], 
-      ?       "own_reactions":[], 
-      ?       "reaction_counts":null, 
-      ?       "reaction_scores":null, 
-      ?       "reply_count":0, 
-      ?       "mentioned_users":[],
-      ?
-      */
       // message.type = 'ephemeral'
       message = updateMessage(
         message,
@@ -161,21 +147,8 @@ export const buy = async (client, body) => {
 }
 
 const sendTradeMessages = async ({ channel, message, username }) => {
-  console.log(message)
-
   const members = await channel.queryMembers({})
-  members.members
-    .filter((member) => member.name !== username)
-    .map(async (member) =>
-      logger.log(
-        updateMessage(message, {
-          id: "",
-          user_id: member.user_id,
-          parent_id: message.id,
-          show_in_channel: false,
-        })
-      )
-    )
+
   return Promise.all(
     members.members
       .filter((member) => member.name !== username)
@@ -191,25 +164,6 @@ const sendTradeMessages = async ({ channel, message, username }) => {
           )
       )
   )
-}
-
-function singleLineTemplateString(strings, ...values) {
-  let output = ""
-  for (let i = 0; i < values.length; i++) {
-    output += strings[i] + values[i]
-  }
-  output += strings[values.length]
-
-  // Split on newlines.
-  let lines = output.split(/(?:\r\n|\n|\r)/)
-
-  // Rip out the leading whitespace.
-  return lines
-    .map((line) => {
-      return line.replace(/^\s+/gm, "")
-    })
-    .join(" ")
-    .trim()
 }
 
 const updateMessage = (message, newAttrs) => {

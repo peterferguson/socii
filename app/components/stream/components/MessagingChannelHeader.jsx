@@ -1,14 +1,15 @@
 import TypingIndicator from "./TypingIndicator"
 
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { ChannelContext } from "stream-chat-react"
+import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import { FaList } from "react-icons/fa"
 import { MdEdit, MdSave } from "react-icons/md"
 import AvatarGroup from "@components/stream/components/AvatarGroup"
 import styles from "@styles/MessagingChannelHeader.module.css"
 
 const MessagingChannelHeader = ({ toggleHideChannelList }) => {
-  const { channel, client } = useContext(ChannelContext)
+  const { client } = useContext(ChatContext)
+  const { channel } = useContext(ChannelStateContext)
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
   const [isEditing, setIsEditing] = useState(false)

@@ -3,7 +3,7 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "start-up": "./start-up.bash",
-    "dev": "firebase emulators:start --import socii-firestore-backup",
+    "dev": "tsc && firebase emulators:start --import socii-firestore-backup",
     "build": "tsc",
     "functions": "tsc && firebase emulators:start --only functions",
     "shell": "firebase functions:shell",

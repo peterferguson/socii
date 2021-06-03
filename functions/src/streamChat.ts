@@ -1,8 +1,6 @@
 import { log } from "firebase-functions/lib/logger"
 import { firestore } from "./index"
-
-
-const StreamChat = require("stream-chat").StreamChat
+import { StreamChatClient } from "./utils/helper.js"
 
 const generateToken = async (snap, context) => {
   // Get an object representing the user document
@@ -10,10 +8,7 @@ const generateToken = async (snap, context) => {
   const uid = context.params.userId
   log(`Creating a Stream User Token for ${username}`)
 
-  const streamClient = new StreamChat(
-    process.env.STREAM_API_KEY,
-    process.env.STREAM_API_SECRET
-  )
+  const streamClient = StreamChatClient()
 
   const tokenDocRef = firestore.collection(`users/${uid}/stream`).doc(uid)
   tokenDocRef.set({ token: streamClient.createToken(username) })
@@ -21,12 +16,9 @@ const generateToken = async (snap, context) => {
 
 const createGroup = async (data, context) => {
   const admin = { id: "admin" }
-  const streamClient = new StreamChat(
-    process.env.STREAM_API_KEY,
-    process.env.STREAM_API_SECRET
-  )
-  const channel = streamClient.channel("team", "group-chat", {
-    name: data.groupName,
+  const streamClient = StreamChatClient()
+  const channel = streamClient.channel("messaging", data.groupName, {
+    name: `${data.groupName} Group Chat`,
     created_by: admin,
   })
 

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buy = exports.confirmInvestmentMML = exports.buyMML = void 0;
 const logger = require("firebase-functions").logger;
+const helper_js_1 = require("../../utils/helper.js");
 const buyMML = ({ username, tickerSymbol }) => {
     const mmlstring = `<mml type="card"><buy></buy></mml>`;
     const mmlmessage = {
@@ -37,16 +38,16 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, })
     const mmlstring = `<mml><tradeConfirmation></tradeConfirmation></mml>`;
     const mmlmessage = {
         user_id: username,
-        text: singleLineTemplateString `
+        text: helper_js_1.singleLineTemplateString `
     Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
     for ${cost}. Do you agree that the group should execute this trade?
     `,
         command: "buy",
         attachments: [
             {
+                tickerSymbol,
                 type: "buy",
                 mml: mmlstring,
-                tickerSymbol: tickerSymbol,
                 actions: [
                     {
                         name: "action",
@@ -144,7 +145,6 @@ const buy = async (client, body) => {
 };
 exports.buy = buy;
 const sendTradeMessages = async ({ channel, message, username }) => {
-    console.log(message);
     const members = await channel.queryMembers({});
     members.members
         .filter((member) => member.name !== username)
@@ -163,22 +163,6 @@ const sendTradeMessages = async ({ channel, message, username }) => {
         show_in_channel: false,
     }))));
 };
-function singleLineTemplateString(strings, ...values) {
-    let output = "";
-    for (let i = 0; i < values.length; i++) {
-        output += strings[i] + values[i];
-    }
-    output += strings[values.length];
-    // Split on newlines.
-    let lines = output.split(/(?:\r\n|\n|\r)/);
-    // Rip out the leading whitespace.
-    return lines
-        .map((line) => {
-        return line.replace(/^\s+/gm, "");
-    })
-        .join(" ")
-        .trim();
-}
 const updateMessage = (message, newAttrs) => {
     // - remove restricted attrs
     const { latest_reactions, own_reactions, reply_count, type, ...msg } = message;

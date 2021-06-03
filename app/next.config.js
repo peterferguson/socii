@@ -2,9 +2,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
-const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
-
-
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   webpack(config) {
@@ -21,7 +18,6 @@ module.exports = withBundleAnalyzer({
         loader: require.resolve("url-loader"),
       }
     )
-    config.plugins.push(new DuplicatePackageCheckerPlugin())
 
     return config
   },

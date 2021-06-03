@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { ImagePreviewer, FilePreviewer } from 'react-file-utils'
-import { ChannelContext } from 'stream-chat-react'
+import { useContext } from "react"
+import { ImagePreviewer, FilePreviewer } from "react-file-utils"
+import { ChannelStateContext } from "stream-chat-react"
 
 export const UploadsPreview = ({
   fileOrder,
@@ -14,7 +14,7 @@ export const UploadsPreview = ({
   uploadImage,
   uploadNewFiles,
 }) => {
-  const channelContext = useContext(ChannelContext)
+  const { multipleUploads, maxNumberOfFiles } = useContext(ChannelStateContext)
 
   return (
     <>
@@ -24,10 +24,9 @@ export const UploadsPreview = ({
           handleRemove={removeImage}
           handleRetry={uploadImage}
           handleFiles={uploadNewFiles}
-          multiple={channelContext.multipleUploads}
+          multiple={multipleUploads}
           disabled={
-            channelContext.maxNumberOfFiles !== undefined &&
-            numberOfUploads >= channelContext.maxNumberOfFiles
+            maxNumberOfFiles !== undefined && numberOfUploads >= maxNumberOfFiles
           }
         />
       )}

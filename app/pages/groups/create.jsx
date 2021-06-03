@@ -1,23 +1,25 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { RadioGroup } from '@headlessui/react'
-import { firestore, serverTimestamp, arrayUnion } from '@lib/firebase'
+import React, { useState, useEffect, useCallback, useContext } from "react"
+import { RadioGroup } from "@headlessui/react"
+import { firestore, serverTimestamp, arrayUnion } from "@lib/firebase"
 import {
   groupPrivacyOptions,
   groupLumpSumOptions,
   groupDepositOptions,
-} from '@lib/constants'
-import { UserContext } from '@lib/context'
+} from "@lib/constants"
+import { UserContext } from "@lib/context"
+import CheckIcon from "@components/BackgroundCheck"
+import CrossIcon from "@icons/cross.svg"
 
-import CheckIcon from '@components/BackgroundCheck'
-import CrossIcon from '@icons/cross.svg'
-import debounce from 'lodash/debounce'
-import toast from 'react-hot-toast'
+import debounce from "lodash/debounce"
+import toast from "react-hot-toast"
+import { useRouter } from "next/router"
 
 export default function Create() {
   const { user, username } = useContext(UserContext)
+  const router = useRouter()
 
-  const [groupName, setGroupName] = useState('')
-  const [groupDescription, setGroupDescription] = useState('')
+  const [groupName, setGroupName] = useState("")
+  const [groupDescription, setGroupDescription] = useState("")
   const [privacyOption, setPrivacyOption] = useState(groupPrivacyOptions[1])
   const [depositOption, setDepositOption] = useState(groupDepositOptions[1])
   const [lumpSumOption, setLumpSumOption] = useState(groupLumpSumOptions[1])
@@ -35,7 +37,7 @@ export default function Create() {
       setLoading(false)
       setisValidGroupName(false)
     } else {
-      setGroupName('')
+      setGroupName("")
       setisValidGroupName(false)
     }
 
@@ -55,7 +57,7 @@ export default function Create() {
   const checkGroupName = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {
-        const nameQuery = firestore.collection('groups').where('groupName', '==', name)
+        const nameQuery = firestore.collection("groups").where("groupName", "==", name)
 
         const { empty } = await nameQuery.get()
 
@@ -85,7 +87,7 @@ export default function Create() {
             />
             <div
               className={`bg-white text-sm sm:text-tiny ${
-                isValidGroupName ? 'text-brand-light btn-transition' : 'text-red-400'
+                isValidGroupName ? "text-brand-light btn-transition" : "text-red-400"
               } p-0.5 align-middle`}
               onKeyDown={null}
             >
@@ -119,7 +121,7 @@ export default function Create() {
             AmountOptions={groupLumpSumOptions}
             amountOption={lumpSumOption}
             setAmountOption={setLumpSumOption}
-            srLabel={'Initial Lump Sum Amount'}
+            srLabel={"Initial Lump Sum Amount"}
           />
           <div className="flex flex-col p-4 font-bold text-md font-work-sans">
             Deposit Schedule
@@ -137,7 +139,7 @@ export default function Create() {
             AmountOptions={groupDepositOptions}
             amountOption={depositOption}
             setAmountOption={setDepositOption}
-            srLabel={'Monthly Deposit Amount'}
+            srLabel={"Monthly Deposit Amount"}
           />
           <button
             className="w-11/12 my-8 btn"
@@ -145,6 +147,7 @@ export default function Create() {
               isValidGroupName
                 ? createGroup(
                     e,
+                    router,
                     user,
                     username,
                     groupName,
@@ -184,9 +187,9 @@ function AmountOptions({
               className={({ active }) =>
                 `${
                   active
-                    ? 'ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                         ring-brand-light ring-opacity-60'
-                    : ''
+                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
+                         ring-brand-light ring-opacity-60"
+                    : ""
                 }
                      bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer \
                      focus:outline-none flex-1`
@@ -200,7 +203,7 @@ function AmountOptions({
                         <RadioGroup.Label
                           as="p"
                           className={`font-medium ${
-                            checked ? 'text-brand-light' : 'text-gray-900'
+                            checked ? "text-brand-light" : "text-gray-900"
                           }`}
                         >
                           {option.amount}
@@ -236,9 +239,9 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
               className={({ active }) =>
                 `${
                   active
-                    ? 'ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                         ring-brand-light ring-opacity-60'
-                    : ''
+                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
+                         ring-brand-light ring-opacity-60"
+                    : ""
                 }
                      bg-white relative rounded-lg shadow-md px-5 py-4 cursor-pointer \
                      focus:outline-none flex-1`
@@ -252,7 +255,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
                         <RadioGroup.Label
                           as="p"
                           className={`font-medium  ${
-                            checked ? 'text-brand-light' : 'text-gray-900'
+                            checked ? "text-brand-light" : "text-gray-900"
                           }`}
                         >
                           {option.name}
@@ -260,7 +263,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
                         <RadioGroup.Description
                           as="span"
                           className={`inline ${
-                            checked ? 'text-black' : 'text-gray-500'
+                            checked ? "text-black" : "text-gray-500"
                           }`}
                         >
                           <span>{option.description}</span>
@@ -285,6 +288,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
 
 const createGroup = async (
   e,
+  router,
   user,
   username,
   groupName,
@@ -294,11 +298,10 @@ const createGroup = async (
   groupDescription
 ) => {
   e.preventDefault()
-  const router = useRouter()
 
-  const userGroupRef = firestore.collection('users').doc(user.uid)
-  const groupRef = firestore.collection('groups').doc(groupName)
-  const investorsRef = groupRef.collection('investors').doc(username)
+  const userGroupRef = firestore.collection("users").doc(user.uid)
+  const groupRef = firestore.collection("groups").doc(groupName)
+  const investorsRef = groupRef.collection("investors").doc(username)
 
   const batch = firestore.batch()
 
@@ -307,7 +310,7 @@ const createGroup = async (
     groupDescription,
     groupName,
     privacyOption,
-    groupType: '', // TODO: Implement group types (dividend/active/value/growth)
+    groupType: "", // TODO: Implement group types (dividend/active/value/growth)
     cashBalance: depositOption.amount + lumpSumOption.amount, //TODO: Add this to the payment ledger
     joinFee: lumpSumOption.amount,
     membershipFee: depositOption.amount,

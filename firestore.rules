@@ -48,7 +48,8 @@ service cloud.firestore {
       }
       
       match /groups/{groupId} {
-        allow read, write: if isGroupMember(groupId);
+        allow read, create:  if request.auth != null;
+        allow update: if isGroupMember(groupId);
 
           // Explicitly define rules for the 'trades' subcollection
           // TODO: Create function to choose who can update these rather than anyone as below

@@ -27,6 +27,11 @@ export const auth = firebase.auth()
 export const storage = firebase.storage()
 export const firestore = firebase.firestore()
 export const functions = firebase.app().functions(londonRegion)
+
+// ! Testing purposes
+firestore.useEmulator("localhost", 8080)
+functions.useEmulator("localhost", 5001)
+
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider()
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED
@@ -37,6 +42,7 @@ export const arrayUnion = firebase.firestore.FieldValue.arrayUnion
 export const fromMillis = firebase.firestore.Timestamp.fromMillis
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const alphaVantageQuery = functions.httpsCallable("alphaVantageQuery")
+export const tradeSubmission = functions.httpsCallable("tradeSubmission")
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();
@@ -54,20 +60,20 @@ export async function getUserWithUsername(username) {
   return userDoc
 }
 
-// Get first name from firebase user
-/**`
- * Convert a ticker symbol to ISIN using firebase docs
+/**
+ * Get first name from firebase user
  * @param  {string} ticker
  */
 export const userFirstName = (user) => user.displayName.split(" ")?.[0]
 
-/**`
+/**
  * Gets a ticker/{isin} document ISIN by querying the ticker
  * @param  {string} ticker
  */
 export async function tickerToISIN(ticker: string): Promise<string> {
+  const tickerSymbol = ticker.toUpperCase()
   const tickerRef = firestore.collection("tickers")
-  const query = tickerRef.where("tickerSymbol", "==", ticker).limit(1)
+  const query = tickerRef.where("tickerSymbol", "==", tickerSymbol).limit(1)
   const tickerDoc = (await query.get()).docs?.[0]
   return await tickerDoc.id
 }

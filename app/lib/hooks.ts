@@ -219,7 +219,9 @@ export function useTickerPriceData({ tickerSymbol }) {
         .collectionGroup("data")
         .where("symbol", "==", tickerSymbol)
         .limit(1)
-      const ticker = await (await tickerQuery.get()).docs?.[0].data()
+      const tickerDoc = await (await tickerQuery.get()).docs?.[0]
+      const ISIN = tickerDoc.ref.path.split("/")[1]
+      const ticker = {...tickerDoc.data(), ISIN}
       dispatch({ type: "UPDATE_TICKER", ticker })
       dispatch({
         type: "UPDATE_ASSET_CURRENCY",

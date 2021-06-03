@@ -2,10 +2,11 @@ import React, { memo, useCallback, useContext, useReducer } from "react"
 import { ImageDropzone } from "react-file-utils"
 import { logChatPromiseExecution } from "stream-chat"
 import {
-  ChannelContext,
+  ChannelStateContext,
+  ChannelActionContext,
   ChatAutoComplete,
   EmojiPicker,
-  useMessageInput,
+  useMessageInputState,
 } from "stream-chat-react"
 
 import EmojiIcon from "@icons/stream/emoji.svg"
@@ -143,8 +144,10 @@ const useCommand = () => {
 }
 
 const MessagingInput = (props) => {
-  const { acceptedFiles, maxNumberOfFiles, multipleUploads, sendMessage } =
-    useContext(ChannelContext)
+  const { acceptedFiles, maxNumberOfFiles, multipleUploads, channel } =
+    useContext(ChannelStateContext)
+  const { sendMessage } = useContext(ChannelActionContext)
+  const commands = channel?.getConfig?.()?.commands
 
   const [
     command,
@@ -171,7 +174,7 @@ const MessagingInput = (props) => {
     exitCommandMode()
   }
 
-  const messageInput = useMessageInput({ ...props, overrideSubmitHandler })
+  const messageInput = useMessageInputState({ ...props, overrideSubmitHandler })
 
   const onChange = useCallback(
     (e) => {
@@ -224,7 +227,7 @@ const MessagingInput = (props) => {
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
-            commands={messageInput.getCommands()}
+            commands={commands}
             innerRef={messageInput.textareaRef}
             handleSubmit={messageInput.handleSubmit}
             onSelectItem={messageInput.onSelectItem}

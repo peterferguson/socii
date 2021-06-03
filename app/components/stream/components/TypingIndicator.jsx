@@ -1,9 +1,10 @@
 import styles from "@styles/TypingIndicator.module.css"
 import React, { useContext } from "react"
-import { ChannelContext } from "stream-chat-react"
+import { ChannelStateContext, ChatContext } from "stream-chat-react"
 
 const TypingIndicator = () => {
-  const { client, typing } = useContext(ChannelContext)
+  const { client } = useContext(ChatContext)
+  const { typing } = useContext(ChannelStateContext)
 
   if (!client || !typing) return null
 
