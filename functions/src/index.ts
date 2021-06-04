@@ -28,7 +28,6 @@ const data = require("./data.js")
 const documentListeners = require("./documentListeners.js")
 
 module.exports = {
-  tradeToFirestore: functions.region(london).https.onRequest(trades),
   tradeSubmission: functions.region(london).https.onCall(trades.tradeSubmission),
   tradeConfirmation: functions.region(london).https.onCall(trades.tradeConfirmation),
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),

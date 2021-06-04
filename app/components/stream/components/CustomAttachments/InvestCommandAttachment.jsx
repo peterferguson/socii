@@ -16,7 +16,7 @@ const MML = React.lazy(async () => {
 
 const InvestCommandAttachment = ({ attachment }) => {
   const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+    tickerSymbol: attachment?.tickerSymbol?.toUpperCase(),
   })
 
   const converters = {

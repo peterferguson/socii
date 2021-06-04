@@ -1,18 +1,8 @@
 import {
-  Channel,
-  ChannelList,
-  Chat,
-  MessageInput,
-  MessageList,
-  MessageSimple,
-  useChatContext,
-  Window,
-} from "stream-chat-react"
-
-import {
   CreateChannel,
   CustomAttachment,
   // CustomMessage,
+  CustomTriggerProvider,
   MessagingChannelHeader,
   MessagingChannelList,
   MessagingChannelPreview,
@@ -21,6 +11,16 @@ import {
   TypingIndicator,
 } from "@components/stream/components"
 
+import {
+  Channel,
+  ChannelList,
+  Chat,
+  MessageInput,
+  MessageList,
+  // MessageSimple,
+  useChatContext,
+  Window,
+} from "stream-chat-react"
 import { useMediaQuery } from "react-responsive"
 import React, { useState } from "react"
 
@@ -45,16 +45,24 @@ export default function StreamChat({ client, theme = "light", groupName = null }
         </p>
         </div>
       )} */}
-      <StreamChannelList
-        hideChannelList={hideChannelList}
-        onClose={onClose}
-        onCreateChannel={onCreateChannel}
-        groupName={groupName}
-      />
+      {!groupName && (
+        <StreamChannelList
+          hideChannelList={hideChannelList}
+          onClose={onClose}
+          onCreateChannel={onCreateChannel}
+          groupName={groupName}
+        />
+      )}
       <Channel
+        channel={
+          !groupName
+            ? null
+            : client.channel("messaging", groupName?.split(" ").join("-"))
+        }
         maxNumberOfFiles={10}
         multipleUploads={true}
         Attachment={CustomAttachment}
+        TriggerProvider={CustomTriggerProvider}
       >
         <Window
           hideOnThread={true}
@@ -67,8 +75,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
             />
           )}
           <MessagingChannelHeader
-            theme={theme}
-            toggleHideChannelList={toggleHideChannelList}
+            toggleHideChannelList={!groupName ? toggleHideChannelList : null}
           />
           <MessageList
             onClick={hideChannelList ? toggleHideChannelList : null}
@@ -108,6 +115,7 @@ const StreamChannelList = ({
         filter={filter}
         sort={sort}
         options={options}
+        showChannelSearch={true}
         customActiveChannel={groupName?.split(" ").join("-") || ""}
         // channelRenderFilterFn={channelFilter}
         List={(props) => (

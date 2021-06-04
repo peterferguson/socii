@@ -34,7 +34,7 @@ export const currencyIcons = {
 
 const SellCommandAttachment = ({ attachment }) => {
   const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+    tickerSymbol: attachment?.tickerSymbol?.toUpperCase(),
   })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)

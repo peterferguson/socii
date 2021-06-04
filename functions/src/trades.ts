@@ -26,27 +26,34 @@ import {
 */
 const tradeSubmission = async (data, context) => {
   verifyUser(context)
-  const args = await verifyContent(data, context)
+  const { cost, ...verifiedData } = await verifyContent(data, context)
+  const price = cost
   const { messageId } = data
 
   // * Create trade document
   const tradeRef = await firestore
-    .collection(`groups/${args.groupName}/trades`)
+    .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
 
   // * Store initial trade data
   tradeRef.set({
-    ...args,
-    agreesToTrade: [args.executorRef],
+    ...verifiedData,
+    price,
+    agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
   })
 
   // * Send confirmation message into chat
   const message = confirmInvestmentMML({
-    ...data,
+    ...verifiedData,
+    cost,
     parent_id: messageId,
     show_in_channel: false,
   })
+
+  const streamClient = StreamChatClient()
+  const channel = streamClient.channel("messaging", data.groupName.split(" ").join("-"))
+  return await channel.sendMessage(message)
 }
 
 // TODO: Convert to doc listener
@@ -56,7 +63,9 @@ const tradeConfirmation = async (data, context) => {
   const { groupName, messageId } = data
 
   const groupRef = await firestore.collection(`groups/${groupName}`)
-  const tradesRef = await firestore.collection(`groups/${groupName}/trades`).doc(messageId)
+  const tradesRef = await firestore
+    .collection(`groups/${groupName}/trades`)
+    .doc(messageId)
 
   const { cashBalance, investorCount } = await groupRef.get()
   const tradeData = await tradesRef.get()
@@ -198,10 +207,11 @@ const verifyUser = (context) => {
 
 const verifyContent = async (data, context) => {
   const requiredArgs = {
+    username: "",
     groupName: "",
     assetRef: "",
     orderType: "",
-    price: 0,
+    cost: 0,
     shares: 0,
     // This will allow us to track whether the trade has already been submitted
     // (until epheremal messages work). Also we can use a collectionGroup query
@@ -215,6 +225,7 @@ const verifyContent = async (data, context) => {
     tickerSymbol: "",
     executionCurrency: "GBP",
     executorRef: `users/${context.auth.uid}`,
+    action: "",
   }
 
   // * Check for default args and assign them if they exist
@@ -276,7 +287,7 @@ const investmentReceiptMML = (tradeData) => {
   return mmlmessage
 }
 
-export const confirmInvestmentMML = ({
+const confirmInvestmentMML = ({
   username,
   action,
   tickerSymbol,
@@ -297,7 +308,7 @@ export const confirmInvestmentMML = ({
     show_in_channel: show_in_channel || null,
     attachments: [
       {
-        tickerSymbol,
+        tickerSymbol: tickerSymbol,
         type: "buy",
         mml: mmlstring,
         actions: [
@@ -321,7 +332,6 @@ export const confirmInvestmentMML = ({
 }
 
 module.exports = {
-  tradeToFirestore,
   tradeSubmission,
   tradeConfirmation,
 }

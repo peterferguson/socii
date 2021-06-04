@@ -56,7 +56,7 @@ service cloud.firestore {
           // TODO: ... see canCreatePost in https://github.com/fireship-io/next-firebase-course/blob/4fab05128a2ae5e9c6d51557922642e7daa41260/firestore.rules
           // * Trades ledger
           match /trades/{tradeId} {
-            allow read, write: if false;
+            allow read, update: if isGroupMember(groupId);
             // allow read, create: if request.auth != null && request.auth.uid == userId;
             // allow delete: if false;
             // allow update: if false;

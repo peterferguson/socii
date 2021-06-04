@@ -8,7 +8,7 @@ import {
   useExchangeRate,
 } from "@lib/hooks"
 import { UserContext } from "@lib/context"
-import { tradeSubmission, firestore } from "@lib/firebase"
+import { tradeSubmission } from "@lib/firebase"
 
 import {
   LoadingIndicator,
@@ -40,7 +40,7 @@ export const currencyIcons = {
 const BuyCommandAttachment = ({ attachment }) => {
   const { username } = useContext(UserContext)
   const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
+    tickerSymbol: attachment?.tickerSymbol?.toUpperCase() || "SPOT",
   })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
@@ -62,50 +62,12 @@ const BuyCommandAttachment = ({ attachment }) => {
         localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
       />
     ),
-    tradeConfirmation: (tag) => (
-      <InvestConfirmationMMLConverter
-        {...tag.node.attributes}
-        tagKey={tag.key}
-        localCostPerShare={localCostPerShare}
-        localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
-      />
-    ),
-  }
-
-  const buySubmission = async (actions, tickerSymbol) => {
-    // TODO: This leaves us open to attacks ...
-    // ! need to handle this
-    // TODO:
-    // ? Could just move away from calling the command function & reach directly for the
-    // ? tradeSubmission function. Then also handle the mml message sending there.
-    await fetch("http://localhost:5001/sociiinvest/europe-west2/commands?type=buy", {
-      method: "POST",
-      body: JSON.stringify({
-        message: {
-          text: `/buy ${tickerSymbol}`,
-          command: "buy",
-          args: `buy ${tickerSymbol}`,
-          parent_id: message.id,
-          show_in_channel: false,
-          html: "",
-          attachments: [],
-          mentioned_users: [],
-        },
-        user: {
-          id: username,
-          role: "user",
-          banned: false,
-          online: true,
-        },
-        form_data: { ...actions, action: "buy" },
-      }),
-    })
   }
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
       <LogoPriceCardHeader
-        tickerSymbol={attachment?.tickerSymbol.toUpperCase()}
+        tickerSymbol={attachment?.tickerSymbol?.toUpperCase()}
         tickerState={tickerState}
       />
       <Suspense fallback={<LoadingIndicator />}>
@@ -120,18 +82,11 @@ const BuyCommandAttachment = ({ attachment }) => {
               tradeSubmission({
                 username,
                 groupName,
-                tickerSymbol: attachment?.tickerSymbol.toUpperCase(),
                 assetRef: `tickers/${tickerState.ticker.ISIN}`,
                 orderType: "BUY",
                 messageId: message.id,
                 ...actions, // TODO: NEED TO ENSURE THESE ARE NOT NULL
               })
-            }
-            if ("yes" in data) {
-              // ! Trade is based on the groups selection process.
-              // ! Defaults to uanimous decision.
-              agreesToTrade()
-              // tradeConfirmation() // TODO: Refactor into a client-side update of the agreesToTrade array & convert tradeConfirmation fn to a doc listener!
             }
           }}
           Loading={LoadingIndicator}
@@ -139,10 +94,6 @@ const BuyCommandAttachment = ({ attachment }) => {
       </Suspense>
     </div>
   )
-}
-
-const agreesToTrade = () => {
-  const tradeRef = firestore.collection(`groups/${groupname}/`)
 }
 
 /* Converters */
@@ -208,24 +159,5 @@ const MMLNumberInput = ({ tagKey, value, onChange, name, currencyIcon = null }) 
     </div>
   )
 }
-
-const InvestConfirmationMMLConverter = () => (
-  <>
-    <div className="flex items-center justify-center w-full mx-auto space-x-2">
-      <MMLButton
-        key={`no-button`}
-        name="no"
-        className="w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400"
-        text="No"
-      />
-      <MMLButton
-        key={`yes-button`}
-        name="yes"
-        className="w-1/2 mx-2 outline-btn btn-transition"
-        text={"Yes"}
-      />
-    </div>
-  </>
-)
 
 export default BuyCommandAttachment

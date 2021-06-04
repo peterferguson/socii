@@ -9,12 +9,49 @@ export default function LogoPriceCardHeader({
   tickerState,
   className = "",
 }) {
-  const { priceChange, price, assetCurrency } = tickerState || {}
+  const { priceChange, price, assetCurrency, shares } = tickerState || {}
   const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
   const pnlColors = `${pnlBgColor} ${pnlBgColor
     .replace("bg", "text")
     .replace("200", "700")}`
 
+  return (
+    <div className={`cursor-pointer ${className}`}>
+      <TickerLogo tickerSymbol={tickerSymbol} />
+      <div className="w-auto h-auto p-1 text-center">
+        <div
+          className={
+            "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
+               inline-block font-poppins mt-1 text-blueGray-500"
+          }
+        >
+          {!shares ? (
+            <>
+              {tickerSymbol} &bull; {currencyFormatter(price, assetCurrency)}
+            </>
+          ):
+          (
+            <>
+            {tickerSymbol}
+            {shares} Shares
+            {currencyFormatter(price, assetCurrency)}
+            </>
+          )
+          }
+        </div>
+        {!priceChange && (
+          <PriceChangeTag
+            price={price}
+            pnlColors={pnlColors}
+            priceChange={priceChange}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+function TickerLogo({ tickerSymbol }) {
   const logo = useRef(null)
 
   useEffect(() => {
@@ -25,22 +62,19 @@ export default function LogoPriceCardHeader({
   }, [tickerSymbol])
 
   return (
-    <div className={`cursor-pointer ${className}`}>
-      <img
-        className="h-auto mx-auto rounded-full shadow-lg w-14"
-        src={logo.current}
-        alt={`${tickerSymbol} logo`}
-        onClick={() => router.push(`/stock/${tickerSymbol}`)}
-      />
-      <div className="w-auto h-auto p-1 text-center">
-        <div
-          className={
-            "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
-               inline-block font-poppins mt-1 text-blueGray-500"
-          }
-        >
-          {tickerSymbol} &bull; {currencyFormatter(price, assetCurrency)}
-        </div>
+    <img
+      className="h-auto mx-auto rounded-full shadow-lg w-14"
+      src={logo.current}
+      alt={`${tickerSymbol} logo`}
+      onClick={() => router.push(`/stock/${tickerSymbol}`)}
+    />
+  )
+}
+
+function PriceChangeTag({ priceChange, pnlColors, price }) {
+  return (
+    <>
+      {(priceChange !== null || !priceChange !== undefined) && (
         <div
           className={`ml-1 ${pnlColors} text-xs font-semibold inline-block py-1 px-2 rounded-full uppercase mt-1`}
         >
@@ -49,7 +83,7 @@ export default function LogoPriceCardHeader({
             <span className="ml-0.5">{(100 * priceChange).toFixed(2)}%</span>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }

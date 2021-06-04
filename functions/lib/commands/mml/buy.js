@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buy = exports.confirmInvestmentMML = exports.buyMML = void 0;
+exports.buy = exports.buyMML = void 0;
 const logger = require("firebase-functions").logger;
-const helper_js_1 = require("../../utils/helper.js");
 const buyMML = ({ username, tickerSymbol }) => {
     const mmlstring = `<mml type="card"><buy></buy></mml>`;
     const mmlmessage = {
@@ -34,40 +33,6 @@ const buyMML = ({ username, tickerSymbol }) => {
     return mmlmessage;
 };
 exports.buyMML = buyMML;
-const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, parent_id, show_in_channel, }) => {
-    const mmlstring = `<mml><tradeConfirmation></tradeConfirmation></mml>`;
-    const mmlmessage = {
-        user_id: username,
-        text: helper_js_1.singleLineTemplateString `
-    Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
-    for ${cost}. Do you agree that the group should execute this trade?
-    `,
-        command: "buy",
-        attachments: [
-            {
-                tickerSymbol,
-                type: "buy",
-                mml: mmlstring,
-                actions: [
-                    {
-                        name: "action",
-                        text: "Yes",
-                        type: "button",
-                        value: "yes",
-                    },
-                    {
-                        name: "action",
-                        text: "No",
-                        type: "button",
-                        value: "no",
-                    },
-                ],
-            },
-        ],
-    };
-    return !parent_id ? mmlmessage : { ...mmlmessage, parent_id, show_in_channel };
-};
-exports.confirmInvestmentMML = confirmInvestmentMML;
 /*
  * COMMANDS
  */
@@ -105,16 +70,8 @@ const buy = async (client, body) => {
             // 1 Initial confirmation of a buy action should prompt the rest of the group to agree
             // TODO: Query group members and send a message to each or send a polling message recording the users that interacted with it
             // TODO: Could also mention members in their own messages in a thread under the buy command message
+            // ! Moved to tradeSubmission function
             // message.type = 'ephemeral'
-            message = updateMessage(message, exports.confirmInvestmentMML({
-                ...formData,
-                username,
-                tickerSymbol,
-                parent_id,
-                show_in_channel,
-            }));
-            logger.log(message);
-            return await sendTradeMessages({ channel, message, username });
             break;
         case "cancel":
             // 2 Simply cancel the buy action.
@@ -139,17 +96,19 @@ const buy = async (client, body) => {
     }
 };
 exports.buy = buy;
-const sendTradeMessages = async ({ channel, message, username }) => {
-    const members = await channel.queryMembers({});
-    return Promise.all(members.members
-        .filter((member) => member.name !== username)
-        .map(async (member) => await channel.sendMessage(updateMessage(message, {
-        id: "",
-        user_id: member.user_id,
-        parent_id: message.id,
-        show_in_channel: false,
-    }))));
-};
+// const sendTradeMessages = async ({ channel, message, username }) => {
+//   const members = await channel.queryMembers({})
+//   return Promise.all(
+//     members.members
+//       .filter((member) => member.name !== username)
+//       .map(
+//         async (member) =>
+//           await channel.sendMessage(
+//             updateMessage(message, { id: "", user_id: member.user_id })
+//           )
+//       )
+//   )
+// }
 const updateMessage = (message, newAttrs) => {
     // - remove restricted attrs
     const { latest_reactions, own_reactions, reply_count, type, ...msg } = message;

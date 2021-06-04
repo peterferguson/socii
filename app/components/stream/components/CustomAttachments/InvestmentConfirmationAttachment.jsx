@@ -1,0 +1,90 @@
+// import { currencyIcons } from "@lib/constants"
+import MMLButton from "./MMLButton"
+import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
+import { UserContext } from "@lib/context"
+import { firestore, arrayUnion } from "@lib/firebase"
+
+import {
+  LoadingIndicator,
+  useMessageContext,
+  useChannelStateContext,
+} from "stream-chat-react"
+import React, { Suspense, useContext } from "react"
+
+const MML = React.lazy(async () => {
+  const mml = await import("mml-react")
+  return { default: mml.MML }
+})
+
+import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
+export const currencyIcons = {
+  AUD: { icon: FaDollarSign },
+  CAD: { icon: FaDollarSign },
+  // CHF: "CHF",
+  EUR: { icon: FaEuroSign },
+  GBP: { icon: FaPoundSign },
+  JPY: { icon: FaYenSign },
+  USD: { icon: FaDollarSign },
+}
+
+const InvestmentConfirmationAttachment = ({ attachment }) => {
+  const { user } = useContext(UserContext)
+  const { channel } = useChannelStateContext()
+  const { message } = useMessageContext()
+
+  const groupName = channel.cid.split(":").pop()
+
+  // TODO: Add different views of the buy card for users who did not submit it
+  const converters = {
+    investmentConfirmation: (tag) => (
+      <InvestConfirmationMMLConverter {...tag.node.attributes} tagKey={tag.key} />
+    ),
+  }
+
+  return (
+    <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
+      <LogoPriceCardHeader />
+      <Suspense fallback={<LoadingIndicator />}>
+        <MML
+          converters={converters}
+          source={attachment.mml}
+          onSubmit={(data) => {
+            // ! Trade is based on the groups selection process.
+            // ! Defaults to uanimous decision.
+            if ("yes" in data) agreesToTrade(groupName, message.parent_id, user.uid)
+          }}
+          Loading={LoadingIndicator}
+        />
+      </Suspense>
+    </div>
+  )
+}
+
+const agreesToTrade = async (groupName, messageId, uid) => {
+  const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
+  console.log(await tradesRef.data());
+  await tradesRef.update({ agreesToTrade: arrayUnion(uid) })
+}
+
+/* Converters */
+
+const InvestConfirmationMMLConverter = () => (
+  <>
+    <div className="flex items-center justify-center w-full mx-auto space-x-2">
+      <MMLButton
+        key={`no-button`}
+        name="no"
+        className="w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400"
+        text="No"
+      />
+      <MMLButton
+        key={`yes-button`}
+        name="yes"
+        className="w-1/2 mx-2 outline-btn btn-transition"
+        text={"Yes"}
+      />
+    </div>
+  </>
+)
+
+export default InvestmentConfirmationAttachment

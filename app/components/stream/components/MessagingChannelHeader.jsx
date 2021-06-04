@@ -72,10 +72,12 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
 
   return (
     <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
-      <FaList
-        className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-        onClick={toggleHideChannelList}
-      />
+      {toggleHideChannelList &&
+        <FaList
+          className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+          onClick={toggleHideChannelList}
+        />
+      }
       {AvatarGroup(members, styles)}
       {!isEditing ? (
         <div className="flex-1 pl-4 font-bold font-poppins">{channelName || title}</div>

@@ -1,0 +1,6 @@
+export { default as StockDisplayAttachment } from "./StockDisplayAttachment"
+export { default as SellCommandAttachment } from "./SellCommandAttachment"
+export { default as InvestmentReceiptAttachment } from "./InvestmentReceiptAttachment"
+export { default as BuyCommandAttachment } from "./BuyCommandAttachment"
+export { default as InvestCommandAttachment } from "./InvestCommandAttachment"
+export { default as InvestmentConfirmationAttachment } from "./InvestmentConfirmationAttachment"

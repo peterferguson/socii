@@ -6,13 +6,15 @@ import {
   ChannelActionContext,
   ChatAutoComplete,
   EmojiPicker,
-  useMessageInputState,
+  useMessageInputContext,
 } from "stream-chat-react"
 
 import EmojiIcon from "@icons/stream/emoji.svg"
 import SendIcon from "@icons/stream/send.svg"
 import UseCommandIcon from "@icons/stream/command.svg"
 import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
+
+import { FaDollarSign } from "react-icons/fa"
 
 import { UploadsPreview } from "./UploadsPreview"
 
@@ -70,6 +72,7 @@ const commandTypes = {
 // * Icons for buttons in input section
 const emojiButtons = {
   emoji: { icon: EmojiIcon },
+  ticker: { icon: FaDollarSign },
   command: { icon: UseCommandIcon },
   submit: { icon: SendIcon },
 }
@@ -102,9 +105,7 @@ const useCommand = () => {
 
   const [command, dispatch] = useReducer(commandReducer, defaultCommand)
 
-  const setNewCommand = (newCommand) => {
-    dispatch({ type: "FOUND_COMMAND", newCommand })
-  }
+  const setNewCommand = (newCommand) => dispatch({ type: "FOUND_COMMAND", newCommand })
   const enterCommandMode = () => dispatch({ type: "SET_COMMAND_MODE" })
   const exitCommandMode = () => dispatch({ type: "EXIT_COMMAND_MODE" })
 
@@ -155,6 +156,7 @@ const MessagingInput = (props) => {
   ] = useCommand()
 
   const overrideSubmitHandler = (message) => {
+    console.debug(message);
     if (!message.text || message.text === " ") return
     let updatedMessage
 
@@ -164,6 +166,7 @@ const MessagingInput = (props) => {
     }
 
     // - In command state reinstate the command before submission
+    console.debug(command.mode)
     if (command.mode) {
       const updatedText = reinstateCommand(message.text)
       updatedMessage = { ...message, text: updatedText }
@@ -174,7 +177,10 @@ const MessagingInput = (props) => {
     exitCommandMode()
   }
 
-  const messageInput = useMessageInputState({ ...props, overrideSubmitHandler })
+  const messageInput = useMessageInputContext({ ...props })
+
+  messageInput.overrideSubmitHandler = overrideSubmitHandler
+  console.log(command)
 
   const onChange = useCallback(
     (e) => {
@@ -182,9 +188,7 @@ const MessagingInput = (props) => {
       const deletePressed = e.nativeEvent?.inputType === "deleteContentBackward"
 
       // - In command mode detect empty deletion & exit command mode
-      if (value.length <= 1 && deletePressed) {
-        exitCommandMode()
-      }
+      if (value.length <= 1 && deletePressed) exitCommandMode()
 
       // - Check for command & enter command mode if found
       // - Updating displayed input based on command removal
@@ -205,6 +209,13 @@ const MessagingInput = (props) => {
       preventDefault: () => null,
     })
   }
+  const onClickTicker = () => {
+    messageInput.textareaRef.current.focus()
+    messageInput.handleChange({
+      target: { value: "$" },
+      preventDefault: () => null,
+    })
+  }
   return (
     <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-md">
       <EmojiButton
@@ -213,6 +224,7 @@ const MessagingInput = (props) => {
         ref={messageInput.emojiPickerRef}
       />
       <EmojiButton emojiButton={emojiButtons.command} onClick={onClickCommand} />
+      <EmojiButton emojiButton={emojiButtons.ticker} onClick={onClickTicker} />
       <ImageDropzone
         accept={acceptedFiles}
         handleFiles={messageInput.uploadNewFiles}
@@ -237,10 +249,9 @@ const MessagingInput = (props) => {
             maxRows={props.maxRows}
             placeholder="Send a message"
             onPaste={messageInput.onPaste}
-            triggers={props.autocompleteTriggers}
             grow={props.grow}
             disabled={props.disabled}
-            additionalTextareaProps={props.additionalTextareaProps}
+            additionalTextareaProps={{ ...props.additionalTextareaProps }}
           />
         </div>
       </ImageDropzone>
