@@ -6,6 +6,7 @@ import {
   ChannelActionContext,
   ChatAutoComplete,
   EmojiPicker,
+  useMessageInputState,
   useMessageInputContext,
 } from "stream-chat-react"
 
@@ -156,7 +157,7 @@ const MessagingInput = (props) => {
   ] = useCommand()
 
   const overrideSubmitHandler = (message) => {
-    console.debug(message);
+    console.debug(message)
     if (!message.text || message.text === " ") return
     let updatedMessage
 
@@ -177,10 +178,12 @@ const MessagingInput = (props) => {
     exitCommandMode()
   }
 
-  const messageInput = useMessageInputContext({ ...props })
+  let messageInput = useMessageInputState({ ...props, overrideSubmitHandler })
+  // ! Having to resort to this as the useMessageInputContext is overwriting the overriderSubmitHandler
+  messageInput = {...useMessageInputContext(), ...messageInput}
 
-  messageInput.overrideSubmitHandler = overrideSubmitHandler
-  console.log(command)
+  // messageInput = { ...messageInput, ...props, overrideSubmitHandler }
+  // console.log(messageInput.handleSubmit)
 
   const onChange = useCallback(
     (e) => {

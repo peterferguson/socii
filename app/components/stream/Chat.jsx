@@ -55,9 +55,9 @@ export default function StreamChat({ client, theme = "light", groupName = null }
       )}
       <Channel
         channel={
-          !groupName
-            ? null
-            : client.channel("messaging", groupName?.split(" ").join("-"))
+          groupName
+            ? client.channel("messaging", groupName?.split(" ").join("-"))
+            : null
         }
         maxNumberOfFiles={10}
         multipleUploads={true}
@@ -81,6 +81,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
             onClick={hideChannelList ? toggleHideChannelList : null}
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
             TypingIndicator={TypingIndicator}
+            // messageLimit={5} // TODO: Implement messageLimit to save on api calls
           />
           <MessageInput focus Input={MessagingInput} />
         </Window>

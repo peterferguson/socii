@@ -85,6 +85,7 @@ const BuyCommandAttachment = ({ attachment }) => {
                 assetRef: `tickers/${tickerState.ticker.ISIN}`,
                 orderType: "BUY",
                 messageId: message.id,
+                action: "buy",
                 ...actions, // TODO: NEED TO ENSURE THESE ARE NOT NULL
               })
             }

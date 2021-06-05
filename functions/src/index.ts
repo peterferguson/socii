@@ -29,7 +29,10 @@ const documentListeners = require("./documentListeners.js")
 
 module.exports = {
   tradeSubmission: functions.region(london).https.onCall(trades.tradeSubmission),
-  tradeConfirmation: functions.region(london).https.onCall(trades.tradeConfirmation),
+  tradeConfirmation: functions
+    .region(london)
+    .firestore.document("groups/{groupName}/trades/{messageId}")
+    .onWrite(trades.tradeConfirmation),
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   generateToken: functions
     .region(london)

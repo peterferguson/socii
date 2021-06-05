@@ -34,6 +34,9 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
 
   const groupName = channel.cid.split(":").pop()
 
+  const [action, shares] = message.text.split("to ").pop().split("shares")[0].split(" ")
+  const cost = message.text.split("for ").pop().split(". Do")[0]
+
   // TODO: Add different views of the buy card for users who did not submit it
   const converters = {
     investmentConfirmation: (tag) => (
@@ -43,7 +46,14 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-      <LogoPriceCardHeader />
+      <LogoPriceCardHeader
+        tickerSymbol={attachment?.tickerSymbol}
+        tickerState={{
+          action,
+          price: parseFloat(cost),
+          shares: parseFloat(shares),
+        }}
+      />
       <Suspense fallback={<LoadingIndicator />}>
         <MML
           converters={converters}
@@ -62,7 +72,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
 
 const agreesToTrade = async (groupName, messageId, uid) => {
   const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
-  console.log(await tradesRef.data());
+  console.log(await tradesRef.data())
   await tradesRef.update({ agreesToTrade: arrayUnion(uid) })
 }
 

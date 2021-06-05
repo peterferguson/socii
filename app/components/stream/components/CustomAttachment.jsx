@@ -16,7 +16,7 @@ export default function CustomAttachment(props) {
   switch (attachment?.type) {
     case "receipt":
       return <InvestmentReceiptAttachment attachment={attachment} />
-    case "tradeConfirmation":
+    case "investmentConfirmation":
       return <InvestmentConfirmationAttachment attachment={attachment} />
     case "stock":
       return <StockDisplayAttachment attachment={attachment} />
