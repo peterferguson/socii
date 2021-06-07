@@ -72,8 +72,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
 
 const agreesToTrade = async (groupName, messageId, uid) => {
   const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
-  console.log(await tradesRef.data())
-  await tradesRef.update({ agreesToTrade: arrayUnion(uid) })
+  await tradesRef.update({ agreesToTrade: arrayUnion(`users/${uid}`) })
 }
 
 /* Converters */

@@ -33,7 +33,6 @@ const incrementInvestors = async (change, context) => {
     }
     return;
 };
-// TODO: Convert to doc listener
 const tradeConfirmation = async (change, context) => {
     // - document at groups/{groupName}/trades/{messageId}
     const { groupName, messageId } = context.params;
@@ -43,10 +42,12 @@ const tradeConfirmation = async (change, context) => {
     // - Data to update the state of the trade on completion of function
     // - Should also stop infinite loops
     const tradeUpdateData = { executed: true };
-    const groupRef = await index_js_1.firestore.collection(`groups/${groupName}`);
+    const groupRef = await index_js_1.firestore.collection("groups").doc(groupName);
     const { cashBalance, investorCount } = await groupRef.get();
     const ISIN = tradeData.assetRef.split("/")[-1];
     const latestPrice = await helper_js_1.iexStockPrice(tradeData.tickerSymbol);
+    logger.log(latestPrice);
+    logger.log(latestPrice - tradeData.price);
     if (tradeData.shares * latestPrice > cashBalance) {
         // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
         // - A small variation should be somewhat enforced on the client-side.

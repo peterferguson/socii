@@ -50,12 +50,19 @@ const tradeConfirmation = async (change, context) => {
   // - Should also stop infinite loops
   const tradeUpdateData = { executed: true }
 
-  const groupRef = await firestore.collection(`groups/${groupName}`)
+  const groupRef = await firestore.collection("groups").doc(groupName)
   const { cashBalance, investorCount } = await groupRef.get()
 
   const ISIN = tradeData.assetRef.split("/")[-1]
 
   const latestPrice = await iexStockPrice(tradeData.tickerSymbol)
+  
+  // TODO: Fix price checking
+  // ? The exchange rate will not be accounted for this way
+  // ? 
+  logger.log(latestPrice);
+  logger.log(latestPrice-tradeData.price);
+  
 
   if (tradeData.shares * latestPrice > cashBalance) {
     // - Accept a smaller share amount if the cashBalance gets us close to the original share amount

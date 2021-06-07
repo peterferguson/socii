@@ -10,8 +10,8 @@ adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(adminConfig);
 process.env.STREAM_API_SECRET = functions.config().stream.secret;
 process.env.STREAM_API_KEY = functions.config().stream.api_key;
-process.env.IEX_API_VERSION = functions.config().iex_api_version;
-process.env.IEX_API_KEY = functions.config().iex_api_key;
+process.env.IEX_API_VERSION = functions.config().iex.api_version;
+process.env.IEX_API_KEY = functions.config().iex.api_key;
 const london = "europe-west2";
 // * Exportable utils
 exports.firestore = admin.firestore();
@@ -31,7 +31,7 @@ module.exports = {
     tradeConfirmation: functions
         .region(london)
         .firestore.document("groups/{groupName}/trades/{messageId}")
-        .onWrite(trades.tradeConfirmation),
+        .onWrite(documentListeners.tradeConfirmation),
     alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
     generateToken: functions
         .region(london)
