@@ -1,7 +1,6 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
-import IEXQuery from "@lib/iex"
-import { fetchJSON } from "@utils/helper"
+import { iexClient } from "@utils/helper"
 import Link from "next/link"
 import { logoUrl } from "@utils/helper"
 
@@ -15,15 +14,15 @@ export default function GroupColumn({ groupName }) {
   const [holdings, loading] = useCollectionDataOnce(holdingsRef)
 
   useEffect(() => {
-    holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery()
+    holdings?.map(async ({ tickerSymbol }) => {
+      const { latestPrice } = await iexClient.quote(tickerSymbol, {
+        filter: "latestPrice",
+      })
 
-      fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
-        setCurrentPrices((previousState) => ({
-          ...previousState,
-          [tickerSymbol]: value,
-        }))
-      )
+      setCurrentPrices((previousState) => ({
+        ...previousState,
+        [tickerSymbol]: latestPrice,
+      }))
     })
   }, [holdings])
 

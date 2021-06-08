@@ -56,9 +56,9 @@ const verifyContent = async (data, context) => {
         cost: 0,
         shares: 0,
         action: "",
-        // This will allow us to track whether the trade has already been submitted
-        // (until epheremal messages work). Also we can use a collectionGroup query
-        // to find the particular trade in question for each message.
+        // - This will allow us to track whether the trade has already been submitted
+        // - (until epheremal messages work). Also we can use a collectionGroup query
+        // - to find the particular trade in question for each message.
         messageId: "",
     };
     const optionalArgs = {

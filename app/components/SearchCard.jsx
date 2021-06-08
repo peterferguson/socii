@@ -5,20 +5,17 @@ import {
   connectSearchBox,
   Configure,
   connectStateResults,
-} from 'react-instantsearch-dom'
-import React, { useEffect, useState } from 'react'
-import algoliasearch from 'algoliasearch/lite'
-import SearchIcon from '@icons/search.svg'
-import LoadingIndicator from '@components/LoadingIndicator'
-import Link from 'next/link'
-import debounce from 'lodash/debounce'
-import { Dialog } from '@headlessui/react'
-import { useRouter } from 'next/router'
-import IEXQuery from '@lib/iex'
-import { useAsync } from 'react-async-hook'
-import { fetchJSON } from 'utils/helper'
-
-const iexClient = new IEXQuery()
+} from "react-instantsearch-dom"
+import React, { useEffect, useState } from "react"
+import algoliasearch from "algoliasearch/lite"
+import SearchIcon from "@icons/search.svg"
+import LoadingIndicator from "@components/LoadingIndicator"
+import Link from "next/link"
+import debounce from "lodash/debounce"
+import { Dialog } from "@headlessui/react"
+import { useRouter } from "next/router"
+import { useAsync } from "react-async-hook"
+import { iexClient } from "utils/helper"
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
@@ -44,7 +41,7 @@ const searchClient = {
 }
 
 const searchProps = {
-  indexName: 'tickers',
+  indexName: "tickers",
   searchClient,
   searchFunction: function (helper) {
     if (helper.state.query.length < 2) {
@@ -82,10 +79,10 @@ const Loading = connectStateResults(({ isSearchStalled }) => {
 const Hit = ({ hit }) => {
   const [loadingTicker, setLoadingTicker] = useState(false)
 
-  const latestPrice = useAsync(fetchJSON, [iexClient.stockPrice(hit.tickerSymbol)])
-  const changePct = useAsync(fetchJSON, [
-    iexClient.stockQuote(hit.tickerSymbol, 'changePercent'),
-  ])
+  const price = useAsync(
+    () => iexClient.quote(hit.tickerSymbol, { filter: "latestPrice,changePercent" }),
+    []
+  )
 
   const hitClickHandler = () => setLoadingTicker(!loadingTicker)
 
@@ -104,9 +101,9 @@ const Hit = ({ hit }) => {
         {loadingTicker && <Loading show={loadingTicker} className="z-50" />}
         <div className="flex pt-4">
           <h4 className="flex-1 text-xl text-gray-900">{hit.tickerSymbol}</h4>
-          {latestPrice.result ? (
+          {price.result ? (
             <p className="inline text-base text-right text-green-400">
-              $ {latestPrice.result}
+              $ {price.result?.latestPrice}
             </p>
           ) : (
             <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
@@ -114,9 +111,9 @@ const Hit = ({ hit }) => {
         </div>
         <div className="flex">
           <p className="flex-1 text-base text-gray-600">{hit.longName}</p>
-          {changePct.result ? (
-            <p className={'inline text-base text-right text-red-400'}>
-              {(100 * changePct.result).toFixed(2)}%
+          {price.result ? (
+            <p className={"inline text-base text-right text-red-400"}>
+              {(100 * price.result?.changePercent).toFixed(2)}%
             </p>
           ) : (
             <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />

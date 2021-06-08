@@ -28,9 +28,14 @@ export const storage = firebase.storage()
 export const firestore = firebase.firestore()
 export const functions = firebase.app().functions(londonRegion)
 
-// ! Testing purposes
-firestore.useEmulator("localhost", 8080)
-functions.useEmulator("localhost", 5001)
+if (
+  process.env.NODE_ENV === "development" &&
+  !firestore._delegate._settings.host?.includes("local")
+  // ! Stops NextJS hot reloading from re-executing this code
+) {
+  firestore.useEmulator("localhost", 8080)
+  functions.useEmulator("localhost", 5001)
+}
 
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider()

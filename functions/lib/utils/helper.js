@@ -7,7 +7,6 @@ const logger = require("firebase-functions").logger;
 const iexStockPrice = async (tickerSymbol) => {
     const getJSON = bent("json");
     const baseUrl = `https://cloud.iexapis.com/${process.env.IEX_API_VERSION}/stock/${tickerSymbol}/quote/latestPrice?token=${process.env.IEX_API_KEY}`;
-    logger.log(baseUrl);
     return await getJSON(baseUrl);
 };
 exports.iexStockPrice = iexStockPrice;

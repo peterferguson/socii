@@ -46,8 +46,12 @@ const tradeConfirmation = async (change, context) => {
     const { cashBalance, investorCount } = await groupRef.get();
     const ISIN = tradeData.assetRef.split("/")[-1];
     const latestPrice = await helper_js_1.iexStockPrice(tradeData.tickerSymbol);
-    logger.log(latestPrice);
-    logger.log(latestPrice - tradeData.price);
+    // TODO: Fix price checking
+    // ? The exchange rate will not be accounted for this way
+    // 1 Could use the assetRef/data/alphaVantage to get the currency then call another fx api
+    // 2 This would all need refactoring as there is some many apis called and in different places 
+    // 2 We could just put this all in the same firestore collection i.e. it is info we need so put it in the trade doc
+    // 2 i.e. both execution and assetCurrency should be there so we can call the fx api simply.
     if (tradeData.shares * latestPrice > cashBalance) {
         // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
         // - A small variation should be somewhat enforced on the client-side.

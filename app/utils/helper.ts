@@ -1,6 +1,6 @@
 import { tickerToISIN } from "@lib/firebase"
-import IEXQuery, { ChartRangeOption } from "@lib/iex"
 import { CurrencyCode } from "@lib/constants"
+import { Client } from "iexjs"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
@@ -94,22 +94,6 @@ export const alphaVantageData = async (tickerSymbol) => {
   }))
 }
 
-// ! EXPENSIVE
-export const iexChartTimeseries = async (
-  tickerSymbol: string,
-  range: ChartRangeOption = "1mm"
-) => {
-  const iexClient = new IEXQuery()
-  const data = await fetchJSON(iexClient.stockChart(tickerSymbol, range))
-
-  // * Return close for each date as timeseries
-  return data.map(({ close, date, volume }) => ({
-    close,
-    volume,
-    timestamp: new Date(date).getTime(),
-  }))
-}
-
 export function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -196,8 +180,6 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
       timestamp: parseInt(doc.id) * 1000,
     }))
   }
-  // ! EXPENSIVE
-  // timeseries = await iexChartTimeseries(tickerSymbol)
 
   return timeseries
 }
@@ -279,17 +261,30 @@ export const getTimeStamp = (channel) => {
 export function singleLineTemplateString(strings, ...values) {
   // Interweave the strings with the
   // substitution vars first.
-  let output = '';
+  let output = ""
   for (let i = 0; i < values.length; i++) {
-    output += strings[i] + values[i];
+    output += strings[i] + values[i]
   }
-  output += strings[values.length];
+  output += strings[values.length]
 
   // Split on newlines.
-  let lines = output.split(/(?:\r\n|\n|\r)/);
+  let lines = output.split(/(?:\r\n|\n|\r)/)
 
   // Rip out the leading whitespace.
-  return lines.map((line) => {
-    return line.replace(/^\s+/gm, '');
-  }).join(' ').trim();
+  return lines
+    .map((line) => {
+      return line.replace(/^\s+/gm, "")
+    })
+    .join(" ")
+    .trim()
 }
+
+export const iexClient = new Client({
+  api_token: process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY,
+  version: "stable",
+})
+
+export const iexPrice = (tickerSymbol: string) =>
+  iexClient.quote(tickerSymbol, { filter: "latestPrice" })
+export const iexPctChange = (tickerSymbol: string) =>
+  iexClient.quote(tickerSymbol, { filter: "changePercent" })

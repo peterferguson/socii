@@ -5,12 +5,10 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
 
-import { currencyConversion, fetchJSON, isBrowser, round } from "@utils/helper"
+import { currencyConversion, isBrowser, round, iexClient } from "@utils/helper"
 import { CurrencyCode } from "@lib/constants"
-import IEXQuery from "@lib/iex"
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
-const iexClient = new IEXQuery()
 
 export function useUserData() {
   const [user] = useAuthState(auth)
@@ -194,17 +192,18 @@ export function useTickerPriceData({ tickerSymbol }) {
     ticker: null,
   })
   useEffect(() => {
-    let stockPrice
-    let changePct
-
     const callIEX = async () => {
-      stockPrice = await fetchJSON(iexClient.stockPrice(tickerSymbol))
-      changePct = await fetchJSON(iexClient.stockQuote(tickerSymbol, "changePercent"))
+      const { latestPrice, changePercent } = await iexClient.quote(tickerSymbol, {
+        filter: "latestPrice,changePercent",
+      })
 
+      console.log(latestPrice);
+      console.log(changePercent);
+      
       dispatch({
         type: "UPDATE_PRICE",
-        price: stockPrice,
-        priceChange: changePct,
+        price: latestPrice,
+        priceChange: changePercent,
         priceLastUpdated: new Date().toLocaleString(),
       })
     }
@@ -219,7 +218,7 @@ export function useTickerPriceData({ tickerSymbol }) {
         .limit(1)
       const tickerDoc = await (await tickerQuery.get()).docs?.[0]
       const ISIN = tickerDoc.ref.path.split("/")[1]
-      const ticker = {...tickerDoc.data(), ISIN}
+      const ticker = { ...tickerDoc.data(), ISIN }
       dispatch({ type: "UPDATE_TICKER", ticker })
       dispatch({
         type: "UPDATE_ASSET_CURRENCY",

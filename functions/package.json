@@ -20,6 +20,7 @@
     "bent": "^7.3.12",
     "firebase-admin": "^9.2.0",
     "firebase-functions": "^3.11.0",
+    "iexjs": "^0.3.0",
     "mml-react": "^0.4.0",
     "react-icons": "^4.2.0",
     "stream-chat": "^3.1.4"
