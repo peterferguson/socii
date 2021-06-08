@@ -37,19 +37,25 @@ const tradeConfirmation = async (change, context) => {
     // - document at groups/{groupName}/trades/{messageId}
     const { groupName, messageId } = context.params;
     const tradeData = change.after.data();
+    logger.log(tradeData);
     if (tradeData.executed)
         return; // - do nothing
     // - Data to update the state of the trade on completion of function
     // - Should also stop infinite loops
     const tradeUpdateData = { executed: true };
     const groupRef = await index_js_1.firestore.collection("groups").doc(groupName);
-    const { cashBalance, investorCount } = await groupRef.get();
-    const ISIN = tradeData.assetRef.split("/")[-1];
-    const latestPrice = await helper_js_1.iexStockPrice(tradeData.tickerSymbol);
+    let { cashBalance, investorCount } = (await groupRef.get()).data();
+    // ! TESTING
+    investorCount = investorCount || 1;
+    const ISIN = tradeData.assetRef.split("/").pop();
+    tradeData.assetRef = index_js_1.firestore.doc(tradeData.assetRef);
+    const { latestPrice } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
+        filter: "latestPrice",
+    });
     // TODO: Fix price checking
     // ? The exchange rate will not be accounted for this way
     // 1 Could use the assetRef/data/alphaVantage to get the currency then call another fx api
-    // 2 This would all need refactoring as there is some many apis called and in different places 
+    // 2 This would all need refactoring as there is some many apis called and in different places
     // 2 We could just put this all in the same firestore collection i.e. it is info we need so put it in the trade doc
     // 2 i.e. both execution and assetCurrency should be there so we can call the fx api simply.
     if (tradeData.shares * latestPrice > cashBalance) {
@@ -79,10 +85,10 @@ const tradeConfirmation = async (change, context) => {
     else {
         tradeData.price = latestPrice;
     }
-    if (tradeData.agreesToTrade.length === investorCount - 1) {
+    if (investorCount == 1 || tradeData.agreesToTrade.length === investorCount - 1) {
         // ! Execute Trade
         // 1. Batch update holdings
-        const holdingDocRef = index_js_1.firestore.collection(`${groupRef}/holdings`).doc(ISIN);
+        const holdingDocRef = index_js_1.firestore.collection(`groups/${groupName}/holdings`).doc(ISIN);
         const { type, holdingData, pnlPercentage } = await upsertHolding({
             holdingDocRef,
             tradeData,
@@ -102,8 +108,7 @@ const tradeConfirmation = async (change, context) => {
                 return;
         }
         // 2. send a message with the finalised price
-        const streamClient = helper_js_1.StreamChatClient();
-        const channel = streamClient.channel("messaging", groupName);
+        const channel = helper_js_1.streamClient.channel("messaging", groupName);
         await channel.sendMessage(investmentReceiptMML(tradeData));
     }
     return change.after.ref.update(tradeUpdateData);
@@ -112,6 +117,7 @@ const tradeConfirmation = async (change, context) => {
  * Helper Functions
  */
 const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
+    logger.log(tradeData);
     const { orderType, shares, price, assetRef, tickerSymbol, shortName } = tradeData;
     const negativeEquityMultiplier = orderType.toLowerCase().includes("buy") ? 1 : -1;
     // - Assumptions:
@@ -122,10 +128,10 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
     // * Check if the holding already exists
     const holding = await holdingDocRef.get();
     const outputData = { type: "", holdingData: {}, pnlPercentage: {} };
-    // - Trade already exists in holding ... do nothing
-    if (holding.trades.includes(messageId))
-        return outputData;
     if (holding.exists) {
+        // - Trade already exists in holding ... do nothing
+        if (holding.trades.includes(messageId))
+            return outputData;
         const currentShares = holding.get("shares");
         const currentAvgPrice = holding.get("avgPrice");
         const newAvgPrice = negativeEquityMultiplier + 1

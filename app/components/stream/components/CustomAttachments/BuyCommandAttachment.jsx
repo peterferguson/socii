@@ -85,7 +85,10 @@ const BuyCommandAttachment = ({ attachment }) => {
                 assetRef: `tickers/${tickerState.ticker.ISIN}`,
                 orderType: "BUY",
                 messageId: message.id,
-                action: "buy",
+                action: "buy", //TODO: Review redundancy with orderType (may not be with limit orders)
+                executionCurrency: localCurrency,
+                assetCurrency: tickerState.assetCurrency,
+                price: tickerState.price,
                 ...actions, // TODO: NEED TO ENSURE THESE ARE NOT NULL
               })
             }

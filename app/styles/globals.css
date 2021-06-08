@@ -175,7 +175,7 @@
 }
 
 .str-chat-channel.messaging .str-chat__main-panel {
-  padding: 25px 5px 0px 5px;
+  background-color: rgb(249, 250, 251);
 }
 
 .str-chat {
@@ -198,14 +198,18 @@
   max-height: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 0px; }
+  padding-top: 0px;
+}
 
-  .messaging.str-chat .str-chat__thread .str-chat__gallery {
-    justify-content: flex-end;
-    border-radius: 0; }
-    .messaging.str-chat .str-chat__thread .str-chat__gallery-image, .messaging.str-chat .str-chat__thread .str-chat__gallery-placeholder {
-      width: 100px;
-      height: 100px; }
+.messaging.str-chat .str-chat__thread .str-chat__gallery {
+  justify-content: flex-end;
+  border-radius: 0;
+}
+.messaging.str-chat .str-chat__thread .str-chat__gallery-image,
+.messaging.str-chat .str-chat__thread .str-chat__gallery-placeholder {
+  width: 100px;
+  height: 100px;
+}
 
 .str-chat__thread {
   margin: 25px 5px 0px;
@@ -256,4 +260,3 @@ a {
   -ms-user-select: text;
   user-select: text;
 }
-

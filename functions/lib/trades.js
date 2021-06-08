@@ -16,30 +16,31 @@ const helper_js_1 = require("./utils/helper.js");
 */
 const tradeSubmission = async (data, context) => {
     verifyUser(context);
-    const { cost, ...verifiedData } = await verifyContent(data, context);
-    const price = cost;
+    const verifiedData = await verifyContent(data, context);
     const { messageId } = data;
     // * Create trade document
+    const groupRef = await index_js_1.firestore.collection("groups").doc(verifiedData.groupName);
+    const { investorCount } = (await groupRef.get()).data();
     const tradeRef = await index_js_1.firestore
         .collection(`groups/${verifiedData.groupName}/trades`)
         .doc(messageId);
     // * Store initial trade data
     tradeRef.set({
         ...verifiedData,
-        price,
         agreesToTrade: [verifiedData.executorRef],
         timestamp: index_js_1.serverTimestamp(),
     });
-    // * Send confirmation message into chat
-    const message = confirmInvestmentMML({
-        ...verifiedData,
-        cost,
-        parent_id: messageId,
-        show_in_channel: false,
-    });
-    const streamClient = helper_js_1.StreamChatClient();
-    const channel = streamClient.channel("messaging", data.groupName.split(" ").join("-"));
-    return await channel.sendMessage(message);
+    if (investorCount > 1) {
+        // * Send confirmation message into chat
+        const message = confirmInvestmentMML({
+            ...verifiedData,
+            cost: verifiedData.price,
+            parent_id: messageId,
+            show_in_channel: false,
+        });
+        const channel = helper_js_1.streamClient.channel("messaging", data.groupName.split(" ").join("-"));
+        return await channel.sendMessage(message);
+    }
 };
 const verifyUser = (context) => {
     // * Checking that the user is authenticated.
@@ -54,6 +55,7 @@ const verifyContent = async (data, context) => {
         assetRef: "",
         orderType: "",
         cost: 0,
+        price: 0,
         shares: 0,
         action: "",
         // - This will allow us to track whether the trade has already been submitted
@@ -66,6 +68,7 @@ const verifyContent = async (data, context) => {
         shortName: "",
         tickerSymbol: "",
         executionCurrency: "GBP",
+        assetCurrency: "USD",
         executorRef: `users/${context.auth.uid}`,
     };
     // * Check for default args and assign them if they exist

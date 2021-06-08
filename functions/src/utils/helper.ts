@@ -1,12 +1,5 @@
 const StreamChat = require("stream-chat").StreamChat
-const bent = require("bent")
-const logger = require("firebase-functions").logger
-
-export const iexStockPrice = async (tickerSymbol) => {
-  const getJSON = bent("json")
-  const baseUrl = `https://cloud.iexapis.com/${process.env.IEX_API_VERSION}/stock/${tickerSymbol}/quote/latestPrice?token=${process.env.IEX_API_KEY}`
-  return await getJSON(baseUrl)
-}
+const { Client } = require("iexjs")
 
 export function singleLineTemplateString(strings, ...values) {
   let output = ""
@@ -27,5 +20,9 @@ export function singleLineTemplateString(strings, ...values) {
     .trim()
 }
 
-export const StreamChatClient = () =>
-  new StreamChat(process.env.STREAM_API_KEY, process.env.STREAM_API_SECRET)
+export const streamClient = new StreamChat(
+  process.env.STREAM_API_KEY,
+  process.env.STREAM_API_SECRET
+)
+
+export const iexClient = new Client({ version: process.env.IEX_API_VERSION })

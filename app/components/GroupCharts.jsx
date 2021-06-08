@@ -4,14 +4,14 @@ import { iexClient } from "@utils/helper"
 import Link from "next/link"
 import { logoUrl } from "@utils/helper"
 
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
+import { useCollectionData } from "react-firebase-hooks/firestore"
 import React, { useState, useEffect } from "react"
 
 export default function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([])
   const holdingsRef = firestore.collection(`groups/${groupName}/holdings`)
 
-  const [holdings, loading] = useCollectionDataOnce(holdingsRef)
+  const [holdings, loading] = useCollectionData(holdingsRef)
 
   useEffect(() => {
     holdings?.map(async ({ tickerSymbol }) => {

@@ -197,9 +197,6 @@ export function useTickerPriceData({ tickerSymbol }) {
         filter: "latestPrice,changePercent",
       })
 
-      console.log(latestPrice);
-      console.log(changePercent);
-      
       dispatch({
         type: "UPDATE_PRICE",
         price: latestPrice,

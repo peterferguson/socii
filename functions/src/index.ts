@@ -10,7 +10,7 @@ admin.initializeApp(adminConfig)
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
-process.env.IEX_API_KEY = functions.config().iex.api_key
+process.env.IEX_TOKEN = functions.config().iex.api_key
 const london = "europe-west2"
 
 // * Exportable utils

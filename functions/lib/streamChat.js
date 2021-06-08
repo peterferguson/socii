@@ -8,14 +8,12 @@ const generateToken = async (snap, context) => {
     const { username } = snap.data();
     const uid = context.params.userId;
     logger_1.log(`Creating a Stream User Token for ${username}`);
-    const streamClient = helper_js_1.StreamChatClient();
     const tokenDocRef = index_1.firestore.collection(`users/${uid}/stream`).doc(uid);
-    tokenDocRef.set({ token: streamClient.createToken(username) });
+    tokenDocRef.set({ token: helper_js_1.streamClient.createToken(username) });
 };
 const createGroup = async (data, context) => {
     const admin = { id: "admin" };
-    const streamClient = helper_js_1.StreamChatClient();
-    const channel = streamClient.channel("messaging", data.groupName, {
+    const channel = helper_js_1.streamClient.channel("messaging", data.groupName, {
         name: `${data.groupName} Group Chat`,
         created_by: admin,
     });

@@ -1,15 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StreamChatClient = exports.singleLineTemplateString = exports.iexStockPrice = void 0;
+exports.iexClient = exports.streamClient = exports.singleLineTemplateString = void 0;
 const StreamChat = require("stream-chat").StreamChat;
-const bent = require("bent");
-const logger = require("firebase-functions").logger;
-const iexStockPrice = async (tickerSymbol) => {
-    const getJSON = bent("json");
-    const baseUrl = `https://cloud.iexapis.com/${process.env.IEX_API_VERSION}/stock/${tickerSymbol}/quote/latestPrice?token=${process.env.IEX_API_KEY}`;
-    return await getJSON(baseUrl);
-};
-exports.iexStockPrice = iexStockPrice;
+const { Client } = require("iexjs");
 function singleLineTemplateString(strings, ...values) {
     let output = "";
     for (let i = 0; i < values.length; i++) {
@@ -27,6 +20,6 @@ function singleLineTemplateString(strings, ...values) {
         .trim();
 }
 exports.singleLineTemplateString = singleLineTemplateString;
-const StreamChatClient = () => new StreamChat(process.env.STREAM_API_KEY, process.env.STREAM_API_SECRET);
-exports.StreamChatClient = StreamChatClient;
+exports.streamClient = new StreamChat(process.env.STREAM_API_KEY, process.env.STREAM_API_SECRET);
+exports.iexClient = new Client({ version: process.env.IEX_API_VERSION });
 //# sourceMappingURL=helper.js.map

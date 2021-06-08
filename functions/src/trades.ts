@@ -1,7 +1,7 @@
 const logger = require("firebase-functions").logger
 
 import { firestore, serverTimestamp, HttpsError } from "./index.js"
-import { singleLineTemplateString, StreamChatClient } from "./utils/helper.js"
+import { singleLineTemplateString, streamClient } from "./utils/helper.js"
 
 /*
 - tradeSubmission
@@ -16,11 +16,14 @@ import { singleLineTemplateString, StreamChatClient } from "./utils/helper.js"
 */
 const tradeSubmission = async (data, context) => {
   verifyUser(context)
-  const { cost, ...verifiedData } = await verifyContent(data, context)
-  const price = cost
+  const verifiedData = await verifyContent(data, context)
   const { messageId } = data
 
   // * Create trade document
+  const groupRef = await firestore.collection("groups").doc(verifiedData.groupName)
+
+  const { investorCount } = (await groupRef.get()).data()
+
   const tradeRef = await firestore
     .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
@@ -28,22 +31,24 @@ const tradeSubmission = async (data, context) => {
   // * Store initial trade data
   tradeRef.set({
     ...verifiedData,
-    price,
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
   })
 
-  // * Send confirmation message into chat
-  const message = confirmInvestmentMML({
-    ...verifiedData,
-    cost,
-    parent_id: messageId,
-    show_in_channel: false,
-  })
-
-  const streamClient = StreamChatClient()
-  const channel = streamClient.channel("messaging", data.groupName.split(" ").join("-"))
-  return await channel.sendMessage(message)
+  if (investorCount > 1) {
+    // * Send confirmation message into chat
+    const message = confirmInvestmentMML({
+      ...verifiedData,
+      cost: verifiedData.price, //TODO: Review the usage of cost and price here
+      parent_id: messageId,
+      show_in_channel: false,
+    })
+    const channel = streamClient.channel(
+      "messaging",
+      data.groupName.split(" ").join("-")
+    )
+    return await channel.sendMessage(message)
+  }
 }
 
 const verifyUser = (context) => {
@@ -63,6 +68,7 @@ const verifyContent = async (data, context) => {
     assetRef: "",
     orderType: "",
     cost: 0,
+    price: 0,
     shares: 0,
     action: "",
     // - This will allow us to track whether the trade has already been submitted
@@ -76,6 +82,7 @@ const verifyContent = async (data, context) => {
     shortName: "",
     tickerSymbol: "",
     executionCurrency: "GBP",
+    assetCurrency: "USD",
     executorRef: `users/${context.auth.uid}`,
   }
 

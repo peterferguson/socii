@@ -23,10 +23,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-      <LogoPriceCardHeader
-        tickerSymbol={attachment?.tickerSymbol?.toUpperCase()}
-        tickerState={tickerState}
-      />
+      <LogoPriceCardHeader tickerSymbol={attachment?.tickerSymbol?.toUpperCase()} />
     </div>
   )
 }
