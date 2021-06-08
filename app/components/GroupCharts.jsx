@@ -1,6 +1,6 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
-import { iexClient } from "@utils/helper"
+import { iexClient, round } from "@utils/helper"
 import Link from "next/link"
 import { logoUrl } from "@utils/helper"
 
@@ -107,8 +107,10 @@ export function GroupPieCard({
 
 function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
   const tickerSymbol = holding.tickerSymbol
-
+  
+  console.log(holding.avgPrice);
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
+  console.log(pnl);
 
   return (
     <div className="flex h-auto m-1">
@@ -124,12 +126,12 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
                 />
               </a>
               <a>
-                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
+                <div className="w-20 overflow-hidden font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
                   {holding.shortName}
                 </div>
               </a>
               <a>
-                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
+                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
                   {tickerSymbol}
                 </div>
               </a>
@@ -140,7 +142,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
         <div className="flex flex-col items-center justify-center w-20 mr-4">
           <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">
             {latestPrice ? (
-              `${holding.shares} Shares`
+              `${round(holding.shares, 4)} Shares`
             ) : (
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}

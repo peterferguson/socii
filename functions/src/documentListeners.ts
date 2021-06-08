@@ -9,7 +9,7 @@ import { singleLineTemplateString, iexClient, streamClient } from "./utils/helpe
 
 // TODO: Update the function to gather the document ref of the document listener
 
-/**
+/*
  * Increment the investorCount value on a group when a new investor is added to the investors collection
  * Usage as follows:
  *
@@ -111,10 +111,12 @@ const tradeConfirmation = async (change, context) => {
     switch (type) {
       case "update":
         holdingDocRef.update(holdingData)
+        groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
         if (pnlPercentage) tradeUpdateData["pnlPercentage"] = pnlPercentage
         break
       case "set":
         holdingDocRef.set(holdingData)
+        groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
         break
       default:
         // - Secondary execution check (this time on the holding doc) ... do nothing
@@ -151,6 +153,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
   if (holding.exists) {
     // - Trade already exists in holding ... do nothing
     if (holding.trades.includes(messageId)) return outputData
+
     const currentShares = holding.get("shares")
     const currentAvgPrice = holding.get("avgPrice")
     const newAvgPrice =
@@ -178,7 +181,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
       tickerSymbol,
       shortName,
       trades: [messageId],
-      avgPrice: price / shares,
+      avgPrice: price,
       shares: increment(sharesIncrement),
       lastUpdated: serverTimestamp(),
     }

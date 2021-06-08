@@ -89,7 +89,9 @@ const BuyCommandAttachment = ({ attachment }) => {
                 executionCurrency: localCurrency,
                 assetCurrency: tickerState.assetCurrency,
                 price: tickerState.price,
-                ...actions, // TODO: NEED TO ENSURE THESE ARE NOT NULL
+                cost: parseFloat(actions.cost),
+                shares: parseFloat(actions.shares),
+                // TODO: NEED TO ENSURE THESE ARE NOT NULL
               })
             }
           }}

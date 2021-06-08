@@ -7,7 +7,7 @@ const helper_js_1 = require("./utils/helper.js");
 // ! a count in firestore. Returns a funtion that can be used in conjunction with a
 // ! document triggered cloud function.
 // TODO: Update the function to gather the document ref of the document listener
-/**
+/*
  * Increment the investorCount value on a group when a new investor is added to the investors collection
  * Usage as follows:
  *
@@ -37,7 +37,6 @@ const tradeConfirmation = async (change, context) => {
     // - document at groups/{groupName}/trades/{messageId}
     const { groupName, messageId } = context.params;
     const tradeData = change.after.data();
-    logger.log(tradeData);
     if (tradeData.executed)
         return; // - do nothing
     // - Data to update the state of the trade on completion of function
@@ -97,11 +96,13 @@ const tradeConfirmation = async (change, context) => {
         switch (type) {
             case "update":
                 holdingDocRef.update(holdingData);
+                groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice });
                 if (pnlPercentage)
                     tradeUpdateData["pnlPercentage"] = pnlPercentage;
                 break;
             case "set":
                 holdingDocRef.set(holdingData);
+                groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice });
                 break;
             default:
                 // - Secondary execution check (this time on the holding doc) ... do nothing
@@ -117,7 +118,6 @@ const tradeConfirmation = async (change, context) => {
  * Helper Functions
  */
 const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
-    logger.log(tradeData);
     const { orderType, shares, price, assetRef, tickerSymbol, shortName } = tradeData;
     const negativeEquityMultiplier = orderType.toLowerCase().includes("buy") ? 1 : -1;
     // - Assumptions:
@@ -156,7 +156,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
             tickerSymbol,
             shortName,
             trades: [messageId],
-            avgPrice: price / shares,
+            avgPrice: price,
             shares: index_js_1.increment(sharesIncrement),
             lastUpdated: index_js_1.serverTimestamp(),
         };

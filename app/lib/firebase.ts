@@ -30,7 +30,7 @@ export const functions = firebase.app().functions(londonRegion)
 
 if (
   process.env.NODE_ENV === "development" &&
-  !firestore._delegate._settings.host?.includes("local")
+  !firestore?._delegate._settings.host?.includes("local")
   // ! Stops NextJS hot reloading from re-executing this code
 ) {
   firestore.useEmulator("localhost", 8080)
