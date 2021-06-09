@@ -1,4 +1,4 @@
-import { buy } from "./mml/buy"
+import { buy, sell } from "./mml/trades"
 const StreamChat = require("stream-chat").StreamChat
 
 
@@ -12,6 +12,7 @@ const handleCommand = async (req, res) => {
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
+  // ! Removing for testing & possible deletion if we move to a in-house command setup
   //   // Important: validate that the request came from Stream
   //   const valid = streamClient.verifyWebhook(req.body, req.headers["x-signature"])
   //   if (!valid) {
@@ -22,15 +23,21 @@ const handleCommand = async (req, res) => {
   //     return
   //   }
 
+  const streamClient = new StreamChat(
+    process.env.STREAM_API_KEY,
+    process.env.STREAM_API_SECRET
+  )
+  const payload = typeof body === "string" ? JSON.parse(body) : body
+  
+
   switch (type) {
     case "buy":
-      const streamClient = new StreamChat(
-        process.env.STREAM_API_KEY,
-        process.env.STREAM_API_SECRET
-      )
-      const payload = typeof body === "string" ? JSON.parse(body) : body
       const buy_response = await buy(streamClient, payload)
       res.status(200).end(`${type} command executed: ${JSON.stringify(buy_response)}`)
+      break
+    case "sell":
+      const sell_response = await sell(streamClient, payload)
+      res.status(200).end(`${type} command executed: ${JSON.stringify(sell_response)}`)
       break
     default:
       res.status(400).end(`Please send a correct command type`)

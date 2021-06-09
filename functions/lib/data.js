@@ -74,7 +74,7 @@ const alphaVantageQuery = async (data, context) => {
     }
     else {
         const response = await alphaVantageSummary(data.tickerSymbol);
-        const exchange = response === null || response === void 0 ? void 0 : response.Exchange;
+        const exchange = response.Exchange || "";
         const cleanResponse = cleanJsonResponse(response);
         // * Store result in firestore
         const batch = index_js_1.firestore.batch();

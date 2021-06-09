@@ -1,9 +1,8 @@
 import { Attachment } from "stream-chat-react"
 import {
   StockDisplayAttachment,
-  SellCommandAttachment,
   InvestmentReceiptAttachment,
-  BuyCommandAttachment,
+  TradeCommandAttachment,
   InvestCommandAttachment,
   InvestmentConfirmationAttachment,
 } from "./CustomAttachments"
@@ -23,9 +22,9 @@ export default function CustomAttachment(props) {
     case "invest":
       return <InvestCommandAttachment attachment={attachment} />
     case "buy":
-      return <BuyCommandAttachment attachment={attachment} />
+      return <TradeCommandAttachment attachment={attachment} type={"buy"} />
     case "sell":
-      return <SellCommandAttachment attachment={attachment} />
+      return <TradeCommandAttachment attachment={attachment} type={"sell"} />
     default:
       break
   }

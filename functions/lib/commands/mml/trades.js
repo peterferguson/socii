@@ -90,4 +90,4 @@ const updateMessage = (message, newAttrs) => {
     const { latest_reactions, own_reactions, reply_count, type, ...msg } = message;
     return { ...msg, ...newAttrs };
 };
-//# sourceMappingURL=buy.js.map
+//# sourceMappingURL=trades.js.map

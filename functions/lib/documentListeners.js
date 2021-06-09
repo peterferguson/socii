@@ -48,15 +48,19 @@ const tradeConfirmation = async (change, context) => {
     investorCount = investorCount || 1;
     const ISIN = tradeData.assetRef.split("/").pop();
     tradeData.assetRef = index_js_1.firestore.doc(tradeData.assetRef);
-    const { latestPrice } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
-        filter: "latestPrice",
+    const { latestPrice, isUSMarketOpen } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
+        filter: "latestPrice,isUSMarketOpen",
     });
+    // - do nothing if market is closed
+    if (!isUSMarketOpen) {
+        // 2. send a message with the finalised price
+        const channel = helper_js_1.streamClient.channel("messaging", groupName);
+        await channel.sendMessage(await marketClosedMessage(tradeData.assetRef));
+        return;
+    }
     // TODO: Fix price checking
-    // ? The exchange rate will not be accounted for this way
-    // 1 Could use the assetRef/data/alphaVantage to get the currency then call another fx api
-    // 2 This would all need refactoring as there is some many apis called and in different places
-    // 2 We could just put this all in the same firestore collection i.e. it is info we need so put it in the trade doc
-    // 2 i.e. both execution and assetCurrency should be there so we can call the fx api simply.
+    // ! Now asset price & currency is available along with cost & execution currency this should be simple
+    // ! As stated below I think this should be a client-side check though
     if (tradeData.shares * latestPrice > cashBalance) {
         // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
         // - A small variation should be somewhat enforced on the client-side.
@@ -168,7 +172,8 @@ const investmentReceiptMML = (tradeData) => {
     const mmlmessage = {
         user_id: "socii",
         text: helper_js_1.singleLineTemplateString `
-    ${tradeData.shares} shares of $${tradeData.tickerSymbol} purchased for ${tradeData.price} per share.
+    ${tradeData.shares} shares of $${tradeData.tickerSymbol} purchased for ${helper_js_1.currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
+    For a cost of ${helper_js_1.currencySymbols[tradeData.executionCurrency]}${tradeData.cost}
     `,
         attachments: [
             {
@@ -179,6 +184,15 @@ const investmentReceiptMML = (tradeData) => {
         ],
     };
     return mmlmessage;
+};
+const marketClosedMessage = async (assetRef) => {
+    const assetData = await (await assetRef.get()).data();
+    return {
+        user_id: "socii",
+        text: helper_js_1.singleLineTemplateString `
+    Sorry the ${assetData.exchange} is not currently open!
+    `,
+    };
 };
 module.exports = { incrementInvestors, tradeConfirmation };
 //# sourceMappingURL=documentListeners.js.map

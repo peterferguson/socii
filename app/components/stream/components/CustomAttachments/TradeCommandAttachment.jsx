@@ -37,10 +37,10 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const BuyCommandAttachment = ({ attachment }) => {
+const TradeCommandAttachment = ({ attachment, type }) => {
   const { username } = useContext(UserContext)
   const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol?.toUpperCase() || "SPOT",
+    tickerSymbol: attachment?.tickerSymbol?.toUpperCase(),
   })
   const [localCurrency] = useLocalCurrency()
   const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
@@ -53,16 +53,21 @@ const BuyCommandAttachment = ({ attachment }) => {
   const groupName = channel.cid.split(":").pop()
 
   // TODO: Add different views of the buy card for users who did not submit it
-  const converters = {
-    buy: (tag) => (
-      <BuyMMLConverter
-        {...tag.node.attributes}
-        tagKey={tag.key}
-        localCostPerShare={localCostPerShare}
-        localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
-      />
-    ),
-  }
+  // - Creates a object of all actions and their CustomMMLConverterFunctions
+  const converters = Object.assign(
+    {},
+    ...["buy", "sell"].map((type) => ({
+      [type]: (tag) => (
+        <TradeMMLConverter
+          {...tag.node.attributes}
+          tagKey={tag.key}
+          localCostPerShare={localCostPerShare}
+          localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
+          tradeType={type}
+        />
+      ),
+    }))
+  )
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
@@ -75,24 +80,29 @@ const BuyCommandAttachment = ({ attachment }) => {
           converters={converters}
           source={attachment.mml}
           onSubmit={(data) => {
-            const { buy, cancel, ...actions } = data // - remove buy & cancel
+            const { buy, sell, cancel, ...actions } = data // - remove buy, sell & cancel
 
+            const tradeArgs = {
+              username,
+              groupName,
+              assetRef: `tickers/${tickerState.ticker.ISIN}`,
+              messageId: message.id,
+              executionCurrency: localCurrency,
+              assetCurrency: tickerState.assetCurrency,
+              // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
+              price: tickerState.price,
+              cost: parseFloat(actions.cost),
+              shares: parseFloat(actions.shares),
+              // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
+            }
+
+            //TODO: Review redundancy with orderType (may not be with limit orders)
+            // - Write to firestore & send confirmation message in thread
             if ("buy" in data) {
-              // - Write to firestore & send confirmation message in thread
-              tradeSubmission({
-                username,
-                groupName,
-                assetRef: `tickers/${tickerState.ticker.ISIN}`,
-                orderType: "BUY",
-                messageId: message.id,
-                action: "buy", //TODO: Review redundancy with orderType (may not be with limit orders)
-                executionCurrency: localCurrency,
-                assetCurrency: tickerState.assetCurrency,
-                price: tickerState.price,
-                cost: parseFloat(actions.cost),
-                shares: parseFloat(actions.shares),
-                // TODO: NEED TO ENSURE THESE ARE NOT NULL
-              })
+              tradeSubmission({ ...tradeArgs, orderType: "BUY", action: "buy" })
+            }
+            if ("sell" in data) {
+              tradeSubmission({ ...tradeArgs, orderType: "SELL", action: "sell" })
             }
           }}
           Loading={LoadingIndicator}
@@ -102,9 +112,11 @@ const BuyCommandAttachment = ({ attachment }) => {
   )
 }
 
-/* Converters */
+/*
+ * CustomMMLConverterFunctions
+ */
 
-const BuyMMLConverter = ({ tagKey, localCostPerShare, localCurrency }) => {
+const TradeMMLConverter = ({ tagKey, localCostPerShare, localCurrency, tradeType }) => {
   const [shares, handleChange, toCost] = useShareCost(localCostPerShare)
 
   return (
@@ -130,10 +142,10 @@ const BuyMMLConverter = ({ tagKey, localCostPerShare, localCurrency }) => {
           text="Cancel"
         />
         <MMLButton
-          key={`buy-button`}
-          name="buy"
+          key={`${tradeType}-button`}
+          name={tradeType}
           className="flex-grow mx-2 outline-btn btn-transition"
-          text="Buy"
+          text={tradeType.charAt(0).toUpperCase() + tradeType.slice(1)}
         />
       </div>
     </div>
@@ -166,4 +178,4 @@ const MMLNumberInput = ({ tagKey, value, onChange, name, currencyIcon = null }) 
   )
 }
 
-export default BuyCommandAttachment
+export default TradeCommandAttachment

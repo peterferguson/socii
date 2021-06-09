@@ -26,3 +26,13 @@ export const streamClient = new StreamChat(
 )
 
 export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
+
+export const currencySymbols = {
+  AUD: "$",
+  CAD: "$",
+  CHF: "CHF",
+  EUR: "€",
+  GBP: "£",
+  JPY: "¥",
+  USD: "$",
+}

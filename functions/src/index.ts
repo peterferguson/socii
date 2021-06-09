@@ -26,30 +26,37 @@ const commands = require("./commands/index.js")
 const algoliaSearch = require("./algoliaSearch.js")
 const trades = require("./trades.js")
 const data = require("./data.js")
-const documentListeners = require("./documentListeners.js")
+const databaseOperations = require("./databaseOperations.js")
 
 module.exports = {
-  tradeSubmission: functions.region(london).https.onCall(trades.tradeSubmission),
+  // 1 Document Listeners
   tradeConfirmation: functions
     .region(london)
     .firestore.document("groups/{groupName}/trades/{messageId}")
-    .onWrite(documentListeners.tradeConfirmation),
-  alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
+    .onWrite(trades.tradeConfirmation),
   generateToken: functions
     .region(london)
     .firestore.document("users/{userId}")
     .onCreate(streamChat.generateToken),
-  createGroup: functions.region(london).https.onCall(streamChat.createGroup),
-  loadTickersToAlgolia: functions
+  createGroup: functions
     .region(london)
-    .https.onRequest(algoliaSearch.loadTickersToAlgolia),
+    .firestore.document("groups/{groupName}")
+    .onWrite(streamChat.createGroup),
   incrementInvestors: functions
     .region(london)
     .firestore.document("groups/{groupName}/investors/{investorUsername}")
-    .onWrite(documentListeners.incrementInvestors),
+    .onWrite(databaseOperations.incrementInvestors),
   onTickerCreated: functions
     .region(london)
     .firestore.document("ticker/{isin}")
     .onCreate(algoliaSearch.onTickerCreated),
+  // 2 HTTPS Triggers
+  // 2.1 onRequest
+  loadTickersToAlgolia: functions // TODO: Convert to use new firebase extension
+    .region(london)
+    .https.onRequest(algoliaSearch.loadTickersToAlgolia),
   commands: functions.region(london).https.onRequest(commands.handleCommand),
+  // 2.2 onCall
+  alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
+  tradeSubmission: functions.region(london).https.onCall(trades.tradeSubmission),
 }
