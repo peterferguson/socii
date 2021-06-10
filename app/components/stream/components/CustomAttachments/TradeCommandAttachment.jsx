@@ -38,20 +38,22 @@ const TradeCommandAttachment = ({ attachment, type, exchangeRate, localCurrency 
   const tickerSymbol = attachment?.tickerSymbol?.toUpperCase()
   const tickerData = getTickerData(tickerSymbol)
   const [priceExpired, setPriceExpired] = useState(false)
-  const [shouldRefresh, setShouldRefresh] = useState(true)
+  const [refreshs, setRefreshs] = useState(0)
 
   const price = useTickerPrice(tickerSymbol, priceExpired, setPriceExpired)
   // TODO: Need to implement cache clearing or the price will never update
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
 
+  const refreshCountThreshold = 10
   const refreshTime = 20000
   useInterval(
     () => {
       const expired = (updateTime) => new Date() - Date.parse(updateTime) >= refreshTime
       setPriceExpired(expired(price?.priceLastUpdated))
+      setRefreshs(refreshs + 1)
     },
-    // Delay in milliseconds or null to stop it
-    shouldRefresh ? refreshTime : null
+    // refreshTime in milliseconds stopped after 10 refreshs
+    refreshs < refreshCountThreshold ? refreshTime : null
   )
 
   const ticker = { ...tickerData, ...price }
