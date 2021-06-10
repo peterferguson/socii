@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sell = exports.buy = exports.tradeMML = void 0;
+const firebase_functions_1 = require("firebase-functions");
 const tradeMML = ({ username, tickerSymbol, tradeType }) => {
     const mmlstring = `<mml type="card"><${tradeType}></${tradeType}></mml>`;
     const mmlmessage = {
@@ -36,13 +37,14 @@ exports.tradeMML = tradeMML;
  * COMMANDS
  */
 const trade = (tradeType) => async (client, body) => {
-    var _a, _b;
-    const channelID = (_a = body.cid) === null || _a === void 0 ? void 0 : _a.split(":")[1];
+    var _a, _b, _c;
+    firebase_functions_1.logger.log(`Executing a ${tradeType} trade with body: ${JSON.stringify(body)}`);
+    const channelID = ((_a = body.cid) === null || _a === void 0 ? void 0 : _a.split(":").pop()) || ((_b = body.message.cid) === null || _b === void 0 ? void 0 : _b.split(":").pop());
     const channel = client.channel("messaging", channelID);
     const username = body.user.id;
     // * the body of the message will be modified based on user interactions
     let message = body.message;
-    const args = (_b = message.args) === null || _b === void 0 ? void 0 : _b.split(" ").map((str) => str.trim());
+    const args = (_c = message.args) === null || _c === void 0 ? void 0 : _c.split(" ").map((str) => str.trim());
     // * form_data will only be present once the user starts interacting
     const formData = body.form_data || {};
     const action = formData["action"];

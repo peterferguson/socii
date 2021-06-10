@@ -1,12 +1,8 @@
 // import { currencyIcons } from "@lib/constants"
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import {
-  useTickerPriceData,
-  useShareCost,
-  useLocalCurrency,
-  useExchangeRate,
-} from "@lib/hooks"
+import { useShareCost, useTickerPrice, useInterval } from "@lib/hooks"
+import { getTickerData } from "@utils/helper"
 import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
 
@@ -15,7 +11,7 @@ import {
   useMessageContext,
   useChannelStateContext,
 } from "stream-chat-react"
-import React, { Suspense, useContext } from "react"
+import React, { Suspense, useContext, useEffect, useState } from "react"
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
@@ -37,18 +33,34 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const TradeCommandAttachment = ({ attachment, type }) => {
+const TradeCommandAttachment = ({ attachment, type, exchangeRate, localCurrency }) => {
   const { username } = useContext(UserContext)
-  const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol?.toUpperCase(),
-  })
-  const [localCurrency] = useLocalCurrency()
-  const exchangeRate = useExchangeRate(tickerState.assetCurrency, localCurrency)
+  const tickerSymbol = attachment?.tickerSymbol?.toUpperCase()
+  const tickerData = getTickerData(tickerSymbol)
+  const [priceExpired, setPriceExpired] = useState(false)
+  const [shouldRefresh, setShouldRefresh] = useState(true)
+
+  const price = useTickerPrice(tickerSymbol, priceExpired, setPriceExpired)
+  // TODO: Need to implement cache clearing or the price will never update
+  // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
+
+  const refreshTime = 20000
+  useInterval(
+    () => {
+      const expired = (updateTime) => new Date() - Date.parse(updateTime) >= refreshTime
+      setPriceExpired(expired(price?.priceLastUpdated))
+    },
+    // Delay in milliseconds or null to stop it
+    shouldRefresh ? refreshTime : null
+  )
+
+  const ticker = { ...tickerData, ...price }
+
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
   const localCostPerShare = exchangeRate
-    ? (tickerState.price * exchangeRate?.rate).toFixed(2)
-    : tickerState.price
+    ? (ticker.price * exchangeRate?.rate).toFixed(2)
+    : ticker.price
 
   const groupName = channel.cid.split(":").pop()
 
@@ -62,7 +74,7 @@ const TradeCommandAttachment = ({ attachment, type }) => {
           {...tag.node.attributes}
           tagKey={tag.key}
           localCostPerShare={localCostPerShare}
-          localCurrency={exchangeRate ? localCurrency : tickerState.assetCurrency}
+          localCurrency={exchangeRate ? localCurrency : ticker.assetCurrency}
           tradeType={type}
         />
       ),
@@ -71,10 +83,7 @@ const TradeCommandAttachment = ({ attachment, type }) => {
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-      <LogoPriceCardHeader
-        tickerSymbol={attachment?.tickerSymbol?.toUpperCase()}
-        tickerState={tickerState}
-      />
+      <LogoPriceCardHeader tickerSymbol={tickerSymbol} tickerState={ticker} />
       <Suspense fallback={<LoadingIndicator />}>
         <MML
           converters={converters}
@@ -85,12 +94,12 @@ const TradeCommandAttachment = ({ attachment, type }) => {
             const tradeArgs = {
               username,
               groupName,
-              assetRef: `tickers/${tickerState.ticker.ISIN}`,
+              assetRef: `tickers/${ticker.ticker.ISIN}`,
               messageId: message.id,
               executionCurrency: localCurrency,
-              assetCurrency: tickerState.assetCurrency,
+              assetCurrency: ticker.assetCurrency,
               // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-              price: tickerState.price,
+              price: ticker.price,
               cost: parseFloat(actions.cost),
               shares: parseFloat(actions.shares),
               // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑

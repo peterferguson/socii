@@ -147,91 +147,6 @@ export function useHasMounted() {
   return hasMounted
 }
 
-function TickerPriceDataReducer(state, action) {
-  switch (action.type) {
-    case "UPDATE_PRICE": {
-      return {
-        ...state,
-        price: action.price,
-        priceChange: action.priceChange,
-        priceLastUpdated: action.priceLastUpdated,
-      }
-    }
-    case "UPDATE_TICKER": {
-      return {
-        ...state,
-        ticker: action.ticker,
-      }
-    }
-    case "UPDATE_COST_PER_SHARE": {
-      return {
-        ...state,
-        costPerShare: action.costPerShare,
-      }
-    }
-    case "UPDATE_ASSET_CURRENCY": {
-      return {
-        ...state,
-        assetCurrency: action.assetCurrency,
-      }
-    }
-    default:
-      return new Error(`Unhandled action type in reducer ${action.type}`)
-  }
-}
-
-// - Assumes initial state has tickerSymbol
-// TODO typing
-// TODO Add update dispatches to call updates to the values?
-export function useTickerPriceData({ tickerSymbol }) {
-  const [state, dispatch] = useReducer(TickerPriceDataReducer, {
-    assetCurrency: "USD",
-    price: 0.0,
-    priceChange: 0.0,
-    priceLastUpdated: "",
-    ticker: null,
-  })
-  useEffect(() => {
-    const callIEX = async () => {
-      const { latestPrice, changePercent } = await iexClient.quote(tickerSymbol, {
-        filter: "latestPrice,changePercent",
-      })
-
-      dispatch({
-        type: "UPDATE_PRICE",
-        price: latestPrice,
-        priceChange: changePercent,
-        priceLastUpdated: new Date().toLocaleString(),
-      })
-    }
-
-    const getTickerData = async () => {
-      // WARN: Getting currency from the collection group instead of the top level causes
-      // WARN: alot more data than necessary to be passed ...
-      // TODO: Move it into the ticker collection
-      const tickerQuery = firestore
-        .collectionGroup("data")
-        .where("symbol", "==", tickerSymbol)
-        .limit(1)
-      const tickerDoc = await (await tickerQuery.get()).docs?.[0]
-      const ISIN = tickerDoc.ref.path.split("/")[1]
-      const ticker = { ...tickerDoc.data(), ISIN }
-      dispatch({ type: "UPDATE_TICKER", ticker })
-      dispatch({
-        type: "UPDATE_ASSET_CURRENCY",
-        assetCurrency: ticker.currency,
-      })
-    }
-
-    if (tickerSymbol) {
-      callIEX()
-      getTickerData()
-    }
-  }, [tickerSymbol])
-
-  return state
-}
-
 export const useShareCost = (costPerShare) => {
   const [shares, setShares] = useState(1)
 
@@ -279,26 +194,21 @@ export const useExchangeRate = (
   fromCurrency: CurrencyCode,
   toCurrency: CurrencyCode
 ) => {
-  const rateRef = useRef(null)
-  const setConversion = async () => {
-    rateRef.current = await currencyConversion(fromCurrency, toCurrency)
-  }
-  useEffect(() => {
-    if (!rateRef.current) {
-      setConversion()
-    }
-  }, [fromCurrency])
-
+  // TODO: update polling
   // Add this for polling the exhange rate
   // useInterval(() => setConversion(), 60 * 1000)
 
-  return rateRef.current
+  // - set the rate for the currency pair in local storage
+  return usePersistentState(
+    currencyConversion(fromCurrency, toCurrency),
+    `${fromCurrency}${toCurrency}`
+  )
 }
 
 export const usePersistentState = (defaultValue, key) => {
   const [value, setValue] = useState(() => {
-    const persistentValue = window.localStorage.getItem(key)
-    return persistentValue !== null ? JSON.parse(persistentValue) : defaultValue
+    const persistentValue = JSON.parse(window.localStorage.getItem(key))
+    return persistentValue !== null ? persistentValue : defaultValue
   })
   useEffect(() => {
     window.localStorage.setItem(key, JSON.stringify(value))
@@ -308,4 +218,32 @@ export const usePersistentState = (defaultValue, key) => {
 
 export const useLocalCurrency = () => {
   return usePersistentState("GBP", "localCurrency")
+}
+
+export const useTickerPrice = (tickerSymbol, expired = false, setExpired = null) => {
+  const [price, setPrice] = usePersistentState("", `${tickerSymbol}-price`)
+
+  // TODO: Implement cache clearing logic
+  // TODO: Implement different price/chart collection policies for more popular stocks
+  // ? We could do different pricing strategies based on data availibilty to the user
+  // ? For example if a user agrees to decreased data availability we could offered reduced
+  // ? price services. Alternatively we could offer to match so part of the cost of a share
+  // ? or maybe even offer free shares for opting in.
+
+  if (!price || expired) {
+    iexClient
+      .quote(tickerSymbol, {
+        filter: "latestPrice,changePercent",
+      })
+      .then(({ latestPrice, changePercent }) => {
+        setPrice({
+          price: latestPrice || 0.0,
+          priceChange: changePercent || 0.0,
+          priceLastUpdated: new Date().toISOString(),
+        })
+      })
+    setExpired?.(false)
+  }
+
+  return price
 }

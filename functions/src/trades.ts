@@ -190,7 +190,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
 
   if (holding.exists) {
     // - Trade already exists in holding ... do nothing
-    if (holding.trades.includes(messageId)) return outputData
+    if (holding.trades?.includes(messageId)) return outputData
 
     const currentShares = holding.get("shares")
     const currentAvgPrice = holding.get("avgPrice")

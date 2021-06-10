@@ -1,3 +1,5 @@
+import { logger } from "firebase-functions"
+
 export const tradeMML = ({ username, tickerSymbol, tradeType }) => {
   const mmlstring = `<mml type="card"><${tradeType}></${tradeType}></mml>`
   const mmlmessage = {
@@ -34,7 +36,9 @@ export const tradeMML = ({ username, tickerSymbol, tradeType }) => {
  */
 
 const trade = (tradeType) => async (client, body) => {
-  const channelID = body.cid?.split(":")[1]
+  logger.log(`Executing a ${tradeType} trade with body: ${JSON.stringify(body)}`)
+
+  const channelID = body.cid?.split(":").pop() || body.message.cid?.split(":").pop()
   const channel = client.channel("messaging", channelID)
   const username = body.user.id
 

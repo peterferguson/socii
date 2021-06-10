@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.tradeConfirmation = exports.tradeSubmission = void 0;
 const logger = require("firebase-functions").logger;
 const index_js_1 = require("./index.js");
 const helper_js_1 = require("./utils/helper.js");
@@ -42,6 +43,173 @@ const tradeSubmission = async (data, context) => {
         return await channel.sendMessage(message);
     }
 };
+exports.tradeSubmission = tradeSubmission;
+const tradeConfirmation = async (change, context) => {
+    // - document at groups/{groupName}/trades/{messageId}
+    const { groupName, messageId } = context.params;
+    const tradeData = change.after.data();
+    if (tradeData.executed)
+        return; // - do nothing
+    // - Data to update the state of the trade on completion of function
+    // - Should also stop infinite loops
+    const tradeUpdateData = { executed: true };
+    const groupRef = await index_js_1.firestore.collection("groups").doc(groupName);
+    let { cashBalance, investorCount } = (await groupRef.get()).data();
+    // ! TESTING
+    investorCount = investorCount || 1;
+    // ! TESTING
+    const ISIN = tradeData.assetRef.split("/").pop();
+    tradeData.assetRef = index_js_1.firestore.doc(tradeData.assetRef);
+    const { latestPrice, isUSMarketOpen } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
+        filter: "latestPrice,isUSMarketOpen",
+    });
+    // - do nothing if market is closed
+    if (!isUSMarketOpen) {
+        // 2. send a message with the finalised price
+        const channel = helper_js_1.streamClient.channel("messaging", groupName);
+        await channel.sendMessage(await marketClosedMessage(tradeData.assetRef));
+        return;
+    }
+    // TODO: Fix price checking
+    // ! Now asset price & currency is available along with cost & execution currency this should be simple
+    // ! As stated below I think this should be a client-side check though
+    if (tradeData.shares * latestPrice > cashBalance && !isSell(tradeData.orderType)) {
+        // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
+        // - A small variation should be somewhat enforced on the client-side.
+        // - Assuming no massive jump in stock price.
+        // TODO: Implement a client-side check on the cost vs cashBalance.
+        // TODO: Need to distinguish shares bought by cost & those by share amount
+        tradeData.shares = (cashBalance / latestPrice) * 0.975;
+        // - drop share amount to within 2.5% of total cashBalance.
+        // ! This is arbitrary & maybe be another threshold decided upon by the group.
+        // TODO: Create a group settings page which lists the thresholds that can be tinkered
+    }
+    if ((latestPrice - tradeData.price) / tradeData.price > 0.025 &&
+        !isSell(tradeData.orderType)) {
+        logger.log(`The price has risen more than 2.5% since the price was agreed`);
+        /*
+         ! Add user setting to allow for an acceptable price variation between latestPrice and
+         ! agreed price (tradeData.price).
+         *
+         *
+         * Possible failure mechanisms/things to think aboout if this fails
+         1. If this fails we may need to send a new message warning the group of the new price.
+         ?. This may be too slow for a highly beta stock. Imagine GME or any squeeze
+         2. Allowing a user an option to set a new threshold on each purchase if it is high beta
+         */
+    }
+    else {
+        tradeData.price = latestPrice;
+    }
+    if (investorCount == 1 || tradeData.agreesToTrade.length === investorCount - 1) {
+        // ! Execute Trade
+        // 1. Batch update holdings
+        const holdingDocRef = index_js_1.firestore.collection(`groups/${groupName}/holdings`).doc(ISIN);
+        const { type, holdingData, pnlPercentage } = await upsertHolding({
+            holdingDocRef,
+            tradeData,
+            messageId,
+        });
+        switch (type) {
+            case "update":
+                holdingDocRef.update(holdingData);
+                groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice });
+                if (pnlPercentage)
+                    tradeUpdateData["pnlPercentage"] = pnlPercentage;
+                break;
+            case "set":
+                holdingDocRef.set(holdingData);
+                groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice });
+                break;
+            default:
+                // - Secondary execution check (this time on the holding doc) ... do nothing
+                return;
+        }
+        // 2. send a message with the finalised price
+        const channel = helper_js_1.streamClient.channel("messaging", groupName);
+        await channel.sendMessage(investmentReceiptMML(tradeData));
+    }
+    return change.after.ref.update(tradeUpdateData);
+};
+exports.tradeConfirmation = tradeConfirmation;
+/*
+ * Helper Functions
+ */
+const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
+    var _a;
+    const { orderType, shares, price, assetRef, tickerSymbol, shortName } = tradeData;
+    const negativeEquityMultiplier = orderType.toLowerCase().includes("buy") ? 1 : -1;
+    // - Assumptions:
+    // 1. We keep zero share holdings to easily identify all previous holdings.
+    // ? Could this be imposed in the firestore rules.
+    // 2: On selling shares the cost basis is not affected & so only the shares is changed
+    const sharesIncrement = negativeEquityMultiplier * shares;
+    // * Check if the holding already exists
+    const holding = await holdingDocRef.get();
+    const outputData = { type: "", holdingData: {}, pnlPercentage: {} };
+    if (holding.exists) {
+        // - Trade already exists in holding ... do nothing
+        if ((_a = holding.trades) === null || _a === void 0 ? void 0 : _a.includes(messageId))
+            return outputData;
+        const currentShares = holding.get("shares");
+        const currentAvgPrice = holding.get("avgPrice");
+        const newAvgPrice = negativeEquityMultiplier + 1
+            ? (currentAvgPrice * currentShares + price * shares) / (currentShares + shares)
+            : currentAvgPrice;
+        // * Add profit to a sell trade on a current holding
+        if (!(negativeEquityMultiplier + 1)) {
+            outputData.pnlPercentage = (100 * (price - currentAvgPrice)) / currentAvgPrice;
+        }
+        outputData.type = "update";
+        outputData.holdingData = {
+            avgPrice: newAvgPrice,
+            shares: index_js_1.increment(sharesIncrement),
+            lastUpdated: index_js_1.serverTimestamp(),
+            trades: index_js_1.arrayUnion(messageId),
+        };
+    }
+    else {
+        outputData.type = "set";
+        outputData.holdingData = {
+            assetRef,
+            tickerSymbol,
+            shortName,
+            trades: [messageId],
+            avgPrice: price,
+            shares: index_js_1.increment(sharesIncrement),
+            lastUpdated: index_js_1.serverTimestamp(),
+        };
+    }
+    return outputData;
+};
+const investmentReceiptMML = (tradeData) => {
+    const mmlstring = `<mml><investmentReceipt></investmentReceipt></mml>`;
+    const mmlmessage = {
+        user_id: "socii",
+        text: helper_js_1.singleLineTemplateString `
+    ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${isSell(tradeData.orderType) ? "sold" : "purchased"} for ${helper_js_1.currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
+    For a cost of ${helper_js_1.currencySymbols[tradeData.executionCurrency]}${tradeData.cost}
+    `,
+        attachments: [
+            {
+                type: "receipt",
+                mml: mmlstring,
+                tickerSymbol: tradeData.tickerSymbol,
+            },
+        ],
+    };
+    return mmlmessage;
+};
+const marketClosedMessage = async (assetRef) => {
+    const assetData = await (await assetRef.get()).data();
+    return {
+        user_id: "socii",
+        text: helper_js_1.singleLineTemplateString `
+    Sorry the ${assetData.exchange} is not currently open!
+    `,
+    };
+};
+const isSell = (orderType) => !orderType.toLowerCase().includes("sell");
 const verifyUser = (context) => {
     // * Checking that the user is authenticated.
     if (!context.auth) {
@@ -58,10 +226,10 @@ const verifyContent = async (data, context) => {
         price: 0,
         shares: 0,
         action: "",
-        // - This will allow us to track whether the trade has already been submitted
+        messageId: "",
+        // - messageId will allow us to track whether the trade has already been submitted
         // - (until epheremal messages work). Also we can use a collectionGroup query
         // - to find the particular trade in question for each message.
-        messageId: "",
     };
     const optionalArgs = {
         assetType: "",
@@ -108,7 +276,7 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, pa
     Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
     for ${cost}. Do you agree that the group should execute this trade?
     `,
-        command: "buy",
+        command: action,
         parent_id: parent_id || null,
         show_in_channel: show_in_channel || null,
         attachments: [
@@ -135,5 +303,4 @@ const confirmInvestmentMML = ({ username, action, tickerSymbol, cost, shares, pa
     };
     return mmlmessage;
 };
-module.exports = { tradeSubmission };
 //# sourceMappingURL=trades.js.map

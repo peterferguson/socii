@@ -21,22 +21,22 @@ class MyDocument extends Document {
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="public/icons/apple-touch-icon.png"
+            href="/public/icons/apple-touch-icon.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="public/icons/favicon-32x32.png"
+            href="/public/icons/favicon-32x32.png"
           />
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="public/icons/favicon-16x16.png"
+            href="/public/icons/favicon-16x16.png"
           />
-          <link rel="manifest" href="public/manifest.json" />
-          <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#00aba9" />
+          <link rel="manifest" href="/public/manifest.json" />
+          <link rel="mask-icon" href="/public/safari-pinned-tab.svg" color="#00aba9" />
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#ffffff" />

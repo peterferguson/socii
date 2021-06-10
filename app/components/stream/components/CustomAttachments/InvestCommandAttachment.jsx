@@ -1,9 +1,10 @@
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { useTickerPriceData } from "@lib/hooks"
+import { usePersistentState } from "@lib/hooks"
+import { getTickerPriceData } from "@utils/helper"
 
 import { LoadingIndicator } from "stream-chat-react"
-import React, { Suspense } from "react"
+import React, { Suspense, useEffect } from "react"
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
@@ -15,17 +16,16 @@ const MML = React.lazy(async () => {
 // WARN: And passing these so we then call the api less
 
 const InvestCommandAttachment = ({ attachment }) => {
-  const tickerState = useTickerPriceData({
-    tickerSymbol: attachment?.tickerSymbol?.toUpperCase(),
-  })
+  const tickerSymbol = attachment?.tickerSymbol?.toUpperCase()
+  const tickerData = {} // TODO: FIX THIS WITH PERSISTENT DATA
 
   const converters = {
     invest: (tag) => (
       <InvestMMLConverter
         {...tag.node.attributes}
         canSell={true} // - futureproofing for breaking if the group holds the asset
-        tickerSymbol={attachment.tickerSymbol}
-        tickerState={tickerState}
+        tickerSymbol={tickerSymbol}
+        tickerState={tickerData}
       />
     ),
   }

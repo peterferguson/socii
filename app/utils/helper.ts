@@ -1,4 +1,4 @@
-import { tickerToISIN } from "@lib/firebase"
+import { tickerToISIN, firestore } from "@lib/firebase"
 import { CurrencyCode } from "@lib/constants"
 import { Client } from "iexjs"
 
@@ -288,3 +288,19 @@ export const iexPrice = (tickerSymbol: string) =>
   iexClient.quote(tickerSymbol, { filter: "latestPrice" })
 export const iexPctChange = (tickerSymbol: string) =>
   iexClient.quote(tickerSymbol, { filter: "changePercent" })
+
+export const getTickerData = async (tickerSymbol) => {
+  // - set the rate for the currency pair in local storage
+  const tickerQuery = firestore
+    .collectionGroup("data")
+    .where("symbol", "==", tickerSymbol)
+    .limit(1)
+  const tickerDoc = await (await tickerQuery.get()).docs?.[0]
+  const ISIN = tickerDoc.ref.path.split("/")[1]
+  return { ...tickerDoc.data(), ISIN }
+}
+
+export const isEmpty = (obj) => {
+  for (let key in obj) return false
+  return true
+}

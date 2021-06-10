@@ -37,9 +37,9 @@
 
 // const iexMarkets = require("./iexMarkets.json")
 
-const iexMarketSuffixMap = {
-  "Euronext Dublin": "-ID",
-}
+// const iexMarketSuffixMap = {
+//   "Euronext Dublin": "-ID",
+// }
 
 // const ukTickersQuery = firestore
 //   .collection("tickers")
