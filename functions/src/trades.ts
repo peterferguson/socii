@@ -1,4 +1,4 @@
-const logger = require("firebase-functions").logger
+import { logger } from "firebase-functions"
 import {
   firestore,
   serverTimestamp,
@@ -24,19 +24,29 @@ import {
 2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update 
 2. holdings and send confirmation message with the price at which the asset was purchased
 */
-export const tradeSubmission = async (data, context) => {
+export const tradeSubmission = async (
+  data: { groupName?: string; messageId?: string },
+  context: any
+) => {
+  console.log(data)
+  console.log(context)
+
   verifyUser(context)
   const verifiedData = await verifyContent(data, context)
   const { messageId } = data
+  console.log(verifiedData)
 
   // * Create trade document
   const groupRef = await firestore.collection("groups").doc(verifiedData.groupName)
+  console.log("groupRef")
 
   const { investorCount } = (await groupRef.get()).data()
+  console.log("count")
 
   const tradeRef = await firestore
     .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
+  console.log("tradeRef")
 
   // * Store initial trade data
   tradeRef.set({
@@ -44,8 +54,10 @@ export const tradeSubmission = async (data, context) => {
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
   })
+  console.log("update Trade")
 
   if (investorCount > 1) {
+    console.log("sending msg")
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
       ...verifiedData,
@@ -57,6 +69,7 @@ export const tradeSubmission = async (data, context) => {
       "messaging",
       data.groupName.split(" ").join("-")
     )
+    console.log("sent msg")
     return await channel.sendMessage(message)
   }
 }
@@ -274,7 +287,7 @@ const verifyContent = async (data, context) => {
   const requiredArgs = {
     username: "",
     groupName: "",
-    assetRef: "",
+    assetRef: null,
     orderType: "",
     cost: 0,
     price: 0,

@@ -1,9 +1,8 @@
 import { buy, sell } from "./mml/trades"
-const StreamChat = require("stream-chat").StreamChat
-
+import { StreamChat } from "stream-chat"
 
 // * Function to route the commands to the correct function based on the type query param
-const handleCommand = async (req, res) => {
+export const handleCommand = async (req, res) => {
   const { query, method, body } = req
   const type = query?.type
 
@@ -28,7 +27,6 @@ const handleCommand = async (req, res) => {
     process.env.STREAM_API_SECRET
   )
   const payload = typeof body === "string" ? JSON.parse(body) : body
-  
 
   switch (type) {
     case "buy":
@@ -43,5 +41,3 @@ const handleCommand = async (req, res) => {
       res.status(400).end(`Please send a correct command type`)
   }
 }
-
-export { handleCommand }

@@ -12,7 +12,7 @@ import { streamClient } from "./utils/helper.js"
  * @param context
  * @returns
  */
-const generateToken = async (change, context) => {
+export const generateToken = async (change, context) => {
   // - Get an object representing the user document
   const { username } = change.data()
   const uid = context.params.userId
@@ -34,7 +34,7 @@ const generateToken = async (change, context) => {
  * @param context
  * @returns
  */
-const createGroup = async (change, context) => {
+export const createGroup = async (change, context) => {
   const { groupName } = context.params
 
   if (!change.before.exists) {
@@ -65,5 +65,3 @@ const createGroup = async (change, context) => {
   }
   return
 }
-
-module.exports = { generateToken, createGroup }

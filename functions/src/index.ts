@@ -1,10 +1,10 @@
-const functions = require("firebase-functions")
-const admin = require("firebase-admin")
-const serviceAccount = require("../serviceAccountKey.json")
+import * as functions from "firebase-functions"
+import admin from "firebase-admin"
+import serviceAccount from "../serviceAccountKey.json"
 
 // * Constant initialisation
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
-adminConfig.credential = admin.credential.cert(serviceAccount)
+adminConfig.credential = admin.credential.cert(JSON.stringify(serviceAccount))
 admin.initializeApp(adminConfig)
 
 process.env.STREAM_API_SECRET = functions.config().stream.secret
@@ -21,12 +21,12 @@ export const arrayUnion = admin.firestore.FieldValue.arrayUnion
 export const HttpsError = functions.https.HttpsError
 
 // * Import function modules
-const streamChat = require("./streamChat.js")
-const commands = require("./commands/index.js")
-const algoliaSearch = require("./algoliaSearch.js")
-const trades = require("./trades.js")
-const data = require("./data.js")
-const databaseOperations = require("./databaseOperations.js")
+import * as streamChat from "./streamChat.js"
+import * as commands from "./commands/index.js"
+import * as algoliaSearch from "./algoliaSearch.js"
+import * as trades from "./trades.js"
+import * as data from "./data.js"
+import * as databaseOperations from "./databaseOperations.js"
 
 module.exports = {
   // 1 Document Listeners

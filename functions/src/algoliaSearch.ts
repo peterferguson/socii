@@ -1,5 +1,5 @@
-const algoliasearch = require('algoliasearch')
-import { firestore } from './index'
+import algoliasearch from "algoliasearch"
+import { firestore } from "./index"
 
 // Config var initialisation
 const ALGOLIA_ID = process.env.ALGOLIA_ID
@@ -12,12 +12,12 @@ const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY)
  * HTTP function to do an initial load of tickers in /tickers/:documentId/ to the
  * the search index.
  */
-exports.loadTickersToAlgolia = async (req, res) => {
+export const loadTickersToAlgolia = async (req, res) => {
   // This array will contain all records to be indexed in Algolia.
   // A record does not need to necessarily contain all properties of the Firestore
   // document, only the relevant ones.
   const algoliaRecords = []
-  const indexName = 'tickers' // Ensure collection and index match in name
+  const indexName = "tickers" // Ensure collection and index match in name
   const collectionIndex = client.initIndex(indexName)
 
   // Retrieve all documents from the tickers collection.
@@ -38,7 +38,7 @@ exports.loadTickersToAlgolia = async (req, res) => {
   })
 
   collectionIndex.saveObjects(algoliaRecords, (_error, content) => {
-    res.status(200).send('COLLECTION was indexed to Algolia successfully.')
+    res.status(200).send("COLLECTION was indexed to Algolia successfully.")
   })
 }
 
@@ -46,7 +46,7 @@ exports.loadTickersToAlgolia = async (req, res) => {
  * Listens for new tickers added to /tickers/:documentId/ and updates
  * the search index every time a ticker is added to the database.
  */
-exports.onTickerCreated = (snap, context) => {
+export const onTickerCreated = (snap, context) => {
   // Get the ticker document
   const ticker = snap.data()
 

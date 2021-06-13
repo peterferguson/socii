@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tradeConfirmation = exports.tradeSubmission = void 0;
-const logger = require("firebase-functions").logger;
+const firebase_functions_1 = require("firebase-functions");
 const index_js_1 = require("./index.js");
 const helper_js_1 = require("./utils/helper.js");
 /*
@@ -95,7 +95,7 @@ const tradeConfirmation = async (change, context) => {
     }
     if ((latestPrice - tradeData.price) / tradeData.price > 0.025 &&
         !isSell(tradeData.orderType)) {
-        logger.log(`The price has risen more than 2.5% since the price was agreed`);
+        firebase_functions_1.logger.log(`The price has risen more than 2.5% since the price was agreed`);
         /*
          ! Add user setting to allow for an acceptable price variation between latestPrice and
          ! agreed price (tradeData.price).
@@ -229,7 +229,7 @@ const verifyContent = async (data, context) => {
     const requiredArgs = {
         username: "",
         groupName: "",
-        assetRef: "",
+        assetRef: null,
         orderType: "",
         cost: 0,
         price: 0,

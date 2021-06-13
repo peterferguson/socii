@@ -23,24 +23,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpsError = exports.arrayUnion = exports.serverTimestamp = exports.increment = exports.firestore = void 0;
-const firebase_functions_1 = __importDefault(require("firebase-functions"));
+const functions = __importStar(require("firebase-functions"));
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const serviceAccountKey_json_1 = __importDefault(require("../serviceAccountKey.json"));
 // * Constant initialisation
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-adminConfig.credential = firebase_admin_1.default.credential.cert(serviceAccountKey_json_1.default);
+adminConfig.credential = firebase_admin_1.default.credential.cert(JSON.stringify(serviceAccountKey_json_1.default));
 firebase_admin_1.default.initializeApp(adminConfig);
-process.env.STREAM_API_SECRET = firebase_functions_1.default.config().stream.secret;
-process.env.STREAM_API_KEY = firebase_functions_1.default.config().stream.api_key;
-process.env.IEX_API_VERSION = firebase_functions_1.default.config().iex.api_version;
-process.env.IEX_TOKEN = firebase_functions_1.default.config().iex.api_key;
+process.env.STREAM_API_SECRET = functions.config().stream.secret;
+process.env.STREAM_API_KEY = functions.config().stream.api_key;
+process.env.IEX_API_VERSION = functions.config().iex.api_version;
+process.env.IEX_TOKEN = functions.config().iex.api_key;
 const london = "europe-west2";
 // * Exportable utils
 exports.firestore = firebase_admin_1.default.firestore();
 exports.increment = firebase_admin_1.default.firestore.FieldValue.increment;
 exports.serverTimestamp = firebase_admin_1.default.firestore.FieldValue.serverTimestamp;
 exports.arrayUnion = firebase_admin_1.default.firestore.FieldValue.arrayUnion;
-exports.HttpsError = firebase_functions_1.default.https.HttpsError;
+exports.HttpsError = functions.https.HttpsError;
 // * Import function modules
 const streamChat = __importStar(require("./streamChat.js"));
 const commands = __importStar(require("./commands/index.js"));
@@ -50,34 +50,34 @@ const data = __importStar(require("./data.js"));
 const databaseOperations = __importStar(require("./databaseOperations.js"));
 module.exports = {
     // 1 Document Listeners
-    tradeConfirmation: firebase_functions_1.default
+    tradeConfirmation: functions
         .region(london)
         .firestore.document("groups/{groupName}/trades/{messageId}")
         .onWrite(trades.tradeConfirmation),
-    generateToken: firebase_functions_1.default
+    generateToken: functions
         .region(london)
         .firestore.document("users/{userId}")
         .onCreate(streamChat.generateToken),
-    createGroup: firebase_functions_1.default
+    createGroup: functions
         .region(london)
         .firestore.document("groups/{groupName}")
         .onWrite(streamChat.createGroup),
-    incrementInvestors: firebase_functions_1.default
+    incrementInvestors: functions
         .region(london)
         .firestore.document("groups/{groupName}/investors/{investorUsername}")
         .onWrite(databaseOperations.incrementInvestors),
-    onTickerCreated: firebase_functions_1.default
+    onTickerCreated: functions
         .region(london)
         .firestore.document("ticker/{isin}")
         .onCreate(algoliaSearch.onTickerCreated),
     // 2 HTTPS Triggers
     // 2.1 onRequest
-    loadTickersToAlgolia: firebase_functions_1.default // TODO: Convert to use new firebase extension
+    loadTickersToAlgolia: functions // TODO: Convert to use new firebase extension
         .region(london)
         .https.onRequest(algoliaSearch.loadTickersToAlgolia),
-    commands: firebase_functions_1.default.region(london).https.onRequest(commands.handleCommand),
+    commands: functions.region(london).https.onRequest(commands.handleCommand),
     // 2.2 onCall
-    alphaVantageQuery: firebase_functions_1.default.region(london).https.onCall(data.alphaVantageQuery),
-    tradeSubmission: firebase_functions_1.default.region(london).https.onCall(trades.tradeSubmission),
+    alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
+    tradeSubmission: functions.region(london).https.onCall(trades.tradeSubmission),
 };
 //# sourceMappingURL=index.js.map

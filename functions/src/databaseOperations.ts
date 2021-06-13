@@ -1,5 +1,4 @@
-const logger = require("firebase-functions").logger
-
+import { logger } from "firebase-functions"
 import { firestore, increment } from "./index.js"
 
 /*

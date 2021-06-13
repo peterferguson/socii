@@ -1,5 +1,5 @@
 import { firestore, serverTimestamp } from "./index.js"
-const bent = require("bent")
+import bent from "bent"
 
 // - Helper functions
 
@@ -66,7 +66,7 @@ const cleanJsonResponse = (response) => {
  *                     More info: https://expressjs.com/en/api.html#res
  */
 
-const alphaVantageQuery = async (data, context) => {
+export const alphaVantageQuery = async (data, context) => {
   const query = firestore
     .collection("tickers")
     .where("tickerSymbol", "==", data.tickerSymbol)
@@ -101,8 +101,4 @@ const alphaVantageQuery = async (data, context) => {
     batch.commit()
     return filterKeys(cleanResponse, data.queryFields)
   }
-}
-
-module.exports = {
-  alphaVantageQuery,
 }
