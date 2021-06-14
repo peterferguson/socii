@@ -1,10 +1,10 @@
-import * as functions from "firebase-functions"
+const functions = require("firebase-functions")
 import admin from "firebase-admin"
-import serviceAccount from "../serviceAccountKey.json"
+const serviceAccount = require("../serviceAccountKey.json")
 
 // * Constant initialisation
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
-adminConfig.credential = admin.credential.cert(JSON.stringify(serviceAccount))
+adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)
 
 process.env.STREAM_API_SECRET = functions.config().stream.secret
