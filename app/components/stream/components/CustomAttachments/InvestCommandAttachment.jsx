@@ -1,10 +1,8 @@
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { usePersistentState } from "@lib/hooks"
-import { getTickerPriceData } from "@utils/helper"
 
 import { LoadingIndicator } from "stream-chat-react"
-import React, { Suspense, useEffect } from "react"
+import React, { Suspense } from "react"
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")

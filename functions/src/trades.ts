@@ -28,25 +28,18 @@ export const tradeSubmission = async (
   data: { groupName?: string; messageId?: string },
   context: any
 ) => {
-  console.log(data)
-  console.log(context)
-
   verifyUser(context)
   const verifiedData = await verifyContent(data, context)
   const { messageId } = data
-  console.log(verifiedData)
 
   // * Create trade document
   const groupRef = await firestore.collection("groups").doc(verifiedData.groupName)
-  console.log("groupRef")
 
   const { investorCount } = (await groupRef.get()).data()
-  console.log("count")
 
   const tradeRef = await firestore
     .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
-  console.log("tradeRef")
 
   // * Store initial trade data
   tradeRef.set({
@@ -54,10 +47,8 @@ export const tradeSubmission = async (
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
   })
-  console.log("update Trade")
 
   if (investorCount > 1) {
-    console.log("sending msg")
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
       ...verifiedData,
@@ -69,7 +60,6 @@ export const tradeSubmission = async (
       "messaging",
       data.groupName.split(" ").join("-")
     )
-    console.log("sent msg")
     return await channel.sendMessage(message)
   }
 }
@@ -88,9 +78,6 @@ export const tradeConfirmation = async (change, context) => {
   const groupRef = await firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  // ! TESTING
-  investorCount = investorCount || 1
-  // ! TESTING
 
   const ISIN = tradeData.assetRef.split("/").pop()
   tradeData.assetRef = firestore.doc(tradeData.assetRef)

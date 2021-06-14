@@ -107,10 +107,8 @@ export function GroupPieCard({
 
 function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
   const tickerSymbol = holding.tickerSymbol
-  
-  console.log(holding.avgPrice);
+
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
-  console.log(pnl);
 
   return (
     <div className="flex h-auto m-1">

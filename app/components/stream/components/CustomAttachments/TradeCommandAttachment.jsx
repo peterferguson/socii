@@ -1,7 +1,13 @@
 // import { currencyIcons } from "@lib/constants"
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { useShareCost, useTickerPrice, useInterval } from "@lib/hooks"
+import {
+  useShareCost,
+  useTickerPrice,
+  useInterval,
+  useLocalCurrency,
+  useExchangeRate,
+} from "@lib/hooks"
 import { getTickerData } from "@utils/helper"
 import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
@@ -33,36 +39,57 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const TradeCommandAttachment = ({ attachment, type, exchangeRate, localCurrency }) => {
+const TradeCommandAttachment = ({ attachment, type }) => {
   const { username } = useContext(UserContext)
-  const tickerSymbol = attachment?.tickerSymbol?.toUpperCase()
-  const tickerData = getTickerData(tickerSymbol)
-  const [priceExpired, setPriceExpired] = useState(false)
-  const [refreshs, setRefreshs] = useState(0)
+  const { channel } = useChannelStateContext()
+  const { message } = useMessageContext()
 
-  const price = useTickerPrice(tickerSymbol, priceExpired, setPriceExpired)
+  const tickerSymbol = attachment?.tickerSymbol?.toUpperCase()
+
+  const [tickerData, setTickerData] = useState(null)
+  const [priceExpired, setPriceExpired] = useState(false)
+  const [refreshCount, setRefreshCount] = useState(0)
+  const [localCurrency] = useLocalCurrency()
+
+  const { price, priceChange, priceLastUpdated } = useTickerPrice(
+    tickerSymbol,
+    priceExpired,
+    setPriceExpired
+  )
   // TODO: Need to implement cache clearing or the price will never update
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
 
+  // - polling for updates to price
+  // TODO: Only do this if market is open!
   const refreshCountThreshold = 10
-  const refreshTime = 20000
+  const refreshTime = 20 * 1000 // - 20ms
   useInterval(
     () => {
       const expired = (updateTime) => new Date() - Date.parse(updateTime) >= refreshTime
-      setPriceExpired(expired(price?.priceLastUpdated))
-      setRefreshs(refreshs + 1)
+      setPriceExpired(expired(priceLastUpdated))
+      setRefreshCount(refreshCount + 1)
     },
-    // refreshTime in milliseconds stopped after 10 refreshs
-    refreshs < refreshCountThreshold ? refreshTime : null
+    // `refreshTime` in milliseconds stopped after `refreshCountThreshold` refreshes
+    refreshCount < refreshCountThreshold ? refreshTime : null
   )
 
-  const ticker = { ...tickerData, ...price }
+  useEffect(() => {
+    getTickerData(tickerSymbol).then((d) =>
+      setTickerData({
+        ...d,
+        price,
+        priceChange,
+        priceLastUpdated,
+      })
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tickerSymbol])
 
-  const { channel } = useChannelStateContext()
-  const { message } = useMessageContext()
+  const [exchangeRate] = useExchangeRate(localCurrency, tickerData?.currency)
+
   const localCostPerShare = exchangeRate
-    ? (ticker.price * exchangeRate?.rate).toFixed(2)
-    : ticker.price
+    ? (price * (exchangeRate?.rate ? exchangeRate?.rate : 1)).toFixed(2)
+    : price
 
   const groupName = channel.cid.split(":").pop()
 
@@ -71,12 +98,15 @@ const TradeCommandAttachment = ({ attachment, type, exchangeRate, localCurrency 
   const converters = Object.assign(
     {},
     ...["buy", "sell"].map((type) => ({
+      // eslint-disable-next-line react/display-name
       [type]: (tag) => (
         <TradeMMLConverter
           {...tag.node.attributes}
           tagKey={tag.key}
           localCostPerShare={localCostPerShare}
-          localCurrency={exchangeRate ? localCurrency : ticker.assetCurrency}
+          localCurrency={
+            price !== localCostPerShare ? localCurrency : tickerData.assetCurrency
+          }
           tradeType={type}
         />
       ),
@@ -85,28 +115,27 @@ const TradeCommandAttachment = ({ attachment, type, exchangeRate, localCurrency 
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-      <LogoPriceCardHeader tickerSymbol={tickerSymbol} tickerState={ticker} />
+      <LogoPriceCardHeader tickerSymbol={tickerSymbol} tickerState={tickerData} />
       <Suspense fallback={<LoadingIndicator />}>
         <MML
           converters={converters}
           source={attachment.mml}
           onSubmit={(data) => {
-            const { buy, sell, cancel, ...actions } = data // - remove buy, sell & cancel
-
             const tradeArgs = {
               username,
               groupName,
-              assetRef: `tickers/${ticker.ticker.ISIN}`,
+              assetRef: `tickers/${tickerData.ISIN}`,
               messageId: message.id,
               executionCurrency: localCurrency,
-              assetCurrency: ticker.assetCurrency,
+              assetCurrency: tickerData.assetCurrency,
               // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-              price: ticker.price,
-              cost: parseFloat(actions.cost),
-              shares: parseFloat(actions.shares),
+              price: price,
+              cost: parseFloat(data.cost),
+              shares: parseFloat(data.shares),
               // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
             }
-
+            console.log(tradeArgs)
+            console.log(tradeSubmission);
             //TODO: Review redundancy with orderType (may not be with limit orders)
             // - Write to firestore & send confirmation message in thread
             if ("buy" in data) {
@@ -139,7 +168,7 @@ const TradeMMLConverter = ({ tagKey, localCostPerShare, localCurrency, tradeType
         onChange={handleChange}
       />
       <MMLNumberInput
-        name={"Cost"}
+        name={tradeType.toLowerCase() === "buy" ? "Cost" : "Amount"}
         key={`${tagKey}-cost`}
         value={toCost(shares)}
         onChange={handleChange}

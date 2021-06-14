@@ -16,30 +16,22 @@ const helper_js_1 = require("./utils/helper.js");
 2. holdings and send confirmation message with the price at which the asset was purchased
 */
 const tradeSubmission = async (data, context) => {
-    console.log(data);
-    console.log(context);
     verifyUser(context);
     const verifiedData = await verifyContent(data, context);
     const { messageId } = data;
-    console.log(verifiedData);
     // * Create trade document
     const groupRef = await index_js_1.firestore.collection("groups").doc(verifiedData.groupName);
-    console.log("groupRef");
     const { investorCount } = (await groupRef.get()).data();
-    console.log("count");
     const tradeRef = await index_js_1.firestore
         .collection(`groups/${verifiedData.groupName}/trades`)
         .doc(messageId);
-    console.log("tradeRef");
     // * Store initial trade data
     tradeRef.set({
         ...verifiedData,
         agreesToTrade: [verifiedData.executorRef],
         timestamp: index_js_1.serverTimestamp(),
     });
-    console.log("update Trade");
     if (investorCount > 1) {
-        console.log("sending msg");
         // * Send confirmation message into chat
         const message = confirmInvestmentMML({
             ...verifiedData,
@@ -48,7 +40,6 @@ const tradeSubmission = async (data, context) => {
             show_in_channel: false,
         });
         const channel = helper_js_1.streamClient.channel("messaging", data.groupName.split(" ").join("-"));
-        console.log("sent msg");
         return await channel.sendMessage(message);
     }
 };
@@ -64,21 +55,18 @@ const tradeConfirmation = async (change, context) => {
     const tradeUpdateData = { executed: true };
     const groupRef = await index_js_1.firestore.collection("groups").doc(groupName);
     let { cashBalance, investorCount } = (await groupRef.get()).data();
-    // ! TESTING
-    investorCount = investorCount || 1;
-    // ! TESTING
     const ISIN = tradeData.assetRef.split("/").pop();
     tradeData.assetRef = index_js_1.firestore.doc(tradeData.assetRef);
     const { latestPrice, isUSMarketOpen } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
         filter: "latestPrice,isUSMarketOpen",
     });
-    // - do nothing if market is closed
-    if (!isUSMarketOpen) {
-        // 2. send a message with the finalised price
-        const channel = helper_js_1.streamClient.channel("messaging", groupName);
-        await channel.sendMessage(await marketClosedMessage(tradeData.assetRef));
-        return;
-    }
+    // // - do nothing if market is closed
+    // if (!isUSMarketOpen) {
+    //   // 2. send a message with the finalised price
+    //   const channel = streamClient.channel("messaging", groupName)
+    //   await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
+    //   return
+    // }
     // TODO: Fix price checking
     // ! Now asset price & currency is available along with cost & execution currency this should be simple
     // ! As stated below I think this should be a client-side check though

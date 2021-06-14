@@ -1,12 +1,21 @@
+import { CurrencyCode } from "@lib/constants"
 import { auth, firestore } from "@lib/firebase"
-
-import { useState, useEffect, useLayoutEffect, useRef, useReducer } from "react"
+import {
+  currencyConversion,
+  iexClient,
+  isBrowser,
+  isPromise,
+  round,
+  isEmpty,
+  fetcher,
+  currencyConversionDataCleaning,
+  alphaVantageQuery,
+} from "@utils/helper"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
-
-import { currencyConversion, isBrowser, round, iexClient } from "@utils/helper"
-import { CurrencyCode } from "@lib/constants"
+import useSWR from "swr"
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
@@ -25,7 +34,7 @@ export function useUserData() {
   useEffect(() => {
     const getUserData = () => {
       // allows us to turn off the realtime data feed when finished
-      let unsubscribe
+      let unsubscribe: () => void
 
       const userRef = firestore.collection("users").doc(user.uid)
       unsubscribe = userRef.onSnapshot((doc) => {
@@ -42,7 +51,7 @@ export function useUserData() {
   return { user, username, userGroups }
 }
 
-export const useStream = (uid, username, displayName) => {
+export const useStream = (uid: string, username: any, displayName: string) => {
   const streamClient = useRef(null)
 
   useEffect(() => {
@@ -139,7 +148,7 @@ export const useIntersectionObserver = ({
   return { setNode, entry }
 }
 
-export function useHasMounted() {
+export function useHasMounted(): boolean {
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
     setHasMounted(true)
@@ -147,13 +156,13 @@ export function useHasMounted() {
   return hasMounted
 }
 
-export const useShareCost = (costPerShare) => {
+export const useShareCost = (costPerShare: number) => {
   const [shares, setShares] = useState(1)
 
-  const toShares = (cost) => cost / costPerShare
-  const toCost = (shares) => costPerShare * shares
+  const toShares = (cost: number) => cost / costPerShare
+  const toCost = (shares: number) => costPerShare * shares
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target
 
     const input = parseFloat(value)
@@ -172,7 +181,7 @@ export const useShareCost = (costPerShare) => {
   return [shares, handleChange, toCost]
 }
 
-export const useInterval = (callback, delay) => {
+export const useInterval = (callback: () => void, delay: number) => {
   const savedCallback = useRef(null)
 
   useEffect(() => {
@@ -192,35 +201,78 @@ export const useInterval = (callback, delay) => {
 
 export const useExchangeRate = (
   fromCurrency: CurrencyCode,
-  toCurrency: CurrencyCode
+  toCurrency: CurrencyCode,
+  refreshCountThreshold = 10,
+  refreshTime = 60 * 1000 // - 1 min in ms,
 ) => {
-  // TODO: update polling
-  // Add this for polling the exhange rate
-  // useInterval(() => setConversion(), 60 * 1000)
+  const [refreshCount, setRefreshCount] = useState(0)
 
-  // - set the rate for the currency pair in local storage
-  return usePersistentState(
-    currencyConversion(fromCurrency, toCurrency),
+  const [value, setValue] = usePersistentState(
+    { func: currencyConversion, args: [fromCurrency, toCurrency] },
     `${fromCurrency}${toCurrency}`
   )
+
+  // - polling for updates to exchange rate
+  useInterval(
+    () => {
+      setValue({ func: currencyConversion, args: [fromCurrency, toCurrency] })
+      setRefreshCount(refreshCount + 1)
+    },
+    // - `refreshTime` in milliseconds stopped after `refreshCountThreshold` refreshes
+    refreshCount < refreshCountThreshold ? refreshTime : null
+  )
+
+  if (fromCurrency === toCurrency || !fromCurrency || !toCurrency) {
+    window.localStorage.removeItem(`${fromCurrency}${toCurrency}`)
+    return [{ rate: 1 }]
+  }
+  return [value, setValue]
 }
 
-export const usePersistentState = (defaultValue, key) => {
+export const useCurrencyConversion = (
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode
+) => {
+  const { data, error } = useSWR(
+    alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
+      from_currency: fromCurrency,
+      to_currency: toCurrency,
+    }),
+    fetcher
+  )
+  return {
+    exchangeRate: currencyConversionDataCleaning(data),
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
+export const usePersistentState = (defaultValue: any | Promise<any>, key: string) => {
   const [value, setValue] = useState(() => {
     const persistentValue = JSON.parse(window.localStorage.getItem(key))
-    return persistentValue !== null ? persistentValue : defaultValue
+    if (persistentValue !== null && !isEmpty(persistentValue)) return persistentValue
+    // - Allows us to send an object with the keys func & args as defaultValue
+    // TODO: This works in node but is not setting correct value in localStorage
+    if (defaultValue && "func" in defaultValue)
+      return defaultValue.func(...defaultValue.args)
+    return typeof defaultValue === "function" ? defaultValue() : defaultValue
   })
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value))
+    isPromise(value)
+      ? // - if the value is a promise resolve it before storing in cache
+        value.then((r) => window.localStorage.setItem(key, JSON.stringify(r)))
+      : window.localStorage.setItem(key, JSON.stringify(value))
   }, [key, value])
   return [value, setValue]
 }
 
-export const useLocalCurrency = () => {
-  return usePersistentState("GBP", "localCurrency")
-}
+export const useLocalCurrency = () => usePersistentState("GBP", "localCurrency")
 
-export const useTickerPrice = (tickerSymbol, expired = false, setExpired = null) => {
+export const useTickerPrice = (
+  tickerSymbol: string,
+  expired = false,
+  setExpired = null
+): any => {
   const [price, setPrice] = usePersistentState("", `${tickerSymbol}-price`)
 
   // TODO: Implement cache clearing logic

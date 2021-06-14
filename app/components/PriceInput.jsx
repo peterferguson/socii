@@ -44,7 +44,7 @@ export default function PriceInput({
             className="focus:ring-teal-500 focus:border-teal-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
           >
             {Object.keys(currencySymbols).map((currency) => (
-              <option value={currency}>{currency}</option>
+              <option key={currency} value={currency}>{currency}</option>
             ))}
           </select>
         </div>

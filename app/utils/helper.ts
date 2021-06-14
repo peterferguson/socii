@@ -35,14 +35,12 @@ export const handleEnterKeyDown = (event, callback) => {
   }
 }
 
-export const alphaVantageQuery = async (queryType: string, params: object) => {
+export const alphaVantageQuery = (queryType: string, params: object) => {
   const queryParmsString: string = Object.keys(params)
     .map((key) => `&${key}=${params[key]}`)
     .join("")
 
-  return await fetchJSON(
-    `https://www.alphavantage.co/query?function=${queryType}${queryParmsString}&apikey=${alphaVantageApiKey}`
-  )
+  return `https://www.alphavantage.co/query?function=${queryType}${queryParmsString}&apikey=${alphaVantageApiKey}`
 }
 
 export const currencyConversion = async (
@@ -65,24 +63,40 @@ export const currencyConversion = async (
    *      }
    *   }
    */
-  const data = await alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
-    from_currency: fromCurrency,
-    to_currency: toCurrency,
-  })
+  const data = await fetchJSON(
+    alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
+      from_currency: fromCurrency,
+      to_currency: toCurrency,
+    })
+  )
+  return currencyConversionDataCleaning(data)
+}
 
+interface ExchangeRate {
+  rate?: string
+  lastRefresh?: string
+  timezone?: string
+}
+
+export function currencyConversionDataCleaning(data: {
+  [x: string]: { [x: string]: string }
+}): ExchangeRate | null {
   if ("Realtime Currency Exchange Rate" in data) {
     const exchangeRate = data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
     const lastUpdated = data["Realtime Currency Exchange Rate"]["6. Last Refreshed"]
-    return { rate: exchangeRate, lastRefresh: lastUpdated }
+    const timezone = data["Realtime Currency Exchange Rate"]["7. Time Zone"]
+    return { rate: exchangeRate, lastRefresh: lastUpdated, timezone }
   }
 
-  return {}
+  return null
 }
 
-export const alphaVantageData = async (tickerSymbol) => {
-  const data = await alphaVantageQuery("TIME_SERIES_DAILY", {
-    symbol: tickerSymbol,
-  })
+export const alphaVantageTimeseries = async (tickerSymbol: string) => {
+  const data = await fetchJSON(
+    alphaVantageQuery("TIME_SERIES_DAILY", {
+      symbol: tickerSymbol,
+    })
+  )
 
   const dates = Object.keys(data["Time Series (Daily)"])
 
@@ -101,6 +115,9 @@ export function validateEmail(email) {
 }
 
 export const fetchJSON = async (url) => (await fetch(url)).json()
+
+export const fetcher = (...args): Promise<any> =>
+  fetch(...args).then((res) => res.json())
 
 export const stockProps = async (
   tickerQuery,
@@ -172,7 +189,7 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
 
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
-    timeseries = await alphaVantageData(tickerSymbol)
+    timeseries = await alphaVantageTimeseries(tickerSymbol)
     // TODO: This is server-side so update firestore with the timeseries data onCall
   } else {
     timeseries = timeseriesDocs.map((doc) => ({
@@ -286,8 +303,14 @@ export const iexClient = new Client({
 
 export const iexPrice = (tickerSymbol: string) =>
   iexClient.quote(tickerSymbol, { filter: "latestPrice" })
+
 export const iexPctChange = (tickerSymbol: string) =>
   iexClient.quote(tickerSymbol, { filter: "changePercent" })
+
+export const isEmpty = (obj) => {
+  for (let key in obj) return false
+  return true
+}
 
 export const getTickerData = async (tickerSymbol) => {
   // - set the rate for the currency pair in local storage
@@ -295,12 +318,19 @@ export const getTickerData = async (tickerSymbol) => {
     .collectionGroup("data")
     .where("symbol", "==", tickerSymbol)
     .limit(1)
-  const tickerDoc = await (await tickerQuery.get()).docs?.[0]
+  // const [snapshot, loading, error] = useCollectionOnce(query, options);
+  const tickerDoc = (await tickerQuery.get()).docs?.[0]
   const ISIN = tickerDoc.ref.path.split("/")[1]
   return { ...tickerDoc.data(), ISIN }
 }
 
-export const isEmpty = (obj) => {
-  for (let key in obj) return false
-  return true
+/**
+ * Determine whether the given `promise` is a Promise.
+ *
+ * @param {*} promise
+ *
+ * @returns {Boolean}
+ */
+export function isPromise(promise): boolean {
+  return !!promise && typeof promise.then === "function"
 }
