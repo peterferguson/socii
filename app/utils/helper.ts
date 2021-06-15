@@ -115,8 +115,7 @@ export function validateEmail(email) {
 
 export const fetchJSON = async (url) => (await fetch(url)).json()
 
-export const fetcher = (...args): Promise<any> =>
-  fetch(...args).then((res) => res.json())
+export const fetcher = (url) => fetch(url).then((r) => r.json())
 
 export const stockProps = async (
   tickerQuery,
@@ -241,7 +240,11 @@ export const localCostPerShare = async (
     return {}
   }
   const { rate, lastRefresh } = await currencyConversion(fromCurrency, toCurrency)
-  return { costPerShare: rate * input, lastRefresh, exchangeRate: rate }
+  return {
+    costPerShare: parseFloat(rate) * input,
+    lastRefresh,
+    exchangeRate: parseFloat(rate),
+  }
 }
 
 export const currencyFormatter = (number: number, currency: string = "GBP"): string =>
