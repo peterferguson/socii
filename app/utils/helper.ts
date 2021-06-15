@@ -1,6 +1,5 @@
 import { tickerToISIN, firestore } from "@lib/firebase"
 import { CurrencyCode } from "@lib/constants"
-import { Client } from "iexjs"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
@@ -296,17 +295,6 @@ export function singleLineTemplateString(strings, ...values) {
     .trim()
 }
 
-export const iexClient = new Client({
-  api_token: process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY,
-  version: "stable",
-})
-
-export const iexPrice = (tickerSymbol: string) =>
-  iexClient.quote(tickerSymbol, { filter: "latestPrice" })
-
-export const iexPctChange = (tickerSymbol: string) =>
-  iexClient.quote(tickerSymbol, { filter: "changePercent" })
-
 export const isEmpty = (obj) => {
   for (let key in obj) return false
   return true
@@ -333,4 +321,8 @@ export const getTickerData = async (tickerSymbol) => {
  */
 export function isPromise(promise): boolean {
   return !!promise && typeof promise.then === "function"
+}
+
+export const iexQuote = async (tickerSymbol: string, filter: string) => {
+  return await fetcher(`/api/iex/quote/${tickerSymbol}?filter=${filter}`)
 }

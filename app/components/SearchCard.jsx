@@ -15,7 +15,7 @@ import debounce from "lodash/debounce"
 import { Dialog } from "@headlessui/react"
 import { useRouter } from "next/router"
 import { useAsync } from "react-async-hook"
-import { iexClient } from "utils/helper"
+import { iexQuote } from "utils/helper"
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
@@ -80,7 +80,7 @@ const Hit = ({ hit }) => {
   const [loadingTicker, setLoadingTicker] = useState(false)
 
   const price = useAsync(
-    () => iexClient.quote(hit.tickerSymbol, { filter: "latestPrice,changePercent" }),
+    () => iexQuote(hit.tickerSymbol, "latestPrice,changePercent"),
     []
   )
 

@@ -1,9 +1,9 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
-import { iexClient, round } from "@utils/helper"
-import Link from "next/link"
+import { iexQuote, round } from "@utils/helper"
 import { logoUrl } from "@utils/helper"
 
+import Link from "next/link"
 import { useCollectionData } from "react-firebase-hooks/firestore"
 import React, { useState, useEffect } from "react"
 
@@ -15,9 +15,7 @@ export default function GroupColumn({ groupName }) {
 
   useEffect(() => {
     holdings?.map(async ({ tickerSymbol }) => {
-      const { latestPrice } = await iexClient.quote(tickerSymbol, {
-        filter: "latestPrice",
-      })
+      const { latestPrice } = await iexQuote(tickerSymbol, "latestPrice")
 
       setCurrentPrices((previousState) => ({
         ...previousState,

@@ -185,9 +185,6 @@ const MessagingInput = (props) => {
     textareaRef: messageInputContext.textareaRef,
   }
 
-  // messageInput = { ...messageInput, ...props, overrideSubmitHandler }
-  // console.log(messageInput.handleSubmit)
-
   const onChange = useCallback(
     (e) => {
       const { value } = e.target
