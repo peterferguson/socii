@@ -38,7 +38,7 @@ export default function LogoPriceCardHeader({
                     : "text-red-400"
                 }`}
               >
-                {action.toUpperCase()} {shares} Shares &bull;
+                {action.toUpperCase()} {shares} Shares &bull;{" "}
                 {currencyFormatter(price, currency)}
               </div>
             </>
