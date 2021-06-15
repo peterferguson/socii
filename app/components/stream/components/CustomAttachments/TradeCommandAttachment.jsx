@@ -100,6 +100,12 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, exchangeRate, tickerData?.currency])
 
+  useEffect(() => {
+    if (tickerData && tickerData?.price !== price) {
+      tickerData.price = price
+    }
+  }, [price, tickerData, tickerData?.price])
+
   if (tickerData)
     tickerData.assetCurrency = isLoadingExchangeRate
       ? tickerData.currency
@@ -149,10 +155,14 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
             //TODO: Review redundancy with orderType (may not be with limit orders)
             // - Write to firestore & send confirmation message in thread
             if ("buy" in data) {
-              tradeSubmission({ ...tradeArgs, orderType: "BUY", action: "buy" })
+              tradeSubmission(
+                JSON.stringify({ ...tradeArgs, orderType: "BUY", action: "buy" })
+              )
             }
             if ("sell" in data) {
-              tradeSubmission({ ...tradeArgs, orderType: "SELL", action: "sell" })
+              tradeSubmission(
+                JSON.stringify({ ...tradeArgs, orderType: "SELL", action: "sell" })
+              )
             }
           }}
           Loading={LoadingIndicator}
