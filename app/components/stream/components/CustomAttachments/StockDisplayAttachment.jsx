@@ -1,4 +1,5 @@
 import { uncamelCase } from '@utils/helper'
+import Image from "next/image"
 import router from 'next/router'
 import React from 'react'
 
@@ -10,7 +11,7 @@ const StockDisplayAttachment = ({ attachment }) => {
       className="p-4 bg-white rounded-lg shadow-lg cursor-pointer"
       onClick={() => router.push(attachment?.url)}
     >
-      <img
+      <Image
         className="h-auto mx-auto rounded-full shadow-lg w-14"
         src={attachment?.image}
         alt={`${tickerSymbol} logo`}

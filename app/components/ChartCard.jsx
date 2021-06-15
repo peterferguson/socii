@@ -1,9 +1,10 @@
-import { FlexibleXYPlot, LineSeries, Crosshair } from "react-vis"
-import "react-vis/dist/style.css"
-import React, { useRef, useEffect, useState } from "react"
 import { tailwindColorMap } from "@lib/constants"
 import { pctChange } from "@utils/helper"
+import Image from "next/image"
 import Link from "next/link"
+import React, { useEffect, useRef, useState } from "react"
+import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
+import "react-vis/dist/style.css"
 
 export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
   const [height, setHeight] = useState(null)
@@ -41,13 +42,13 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
   }
   return (
     <>
-      <div className="max-w-sm w-11/12 sm:w-1/2 lg:w-1/3 h-auto m-1">
-        <div className="bg-white shadow-2xl rounded-lg overflow-hidden flex h-20 p-2">
-          <div className="flex-none mx-auto justify-center rounded-full w-20">
+      <div className="w-11/12 h-auto max-w-sm m-1 sm:w-1/2 lg:w-1/3">
+        <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
+          <div className="justify-center flex-none w-20 mx-auto rounded-full">
             <Link href={`stock/${tickerSymbol}`}>
               <a>
-                <img
-                  className="shadow-lg rounded-full h-10 w-10 mx-auto"
+                <Image
+                  className="w-10 h-10 mx-auto rounded-full shadow-lg"
                   src={logoUrl}
                   alt={`${tickerSymbol} logo`}
                 />
@@ -55,20 +56,20 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
             </Link>
             <Link href={`stock/${tickerSymbol}`}>
               <a>
-                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                   {shortName}
                 </div>
               </a>
             </Link>
             <Link href={`stock/${tickerSymbol}`}>
               <a>
-                <div className="text-center text-gray-600 uppercase text-tiny font-semibold tracking-wider">
+                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                   {tickerSymbol}
                 </div>
               </a>
             </Link>
           </div>
-          <div className="flex-grow mx-auto w-2/4" ref={middleDivRef}>
+          <div className="flex-grow w-2/4 mx-auto" ref={middleDivRef}>
             <FlexibleXYPlot
               height={height}
               width={width}
@@ -90,7 +91,7 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
             </FlexibleXYPlot>
           </div>
           <div className="flex flex-col items-center justify-center w-20">
-            <div className="text-gray-600 uppercase text-sm font-semibold tracking-wider overflow-ellipsis overflow-hidden">
+            <div className="overflow-hidden text-sm font-semibold tracking-wider text-gray-600 uppercase overflow-ellipsis">
               ${data?.[0].close}
             </div>
             <div

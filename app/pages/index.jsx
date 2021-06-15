@@ -1,12 +1,13 @@
-import { firestore } from "@lib/firebase"
-import { UserContext } from "@lib/context"
-import { logoUrl } from "@utils/helper"
 import Logo from "@components/Logo"
 import OutlineButton from "@components/OutlineButton"
-
+import { UserContext } from "@lib/context"
+import { firestore } from "@lib/firebase"
+import { logoUrl } from "@utils/helper"
+import Image from "next/image"
 import { useRouter } from "next/router"
-import { useCollection } from "react-firebase-hooks/firestore"
 import React, { useContext } from "react"
+import { useCollection } from "react-firebase-hooks/firestore"
+
 
 export default function Home() {
   const router = useRouter()
@@ -80,7 +81,7 @@ function TickerList() {
     <>
       {tickers &&
         tickers.map((ticker) => (
-          <img
+          <Image
             key={ticker.ISIN}
             className="flex w-16 h-16 ml-4 rounded-full shadow-lg sm:ml-0 btn-transition"
             src={logoUrl(ticker.ISIN)}

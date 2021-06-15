@@ -1,4 +1,5 @@
-import { pnlBackgroundColor, pctChange, pnlTextColor, logoUrl } from "@utils/helper"
+import { logoUrl, pctChange, pnlBackgroundColor, pnlTextColor } from "@utils/helper"
+import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
@@ -14,7 +15,7 @@ export default function SmallAssetPctChangeCard({
     <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
       <div className="w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
         <div className="items-center justify-center sm:flex">
-          <img
+          <Image
             className="w-16 h-auto mx-auto rounded-full shadow-lg"
             src={logoUrl}
             alt={`${tickerSymbol} logo`}
@@ -59,7 +60,7 @@ export function SmallAssetCard({
     <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
       <div className="w-40 h-full p-4 bg-white rounded-lg shadow-lg sm:h-36 sm:w-52">
         <div className="items-center justify-center sm:flex">
-          <img
+          <Image
             className="h-auto mx-auto rounded-full shadow-lg w-14"
             src={logoUrl}
             alt={`${tickerSymbol} logo`}
@@ -100,7 +101,7 @@ export function AssetCard({ ticker, timeseries, sector }) {
       <Link href={`/stock/${ticker.tickerSymbol}`}>
         <a href={ticker.tickerSymbol}>
           <header className="flex mb-auto flex-nowrap">
-            <img
+            <Image
               className="flex-none w-12 rounded"
               src={logoUrl(ticker.ISIN)}
               alt={`${ticker.tickerSymbol} logo`}
@@ -154,7 +155,7 @@ export function BlockCard({ ticker, timeseries }) {
             </div>
             <div className="relative flex-initial w-auto pl-4">
               <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-red-500 rounded-full shadow-lg">
-                <img
+                <Image
                   className="flex-none w-12 rounded"
                   src={logoUrl(ticker.ISIN)}
                   alt={`${ticker.tickerSymbol} logo`}

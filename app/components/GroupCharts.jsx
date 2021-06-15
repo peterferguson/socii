@@ -1,11 +1,11 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
-import { iexQuote, round } from "@utils/helper"
-import { logoUrl } from "@utils/helper"
-
+import { iexQuote, logoUrl, round } from "@utils/helper"
+import Image from "next/image"
 import Link from "next/link"
+import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"
-import React, { useState, useEffect } from "react"
+
 
 export default function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([])
@@ -115,7 +115,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
           <Link href={`/stock/${tickerSymbol}`}>
             <div className="cursor-pointer">
               <a>
-                <img
+                <Image
                   className="w-10 h-10 mx-auto rounded-full shadow-lg"
                   src={logoUrl(holding.ISIN)}
                   alt={`${tickerSymbol} logo`}

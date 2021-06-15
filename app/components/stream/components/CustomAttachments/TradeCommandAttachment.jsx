@@ -1,29 +1,26 @@
 // import { currencyIcons } from "@lib/constants"
-import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { useShareCost, useTickerPrice, useInterval, useLocalCurrency } from "@lib/hooks"
-import { getTickerData, currencyConversion, fetcher } from "@utils/helper"
 import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
-
-import useSWR from "swr"
-import {
-  LoadingIndicator,
-  useMessageContext,
-  useChannelStateContext,
-} from "stream-chat-react"
+import { useInterval, useLocalCurrency, useShareCost, useTickerPrice } from "@lib/hooks"
+import { currencyConversion, fetcher, getTickerData } from "@utils/helper"
 import React, { Suspense, useContext, useEffect, useState } from "react"
+// WARN: IEX called for each instance of a buy command message
+// WARN: Should think about some how collecting the tickers referenced on the message list
+// WARN: And passing these so we then call the api less
+import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
+import {
+  LoadingIndicator, useChannelStateContext, useMessageContext
+} from "stream-chat-react"
+import useSWR from "swr"
+import MMLButton from "./MMLButton"
+
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
   return { default: mml.MML }
 })
 
-// WARN: IEX called for each instance of a buy command message
-// WARN: Should think about some how collecting the tickers referenced on the message list
-// WARN: And passing these so we then call the api less
-
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
 export const currencyIcons = {
   AUD: { icon: FaDollarSign },
   CAD: { icon: FaDollarSign },

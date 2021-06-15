@@ -1,8 +1,9 @@
-import { pnlBackgroundColor, currencyFormatter, logoUrl } from "@utils/helper"
-
+import { currencyFormatter, logoUrl, pnlBackgroundColor } from "@utils/helper"
+import Image from "next/image"
 import router from "next/router"
 import React, { useEffect, useRef } from "react"
-import { FaArrowUp, FaArrowDown } from "react-icons/fa"
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+
 
 export default function LogoPriceCardHeader({
   tickerSymbol,
@@ -67,7 +68,7 @@ function TickerLogo({ tickerSymbol }) {
   }, [tickerSymbol])
 
   return (
-    <img
+    <Image
       className="h-auto mx-auto rounded-full shadow-lg w-14"
       src={logo.current}
       alt={`${tickerSymbol} logo`}
