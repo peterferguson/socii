@@ -187,22 +187,22 @@ export const getCleanImage = (member) => {
   return member.user.image
 }
 
-export const localCostPerShare = async (
-  price: string | number,
-  fromCurrency: CurrencyCode,
-  toCurrency: CurrencyCode
-) => {
-  const input = typeof price !== "number" ? parseFloat(price) : price
-  if (isNaN(input)) {
-    return {}
-  }
-  const { rate, lastRefresh } = await currencyConversion(fromCurrency, toCurrency)
-  return {
-    costPerShare: parseFloat(rate) * input,
-    lastRefresh,
-    exchangeRate: parseFloat(rate),
-  }
-}
+// export const localCostPerShare = async (
+//   price: string | number,
+//   fromCurrency: CurrencyCode,
+//   toCurrency: CurrencyCode
+// ) => {
+//   const input = typeof price !== "number" ? parseFloat(price) : price
+//   if (isNaN(input)) {
+//     return {}
+//   }
+//   const { rate, lastRefresh } = await currencyConversion(fromCurrency, toCurrency)
+//   return {
+//     costPerShare: parseFloat(rate) * input,
+//     lastRefresh,
+//     exchangeRate: parseFloat(rate),
+//   }
+// }
 
 export const currencyFormatter = (number: number, currency: string = "GBP"): string =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(number || 0)
