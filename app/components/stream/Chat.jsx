@@ -83,7 +83,7 @@ export default function StreamChat({ client, theme = "light", groupName = null }
             TypingIndicator={TypingIndicator}
             // messageLimit={5} // TODO: Implement messageLimit to save on api calls
           />
-          <MessageInput focus Input={MessagingInput} />
+          <MessageInput autoFocus Input={MessagingInput} />
         </Window>
         <MessagingThread />
       </Channel>

@@ -16,7 +16,6 @@ import UseCommandIcon from "@icons/stream/command.svg"
 import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
 
 import { FaDollarSign } from "react-icons/fa"
-
 import { UploadsPreview } from "./UploadsPreview"
 
 // * Actions split by state
@@ -157,7 +156,6 @@ const MessagingInput = (props) => {
   ] = useCommand()
 
   const overrideSubmitHandler = (message) => {
-    console.debug(message)
     if (!message.text || message.text === " ") return
     let updatedMessage
 
@@ -167,7 +165,6 @@ const MessagingInput = (props) => {
     }
 
     // - In command state reinstate the command before submission
-    console.debug(command.mode)
     if (command.mode) {
       const updatedText = reinstateCommand(message.text)
       updatedMessage = { ...message, text: updatedText }
@@ -179,8 +176,14 @@ const MessagingInput = (props) => {
   }
 
   let messageInput = useMessageInputState({ ...props, overrideSubmitHandler })
+  let messageInputContext = useMessageInputContext()
+
   // ! Having to resort to this as the useMessageInputContext is overwriting the overriderSubmitHandler
-  messageInput = {...useMessageInputContext(), ...messageInput}
+  messageInput = {
+    ...messageInputContext,
+    ...messageInput,
+    textareaRef: messageInputContext.textareaRef,
+  }
 
   // messageInput = { ...messageInput, ...props, overrideSubmitHandler }
   // console.log(messageInput.handleSubmit)
