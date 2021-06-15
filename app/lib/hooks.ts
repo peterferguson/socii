@@ -8,8 +8,6 @@ import {
   round,
   isEmpty,
   fetcher,
-  currencyConversionDataCleaning,
-  alphaVantageQuery,
 } from "@utils/helper"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -215,7 +213,7 @@ export const useExchangeRate = (
   // - polling for updates to exchange rate
   useInterval(
     () => {
-      setValue({ func: currencyConversion, args: [fromCurrency, toCurrency] })
+      setValue(currencyConversion(fromCurrency, toCurrency))
       setRefreshCount(refreshCount + 1)
     },
     // - `refreshTime` in milliseconds stopped after `refreshCountThreshold` refreshes
@@ -234,14 +232,12 @@ export const useCurrencyConversion = (
   toCurrency: CurrencyCode
 ) => {
   const { data, error } = useSWR(
-    alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
-      from_currency: fromCurrency,
-      to_currency: toCurrency,
-    }),
-    fetcher
+    currencyConversion(fromCurrency, toCurrency),
+    fetcher,
+    { dedupingInterval: 10000 }
   )
   return {
-    exchangeRate: currencyConversionDataCleaning(data),
+    exchangeRate: data,
     isLoading: !error && !data,
     isError: error,
   }

@@ -42,53 +42,10 @@ export const alphaVantageQuery = (queryType: string, params: object) => {
   return `https://www.alphavantage.co/query?function=${queryType}${queryParmsString}&apikey=${alphaVantageApiKey}`
 }
 
-export const currencyConversion = async (
+export const currencyConversion = (
   fromCurrency: CurrencyCode,
   toCurrency: CurrencyCode
-) => {
-  /*
-   *   Alpha Vantage Query Return Type
-   *   {
-   *      "Realtime Currency Exchange Rate": {
-   *          "1. From_Currency Code": "USD",
-   *          "2. From_Currency Name": "United States Dollar",
-   *          "3. To_Currency Code": "JPY",
-   *          "4. To_Currency Name": "Japanese Yen",
-   *          "5. Exchange Rate": "108.91000000",
-   *          "6. Last Refreshed": "2021-05-19 13:34:30",
-   *          "7. Time Zone": "UTC",
-   *          "8. Bid Price": "108.90800000",
-   *          "9. Ask Price": "108.91200000"
-   *      }
-   *   }
-   */
-  const data = await fetchJSON(
-    alphaVantageQuery("CURRENCY_EXCHANGE_RATE", {
-      from_currency: fromCurrency,
-      to_currency: toCurrency,
-    })
-  )
-  return currencyConversionDataCleaning(data)
-}
-
-interface ExchangeRate {
-  rate?: string
-  lastRefresh?: string
-  timezone?: string
-}
-
-export function currencyConversionDataCleaning(data: {
-  [x: string]: { [x: string]: string }
-}): ExchangeRate | null {
-  if ("Realtime Currency Exchange Rate" in data) {
-    const exchangeRate = data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
-    const lastUpdated = data["Realtime Currency Exchange Rate"]["6. Last Refreshed"]
-    const timezone = data["Realtime Currency Exchange Rate"]["7. Time Zone"]
-    return { rate: exchangeRate, lastRefresh: lastUpdated, timezone }
-  }
-
-  return null
-}
+) => `/api/av/currencyConversion?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}`
 
 export const alphaVantageTimeseries = async (tickerSymbol: string) => {
   const data = await fetchJSON(

@@ -1,17 +1,12 @@
 // import { currencyIcons } from "@lib/constants"
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import {
-  useShareCost,
-  useTickerPrice,
-  useInterval,
-  useLocalCurrency,
-  useExchangeRate,
-} from "@lib/hooks"
-import { getTickerData } from "@utils/helper"
+import { useShareCost, useTickerPrice, useInterval, useLocalCurrency } from "@lib/hooks"
+import { getTickerData, currencyConversion, fetcher } from "@utils/helper"
 import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
 
+import useSWR from "swr"
 import {
   LoadingIndicator,
   useMessageContext,
@@ -39,7 +34,7 @@ export const currencyIcons = {
   USD: { icon: FaDollarSign },
 }
 
-const TradeCommandAttachment = ({ attachment, type }) => {
+const TradeCommandAttachment = ({ attachment, tradeType }) => {
   const { username } = useContext(UserContext)
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
@@ -56,7 +51,6 @@ const TradeCommandAttachment = ({ attachment, type }) => {
     priceExpired,
     setPriceExpired
   )
-  // TODO: Need to implement cache clearing or the price will never update
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
 
   // - polling for updates to price
@@ -85,11 +79,31 @@ const TradeCommandAttachment = ({ attachment, type }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickerSymbol])
 
-  const [exchangeRate] = useExchangeRate(localCurrency, tickerData?.currency)
+  const [costPerShare, setCostPerShare] = useState({
+    cost: price,
+    currency: tickerData?.currency,
+  })
 
-  const localCostPerShare = exchangeRate
-    ? (price * (exchangeRate?.rate ? exchangeRate?.rate : 1)).toFixed(2)
-    : price
+  const { data: exchangeRate, error } = useSWR(
+    () => currencyConversion(tickerData.currency, localCurrency),
+    fetcher,
+    { dedupingInterval: 10000 }
+  )
+
+  const isLoadingExchangeRate = !error && !exchangeRate
+
+  useEffect(() => {
+    setCostPerShare(() => ({
+      cost: (isLoadingExchangeRate ? price : price * exchangeRate?.rate).toFixed(2),
+      currency: isLoadingExchangeRate ? tickerData?.currency : localCurrency,
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [price, exchangeRate, tickerData?.currency])
+
+  if (tickerData)
+    tickerData.assetCurrency = isLoadingExchangeRate
+      ? tickerData.currency
+      : localCurrency
 
   const groupName = channel.cid.split(":").pop()
 
@@ -103,10 +117,8 @@ const TradeCommandAttachment = ({ attachment, type }) => {
         <TradeMMLConverter
           {...tag.node.attributes}
           tagKey={tag.key}
-          localCostPerShare={localCostPerShare}
-          localCurrency={
-            price !== localCostPerShare ? localCurrency : tickerData.assetCurrency
-          }
+          costPerShare={costPerShare.cost}
+          currency={costPerShare.currency}
           tradeType={type}
         />
       ),
@@ -134,8 +146,6 @@ const TradeCommandAttachment = ({ attachment, type }) => {
               shares: parseFloat(data.shares),
               // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
             }
-            console.log(tradeArgs)
-            console.log(tradeSubmission);
             //TODO: Review redundancy with orderType (may not be with limit orders)
             // - Write to firestore & send confirmation message in thread
             if ("buy" in data) {
@@ -156,8 +166,8 @@ const TradeCommandAttachment = ({ attachment, type }) => {
  * CustomMMLConverterFunctions
  */
 
-const TradeMMLConverter = ({ tagKey, localCostPerShare, localCurrency, tradeType }) => {
-  const [shares, handleChange, toCost] = useShareCost(localCostPerShare)
+const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
+  const [shares, handleChange, toCost] = useShareCost(costPerShare)
 
   return (
     <div className="flex flex-col">
@@ -172,7 +182,7 @@ const TradeMMLConverter = ({ tagKey, localCostPerShare, localCurrency, tradeType
         key={`${tagKey}-cost`}
         value={toCost(shares)}
         onChange={handleChange}
-        currencyIcon={currencyIcons[localCurrency]}
+        currencyIcon={currencyIcons[currency]}
       />
       <div className="flex flex-row mt-1">
         <MMLButton

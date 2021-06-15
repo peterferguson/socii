@@ -9,7 +9,7 @@ export default function LogoPriceCardHeader({
   tickerState,
   className = "",
 }) {
-  const { priceChange, price, assetCurrency, shares, action } = tickerState || {}
+  const { priceChange, price, currency, shares, action } = tickerState || {}
   const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
   const pnlColors = `${pnlBgColor} ${pnlBgColor
     .replace("bg", "text")
@@ -26,7 +26,7 @@ export default function LogoPriceCardHeader({
         >
           {!shares ? (
             <>
-              {tickerSymbol} &bull; {currencyFormatter(price, assetCurrency)}
+              {tickerSymbol} &bull; {currencyFormatter(price, currency)}
             </>
           ) : (
             <>
@@ -39,7 +39,7 @@ export default function LogoPriceCardHeader({
                 }`}
               >
                 {action.toUpperCase()} {shares} Shares &bull;
-                {currencyFormatter(price, assetCurrency)}
+                {currencyFormatter(price, currency)}
               </div>
             </>
           )}
