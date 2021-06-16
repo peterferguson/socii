@@ -2,19 +2,11 @@
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
 })
-import Cors from "cors"
 import { NextApiRequest, NextApiResponse } from "next"
-import initMiddleware from "@utils/middleware"
+import { cors } from "@utils/middleware"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Initialize the cors middleware
-  const cors = initMiddleware(
-    // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
-    Cors({
-      // Only allow requests with GET, POST and OPTIONS
-      methods: ["GET"],
-    })
-  )
+  await cors(req, res)
 
   if (req.method !== "GET") return res.status(405).end()
 
@@ -25,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!fromCurrency || !toCurrency) return res.status(422).end()
 
+  res.setHeader("Content-Type", "application/json")
   res.end(
     JSON.stringify(
       currencyConversionDataCleaning(await alpha.forex.rate(fromCurrency, toCurrency))
