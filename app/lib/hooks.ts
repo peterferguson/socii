@@ -2,13 +2,14 @@ import { CurrencyCode } from "@lib/constants"
 import { auth, firestore } from "@lib/firebase"
 import {
   currencyConversion,
+  fetcher,
   iexQuote,
   isBrowser,
+  isEmpty,
   isPromise,
   round,
-  isEmpty,
-  fetcher,
 } from "@utils/helper"
+import Cookie from "js-cookie"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
@@ -243,9 +244,17 @@ export const useCurrencyConversion = (
   }
 }
 
-export const usePersistentState = (defaultValue: any | Promise<any>, key: string) => {
+const getter = (k, asCookie) => (asCookie ? Cookie.get(k) : localStorage.getItem(k))
+const setter = (k, v, asCookie) =>
+  asCookie ? Cookie.set(k, v) : localStorage.setItem(k, v)
+
+export const usePersistentState = (
+  defaultValue: any | Promise<any>,
+  key: string,
+  asCookie: boolean = false
+) => {
   const [value, setValue] = useState(() => {
-    const persistentValue = JSON.parse(window.localStorage.getItem(key))
+    const persistentValue = JSON.parse(getter(key, asCookie) || null)
     if (persistentValue !== null && !isEmpty(persistentValue)) return persistentValue
     // - Allows us to send an object with the keys func & args as defaultValue
     // TODO: This works in node but is not setting correct value in localStorage
@@ -256,13 +265,13 @@ export const usePersistentState = (defaultValue: any | Promise<any>, key: string
   useEffect(() => {
     isPromise(value)
       ? // - if the value is a promise resolve it before storing in cache
-        value.then((r) => window.localStorage.setItem(key, JSON.stringify(r)))
-      : window.localStorage.setItem(key, JSON.stringify(value))
-  }, [key, value])
+        value.then((r) => setter(key, JSON.stringify(r), asCookie))
+      : setter(key, JSON.stringify(value), asCookie)
+  }, [key, value, asCookie])
   return [value, setValue]
 }
 
-export const useLocalCurrency = () => usePersistentState("GBP", "localCurrency")
+export const useLocalCurrency = () => usePersistentState("GBP", "localCurrency", true)
 
 interface PriceData {
   price: number
