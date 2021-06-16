@@ -10,11 +10,12 @@ import React, { Suspense, useContext, useEffect, useState } from "react"
 // WARN: And passing these so we then call the api less
 import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
 import {
-  LoadingIndicator, useChannelStateContext, useMessageContext
+  LoadingIndicator,
+  useChannelStateContext,
+  useMessageContext,
 } from "stream-chat-react"
 import useSWR from "swr"
 import MMLButton from "./MMLButton"
-
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
@@ -43,38 +44,24 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   const [refreshCount, setRefreshCount] = useState(0)
   const [localCurrency] = useLocalCurrency()
 
-  const { price, priceChange, priceLastUpdated } = useTickerPrice(
-    tickerSymbol,
-    priceExpired,
-    setPriceExpired
-  )
+  const {
+    price,
+    percentChange,
+    lastUpdated: priceLastUpdated,
+  } = useTickerPrice(tickerSymbol, priceExpired, setPriceExpired)
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
-
-  // - polling for updates to price
-  // TODO: Only do this if market is open!
-  const refreshCountThreshold = 10
-  const refreshTime = 20 * 1000 // - 20ms
-  useInterval(
-    () => {
-      const expired = (updateTime) => new Date() - Date.parse(updateTime) >= refreshTime
-      setPriceExpired(expired(priceLastUpdated))
-      setRefreshCount(refreshCount + 1)
-    },
-    // `refreshTime` in milliseconds stopped after `refreshCountThreshold` refreshes
-    refreshCount < refreshCountThreshold ? refreshTime : null
-  )
 
   useEffect(() => {
     getTickerData(tickerSymbol).then((d) =>
       setTickerData({
         ...d,
         price,
-        priceChange,
+        percentChange,
         priceLastUpdated,
       })
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tickerSymbol])
+  }, [tickerSymbol, price])
 
   const [costPerShare, setCostPerShare] = useState({
     cost: price,
@@ -95,45 +82,32 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
       currency: isLoadingExchangeRate ? tickerData?.currency : localCurrency,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [price, exchangeRate, tickerData?.currency])
-
-  useEffect(() => {
-    if (tickerData && tickerData?.price !== price) {
-      tickerData.price = price
-    }
-  }, [price, tickerData, tickerData?.price])
-
-  if (tickerData)
-    tickerData.assetCurrency = isLoadingExchangeRate
-      ? tickerData.currency
-      : localCurrency
+  }, [price, exchangeRate, tickerData])
 
   const groupName = channel.cid.split(":").pop()
 
-  // TODO: Add different views of the buy card for users who did not submit it
-  // - Creates a object of all actions and their CustomMMLConverterFunctions
-  const converters = Object.assign(
-    {},
-    ...["buy", "sell"].map((type) => ({
-      // eslint-disable-next-line react/display-name
-      [type]: (tag) => (
-        <TradeMMLConverter
-          {...tag.node.attributes}
-          tagKey={tag.key}
-          costPerShare={costPerShare.cost}
-          currency={costPerShare.currency}
-          tradeType={type}
-        />
-      ),
-    }))
+  // - polling for updates to price
+  // TODO: Only do this if market is open!
+  const refreshCountThreshold = 10
+  const refreshTime = 20 * 1000 // - 20ms
+  useInterval(
+    () => {
+      const expired = (updateTime) => new Date() - Date.parse(updateTime) >= refreshTime
+      setPriceExpired(expired(priceLastUpdated))
+      setRefreshCount(refreshCount + 1)
+    },
+    // `refreshTime` in milliseconds stopped after `refreshCountThreshold` refreshes
+    refreshCount < refreshCountThreshold ? refreshTime : null
   )
+
+  console.log("here")
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
       <LogoPriceCardHeader tickerSymbol={tickerSymbol} tickerState={tickerData} />
       <Suspense fallback={<LoadingIndicator />}>
         <MML
-          converters={converters}
+          converters={converters(costPerShare)}
           source={attachment.mml}
           onSubmit={(data) => {
             const tradeArgs = {
@@ -168,6 +142,25 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
 /*
  * CustomMMLConverterFunctions
  */
+
+// TODO: Add different views of the buy card for users who did not submit it
+// - Creates a object of all actions and their CustomMMLConverterFunctions
+const converters = ({ cost, currency }) =>
+  Object.assign(
+    {},
+    ...["buy", "sell"].map((type) => ({
+      // eslint-disable-next-line react/display-name
+      [type]: (tag) => (
+        <TradeMMLConverter
+          {...tag.node.attributes}
+          tagKey={tag.key}
+          costPerShare={cost}
+          currency={currency}
+          tradeType={type}
+        />
+      ),
+    }))
+  )
 
 const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
   const [shares, handleChange, toCost] = useShareCost(costPerShare)

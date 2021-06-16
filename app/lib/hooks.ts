@@ -249,7 +249,7 @@ export const usePersistentState = (defaultValue: any | Promise<any>, key: string
     if (persistentValue !== null && !isEmpty(persistentValue)) return persistentValue
     // - Allows us to send an object with the keys func & args as defaultValue
     // TODO: This works in node but is not setting correct value in localStorage
-    if (defaultValue && "func" in defaultValue)
+    if (typeof defaultValue === "object" && "func" in defaultValue)
       return defaultValue.func(...defaultValue.args)
     return typeof defaultValue === "function" ? defaultValue() : defaultValue
   })
@@ -264,11 +264,17 @@ export const usePersistentState = (defaultValue: any | Promise<any>, key: string
 
 export const useLocalCurrency = () => usePersistentState("GBP", "localCurrency")
 
+interface PriceData {
+  price: number
+  percentChange: number
+  lastUpdated: string
+}
+
 export const useTickerPrice = (
   tickerSymbol: string,
   expired = false,
   setExpired = null
-): any => {
+): PriceData => {
   const [price, setPrice] = usePersistentState("", `${tickerSymbol}-price`)
 
   // TODO: Implement cache clearing logic
@@ -278,20 +284,22 @@ export const useTickerPrice = (
   // ? price services. Alternatively we could offer to match so part of the cost of a share
   // ? or maybe even offer free shares for opting in.
 
-  if (!price || expired) {
-    iexQuote(tickerSymbol, "latestPrice,changePercent").then(
-      ({ latestPrice, changePercent }) => {
-        setPrice({
-          price: latestPrice || 0.0,
-          priceChange: changePercent || 0.0,
-          priceLastUpdated: new Date().toISOString(),
-        })
-      }
-    )
-    setExpired?.(false)
-  }
+  useEffect(() => {
+    if (!price || expired) {
+      iexQuote(tickerSymbol, "latestPrice,changePercent").then(
+        ({ latestPrice, changePercent }) => {
+          setPrice({
+            price: latestPrice || 0.0,
+            percentChange: changePercent || 0.0,
+            lastUpdated: new Date().toISOString(),
+          })
+        }
+      )
+      setExpired?.(false)
+    }
+  }, [expired, price, setExpired, setPrice, tickerSymbol])
 
-  return price
+  return price || { price: 0, percentChange: 0, lastUpdated: new Date(0).toISOString() }
 }
 
 // ! taken from https://usehooks-typescript.com/react-hook/use-script
