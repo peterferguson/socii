@@ -1,7 +1,7 @@
-import { uncamelCase } from '@utils/helper'
-import Image from "next/image"
-import router from 'next/router'
-import React from 'react'
+import { uncamelCase } from "@utils/helper"
+
+import router from "next/router"
+import React from "react"
 
 const StockDisplayAttachment = ({ attachment }) => {
   const tickerSymbol = attachment?.name
@@ -11,7 +11,7 @@ const StockDisplayAttachment = ({ attachment }) => {
       className="p-4 bg-white rounded-lg shadow-lg cursor-pointer"
       onClick={() => router.push(attachment?.url)}
     >
-      <Image
+      <img
         className="h-auto mx-auto rounded-full shadow-lg w-14"
         src={attachment?.image}
         alt={`${tickerSymbol} logo`}
@@ -19,8 +19,8 @@ const StockDisplayAttachment = ({ attachment }) => {
       <div className="w-auto h-auto p-1 text-center">
         <div
           className={
-            'text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
-                inline-block font-poppins'
+            "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
+                inline-block font-poppins"
           }
         >
           {name}
@@ -37,7 +37,7 @@ const StockDisplayAttachment = ({ attachment }) => {
                 key={key}
                 className="w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-left sm:mt-4 text-brand-light"
               >
-                {uncamelCase(key)} &bull;{' '}
+                {uncamelCase(key)} &bull;{" "}
                 <span className="text-gray-600 text-tiny font-poppins">
                   {asset[key]}
                 </span>

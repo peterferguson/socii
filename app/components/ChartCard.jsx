@@ -1,6 +1,6 @@
 import { tailwindColorMap } from "@lib/constants"
 import { pctChange } from "@utils/helper"
-import Image from "next/image"
+
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
@@ -47,7 +47,7 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
           <div className="justify-center flex-none w-20 mx-auto rounded-full">
             <Link href={`stock/${tickerSymbol}`}>
               <a>
-                <Image
+                <img
                   className="w-10 h-10 mx-auto rounded-full shadow-lg"
                   src={logoUrl}
                   alt={`${tickerSymbol} logo`}

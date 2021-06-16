@@ -3,13 +3,18 @@ import { Dialog } from "@headlessui/react"
 import SearchIcon from "@icons/search.svg"
 import algoliasearch from "algoliasearch/lite"
 import debounce from "lodash/debounce"
-import Image from "next/image"
+
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useAsync } from "react-async-hook"
 import {
-  Configure, connectSearchBox, connectStateResults, Highlight, Hits, InstantSearch
+  Configure,
+  connectSearchBox,
+  connectStateResults,
+  Highlight,
+  Hits,
+  InstantSearch,
 } from "react-instantsearch-dom"
 import { iexQuote } from "utils/helper"
 
@@ -88,7 +93,7 @@ const Hit = ({ hit }) => {
         className="w-full max-w-md px-8 py-4 my-2 bg-white rounded-lg shadow-lg sm:my-0"
         onClick={hitClickHandler}
       >
-        <Image
+        <img
           src={`https://storage.googleapis.com/sociiinvest.appspot.com/logos/${hit.ISIN}.png`}
           alt=""
           className="w-12 h-12 -my-8 border-double rounded-full border-brand -mx-14"
