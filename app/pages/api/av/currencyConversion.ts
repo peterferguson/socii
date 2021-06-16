@@ -1,10 +1,21 @@
-// const bent = require("bent")
+// const bent = require("bent"))
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
 })
+import Cors from "cors"
 import { NextApiRequest, NextApiResponse } from "next"
+import initMiddleware from "@utils/middleware"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Initialize the cors middleware
+  const cors = initMiddleware(
+    // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+    Cors({
+      // Only allow requests with GET, POST and OPTIONS
+      methods: ["GET"],
+    })
+  )
+
   if (req.method !== "GET") return res.status(405).end()
 
   const { fromCurrency, toCurrency } = req.query as {
