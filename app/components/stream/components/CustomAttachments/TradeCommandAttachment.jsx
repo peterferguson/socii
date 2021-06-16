@@ -100,8 +100,6 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
     refreshCount < refreshCountThreshold ? refreshTime : null
   )
 
-  console.log("here")
-
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
       <LogoPriceCardHeader tickerSymbol={tickerSymbol} tickerState={tickerData} />
