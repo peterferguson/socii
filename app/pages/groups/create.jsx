@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
+import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
-import { firestore, serverTimestamp, arrayUnion } from "@lib/firebase"
+import CrossIcon from "@icons/cross.svg"
 import {
-  groupPrivacyOptions,
-  groupLumpSumOptions,
   groupDepositOptions,
+  groupLumpSumOptions,
+  groupPrivacyOptions,
 } from "@lib/constants"
 import { UserContext } from "@lib/context"
-import CheckIcon from "@components/BackgroundCheck"
-import CrossIcon from "@icons/cross.svg"
-
+import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
 import debounce from "lodash/debounce"
-import toast from "react-hot-toast"
 import { useRouter } from "next/router"
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { HiOutlineUserGroup } from "react-icons/hi"
 
 export default function Create() {
   const { user, username } = useContext(UserContext)
@@ -48,9 +48,8 @@ export default function Create() {
     }
   }
 
-  useEffect(() => {
-    checkGroupName(groupName)
-  }, [groupName])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => checkGroupName(groupName), [groupName])
 
   // Hit the database for groupName match after each debounced change
   // useCallback is required for debounce to work
@@ -72,75 +71,84 @@ export default function Create() {
   )
 
   return (
-    <main className="flex items-center justify-center w-screen h-screen bg-gray-50">
+    <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-100">
       <form className="w-full my-16 sm:w-2/3">
-        <div className="px-4 py-3 mb-3 leading-tight text-gray-700 border border-gray-300 appearance-none bg-brand-light bg-opacity-10 \ rounded-t-3xl sm:rounded-xl focus:outline-none focus:bg-gray-50 focus:border-gray-500">
-          <div className="p-4 text-xl font-bold font-work-sans">
-            Create an Investment Group
+        <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
+          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white rounded-full shadow-lg bg-brand-light">
+            <HiOutlineUserGroup className="w-8 h-8 text-white" />
           </div>
-          <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light">
-            <input
-              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none"
-              type="text"
-              placeholder="Investment Group Name"
-              onChange={onChange}
-            />
-            <div
-              className={`bg-white text-sm sm:text-tiny ${
-                isValidGroupName ? "text-brand-light btn-transition" : "text-red-400"
-              } p-0.5 align-middle`}
-              onKeyDown={null}
-            >
-              {isValidGroupName ? (
-                <CheckIcon className="w-6" onClick={null} />
-              ) : (
-                <CrossIcon className="w-6" />
-              )}
+          <div className="pt-4 pb-1 text-4xl font-bold text-center font-work-sans">
+            Create an Investment
+          </div>
+          <div className="pb-4 text-4xl font-bold text-center font-work-sans">
+            Group
+          </div>
+          <label className="ml-4 font-bold text-md font-work-sans">
+            Name
+            <div className="flex flex-row">
+              <input
+                className="w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand-light focus:ring-1 focus:ring-brand text-tiny sm:text-base"
+                type="text"
+                placeholder="Investment Group Name"
+                onChange={onChange}
+              />
+              <div
+                className={`h-10 w-10 bg-none text-sm sm:text-tiny ${
+                  isValidGroupName ? "text-brand-light btn-transition" : "text-red-400"
+                } p-0.5 justify-center ml-[-4.5rem] mt-[1.45rem]`}
+                onKeyDown={null}
+              >
+                {isValidGroupName ? (
+                  <CheckIcon className="w-6" onClick={null} />
+                ) : (
+                  <CrossIcon className="w-6" />
+                )}
+              </div>
             </div>
-          </div>
-          <div className="px-6 py-4 font-bold text-md font-work-sans">
-            Add a short description
-          </div>
-          <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none active:border-opacity-100 active:border-brand-light focus:border-opacity-100 focus:border-brand-light">
+          </label>
+          <label className="ml-4 font-bold text-md font-work-sans">
+            Short description
             <input
-              className="flex-grow w-2/3 bg-white appearance-none sm:w-full focus:outline-none text-tiny sm:text-base"
+              className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand-light focus:ring-1 focus:ring-brand text-tiny sm:text-base"
               type="text"
               placeholder="Best active value/dividend/growth investment club around!"
               onChange={(e) => setGroupDescription(e.target.value)}
             />
-          </div>
-          <div className="p-4 font-bold text-md font-work-sans">Group Privacy</div>
-          <PrivacyOptions
-            privacyOption={privacyOption}
-            setPrivacyOption={setPrivacyOption}
-          />
-          <div className="flex flex-col p-4 font-bold text-md font-work-sans">
+          </label>
+          <label className="mx-4 mt-4 font-bold text-md font-work-sans">
+            Group Privacy
+            <PrivacyOptions
+              privacyOption={privacyOption}
+              setPrivacyOption={setPrivacyOption}
+            />
+          </label>
+          <label className="flex flex-col mx-4 mb-4 font-bold text-md font-work-sans">
             Initial Lump-Sum
-          </div>
-          <AmountOptions
-            AmountOptions={groupLumpSumOptions}
-            amountOption={lumpSumOption}
-            setAmountOption={setLumpSumOption}
-            srLabel={"Initial Lump Sum Amount"}
-          />
-          <div className="flex flex-col p-4 font-bold text-md font-work-sans">
+            <AmountOptions
+              AmountOptions={groupLumpSumOptions}
+              amountOption={lumpSumOption}
+              setAmountOption={setLumpSumOption}
+              srLabel={"Initial Lump Sum Amount"}
+            />
+          </label>
+          <label className="flex flex-col m-4 font-bold text-md font-work-sans">
             Deposit Schedule
             {/* 
             // ! Legally the group members will have to ensure this balance is maintained.
             // ! All we can do is raise warnings when their average balance is below 
             // ! the cash holding of the group may not have enough 
             */}
-            <span className="pt-1 pl-4 uppercase text-tiny text-emerald-500">
+            {/* <span className="pt-1 uppercase text-tiny text-emerald-400">
               (a monthly deposit so that all members of the group have enough to trade
               with)
-            </span>
-          </div>
-          <AmountOptions
-            AmountOptions={groupDepositOptions}
-            amountOption={depositOption}
-            setAmountOption={setDepositOption}
-            srLabel={"Monthly Deposit Amount"}
-          />
+            </span> */}
+            <AmountOptions
+              AmountOptions={groupDepositOptions}
+              amountOption={depositOption}
+              setAmountOption={setDepositOption}
+              srLabel={"Monthly Deposit Amount"}
+            />
+          </label>
           <button
             className="w-11/12 my-8 btn"
             onClick={(e) =>
@@ -176,7 +184,7 @@ function AmountOptions({
   srLabel,
 }) {
   return (
-    <div className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}>
+    <div className={`w-11/12 mt-4 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={amountOption} onChange={setAmountOption}>
         <RadioGroup.Label className="sr-only">{srLabel}</RadioGroup.Label>
         <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \ sm:flex sm:flex-row">
@@ -228,23 +236,23 @@ function AmountOptions({
 
 function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
   return (
-    <div className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}>
+    <div className={`w-11/12 ml-4 mt-4 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={privacyOption} onChange={setPrivacyOption}>
         <RadioGroup.Label className="sr-only">Privacy option</RadioGroup.Label>
-        <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \ sm:flex sm:flex-row">
+        <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 sm:flex sm:flex-row">
           {groupPrivacyOptions.map((option) => (
             <RadioGroup.Option
               key={option.name}
               value={option}
               className={({ active }) =>
-                `${
-                  active
-                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                         ring-brand-light ring-opacity-60"
-                    : ""
-                }
-                     bg-white relative rounded-lg shadow-md px-5 py-4 cursor-pointer \
-                     focus:outline-none flex-1`
+                `bg-white relative rounded-lg shadow-md border border-gray-200 px-5 py-4 cursor-pointer \
+              focus:outline-none flex-1
+              ${
+                active
+                  ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
+                       ring-brand-light ring-opacity-60 border-none"
+                  : ""
+              }`
               }
             >
               {({ checked }) => (
