@@ -307,6 +307,9 @@ const createGroup = async (
 ) => {
   e.preventDefault()
 
+
+  // TODO: Need to fix rules to allow user creation. (userGroupRef isn't accessible)
+
   const userGroupRef = firestore.collection("users").doc(user.uid)
   const groupRef = firestore.collection("groups").doc(groupName)
   const investorsRef = groupRef.collection("investors").doc(username)
