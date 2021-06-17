@@ -2,12 +2,14 @@ import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import CrossIcon from "@icons/cross.svg"
 import {
+  currencyIcons,
   groupDepositOptions,
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
 import { UserContext } from "@lib/context"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
+import { useLocalCurrency } from "@lib/hooks"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useContext, useEffect, useState } from "react"
@@ -183,6 +185,8 @@ function AmountOptions({
   setAmountOption,
   srLabel,
 }) {
+  const [localCurrency] = useLocalCurrency()
+  const LocalCurrencyIcon = currencyIcons[localCurrency].icon
   return (
     <div className={`w-11/12 mt-4 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={amountOption} onChange={setAmountOption}>
@@ -210,11 +214,13 @@ function AmountOptions({
                       <div className="text-sm">
                         <RadioGroup.Label
                           as="p"
-                          className={`font-medium ${
+                          className={`font-medium text-lg sm:text-md ${
                             checked ? "text-brand-light" : "text-gray-900"
                           }`}
                         >
-                          {option.amount}
+                          {currencyIcons[localCurrency].text}{option.amount}
+                          {/* <LocalCurrencyIcon className="w-4 h-4 mt-1.5" /> */}
+                          {/* <span className="text-lg">{option.amount}</span> */}
                         </RadioGroup.Label>
                       </div>
                     </div>
@@ -306,7 +312,6 @@ const createGroup = async (
   groupDescription
 ) => {
   e.preventDefault()
-
 
   // TODO: Need to fix rules to allow user creation. (userGroupRef isn't accessible)
 

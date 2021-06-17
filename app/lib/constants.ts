@@ -1,8 +1,10 @@
 import AppleLogo from "@icons/apple.svg"
 import FacebookLogo from "@icons/fb.svg"
-import TwitterLogo from "@icons/twitter.svg"
 import GoogleLogo from "@icons/google.svg"
-import { googleAuthProvider, facebookAuthProvider } from "@lib/firebase"
+import TwitterLogo from "@icons/twitter.svg"
+import { facebookAuthProvider, googleAuthProvider } from "@lib/firebase"
+import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
+
 
 export const currencySymbols = {
   AUD: "$",
@@ -14,8 +16,17 @@ export const currencySymbols = {
   USD: "$",
 }
 
-
 export type CurrencyCode = "AUD" | "CAD" | "CHF" | "EUR" | "GBP" | "JPY" | "USD"
+
+export const currencyIcons = {
+  AUD: { icon: FaDollarSign, text: "$" },
+  CAD: { icon: FaDollarSign, text: "$" },
+  // CHF: "CHF",
+  EUR: { icon: FaEuroSign, text: "€" },
+  GBP: { icon: FaPoundSign, text: "£" },
+  JPY: { icon: FaYenSign, text: "¥" },
+  USD: { icon: FaDollarSign, text: "$" },
+}
 
 /*
  * Group Privacy Settings
@@ -36,19 +47,19 @@ export const groupPrivacyOptions = [
  */
 export const groupDepositOptions = [
   {
-    amount: "£0",
+    amount: 0,
   },
   {
-    amount: "£10",
+    amount: 10,
   },
   {
-    amount: "£25",
+    amount: 25,
   },
   {
-    amount: "£50",
+    amount: 50,
   },
   {
-    amount: "£100",
+    amount: 100,
   },
 ]
 
@@ -57,19 +68,19 @@ export const groupDepositOptions = [
  */
 export const groupLumpSumOptions = [
   {
-    amount: "£0",
+    amount: 0,
   },
   {
-    amount: "£25",
+    amount: 25,
   },
   {
-    amount: "£50",
+    amount: 50,
   },
   {
-    amount: "£100",
+    amount: 100,
   },
   {
-    amount: "£250",
+    amount: 250,
   },
 ]
 

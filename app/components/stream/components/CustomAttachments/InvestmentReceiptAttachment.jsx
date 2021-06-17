@@ -1,4 +1,3 @@
-// import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import React from "react"
 
@@ -7,17 +6,6 @@ import { useMessageContext } from "stream-chat-react"
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
-
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
-export const currencyIcons = {
-  AUD: { icon: FaDollarSign },
-  CAD: { icon: FaDollarSign },
-  // CHF: "CHF",
-  EUR: { icon: FaEuroSign },
-  GBP: { icon: FaPoundSign },
-  JPY: { icon: FaYenSign },
-  USD: { icon: FaDollarSign },
-}
 
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
@@ -28,8 +16,6 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
   const action =
     message.text.split(" for")[0].split(" ").pop() === "sold" ? "sell" : "buy"
   const cost = parseFloat(localPrice.slice(1))
-  console.log(cost)
-  console.log(shares)
 
   // TODO: The receipt is colored by buy-sell instead of by the loss or gain. Which should
   // TODO: definitely be included in the message also!

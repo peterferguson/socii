@@ -1,14 +1,10 @@
-// import { currencyIcons } from "@lib/constants"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
+import { currencyIcons } from "@lib/constants"
 import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
 import { useInterval, useLocalCurrency, useShareCost, useTickerPrice } from "@lib/hooks"
 import { currencyConversion, fetcher, getTickerData } from "@utils/helper"
 import React, { Suspense, useContext, useEffect, useState } from "react"
-// WARN: IEX called for each instance of a buy command message
-// WARN: Should think about some how collecting the tickers referenced on the message list
-// WARN: And passing these so we then call the api less
-import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
 import {
   LoadingIndicator,
   useChannelStateContext,
@@ -17,20 +13,14 @@ import {
 import useSWR from "swr"
 import MMLButton from "./MMLButton"
 
+// WARN: IEX called for each instance of a buy command message
+// WARN: Should think about some how collecting the tickers referenced on the message list
+// WARN: And passing these so we then call the api less
+
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
   return { default: mml.MML }
 })
-
-export const currencyIcons = {
-  AUD: { icon: FaDollarSign },
-  CAD: { icon: FaDollarSign },
-  // CHF: "CHF",
-  EUR: { icon: FaEuroSign },
-  GBP: { icon: FaPoundSign },
-  JPY: { icon: FaYenSign },
-  USD: { icon: FaDollarSign },
-}
 
 const TradeCommandAttachment = ({ attachment, tradeType }) => {
   const { username } = useContext(UserContext)
@@ -176,7 +166,7 @@ const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
         key={`${tagKey}-cost`}
         value={toCost(shares)}
         onChange={handleChange}
-        currencyIcon={currencyIcons[currency]}
+        currency={currency}
       />
       <div className="flex flex-row mt-1">
         <MMLButton
@@ -196,7 +186,8 @@ const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
   )
 }
 
-const MMLNumberInput = ({ tagKey, value, onChange, name, currencyIcon = null }) => {
+const MMLNumberInput = ({ tagKey, value, onChange, name, currency }) => {
+  const CurrencyIcon = currency ? currencyIcons[currency].icon : null
   return (
     <div className="flex flex-row m-2 border rounded shadow">
       <span
@@ -204,7 +195,7 @@ const MMLNumberInput = ({ tagKey, value, onChange, name, currencyIcon = null }) 
         className="flex items-center px-3 font-bold rounded rounded-r-none font-poppins bg-grey-200 text-grey-400"
       >
         {name}
-        {currencyIcon && <currencyIcon.icon className="ml-2 mb-0.5" />}
+        {CurrencyIcon && <CurrencyIcon className="ml-2 mb-0.5" />}
       </span>
       <input
         type="number"

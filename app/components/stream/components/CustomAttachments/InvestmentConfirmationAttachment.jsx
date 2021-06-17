@@ -1,4 +1,3 @@
-// import { currencyIcons } from "@lib/constants"
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { UserContext } from "@lib/context"
@@ -15,17 +14,6 @@ const MML = React.lazy(async () => {
   const mml = await import("mml-react")
   return { default: mml.MML }
 })
-
-import { FaDollarSign, FaPoundSign, FaYenSign, FaEuroSign } from "react-icons/fa"
-export const currencyIcons = {
-  AUD: { icon: FaDollarSign },
-  CAD: { icon: FaDollarSign },
-  // CHF: "CHF",
-  EUR: { icon: FaEuroSign },
-  GBP: { icon: FaPoundSign },
-  JPY: { icon: FaYenSign },
-  USD: { icon: FaDollarSign },
-}
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
   const { user } = useContext(UserContext)
