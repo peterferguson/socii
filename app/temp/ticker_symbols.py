@@ -21,7 +21,7 @@ def willItFloat(string: str) -> Union[str, float]:
 
 def camelCase(string: str) -> str:
     return (
-        string?.[0].lower() + string[1:]
+        string[0].lower() + string[1:]
         if not all(x.isupper() for x in string[:2])
         else string
     )
@@ -59,7 +59,7 @@ def yahooData(isin: str, exchanges=yq.get_exchanges().to_dict("records")):
 
     markets = [market for market in exchanges if "." + suffix == market["Suffix"]]
     market = (
-        markets?.[0]
+        markets[0]
         if markets
         else {
             "Country": "United States of America",
@@ -87,6 +87,7 @@ def yahooDataToFirestore(isin: str, is_popular: bool = False):
     client.document(f"tickers/{isin}").set(data)
 
 
+# ! added to data gcp function
 def alphaVantageDataToFirestore(
     ticker: str, query_params: dict[str, str] = {"function": "OVERVIEW"}
 ):
@@ -114,6 +115,8 @@ def alphaVantageTimeseriesToFirestore(
     ticker: str, query_params: dict[str, str] = {"function": "TIME_SERIES_DAILY"}
 ):
     isin = tickerToISIN(ticker)
+    if not isin:
+        return
     base_url = "https://www.alphavantage.co/query?"
     api_key = "&apikey=E9W8LZBTXVYZ31IO"
     symbol = f"&symbol={ticker}"
@@ -122,11 +125,11 @@ def alphaVantageTimeseriesToFirestore(
     data = requests.get(base_url + params + symbol + api_key).json()
 
     if "note" in data and "Alpha Vantange" in data["note"]:
-        # API call limit reached ... return without writing to Firestore
+        # - API call limit reached ... return without writing to Firestore
         print(f"API call limit reached for {ticker}")
         return
 
-    timeseries_key = [key for key in data.keys() if "time series" in key.lower()]?.[0]
+    timeseries_key = [key for key in data.keys() if "time series" in key.lower()][0]
 
     timeseries = data[timeseries_key]
 
@@ -237,13 +240,13 @@ def trading212TickersToFireStore():
 def tickerToISIN(ticker: str) -> str:
     query = client.collection("tickers").where("tickerSymbol", "==", ticker).limit(1)
     results = query.get()
-    return results?.[0].to_dict()["ISIN"] if results else None
+    return results[0].to_dict()["ISIN"] if results else None
 
 
 def isinToTicker(isin: str) -> str:
     query = client.collection("tickers").where("ISIN", "==", isin).limit(1)
     results = query.get()
-    return results?.[0].to_dict()["tickerSymbol"] if results else None
+    return results[0].to_dict()["tickerSymbol"] if results else None
 
 
 def makeLogoPublic(isin: str):
@@ -265,7 +268,7 @@ def uploadLogoUrl(ticker: str):
 
 if __name__ == "__main__":
 
-    with open("/Users/peter/Projects/socii/serviceAccountKey.json", "r") as f:
+    with open("/Users/peter/Projects/socii/app/serviceAccountKey.json", "r") as f:
         service_account_info = json.load(f)
 
     credentials = firebase_admin.credentials.Certificate(service_account_info)
@@ -289,6 +292,104 @@ if __name__ == "__main__":
         "BABA",
         "TTD",
         "GME",
+    ] + [
+        "GERN",
+        "AMC",
+        "XLF",
+        "WISH",
+        "SNDL",
+        "SPY",
+        "AAPL",
+        "CLNE",
+        "BACO",
+        "ORPH",
+        "NIO",
+        "GE",
+        "SQQQ",
+        "FT",
+        "TRCH",
+        "PLTR",
+        "T",
+        "WFC",
+        "GFI",
+        "EDU",
+        "AMD",
+        "INTC",
+        "XLE",
+        "QQQA",
+        "ALF",
+        "IWMV",
+        "VXX",
+        "FCX",
+        "HBANCLF",
+        "C",
+        "JPMA",
+        "ANPCN",
+        "NLY",
+        "NAKDUVXYE",
+        "EEM",
+        "MU",
+        "XOMA",
+        "AHT",
+        "BBVZ",
+        "ZOM",
+        "X",
+        "PFE",
+        "ITUB",
+        "MSFT",
+        "EWZ",
+        "PBR",
+        "EFA",
+        "CSCO",
+        "RIG",
+        "XPEV",
+        "TQQQ",
+        "SLV",
+        "TALC",
+        "CLOVI",
+        "IVR",
+        "ABEV",
+        "GDX",
+        "NOK",
+        "KO",
+        "ET",
+        "VALEH",
+        "HYG",
+        "TELLA",
+        "ATHA",
+        "GOLD",
+        "ERIC",
+        "SWNL",
+        "LU",
+        "AAL",
+        "JD",
+        "HL",
+        "TLT",
+        "CCL",
+        "CMCSA",
+        "SIRI",
+        "MUX",
+        "VXRTS",
+        "SDS",
+        "GM",
+        "KMIS",
+        "SESN",
+        "HPQ",
+        "SLB",
+        "VIAC",
+        "TSLA",
+        "BBD",
+        "LKCO",
+        "MO",
+        "NVDA",
+        "OXY",
+        "HPE",
+        "MRO",
+        "AUYS",
+        "SENS",
+        "WKHS",
+        "FB",
+        "BNL",
     ]
 
     # # * Make popular tickers
@@ -308,23 +409,19 @@ if __name__ == "__main__":
     #     yahooSummaryToFirestore(ticker=ticker)
 
     # # * Upload alpha vantage data
-    # # TODO : Set up cloud function to update these every so often
     # for ticker in tqdm(popular_tickers):
     #     alphaVantageDataToFirestore(ticker=ticker)
 
-    # # * Upload alpha vantage timeseries (monthly)
-    # # TODO : Set up cloud function to update these every so often
-    # for ticker in tqdm(popular_tickers):
-    #     alphaVantageTimeseriesToFirestore(
-    #         ticker=ticker, query_params={"function": "TIME_SERIES_MONTHLY"}
-    #     )
-    #     alphaVantageTimeseriesToFirestore(
-    #         ticker=ticker, query_params={"function": "TIME_SERIES_DAILY"}
-    #     )
-    #     alphaVantageTimeseriesToFirestore(ticker=ticker)
-    #     sleep(60)
-
-    # * Upload storage logo urls to firestore docs
+    # * Upload alpha vantage timeseries (monthly)
     # TODO : Set up cloud function to update these every so often
     for ticker in tqdm(popular_tickers):
-        uploadLogoUrl(ticker)
+        # alphaVantageTimeseriesToFirestore(
+        #     ticker=ticker, query_params={"function": "TIME_SERIES_MONTHLY"}
+        # )
+        alphaVantageTimeseriesToFirestore(ticker=ticker)
+        sleep(60)
+
+    # # * Upload storage logo urls to firestore docs
+    # # TODO : Set up cloud function to update these every so often
+    # for ticker in tqdm(popular_tickers):
+    #     uploadLogoUrl(ticker)
