@@ -282,7 +282,7 @@ export async function getStaticProps({ params }) {
     .limit(1)
 
   try {
-    props = await stockProps(tickerQuery, "", 100)
+    props = await stockProps({ tickerQuery, timeseriesLimit: 100 })
   } catch (e) {
     return {
       redirect: {

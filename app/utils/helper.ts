@@ -47,6 +47,13 @@ export const currencyConversion = (
   toCurrency: CurrencyCode
 ) => `/api/av/currencyConversion?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}`
 
+// !
+// !
+// !
+// TODO: Check firestore for the latest chart first then if not load this data & push it to firestore
+// !
+// !
+// !
 export const alphaVantageTimeseries = async (tickerSymbol: string) => {
   const data = await fetchJSON(
     alphaVantageQuery("TIME_SERIES_DAILY", {
@@ -54,7 +61,7 @@ export const alphaVantageTimeseries = async (tickerSymbol: string) => {
     })
   )
 
-  const dates = Object.keys(data["Time Series (Daily)"])
+  const dates = Object.keys(data["Time Series (Daily)"] || {})
 
   // * Return close for each date as timeseries
   return dates.map((ts) => ({
@@ -74,12 +81,14 @@ export const fetchJSON = async (url) => (await fetch(url)).json()
 
 export const fetcher = (url) => fetch(url).then((r) => r.json())
 
-export const stockProps = async (
-  tickerQuery,
+// TODO: Needs refactored
+export const stockProps = async ({
+  tickerQuery = null,
   subQueryField = "",
-  timeseriesLimit = 30
-) => {
-  const tickerDocs = await tickerQuery.get()
+  timeseriesLimit = 30,
+  tickerDocs = null,
+}) => {
+  tickerDocs = tickerDocs ? tickerDocs : await tickerQuery.get()
 
   let tickerSymbols = []
   let sector = null
@@ -107,6 +116,7 @@ export const stockProps = async (
     if (subQueryField) {
       sector = await tickerExistsSubquery(tickerDoc.ref, subQueryField)
     }
+    console.log(ticker)
 
     tickerSymbols.push({ ticker, timeseries, sector })
   }
@@ -145,7 +155,7 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
     timeseries = await alphaVantageTimeseries(tickerSymbol)
-    // TODO: This is server-side so update firestore with the timeseries data onCall
+    // TODO: update firestore with the timeseries data
   } else {
     timeseries = timeseriesDocs.map((doc) => ({
       ...doc.data(),

@@ -10,7 +10,7 @@ import {
   round,
 } from "@utils/helper"
 import Cookie from "js-cookie"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
@@ -108,43 +108,39 @@ export const useScreenType = () => {
   return "fullscreen"
 }
 
-export const useIntersectionObserver = ({
-  threshold = 0,
-  root = null,
-  rootMargin = "0%",
-}) => {
+interface Args extends IntersectionObserver {
+  freezeOnceVisible?: boolean
+}
+
+export function useIntersectionObserver(
+  elementRef: RefObject<Element>,
+  { threshold = 0, root = null, rootMargin = "0%", freezeOnceVisible = false }: Args
+): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
-  const [node, setNode] = useState<HTMLElement | null>(null)
-  const observer = useRef<IntersectionObserver>(null)
+
+  const frozen = entry?.isIntersecting && freezeOnceVisible
+
+  const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
+    setEntry(entry)
+  }
 
   useEffect(() => {
-    if (observer.current) {
-      observer?.current?.disconnect()
-    }
+    const node = elementRef?.current // DOM Ref
+    const hasIOSupport = !!window.IntersectionObserver
 
-    if (node) {
-      if (window.IntersectionObserver) {
-        observer.current = new window.IntersectionObserver(
-          ([newEntry]) => setEntry(newEntry),
-          {
-            root,
-            rootMargin,
-            threshold,
-          }
-        )
+    if (!hasIOSupport || frozen || !node) return
 
-        observer.current.observe(node)
-      }
-    }
+    const observerParams = { threshold, root, rootMargin }
+    const observer = new IntersectionObserver(updateEntry, observerParams)
 
-    return () => {
-      if (observer?.current) {
-        observer?.current?.disconnect()
-      }
-    }
-  }, [threshold, root, rootMargin, node])
+    observer.observe(node)
 
-  return { setNode, entry }
+    return () => observer.disconnect()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elementRef, threshold, root, rootMargin, frozen])
+
+  return entry
 }
 
 export function useHasMounted(): boolean {

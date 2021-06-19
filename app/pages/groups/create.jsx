@@ -76,7 +76,7 @@ export default function Create() {
     <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-100">
       <form className="w-full my-16 sm:w-2/3">
         <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
-          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white rounded-full shadow-lg bg-brand-light">
+          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white rounded-full shadow-lg bg-brand-light border-[3px] border-white">
             <HiOutlineUserGroup className="w-8 h-8 text-white" />
           </div>
           <div className="pt-4 pb-1 text-4xl font-bold text-center font-work-sans">

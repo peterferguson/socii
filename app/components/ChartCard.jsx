@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
 import "react-vis/dist/style.css"
 
-export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
+export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, data }) {
   const [height, setHeight] = useState(null)
   const [width, setWidth] = useState(null)
   const [crosshairValue, setCrosshairValue] = useState(false)
@@ -14,7 +14,7 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
 
   const middleDivRef = useRef(null)
 
-  // TODO: Convert this into a useContainerSize hook
+  // TODO: Convert this into a useElementSize() hook from https://usehooks-typescript.com/react-hook/use-element-size
   useEffect(() => {
     if (middleDivRef.current) {
       setHeight(middleDivRef.current.offsetHeight)
@@ -42,7 +42,10 @@ export default function ChartCard({ logoUrl, tickerSymbol, shortName, data }) {
   }
   return (
     <>
-      <div className="w-11/12 h-auto max-w-sm m-1 sm:w-1/2 lg:w-1/3">
+      <div
+        ref={cardRef ? cardRef : null}
+        className="w-11/12 h-auto max-w-sm m-1 sm:w-1/2 lg:w-1/3"
+      >
         <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
           <div className="justify-center flex-none w-20 mx-auto rounded-full">
             <Link href={`stock/${tickerSymbol}`}>

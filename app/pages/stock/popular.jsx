@@ -1,6 +1,7 @@
-import { AssetCard, BlockCard } from '@components/AssetCards'
-import { firestore } from '@lib/firebase'
-import { stockProps } from '@utils/helper'
+import { AssetCard } from "@components/AssetCards"
+import { firestore } from "@lib/firebase"
+import { stockProps } from "@utils/helper"
+import React from "react"
 
 export default function Popular({ tickerSymbols }) {
   // TODO: on click of chevron create a new view with only the popular stocks
@@ -36,7 +37,11 @@ export default function Popular({ tickerSymbols }) {
 
 export async function getStaticProps(context) {
   // * Get ticker name from firestore
-  const tickerQuery = firestore.collection('tickers').where('isPopular', '==', true)
+  const tickerQuery = firestore.collection("tickers").where("isPopular", "==", true)
 
-  return await stockProps(tickerQuery, 'industry', 2)
+  return await stockProps({
+    tickerQuery,
+    subQueryField: "industry",
+    timeseriesLimit: 2,
+  })
 }
