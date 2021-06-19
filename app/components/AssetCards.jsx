@@ -104,23 +104,32 @@ export function AssetCard({ ticker, timeseries, sector }) {
   const pnlColor = pnlTextColor(
     pctChange(timeseries?.[0].close, timeseries[timeseries.length - 1].close)
   )
+  const { tickerSymbol } = ticker
+  const [logoNotFound, setLogoNotFound] = useState(false)
   return (
     <>
-      <Link href={`/stock/${ticker.tickerSymbol}`}>
-        <a href={ticker.tickerSymbol}>
+      <Link href={`/stock/${tickerSymbol}`}>
+        <a href={tickerSymbol}>
           <header className="flex mb-auto flex-nowrap">
-            <img
-              className="flex-none w-12 rounded"
-              src={logoUrl(ticker.ISIN)}
-              alt={`${ticker.tickerSymbol} logo`}
-            />
+            {!logoNotFound ? (
+              <img
+                className="h-14 mx-auto rounded-full shadow-lg w-14"
+                src={logoUrl(ticker.ISIN)}
+                alt={`${tickerSymbol} logo`}
+                onError={() => setLogoNotFound(true)}
+              />
+            ) : (
+              <div className="h-14 mx-auto rounded-full shadow-lg w-14 font-semibold bg-gray-100 text-tiny flex items-center justify-center text-gray-500">
+                {tickerSymbol}
+              </div>
+            )}
             <p className="p-2 truncate">{ticker.shortName}</p>
           </header>
         </a>
       </Link>
-      <Link href={`/stock/${ticker.tickerSymbol}`}>
+      <Link href={`/stock/${tickerSymbol}`}>
         <div className="relative py-8 mx-3 align-middle grid grid-cols-none">
-          <h1 className="text-xl font-bold">{ticker.tickerSymbol}</h1>
+          <h1 className="text-xl font-bold">{tickerSymbol}</h1>
 
           <div className="bpx-border">
             <div className={`font-bold text-3xl ${pnlColor}`}>
@@ -132,13 +141,13 @@ export function AssetCard({ ticker, timeseries, sector }) {
       <div className="flex flex-col pt-2 pb-4 mb-8 -mt-2 justify leading-8">
         <a
           className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
-          href={ticker.tickerSymbol}
+          href={tickerSymbol}
         >
           {sector.sector}
         </a>
         <a
           className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
-          href={ticker.tickerSymbol}
+          href={tickerSymbol}
         >
           {sector.industry}
         </a>
