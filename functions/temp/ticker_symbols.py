@@ -112,11 +112,20 @@ def alphaVantageDataToFirestore(
 
 
 def alphaVantageTimeseriesToFirestore(
-    ticker: str, query_params: dict[str, str] = {"function": "TIME_SERIES_DAILY"}
+    ticker: str = "",
+    query_params: dict[str, str] = {"function": "TIME_SERIES_DAILY"},
+    isin: str = "",
 ):
-    isin = tickerToISIN(ticker)
-    if not isin:
+
+    if ticker and not isin:
+        isin = tickerToISIN(ticker)
+
+    if isin and not ticker:
+        ticker = isinToTicker(isin)
+
+    if not ticker or not isin:
         return
+
     base_url = "https://www.alphavantage.co/query?"
     api_key = "&apikey=E9W8LZBTXVYZ31IO"
     symbol = f"&symbol={ticker}"
@@ -257,13 +266,17 @@ def makeLogoPublic(isin: str):
     print(blob.public_url)
 
 
-def uploadLogoUrl(ticker: str):
-    isin = tickerToISIN(ticker)
+def uploadLogoUrl(ticker: str = "", isin: str = ""):
+    if not ticker and not isin:
+        return
+    if not isin and ticker:
+        isin = tickerToISIN(ticker)
     client.document(f"tickers/{isin}").update(
         {
             "logoUrl": f"https://storage.googleapis.com/sociiinvest.appspot.com/logos/{isin}.png"
         }
     )
+    makeLogoPublic(isin)
 
 
 if __name__ == "__main__":
@@ -292,7 +305,7 @@ if __name__ == "__main__":
         "BABA",
         "TTD",
         "GME",
-    ] + [
+    ] + [  # - these are not marked as popular
         "GERN",
         "AMC",
         "XLF",
@@ -393,35 +406,41 @@ if __name__ == "__main__":
     ]
 
     # # * Make popular tickers
-    # for ticker in popular_tickers:
+    # for ticker in tqdm(popular_tickers):
     #     isin = tickerToISIN(ticker)
     #     if isin:
     #         yahooDataToFirestore(isin, is_popular=True)
 
-    # # * Make popular tickers
-    # for ticker in popular_tickers:
-    #     isin = tickerToISIN(ticker)
+    # # * Upload storage logo urls to firestore docs
+    # # TODO : Set up cloud function to update these every so often
+    #     uploadLogoUrl(ticker)
     #     makeLogoPublic(isin)
 
     # # * Upload yahoo data
     # # TODO : Set up cloud function to update these every so often
-    # for ticker in tqdm(popular_tickers):
     #     yahooSummaryToFirestore(ticker=ticker)
 
-    # # * Upload alpha vantage data
-    # for ticker in tqdm(popular_tickers):
-    #     alphaVantageDataToFirestore(ticker=ticker)
-
-    # * Upload alpha vantage timeseries (monthly)
-    # TODO : Set up cloud function to update these every so often
-    for ticker in tqdm(popular_tickers):
-        # alphaVantageTimeseriesToFirestore(
-        #     ticker=ticker, query_params={"function": "TIME_SERIES_MONTHLY"}
-        # )
-        alphaVantageTimeseriesToFirestore(ticker=ticker)
-        sleep(60)
-
-    # # * Upload storage logo urls to firestore docs
+    # # * Upload alpha vantage timeseries (monthly)
     # # TODO : Set up cloud function to update these every so often
-    # for ticker in tqdm(popular_tickers):
-    #     uploadLogoUrl(ticker)
+    #     alphaVantageDataToFirestore(ticker=ticker)
+    # alphaVantageTimeseriesToFirestore(
+    #     ticker=ticker, query_params={"function": "TIME_SERIES_MONTHLY"}
+    # )
+    # alphaVantageTimeseriesToFirestore(ticker=ticker)
+    # sleep(60)
+
+    query = (
+        client.collection("tickers")
+        .where("marketCountry", "==", "United States of America")
+        .where("exchangeAbbreviation", "!=", "PNK")
+        .order_by("exchangeAbbreviation", "ASCENDING")
+        .limit(150)
+    )
+
+    for snapshot in tqdm(query.get()):
+        ticker = snapshot.to_dict()
+        uploadLogoUrl(isin=ticker.get("ISIN"))
+        alphaVantageTimeseriesToFirestore(
+            ticker=ticker.get("tickerSymbol"), isin=ticker.get("ISIN")
+        )
+        sleep(60)
