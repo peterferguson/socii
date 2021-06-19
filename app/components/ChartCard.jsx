@@ -10,6 +10,7 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
   const [height, setHeight] = useState(null)
   const [width, setWidth] = useState(null)
   const [crosshairValue, setCrosshairValue] = useState(false)
+  const [logoNotFound, setLogoNotFound] = useState(false)
   const strokeWidth = 2
 
   const middleDivRef = useRef(null)
@@ -50,12 +51,18 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
           <div className="justify-center flex-none w-20 mx-auto rounded-full">
             <Link href={`stock/${tickerSymbol}`}>
               <a>
-                <img
-                  className="w-10 h-10 mx-auto rounded-full shadow-lg"
-                  src={logoUrl}
-                  alt={`${tickerSymbol} logo`}
-                  onError={() => console.log(`${tickerSymbol} logo failed to load`)}
-                />
+                {!logoNotFound ? (
+                  <img
+                    className="w-10 h-10 mx-auto rounded-full shadow-lg"
+                    src={logoUrl}
+                    alt={`${tickerSymbol} logo`}
+                    onError={() => setLogoNotFound(true)}
+                  />
+                ) : (
+                  <div className="w-10 h-10 mx-auto font-semibold bg-gray-100 rounded-full shadow-lg text-tiny flex items-center justify-center text-gray-500">
+                    {tickerSymbol}
+                  </div>
+                )}
               </a>
             </Link>
             <Link href={`stock/${tickerSymbol}`}>

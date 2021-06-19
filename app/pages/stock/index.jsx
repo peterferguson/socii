@@ -10,6 +10,7 @@ import React, { useRef, useEffect } from "react"
 
 export default function StockDisplay({ tickerSymbols }) {
   // TODO: large screen vertical cards - small horizontal cards
+  // TODO: Add skeleton loaders for chart cards on infinite scroll
 
   // - For infinite scroll
 

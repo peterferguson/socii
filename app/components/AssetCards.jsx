@@ -1,7 +1,7 @@
 import { logoUrl, pctChange, pnlBackgroundColor, pnlTextColor } from "@utils/helper"
 
 import Link from "next/link"
-import React from "react"
+import React, { useState } from "react"
 
 export default function SmallAssetPctChangeCard({
   logoUrl,
@@ -55,16 +55,24 @@ export function SmallAssetCard({
   shortName,
   currencySymbol = "$",
 }) {
+  const [logoNotFound, setLogoNotFound] = useState(false)
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
     <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
       <div className="w-40 h-full p-4 bg-white rounded-lg shadow-lg sm:h-36 sm:w-52">
         <div className="items-center justify-center sm:flex">
-          <img
-            className="h-auto mx-auto rounded-full shadow-lg w-14"
-            src={logoUrl}
-            alt={`${tickerSymbol} logo`}
-          />
+          {!logoNotFound ? (
+            <img
+              className="h-14 mx-auto rounded-full shadow-lg w-14"
+              src={logoUrl}
+              alt={`${tickerSymbol} logo`}
+              onError={() => setLogoNotFound(true)}
+            />
+          ) : (
+            <div className="h-14 mx-auto rounded-full shadow-lg w-14 font-semibold bg-gray-100 text-tiny flex items-center justify-center text-gray-500">
+              {tickerSymbol}
+            </div>
+          )}
           <div className="w-auto h-auto p-1 text-center">
             <div
               className={
