@@ -276,7 +276,11 @@ def uploadLogoUrl(ticker: str = "", isin: str = ""):
             "logoUrl": f"https://storage.googleapis.com/sociiinvest.appspot.com/logos/{isin}.png"
         }
     )
-    makeLogoPublic(isin)
+    try:
+        makeLogoPublic(isin)
+    except:
+        print(f"{ticker} failed to make public at logos/{isin}.png")
+    
 
 
 if __name__ == "__main__":
@@ -439,8 +443,13 @@ if __name__ == "__main__":
 
     for snapshot in tqdm(query.get()):
         ticker = snapshot.to_dict()
-        uploadLogoUrl(isin=ticker.get("ISIN"))
-        alphaVantageTimeseriesToFirestore(
-            ticker=ticker.get("tickerSymbol"), isin=ticker.get("ISIN")
-        )
+        isin = ticker.get("ISIN")
+        tickerSymbol = ticker.get("tickerSymbol")
+        if not isin or not tickerSymbol:
+            continue
+        if isin in ["CA09088U1093", "CA33938T1049", "IL0010826357"]:
+            continue
+        uploadLogoUrl(isin=isin)
+        alphaVantageTimeseriesToFirestore(ticker=tickerSymbol, isin=isin)
+
         sleep(60)

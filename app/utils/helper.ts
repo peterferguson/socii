@@ -1,4 +1,4 @@
-import { tickerToISIN, firestore } from "@lib/firebase"
+import { tickerToISIN, firestore, DocumentReference } from "@lib/firebase"
 import { CurrencyCode } from "@lib/constants"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
@@ -47,30 +47,6 @@ export const currencyConversion = (
   toCurrency: CurrencyCode
 ) => `/api/av/currencyConversion?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}`
 
-// !
-// !
-// !
-// TODO: Check firestore for the latest chart first then if not load this data & push it to firestore
-// !
-// !
-// !
-export const alphaVantageTimeseries = async (tickerSymbol: string) => {
-  const data = await fetchJSON(
-    alphaVantageQuery("TIME_SERIES_DAILY", {
-      symbol: tickerSymbol,
-    })
-  )
-
-  const dates = Object.keys(data["Time Series (Daily)"] || {})
-
-  // * Return close for each date as timeseries
-  return dates.map((ts) => ({
-    timestamp: ts,
-    close: parseFloat(data["Time Series (Daily)"][ts]["4. close"]),
-    volume: parseFloat(data["Time Series (Daily)"][ts]["5. volume"]),
-  }))
-}
-
 export function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -116,7 +92,6 @@ export const stockProps = async ({
     if (subQueryField) {
       sector = await tickerExistsSubquery(tickerDoc.ref, subQueryField)
     }
-    console.log(ticker)
 
     tickerSymbols.push({ ticker, timeseries, sector })
   }
@@ -141,7 +116,11 @@ export const tickerExistsSubquery = async (tickerRef, queryField) => {
   return { ...sector, lastUpdate: sector?.lastUpdate.toMillis() ?? null }
 }
 
-export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
+export const tickerTimeseries = async (
+  tickerRef: DocumentReference,
+  limit = 30,
+  tickerSymbol
+) => {
   // * Get timeseries data
   const timeseriesRef = tickerRef
     .collection("timeseries")
@@ -154,8 +133,12 @@ export const tickerTimeseries = async (tickerRef, limit = 30, tickerSymbol) => {
 
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
-    timeseries = await alphaVantageTimeseries(tickerSymbol)
-    // TODO: update firestore with the timeseries data
+    const isin = tickerRef.path.split("/").pop()
+    console.log(isin)
+
+    timeseries = await fetcher(
+      `/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
+    )
   } else {
     timeseries = timeseriesDocs.map((doc) => ({
       ...doc.data(),

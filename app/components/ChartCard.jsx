@@ -44,7 +44,7 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
     <>
       <div
         ref={cardRef ? cardRef : null}
-        className="w-11/12 h-auto max-w-sm m-1 sm:w-1/2 lg:w-1/3"
+        className="w-11/12 h-auto max-w-sm mx-auto my-2"
       >
         <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
           <div className="justify-center flex-none w-20 mx-auto rounded-full">
@@ -54,6 +54,7 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
                   className="w-10 h-10 mx-auto rounded-full shadow-lg"
                   src={logoUrl}
                   alt={`${tickerSymbol} logo`}
+                  onError={() => console.log(`${tickerSymbol} logo failed to load`)}
                 />
               </a>
             </Link>

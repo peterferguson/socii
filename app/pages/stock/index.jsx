@@ -28,16 +28,21 @@ export default function StockDisplay({ tickerSymbols }) {
         .where("exchangeAbbreviation", "!=", "PNK")
         .orderBy("exchangeAbbreviation", "asc")
         .startAfter(lastTickerLoaded.current || 0)
-        .limit(10)
+        .limit(5)
 
       const tickerDocs = await query.get()
 
       lastTickerLoaded.current = tickerDocs.docs.slice(-1).pop()
 
-      let { tickerSymbols: newSymbols } = await stockProps({ tickerDocs })
-      moreTickers.current.push(newSymbols)
+      let {
+        props: { tickerSymbols },
+      } = await stockProps({ tickerDocs })
+      moreTickers.current.push(...tickerSymbols)
     }
-    if (isVisible) getMoreTickers()
+    if (isVisible) {
+      getMoreTickers()
+      lastTickerRef.current = null
+    }
   }, [isVisible])
 
   // const tradingViewSymbols = {
@@ -68,7 +73,7 @@ export default function StockDisplay({ tickerSymbols }) {
           </div>
         </Link>
         <CardSlider tickerSymbols={tickerSymbols} />
-        <div className="flex flex-col items-center min-h-screen mt-8 bg-gray-50">
+        <div className="content-center min-h-screen mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-gray-50">
           {tickerSymbols
             .concat(moreTickers.current)
             .map(({ ticker, timeseries }, i) => {

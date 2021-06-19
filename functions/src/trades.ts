@@ -312,6 +312,7 @@ const verifyContent = async (data, context) => {
   optionalArgs.assetType = assetData.get("assetType")
   optionalArgs.shortName = assetData.get("shortName")
   optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
+  
 
   // * Inject data into requiredArgs
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))

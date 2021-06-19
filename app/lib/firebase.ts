@@ -28,14 +28,15 @@ export const storage = firebase.storage()
 export const firestore = firebase.firestore()
 export const functions = firebase.app().functions(londonRegion)
 
-if (
-  process.env.NODE_ENV === "development" &&
-  !firestore?.["_delegate"]._settings.host?.includes("local")
-  // ! Stops NextJS hot reloading from re-executing this code
-) {
-  firestore.useEmulator("localhost", 8080)
-  functions.useEmulator("localhost", 5001)
-}
+// if (
+//   process.env.NODE_ENV === "development" &&
+//   "_delegate" in firestore &&
+//   !firestore?._delegate._settings.host?.includes("local")
+//   // ! Stops NextJS hot reloading from re-executing this code
+// ) {
+//   firestore.useEmulator("localhost", 8080)
+//   functions.useEmulator("localhost", 5001)
+// }
 
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider()
@@ -44,11 +45,14 @@ export const recaptchaVerifier = firebase.auth.RecaptchaVerifier
 export const credentialWithLink = firebase.auth.EmailAuthProvider.credentialWithLink
 export const increment = firebase.firestore.FieldValue.increment
 export const arrayUnion = firebase.firestore.FieldValue.arrayUnion
-export const fromMillis = firebase.firestore.Timestamp.fromMillis
+export const fromDate = firebase.firestore.Timestamp.fromDate
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 export const alphaVantageQuery = functions.httpsCallable("alphaVantageQuery")
 export const tradeSubmission = functions.httpsCallable("tradeSubmission")
 export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
+
+// - Types
+export type DocumentReference = firebase.firestore.DocumentReference
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

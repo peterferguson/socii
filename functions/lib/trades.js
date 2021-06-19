@@ -60,13 +60,13 @@ const tradeConfirmation = async (change, context) => {
     const { latestPrice, isUSMarketOpen } = await helper_js_1.iexClient.quote(tradeData.tickerSymbol, {
         filter: "latestPrice,isUSMarketOpen",
     });
-    // - do nothing if market is closed
-    if (!isUSMarketOpen) {
-        // 2. send a message with the finalised price
-        const channel = helper_js_1.streamClient.channel("messaging", groupName);
-        await channel.sendMessage(await marketClosedMessage(tradeData.assetRef));
-        return;
-    }
+    // // - do nothing if market is closed
+    // if (!isUSMarketOpen) {
+    //   // 2. send a message with the finalised price
+    //   const channel = streamClient.channel("messaging", groupName)
+    //   await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
+    //   return
+    // }
     // TODO: Fix price checking
     // ! Now asset price & currency is available along with cost & execution currency this should be simple
     // ! As stated below I think this should be a client-side check though
