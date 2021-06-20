@@ -59,7 +59,7 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
                     onError={() => setLogoNotFound(true)}
                   />
                 ) : (
-                  <div className="w-10 h-10 mx-auto font-semibold bg-gray-100 rounded-full shadow-lg text-tiny flex items-center justify-center text-gray-500">
+                  <div className="flex items-center justify-center w-10 h-10 mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg text-tiny">
                     {tickerSymbol}
                   </div>
                 )}

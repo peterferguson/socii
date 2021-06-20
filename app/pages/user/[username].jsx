@@ -14,9 +14,10 @@
 
 import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
+import UserPhoto from "@components/UserPhoto"
 import { UserContext } from "@lib/context"
+import { getRandomTailwindColor } from "@utils/helper"
 import { auth } from "@lib/firebase"
-
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 
@@ -25,15 +26,18 @@ export default function UserPage() {
   const pagename = router.query.username
   const { username, userGroups } = useContext(UserContext)
 
-  // TODO: Convert user photo to a default if none is present
-  // TODO: (maybe create a component based on initials)
+  const isUsersHomepage = pagename === username
+
   return (
     <main>
       <div className="flex flex-row w-full">
-        <img src={auth.currentUser?.photoURL} className="w-12 h-12 m-4 rounded-full" />
+        <UserPhoto
+          username={pagename}
+          photoURL={isUsersHomepage ? auth.currentUser?.photoURL || "" : ""}
+        />
         <div className="p-4 text-xl font-poppins text-brand-light">{pagename}</div>
       </div>
-      <div className="flex items-center justify-center m-8 mx-auto text-5xl font-poppins">
+      <div className={`flex items-center justify-center m-8 mx-auto text-5xl font-poppins text-${getRandomTailwindColor()}`}>
         Groups
       </div>
       <div className="flex flex-wrap justify-center">

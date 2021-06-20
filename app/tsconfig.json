@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -16,13 +20,26 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@components/*": ["components/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@public/*": ["public/*"],
-      "@icons/*": ["public/icons/*"]
-    }
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ],
+      "@icons/*": [
+        "public/icons/*"
+      ]
+    },
+    "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",
@@ -30,7 +47,10 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/_app.jsx",
-    "components/stream/components/MessagingInput/MessagingInput.jsx"
-, "pages/api/commands.js"  ],
-  "exclude": ["node_modules"]
+    "components/stream/components/MessagingInput/MessagingInput.jsx",
+    "pages/api/commands.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

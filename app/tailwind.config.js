@@ -1,3 +1,4 @@
+const { coolGray } = require("tailwindcss/colors")
 const colors = require("tailwindcss/colors")
 
 module.exports = {
@@ -7,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       blur: {
-        "tiny": "1px",
-        "xs": "2px"
+        tiny: "1px",
+        xs: "2px",
       },
       colors: {
         brand: {
@@ -29,11 +30,18 @@ module.exports = {
           DEFAULT: "#20e070",
         },
         blueGray: colors.blueGray,
+        coolGray: colors.coolGray,
         trueGray: colors.trueGray,
         teal: colors.teal,
         emerald: colors.emerald,
         lightBlue: colors.lightBlue,
         orange: colors.orange,
+        lime: colors.lime,
+        sky: colors.sky,
+        violet: colors.violet,
+        fuchsia: colors.fuchsia,
+        pink: colors.pink,
+        rose: colors.rose,
       },
       fontFamily: {
         "work-sans": ['"Work Sans"', "sans-serif"],

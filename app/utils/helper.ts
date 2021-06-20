@@ -180,39 +180,28 @@ export const getCleanImage = (member) => {
   return member.user.image
 }
 
-// export const localCostPerShare = async (
-//   price: string | number,
-//   fromCurrency: CurrencyCode,
-//   toCurrency: CurrencyCode
-// ) => {
-//   const input = typeof price !== "number" ? parseFloat(price) : price
-//   if (isNaN(input)) {
-//     return {}
-//   }
-//   const { rate, lastRefresh } = await currencyConversion(fromCurrency, toCurrency)
-//   return {
-//     costPerShare: parseFloat(rate) * input,
-//     lastRefresh,
-//     exchangeRate: parseFloat(rate),
-//   }
-// }
+export const getRandomTailwindColor = () => {
+  const colors = [
+    "blueGray",
+    "coolGray",
+    "trueGray",
+    "teal",
+    "emerald",
+    "lightBlue",
+    "orange",
+    "lime",
+    "violet",
+    "fuchsia",
+    "pink",
+    "rose",
+  ]
+  const range = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
 
-export const allowCors = (fn) => async (req, res) => {
-  res.setHeader("Access-Control-Allow-Credentials", true)
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT")
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-  )
-  if (req.method === "OPTIONS") {
-    res.status(200).end()
-    return
-  }
-  return await fn(req, res)
+  return `${getRandomArrayElement(colors)}-${getRandomArrayElement(range)}`
 }
+
+export const getRandomArrayElement = (array: any[]) =>
+  array[Math.floor(Math.random() * array.length)]
 
 export const currencyFormatter = (number: number, currency: string = "GBP"): string =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(number || 0)
