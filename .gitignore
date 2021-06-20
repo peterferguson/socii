@@ -85,6 +85,7 @@ node_modules/
 
 # production
 /build
+functions/lib
 
 # misc
 .DS_Store

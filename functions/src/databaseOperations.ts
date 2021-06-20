@@ -46,9 +46,7 @@ export const deleteGroup = async (change, context) => {
 
   // TODO: serach investor sub-collection and delete the grooup from the groups field of 
   // TODO: each investors user collection.
-  
 
-  }
   return
 }
 

@@ -88,7 +88,7 @@ export const tradeConfirmation = async (change, context) => {
       filter: "latestPrice,isUSMarketOpen",
     }
   )
-
+  
   // - do nothing if market is closed
   if (!isUSMarketOpen) {
     // 2. send a message with the finalised price
@@ -258,7 +258,7 @@ const marketClosedMessage = async (assetRef) => {
   }
 }
 
-const isSell = (orderType) => !orderType.toLowerCase().includes("sell")
+const isSell = (orderType) => orderType.toLowerCase().includes("sell")
 
 const verifyUser = (context) => {
   // * Checking that the user is authenticated.

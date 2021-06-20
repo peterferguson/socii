@@ -8,9 +8,11 @@ import { useCollectionData } from "react-firebase-hooks/firestore"
 
 export default function GroupColumn({ groupName }) {
   const [currentPrices, setCurrentPrices] = useState([])
-  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`)
+  const holdingsRef = firestore
+    .collection(`groups/${groupName}/holdings`)
+    .where("shares", "!=", 0)
 
-  const [holdings, loading] = useCollectionData(holdingsRef)
+  let [holdings, loading] = useCollectionData(holdingsRef)
 
   useEffect(() => {
     holdings?.map(async ({ tickerSymbol }) => {
