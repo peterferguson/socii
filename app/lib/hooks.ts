@@ -15,7 +15,6 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
 import useSWR from "swr"
-
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
 export function useUserData() {
@@ -104,13 +103,21 @@ export const useScreenType = () => {
   return "fullscreen"
 }
 
-interface Args extends IntersectionObserver {
+interface IntersectionObserverProps {
+  threshold?: number
+  root?: Element
+  rootMargin?: string
   freezeOnceVisible?: boolean
 }
 
 export function useIntersectionObserver(
   elementRef: RefObject<Element>,
-  { threshold = 0, root = null, rootMargin = "0%", freezeOnceVisible = false }: Args
+  {
+    threshold = 0,
+    root = null,
+    rootMargin = "0%",
+    freezeOnceVisible = false,
+  }: IntersectionObserverProps
 ): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
 
