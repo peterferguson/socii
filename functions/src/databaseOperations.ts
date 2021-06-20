@@ -1,4 +1,3 @@
-import { logger } from "firebase-functions"
 import { firestore, increment } from "./index.js"
 
 /*
@@ -28,3 +27,28 @@ export const incrementInvestors = async (change, context) => {
   }
   return
 }
+
+/*
+ * Clean up group arrays on users collection on deletion of a group
+ * Usage as follows:
+ *
+ * functions.firestore.document('groups/{groupName}')
+ * .onDelete(deleteGroup)
+ *
+ * @param change
+ * @param context
+ * @returns
+ */
+export const deleteGroup = async (change, context) => {
+  const { groupName } = context.params
+
+  const data = change.data()
+
+  // TODO: serach investor sub-collection and delete the grooup from the groups field of 
+  // TODO: each investors user collection.
+  
+
+  }
+  return
+}
+

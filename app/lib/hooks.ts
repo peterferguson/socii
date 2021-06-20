@@ -26,10 +26,6 @@ export function useUserData() {
   // TODO: This happens every so often which is causing extra reads for the groups &
   // TODO: replication is stopped by the set but it is still unnessecary reads!
 
-  // ! THIS NEEDS REFACTORED! DANS SUGGESTED DEPENDCY LIST CAUSES INFINITE LOOPS IN
-  // ! CHAT APP PROBABLY DUE TO USE OF STREAM TOKEN DEFINITION HERE. NEED TO CREATE
-  // ! `useStream` HOOK
-
   useEffect(() => {
     const getUserData = () => {
       // allows us to turn off the realtime data feed when finished
