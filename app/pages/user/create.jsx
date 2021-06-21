@@ -4,7 +4,7 @@ import { UserContext } from "@lib/context"
 import { firestore } from "@lib/firebase"
 import CheckIcon from "@components/BackgroundCheck"
 import debounce from "lodash/debounce"
-import CrossIcon from "@icons/cross.svg"
+import { FiX } from "react-icons/fi"
 import toast from "react-hot-toast"
 import { useRouter } from "next/router"
 
@@ -81,7 +81,7 @@ export default function Username(props) {
               {isValidUsername ? (
                 <CheckIcon className="w-6" onClick={null} />
               ) : (
-                <CrossIcon className="w-6" />
+                <FiX className="w-6 h-6" />
               )}
             </div>
           </div>

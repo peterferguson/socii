@@ -1,7 +1,7 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
 import { TradingViewStockTickerQuotes } from "@components/TradingViewChart"
-import RightChevron from "@icons/rightChevron.svg"
+import { FiChevronRight } from "react-icons/fi"
 import { firestore } from "@lib/firebase"
 import { isBrowser, logoUrl, stockProps } from "@utils/helper"
 import { useIntersectionObserver } from "@lib/hooks"
@@ -70,7 +70,7 @@ export default function StockDisplay({ tickerSymbols }) {
           <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans text-brand-dark">
             Popular Stocks
             <div className="flex-grow" />
-            <RightChevron className="h-8 cursor-pointer mt-0.5" />
+            <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
           </div>
         </Link>
         <CardSlider tickerSymbols={tickerSymbols} />

@@ -1,6 +1,6 @@
 import LoadingIndicator from "@components/LoadingIndicator"
 import { Dialog } from "@headlessui/react"
-import SearchIcon from "@icons/search.svg"
+import { FaSearch } from "react-icons/fa"
 import algoliasearch from "algoliasearch/lite"
 import debounce from "lodash/debounce"
 
@@ -68,7 +68,7 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
         type="search"
         className="w-full p-2 text-center rounded-full focus:outline-none \ focus:border-brand-light focus:ring-brand-light"
       />
-      <SearchIcon className="mx-4 -my-8 text-gray-400" />
+      <FaSearch className="mx-4 -my-8 text-gray-400" />
     </div>
   )
 })

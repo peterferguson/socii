@@ -4,9 +4,7 @@ import { UserContext } from "@lib/context"
 import React, { useState, useEffect, useCallback, useContext } from "react"
 import { handleEnterKeyDown, validateEmail } from "@utils/helper"
 
-import MailIcon from "@icons/mail.svg"
-import CheckIcon from "@icons/check.svg"
-import CrossIcon from "@icons/cross.svg"
+import { FiCheck, FiMail, FiX } from "react-icons/fi"
 
 import toast from "react-hot-toast"
 import debounce from "lodash.debounce"
@@ -176,7 +174,7 @@ function EmailSignUp({ verified, setVerified }) {
   return (
     <form onSubmit={() => emailSignInHandler(email)}>
       <div className="flex flex-none w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border border-gray-300 rounded appearance-none max-h-14 focus:outline-none focus:bg-gray-50 focus:border-gray-500">
-        <MailIcon className="w-8 h-full mr-2 text-sm text-gray-400 align-middle bg-gray-100 sm:text-base pt-0.5" />
+        <FiMail className="w-8 h-full mr-2 text-sm text-gray-400 align-middle bg-gray-100 sm:text-base pt-0.5" />
         <input
           autoFocus
           className="flex flex-grow w-2/3 -mt-1 bg-gray-100 border-none appearance-none sm:w-full focus:outline-none focus:ring-0"
@@ -197,9 +195,9 @@ function EmailSignUp({ verified, setVerified }) {
           onKeyDown={(e) => handleEnterKeyDown(e, () => emailSignInHandler(email))}
         >
           {validateEmail(email) && verified ? (
-            <CheckIcon className="w-6" onClick={() => emailSignInHandler(email)} />
+            <FiCheck className="w-6" onClick={() => emailSignInHandler(email)} />
           ) : (
-            <CrossIcon className="w-6" />
+            <FiX className="w-6 h-6" />
           )}
         </div>
       </div>

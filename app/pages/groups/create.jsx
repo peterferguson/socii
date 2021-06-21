@@ -1,11 +1,10 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
-import CrossIcon from "@icons/cross.svg"
 import {
   currencyIcons,
   groupDepositOptions,
   groupLumpSumOptions,
-  groupPrivacyOptions,
+  groupPrivacyOptions
 } from "@lib/constants"
 import { UserContext } from "@lib/context"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
@@ -76,7 +75,7 @@ export default function Create() {
     <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-100">
       <form className="w-full my-16 sm:w-2/3">
         <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
-          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white rounded-full shadow-lg bg-brand-light border-[3px] border-white">
+          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand-light border-[3px]">
             <HiOutlineUserGroup className="w-8 h-8 text-white" />
           </div>
           <div className="pt-4 pb-1 text-4xl font-bold text-center font-work-sans">
@@ -103,7 +102,7 @@ export default function Create() {
                 {isValidGroupName ? (
                   <CheckIcon className="w-6" onClick={null} />
                 ) : (
-                  <CrossIcon className="w-6" />
+                  <FiX className="w-6 h-6" />
                 )}
               </div>
             </div>
@@ -218,7 +217,8 @@ function AmountOptions({
                             checked ? "text-brand-light" : "text-gray-900"
                           }`}
                         >
-                          {currencyIcons[localCurrency].text}{option.amount}
+                          {currencyIcons[localCurrency].text}
+                          {option.amount}
                           {/* <LocalCurrencyIcon className="w-4 h-4 mt-1.5" /> */}
                           {/* <span className="text-lg">{option.amount}</span> */}
                         </RadioGroup.Label>
