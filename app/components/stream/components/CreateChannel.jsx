@@ -169,12 +169,12 @@ const CreateChannel = ({ onClose, toggleHideChannelList }) => {
       <header className="flex items-center justify-between pl-6 rounded-b-none bg-gray-50 shadow-4xl rounded-xl pr-2.5">
         <div className="flex items-center flex-1">
           <div className="text-lg opacity-50 mr-2.5 font-work-sans">To: </div>
-          <div className=" min-w-85 mt-1.5 -mb-1.5">
+          <div className=" min-w-[85%] mt-1.5 -mb-1.5">
             {!!selectedUsers?.length && (
               <div className="flex flex-wrap px-2 max-w-95">
                 {selectedUsers.map((user) => (
                   <div
-                    className="flex items-center justify-between px-3 bg-gray-200 rounded-full cursor-pointer opacity-90 py-1.5"
+                    className="flex items-center justify-between px-3 bg-gray-200 rounded-full cursor-pointer opacity-90 py-[6px]"
                     onClick={() => removeUser(user)}
                     key={user.id}
                   >

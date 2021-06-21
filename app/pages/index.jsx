@@ -44,9 +44,9 @@ export default function Home() {
           </svg>
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between w-full h-24 overflow-y-hidden">
+      {/* <div className="flex flex-row items-center justify-between w-full h-24 overflow-y-hidden">
         <TickerList />
-      </div>
+      </div> */}
 
       <WhySocii />
       <FeatureSlider />

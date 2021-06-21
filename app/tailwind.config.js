@@ -1,4 +1,3 @@
-const { coolGray } = require("tailwindcss/colors")
 const colors = require("tailwindcss/colors")
 
 module.exports = {
@@ -7,10 +6,6 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      blur: {
-        tiny: "1px",
-        xs: "2px",
-      },
       colors: {
         brand: {
           light: "#3fbaeb",
@@ -20,11 +15,6 @@ module.exports = {
           lightGreen: "#79ffe1",
           blue: "#0385e6",
           pink: "#dca3c8",
-        },
-        back: {
-          DEFAULT: "#0D5F78",
-          light: "#0E7B82",
-          blue: "#005fff",
         },
         present: {
           DEFAULT: "#20e070",
@@ -113,32 +103,6 @@ module.exports = {
       spacing: {
         0.5: "0.125rem",
       },
-      margin: {
-        "-46": "-11.5rem",
-      },
-      borderRadius: {
-        "2.5xl": "20px",
-      },
-      padding: {
-        1.5: "6px",
-      },
-      minHeight: {
-        "60px": "60px",
-      },
-      minWidth: {
-        "1/4": "25%",
-        "1/2": "50%",
-        "3/4": "75%",
-        85: "85%",
-        215: "215px",
-        330: "330px",
-      },
-      maxWidth: {
-        "1/4": "25%",
-        "1/2": "50%",
-        "3/4": "75%",
-        95: "95%",
-      },
       scale: {
         "-1": "-1",
       },
@@ -146,14 +110,7 @@ module.exports = {
         fit: "fit-content",
       },
       width: {
-        88: "22rem",
         fit: "fit-content",
-        "1/7": "14.2857143%",
-        "2/7": "28.5714286%",
-        "3/7": "42.8571429%",
-        "4/7": "57.1428571%",
-        "5/7": "71.4285714%",
-        "6/7": "85.7142857%",
       },
     },
   },
