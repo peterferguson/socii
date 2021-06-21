@@ -39,8 +39,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const dates = Object.keys(timeseries)
 
+  interface OHLC {
+    timestamp: Date
+    open: string
+    high: string
+    low: string
+    close: string
+    volume: string
+  }
+
   const timeseriesData = dates.map((date) => {
-    const ohlc = {}
+    const ohlc = {} as OHLC
     ohlc["timestamp"] = new Date(date)
     const ohlcKeys = Object.keys(timeseries[date])
     ohlcKeys.map((key) => {
@@ -54,14 +63,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // TODO: Remove this from here so the user doesn't have to wait on storing the data
   const batch = firestore.batch()
   for (let ohlc of timeseriesData) {
-    const docName = new Date(ohlc.timestamp).getTime() / 1000
-    console.log(docName);
-    
-    ohlc.timestamp = admin.firestore.Timestamp.fromDate(new Date(ohlc.timestamp))
+    const { timestamp, ...data } = ohlc
+    const docName = timestamp.getTime() / 1000
+
     const outputRef = firestore
       .collection(`tickers/${ISIN}/timeseries`)
       .doc(`${docName}`)
-    batch.set(outputRef, ohlc)
+    batch.set(outputRef, {
+      ...data,
+      timestamp: admin.firestore.Timestamp.fromDate(timestamp),
+    })
   }
   await batch.commit()
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { uncamelCase } from '@utils/helper'
+import { uncamelCase } from "@utils/helper"
+import React, { useState } from "react"
 
+import { FiChevronDown, FiX } from "react-icons/fi"
 const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
   const [dropdown, setDropdown] = useState(false)
   const [dropdownItems, setDropdownItems] = useState(items)
@@ -21,26 +22,23 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center mx-auto ">
+    <div className="flex flex-col items-center w-full mx-auto">
       <div className="w-full">
-        <div className="flex flex-col items-center relative ">
-          <div
-            className="w-full my-2 p-1 flex border border-gray-300 shadow-sm \
-                     bg-white rounded-md"
-          >
-            <div className="flex flex-auto flex-wrap" onClick={toggleDropdown}>
+        <div className="relative flex flex-col items-center">
+          <div className="flex w-full p-1 my-2 bg-white border border-gray-300 shadow-sm \ rounded-md">
+            <div className="flex flex-wrap flex-auto" onClick={toggleDropdown}>
               {selectedItems.map((tag, index) => {
                 return (
                   <div
                     key={index}
-                    className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-teal-700 bg-teal-100 border border-teal-300 "
+                    className="flex items-center justify-center px-2 py-1 m-1 font-medium text-teal-700 bg-teal-100 border border-teal-300 rounded-full"
                   >
-                    <div className="text-xs font-normal leading-none max-w-full flex-initial">
+                    <div className="flex-initial max-w-full text-xs font-normal leading-none">
                       {tag}
                     </div>
-                    <div className="flex flex-auto flex-row-reverse">
+                    <div className="flex flex-row-reverse flex-auto">
                       <div onClick={() => removeTag(tag)}>
-                        <X />
+                        <FiX className="w-4 h-4 ml-2 rounded-full cursor-pointer hover:text-teal-400" />
                       </div>
                     </div>
                   </div>
@@ -55,11 +53,11 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
                 </div> */}
             </div>
             <div
-              className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-300"
+              className="flex items-center w-8 py-1 pl-2 pr-1 text-gray-300 border-l border-gray-300"
               onClick={toggleDropdown}
             >
-              <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
-                <Chevron />
+              <button className="w-6 h-6 text-gray-600 outline-none cursor-pointer focus:outline-none">
+                <FiChevronDown className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -75,17 +73,16 @@ const Dropdown = ({ items, addItem }) => {
   return (
     <div
       id="dropdown"
-      className="absolute ml-6 -mt-2 shadow top-100 bg-white z-40 w-10/12 left-0 \
-                 rounded max-h-56 overflow-y-auto h-full"
+      className="absolute left-0 z-40 w-10/12 h-full ml-6 -mt-2 overflow-y-auto bg-white rounded shadow top-100 \ max-h-56"
     >
       {items.sort().map((item) => {
         return (
           <div
-            className="cursor-pointer w-full border-gray-100 rounded-t border-b \
-                     hover:bg-teal-100"
+            key={`${item}-key`}
+            className="w-full border-b border-gray-100 rounded-t cursor-pointer \ hover:bg-teal-100"
             onClick={() => addItem(item)}
           >
-            <div className="flex mx-2 leading-6 p-2 relative hover:border-teal-100">
+            <div className="relative flex p-2 mx-2 leading-6 hover:border-teal-100">
               {uncamelCase(item)}
             </div>
           </div>
@@ -94,40 +91,5 @@ const Dropdown = ({ items, addItem }) => {
     </div>
   )
 }
-
-const X = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100%"
-    height="100%"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="feather feather-x cursor-pointer hover:text-teal-400 rounded-full w-4 h-4 ml-2"
-  >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-)
-
-const Chevron = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100%"
-    height="100%"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="feather feather-chevron-up w-4 h-4 transform rotate-180"
-  >
-    <polyline points="18 15 12 9 6 15"></polyline>
-  </svg>
-)
 
 export default Multiselect

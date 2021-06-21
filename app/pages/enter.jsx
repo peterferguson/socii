@@ -195,7 +195,7 @@ function EmailSignUp({ verified, setVerified }) {
           onKeyDown={(e) => handleEnterKeyDown(e, () => emailSignInHandler(email))}
         >
           {validateEmail(email) && verified ? (
-            <FiCheck className="w-6" onClick={() => emailSignInHandler(email)} />
+            <FiCheck className="w-6 h-6" onClick={() => emailSignInHandler(email)} />
           ) : (
             <FiX className="w-6 h-6" />
           )}

@@ -2,23 +2,27 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
-module.exports = withBundleAnalyzer({
-  reactStrictMode: true,
-  webpack(config) {
-    config.module.rules.push(
-      {
-        test: /\.svg$/,
-        issuer: {
-          test: /\.(js|ts)x?$/,
-        },
-        use: ["@svgr/webpack"],
-      },
-      {
-        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        loader: require.resolve("url-loader"),
-      }
-    )
+const withPWA = require("next-pwa")
 
-    return config
-  },
-})
+module.exports = withPWA(
+  withBundleAnalyzer({
+    reactStrictMode: true,
+    webpack(config) {
+      config.module.rules.push(
+        {
+          test: /\.svg$/,
+          issuer: {
+            test: /\.(js|ts)x?$/,
+          },
+          use: ["@svgr/webpack"],
+        },
+        {
+          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+          loader: require.resolve("url-loader"),
+        }
+      )
+
+      return config
+    },
+  })
+)

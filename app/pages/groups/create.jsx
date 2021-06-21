@@ -4,7 +4,7 @@ import {
   currencyIcons,
   groupDepositOptions,
   groupLumpSumOptions,
-  groupPrivacyOptions
+  groupPrivacyOptions,
 } from "@lib/constants"
 import { UserContext } from "@lib/context"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
@@ -14,6 +14,7 @@ import { useRouter } from "next/router"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { HiOutlineUserGroup } from "react-icons/hi"
+import { FiX } from "react-icons/fi"
 
 export default function Create() {
   const { user, username } = useContext(UserContext)

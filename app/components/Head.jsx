@@ -9,7 +9,7 @@ Head.propTypes = {
   ogImage: string,
 }
 
-const defaultDescription = ''
+const defaultDescription = 'Invest with Friends!'
 const defaultOGURL = ''
 const defaultOGImage = ''
 
