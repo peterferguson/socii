@@ -1,7 +1,7 @@
-import { Thread } from "stream-chat-react"
-import React from "react"
-import { CustomMessage, MessagingInput } from "./index"
 import CloseThreadIcon from "@icons/stream/closeThreadIcon.svg"
+import React from "react"
+import { Thread } from "stream-chat-react"
+import { MessagingInput } from "./index"
 
 const ThreadHeader = ({ closeThread, thread }) => {
   const getReplyCount = () => {
@@ -27,7 +27,6 @@ const ThreadHeader = ({ closeThread, thread }) => {
 const MessagingThread = () => {
   return (
     <Thread
-      Message={CustomMessage}
       MessageInput={MessagingInput}
       ThreadHeader={ThreadHeader}
       fullWidth={true}

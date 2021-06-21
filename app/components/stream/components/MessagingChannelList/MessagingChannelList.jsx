@@ -1,10 +1,9 @@
-import React, { memo, useContext } from "react"
-import { Avatar } from "stream-chat-react"
 import { StreamContext } from "@lib/context"
-import { getRandomImage, getInitials } from "@utils/helper"
-import { SkeletonLoader } from "./SkeletonLoader"
-
+import { getInitials, getRandomImage } from "@utils/helper"
+import React, { memo, useContext } from "react"
 import { MdChatBubbleOutline } from "react-icons/md"
+import { Avatar } from "stream-chat-react"
+import { SkeletonLoader } from "./SkeletonLoader"
 
 const MessagingChannelList = ({
   children,

@@ -1,5 +1,5 @@
-import { useContext } from "react"
-import { ImagePreviewer, FilePreviewer } from "react-file-utils"
+import React, { useContext } from "react"
+import { FilePreviewer, ImagePreviewer } from "react-file-utils"
 import { ChannelStateContext } from "stream-chat-react"
 
 export const UploadsPreview = ({

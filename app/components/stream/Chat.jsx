@@ -1,7 +1,6 @@
 import {
   CreateChannel,
   CustomAttachment,
-  // CustomMessage,
   CustomTriggerProvider,
   MessagingChannelHeader,
   MessagingChannelList,
@@ -17,7 +16,6 @@ import {
   Chat,
   MessageInput,
   MessageList,
-  // MessageSimple,
   useChatContext,
   Window,
 } from "stream-chat-react"
