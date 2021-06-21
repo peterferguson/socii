@@ -8,7 +8,7 @@ import "firebase/functions"
 import toast from "react-hot-toast"
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyD13i3isXoeOgerBKTdSae9pl4j1oBKoDg",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
   authDomain: "sociiinvest.firebaseapp.com",
   projectId: "sociiinvest",
   storageBucket: "sociiinvest.appspot.com",

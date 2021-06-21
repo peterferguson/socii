@@ -5,13 +5,17 @@ import { cors } from "@utils/middleware"
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
 })
-const serviceAccount = require("../../../serviceAccountKey.json")
 
+// const serviceAccount = require("../../../serviceAccountKey.json")
 // * Constant initialisation
+const credential = JSON.parse(
+  Buffer.from(process.env.GCLOUD_CREDENTIALS, "base64").toString()
+)
+
 const adminConfig = {
   storageBucket: "sociiinvest.appspot.com",
   projectId: "sociiinvest",
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(credential),
 }
 
 if (!admin.apps.length) {
