@@ -1,3 +1,5 @@
+import "stream-chat-react/dist/css/index.css"
+import "@styles/Chat.module.css"
 import {
   CreateChannel,
   CustomAttachment,

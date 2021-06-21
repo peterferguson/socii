@@ -177,9 +177,9 @@ function FeatureSlider() {
                         <p className="mb-3 text-sm text-brand-light font-poppins">
                           {item.supTitle}
                         </p>
-                        <h4 className="mb-3 text-lg font-bold md:text-2xl font-poppins">
+                        <div className="mb-3 text-lg font-bold md:text-2xl font-poppins">
                           {item.title}
-                        </h4>
+                        </div>
                         <p className="text-xs leading-snug text-gray-500 md:text-base font-work-sans">
                           {item.description}
                         </p>

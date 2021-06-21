@@ -88,7 +88,7 @@ const Hit = ({ hit }) => {
   const hitClickHandler = () => setLoadingTicker(!loadingTicker)
 
   return (
-    <Link href={`/stock/${hit.tickerSymbol}`}>
+    <Link href={`/stocks/${hit.tickerSymbol}`}>
       <div
         className="w-full max-w-md px-8 py-4 my-2 bg-white rounded-lg shadow-lg sm:my-0"
         onClick={hitClickHandler}
@@ -101,7 +101,7 @@ const Hit = ({ hit }) => {
         <Highlight attribute="name" hit={hit} />
         {loadingTicker && <Loading show={loadingTicker} className="z-50" />}
         <div className="flex pt-4">
-          <h4 className="flex-1 text-xl text-gray-900">{hit.tickerSymbol}</h4>
+          <div className="flex-1 text-xl text-gray-900">{hit.tickerSymbol}</div>
           {price.result ? (
             <p className="inline text-base text-right text-green-400">
               $ {price.result?.latestPrice}

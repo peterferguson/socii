@@ -113,7 +113,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
     <div className="flex h-auto m-1">
       <div className="flex h-20 p-2 bg-white rounded-lg shadow-2xl w-88 sm:w-96">
         <div className="justify-center flex-none w-20 mx-auto rounded-full">
-          <Link href={`/stock/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <div className="cursor-pointer">
               <a>
                 <img

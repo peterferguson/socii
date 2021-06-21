@@ -15,7 +15,7 @@ export default function SmallCardComponent(props) {
         <img src={`${props.imageUrl}`} alt="" className="w-12 h-12" />
       </div>
       <div className="pt-1 ml-6">
-        <h4 className="text-xl text-gray-900">props.headerText</h4>
+        <div className="text-xl text-gray-900">props.headerText</div>
         <p className="text-base text-gray-600">props.message</p>
       </div>
     </div>

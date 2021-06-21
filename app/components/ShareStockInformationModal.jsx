@@ -50,7 +50,7 @@ export default function ShareStockInformationModal({
           image: tickerLogoUrl,
           name: tickerSymbol,
           type: "stock",
-          url: `/stock/${tickerSymbol}`,
+          url: `/stocks/${tickerSymbol}`,
           targetPrice,
           asset: asset.data,
         },

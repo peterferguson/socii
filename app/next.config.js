@@ -3,10 +3,12 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 
 const withPWA = require("next-pwa")
+const runtimeCaching = require("next-pwa/cache")
 
 module.exports = withPWA(
   withBundleAnalyzer({
     reactStrictMode: true,
+    purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds
     webpack(config) {
       config.module.rules.push(
         {
@@ -23,6 +25,12 @@ module.exports = withPWA(
       )
 
       return config
+    },
+    pwa: {
+      dest: "public/service/",
+      register: true,
+      sw: "service/sw.js",
+      runtimeCaching,
     },
   })
 )

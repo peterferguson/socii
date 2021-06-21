@@ -71,7 +71,7 @@ function TickerLogo({ tickerSymbol }) {
       className="h-auto mx-auto rounded-full shadow-lg w-14"
       src={logo.current}
       alt={`${tickerSymbol} logo`}
-      onClick={() => router.push(`/stock/${tickerSymbol}`)}
+      onClick={() => router.push(`/stocks/${tickerSymbol}`)}
     />
   )
 }

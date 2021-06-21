@@ -3,7 +3,7 @@
   "short_name": "socii",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "favicons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
@@ -11,30 +11,30 @@
   "theme_color": "#3fbaeb",
   "background_color": "#79ffe1",
   "display": "standalone",
-  "start_url": "/stock",
+  "start_url": "/stocks",
   "scope": "/",
   "description": "Invest with Friends!",
   "shortcuts": [
-    {
-      "name": "Group Portfolios",
-      "short_name": "Groups",
-      "description": "View group portfolios",
-      "url": "/groups?source=pwa",
-      "icons": [{ "src": "/images/today.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Stocks",
-      "short_name": "Stocks",
-      "description": "View our stock universe",
-      "url": "/stock?source=pwa",
-      "icons": [{ "src": "/images/today.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Chat with friends",
-      "short_name": "Chat",
-      "description": "Chat with firends",
-      "url": "/chat?source=pwa",
-      "icons": [{ "src": "/images/tomorrow.png", "sizes": "192x192" }]
-    }
+    // {
+    //   "name": "Group Portfolios",
+    //   "short_name": "Groups",
+    //   "description": "View group portfolios",
+    //   "url": "/groups?source=pwa",
+    //   "icons": [{ "src": "/favicons/today.png", "sizes": "192x192" }]
+    // },
+    // {
+    //   "name": "Stocks",
+    //   "short_name": "Stocks",
+    //   "description": "View our stock universe",
+    //   "url": "/stock?source=pwa",
+    //   "icons": [{ "src": "/favicons/today.png", "sizes": "192x192" }]
+    // },
+    // {
+    //   "name": "Chat with friends",
+    //   "short_name": "Chat",
+    //   "description": "Chat with firends",
+    //   "url": "/chat?source=pwa",
+    //   "icons": [{ "src": "/favicons/tomorrow.png", "sizes": "192x192" }]
+    // }
   ]
 }

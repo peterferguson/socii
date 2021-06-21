@@ -108,7 +108,7 @@ export function AssetCard({ ticker, timeseries, sector }) {
   const [logoNotFound, setLogoNotFound] = useState(false)
   return (
     <>
-      <Link href={`/stock/${tickerSymbol}`}>
+      <Link href={`/stocks/${tickerSymbol}`}>
         <a href={tickerSymbol}>
           <header className="flex mb-auto flex-nowrap">
             {!logoNotFound ? (
@@ -127,7 +127,7 @@ export function AssetCard({ ticker, timeseries, sector }) {
           </header>
         </a>
       </Link>
-      <Link href={`/stock/${tickerSymbol}`}>
+      <Link href={`/stocks/${tickerSymbol}`}>
         <div className="relative py-8 mx-3 align-middle grid grid-cols-none">
           <h1 className="text-xl font-bold">{tickerSymbol}</h1>
 

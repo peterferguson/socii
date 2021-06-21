@@ -1,15 +1,15 @@
-import "stream-chat-react/dist/css/index.css"
-import "@styles/globals.css"
 import Head from "@components/Head"
 import Navigation from "@components/Navigation"
-import SearchCard from "@components/SearchCard"
-import { UserContext, StreamContext } from "@lib/context"
-import { useUserData, useStream } from "@lib/hooks"
+import { toastProps } from "@lib/constants"
+import { StreamContext, UserContext } from "@lib/context"
+import { useStream, useUserData } from "@lib/hooks"
+import "@styles/globals.css"
 import { isBrowser } from "@utils/helper"
-
+import dynamic from "next/dynamic"
 import React, { useState } from "react"
 import { Toaster } from "react-hot-toast"
-import { toastProps } from "@lib/constants"
+const SearchCard = dynamic(() => import("components/SearchCard"))
+
 
 export default function MyApp({ Component, pageProps }) {
   const userData = useUserData()
