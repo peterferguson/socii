@@ -112,29 +112,21 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
   return (
     <div className="flex h-auto m-1">
       <div className="flex h-20 p-2 bg-white rounded-lg shadow-2xl w-88 sm:w-96">
-        <div className="justify-center flex-none w-20 mx-auto rounded-full">
-          <Link href={`/stocks/${tickerSymbol}`}>
-            <div className="cursor-pointer">
-              <a>
-                <img
-                  className="w-10 h-10 mx-auto rounded-full shadow-lg"
-                  src={logoUrl(holding.ISIN)}
-                  alt={`${tickerSymbol} logo`}
-                />
-              </a>
-              <a>
-                <div className="w-20 overflow-hidden font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
-                  {holding.shortName}
-                </div>
-              </a>
-              <a>
-                <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
-                  {tickerSymbol}
-                </div>
-              </a>
+        <Link href={`/stocks/${tickerSymbol}`}>
+          <div className="justify-center flex-none w-20 mx-auto rounded-full cursor-pointer">
+            <img
+              className="w-10 h-10 mx-auto rounded-full shadow-lg"
+              src={logoUrl(holding.ISIN)}
+              alt={`${tickerSymbol} logo`}
+            />
+            <div className="w-20 overflow-hidden font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
+              {holding.shortName}
             </div>
-          </Link>
-        </div>
+            <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
+              {tickerSymbol}
+            </div>
+          </div>
+        </Link>
         <div className="flex-grow" />
         <div className="flex flex-col items-center justify-center w-20 mr-4">
           <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">

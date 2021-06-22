@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <div className="h-screen grid grid-cols-2 bg-gray-50">
         {/* <bluryGradientBg className="bg-teal-400"/> */}
-        <div className="z-40 grid-rows-4">
+        <div className="z-10 grid-rows-4">
           <div className="px-4 pt-24 text-7xl sm:pt-32 font-poppins animate-fade-in-down">
             Invest Together.
           </div>

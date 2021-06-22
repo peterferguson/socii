@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
-import "stream-chat-react/dist/css/index.css"
-import "@styles/Chat.module.css"
+import AuthCheck from "@components/AuthCheck"
 import {
   CreateChannel,
   CustomTriggerProvider,
@@ -9,8 +8,21 @@ import {
   MessagingChannelPreview,
   MessagingInput,
 } from "@components/stream"
-
+import "@styles/Chat.module.css"
 import dynamic from "next/dynamic"
+import { boolean, string } from "prop-types"
+import React, { useState } from "react"
+import { useMediaQuery } from "react-responsive"
+import {
+  Channel,
+  ChannelList,
+  Chat,
+  MessageInput,
+  MessageList,
+  useChatContext,
+  Window,
+} from "stream-chat-react"
+import "stream-chat-react/dist/css/index.css"
 
 const MessagingThread = dynamic(() => import("@components/stream/MessagingThread"), {
   loading: () => <p>...</p>,
@@ -24,21 +36,6 @@ const TypingIndicator = dynamic(() => import("@components/stream/TypingIndicator
   loading: () => <p>...</p>,
   ssr: false,
 })
-
-import {
-  Channel,
-  ChannelList,
-  Chat,
-  MessageInput,
-  MessageList,
-  useChatContext,
-  Window,
-} from "stream-chat-react"
-
-import { useMediaQuery } from "react-responsive"
-import React, { useState } from "react"
-
-import { string, boolean } from "prop-types"
 
 StreamChat.propTypes = {
   theme: string,
@@ -55,8 +52,9 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
   return (
-    <Chat client={client} theme={`messaging ${theme}`}>
-      {/* {showNotificationToast && (
+    <AuthCheck>
+      <Chat client={client} theme={`messaging ${theme}`}>
+        {/* {showNotificationToast && (
         <div class="alert">
         <p>
         socii needs your permission to
@@ -66,49 +64,50 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
         </p>
         </div>
       )} */}
-      {!groupName && (
-        <StreamChannelList
-          hideChannelList={hideChannelList}
-          onClose={onClose}
-          onCreateChannel={onCreateChannel}
-          groupName={groupName}
-        />
-      )}
-      <Channel
-        channel={
-          groupName
-            ? client.channel("messaging", groupName?.split(" ").join("-"))
-            : null
-        }
-        maxNumberOfFiles={10}
-        multipleUploads={true}
-        Attachment={CustomAttachment}
-        TriggerProvider={CustomTriggerProvider}
-      >
-        <Window
-          hideOnThread={true}
-          onClick={hideChannelList ? toggleHideChannelList : null}
+        {!groupName && (
+          <StreamChannelList
+            hideChannelList={hideChannelList}
+            onClose={onClose}
+            onCreateChannel={onCreateChannel}
+            groupName={groupName}
+          />
+        )}
+        <Channel
+          channel={
+            groupName
+              ? client.channel("messaging", groupName?.split(" ").join("-"))
+              : null
+          }
+          maxNumberOfFiles={10}
+          multipleUploads={true}
+          Attachment={CustomAttachment}
+          TriggerProvider={CustomTriggerProvider}
         >
-          {isCreating && (
-            <CreateChannel
-              toggleHideChannelList={toggleHideChannelList}
-              onClose={onClose}
-            />
-          )}
-          <MessagingChannelHeader
-            toggleHideChannelList={!groupName ? toggleHideChannelList : null}
-          />
-          <MessageList
+          <Window
+            hideOnThread={true}
             onClick={hideChannelList ? toggleHideChannelList : null}
-            messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-            TypingIndicator={TypingIndicator}
-            // messageLimit={5} // TODO: Implement messageLimit to save on api calls
-          />
-          <MessageInput autoFocus Input={MessagingInput} />
-        </Window>
-        <MessagingThread />
-      </Channel>
-    </Chat>
+          >
+            {isCreating && (
+              <CreateChannel
+                toggleHideChannelList={toggleHideChannelList}
+                onClose={onClose}
+              />
+            )}
+            <MessagingChannelHeader
+              toggleHideChannelList={!groupName ? toggleHideChannelList : null}
+            />
+            <MessageList
+              onClick={hideChannelList ? toggleHideChannelList : null}
+              messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
+              TypingIndicator={TypingIndicator}
+              // messageLimit={5} // TODO: Implement messageLimit to save on api calls
+            />
+            <MessageInput autoFocus Input={MessagingInput} />
+          </Window>
+          <MessagingThread />
+        </Channel>
+      </Chat>
+    </AuthCheck>
   )
 }
 
