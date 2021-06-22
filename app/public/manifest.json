@@ -9,7 +9,7 @@
     }
   ],
   "theme_color": "#3fbaeb",
-  "background_color": "#79ffe1",
+  "background_color": "#fff",
   "display": "standalone",
   "start_url": "/stocks",
   "scope": "/",
