@@ -27,9 +27,9 @@ module.exports = withPWA(
       return config
     },
     pwa: {
-      dest: "public/service/",
+      dest: "public",
       register: true,
-      sw: "service/sw.js",
+      sw: "sw.js",
       runtimeCaching,
     },
   })

@@ -1,16 +1,29 @@
+/* eslint-disable react/display-name */
 import "stream-chat-react/dist/css/index.css"
 import "@styles/Chat.module.css"
 import {
   CreateChannel,
-  CustomAttachment,
   CustomTriggerProvider,
   MessagingChannelHeader,
   MessagingChannelList,
   MessagingChannelPreview,
   MessagingInput,
-  MessagingThread,
-  TypingIndicator,
 } from "@components/stream"
+
+import dynamic from "next/dynamic"
+
+const MessagingThread = dynamic(() => import("@components/stream/MessagingThread"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+})
+const CustomAttachment = dynamic(() => import("@components/stream/CustomAttachment"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+})
+const TypingIndicator = dynamic(() => import("@components/stream/TypingIndicator"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+})
 
 import {
   Channel,
@@ -21,6 +34,7 @@ import {
   useChatContext,
   Window,
 } from "stream-chat-react"
+
 import { useMediaQuery } from "react-responsive"
 import React, { useState } from "react"
 

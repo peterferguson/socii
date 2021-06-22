@@ -6,7 +6,7 @@ import { firestore } from "@lib/firebase"
 import { isBrowser, logoUrl, stockProps } from "@utils/helper"
 import { useIntersectionObserver } from "@lib/hooks"
 import Link from "next/link"
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 
 export default function StockDisplay({ tickerSymbols }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -14,6 +14,7 @@ export default function StockDisplay({ tickerSymbols }) {
 
   // - For infinite scroll
 
+  const [loadingMoreTickers, setLoadingMoreTickers] = useState(false)
   const moreTickers = useRef([])
   const lastTickerLoaded = useRef(null)
   const lastTickerRef = useRef(null)
@@ -39,8 +40,10 @@ export default function StockDisplay({ tickerSymbols }) {
         props: { tickerSymbols },
       } = await stockProps({ tickerDocs })
       moreTickers.current.push(...tickerSymbols)
+      setLoadingMoreTickers(false)
     }
     if (isVisible) {
+      setLoadingMoreTickers(true)
       getMoreTickers()
       lastTickerRef.current = null
     }
@@ -56,14 +59,11 @@ export default function StockDisplay({ tickerSymbols }) {
   // }
 
   return (
+    // TODO: Create our own version of this Ticker Tape banner
     <>
       <div className="flex flex-col">
-        {isBrowser && (
-          <>
-            <TradingViewStockTickerQuotes />
-            {/* <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} /> */}
-          </>
-        )}
+        {/* {isBrowser && <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} />} */}
+        {isBrowser && <TradingViewStockTickerQuotes />}
       </div>
       <div>
         <Link href="/stocks/popular">
