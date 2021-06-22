@@ -10,7 +10,7 @@ import {
   MessagingInput,
   MessagingThread,
   TypingIndicator,
-} from "@components/stream/components"
+} from "@components/stream"
 
 import {
   Channel,
@@ -24,7 +24,14 @@ import {
 import { useMediaQuery } from "react-responsive"
 import React, { useState } from "react"
 
-export default function StreamChat({ client, theme = "light", groupName = null }) {
+import { string, boolean } from "prop-types"
+
+StreamChat.propTypes = {
+  theme: string,
+  groupName: string,
+}
+
+export default function StreamChat({ client, theme = "light", groupName = "" }) {
   const [isCreating, setIsCreating] = useState(false)
   const [hideChannelList, setHideChannelList] = useState(false)
   // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
@@ -91,12 +98,14 @@ export default function StreamChat({ client, theme = "light", groupName = null }
   )
 }
 
-const StreamChannelList = ({
-  hideChannelList,
-  onCreateChannel,
-  onClose,
-  groupName,
-}) => {
+StreamChannelList.propTypes = {
+  hideChannelList: boolean,
+  onCreateChannel: () => {},
+  onClose: () => {},
+  groupName: string,
+}
+
+function StreamChannelList({ hideChannelList, onCreateChannel, onClose, groupName }) {
   const { client } = useChatContext()
   const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
