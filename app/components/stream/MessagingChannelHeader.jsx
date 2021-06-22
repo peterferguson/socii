@@ -1,4 +1,4 @@
-import AvatarGroup from "@components/stream/components/AvatarGroup"
+import AvatarGroup from "@components/stream/AvatarGroup"
 import { Dialog, Transition } from "@headlessui/react"
 import styles from "@styles/MessagingChannelHeader.module.css"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"

@@ -33,7 +33,7 @@ export default function Dropdown() {
     {
       name: "Stocks",
       description: "Search our stock universe",
-      href: "/stock",
+      href: "/stocks",
       icon: ({ className }) => <FaGlobeEurope className={`-mb-1 ${className}`} />,
     },
     {

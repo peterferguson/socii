@@ -1,12 +1,20 @@
-import Logo from "@components/Logo"
-import OutlineButton from "@components/OutlineButton"
+/* eslint-disable react/display-name */
 import { UserContext } from "@lib/context"
 import { firestore } from "@lib/firebase"
 import { logoUrl } from "@utils/helper"
-
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import { useCollection } from "react-firebase-hooks/firestore"
+
+const WhySocii = dynamic(() => import("@components/WhySocii"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+})
+const SociiFeatureSlider = dynamic(() => import("@components/SociiFeatureSlider"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+})
 
 export default function Home() {
   const router = useRouter()
@@ -28,7 +36,7 @@ export default function Home() {
           <div>
             <button
               className="btn btn-transition"
-              onClick={() => router.push(user ? "/stock" : "/enter")}
+              onClick={() => router.push(user ? "/stocks" : "/enter")}
             >
               Invest Now
             </button>
@@ -49,7 +57,7 @@ export default function Home() {
       </div> */}
 
       <WhySocii />
-      <FeatureSlider />
+      <SociiFeatureSlider />
 
       {/* Contact Us */}
       <div className="flex items-center justify-center max-w-5xl px-6 py-16 mx-auto h-1/2">
@@ -87,111 +95,6 @@ function TickerList() {
             alt={`${ticker.tickerSymbol} logo`}
           />
         ))}
-    </>
-  )
-}
-
-function WhySocii() {
-  return (
-    <section className="flex items-center justify-center h-screen bg-gradient-to-br from-brand-light to-brand">
-      <div className="max-w-5xl py-16 pl-4 sm:p-0">
-        <h2 className="text-3xl font-extrabold text-gray-100 font-poppins">
-          Investing with friends has never been easier!
-        </h2>
-        <div className="max-w-lg mx-auto mt-4 text-white leading-6">
-          <p className="pr-4 font-thin">
-            Investing with friends <span className="font-bold">used</span> to mean
-            setting up an investment club, a cumbersome process filled with legal, tax &
-            audit issues to worry about.
-            <br />
-            <br />
-            With soc
-            <span className="pr-1 font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-brand-light font-poppins">
-              ii
-            </span>
-            you dont have to worry about these. We handle
-            <span className="font-bold"> everything</span> for you!
-          </p>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function FeatureSlider() {
-  const timelineHeadings = [
-    {
-      supTitle: "Social Investment Platform",
-      title: "Find & Share Investment Ideas",
-      description:
-        "Chat with friends in group chats & forums about potential investments",
-    },
-    {
-      supTitle: "Group Trade Execution",
-      title: "Execute Trades Directly From Chat",
-      description: "Use chat bot to set up & execute trades",
-    },
-    {
-      supTitle: "Competitive Leagues",
-      title: "Public Group Leaderboards",
-      description: "Go head to head with and gain investment ideas from other groups",
-    },
-    {
-      supTitle: "Incorporation Free",
-      title: "No Incorporation",
-      description: "No need to create a company just to invest with friends!",
-    },
-  ]
-  return (
-    <>
-      <div className="py-8 text-black bg-gradient-to-t from-brand-teal to to-brand-lightGreen">
-        <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
-          <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
-            <p className="text-xs uppercase text-brand-light tracking-loose font-poppins">
-              Social Investing
-            </p>
-            <p className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-poppins">
-              What is <Logo className="text-3xl md:text-4xl" />?
-            </p>
-            <p className="mb-4 text-sm text-black md:text-base"></p>
-            <OutlineButton href="#" text="Explore Now" />
-          </div>
-          {/* Feature Slider */}
-          <div className="sticky ml-0 md:ml-12 lg:w-2/3">
-            <div className="container w-full h-full mx-auto">
-              <div className="relative h-full p-10 overflow-hidden wrap">
-                {/* Center Line */}
-                <div className="absolute h-full border-2 border-teal-300 border-2-2 right-1/2"></div>
-                <div className="absolute h-full border-2 border-teal-300 border-2-2 left-1/2"></div>
-                {/* Headings */}
-                {timelineHeadings.map((item, index) => {
-                  return (
-                    <div
-                      key={`feature-${index}`}
-                      className={`mb-8 flex justify-between ${
-                        index % 2 == 0 ? "flex-row-reverse" : ""
-                      } items-center w-full`}
-                    >
-                      <div className="order-1 w-5/12"></div>
-                      <div className="order-1 w-5/12 px-1 py-4 text-right">
-                        <p className="mb-3 text-sm text-brand-light font-poppins">
-                          {item.supTitle}
-                        </p>
-                        <div className="mb-3 text-lg font-bold md:text-2xl font-poppins">
-                          {item.title}
-                        </div>
-                        <p className="text-xs leading-snug text-gray-500 md:text-base font-work-sans">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   )
 }

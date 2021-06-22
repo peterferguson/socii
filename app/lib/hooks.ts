@@ -7,7 +7,7 @@ import {
   isBrowser,
   isEmpty,
   isPromise,
-  round,
+  round
 } from "@utils/helper"
 import Cookie from "js-cookie"
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react"
@@ -15,6 +15,7 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { useMediaQuery } from "react-responsive"
 import { StreamChat } from "stream-chat"
 import useSWR from "swr"
+
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
 export function useUserData() {

@@ -1,5 +1,5 @@
 import styles from "@styles/MessagingChannelPreview.module.css"
-import AvatarGroup from "@components/stream/components/AvatarGroup"
+import AvatarGroup from "@components/stream/AvatarGroup"
 import { getTimeStamp } from "@utils/helper"
 
 import React, { useContext } from "react"

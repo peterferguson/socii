@@ -1,6 +1,7 @@
 import admin from "firebase-admin"
 import { NextApiRequest, NextApiResponse } from "next"
 import { cors } from "@utils/middleware"
+import { OHLC } from "@lib/types"
 // const bent = require("bent"))
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
@@ -43,15 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const dates = Object.keys(timeseries)
 
-  interface OHLC {
-    timestamp: Date
-    open: string
-    high: string
-    low: string
-    close: string
-    volume: string
-  }
-
   const timeseriesData = dates.map((date) => {
     const ohlc = {} as OHLC
     ohlc["timestamp"] = new Date(date)
@@ -68,14 +60,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const batch = firestore.batch()
   for (let ohlc of timeseriesData) {
     const { timestamp, ...data } = ohlc
-    const docName = timestamp.getTime() / 1000
+
+    const timestampNumber =
+      typeof timestamp !== "number" ? timestamp.getTime() : timestamp
+
+    const timestampFirestoreDate = admin.firestore.Timestamp.fromDate(
+      typeof timestamp !== "number" ? timestamp : new Date(timestamp)
+    )
 
     const outputRef = firestore
       .collection(`tickers/${ISIN}/timeseries`)
-      .doc(`${docName}`)
+      .doc(`${timestampNumber}`)
+
     batch.set(outputRef, {
       ...data,
-      timestamp: admin.firestore.Timestamp.fromDate(timestamp),
+      timestamp: timestampFirestoreDate,
     })
   }
   await batch.commit()

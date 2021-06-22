@@ -7,9 +7,12 @@ import "@styles/globals.css"
 import { isBrowser } from "@utils/helper"
 import dynamic from "next/dynamic"
 import React, { useState } from "react"
-import { Toaster } from "react-hot-toast"
+const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster))
 const SearchCard = dynamic(() => import("components/SearchCard"))
 
+export function reportWebVitals(metric) {
+  console.log(metric)
+}
 
 export default function MyApp({ Component, pageProps }) {
   const userData = useUserData()

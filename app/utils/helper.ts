@@ -1,5 +1,6 @@
 import { tickerToISIN, firestore, DocumentReference } from "@lib/firebase"
 import { CurrencyCode } from "@lib/constants"
+import { OHLCTimeseries } from "@lib/types"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
@@ -58,6 +59,9 @@ export const fetchJSON = async (url) => (await fetch(url)).json()
 export const fetcher = (url) => fetch(url).then((r) => r.json())
 
 // TODO: Needs refactored
+// TODO: Remove the timeseries query so we can pull it separately and load other data first
+// TODO: Allow a query list to filter the return in the ticker data
+
 export const stockProps = async ({
   tickerQuery = null,
   subQueryField = "",
@@ -83,7 +87,7 @@ export const stockProps = async ({
       )
     }
 
-    const timeseries = await tickerTimeseries(
+    const timeseries: OHLCTimeseries = await tickerTimeseries(
       tickerDoc.ref,
       timeseriesLimit,
       ticker.tickerSymbol
@@ -118,9 +122,9 @@ export const tickerExistsSubquery = async (tickerRef, queryField) => {
 
 export const tickerTimeseries = async (
   tickerRef: DocumentReference,
-  limit = 30,
-  tickerSymbol
-) => {
+  limit: number = 30,
+  tickerSymbol: string
+): Promise<OHLCTimeseries> => {
   // * Get timeseries data
   const timeseriesRef = tickerRef
     .collection("timeseries")
@@ -129,21 +133,28 @@ export const tickerTimeseries = async (
 
   let timeseriesDocs = (await timeseriesRef.get()).docs
 
-  let timeseries
+  let timeseries: OHLCTimeseries
 
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
     const isin = tickerRef.path.split("/").pop()
-    console.log(isin)
 
     timeseries = await fetcher(
       `/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
     )
   } else {
-    timeseries = timeseriesDocs.map((doc) => ({
-      ...doc.data(),
-      timestamp: parseInt(doc.id) * 1000,
-    }))
+    timeseries = timeseriesDocs.map((doc) => {
+      const { open, high, low, close, volume } = doc.data()
+
+      return {
+        open,
+        high,
+        low,
+        close,
+        volume,
+        timestamp: parseInt(doc.id) * 1000,
+      }
+    })
   }
 
   return timeseries
