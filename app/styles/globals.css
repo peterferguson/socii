@@ -188,6 +188,10 @@ a {
   height: calc(100vh - 72px);
 }
 
+.str-chat-channel.messaging .str-chat__main-panel {
+  padding: 0px;
+}
+
 /* Threads */
 
 .messaging.str-chat .str-chat__thread {
@@ -262,10 +266,8 @@ a {
   }
 }
 
-.message-input-wrapper 
-
-.str-chat__textarea textarea {
-  background: #F4F4F5;
+.message-input-wrapper .str-chat__textarea textarea {
+  background: #f4f4f5;
   padding: 0px 16px;
   vertical-align: middle;
   font-size: 14px;
@@ -278,6 +280,20 @@ a {
   border-radius: 20px;
 }
 
-.str-chat__textarea textarea:focus{
+.str-chat__textarea textarea:focus {
   background: #fff;
+}
+@media screen and (max-width: 960px) {
+  .str-chat-channel-list.messaging,
+  .str-chat-channel-list.team,
+  .str-chat-channel-list.commerce {
+    position: fixed;
+    left: -400px;
+    top: 0;
+    z-index: 1001;
+    min-height: 100vh;
+    overflow-y: auto;
+    box-shadow: 7px 0 9px 0 rgb(0 0 0 / 3%), 1px 0 0 0 rgb(0 0 0 / 3%);
+    transition: left 200ms ease-in-out;
+  }
 }

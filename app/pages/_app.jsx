@@ -10,8 +10,9 @@ import dynamic from "next/dynamic"
 import React, { useState } from "react"
 const Toaster = dynamic(() => import("react-hot-toast").then(mod => mod.Toaster))
 const SearchCard = dynamic(() => import("components/SearchCard"))
-import "stream-chat-react/dist/css/index.css"
+import "@styles/Chat.css"
 import "@styles/globals.css"
+
 
 export function reportWebVitals(metric) {
   console.log(metric)

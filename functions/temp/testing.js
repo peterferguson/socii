@@ -25,7 +25,6 @@
 //   return ohlc
 // })
 
-
 // ! Testing iexjs library
 // const { Client } = require("iexjs")
 // const client = new Client({ version: "stable" })
@@ -54,6 +53,13 @@
 // adminConfig.credential = admin.credential.cert(serviceAccount)
 // admin.initializeApp(adminConfig)
 // const firestore = admin.firestore()
+
+// const emailRef = firestore
+//   .collectionGroup("invites")
+//   .where("email", "==", "peterferguson95@gmail.com")
+//   .limit(1)
+
+// emailRef.get().then((_) => console.log(_))
 
 // // ! Be sure to export FIRESTORE_EMULATOR_HOST="localhost:8080"
 

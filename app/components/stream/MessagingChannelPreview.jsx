@@ -17,9 +17,14 @@ const getChannelName = (members) => {
   }`
 }
 
-const MessagingChannelPreview = (props) => {
-  const { channel, latestMessage, setActiveChannel, closeIsCreating } = props
-
+const MessagingChannelPreview = ({
+  channel,
+  latestMessage,
+  setActiveChannel,
+  closeIsCreating,
+  hideChannelList,
+  is1Col,
+}) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
 
   const members = Object.values(channel.state.members).filter(
@@ -38,6 +43,7 @@ const MessagingChannelPreview = (props) => {
       onClick={() => {
         closeIsCreating()
         setActiveChannel(channel)
+        if (is1Col) hideChannelList()
       }}
     >
       {AvatarGroup(members, styles)}

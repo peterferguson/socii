@@ -41,33 +41,25 @@ StreamChat.propTypes = {
 }
 
 export default function StreamChat({ client, theme = "light", groupName = "" }) {
+  const is1Col = !useMediaQuery({ minWidth: 800 })
   const [isCreating, setIsCreating] = useState(false)
   const [hideChannelList, setHideChannelList] = useState(false)
-  // const [showNotificationBanner, setShowNotificationBanner] = useState(false);
 
   const onClose = () => setIsCreating(false)
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
+
   return (
     <AuthCheck>
       <Chat client={client} theme={`messaging ${theme}`}>
-        {/* {showNotificationToast && (
-        <div class="alert">
-        <p>
-        socii needs your permission to
-        <button onClick={grantPermission}>
-        enable desktop notifications to execute trades!
-        </button>
-        </p>
-        </div>
-      )} */}
         {!groupName && (
           <StreamChannelList
             hideChannelList={hideChannelList}
             onClose={onClose}
             onCreateChannel={onCreateChannel}
             groupName={groupName}
+            is1Col={is1Col}
           />
         )}
         <Channel
@@ -114,22 +106,32 @@ StreamChannelList.propTypes = {
   onCreateChannel: () => {},
   onClose: () => {},
   groupName: string,
+  is1Col: boolean,
 }
 
-function StreamChannelList({ hideChannelList, onCreateChannel, onClose, groupName }) {
+function StreamChannelList({
+  hideChannelList,
+  onCreateChannel,
+  onClose,
+  groupName,
+  is1Col,
+}) {
   const { client } = useChatContext()
   const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
   const options = { state: true, presence: true, limit: 5 }
-  const is1Cols = useMediaQuery({ minWidth: 800 })
   return (
     <div
-      className={`absolute inset-y-16 md:inset-y-0 left-none md:left-0 -right-16 md:right-none transform md:relative transition 
-        duration-300 ease-in-out 
-        ${hideChannelList && is1Cols && "-translate-x-full flex h-0"}
-        ${!hideChannelList && is1Cols && "translate-x-0 z-40"}
-        ${hideChannelList && !is1Cols && "-translate-x-full hidden"}
-        ${!hideChannelList && !is1Cols && "translate-x-0 z-40"}
+      className={`absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out
+        ${
+          !is1Col
+            ? hideChannelList
+              ? "-translate-x-full hidden"
+              : "translate-x-0 z-40"
+            : hideChannelList
+            ? "hidden"
+            : "absolute inset-y-0 left-96 z-40"
+        }
         `}
     >
       <ChannelList
@@ -143,7 +145,11 @@ function StreamChannelList({ hideChannelList, onCreateChannel, onClose, groupNam
           <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
         )}
         Preview={(props) => (
-          <MessagingChannelPreview {...props} closeIsCreating={onClose} />
+          <MessagingChannelPreview
+            {...props}
+            closeIsCreating={onClose}
+            hideChannelList={hideChannelList}
+          />
         )}
       />
     </div>
@@ -171,25 +177,3 @@ function StreamChannelList({ hideChannelList, onCreateChannel, onClose, groupNam
 *
 *
 */
-
-// function grantPermission() {
-//   if (Notification.permission === 'granted') {
-//     new Notification('You are already subscribed to web notifications');
-//     return;
-//   }
-
-//   if (
-//     Notification.permission !== 'denied' ||
-//     Notification.permission === 'default'
-//   ) {
-//     Notification.requestPermission().then(result => {
-//       if (result === 'granted') {
-//         new Notification('New message from Stream', {
-//           body: 'Nice, notifications are now enabled!',
-//         });
-//       }
-//     });
-//   }
-
-//   setShowNotificationBanner(false);
-// }

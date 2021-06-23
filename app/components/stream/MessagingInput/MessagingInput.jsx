@@ -220,7 +220,7 @@ const MessagingInput = (props) => {
     })
   }
   return (
-    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-md">
+    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-none sm:shadow-md">
       <EmojiButton
         emojiButton={emojiButtons.emoji}
         onClick={messageInput.openEmojiPicker}

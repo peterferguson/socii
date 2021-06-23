@@ -37,6 +37,7 @@ import ClientOnly from "@components/ClientOnly"
 import Custom404 from "../../404"
 import { StreamContext, UserContext } from "@lib/context"
 import GroupColumn from "@components/GroupCharts"
+import { useMediaQuery } from "react-responsive"
 
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
@@ -47,6 +48,7 @@ const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
 })
 
 export default function Group() {
+  const is1Col = useMediaQuery({ minWidth: 800 })
   const router = useRouter()
   const { groupName } = router.query
   const { userGroups } = useContext(UserContext)
@@ -60,17 +62,23 @@ export default function Group() {
         <LoadingIndicator />
       ) : (
         <div className="flex">
-          <div className="w-1/3 p-8">
-            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">holdings</div>
+          <div className="p-8 flex-auto">
+            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">
+              holdings
+            </div>
             <GroupColumn groupName={groupName} />
           </div>
-          <div className="w-2/3">
+          {is1Col && (
             <AuthCheck>
               <ClientOnly>
-                <StreamChatWithNoSSR client={streamClient} groupName={groupName} />
+                <StreamChatWithNoSSR
+                  client={streamClient}
+                  groupName={groupName}
+                  className="flex-auto"
+                />
               </ClientOnly>
             </AuthCheck>
-          </div>
+          )}
         </div>
       )}
     </>
