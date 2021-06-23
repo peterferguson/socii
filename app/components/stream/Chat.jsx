@@ -8,7 +8,6 @@ import {
   MessagingChannelPreview,
   MessagingInput,
 } from "@components/stream"
-import "@styles/Chat.module.css"
 import dynamic from "next/dynamic"
 import { boolean, string } from "prop-types"
 import React, { useState } from "react"
@@ -22,7 +21,6 @@ import {
   useChatContext,
   Window,
 } from "stream-chat-react"
-import "stream-chat-react/dist/css/index.css"
 
 const MessagingThread = dynamic(() => import("@components/stream/MessagingThread"), {
   loading: () => <p>...</p>,

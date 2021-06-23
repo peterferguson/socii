@@ -5,12 +5,13 @@ import { toastProps } from "@lib/constants"
 import { StreamContext, UserContext } from "@lib/context"
 import { useStream, useUserData } from "@lib/hooks"
 import { useMediaQuery } from "react-responsive"
-import "@styles/globals.css"
 import { isBrowser } from "@utils/helper"
 import dynamic from "next/dynamic"
 import React, { useState } from "react"
 const Toaster = dynamic(() => import("react-hot-toast").then(mod => mod.Toaster))
 const SearchCard = dynamic(() => import("components/SearchCard"))
+import "stream-chat-react/dist/css/index.css"
+import "@styles/globals.css"
 
 export function reportWebVitals(metric) {
   console.log(metric)
@@ -46,7 +47,9 @@ export default function MyApp({ Component, pageProps }) {
           )}
           {not1Col && <Navigation {...props} />}
           {isBrowser && <SearchCard {...props} />}
-          <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
+          {isBrowser && (
+            <Component {...pageProps} className={`bg-gray-50 ${props.className}`} />
+          )}
           {!not1Col && <Footer {...props} />}
         </div>
         <Toaster {...toastProps} />
