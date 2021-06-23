@@ -220,7 +220,7 @@ const MessagingInput = (props) => {
     })
   }
   return (
-    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-md">
+    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-none sm:shadow-md">
       <EmojiButton
         emojiButton={emojiButtons.emoji}
         onClick={messageInput.openEmojiPicker}
@@ -238,7 +238,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="flex items-center bg-white border-2 border-gray-400 w-52 md:w-60 lg:w-[400px]  min-h-[40px] z-[100] rounded-3xl focus-within:border-brand">
+        <div className="flex items-center bg-gray-100 border-2 border-gray-400 message-input-wrapper focus-within:bg-white w-52 md:w-60 lg:w-[400px] min-h-[40px] z-[100] rounded-3xl focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
