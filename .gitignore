@@ -111,3 +111,7 @@ yarn-error.log*
 
 # env in next.config
 next.config.js
+
+# Maybe undo this?
+package-lock.json
+sw.js.map
