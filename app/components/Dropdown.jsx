@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Popover, Transition } from "@headlessui/react"
 import { UserContext } from "@lib/context"
 import { signOut, userFirstName } from "@lib/firebase"
@@ -46,7 +47,7 @@ export default function Dropdown() {
     {
       name: "Porfolio",
       description: "Keep track of your growth",
-      href: `/user/${username}`,
+      href: `/user/portfolio`,
       icon: HiOutlineChartPie,
     },
     {
@@ -58,7 +59,7 @@ export default function Dropdown() {
     {
       name: "Groups",
       description: "View all of your Groups",
-      href: "",
+      href: `/user/${username}`,
       icon: HiOutlineUserGroup,
       rightIcon: HiOutlineChevronRight,
       disabled: true,

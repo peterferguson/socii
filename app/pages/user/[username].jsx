@@ -19,47 +19,52 @@ import { UserContext } from "@lib/context"
 import { getRandomTailwindColor } from "@utils/helper"
 import { auth , firestore} from "@lib/firebase"
 import { useRouter } from "next/router"
-import React, { useContext , useState , useRef } from "react"
+import React, { useContext , useState , useEffect,  useRef } from "react"
 
 export default function UserPage() {
   const router = useRouter()
   const pagename = router.query.username
   const { username, userGroups } = useContext(UserContext)
   const [userData, setUserData] = useState([])
-  const checkGroups = useRef(true)
+  const checkRef = useRef(1)
   
   const isUsersHomepage = pagename === username
 
-
-  // //
-
-  // console.log("username: ", username)
-  // console.log("pagename: ", pagename)
-  // console.log("checkgroups: ", checkGroups)
-  // console.log("usergroups: ", userGroups)
-  // //
-
-  /////// IMPROVE
+  /////// IMPROVE - make like the below comment
   /////// method to just get complte doc in one go? better than for each field?
+  // const fetchGroups = async() =>{
+  //   const groupsQuery = firestore.collection("users").where("username", "==", pagename).limit(1)
+  //   const {tmp} = (await groupsQuery.get()).docs?.[0]
+  //     setUserData(tmp.data())
+  // }
+
+  //useEffect 
+
+  useEffect(()=> {
+    console.log(pagename)
+  }, [pagename]
+  )
+
+  useEffect(() => {
+    if (pagename){
+    console.log("effect");
+      fetchGroups()
+    }
+  }, [checkRef]
+  )
   
   const fetchGroups = async() =>{
     const groupsQuery = await firestore.collection("users").where("username", "==", pagename)
     .get().then(snap=> {
     snap.docs.forEach(doc => {
-      console.log("doc data   ", doc.data().groups)
       setUserData(doc.data())
     })
     })
+    if (typeof(userData.groups)!="object") {
+      checkRef.current= 0
+    }
   }
 
-  // console.log("userData: ", userData)
-  // console.log("type of user data: ", typeof(userData.groups))
-
-  debugger
-  if (typeof(userData.groups)!="object") {
-    if (pagename){ fetchGroups() }
-  }
-    
 
   return (
     <main>

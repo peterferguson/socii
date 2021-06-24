@@ -20,10 +20,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint'],
-  rules: {"react/prop-types":0},
+  rules: {"react/prop-types":0 , "react/display-name":0, "react/jsx-no-target-blank":0},
   settings: {
     react: {
       version: 'detect',
     },
   },
 }
+
+

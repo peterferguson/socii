@@ -116,5 +116,5 @@ const createUsername = (e, user, username, router) => {
   })
   batch.set(usernameRef, { uid: user.uid })
 
-  batch.commit().then(() => router.push(`/username/${username}`))
+  batch.commit().then(() => router.push(`/user/${username}`))
 }
