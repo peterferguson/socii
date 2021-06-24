@@ -1,4 +1,6 @@
+import { error } from "firebase-functions/lib/logger"
 import { firestore, increment } from "./index.js"
+import { streamClient } from "./utils/helper.js"
 
 /*
  * Increment the investorCount value on a group when a new investor is added to the investors collection
@@ -19,8 +21,14 @@ export const incrementInvestors = async (change, context) => {
     // New document Created : add one to count
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(1) })
   } else if (change.before.exists && change.after.exists) {
-    // Updating existing document : Do nothing
-    // TODO: update chat members
+    // Updating existing document : Update chat members
+    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+
+    try {
+      await channel.addMembers([investorUsername])
+    } catch (err) {
+      error(err)
+    }
   } else if (!change.after.exists) {
     // Deleting document : subtract one from count
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(-1) })
@@ -44,9 +52,8 @@ export const deleteGroup = async (change, context) => {
 
   const data = change.data()
 
-  // TODO: serach investor sub-collection and delete the grooup from the groups field of 
+  // TODO: serach investor sub-collection and delete the group from the groups field of
   // TODO: each investors user collection.
 
   return
 }
-

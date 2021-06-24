@@ -13,7 +13,6 @@ const SearchCard = dynamic(() => import("components/SearchCard"))
 import "@styles/Chat.css"
 import "@styles/globals.css"
 
-
 export function reportWebVitals(metric) {
   console.log(metric)
 }
@@ -33,7 +32,7 @@ export default function MyApp({ Component, pageProps }) {
     setShowSearchCard
   }
 
-  const not1Col = useMediaQuery({ minWidth: 800 })
+  const not1Col = useMediaQuery({ minWidth: 640 })
 
   return (
     <UserContext.Provider value={userData}>

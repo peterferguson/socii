@@ -6,11 +6,7 @@
 // ? - Create conversion function for the group trade data into an activity feed
 // - Get doc in one go - remove for each - see IMPROVE
 // -
-// -
-// -
-// -
-// -
-// -
+
 
 import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
