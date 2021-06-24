@@ -12,54 +12,33 @@ import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
 import UserPhoto from "@components/UserPhoto"
 import { UserContext } from "@lib/context"
+import { auth, firestore } from "@lib/firebase"
 import { getRandomTailwindColor } from "@utils/helper"
-import { auth , firestore} from "@lib/firebase"
 import { useRouter } from "next/router"
-import React, { useContext , useState , useEffect,  useRef } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 export default function UserPage() {
   const router = useRouter()
   const pagename = router.query.username
   const { username, userGroups } = useContext(UserContext)
   const [userData, setUserData] = useState([])
-  const checkRef = useRef(1)
+
   
   const isUsersHomepage = pagename === username
 
-  /////// IMPROVE - make like the below comment
-  /////// method to just get complte doc in one go? better than for each field?
-  // const fetchGroups = async() =>{
-  //   const groupsQuery = firestore.collection("users").where("username", "==", pagename).limit(1)
-  //   const {tmp} = (await groupsQuery.get()).docs?.[0]
-  //     setUserData(tmp.data())
-  // }
-
-  //useEffect 
-
-  useEffect(()=> {
-    console.log(pagename)
-  }, [pagename]
-  )
-
   useEffect(() => {
+    const fetchGroups = async() =>{
+      const groupsQuery = firestore.collection("users").where("username", "==", pagename).limit(1)
+      const groupsDoc = (await groupsQuery.get()).docs?.[0]
+        setUserData(groupsDoc.data())
+    }
+
     if (pagename){
-    console.log("effect");
       fetchGroups()
     }
-  }, [checkRef]
+
+  }, [pagename ]
   )
-  
-  const fetchGroups = async() =>{
-    const groupsQuery = await firestore.collection("users").where("username", "==", pagename)
-    .get().then(snap=> {
-    snap.docs.forEach(doc => {
-      setUserData(doc.data())
-    })
-    })
-    if (typeof(userData.groups)!="object") {
-      checkRef.current= 0
-    }
-  }
 
 
   return (
