@@ -17,6 +17,7 @@ import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
 
 import { FaDollarSign } from "react-icons/fa"
 import { UploadsPreview } from "./UploadsPreview"
+import { useWindowSize } from "@lib/hooks"
 
 // * Actions split by state
 
@@ -220,7 +221,7 @@ const MessagingInput = (props) => {
     })
   }
   return (
-    <div className="relative flex items-center justify-center w-full p-2 mx-auto bg-white shadow-none sm:shadow-md">
+    <div className="flex items-center justify-center w-full p-2 bg-white shadow-none sm:shadow-md">
       <EmojiButton
         emojiButton={emojiButtons.emoji}
         onClick={messageInput.openEmojiPicker}
@@ -238,7 +239,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="flex items-center bg-gray-100 border-2 border-gray-400 message-input-wrapper focus-within:bg-white w-52 md:w-60 lg:w-[400px] min-h-[40px] z-[100] rounded-3xl focus-within:border-brand">
+        <div className="flex items-center flex-grow bg-gray-100 border-2 border-gray-400 message-input-wrapper focus-within:bg-white min-h-[40px] z-[100] rounded-3xl focus-within:border-brand max-w-96">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -269,14 +270,14 @@ const MessagingInput = (props) => {
 
 const EmojiButton = ({ emojiButton, onClick }) => (
   <div
-    className="px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
+    className="flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
     role="button"
     aria-roledescription="button"
     onClick={onClick}
     ref={emojiButton.ref ? emojiButton.ref : null}
   >
     <emojiButton.icon
-      className={`h-8 w-8 md:h-5 md:w-5 ${
+      className={`h-5 w-5 md:h-6 md:w-6 ${
         emojiButton?.className ? emojiButton?.className : ""
       }`}
     />

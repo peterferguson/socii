@@ -49,6 +49,13 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
+  const showChatFullscreen = !is1Col || hideChannelList || (hideChannelList && !is1Col)
+  // - Truth table
+  // is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
+  //    T   |       T         |                       T
+  //    T   |       F         |                       F
+  //    F   |       T         |                       T
+  //    F   |       F         |                       T
 
   return (
     <AuthCheck>
@@ -56,46 +63,49 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
         {!groupName && (
           <StreamChannelList
             hideChannelList={hideChannelList}
+            toggleHideChannelList={toggleHideChannelList}
             onClose={onClose}
             onCreateChannel={onCreateChannel}
             groupName={groupName}
             is1Col={is1Col}
           />
         )}
-        <Channel
-          channel={
-            groupName
-              ? client.channel("messaging", groupName?.split(" ").join("-"))
-              : null
-          }
-          maxNumberOfFiles={10}
-          multipleUploads={true}
-          Attachment={CustomAttachment}
-          TriggerProvider={CustomTriggerProvider}
-        >
-          <Window
-            hideOnThread={true}
-            onClick={hideChannelList ? toggleHideChannelList : null}
+        {showChatFullscreen && (
+          <Channel
+            channel={
+              groupName
+                ? client.channel("messaging", groupName?.split(" ").join("-"))
+                : null
+            }
+            maxNumberOfFiles={10}
+            multipleUploads={true}
+            Attachment={CustomAttachment}
+            TriggerProvider={CustomTriggerProvider}
           >
-            {isCreating && (
-              <CreateChannel
-                toggleHideChannelList={toggleHideChannelList}
-                onClose={onClose}
-              />
-            )}
-            <MessagingChannelHeader
-              toggleHideChannelList={!groupName ? toggleHideChannelList : null}
-            />
-            <MessageList
+            <Window
+              hideOnThread={true}
               onClick={hideChannelList ? toggleHideChannelList : null}
-              messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-              TypingIndicator={TypingIndicator}
-              // messageLimit={5} // TODO: Implement messageLimit to save on api calls
-            />
-            <MessageInput autoFocus Input={MessagingInput} />
-          </Window>
-          <MessagingThread />
-        </Channel>
+            >
+              {isCreating && (
+                <CreateChannel
+                  toggleHideChannelList={toggleHideChannelList}
+                  onClose={onClose}
+                />
+              )}
+              <MessagingChannelHeader
+                toggleHideChannelList={!groupName ? toggleHideChannelList : null}
+              />
+              <MessageList
+                onClick={hideChannelList ? toggleHideChannelList : null}
+                messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
+                TypingIndicator={TypingIndicator}
+                // messageLimit={5} // TODO: Implement messageLimit to save on api calls
+              />
+              <MessageInput autoFocus Input={MessagingInput} />
+            </Window>
+            <MessagingThread />
+          </Channel>
+        )}
       </Chat>
     </AuthCheck>
   )
@@ -114,6 +124,7 @@ function StreamChannelList({
   onCreateChannel,
   onClose,
   groupName,
+  toggleHideChannelList,
   is1Col,
 }) {
   const { client } = useChatContext()
@@ -122,15 +133,16 @@ function StreamChannelList({
   const options = { state: true, presence: true, limit: 5 }
   return (
     <div
-      className={`absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out
+      className={`
         ${
           !is1Col
-            ? hideChannelList
+            ? "absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out" &&
+              hideChannelList
               ? "-translate-x-full hidden"
               : "translate-x-0 z-40"
             : hideChannelList
             ? "hidden"
-            : "absolute inset-y-0 left-96 z-40"
+            : "absolute inset-0 z-40 -translate-x-full"
         }
         `}
     >
@@ -148,7 +160,8 @@ function StreamChannelList({
           <MessagingChannelPreview
             {...props}
             closeIsCreating={onClose}
-            hideChannelList={hideChannelList}
+            toggleHideChannelList={toggleHideChannelList}
+            is1Col={is1Col}
           />
         )}
       />

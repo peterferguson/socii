@@ -22,7 +22,7 @@ const MessagingChannelPreview = ({
   latestMessage,
   setActiveChannel,
   closeIsCreating,
-  hideChannelList,
+  toggleHideChannelList,
   is1Col,
 }) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
@@ -33,7 +33,7 @@ const MessagingChannelPreview = ({
 
   return (
     <div
-      className={`h-16 mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
+      className={`flex-grow h-16 mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
         ${
           channel?.id === activeChannel?.id
             ? "bg-white hover:shadow-xl hover:btn-transition"
@@ -43,7 +43,7 @@ const MessagingChannelPreview = ({
       onClick={() => {
         closeIsCreating()
         setActiveChannel(channel)
-        if (is1Col) hideChannelList()
+        if (is1Col) toggleHideChannelList()
       }}
     >
       {AvatarGroup(members, styles)}
