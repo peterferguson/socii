@@ -41,7 +41,7 @@ StreamChat.propTypes = {
 }
 
 export default function StreamChat({ client, theme = "light", groupName = "" }) {
-  const is1Col = !useMediaQuery({ minWidth: 800 })
+  const is1Col = !useMediaQuery({ minWidth: 640 })
   const [isCreating, setIsCreating] = useState(false)
   const [hideChannelList, setHideChannelList] = useState(false)
 
