@@ -6,11 +6,7 @@
 // ? - Create conversion function for the group trade data into an activity feed
 // -
 // -
-// -
-// -
-// -
-// -
-// -
+
 
 import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
