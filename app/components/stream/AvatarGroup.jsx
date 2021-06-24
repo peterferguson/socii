@@ -5,6 +5,8 @@ import { Avatar } from "stream-chat-react"
 
 export default function AvatarGroup(members, styles) {
   if (members.length === 1) {
+    console.log("member username", members?.[0]?.user.name)
+    console.log("initials", getInitials(members?.[0]?.user.name))
     return (
       <div className={styles["messaging__channel-header__avatars"]}>
         <Avatar
