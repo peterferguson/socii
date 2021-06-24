@@ -1,7 +1,23 @@
 /* eslint-disable semi */
+require("dotenv").config({ path: "./temp/.env" })
+
+
+// const admin = require("firebase-admin")
+// const serviceAccount = require("../serviceAccountKey.json")
+
+// // * Constant initialisation
+// const adminConfig = {
+//   storageBucket: "sociiinvest.appspot.com",
+//   projectId: "sociiinvest",
+// }
+// adminConfig.credential = admin.credential.cert(serviceAccount)
+// admin.initializeApp(adminConfig)
+// const firestore = admin.firestore()
+
+
 // ! Testing alphavantage library
 // const bent = require("bent")
-// const alpha = require("alphavantage")({ key: "E9W8LZBTXVYZ31IO" })
+// const alpha = require("alphavantage")({ key: process.env.ALPHA_VANTAGE_KEY })
 // alpha.data.quote("TSLA").then((r) => console.log(r))
 // alpha.fundamental.company_overview("EZJ.L").then((r) => console.log(r))
 // alpha.data.search("IAG").then((r) => console.log(r))
@@ -42,25 +58,6 @@
 // ! Update the market information in firebase
 // TODO: Update this information with market suffixes for each api channel
 
-// const admin = require("firebase-admin")
-// const serviceAccount = require("../serviceAccountKey.json")
-
-// // * Constant initialisation
-// const adminConfig = {
-//   storageBucket: "sociiinvest.appspot.com",
-//   projectId: "sociiinvest",
-// }
-// adminConfig.credential = admin.credential.cert(serviceAccount)
-// admin.initializeApp(adminConfig)
-// const firestore = admin.firestore()
-
-// const emailRef = firestore
-//   .collectionGroup("invites")
-//   .where("email", "==", "peterferguson95@gmail.com")
-//   .limit(1)
-
-// emailRef.get().then((_) => console.log(_))
-
 // // ! Be sure to export FIRESTORE_EMULATOR_HOST="localhost:8080"
 
 // const iexMarkets = require("./iexMarkets.json")
@@ -99,3 +96,42 @@
 //     })
 //   })
 // })
+
+// ! Testing collectionGroup queries for new indexes
+// const emailRef = firestore
+//   .collectionGroup("invites")
+//   .where("email", "==", "peterferguson95@gmail.com")
+//   .limit(1)
+
+// emailRef.get().then((_) => console.log(_))
+
+// ! Testing that all group members are in group chat
+
+// const StreamChat = require("stream-chat").StreamChat
+// const streamClient = new StreamChat(
+//   process.env.STREAM_API_KEY,
+//   process.env.STREAM_API_SECRET
+// )
+
+// firestore
+//   .collection("groups")
+//   .get()
+//   .then((snap) =>
+//     snap.docs.map((doc) => {
+//       const group = doc.data()
+//       const groupName = group.groupName
+//       if (["create"].includes(groupName)) return
+//       const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+//       firestore
+//         .collection(`groups/${groupName}/investors`)
+//         .get()
+//         .then((snap) =>
+//           snap.docs.map((doc) => {
+//             if (!Object.values(channel.state.members).includes(doc.id)) {
+// 		channel.addMembers(doc.id)
+// 		console.log("Added ", doc.id, " to ", groupName, "group chat");
+//             }
+//           })
+//         )
+//     })
+//   )
