@@ -159,17 +159,20 @@ export const tickerTimeseries = async (
 
   return timeseries
 }
+const randomLetter = () =>
+  "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)].toUpperCase()
 
 export const getRandomImage = (letters = "") => {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz"
   const baseUrl = "https://getstream.imgix.net/images/random_svg/"
   const extension = ".png"
 
   if (!letters) {
-    const randomLetter = () => alphabet[Math.floor(Math.random() * 26)].toUpperCase()
     letters = randomLetter() + randomLetter()
   }
-  return `${baseUrl}${letters}${extension}`
+  return `${baseUrl}${(letters.length > 2
+    ? letters[0]
+    : letters
+  ).toUpperCase()}${extension}`
 }
 
 export const getInitials = (slug) => {

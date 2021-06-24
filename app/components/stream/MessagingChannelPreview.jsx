@@ -5,12 +5,9 @@ import { getTimeStamp } from "@utils/helper"
 import React, { useContext } from "react"
 import { ChatContext } from "stream-chat-react"
 
-const getChannelName = (members) => {
-  const defaultName = "Invest Social"
-
-  if (!members.length || members.length === 1) {
+const getChannelName = (members, defaultName) => {
+  if (!members.length || members.length === 1)
     return members?.[0]?.user.name || defaultName
-  }
 
   return `${members?.[0]?.user.name || defaultName}, ${
     members[1]?.user.name || defaultName
@@ -26,10 +23,20 @@ const MessagingChannelPreview = ({
   is1Col,
 }) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
+  const channelName = channel.data.id.split("-").join(" ")
 
-  const members = Object.values(channel.state.members).filter(
-    ({ user }) => user.id !== client.userID // - show all memebers except yourself
-  )
+  const channelNameAsMember = [{ user: { name: channelName } }]
+
+  let members =
+    Object.values(channel.state.members).length - 1 > 0
+      ? Object.values(channel.state.members).filter(
+          ({ user }) => user.id !== client.userID // - show all memebers except yourself
+        )
+      : channelNameAsMember
+
+
+  // - edge case: use first initial for group chats
+  if (!channelName.includes("members")) members = [{ user: { name: channelName } }]
 
   return (
     <div
@@ -50,7 +57,7 @@ const MessagingChannelPreview = ({
       <div className="flex flex-col items-center w-full mx-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
           <p className="m-0 overflow-hidden text-base font-medium text-black font-work-sans max-w-[158px] overflow-ellipsis whitespace-nowrap">
-            {channel.data.name || getChannelName(members)}
+            {channel.data.name || getChannelName(members, channelName)}
           </p>
           <p className="pl-1 m-0 text-tiny font-work-sans text-trueGray-600">
             {getTimeStamp(channel)}
