@@ -154,7 +154,11 @@ function StreamChannelList({
         customActiveChannel={groupName?.split(" ").join("-") || ""}
         // channelRenderFilterFn={channelFilter}
         List={(props) => (
-          <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
+          <MessagingChannelList
+            {...props}
+            onCreateChannel={onCreateChannel}
+            is1Col={is1Col}
+          />
         )}
         Preview={(props) => (
           <MessagingChannelPreview

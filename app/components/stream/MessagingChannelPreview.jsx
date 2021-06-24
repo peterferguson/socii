@@ -28,7 +28,7 @@ const MessagingChannelPreview = ({
   const { channel: activeChannel, client } = useContext(ChatContext)
 
   const members = Object.values(channel.state.members).filter(
-    ({ user }) => user.id !== client.userID
+    ({ user }) => user.id !== client.userID // - show all memebers except yourself
   )
 
   return (

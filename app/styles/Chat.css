@@ -1,3 +1,5 @@
+@tailwind components;
+
 .messenger-chat.str-chat {
   height: 100vh;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -2856,7 +2858,7 @@
   border-radius: 15px;
   color: black;
   font-size: 14px;
-  padding: 0 10px;
+  padding: 0 14px;
 }
 .str-chat__channel-search input::-webkit-input-placeholder {
   color: gray;
@@ -2865,17 +2867,21 @@
   color: gray;
 }
 .str-chat__channel-search input:focus {
-  background: white;
-  border: 1px solid #006cff;
-  box-shadow: 0 0 0 2px rgba(0, 108, 255, 0.36);
-  transition: all 0.2s ease-in-out;
+  background: #f4f4f5;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 16px;
+  min-height: 16px;
+  border: none !important;
+  outline: none !important;
+  appearance: none;
+  transition: box-shadow 0.2s ease-in-out;
+  color: rgba(0, 0, 0, 0.9);
+  border-radius: 20px;
+  resize: none;
+  box-shadow: 0 0 0 2px rgba(15, 169, 230, 1);
 }
-.str-chat__channel-search-container {
-  position: absolute;
-  width: 300px;
-  z-index: 2;
-  padding: 10px;
-}
+
 .str-chat__channel-search-container-searching {
   padding-left: 10px;
 }
@@ -2913,12 +2919,16 @@
 .str-chat__channel-search-container.popup .str-chat__channel-search-result.focused {
   background: #f1f1f3;
 }
-.str-chat__channel-search-container.inline {
-  top: 60px;
-  right: 0px;
-  background: #f1f1f3;
-  height: calc(100vh - 60px);
+
+@layer components {
+  .str-chat__channel-search-container {
+    @apply absolute bg-gray-200 rounded-lg shadow-xl z-50;
+  }
+  .str-chat__channel-search-container.inline {
+    @apply absolute left-4 top-14 p-3 w-80 sm:w-96 h-64 rounded-lg shadow-xl bg-gray-200 bg-opacity-95;
+  }
 }
+
 .str-chat__channel-search-container.inline .str-chat__channel-search-result:hover {
   background: white;
 }
@@ -6477,10 +6487,10 @@
   min-height: 16px;
   border: none !important;
   outline: none !important;
+  appearance: none;
   transition: box-shadow 0.2s ease-in-out;
   color: rgba(0, 0, 0, 0.9);
   border-radius: 20px;
-  appearance: none;
   resize: none;
   /* resize: vertical; */
 }
@@ -6490,9 +6500,11 @@
 }
 
 textarea.rta__textarea .str-chat__textarea__textarea {
+  width: 100%;
   resize: none;
   background: #fff;
 }
 textarea.rta__textarea .str-chat__textarea__textarea:focus {
+  width: 100%;
   background: #fff;
 }

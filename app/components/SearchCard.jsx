@@ -126,17 +126,12 @@ const Hit = ({ hit }) => {
 }
 
 // ! BUG: If a user navigates to the same page they are on the loader appears indefinitely
-export default function SearchCard({ showSearchCard, setShowSearchCard }) {
-  const isOpen = showSearchCard
-  const setIsOpen = setShowSearchCard
-
+export default function SearchCard({ showSearchCard: isOpen, setShowSearchCard: setIsOpen }) {
   const router = useRouter()
 
   useEffect(() => {
-    if (isOpen) {
-      setIsOpen(!isOpen)
-    }
-  }, [router.asPath])
+    if (isOpen) setIsOpen(!isOpen)
+  }, [isOpen, router.asPath, setIsOpen])
 
   // TODO Fix the dialog styling for mobile
   return (
