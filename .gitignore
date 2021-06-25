@@ -115,3 +115,11 @@ next.config.js
 # Maybe undo this?
 package-lock.json
 sw.js.map
+
+# `next-pwa` recommended
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
+
+# Checking for memory leaks
+*.heaptimeline
