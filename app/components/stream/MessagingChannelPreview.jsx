@@ -48,7 +48,7 @@ const MessagingChannelPreview = ({
         }
       `}
       onClick={() => {
-        closeIsCreating()
+        // closeIsCreating()
         setActiveChannel(channel)
         if (is1Col) toggleHideChannelList()
       }}

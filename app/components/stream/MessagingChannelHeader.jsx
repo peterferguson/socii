@@ -3,12 +3,11 @@ import styles from "@styles/MessagingChannelHeader.module.css"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { FaList } from "react-icons/fa"
 import { HiOutlineCog } from "react-icons/hi"
-import { ImBin, ImCross, ImPencil } from "react-icons/im"
+import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 import { MdSave } from "react-icons/md"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import DeleteChannelModal from "../DeleteChatModal"
 import TypingIndicator from "./TypingIndicator"
-
 
 // TODO: Add tooltips to settings icons
 const MessagingChannelHeader = ({ toggleHideChannelList }) => {
@@ -99,6 +98,12 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
             !isEditing ? (
               <div className="flex">
                 <ImPencil
+                  className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+                  onClick={() => {
+                    if (!isEditing) setIsEditing(true)
+                  }}
+                />
+                <ImUserPlus
                   className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
                   onClick={() => {
                     if (!isEditing) setIsEditing(true)

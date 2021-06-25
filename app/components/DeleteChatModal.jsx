@@ -6,7 +6,6 @@ const DeleteChannelModal = ({ showDelete: isOpen, setShowDelete: setIsOpen }) =>
   const { channel } = useContext(ChannelStateContext)
 
   const closeModal = () => setIsOpen(false)
-  const openModal = () => setIsOpen(true)
 
   const deleteChannel = async () => await channel.delete()
 

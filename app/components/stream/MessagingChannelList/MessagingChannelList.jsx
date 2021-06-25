@@ -9,8 +9,7 @@ const MessagingChannelList = ({
   children,
   error = false,
   loading,
-  onCreateChannel,
-  is1Col,
+  onCreateChannel
 }) => {
   const { streamClient } = useContext(StreamContext)
 
@@ -22,14 +21,12 @@ const MessagingChannelList = ({
       <div className="flex items-center py-3 pl-5 mb-5">
         <Avatar image={image} name={name} size={40} />
         <div className="flex text-base font-extrabold font-poppins">{name || id}</div>
-        {!is1Col && (
-          <button
-            className="flex items-center justify-center w-10 h-10 ml-auto mr-5 bg-white border-0 rounded-full shadow-2xl cursor-pointer focus:outline-none"
-            onClick={onCreateChannel}
-          >
-            <MdChatBubbleOutline className="w-5 h-5 text-brand" />
-          </button>
-        )}
+        <button
+          className="flex items-center justify-center w-10 h-10 ml-auto mr-5 bg-white border-0 rounded-full shadow-2xl cursor-pointer focus:outline-none"
+          onClick={onCreateChannel}
+        >
+          <MdChatBubbleOutline className="w-5 h-5 text-brand" />
+        </button>
       </div>
       {children}
     </div>

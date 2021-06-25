@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import AuthCheck from "@components/AuthCheck"
 import {
-  CreateChannel,
+  CreateChatModal,
   CustomTriggerProvider,
   MessagingChannelHeader,
   MessagingChannelList,
@@ -45,7 +45,6 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
   const [isCreating, setIsCreating] = useState(false)
   const [hideChannelList, setHideChannelList] = useState(false)
 
-  const onClose = () => setIsCreating(false)
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
@@ -64,7 +63,6 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
           <StreamChannelList
             hideChannelList={hideChannelList}
             toggleHideChannelList={toggleHideChannelList}
-            onClose={onClose}
             onCreateChannel={onCreateChannel}
             groupName={groupName}
             is1Col={is1Col}
@@ -86,12 +84,6 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
               hideOnThread={true}
               onClick={hideChannelList ? toggleHideChannelList : null}
             >
-              {isCreating && (
-                <CreateChannel
-                  toggleHideChannelList={toggleHideChannelList}
-                  onClose={onClose}
-                />
-              )}
               <MessagingChannelHeader
                 toggleHideChannelList={!groupName ? toggleHideChannelList : null}
               />
@@ -106,6 +98,12 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
             <MessagingThread />
           </Channel>
         )}
+        {isCreating && (
+          <CreateChatModal
+            isCreating={isCreating}
+            setIsCreating={setIsCreating}
+          />
+        )}
       </Chat>
     </AuthCheck>
   )
@@ -114,7 +112,6 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
 StreamChannelList.propTypes = {
   hideChannelList: boolean,
   onCreateChannel: () => {},
-  onClose: () => {},
   groupName: string,
   is1Col: boolean,
 }
@@ -122,7 +119,6 @@ StreamChannelList.propTypes = {
 function StreamChannelList({
   hideChannelList,
   onCreateChannel,
-  onClose,
   groupName,
   toggleHideChannelList,
   is1Col,
@@ -154,16 +150,11 @@ function StreamChannelList({
         customActiveChannel={groupName?.split(" ").join("-") || ""}
         // channelRenderFilterFn={channelFilter}
         List={(props) => (
-          <MessagingChannelList
-            {...props}
-            onCreateChannel={onCreateChannel}
-            is1Col={is1Col}
-          />
+          <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
         )}
         Preview={(props) => (
           <MessagingChannelPreview
             {...props}
-            closeIsCreating={onClose}
             toggleHideChannelList={toggleHideChannelList}
             is1Col={is1Col}
           />
