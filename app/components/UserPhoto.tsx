@@ -3,9 +3,9 @@ import { getRandomTailwindColor } from "@utils/helper"
 import React, { useEffect, useRef } from "react"
 
 type UserPhotoProps = {
-  username: string
-  className: string
-  photoURL: string
+  username?: string
+  className?: string
+  photoURL?: string
 }
 
 export default function UserPhoto({

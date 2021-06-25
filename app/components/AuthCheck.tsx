@@ -1,8 +1,13 @@
-import Link from 'next/link'
-import { UserContext } from '@lib/context'
-import React, { useContext } from 'react'
+import Link from "next/link"
+import { UserContext } from "@lib/context"
+import React, { useContext } from "react"
 
-export default function AuthCheck({children, fallback}) {
+interface AuthCheckProps {
+  children: JSX.Element
+  fallback?: JSX.Element
+}
+
+export default function AuthCheck({ children, fallback }: AuthCheckProps) {
   const { username } = useContext(UserContext)
 
   return username
