@@ -56,7 +56,7 @@ const DeleteChannelModal = ({ showDelete: isOpen, setShowDelete: setIsOpen }) =>
                 </p>
               </div>
 
-              <div className="mt-4 font-medium text-tiny sm:text-sm">
+              <div className="flex items-center justify-center mx-auto mt-4 font-medium text-tiny sm:text-sm">
                 <button
                   type="button"
                   className="inline-flex justify-center px-4 py-2 mx-2 text-blue-800 bg-blue-100 border border-transparent sm:mx-8 rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"

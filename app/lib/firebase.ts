@@ -19,9 +19,7 @@ export const firebaseConfig = {
 
 const londonRegion = "europe-west2"
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
-}
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
 
 export const auth = firebase.auth()
 export const storage = firebase.storage()
@@ -53,6 +51,7 @@ export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
 
 // - Types
 export type DocumentReference = firebase.firestore.DocumentReference
+export type DocumentData = firebase.firestore.DocumentData
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

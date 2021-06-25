@@ -20,9 +20,8 @@ export default function TradingViewChart({ tickerSymbol, exchange = 'NASDAQ' }) 
       theme={Themes.LIGHT}
       locale="en"
       allow_symbol_change={false}
-      height={height * 0.7}
-      width={width * 0.9}
-      // autosize={true}
+      height={height * 0.6}
+      width={width * 0.8}
     />
   )
 }
