@@ -45,9 +45,8 @@ const searchProps = {
   indexName: "tickers",
   searchClient,
   searchFunction: function (helper) {
-    if (helper.state.query.length < 2) {
-      return // no search if less than 2 character
-    }
+    // - No search of less than 2 characters
+    if (helper.state.query.length < 2) return
     helper.search()
   },
 }
@@ -66,7 +65,7 @@ const DebouncedSearchBox = connectSearchBox(({ refine }) => {
         onChange={onChangeDebounced}
         placeholder="Search: TSLA"
         type="search"
-        className="w-full p-2 text-center rounded-full focus:outline-none \ focus:border-brand-light focus:ring-brand-light"
+        className="w-full p-2 text-center rounded-full focus:outline-none focus:border-brand-light focus:ring-brand-light"
       />
       <FaSearch className="mx-4 -my-8 text-gray-400" />
     </div>
@@ -126,12 +125,15 @@ const Hit = ({ hit }) => {
 }
 
 // ! BUG: If a user navigates to the same page they are on the loader appears indefinitely
-export default function SearchCard({ showSearchCard: isOpen, setShowSearchCard: setIsOpen }) {
+export default function SearchCard({
+  showSearchCard: isOpen,
+  setShowSearchCard: setIsOpen,
+}) {
   const router = useRouter()
 
   useEffect(() => {
     if (isOpen) setIsOpen(!isOpen)
-  }, [isOpen, router.asPath, setIsOpen])
+  }, [router.asPath])
 
   // TODO Fix the dialog styling for mobile
   return (
