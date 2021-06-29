@@ -1,12 +1,14 @@
 import { UserContext } from "@lib/context"
+import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import {
   HiOutlineAnnotation,
+  HiOutlineCog,
   HiOutlineGlobe,
   HiOutlineHome,
   HiOutlineSearch,
+  HiOutlineUserGroup,
 } from "react-icons/hi"
-import { useRouter } from "next/router"
 
 type FooterProps = {
   // eslint-disable-next-line no-unused-vars
@@ -20,8 +22,8 @@ export default function Footer({ showSearchCard, setShowSearchCard }: FooterProp
 
   const links = [
     {
-      text: "Home",
-      icon: HiOutlineHome,
+      text: !user ? "Home" : "Groups",
+      icon: !user ? HiOutlineHome : HiOutlineUserGroup,
       onClick: () => router.push(!user ? "/" : `/user/${username}`),
       isActive: !router.asPath.slice(1) || router.asPath.includes("user"),
     },
@@ -43,15 +45,23 @@ export default function Footer({ showSearchCard, setShowSearchCard }: FooterProp
       onClick: () => router.push("/chat"),
       isActive: router.asPath.includes("chat"),
     },
+    {
+      text: "Settings",
+      icon: HiOutlineCog,
+      onClick: () => router.push("/settings"),
+      isActive: router.asPath.includes("settings"),
+    },
   ]
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-gray-100 font-poppins text-tiny text-brand-dark">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white font-poppins text-tiny text-brand-dark">
       {links.map((link) => {
         return (
           <a
             className={`block w-full px-3 py-3 text-xs text-center ${
-              link.isActive ? "font-extrabold" : ""
+              link.isActive
+                ? "font-extrabold border-t-4 border-brand bg-gradient-to-t from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
+                : ""
             } transition duration-300`}
             key={`${link.text}-key`}
             onClick={link.onClick}
