@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react"
 
 export default function AboutUs() {
   return (
-    <div className="flex flex-col h-screen p-12 text-brand-light leading-20">
+    <div className="flex flex-col h-screen p-12 text-brand leading-20">
       <h1 className="p-4 font-bold font-poppins text-8xl">About Us</h1>
       <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
         Invest with Friends
@@ -14,7 +14,7 @@ export default function AboutUs() {
         investing.
       </p>
       <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
-        {' '}
+        {" "}
         The Problem with Group Investing
       </h2>
       <p className="p-4 mx-auto">
@@ -22,7 +22,7 @@ export default function AboutUs() {
         influx in retail investors. Most without a clue of how to invest. My investment
         journey began with an initial solo learning phase followed by a desire to share
         this new found joy (and way to make money) with friends. We looked at creating
-        an investment club the traditional way - however it is riddles with hurdles.{' '}
+        an investment club the traditional way - however it is riddles with hurdles.{" "}
         <br />
         Pooling investment clubs are dying. They mainly existed to avoid the high
         commission on trades for those who could not afford them. <br />
@@ -36,8 +36,8 @@ export default function AboutUs() {
         learning together then also diminishes over time.
       </p>
       <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
-        {' '}
-        Social Investing{' '}
+        {" "}
+        Social Investing{" "}
       </h2>
       Socii is born out of a societal game of “keep-away” when it comes to keeping
       Investing away from the lower classes. We are here to even the odds. Bringing the

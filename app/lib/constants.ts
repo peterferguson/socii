@@ -3,8 +3,8 @@ import FacebookLogo from "@icons/fb.svg"
 import GoogleLogo from "@icons/google.svg"
 import TwitterLogo from "@icons/twitter.svg"
 import { facebookAuthProvider, googleAuthProvider } from "@lib/firebase"
+import { ToastOptions, ToastPosition } from "react-hot-toast"
 import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
-
 
 export const currencySymbols = {
   AUD: "$",
@@ -165,7 +165,13 @@ export const alphaVantageQueryOptions = [
   "lastSplitDate",
 ]
 
-export const toastProps = {
+interface ToastProps {
+  position: ToastPosition
+  reverseOrder: boolean
+  toastOptions: ToastOptions
+}
+
+export const toastProps: ToastProps = {
   position: "top-center",
   reverseOrder: false,
   toastOptions: {
@@ -175,21 +181,6 @@ export const toastProps = {
       color: "#fff",
       zIndex: 1,
     },
-    duration: 500,
-    // Default options for specific types
-    success: {
-      duration: 5000,
-      theme: {
-        primary: "green",
-        secondary: "black",
-      },
-    },
-    error: {
-      duration: 5000,
-      theme: {
-        primary: "green",
-        secondary: "black",
-      },
-    },
+    duration: 5000,
   },
 }

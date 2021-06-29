@@ -76,7 +76,7 @@ export default function Create() {
     <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-100">
       <form className="w-full my-16 sm:w-2/3">
         <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
-          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand-light border-[3px]">
+          <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand border-[3px]">
             <HiOutlineUserGroup className="w-8 h-8 text-white" />
           </div>
           <div className="pt-4 pb-1 text-4xl font-bold text-center font-work-sans">
@@ -89,14 +89,14 @@ export default function Create() {
             Name
             <div className="flex flex-row">
               <input
-                className="w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand-light focus:ring-1 focus:ring-brand text-tiny sm:text-base"
+                className="w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
                 type="text"
                 placeholder="Investment Group Name"
                 onChange={onChange}
               />
               <div
                 className={`h-10 w-10 bg-none text-sm sm:text-tiny ${
-                  isValidGroupName ? "text-brand-light btn-transition" : "text-red-400"
+                  isValidGroupName ? "text-brand btn-transition" : "text-red-400"
                 } p-0.5 justify-center ml-[-4.5rem] mt-[1.45rem]`}
                 onKeyDown={null}
               >
@@ -111,7 +111,7 @@ export default function Create() {
           <label className="ml-4 font-bold text-md font-work-sans">
             Short description
             <input
-              className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand-light focus:ring-1 focus:ring-brand text-tiny sm:text-base"
+              className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
               type="text"
               placeholder="Best active value/dividend/growth investment club around!"
               onChange={(e) => setGroupDescription(e.target.value)}
@@ -200,7 +200,7 @@ function AmountOptions({
                 `${
                   active
                     ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                         ring-brand-light ring-opacity-60"
+                         ring-brand ring-opacity-60"
                     : ""
                 }
                      bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer \
@@ -215,7 +215,7 @@ function AmountOptions({
                         <RadioGroup.Label
                           as="p"
                           className={`font-medium text-lg sm:text-md ${
-                            checked ? "text-brand-light" : "text-gray-900"
+                            checked ? "text-brand" : "text-gray-900"
                           }`}
                         >
                           {currencyIcons[localCurrency].text}
@@ -226,7 +226,7 @@ function AmountOptions({
                       </div>
                     </div>
                     {checked && (
-                      <div className="flex-shrink-0 text-brand-light">
+                      <div className="flex-shrink-0 text-brand">
                         <CheckIcon className="w-6 h-6" />
                       </div>
                     )}
@@ -257,7 +257,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
               ${
                 active
                   ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                       ring-brand-light ring-opacity-60 border-none"
+                       ring-brand ring-opacity-60 border-none"
                   : ""
               }`
               }
@@ -270,7 +270,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
                         <RadioGroup.Label
                           as="p"
                           className={`font-medium  ${
-                            checked ? "text-brand-light" : "text-gray-900"
+                            checked ? "text-brand" : "text-gray-900"
                           }`}
                         >
                           {option.name}
@@ -286,7 +286,7 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
                       </div>
                     </div>
                     {checked && (
-                      <div className="flex-shrink-0 text-brand-light">
+                      <div className="flex-shrink-0 text-brand">
                         <CheckIcon className="w-6 h-6" />
                       </div>
                     )}

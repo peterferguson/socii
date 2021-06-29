@@ -28,10 +28,10 @@ export default function FeatureSlider() {
   ]
   return (
     <>
-      <div className="py-8 text-black bg-gradient-to-t from-brand-teal to to-brand-lightGreen">
+      <div className="py-8 text-black bg-gradient-to-t from-lightTeal to to-brandGreen">
         <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
           <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
-            <p className="text-xs uppercase text-brand-light tracking-loose font-poppins">
+            <p className="text-xs uppercase text-brand tracking-loose font-poppins">
               Social Investing
             </p>
             <p className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-poppins">
@@ -58,7 +58,7 @@ export default function FeatureSlider() {
                     >
                       <div className="order-1 w-5/12"></div>
                       <div className="order-1 w-5/12 px-1 py-4 text-right">
-                        <p className="mb-3 text-sm text-brand-light font-poppins">
+                        <p className="mb-3 text-sm text-brand font-poppins">
                           {item.supTitle}
                         </p>
                         <div className="mb-3 text-lg font-bold md:text-2xl font-poppins">

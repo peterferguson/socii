@@ -1,4 +1,5 @@
 import PieCard, { PieCardSkeleton } from "@components/PieCard"
+import DonutChart from "@components/DonutChart"
 import { firestore } from "@lib/firebase"
 import { iexQuote, logoUrl, round } from "@utils/helper"
 
@@ -6,7 +7,7 @@ import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"
 
-export default function GroupColumn({ groupName }) {
+export default function GroupColumnCard({ groupName, className }) {
   const [currentPrices, setCurrentPrices] = useState([])
   const holdingsRef = firestore
     .collection(`groups/${groupName}/holdings`)
@@ -32,9 +33,11 @@ export default function GroupColumn({ groupName }) {
   )
 
   return (
-    <div className="flex flex-col items-center mx-auto mb-4">
+    <div
+      className={`flex flex-col items-center p-4 mx-auto mb-4 bg-white rounded shadow-2xl sm:rounded-xl ${className}`}
+    >
       {!loading ? (
-        <GroupPieCard
+        <GroupPieChart
           groupName={groupName}
           holdingData={holdingData}
           currentPrices={currentPrices}
@@ -43,24 +46,80 @@ export default function GroupColumn({ groupName }) {
         <PieCardSkeleton scaling={0.3} radius={250} />
       )}
       {!loading && (
-        <div className="w-full py-3 my-8 text-center border-b border-gray-400 h-3.5">
-          <span className="py-0 text-gray-400 px-2.5 bg-gray-50">
+        <div className="w-full py-3 mb-8 -mt-8 text-center border-b border-gray-400 h-3.5">
+          <span className="py-0 text-gray-400 bg-white px-2.5">
             {holdings.length} Investments
           </span>
         </div>
       )}
-      {!loading &&
-        holdingData.map((holding, index) => {
-          return currentPrices ? (
-            <StockCard
-              key={`holding-${index}`}
-              holding={holding}
-              latestPrice={currentPrices[holding.tickerSymbol]}
-            />
-          ) : (
-            <StockCardSkeleton />
-          )
-        })}
+      {!loading && (
+        <ul>
+          {holdingData.map((holding, index) => {
+            return currentPrices ? (
+              <StockCard
+                key={`holding-${index}`}
+                holding={holding}
+                latestPrice={currentPrices[holding.tickerSymbol]}
+                index={index}
+              />
+            ) : (
+              <StockCardSkeleton />
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+export function GroupPieChart({
+  groupName,
+  holdingData,
+  currentPrices,
+  className = "",
+}) {
+  const portfolioValue = holdingData
+    ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
+    .reduce((a, b) => a + b, 0)
+
+  const gain =
+    ((portfolioValue -
+      holdingData
+        ?.map(({ avgPrice, shares }) => avgPrice * shares)
+        .reduce((a, b) => a + b, 0)) *
+      100) /
+    portfolioValue
+
+  const pieData = holdingData?.map(({ tickerSymbol, shortName, shares }) => ({
+    theta: (currentPrices[tickerSymbol] * shares) / portfolioValue,
+    label: shortName,
+    subLabel: tickerSymbol,
+  }))
+
+  return (
+    <div
+      className={`
+      w-88 sm:w-full items-center justify-center flex flex-col m-0 sm:m-4 
+      mb-2 sm:mb-4 ${className}
+    `}
+    >
+      <Link href={`/groups/${groupName}`}>
+        <a>
+          <div className="relative z-10 text-4xl text-center cursor-pointer top-2 text-brand font-poppins">
+            {groupName}
+          </div>
+        </a>
+      </Link>
+      <DonutChart
+        className="z-0 -mt-6"
+        data={pieData}
+        scaling={0.35}
+        radius={250}
+        text={{
+          main: `$${portfolioValue?.toFixed(2)}`,
+          sub: `${gain.toFixed(2)}%`,
+        }}
+      />
     </div>
   )
 }
@@ -104,38 +163,40 @@ export function GroupPieCard({
   )
 }
 
-function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
+function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {
   const tickerSymbol = holding.tickerSymbol
 
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   return (
-    <div className="flex h-auto m-1">
-      <div className="flex h-20 p-2 bg-white rounded-lg shadow-2xl w-88 sm:w-96">
+    <li className={`relative h-auto m-1 ${index !== 0 ? "border-t border-gray-200 mt-2" : ""} `}>
+      <div className="flex p-2 bg-white">
         <Link href={`/stocks/${tickerSymbol}`}>
-          <div className="justify-center flex-none w-20 mx-auto rounded-full cursor-pointer">
+          <div className="items-center justify-center flex-none flex-grow-0 m-auto rounded-full cursor-pointer">
             <img
-              className="w-10 h-10 mx-auto rounded-full shadow-lg"
+              className="w-10 h-10 mx-2 rounded-full ring-1 ring-brand-shade-darkest"
               src={logoUrl(holding.ISIN)}
               alt={`${tickerSymbol} logo`}
             />
-            <div className="w-20 overflow-hidden font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
-              {holding.shortName}
-            </div>
-            <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny h-[15px]">
-              {tickerSymbol}
-            </div>
           </div>
         </Link>
-        <div className="flex-grow" />
-        <div className="flex flex-col items-center justify-center w-20 mr-4">
-          <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">
+        <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
+          <div className="text-base font-extrabold tracking-wider uppercase text-brand-shade-darkest font-poppins">
+            {tickerSymbol}
+          </div>
+          <div className="overflow-hidden font-thin tracking-wider uppercase text-brand-shade-darkest text-tiny">
+            {holding.shortName}
+          </div>
+        </div>
+        <div className="flex-grow"></div>
+        <div className="flex flex-col items-center justify-center flex-grow-0 w-20 mr-4">
+          {/* <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">
             {latestPrice ? (
               `${round(holding.shares, 4)} Shares`
             ) : (
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
-          </div>
+          </div> */}
           <div className="overflow-hidden font-semibold tracking-wider text-black uppercase text-md overflow-ellipsis">
             {latestPrice ? (
               `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
@@ -152,7 +213,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$" }) {
           </div>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 

@@ -197,17 +197,13 @@ export const getCleanImage = (member) => {
 export const getRandomTailwindColor = () => {
   const colors = [
     "blueGray",
-    "coolGray",
     "trueGray",
     "teal",
     "emerald",
     "lightBlue",
     "orange",
     "lime",
-    "violet",
-    "fuchsia",
     "pink",
-    "rose",
   ]
   const range = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
 

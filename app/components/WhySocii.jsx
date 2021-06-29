@@ -2,7 +2,7 @@ import React from "react"
 
 export default function WhySocii() {
   return (
-    <section className="flex items-center justify-center h-screen bg-gradient-to-br from-brand-light to-brand">
+    <section className="flex items-center justify-center h-screen bg-gradient-to-br from-brand to-brand">
       <div className="max-w-5xl py-16 pl-4 sm:p-0">
         <h2 className="text-3xl font-extrabold text-gray-100 font-poppins">
           Investing with friends has never been easier!
@@ -15,7 +15,7 @@ export default function WhySocii() {
             <br />
             <br />
             With soc
-            <span className="pr-1 font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-brand-light font-poppins">
+            <span className="pr-1 font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-brand font-poppins">
               ii
             </span>
             you dont have to worry about these. We handle

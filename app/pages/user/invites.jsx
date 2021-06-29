@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { firestore } from '@lib/firebase'
+import React, { useState, useEffect } from "react"
+import { firestore } from "@lib/firebase"
 
 export default function Invites() {
   return (
@@ -21,14 +21,14 @@ export default function Invites() {
 
 // * Phone sign up & invite system
 function PhoneInvite() {
-  const [digits, setDigits] = useState('')
+  const [digits, setDigits] = useState("")
   const [previouslyInvited, setPreviouslyInvited] = useState(false)
   const phoneNumber = `+44${digits}`
 
   // Step 1 - Verify Invite is not already invited
   useEffect(() => {
     if (phoneNumber.length === 13) {
-      const ref = firestore.collection('invites').doc(phoneNumber)
+      const ref = firestore.collection("invites").doc(phoneNumber)
       ref.get().then(({ exists }) => {
         setPreviouslyInvited(exists)
       })
@@ -38,7 +38,7 @@ function PhoneInvite() {
   return (
     <div>
       <fieldset>
-        <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none focus:border-opacity-100 focus:border-brand-light">
+        <div className="flex w-11/12 px-4 py-3 mb-3 ml-4 leading-tight text-gray-700 bg-white border rounded-lg appearance-none border-brand-dark border-opacity-30 \ focus:outline-none focus:border-opacity-100 focus:border-brand">
           <div className="h-full pt-1 text-sm text-black align-middle bg-white sm:text-base sm:pt-0.5">
             +44
           </div>
@@ -52,9 +52,7 @@ function PhoneInvite() {
           />
           <div
             className={`bg-white text-md sm:text-md pt-1 sm:pt-0.5 ${
-              phoneNumber.length === 13
-                ? 'text-brand-light btn-transition'
-                : 'text-red-400'
+              phoneNumber.length === 13 ? "text-brand btn-transition" : "text-red-400"
             } p-0.5 align-middle`}
             onClick={phoneNumber.length === 13 ? null : null}
             onKeyDown={phoneNumber.length === 13 ? null : null}
@@ -74,7 +72,7 @@ function SendInvites({ user }) {
   const query = firestore.collection(`users/${user.uid}/invites`)
   const [invites] = useCollectionData(query)
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState("")
 
   const sendInvite = async () => {
     const inviteRef = firestore.collection(`users/${user.uid}/invites`).doc()

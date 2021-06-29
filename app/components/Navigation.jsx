@@ -1,4 +1,5 @@
 import Logo from "@components/Logo"
+import MacSearchKey from "@components/MacSearchKey"
 import { UserContext } from "@lib/context"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -42,17 +43,7 @@ function SearchBar({ setShowSearchCard }) {
         <span className="text-gray-400">
           Search<span className="hidden text-gray-400 sm:inline">: TSLA</span>
         </span>
-        <span className="hidden text-sm text-gray-400 border border-gray-300 sm:block leading-5 py-0.5 px-1.5 rounded-md">
-          <span className="sr-only">Press </span>
-          <kbd className="font-sans">
-            <abbr title="Command" className="no-underline">
-              ⌘
-            </abbr>
-          </kbd>
-          <span className="sr-only"> and </span>
-          <kbd className="font-sans">K</kbd>
-          <span className="sr-only"> to search</span>
-        </span>
+        <MacSearchKey />
       </button>
     </div>
   )

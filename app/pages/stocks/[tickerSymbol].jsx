@@ -1,24 +1,24 @@
-import Custom404 from "../404"
-import LineChart from "@components/LineChart"
-import ShareStockInformationModal from "@components/ShareStockInformationModal"
-import SelectGroupModal from "@components/SelectGroupModal"
-import TradingViewChart, {
-  TradingViewStockProfile,
-  TradingViewStockFinancials,
-} from "@components/TradingViewChart"
 import { SmallAssetCard } from "@components/AssetCards"
-import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper"
-import { UserContext, SelectedGroupContext } from "@lib/context"
-import { firestore } from "@lib/firebase"
-
-import { useRouter } from "next/router"
-import React, { useState, useContext } from "react"
+import LineChart from "@components/LineChart"
+import SelectGroupModal from "@components/SelectGroupModal"
+import ShareStockInformationModal from "@components/ShareStockInformationModal"
+import TradingViewChart, {
+  TradingViewStockFinancials,
+  TradingViewStockProfile,
+} from "@components/TradingViewChart"
 import { Switch } from "@headlessui/react"
-import { useEffect } from "react"
+import { SelectedGroupContext, UserContext } from "@lib/context"
+import { useWindowSize } from "@lib/hooks"
+import { firestore } from "@lib/firebase"
+import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper"
+import { useRouter } from "next/router"
+import React, { useContext, useEffect, useState } from "react"
+import Custom404 from "../404"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
 
+  const [width, height] = useWindowSize()
   const { user, userGroups } = useContext(UserContext)
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
@@ -98,14 +98,14 @@ export default function TickerPage({ tickerSymbols }) {
           tickerSymbol={ticker.tickerSymbol}
           exchange={ticker.exchange}
           className="p-4 m-4"
-          // height={height}
-          // width={width * 0.5}
+          height={height * 0.8}
+          width={width * 0.9}
         />
         <TradingViewStockFinancials
           tickerSymbol={ticker.tickerSymbol}
           exchange={ticker.exchange}
-          // height={height}
-          // width={width * 0.5}
+          height={height * 0.8}
+          width={width * 0.9}
           className="p-4 m-4 mb-12 sm:mb-4"
         />
       </div>
@@ -237,7 +237,7 @@ function Chart({
                 checked={showTradingView}
                 onChange={setShowTradingView}
                 className={`${
-                  showTradingView ? "bg-brand" : "bg-brand-light"
+                  showTradingView ? "bg-brand" : "bg-brand"
                 } relative inline-flex items-center h-6 rounded-full w-11 \
               flex-shrink-0 border-2 border-transparent cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
               >

@@ -3,7 +3,7 @@ import React from "react"
 
 export default function CardSlider({ tickerSymbols }) {
   return (
-    <section className="flex p-12 overflow-x-scroll bg-gray-50">
+    <section className="flex p-12 overflow-x-scroll">
       {tickerSymbols.map(({ ticker, timeseries, sector }, i) => {
         return (
           <article key={`slider-card-${i}`} className="slide-card">

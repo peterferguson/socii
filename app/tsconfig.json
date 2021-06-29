@@ -30,7 +30,7 @@
     "custom.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.jsx",
+    "pages/_app.tsx",
     "components/stream/MessagingInput/MessagingInput.jsx",
     "pages/api/commands.js"
   ],

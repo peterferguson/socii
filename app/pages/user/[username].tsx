@@ -7,13 +7,12 @@
 // - Get doc in one go - remove for each - see IMPROVE
 // -
 
-import GroupColumn from "@components/GroupCharts"
 import AuthCheck from "@components/AuthCheck"
+import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
 import UserPhoto from "@components/UserPhoto"
 import { UserContext } from "@lib/context"
 import { auth, firestore } from "@lib/firebase"
-import { getRandomTailwindColor } from "@utils/helper"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
@@ -39,7 +38,13 @@ function GroupPortfolios({ pagename }): JSX.Element {
     <>
       {!(loading || error) ? (
         groups?.map((groupName, index) => {
-          return <GroupColumn key={`group-${index}`} groupName={groupName} />
+          return (
+            <GroupColumn
+              key={`group-${index}`}
+              groupName={groupName}
+              className="w-full sm:w-1/2 xl:w-1/3"
+            />
+          )
         })
       ) : (
         <PortfolioSkeletons />
@@ -50,30 +55,23 @@ function GroupPortfolios({ pagename }): JSX.Element {
 
 export default function UserPage() {
   const router = useRouter()
-  const pagename = router.query.username
-  const { username } = useContext(UserContext)
+  const { username: pagename } = router.query
+  // const { username } = useContext(UserContext)
 
-  const isUsersHomepage = pagename === username
+  // const isUsersHomepage = pagename === username
 
   return (
     <AuthCheck>
-      <main>
-        <div className="flex flex-row w-full">
+      {/* <div className="flex flex-row w-full">
           <UserPhoto
             username={typeof pagename === "string" ? pagename : pagename?.[0]}
             photoURL={isUsersHomepage ? auth.currentUser?.photoURL || "" : ""}
           />
-          <div className="p-4 text-xl font-poppins text-brand-light">{pagename}</div>
-        </div>
-        <div
-          className={`flex items-center justify-center m-8 mx-auto text-5xl font-poppins text-${getRandomTailwindColor()}`}
-        >
-          Groups
-        </div>
-        <div className="flex flex-wrap justify-center">
-          {!pagename ? <PortfolioSkeletons /> : <GroupPortfolios pagename={pagename} />}
-        </div>
-      </main>
+          <div className="p-4 text-xl font-poppins text-brand">{pagename}</div>
+        </div> */}
+      <div className="flex flex-wrap justify-center">
+        {!pagename ? <PortfolioSkeletons /> : <GroupPortfolios pagename={pagename} />}
+      </div>
     </AuthCheck>
   )
 }

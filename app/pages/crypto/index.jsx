@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaMedium, FaBitcoin } from "react-icons/fa"
 
 export default function CryptoHome() {
   return (
-    <div className="flex flex-col h-screen bg-gray-100 bg-center bg-no-repeat bg-cover">
+    <div className="flex flex-col mt-0 bg-gray-100 bg-center bg-no-repeat bg-cover sm:mt-12">
       <div className="w-4/5 p-10 mx-auto my-20 text-center border-4 shadow-2xl cursor-pointer border-brand grid place-items-center sm:my-auto bg-white-600 bg-opacity-70 rounded-xl space-y-5">
         <FaBitcoin className="w-24 h-24 text-[#f2a900]" />
 

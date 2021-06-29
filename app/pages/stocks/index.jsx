@@ -60,40 +60,37 @@ export default function StockDisplay({ tickerSymbols }) {
 
   return (
     // TODO: Create our own version of this Ticker Tape banner
-    <>
-      <div className="flex flex-col">
-        {/* {isBrowser && <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} />} */}
+    <main className="flex flex-wrap overflow-x-scroll max-w-screen-xl">
+      {/* <div className="flex flex-col">
+        {isBrowser && <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} />}
         {isBrowser && <TradingViewStockTickerQuotes />}
-      </div>
-      <div>
-        <Link href="/stocks/popular">
-          <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans text-brand-dark">
-            Popular Stocks
-            <div className="flex-grow" />
-            <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
-          </div>
-        </Link>
-        <CardSlider tickerSymbols={tickerSymbols} />
-        <div className="content-center min-h-screen mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-gray-50">
-          {tickerSymbols
-            .concat(moreTickers.current)
-            .map(({ ticker, timeseries }, i) => {
-              const isLastTicker =
-                i === tickerSymbols.concat(moreTickers.current).length - 1
-              return (
-                <ChartCard
-                  key={ticker.tickerSymbol}
-                  cardRef={isLastTicker ? lastTickerRef : null}
-                  logoUrl={logoUrl(ticker.ISIN)}
-                  tickerSymbol={ticker.tickerSymbol}
-                  shortName={ticker.shortName}
-                  data={timeseries}
-                />
-              )
-            })}
+      </div> */}
+
+      <Link href="/stocks/popular">
+        <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans text-brand-dark">
+          Popular Stocks
+          <div className="flex-grow" />
+          <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
         </div>
+      </Link>
+      <CardSlider tickerSymbols={tickerSymbols} />
+      <div className="content-center w-full mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        {tickerSymbols.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
+          const isLastTicker =
+            i === tickerSymbols.concat(moreTickers.current).length - 1
+          return (
+            <ChartCard
+              key={ticker.tickerSymbol}
+              cardRef={isLastTicker ? lastTickerRef : null}
+              logoUrl={logoUrl(ticker.ISIN)}
+              tickerSymbol={ticker.tickerSymbol}
+              shortName={ticker.shortName}
+              data={timeseries}
+            />
+          )
+        })}
       </div>
-    </>
+    </main>
   )
 }
 

@@ -75,12 +75,13 @@
 .str-chat-channel {
   max-height: 100vh;
 }
+
 .str-chat-channel .str-chat__container {
-  /* height: 100%; */
-  height: calc(100vh - 72px);
+  height: calc(100vh - 96px);
   display: -webkit-flex;
   display: flex;
 }
+
 .str-chat-channel .str-chat__container .str-chat__main-panel {
   height: 100%;
   width: 100%;
@@ -103,7 +104,7 @@
     padding: 5px 5px 0;
   }
   .str-chat-channel .str-chat__container {
-    height: 100vh;
+    height: calc(100vh - 80px);
     width: 100vw;
     z-index: 50;
     display: flex;

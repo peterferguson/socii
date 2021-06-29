@@ -15,7 +15,7 @@ export default function AuthCheck({ children, fallback }: AuthCheckProps) {
     : fallback || (
         <div className="flex items-center justify-center w-screen h-screen mx-auto bg-gray-50">
           <Link href="/enter">
-            <a className="text-3xl text-center underline text-brand-light font-poppins align-center">
+            <a className="text-3xl text-center underline text-brand font-poppins align-center">
               Please sign in to view this content
             </a>
           </Link>

@@ -35,7 +35,7 @@ const StockDisplayAttachment = ({ attachment }) => {
             return (
               <div
                 key={key}
-                className="w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-left sm:mt-4 text-brand-light"
+                className="w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-left sm:mt-4 text-brand"
               >
                 {uncamelCase(key)} &bull;{" "}
                 <span className="text-gray-600 text-tiny font-poppins">

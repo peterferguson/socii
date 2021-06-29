@@ -8,7 +8,6 @@ interface CreateChatModalProps {
   setIsCreating: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
 const CreateChatModal = ({ isCreating, setIsCreating }: CreateChatModalProps) => {
   const { client, setActiveChannel } = useContext(ChatContext)
   const [selectedUsers, setSelectedUsers] = useState<StreamUser[]>([])

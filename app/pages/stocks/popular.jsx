@@ -8,7 +8,7 @@ export default function Popular({ tickerSymbols }) {
   // TODO: large screen vertical cards - small horizontal cards
   return (
     <div>
-      <div className="flex items-center justify-center mx-auto h-80 bg-gradient-to-r from-teal-400 to-brand-light">
+      <div className="flex items-center justify-center mx-auto h-80 bg-gradient-to-r from-teal-400 to-brand">
         <div className="flex px-4 pt-4 m-12 text-6xl font-bold text-center uppercase font-work-sans text-gray-50">
           Popular Stocks
         </div>

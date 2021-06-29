@@ -1,11 +1,11 @@
-import { firestore } from '@lib/firebase'
-import { SelectedGroupContext } from '@lib/context'
-import React, { useState, useContext } from 'react'
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
-import { RadioGroup } from '@headlessui/react'
-import CheckIcon from '@components/BackgroundCheck'
+import { firestore } from "@lib/firebase"
+import { SelectedGroupContext } from "@lib/context"
+import React, { useState, useContext } from "react"
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
+import { RadioGroup } from "@headlessui/react"
+import CheckIcon from "@components/BackgroundCheck"
 
-export default function GroupSelectorRadioGroup({ groupNames, className = '' }) {
+export default function GroupSelectorRadioGroup({ groupNames, className = "" }) {
   const { selectedGroup, changeSelectedGroup } = useContext(SelectedGroupContext)
   const [groupSelected, setGroupSelected] = useState(selectedGroup)
 
@@ -43,9 +43,9 @@ export default function GroupSelectorRadioGroup({ groupNames, className = '' }) 
               className={({ active }) =>
                 `${
                   active
-                    ? 'ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                                   ring-brand-light ring-opacity-60'
-                    : ''
+                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
+                                   ring-brand ring-opacity-60"
+                    : ""
                 }
                                bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer \
                                focus:outline-none flex-1`
@@ -59,7 +59,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = '' }) 
                         <RadioGroup.Label
                           as="p"
                           className={`font-medium ${
-                            checked ? 'text-brand-light' : 'text-gray-900'
+                            checked ? "text-brand" : "text-gray-900"
                           }`}
                         >
                           {group.name}
@@ -68,7 +68,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = '' }) 
                         <RadioGroup.Description
                           as="span"
                           className={`flex flex-col ${
-                            checked ? 'text-light-blue-100' : 'text-gray-500'
+                            checked ? "text-light-blue-100" : "text-gray-500"
                           }`}
                         >
                           <span className="text-tiny overflow-ellipsis">
@@ -81,7 +81,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = '' }) 
                       </div>
                     </div>
                     {checked && (
-                      <div className="flex-shrink-0 text-brand-light">
+                      <div className="flex-shrink-0 text-brand">
                         <CheckIcon className="w-6 h-6" />
                       </div>
                     )}

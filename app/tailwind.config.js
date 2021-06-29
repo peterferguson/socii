@@ -8,29 +8,37 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          light: "#3fbaeb",
-          DEFAULT: "#0fa9e6",
-          dark: "#0c87b8",
-          teal: "#a6fff8",
+          // - brand colors based on DEFAULT using mycolors.space
+          DEFAULT: "#3fbaeb",
+          natural: {
+            lightest: "#E6F4F1",
+            light: "#EEFCFF",
+            dark: "#4C9CA9",
+          },
+          shade: {
+            blue: "#00A3EE",
+            dark: "#007E95",
+            darker: "#00576D",
+            darkest: "#003248",
+          },
+          purple: { DEFAULT: "#A181EE", light: "#CCB3FE" },
+          pink: "#FF72B4",
+          green: "#77B44E",
           lightGreen: "#79ffe1",
-          blue: "#0385e6",
-          pink: "#dca3c8",
+          cyan: {
+            DEFAULT: "#00D2EA",
+            green: "#38E8D9",
+            vivid: "#11D5ED",
+          },
         },
-        present: {
-          DEFAULT: "#20e070",
-        },
+        lightPink: "#dca3c8",
+        lightTeal: "#a6fff8",
         blueGray: colors.blueGray,
-        coolGray: colors.coolGray,
         trueGray: colors.trueGray,
         teal: colors.teal,
         emerald: colors.emerald,
         orange: colors.orange,
-        lime: colors.lime,
-        sky: colors.sky,
-        violet: colors.violet,
-        fuchsia: colors.fuchsia,
         pink: colors.pink,
-        rose: colors.rose,
       },
       fontFamily: {
         "work-sans": ['"Work Sans"', "sans-serif"],
@@ -104,12 +112,6 @@ module.exports = {
       },
       scale: {
         "-1": "-1",
-      },
-      height: {
-        fit: "fit-content",
-      },
-      width: {
-        fit: "fit-content",
       },
     },
   },

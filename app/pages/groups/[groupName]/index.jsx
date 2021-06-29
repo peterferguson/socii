@@ -62,7 +62,7 @@ export default function Group() {
         <LoadingIndicator />
       ) : (
         <div className="flex">
-          <div className="p-8 flex-auto">
+          <div className="flex-auto p-8">
             <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">
               holdings
             </div>

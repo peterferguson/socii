@@ -172,7 +172,7 @@ const ChatUserSearch = ({
           onChange={(e) => setInputText(e.target.value)}
           placeholder={!selectedUsers.length ? "Search users..." : ""}
           type="text"
-          className="w-full max-w-md border-none rounded-full focus:outline-none focus-within:ring-brand-light focus-within:ring-2 bg-gray-50"
+          className="w-full max-w-md border-none rounded-full focus:outline-none focus-within:ring-brand focus-within:ring-2 bg-gray-50"
         />
       </form>
       <div className=" min-w-[85%] mt-1.5 -mb-1.5">

@@ -205,7 +205,7 @@ function EmailSignUp({ verified, setVerified }) {
         type="submit"
         className={`${
           verified ? "btn-transition cursor-pointer" : "cursor-not-allowed"
-        } rounded bg-brand-light hover:bg-brand active:bg-brand-dark w-full \
+        } rounded bg-brand hover:bg-brand active:bg-brand-dark w-full \
         text-white my-4 py-3 px-4 leading-tight font-bold`}
         onClick={() => emailSignInHandler(email)}
       >

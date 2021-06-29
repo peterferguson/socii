@@ -90,7 +90,7 @@ export default function Dropdown() {
       {({ open }) => (
         <>
           <Popover.Button className="items-center justify-center w-full h-full focus:outline-none">
-            <HiMenu className=" w-6 h-6 text-brand-light" />
+            <HiMenu className=" w-6 h-6 text-brand" />
           </Popover.Button>
           <Transition
             show={open}
@@ -150,7 +150,7 @@ function DropdownItem({ item }) {
           </div>
           {item.rightIcon && (
             <item.rightIcon
-              className="flex-none w-6 h-6 text-brand-light"
+              className="flex-none w-6 h-6 text-brand"
               aria-hidden="true"
             />
           )}

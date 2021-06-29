@@ -40,15 +40,22 @@ StreamChat.propTypes = {
   groupName: string,
 }
 
-export default function StreamChat({ client, theme = "light", groupName = "" }) {
-  const is1Col = !useMediaQuery({ minWidth: 640 })
+export default function StreamChat({
+  client,
+  theme = "light",
+  groupName = "",
+  isSidebar = false,
+}) {
+  let is1Col = !useMediaQuery({ minWidth: 640 })
+  is1Col = isSidebar ? true : is1Col
+
   const [isCreating, setIsCreating] = useState(false)
   const [hideChannelList, setHideChannelList] = useState(false)
 
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
-  const showChatFullscreen = !is1Col || hideChannelList || (hideChannelList && !is1Col)
+  const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
   // - Truth table
   // is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
   //    T   |       T         |                       T
@@ -66,9 +73,10 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
             onCreateChannel={onCreateChannel}
             groupName={groupName}
             is1Col={is1Col}
+            isSidebar={isSidebar}
           />
         )}
-        {showChatFullscreen && (
+        {onlyShowChat && (
           <Channel
             channel={
               groupName
@@ -99,10 +107,7 @@ export default function StreamChat({ client, theme = "light", groupName = "" }) 
           </Channel>
         )}
         {isCreating && (
-          <CreateChatModal
-            isCreating={isCreating}
-            setIsCreating={setIsCreating}
-          />
+          <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
         )}
       </Chat>
     </AuthCheck>
@@ -122,6 +127,7 @@ function StreamChannelList({
   groupName,
   toggleHideChannelList,
   is1Col,
+  isSidebar,
 }) {
   const { client } = useChatContext()
   const filter = { members: { $in: [client?.userID] } }
@@ -138,7 +144,7 @@ function StreamChannelList({
               : "translate-x-0 z-40"
             : hideChannelList
             ? "hidden"
-            : "absolute inset-0 z-40 -translate-x-full"
+            : `${isSidebar ? "" : "absolute inset-0 z-40 -translate-x-full"}`
         }
         `}
     >

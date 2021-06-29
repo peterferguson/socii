@@ -10,7 +10,7 @@ export default function Logo({ className }) {
       <Link href="/">
         <a
           className={`${className} bg-clip-text text-transparent \
-                       bg-gradient-to-r from-green-400 to-brand-light font-poppins`}
+                       bg-gradient-to-r from-green-400 to-brand font-poppins`}
         >
           ii
         </a>

@@ -110,8 +110,7 @@ export default function ShareStockInformationModal({
                 as="h3"
                 className="text-lg font-medium text-gray-900 font-poppins"
               >
-                Tell <span className="font-bold text-brand-light">{selectedGroup}</span>{" "}
-                about{" "}
+                Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
                 <span span className="font-bold text-teal-300">
                   {tickerSymbol}
                 </span>

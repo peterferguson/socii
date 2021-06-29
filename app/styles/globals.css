@@ -6,7 +6,7 @@
 
 @layer components {
   .btn {
-    @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand-light;
+    @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand;
   }
 
   .btn:hover {
@@ -25,8 +25,8 @@
   }
 
   .outline-btn {
-    @apply bg-transparent mr-auto text-brand-light rounded shadow p-2 border 
-      border-brand-light font-work-sans;
+    @apply bg-transparent mr-auto text-brand rounded shadow p-2 border 
+      border-brand font-work-sans;
   }
 
   .outline-btn:hover {
@@ -127,7 +127,7 @@ a {
 
 @layer components {
   .messaging-input__input-wrapper {
-    @apply flex items-center min-h-[60px] min-w-[200px] max-w-[400px]  h-fit z-[100] rounded-3xl 
+    @apply flex items-center min-h-[60px] min-w-[200px] max-w-[400px]  h-["fit-content"] z-[100] rounded-3xl 
 	  bg-white border-2 border-gray-400;
   }
 
@@ -139,4 +139,3 @@ a {
     @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center;
   }
 }
-

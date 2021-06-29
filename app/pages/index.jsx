@@ -4,7 +4,7 @@ import { firestore } from "@lib/firebase"
 import { logoUrl } from "@utils/helper"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { useCollection } from "react-firebase-hooks/firestore"
 
 const WhySocii = dynamic(() => import("@components/WhySocii"), {
@@ -16,12 +16,15 @@ const SociiFeatureSlider = dynamic(() => import("@components/SociiFeatureSlider"
   ssr: false,
 })
 
-export default function Home() {
+export default function Home({ scrollRef }) {
   const router = useRouter()
   const { user } = useContext(UserContext)
+  useEffect(() => {
+    console.log(scrollRef)
+  }, [scrollRef])
   return (
     <>
-      <div className="h-screen grid grid-cols-2 bg-gray-50">
+      <div className="h-screen grid grid-cols-2 bg-gray-50" ref={scrollRef}>
         {/* <bluryGradientBg className="bg-teal-400"/> */}
         <div className="z-10 grid-rows-4">
           <div className="px-4 pt-24 text-7xl sm:pt-32 font-poppins animate-fade-in-down">
@@ -42,7 +45,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="z-0 flex bg-gradient-to-r from-green-300 to-brand-light animate-fade-in-right">
+        <div className="z-0 flex bg-gradient-to-r from-green-300 to-brand animate-fade-in-right">
           <svg
             className="w-32 h-full -ml-16 fill-current text-gray-50 z-1"
             preserveAspectRatio="none"
