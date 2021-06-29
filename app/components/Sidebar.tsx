@@ -11,12 +11,6 @@ import {
 
 const navItems = [
   {
-    name: "Invites",
-    description: "Invite your friends to the alpha",
-    href: "/user/invites",
-    icon: HiOutlineAtSymbol,
-  },
-  {
     name: "Stocks",
     description: "Search our stock universe",
     href: "/stocks",
@@ -51,6 +45,12 @@ const navItems = [
   //   // onClick: () => setOpenSettings(!openSettings),
   // },
   {
+    name: "Invites",
+    description: "Invite your friends to the alpha",
+    href: "/user/invites",
+    icon: HiOutlineAtSymbol,
+  },
+  {
     name: "Settings",
     description: "Adjust your settings",
     href: "",
@@ -66,7 +66,7 @@ export default function Sidebar() {
   // - For now this is mocked with a simple enumeration of the list
 
   return (
-    <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-80">
+    <div className="relative hidden w-20 h-screen my-4 ml-4 shadow-lg md:block lg:w-80">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
           <Logo className="text-2xl" />
@@ -77,14 +77,16 @@ export default function Sidebar() {
               <a
                 className={`flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 ${
                   i === 0
-                    ? "text-blue-500 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800"
-                    : "text-gray-500 dark:text-gray-200 hover:text-blue-500"
+                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
+                    : "text-gray-500 dark:text-gray-200 hover:text-brand-cyan"
                 }`}
                 href="#"
                 key={`${item.name}-selector`}
               >
-                <item.icon className="text-xl" />
-                <span className="mx-4 text-sm font-normal">{item.name}</span>
+                <item.icon className="mx-auto text-xl lg:mx-0" />
+                <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
+                  {item.name}
+                </span>
               </a>
             ))}
           </div>
