@@ -75,6 +75,11 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
     </form>
   )
 
+  const deleteChannel = async () => {
+    await channel.delete()
+    toggleHideChannelList()
+  }
+
   return (
     <Fragment>
       <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
@@ -130,7 +135,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
         </div>
       </div>
       {showDelete && (
-        <DeleteChannelModal showDelete={showDelete} setShowDelete={setShowDelete} />
+        <DeleteChannelModal showDelete={showDelete} setShowDelete={setShowDelete} deleteChannel={deleteChannel} />
       )}
     </Fragment>
   )

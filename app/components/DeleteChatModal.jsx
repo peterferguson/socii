@@ -1,13 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react"
-import React, { Fragment, useContext } from "react"
-import { ChannelStateContext } from "stream-chat-react"
+import React, { Fragment } from "react"
 
-const DeleteChannelModal = ({ showDelete: isOpen, setShowDelete: setIsOpen }) => {
-  const { channel } = useContext(ChannelStateContext)
-
+const DeleteChannelModal = ({
+  showDelete: isOpen,
+  setShowDelete: setIsOpen,
+  deleteChannel,
+}) => {
   const closeModal = () => setIsOpen(false)
-
-  const deleteChannel = async () => await channel.delete()
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
