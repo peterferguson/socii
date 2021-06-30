@@ -59,8 +59,8 @@ export default function Home({ scrollRef }) {
         <TickerList />
       </div> */}
 
-      <WhySocii />
       <SociiFeatureSlider />
+      <WhySocii />
 
       {/* Contact Us */}
       <div className="flex items-center justify-center max-w-5xl px-6 py-16 mx-auto h-1/2">

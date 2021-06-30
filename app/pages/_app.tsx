@@ -62,25 +62,29 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     theme,
   }
 
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-   if (showActiveChannel) {
-    setShowActiveChannel(!showActiveChannel);
-   }
- // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [router.asPath]);
+    if (showActiveChannel) {
+      setShowActiveChannel(!showActiveChannel)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath])
 
   return (
     <UserContext.Provider value={userData}>
       <StreamContext.Provider value={{ client }}>
         <Head />
         {!userData.user && <PromotionBanner />}
-        <ComponentContainer {...props} user={userData.user}>
-          {isBrowser && <SearchCard {...props} />}
-          {isBrowser && <Component {...props} />}
-          {is1Col && <Footer {...props} />}
-        </ComponentContainer>
+        {router.asPath === "/" ? (
+          <>{isBrowser && <Component {...props} />}</>
+        ) : (
+          <ComponentContainer {...props} user={userData.user}>
+            {isBrowser && <SearchCard {...props} />}
+            {isBrowser && <Component {...props} />}
+            {is1Col && <Footer {...props} />}
+          </ComponentContainer>
+        )}
         <Toaster {...toastProps} />
       </StreamContext.Provider>
     </UserContext.Provider>
