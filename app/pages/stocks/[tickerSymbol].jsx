@@ -39,13 +39,10 @@ export default function TickerPage({ tickerSymbols }) {
   const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
   useEffect(() => {
-    const setLogoUrl = async () => {
+    const setLogoUrl = async () =>
       setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
-    }
 
-    if (ticker) {
-      setLogoUrl()
-    }
+    if (ticker) setLogoUrl()
   }, [ticker])
 
   if (router.isFallback) {
@@ -99,13 +96,13 @@ export default function TickerPage({ tickerSymbols }) {
           exchange={ticker.exchange}
           className="p-4 m-4"
           height={height * 0.8}
-          width={width * 0.9}
+          width={width * 0.7}
         />
         <TradingViewStockFinancials
           tickerSymbol={ticker.tickerSymbol}
           exchange={ticker.exchange}
           height={height * 0.8}
-          width={width * 0.9}
+          width={width * 0.7}
           className="p-4 m-4 mb-12 sm:mb-4"
         />
       </div>
@@ -148,7 +145,7 @@ function TickerComponents({
   }
   return (
     <>
-      <div className="flex flex-row w-full bg-gray-50">
+      <div className="flex flex-row w-full">
         <SmallAssetCard
           logoUrl={tickerLogoUrl}
           tickerSymbol={tickerSymbol}
@@ -157,7 +154,7 @@ function TickerComponents({
           monthlyPctChange={monthlyPctChange}
         />
         <div className="flex-grow hidden sm:block" />
-        <div className="flex-none px-4 pt-4 sm:pl-8 bg-gray-50">
+        <div className="flex-none px-4 pt-4 sm:pl-8 ">
           <div className="items-center justify-center w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
             <span className="z-10 w-12 h-4 text-3xl sm:text-4xl">
               ${highlightedClose}
@@ -206,7 +203,7 @@ function Chart({
   latestClose,
 }) {
   return (
-    <div className="flex items-center justify-center w-full h-2/3 bg-gray-50">
+    <div className="flex items-center justify-center w-full h-2/3 ">
       <div className="w-full p-2 m-4 bg-white shadow-lg rounded-xl">
         <div className="flex justify-between w-full h-20">
           {!showTradingView ? (

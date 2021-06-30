@@ -1,6 +1,7 @@
 import styles from "@styles/MessagingChannelPreview.module.css"
 import AvatarGroup from "@components/stream/AvatarGroup"
 import { getTimeStamp } from "@utils/helper"
+import useMediaQuery from "react-responsive"
 
 import React, { useContext } from "react"
 import { ChatContext } from "stream-chat-react"
@@ -18,13 +19,13 @@ const MessagingChannelPreview = ({
   channel,
   latestMessage,
   setActiveChannel,
-  closeIsCreating,
+  setShowActiveChannel,
   toggleHideChannelList,
-  is1Col,
+  isSidebar,
 }) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
   const channelName = channel.data.id.split("-").join(" ")
-
+  const is2Col = !useMediaQuery({ minWidth: 1024 })
   const channelNameAsMember = [{ user: { name: channelName } }]
 
   let members =
@@ -34,8 +35,7 @@ const MessagingChannelPreview = ({
         )
       : channelNameAsMember
 
-
-  // - edge case: use first initial for group chats
+  // - edge case: use first initial for chat picture for group chats
   if (!channelName.includes("members")) members = [{ user: { name: channelName } }]
 
   return (
@@ -43,14 +43,14 @@ const MessagingChannelPreview = ({
       className={`flex-grow h-16 mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
         ${
           channel?.id === activeChannel?.id
-            ? "bg-white hover:shadow-xl hover:btn-transition"
-            : "hover:bg-white hover:shadow-xl hover:btn-transition"
+            ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
+            : "hover:bg-blueGray-100 hover:shadow-xl hover:btn-transition"
         }
       `}
       onClick={() => {
-        // closeIsCreating()
         setActiveChannel(channel)
-        if (is1Col) toggleHideChannelList()
+        if (isSidebar) setShowActiveChannel(true)
+        if (is2Col && !isSidebar) toggleHideChannelList()
       }}
     >
       {AvatarGroup(members, styles)}

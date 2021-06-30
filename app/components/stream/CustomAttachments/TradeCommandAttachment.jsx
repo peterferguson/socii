@@ -160,6 +160,7 @@ const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
         key={`${tagKey}-shares`}
         value={shares}
         onChange={handleChange}
+        decimals={8}
       />
       <MMLNumberInput
         name={tradeType.toLowerCase() === "buy" ? "Cost" : "Amount"}
@@ -186,25 +187,23 @@ const TradeMMLConverter = ({ tagKey, costPerShare, currency, tradeType }) => {
   )
 }
 
-const MMLNumberInput = ({ tagKey, value, onChange, name, currency }) => {
+const MMLNumberInput = ({ tagKey, value, onChange, name, currency, decimals = 2 }) => {
   const CurrencyIcon = currency ? currencyIcons[currency].icon : null
   return (
     <div className="flex flex-row m-2 border rounded shadow">
       <span
         key={tagKey}
-        className="flex items-center px-3 font-bold rounded rounded-r-none font-poppins bg-grey-200 text-grey-400"
+        className="flex items-center px-3 text-sm font-bold rounded rounded-r-none sm:text-base font-poppins bg-grey-200 text-grey-400"
       >
         {name}
         {CurrencyIcon && <CurrencyIcon className="ml-2 mb-0.5" />}
       </span>
       <input
         type="number"
-        pattern="[0-9]+([\.,][0-9]+)?"
-        min="0.01"
-        step="0.01"
+        pattern={`[0-9]+([.,][0-9]+)?{,${decimals}}`}
         label={name.toLowerCase()}
         name={name.toLowerCase()}
-        className="w-full py-2 font-bold text-right border-none rounded focus-within:outline-none focus-within:border-none focus-within:ring-0"
+        className="w-full py-2 text-sm font-bold text-right border-none rounded sm:text-base focus-within:outline-none focus-within:border-none focus-within:ring-0"
         value={value}
         onChange={onChange}
         formNoValidate={true}

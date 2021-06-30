@@ -8,7 +8,7 @@ const runtimeCaching = require("next-pwa/cache")
 module.exports = withPWA(
   withBundleAnalyzer({
     images: {
-      domains: ["lh6.googleusercontent.com"],
+      domains: ["lh6.googleusercontent.com", "lh3.googleusercontent.com"],
     },
     reactStrictMode: true,
     purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds

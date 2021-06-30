@@ -1,7 +1,7 @@
 @tailwind components;
 
 .messenger-chat.str-chat {
-  height: 100vh;
+  height: calc(100vh - 96px);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: -webkit-flex;
   display: flex;
@@ -16,7 +16,7 @@
 .messenger-chat.str-chat .str-chat__container {
   -webkit-flex: 1;
   flex: 1;
-  height: 100%;
+  height: calc(100vh - 96px);
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: row;
@@ -26,7 +26,7 @@
   width: 100%;
   -webkit-flex: 1;
   flex: 1;
-  height: 100%;
+  height: calc(100vh - 96px);
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
@@ -36,8 +36,8 @@
 
 .str-chat {
   box-sizing: border-box;
-  height: calc(100vh - 72px);
-  max-height: calc(100vh - 72px);
+  height: calc(100vh - 96px);
+  max-height: calc(100vh - 96px);
 }
 .str-chat *,
 .str-chat *::after,
@@ -51,7 +51,8 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 } */
 .str-chat.messaging {
-  background-color: #f1f1f3;
+  /* background-color: #f1f1f3; */
+  background-color: white;
 }
 .str-chat.messaging.dark {
   background-color: #212326;
@@ -69,7 +70,8 @@
 }
 
 .str-chat-channel-list {
-  float: left;
+  float: left; /* TODO Remove this when the cards are implemented*/
+  background: white;
 }
 
 .str-chat-channel {

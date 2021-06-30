@@ -1,4 +1,6 @@
 import { useRouter } from "next/router"
+import React from "react"
+
 export default function CryptoPair() {
   const router = useRouter()
   const { pair } = router.query

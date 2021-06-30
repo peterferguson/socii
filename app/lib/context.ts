@@ -11,4 +11,4 @@ export const SelectedGroupContext = createContext({
   changeSelectedGroup: (selectedGroup) => {},
 })
 
-export const StreamContext = createContext({ streamClient: null })
+export const StreamContext = createContext({ client: null })

@@ -33,6 +33,6 @@
     "pages/_app.tsx",
     "components/stream/MessagingInput/MessagingInput.jsx",
     "pages/api/commands.js"
-  ],
+, "components/stream/Chat.jsx", "components/stream/MessagingChannelPreview.jsx"  ],
   "exclude": ["node_modules"]
 }

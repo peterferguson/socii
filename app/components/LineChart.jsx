@@ -17,7 +17,7 @@ export default function LineChart({
 
   useEffect(() => {
     setPctChangeValue(pctChange(timeseries?.[0].y, crosshairValue.y).toFixed(2))
-  }, [crosshairValue])
+  }, [crosshairValue, timeseries])
 
   const lineSeriesProps = {
     animation: true,
@@ -40,14 +40,14 @@ export default function LineChart({
   }
 
   return (
-    <div className="flex mx-auto items-center justify-center">
+    <div className="flex items-center justify-center mx-auto">
       <FlexibleXYPlot
         onMouseLeave={() => {
           setCrosshairValue(false)
           setCrosshairIndexValue(0)
         }}
         height={height * 0.6}
-        width={width * 0.8}
+        width={width * 0.65}
         xType="time"
         margin={{ left: 10, bottom: 75, top: 10 }}
       >

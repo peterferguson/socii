@@ -1,5 +1,3 @@
-/* eslint-disable react/display-name */
-import AuthCheck from "@components/AuthCheck"
 import {
   CreateChatModal,
   CustomTriggerProvider,
@@ -9,16 +7,15 @@ import {
   MessagingInput,
 } from "@components/stream"
 import dynamic from "next/dynamic"
-import { boolean, string } from "prop-types"
-import React, { useState } from "react"
+import { useRouter } from "next/router"
+import React, { useState, useContext } from "react"
 import { useMediaQuery } from "react-responsive"
 import {
   Channel,
+  ChatContext,
   ChannelList,
-  Chat,
   MessageInput,
   MessageList,
-  useChatContext,
   Window,
 } from "stream-chat-react"
 
@@ -35,27 +32,25 @@ const TypingIndicator = dynamic(() => import("@components/stream/TypingIndicator
   ssr: false,
 })
 
-StreamChat.propTypes = {
-  theme: string,
-  groupName: string,
-}
-
 export default function StreamChat({
   client,
-  theme = "light",
-  groupName = "",
+  setShowActiveChannel,
   isSidebar = false,
 }) {
   let is1Col = !useMediaQuery({ minWidth: 640 })
   is1Col = isSidebar ? true : is1Col
 
+  const router = useRouter()
+  const { groupName } = router.query
+
   const [isCreating, setIsCreating] = useState(false)
-  const [hideChannelList, setHideChannelList] = useState(false)
+  const [hideChannelList, setHideChannelList] = useState(!isSidebar)
 
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
 
   const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
+
   // - Truth table
   // is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
   //    T   |       T         |                       T
@@ -63,73 +58,80 @@ export default function StreamChat({
   //    F   |       T         |                       T
   //    F   |       F         |                       T
 
+  const streamProps = {
+    client,
+    groupName,
+    hideChannelList,
+    toggleHideChannelList,
+    isSidebar,
+  }
+
   return (
-    <AuthCheck>
-      <Chat client={client} theme={`messaging ${theme}`}>
-        {!groupName && (
-          <StreamChannelList
-            hideChannelList={hideChannelList}
-            toggleHideChannelList={toggleHideChannelList}
-            onCreateChannel={onCreateChannel}
-            groupName={groupName}
-            is1Col={is1Col}
-            isSidebar={isSidebar}
-          />
-        )}
-        {onlyShowChat && (
-          <Channel
-            channel={
-              groupName
-                ? client.channel("messaging", groupName?.split(" ").join("-"))
-                : null
-            }
-            maxNumberOfFiles={10}
-            multipleUploads={true}
-            Attachment={CustomAttachment}
-            TriggerProvider={CustomTriggerProvider}
-          >
-            <Window
-              hideOnThread={true}
-              onClick={hideChannelList ? toggleHideChannelList : null}
-            >
-              <MessagingChannelHeader
-                toggleHideChannelList={!groupName ? toggleHideChannelList : null}
-              />
-              <MessageList
-                onClick={hideChannelList ? toggleHideChannelList : null}
-                messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-                TypingIndicator={TypingIndicator}
-                // messageLimit={5} // TODO: Implement messageLimit to save on api calls
-              />
-              <MessageInput autoFocus Input={MessagingInput} />
-            </Window>
-            <MessagingThread />
-          </Channel>
-        )}
-        {isCreating && (
-          <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
-        )}
-      </Chat>
-    </AuthCheck>
+    <>
+      <StreamChannelList
+        {...streamProps}
+        onCreateChannel={onCreateChannel}
+        setShowActiveChannel={setShowActiveChannel}
+        is1Col={is1Col}
+      />
+      {onlyShowChat && <StreamChannel {...streamProps} />}
+      {isCreating && (
+        <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
+      )}
+    </>
   )
 }
 
-StreamChannelList.propTypes = {
-  hideChannelList: boolean,
-  onCreateChannel: () => {},
-  groupName: string,
-  is1Col: boolean,
+export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
+  const { client } = useContext(ChatContext)
+  const router = useRouter()
+  const isChatOrGroupRoute =
+    router.pathname.includes("/chat") || router.pathname.includes("/groups")
+  // ! Streams ChannelList requires that the Channel is a child so we hidden
+  return (
+    <div
+      className={`w-full ${isChatOrGroupRoute ? "" : "sm:w-1/2 xl:w-1/3"} ${
+        isSidebar ? "hidden" : ""
+      }`}
+    >
+      <Channel
+        channel={
+          groupName
+            ? client.channel("messaging", groupName?.split(" ").join("-"))
+            : null
+        }
+        maxNumberOfFiles={10}
+        multipleUploads={true}
+        Attachment={CustomAttachment}
+        TriggerProvider={CustomTriggerProvider}
+      >
+        <Window hideOnThread={true}>
+          <MessagingChannelHeader
+            toggleHideChannelList={!groupName ? toggleHideChannelList : null}
+          />
+          <MessageList
+            messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
+            TypingIndicator={TypingIndicator}
+            // messageLimit={5} // TODO: Implement messageLimit to save on api calls
+          />
+          <MessageInput Input={MessagingInput} />
+        </Window>
+        <MessagingThread />
+      </Channel>
+    </div>
+  )
 }
 
-function StreamChannelList({
+export function StreamChannelList({
   hideChannelList,
   onCreateChannel,
   groupName,
+  setShowActiveChannel,
   toggleHideChannelList,
   is1Col,
   isSidebar,
 }) {
-  const { client } = useChatContext()
+  const { client } = useContext(ChatContext)
   const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
   const options = { state: true, presence: true, limit: 5 }
@@ -154,15 +156,15 @@ function StreamChannelList({
         options={options}
         showChannelSearch={true}
         customActiveChannel={groupName?.split(" ").join("-") || ""}
-        // channelRenderFilterFn={channelFilter}
         List={(props) => (
           <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
         )}
         Preview={(props) => (
           <MessagingChannelPreview
             {...props}
+            setShowActiveChannel={setShowActiveChannel}
             toggleHideChannelList={toggleHideChannelList}
-            is1Col={is1Col}
+            isSidebar={isSidebar}
           />
         )}
       />
@@ -187,7 +189,5 @@ function StreamChannelList({
 - Hide (add translate out & z-40)
 ? Small screen & toggled on
 - Show over the top of the chat (translate in & z-40)
-* 
-*
 *
 */

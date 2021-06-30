@@ -12,7 +12,7 @@ export default function SmallAssetPctChangeCard({
 }) {
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
+    <div className="flex-none pt-4 pl-4 sm:pl-8">
       <div className="w-40 p-4 bg-white rounded-lg shadow-lg sm:w-52">
         <div className="items-center justify-center sm:flex">
           <img
@@ -58,18 +58,18 @@ export function SmallAssetCard({
   const [logoNotFound, setLogoNotFound] = useState(false)
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
   return (
-    <div className="flex-none pt-4 pl-4 sm:pl-8 bg-gray-50">
+    <div className="flex-none pt-4 pl-4 sm:pl-8">
       <div className="w-40 h-full p-4 bg-white rounded-lg shadow-lg sm:h-36 sm:w-52">
         <div className="items-center justify-center sm:flex">
           {!logoNotFound ? (
             <img
-              className="h-14 mx-auto rounded-full shadow-lg w-14"
+              className="mx-auto rounded-full shadow-lg h-14 w-14"
               src={logoUrl}
               alt={`${tickerSymbol} logo`}
               onError={() => setLogoNotFound(true)}
             />
           ) : (
-            <div className="h-14 mx-auto rounded-full shadow-lg w-14 font-semibold bg-gray-100 text-tiny flex items-center justify-center text-gray-500">
+            <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny">
               {tickerSymbol}
             </div>
           )}
@@ -113,13 +113,13 @@ export function AssetCard({ ticker, timeseries, sector }) {
           <header className="flex mb-auto flex-nowrap">
             {!logoNotFound ? (
               <img
-                className="h-14 mx-auto rounded-full shadow-lg w-14"
+                className="mx-auto rounded-full shadow-lg h-14 w-14"
                 src={logoUrl(ticker.ISIN)}
                 alt={`${tickerSymbol} logo`}
                 onError={() => setLogoNotFound(true)}
               />
             ) : (
-              <div className="h-14 mx-auto rounded-full shadow-lg w-14 font-semibold bg-gray-100 text-tiny flex items-center justify-center text-gray-500">
+              <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny">
                 {tickerSymbol}
               </div>
             )}

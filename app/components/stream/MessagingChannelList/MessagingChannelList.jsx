@@ -1,19 +1,17 @@
-import { StreamContext } from "@lib/context"
 import { getInitials, getRandomImage } from "@utils/helper"
 import React, { memo, useContext } from "react"
 import { MdChatBubbleOutline } from "react-icons/md"
-import { Avatar } from "stream-chat-react"
+import { Avatar, ChatContext } from "stream-chat-react"
 import { SkeletonLoader } from "./SkeletonLoader"
 
 const MessagingChannelList = ({
   children,
   error = false,
   loading,
-  onCreateChannel
+  onCreateChannel,
 }) => {
-  const { streamClient } = useContext(StreamContext)
-
-  const { id, name } = streamClient.user || {}
+  const { client } = useContext(ChatContext)
+  const { id, name } = client?.user || {}
   const image = getRandomImage(getInitials(name))
 
   const ListHeaderWrapper = ({ children }) => (
@@ -22,7 +20,7 @@ const MessagingChannelList = ({
         <Avatar image={image} name={name} size={40} />
         <div className="flex text-base font-extrabold font-poppins">{name || id}</div>
         <button
-          className="flex items-center justify-center w-10 h-10 ml-auto mr-5 bg-white border-0 rounded-full shadow-2xl cursor-pointer focus:outline-none"
+          className="flex items-center justify-center w-10 h-10 ml-auto mr-5 border rounded-full shadow-2xl cursor-pointer bg-blueGray-50 border-brand-natural-darkest focus:outline-none"
           onClick={onCreateChannel}
         >
           <MdChatBubbleOutline className="w-5 h-5 text-brand" />
@@ -42,7 +40,7 @@ const MessagingChannelList = ({
     )
   }
 
-  if (loading || !streamClient.user) {
+  if (loading || !client?.user) {
     return (
       <ListHeaderWrapper>
         <div className="mt-8 ml-8">

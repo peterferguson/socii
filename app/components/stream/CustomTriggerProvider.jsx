@@ -4,6 +4,7 @@ import { MessageInputContextProvider, useMessageInputContext } from "stream-chat
 import { useCommandTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useCommandTrigger"
 import { useEmojiTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useEmojiTrigger"
 import { useUserTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useUserTrigger"
+
 const options = ["TSLA", "SPOT", "AAPL", "GME", "AMZN"]
 
 const CustomSuggestionItem = (props) => <div>{props.entity.name}</div>

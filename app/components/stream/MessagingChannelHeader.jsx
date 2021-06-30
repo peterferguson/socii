@@ -6,6 +6,7 @@ import { HiOutlineCog } from "react-icons/hi"
 import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 import { MdSave } from "react-icons/md"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
+import { useMediaQuery } from "react-responsive"
 import DeleteChannelModal from "../DeleteChatModal"
 import TypingIndicator from "./TypingIndicator"
 
@@ -13,6 +14,8 @@ import TypingIndicator from "./TypingIndicator"
 const MessagingChannelHeader = ({ toggleHideChannelList }) => {
   const { client } = useContext(ChatContext)
   const { channel } = useContext(ChannelStateContext)
+
+  let is2Col = !useMediaQuery({ minWidth: 1024 })
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
   const [isEditing, setIsEditing] = useState(false)
@@ -77,13 +80,14 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
 
   const deleteChannel = async () => {
     await channel.delete()
+    // tODO: SetShowActiveChannel
     toggleHideChannelList()
   }
 
   return (
     <Fragment>
       <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
-        {toggleHideChannelList && (
+        {toggleHideChannelList && is2Col && (
           <FaList
             className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
             onClick={toggleHideChannelList}
@@ -135,7 +139,11 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
         </div>
       </div>
       {showDelete && (
-        <DeleteChannelModal showDelete={showDelete} setShowDelete={setShowDelete} deleteChannel={deleteChannel} />
+        <DeleteChannelModal
+          showDelete={showDelete}
+          setShowDelete={setShowDelete}
+          deleteChannel={deleteChannel}
+        />
       )}
     </Fragment>
   )

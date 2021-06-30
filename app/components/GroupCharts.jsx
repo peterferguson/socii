@@ -105,7 +105,7 @@ export function GroupPieChart({
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative z-10 text-4xl text-center cursor-pointer top-2 text-brand font-poppins">
+          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-poppins bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
             {groupName}
           </div>
         </a>
@@ -169,7 +169,11 @@ function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   return (
-    <li className={`relative h-auto m-1 ${index !== 0 ? "border-t border-gray-200 mt-2" : ""} `}>
+    <li
+      className={`relative h-auto m-1 ${
+        index !== 0 ? "border-t border-gray-200 mt-2" : ""
+      } `}
+    >
       <div className="flex p-2 bg-white">
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="items-center justify-center flex-none flex-grow-0 m-auto rounded-full cursor-pointer">

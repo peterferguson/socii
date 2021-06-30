@@ -665,7 +665,7 @@ export default function Settings() {
           </div>
         </div>
       </div>
-      <div className="w-full sm:w-1/2 xl:w-1/3">
+      {/* <div className="w-full sm:w-1/2 xl:w-1/3">
         <div className="mb-4">
           <div className="p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700">
             <div className="flex flex-wrap overflow-hidden">
@@ -926,7 +926,7 @@ export default function Settings() {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

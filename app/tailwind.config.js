@@ -31,6 +31,7 @@ module.exports = {
             vivid: "#11D5ED",
           },
         },
+        bitcoin: "#f2a900",
         lightPink: "#dca3c8",
         lightTeal: "#a6fff8",
         blueGray: colors.blueGray,
