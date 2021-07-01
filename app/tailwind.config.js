@@ -108,11 +108,14 @@ module.exports = {
       boxShadow: {
         left: "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
       },
-      spacing: {
-        0.5: "0.125rem",
-      },
       scale: {
         "-1": "-1",
+      },
+      screens: {
+        lgr: "1152px",
+      },
+      spacing: {
+        0.5: "0.125rem",
       },
     },
   },

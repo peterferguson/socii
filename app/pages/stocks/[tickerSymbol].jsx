@@ -45,14 +45,10 @@ export default function TickerPage({ tickerSymbols }) {
     if (ticker) setLogoUrl()
   }, [ticker])
 
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
+  if (router.isFallback) return <div>Loading...</div>
 
-  if (!tickerSymbols) {
-    // TODO: Replace with skeleton loaders
-    return <Custom404 />
-  }
+  // TODO: Replace with skeleton loaders
+  if (!tickerSymbols) return <Custom404 />
 
   return (
     <>

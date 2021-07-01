@@ -1,12 +1,12 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
-import { TradingViewStockTickerQuotes } from "@components/TradingViewChart"
-import { FiChevronRight } from "react-icons/fi"
 import { firestore } from "@lib/firebase"
-import { isBrowser, logoUrl, stockProps } from "@utils/helper"
 import { useIntersectionObserver } from "@lib/hooks"
+import { logoUrl, stockProps } from "@utils/helper"
 import Link from "next/link"
-import React, { useRef, useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { FiChevronRight } from "react-icons/fi"
+import { useMediaQuery } from "react-responsive"
 
 export default function StockDisplay({ tickerSymbols }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -57,10 +57,11 @@ export default function StockDisplay({ tickerSymbols }) {
   //     }
   //   }),
   // }
+  const is1Col = !useMediaQuery({ minWidth: 640 })
 
   return (
     // TODO: Create our own version of this Ticker Tape banner
-    <main className="flex flex-wrap overflow-x-scroll max-w-screen-xl">
+    <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
       {/* <div className="flex flex-col">
         {isBrowser && <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} />}
         {isBrowser && <TradingViewStockTickerQuotes />}
@@ -74,7 +75,8 @@ export default function StockDisplay({ tickerSymbols }) {
         </div>
       </Link>
       <CardSlider tickerSymbols={tickerSymbols} />
-      <div className="content-center w-full mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      {/* TODO: Charts are not resizing on container change */}
+      <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
         {tickerSymbols.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
           const isLastTicker =
             i === tickerSymbols.concat(moreTickers.current).length - 1
@@ -89,6 +91,8 @@ export default function StockDisplay({ tickerSymbols }) {
             />
           )
         })}
+        {/* Compensate for the footer */}
+        {is1Col && <div className=" h-36"></div>}
       </div>
     </main>
   )
