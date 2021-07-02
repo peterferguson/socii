@@ -92,7 +92,7 @@ export default function Sidebar() {
                     ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
                     : "text-brand-shade-darkest dark:text-gray-200 hover:text-brand-cyan"
                 }`}
-                href="#"
+                href="/"
               >
                 <item.icon className="mx-auto text-xl lg:mx-0" />
                 <span className="hidden mx-4 text-sm font-normal lg:inline-flex">

@@ -100,28 +100,28 @@ export default function Settings() {
               </span>
             </div>
             <div className="flex -space-x-2">
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/1.jpg"
                   alt="Guy"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/2.jpeg"
                   alt="Max"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/3.jpg"
                   alt="Charles"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/4.jpg"
@@ -229,28 +229,28 @@ export default function Settings() {
               </span>
             </div>
             <div className="flex -space-x-2">
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/1.jpg"
                   alt="Guy"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/2.jpeg"
                   alt="Max"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/3.jpg"
                   alt="Charles"
                 />
               </a>
-              <a href="#" className="">
+              <a href="/" className="">
                 <img
                   className="inline-block object-cover w-10 h-10 rounded-full ring-2 ring-white"
                   src="/images/person/4.jpg"
@@ -856,7 +856,7 @@ export default function Settings() {
             <p className="font-bold text-black text-md dark:text-white">Messages</p>
             <ul>
               <li className="flex items-center my-6 space-x-2">
-                <a href="#" className="relative block">
+                <a href="/" className="relative block">
                   <img
                     alt="profil"
                     src="/images/person/1.jpg"
@@ -873,7 +873,7 @@ export default function Settings() {
                 </div>
               </li>
               <li className="flex items-center my-6 space-x-2">
-                <a href="#" className="relative block">
+                <a href="/" className="relative block">
                   <img
                     alt="profil"
                     src="/images/person/5.jpg"
@@ -890,7 +890,7 @@ export default function Settings() {
                 </div>
               </li>
               <li className="flex items-center my-6 space-x-2">
-                <a href="#" className="relative block">
+                <a href="/" className="relative block">
                   <img
                     alt="profil"
                     src="/images/person/6.jpg"
@@ -907,7 +907,7 @@ export default function Settings() {
                 </div>
               </li>
               <li className="flex items-center my-6 space-x-2">
-                <a href="#" className="relative block">
+                <a href="/" className="relative block">
                   <img
                     alt="profil"
                     src="/images/person/7.jpg"

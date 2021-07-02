@@ -28,7 +28,7 @@ export default function FeatureSlider() {
   ]
   return (
     <>
-      <div className="py-8 text-black bg-gradient-to-t from-lightTeal to to-brandGreen">
+      <div className="py-8 text-black bg-gradient-to-b to-brand-lightTeal from-brand-natural-light">
         <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
           <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
             <p className="text-xs uppercase text-brand tracking-loose font-poppins">
@@ -38,7 +38,7 @@ export default function FeatureSlider() {
               What is <Logo className="text-3xl md:text-4xl" />?
             </p>
             <p className="mb-4 text-sm text-black md:text-base"></p>
-            <OutlineButton href="#" text="Explore Now" />
+            <OutlineButton href="/" text="Explore Now" />
           </div>
           {/* Feature Slider */}
           <div className="sticky ml-0 md:ml-12 lg:w-2/3">

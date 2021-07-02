@@ -1,14 +1,16 @@
-import { auth, userFirstName, firestore } from "@lib/firebase"
+import Logo from "@components/logo"
 import { signInOptions } from "@lib/constants"
 import { UserContext } from "@lib/context"
-import React, { useState, useEffect, useCallback, useContext } from "react"
+import { auth, firestore, userFirstName } from "@lib/firebase"
 import { handleEnterKeyDown, validateEmail } from "@utils/helper"
-
-import { FiCheck, FiMail, FiX } from "react-icons/fi"
-
-import toast from "react-hot-toast"
 import debounce from "lodash.debounce"
 import router from "next/router"
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { FaFacebook } from "react-icons/fa"
+import { FcGoogle } from "react-icons/fc"
+import { FiCheck, FiMail, FiX } from "react-icons/fi"
+import { useMediaQuery } from "react-responsive"
 
 // ? Should we REQUIRE that the user login with email
 // TODO: Add user info to users colleciton on sign up
@@ -32,9 +34,11 @@ export default function Enter(props) {
 
   const [verified, setVerified] = useState(null)
 
+  const is1Col = !useMediaQuery({ minWidth: 640 })
+
   return (
-    <main className="h-screen bg-gray-50">
-      <div className="flex items-center justify-center min-h-screen">
+    <main className="h-screen bg-brand-natural-light">
+      {/* <div className="flex items-center justify-center min-h-screen">
         <div className="max-w-xl py-3 mx-6 sm:mx-auto">
           <div className="px-6 py-8 bg-white border border-gray-200 shadow-lg sm:px-4 rounded-3xl \ bg-clip-padding bg-opacity-60">
             <div className="max-w-md mx-auto">
@@ -56,6 +60,43 @@ export default function Enter(props) {
               </div>
               {!user && <SignInButtons verified={verified} />}
             </div>
+          </div>
+        </div>
+      </div> */}
+      <div className="relative flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 z-0 bg-black/10"></div>
+        <div className="z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
+          <div className="text-center">
+            <h2 className="mt-6 text-4xl font-bold text-gray-900 font-poppins">
+              Welcome to <Logo />
+            </h2>
+            <p className="mt-2 text-base text-gray-600">
+              Please link your account with one of the following providers:
+            </p>
+          </div>
+          {is1Col && (
+            <div className="flex flex-row items-center justify-center space-x-6">
+              <span className="inline-flex items-center justify-center font-bold bg-white rounded-full cursor-pointer text-facebook w-11 h-11 hover:shadow-lg transition ease-in duration-300">
+                <FaFacebook className="w-11 h-11" />
+              </span>
+              <span className="inline-flex items-center justify-center  font-bold text-white bg-white border border-gray-300 rounded-full cursor-pointer w-11 h-11 hover:shadow-lg transition ease-in duration-300">
+                <FcGoogle className="w-8 h-8" />
+              </span>
+            </div>
+          )}
+          <div className="flex flex-col items-center justify-center mx-auto space-y-6">
+            <span className="relative flex items-center justify-center w-full mx-auto bg-white rounded-full cursor-pointer h-11 ">
+              <FaFacebook className="absolute w-8 h-8 text-white left-[4.25rem]" />
+              <span className="flex items-center justify-center w-8/12 mx-auto text-sm text-white rounded-full h-11 bg-facebook hover:shadow-lg transition ease-in duration-300">
+                Connect with Facebook
+              </span>
+            </span>
+            <span className="relative flex items-center justify-center w-full mx-auto bg-white rounded-full cursor-pointer h-11 ">
+              <FcGoogle className="absolute w-8 h-8 text-white left-[4.25rem]" />
+              <span className="flex items-center justify-center w-8/12 mx-auto text-sm font-thin text-black bg-white border border-gray-100 rounded-full h-11 hover:shadow-lg transition ease-in duration-300">
+                Connect with Google
+              </span>
+            </span>
           </div>
         </div>
       </div>

@@ -295,3 +295,8 @@ export function isPromise(promise): boolean {
 export const iexQuote = async (tickerSymbol: string, filter: string) => {
   return await fetcher(`/api/iex/quote/${tickerSymbol}?filter=${filter}`)
 }
+
+// - Helper for tailwind to replace template literals
+export function tw(...classes: (false | null | undefined | string)[]): string {
+  return classes.filter(Boolean).join(" ")
+}

@@ -1,5 +1,6 @@
 import Footer from "@components/Footer"
 import Head from "@components/Head"
+import Navigation from "@components/Navigation"
 import NavHeader from "@components/NavHeader"
 import Sidebar from "@components/Sidebar"
 import ChatSidebar from "@components/stream/ChatSidebar"
@@ -71,35 +72,41 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
+  const nonStandardLayoutRoutes = ["/", "/enter"]
+
   return (
     <UserContext.Provider value={userData}>
       <StreamContext.Provider value={{ client }}>
-        <Head />
-        {!userData.user && <PromotionBanner />}
-        {router.asPath === "/" ? (
-          <>{isBrowser && <Component {...props} />}</>
-        ) : (
-          <ComponentContainer {...props} user={userData.user}>
-            {isBrowser && <SearchCard {...props} />}
-            {isBrowser && <Component {...props} />}
-            {is1Col && <Footer {...props} />}
-          </ComponentContainer>
-        )}
-        <Toaster {...toastProps} />
+        <main
+          className="relative h-screen overflow-y-scroll bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900"
+          {...props}
+        >
+          <Head />
+          <>
+            {nonStandardLayoutRoutes.includes(router.asPath) ? (
+              <>
+                <Navigation {...props} />
+                <Component {...props} />
+              </>
+            ) : (
+              <ComponentContainer {...props} user={userData.user}>
+                {isBrowser && <SearchCard {...props} />}
+                {isBrowser && <Component {...props} />}
+                {is1Col && <Footer {...props} />}
+              </ComponentContainer>
+            )}
+          </>
+          <Toaster {...toastProps} />
+        </main>
       </StreamContext.Provider>
     </UserContext.Provider>
   )
 }
 
 const ComponentContainer = (props) => (
-  <main
-    className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-lightTeal/80 selection:text-teal-900"
-    {...props}
-  >
-    <Chat client={props.client} theme={`messaging ${props.theme}`}>
-      <MainLayout {...props} />
-    </Chat>
-  </main>
+  <Chat client={props.client} theme={`messaging ${props.theme}`}>
+    <MainLayout {...props} />
+  </Chat>
 )
 
 function MainLayout(props) {
@@ -126,10 +133,3 @@ function MainLayout(props) {
     </div>
   )
 }
-
-const PromotionBanner = () => (
-  <div className="w-full h-20 p-4 text-sm text-center text-white align-middle bg-gradient-to-r to-brand from-teal-400 font-work-sans leading-6 sm:leading-0 sm:text-lg">
-    👋 socii is currently in private pre-alpha mode.
-    <div className="-mt-1">You will need an invite!</div>
-  </div>
-)

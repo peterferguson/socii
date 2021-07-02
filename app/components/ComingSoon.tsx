@@ -1,15 +1,22 @@
+import { tw } from "@utils/helper"
 import React from "react"
 import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
 
-export default function ComingSoon({ children, color, description = "" }) {
+interface IComingSoon {
+  children: React.ReactChildren
+  color: string
+  description: string
+}
+
+export default function ComingSoon({ children, color, description = "" }: IComingSoon) {
   return (
-    <div className="flex flex-col w-full h-full mt-0 bg-gray-100 bg-center bg-no-repeat bg-cover sm:mt-8">
+    <div className="flex flex-col w-full h-full mt-0 bg-gray-100 sm:mt-8">
       <div
-        className={`
-		w-4/5 p-10 mx-auto my-20 text-center border-4 shadow-2xl cursor-pointer 
-		border-${color} grid place-items-center sm:my-auto bg-white-600 
-		bg-opacity-70 rounded-xl space-y-5
-	`}
+        className={tw(
+          "w-4/5 p-10 mx-auto my-20 text-center border-4 shadow-2xl cursor-pointer grid place-items-center sm:my-auto",
+          `border-${color} bg-white bg-opacity-70`,
+          "rounded-xl space-y-5"
+        )}
       >
         {children}
         <h1
@@ -31,21 +38,21 @@ export default function ComingSoon({ children, color, description = "" }) {
         </h2>
         <div className="grid grid-cols-3 gap-2 md:gap-4">
           <a
-            // href="https://www.facebook.com/QuickToolz"
+            // href="https://www.facebook.com/socii"
             title="socii On Facebook"
           >
-            <FaFacebook className="w-24 h-24 px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-[#1778f2] text-[#1778f2] transition duration-500" />
+            <FaFacebook className="w-24 h-24 px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500" />
           </a>
 
           <a
-            // href="https://pinterest.com/quicktoolz/"
+            // href="https://twitter.com/socii/"
             title="socii On Twitter"
           >
-            <FaTwitter className="w-24 h-24 px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-[#1DA1F2] text-[#1DA1F2] transition duration-500" />
+            <FaTwitter className="w-24 h-24 px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500" />
           </a>
 
           <a
-            // href="https://www.reddit.com/user/quicktoolz/"
+            // href="https://www.medium.com/user/socii/"
             title="socii On Medium"
           >
             <FaMedium className="w-24 h-24 px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-black transition duration-500" />
