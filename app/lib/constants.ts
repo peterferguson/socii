@@ -1,8 +1,3 @@
-import AppleLogo from "@icons/apple.svg"
-import FacebookLogo from "@icons/fb.svg"
-import GoogleLogo from "@icons/google.svg"
-import TwitterLogo from "@icons/twitter.svg"
-import { facebookAuthProvider, googleAuthProvider } from "@lib/firebase"
 import { ToastOptions, ToastPosition } from "react-hot-toast"
 import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
 
@@ -82,16 +77,6 @@ export const groupLumpSumOptions = [
   {
     amount: 250,
   },
-]
-
-/*
- * Sign In Options & Logos for Entry Page
- */
-export const signInOptions = [
-  { logo: GoogleLogo, provider: googleAuthProvider },
-  { logo: AppleLogo, provider: null },
-  { logo: TwitterLogo, provider: null },
-  { logo: FacebookLogo, provider: facebookAuthProvider },
 ]
 
 export const tailwindColorMap = {

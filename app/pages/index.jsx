@@ -1,20 +1,22 @@
 /* eslint-disable react/display-name */
 import { UserContext } from "@lib/context"
-import dynamic from "next/dynamic"
+// import dynamic from "next/dynamic"s
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
+import { OneTwoThree } from "@components/WhySocii"
+import SociiFeatureSlider from "@components/SociiFeatureSlider"
 
-const OneTwoThree = dynamic(
-  () => import("@components/WhySocii").then((mod) => mod.OneTwoThree),
-  {
-    loading: () => <p>...</p>,
-    ssr: false,
-  }
-)
-const SociiFeatureSlider = dynamic(() => import("@components/SociiFeatureSlider"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-})
+// const OneTwoThree = dynamic(
+//   () => import("@components/WhySocii").then((mod) => mod.OneTwoThree),
+//   {
+//     loading: () => <p>...</p>,
+//     ssr: false,
+//   }
+// )
+// const SociiFeatureSlider = dynamic(() => import("@components/SociiFeatureSlider"), {
+//   loading: () => <p>...</p>,
+//   ssr: false,
+// })
 
 // TODO: Add is visible ref to each component to load the animations properly
 export default function Home() {
