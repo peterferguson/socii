@@ -28,6 +28,7 @@ module.exports = {
   rules: {
     "react/prop-types": 0,
     "react/display-name": 0,
+    "react/react-in-jsx-scope": 0,
     "react/jsx-no-target-blank": 0,
   },
   settings: {
