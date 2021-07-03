@@ -1,0 +1,3 @@
+#  Get Assets 
+GET {{alpacaBaseURL}}/v1/assets
+Authorization: Basic {{alpacaAuthHeader}}
