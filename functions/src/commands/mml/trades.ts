@@ -45,7 +45,7 @@ const trade = (tradeType) => async (client, body) => {
   // * the body of the message will be modified based on user interactions
   let message = body.message
 
-  const args = message.args?.split(" ").map((str) => str.trim())
+  const args = message.args?.split(" ").filter((str) => !!str)
 
   // * form_data will only be present once the user starts interacting
   const formData = body.form_data || {}
