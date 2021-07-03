@@ -7,6 +7,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        palette: {
+          darkest: "#1595c9",
+          dark: "#17a7e0",
+          primary: "#28b2e9",
+          light: "#56c2ed",
+          lighter: "#6dcbf0",
+          lightest: "#84d3f2",
+        },
         brand: {
           // - brand colors based on DEFAULT using mycolors.space
           DEFAULT: "#3fbaeb",

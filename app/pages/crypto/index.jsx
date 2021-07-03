@@ -3,6 +3,8 @@ import { FaBitcoin } from "react-icons/fa"
 import ComingSoon from "../../components/ComingSoon"
 
 export default function CryptoHome() {
+  // ! In tailwind jit compile the code is scanned and the color must be explicit 
+  // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
   return (
     <ComingSoon
