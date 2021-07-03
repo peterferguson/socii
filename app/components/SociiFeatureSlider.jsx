@@ -28,7 +28,7 @@ export default function FeatureSlider() {
   ]
   return (
     <>
-      <div className="py-8 text-black bg-gradient-to-b to-brand-lightTeal from-brand-natural-light">
+      <div className="py-8 text-black bg-gradient-to-br to-brand-lightTeal via-brand-natural-lightest from-brand-natural-light">
         <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
           <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
             <p className="text-xs uppercase text-brand tracking-loose font-poppins">
