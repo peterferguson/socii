@@ -57,8 +57,11 @@ const Footer = ({ invited, setInvited }) => {
     <div className="overflow-hidden bg-gray-100 max-h-lg">
       <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
         {invited ? (
-          <h1 className="text-3xl font-extrabold text-white font-primary sm:text-4xl md:text-5xl md:leading-snug">
-            Keep an eye on your email for your invite!
+          <h1 className="mt-8 text-2xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-snug">
+            Thanks for signing up!
+            <p className="text-xl font-thin font-secondary">
+              Keep an eye on your inbox for your invite.
+            </p>
           </h1>
         ) : (
           <div className="mt-8 space-y-8">
