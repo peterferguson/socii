@@ -123,3 +123,6 @@ sw.js.map
 
 # Checking for memory leaks
 *.heaptimeline
+
+# vscode
+.vscode
