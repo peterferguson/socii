@@ -5,7 +5,6 @@ import { OneTwoThree } from "@components/WhySocii"
 import { UserContext } from "@lib/context"
 import { tw } from "@utils/helper"
 // import dynamic from "next/dynamic"s
-import { useRouter } from "next/router"
 import React, { useContext, useState } from "react"
 import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
 
@@ -25,21 +24,20 @@ import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
 export default function Home() {
   const { user } = useContext(UserContext)
 
+  const [invited, setInvited] = useState(false)
   return (
     <>
       {!user && <PromotionBanner />}
       {/* TODO Add a wave transition animation to this gradient */}
-      <Hero user={user} />
+      <Hero user={user} setInvited={setInvited} />
       <OneTwoThree />
       <SociiFeatureSlider />
-      <Footer />
+      <Footer invited={invited} setInvited={setInvited} />
     </>
   )
 }
 
-const Hero = ({ user }) => {
-  const router = useRouter()
-
+const Hero = ({ setInvited }) => {
   return (
     <div className="h-screen grid grid-cols-2 bg-gradient-to-bl via-brand-natural-lightest to-brand-natural-light from-brand-shade-blue">
       <div className="z-10 flex flex-col justify-center mx-auto">
@@ -52,13 +50,8 @@ const Hero = ({ user }) => {
         <div className="px-4 pb-4 text-2xl sm:text-4xl font-poppins animate-fade-in-up">
           Future With Friends.
         </div>
-        <div>
-          <button
-            className="btn btn-transition"
-            onClick={() => router.push(user ? "/stocks" : "/enter")}
-          >
-            Invest Now
-          </button>
+        <div className="relative left-32 sm:left-30 top-0 sm:top-12">
+          <Invite setInvited={setInvited} className="mx-auto" />
         </div>
       </div>
     </div>
@@ -72,12 +65,11 @@ const PromotionBanner = () => (
   </div>
 )
 
-const Footer = () => {
-  const [subscribed, setSubscribed] = useState(false)
+const Footer = ({ invited, setInvited }) => {
   return (
     <div className="overflow-hidden bg-gray-100 max-h-lg">
       <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
-        {subscribed ? (
+        {invited ? (
           <h1 className="text-3xl font-extrabold text-white font-primary sm:text-4xl md:text-5xl md:leading-snug">
             Keep an eye on your email for your invite!
           </h1>
@@ -90,7 +82,7 @@ const Footer = () => {
                 Use the email linked to your google or facebook account to get invited.
               </p>
             </h1>
-            <Invite setSubscribed={setSubscribed} />
+            <Invite setInvited={setInvited} />
           </div>
         )}
         <div className="h-80">
@@ -150,54 +142,9 @@ const Footer = () => {
                     >
                       <FaMedium className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-black transition duration-500" />
                     </a>
-                    {/* <a
-                      href="/"
-                      className="text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        className="text-xl hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                        viewBox="0 0 1792 1792"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z"></path>
-                      </svg>
-                    </a>
-                    <a
-                      href="/"
-                      className="text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        className="text-xl hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                        viewBox="0 0 1792 1792"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z"></path>
-                      </svg>
-                    </a>
-                    <a
-                      href="/"
-                      className="text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        className="text-xl hover:text-gray-800 dark:hover:text-white transition-colors duration-200"
-                        viewBox="0 0 1792 1792"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z"></path>
-                      </svg>
-                    </a> */}
                   </div>
                 </div>
-                <div className="flex items-center justify-center w-full h-8 mx-auto text-sm mt-4 text-gray-400 uppercase font-extrathin font-poppins">
+                <div className="flex items-center justify-center w-full h-8 mx-auto mt-4 text-sm text-gray-400 uppercase font-extrathin font-poppins">
                   © 2021 socii. all rights reserved.
                 </div>
               </div>

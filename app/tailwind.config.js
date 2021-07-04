@@ -52,8 +52,9 @@ module.exports = {
         pink: colors.pink,
       },
       fontFamily: {
-        "work-sans": ['"Work Sans"', "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
+        primary: ["Poppins", "sans-serif"],
+        secondary: ['"Work Sans"', "sans-serif"],
+        
       },
       fontSize: {
         tiny: "0.625rem",
