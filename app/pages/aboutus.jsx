@@ -8,10 +8,10 @@ export default function AboutUs() {
         Invest with Friends
       </h2>
       <p className="p-4 mx-auto">
-        socii's goal is to be the starting place for small groups of friends to begin,
-        learn and refine their investing skills, together. Creating an investment group
-        is hard. But it is probably one of the best and most fun ways of learning about
-        investing.
+        socii&apos;ds goal is to be the starting place for small groups of friends to
+        begin, learn and refine their investing skills, together. Creating an investment
+        group is hard. But it is probably one of the best and most fun ways of learning
+        about investing.
       </p>
       <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-primary">
         {" "}

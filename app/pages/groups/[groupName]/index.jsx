@@ -31,17 +31,16 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import LoadingIndicator from "@components/LoadingIndicator"
 import AuthCheck from "@components/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
-import Custom404 from "../../404"
-import { StreamContext, UserContext } from "@lib/context"
 import GroupColumn from "@components/GroupCharts"
-import { useMediaQuery } from "react-responsive"
-
-import React, { useContext } from "react"
-import { useRouter } from "next/router"
+import LoadingIndicator from "@components/LoadingIndicator"
+import { UserContext } from "@lib/context"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
+import React, { useContext } from "react"
+import { useMediaQuery } from "react-responsive"
+import Custom404 from "../../404"
 
 const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
   ssr: false,

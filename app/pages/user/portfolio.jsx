@@ -100,8 +100,8 @@ export default function Dashboard() {
             <div>
               {/* Card stats */}
               <div className="flex flex-wrap">
-                {cards.map((props) => (
-                  <BlockCard {...props} />
+                {cards.map((props, i) => (
+                  <BlockCard key={`card-${i}`} {...props} />
                 ))}
               </div>
             </div>

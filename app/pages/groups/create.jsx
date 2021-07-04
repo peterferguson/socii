@@ -13,8 +13,8 @@ import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import { HiOutlineUserGroup } from "react-icons/hi"
 import { FiX } from "react-icons/fi"
+import { HiOutlineUserGroup } from "react-icons/hi"
 
 export default function Create() {
   const { user, username } = useContext(UserContext)
@@ -55,6 +55,7 @@ export default function Create() {
 
   // Hit the database for groupName match after each debounced change
   // useCallback is required for debounce to work
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkGroupName = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {

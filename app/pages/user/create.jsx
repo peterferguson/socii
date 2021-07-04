@@ -39,10 +39,12 @@ export default function Username(props) {
 
   useEffect(() => {
     checkUsername(username)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username])
 
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkUsername = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {

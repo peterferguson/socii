@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { firestore } from "@lib/firebase"
+import { useCollectionData } from "react-firebase-hooks/firestore"
+import { Dialog } from "@headlessui/react"
 
 export default function Invites() {
   return (
@@ -82,8 +84,8 @@ function SendInvites({ user }) {
   return (
     <div>
       <h1>Invite Your Friends</h1>
-      {invites?.map((data) => (
-        <p>You invited {data?.phoneNumber}</p>
+      {invites?.map((data, i) => (
+        <p key={`number-${i}`}>You invited {data?.phoneNumber}</p>
       ))}
 
       {invites?.length < numberOfInvites && (
@@ -99,7 +101,7 @@ function SendInvites({ user }) {
 // TODO: Implement this for invitation buttons
 // TODO: Create a firestore read on each users invites so that if they return to this screen the phone numbers are prefilled
 // TODO: ... This will act to disable new invitations and allow users to see who they invited
-function Invited(previouslyInvited) {
+function Invited(previouslyInvited, phoneNumber) {
   let [isOpen, setIsOpen] = useState(true)
 
   return (

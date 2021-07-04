@@ -20,7 +20,7 @@ import { useMediaQuery } from "react-responsive"
 // TODO: Implement a route for invitees which has the invited email so we can bypass the auth verification & attach the email to whatever auth user is provided
 // TODO: Implement Apple login on iOS devices
 
-export default function Enter(props) {
+export default function Enter() {
   const { user, username } = useContext(UserContext)
 
   useEffect(() => {

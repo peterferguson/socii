@@ -125,7 +125,9 @@ function TickerComponents({
 
   try {
     movingMonthlyClose = timeseries[crosshairIndexValue + 21]?.y
-  } catch (err) {}
+  } catch (err) {
+    console.log(err)
+  }
 
   const movingMonthlyPctChange = pctChange(highlightedClose, movingMonthlyClose)
 
@@ -250,11 +252,7 @@ function Chart({
             <span className="z-10 text-lg leading-4 sm:text-4xl">
               ${highlightedClose}
               {highlightedChange && (
-                <p
-                  className={`flex text-tiny ${pnlTextColor(
-                    highlightedChange
-                  )}`}
-                >
+                <p className={`flex text-tiny ${pnlTextColor(highlightedChange)}`}>
                   {`(${highlightedChange})%`}
                 </p>
               )}

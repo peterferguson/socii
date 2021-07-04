@@ -16,6 +16,9 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
 
   const groups = groupNames.map((name) => {
     const docRef = firestore.doc(`groups/${name}`)
+
+    // TODO: Fix this! Works for now but could lead to bugs!
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value] = useDocumentDataOnce(docRef)
 
     return {
@@ -32,10 +35,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
         <RadioGroup.Label className="sr-only">
           Select an Investment Group
         </RadioGroup.Label>
-        <div
-          className="flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 \
-                                  sm:flex flex-col sm:flex-row"
-        >
+        <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 sm:flex sm:flex-row">
           {groups.map((group) => (
             <RadioGroup.Option
               key={group.name}
@@ -43,11 +43,10 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
               className={({ active }) =>
                 `${
                   active
-                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 \
-                                   ring-brand ring-opacity-60"
+                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
                     : ""
                 }
-                               bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer \
+                               bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer
                                focus:outline-none flex-1`
               }
             >
@@ -74,7 +73,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
                           <span className="text-tiny overflow-ellipsis">
                             {group.description}
                           </span>
-                          <span className="text-tiny text-center bg-teal-200 text-white font-secondary rounded-full p-1">
+                          <span className="p-1 text-center text-white bg-teal-200 rounded-full text-tiny font-secondary">
                             {group.privacyOption} Group
                           </span>
                         </RadioGroup.Description>
