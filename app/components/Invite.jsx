@@ -5,8 +5,11 @@ function Invite({ setInvited }) {
   const [email, setEmail] = useState("")
   const [clicked, setClicked] = useState(false)
 
-  // TODO: Write a function to listen to notion for confirmation to add the user 
-  // TODO: to the invited list
+  // 1
+  // TODO: Write a function to listen to notion for confirmation to add the user
+  // TODO: to the invited list.
+  // 2
+  // TODO: If the user has already been invited direct them to the enter page
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -37,7 +40,7 @@ function Invite({ setInvited }) {
         type="submit"
         className={tw(
           clicked ? "pointer-events-none opacity-75" : "",
-          `py-3 px-4 bg-palette-light hover:bg-palette-primary text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent 
+          `py-3 px-4 bg-palette-light hover:bg-palette-primary text-white text-tiny sm:text-sm font-semibold rounded-r-lg border border-transparent 
           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary`
         )}
       >

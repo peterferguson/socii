@@ -4,21 +4,8 @@ import SociiFeatureSlider from "@components/SociiFeatureSlider"
 import { OneTwoThree } from "@components/WhySocii"
 import { UserContext } from "@lib/context"
 import { tw } from "@utils/helper"
-// import dynamic from "next/dynamic"s
 import React, { useContext, useState } from "react"
 import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
-
-// const OneTwoThree = dynamic(
-//   () => import("@components/WhySocii").then((mod) => mod.OneTwoThree),
-//   {
-//     loading: () => <p>...</p>,
-//     ssr: false,
-//   }
-// )
-// const SociiFeatureSlider = dynamic(() => import("@components/SociiFeatureSlider"), {
-//   loading: () => <p>...</p>,
-//   ssr: false,
-// })
 
 // TODO: Add is visible ref to each component to load the animations properly
 export default function Home() {
@@ -50,7 +37,7 @@ const Hero = ({ setInvited }) => {
         <div className="px-4 pb-4 text-2xl sm:text-4xl font-primary animate-fade-in-up">
           Future With Friends.
         </div>
-        <div className="relative left-32 sm:left-30 top-0 sm:top-12">
+        <div className="mt-8 ml-8 sm:ml-32 sm:mt-16">
           <Invite setInvited={setInvited} className="mx-auto" />
         </div>
       </div>
@@ -75,7 +62,7 @@ const Footer = ({ invited, setInvited }) => {
           </h1>
         ) : (
           <div className="mt-8 space-y-8">
-            <h1 className="text-3xl font-extrabold font-secondary font-primary sm:text-4xl md:text-5xl md:leading-tight">
+            <h1 className="text-3xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-tight">
               Get your
               <span className="text-palette-primary"> Invite!</span>
               <p className="text-base font-thin font-primary">
