@@ -20,7 +20,7 @@ const StockDisplayAttachment = ({ attachment }) => {
         <div
           className={
             "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
-                inline-block font-poppins"
+                inline-block font-primary"
           }
         >
           {name}
@@ -38,7 +38,7 @@ const StockDisplayAttachment = ({ attachment }) => {
                 className="w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-left sm:mt-4 text-brand"
               >
                 {uncamelCase(key)} &bull;{" "}
-                <span className="text-gray-600 text-tiny font-poppins">
+                <span className="text-gray-600 text-tiny font-primary">
                   {asset[key]}
                 </span>
               </div>

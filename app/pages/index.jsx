@@ -41,13 +41,13 @@ const Hero = ({ setInvited }) => {
   return (
     <div className="h-screen grid grid-cols-2 bg-gradient-to-bl via-brand-natural-lightest to-brand-natural-light from-brand-shade-blue">
       <div className="z-10 flex flex-col justify-center mx-auto">
-        <div className="px-4 pt-4 text-6xl sm:text-8xl sm:pt-32 font-poppins animate-fade-in-down">
+        <div className="px-4 pt-4 text-6xl sm:text-8xl sm:pt-32 font-primary animate-fade-in-down">
           Invest Together.
         </div>
-        <div className="px-4 pt-8 text-2xl sm:text-4xl font-poppins animate-fade-in-up">
+        <div className="px-4 pt-8 text-2xl sm:text-4xl font-primary animate-fade-in-up">
           Secure Your Financial
         </div>
-        <div className="px-4 pb-4 text-2xl sm:text-4xl font-poppins animate-fade-in-up">
+        <div className="px-4 pb-4 text-2xl sm:text-4xl font-primary animate-fade-in-up">
           Future With Friends.
         </div>
         <div className="relative left-32 sm:left-30 top-0 sm:top-12">
@@ -59,7 +59,7 @@ const Hero = ({ setInvited }) => {
 }
 
 const PromotionBanner = () => (
-  <div className="w-full h-20 p-4 text-sm text-center text-white align-middle bg-brand-cyan-green font-work-sans leading-6 sm:leading-0 sm:text-lg">
+  <div className="w-full h-20 p-4 text-sm text-center text-white align-middle bg-brand-cyan-green font-secondary leading-6 sm:leading-0 sm:text-lg">
     👋 socii is currently in private pre-alpha mode.
     <div className="-mt-1">You will need an invite!</div>
   </div>
@@ -75,10 +75,10 @@ const Footer = ({ invited, setInvited }) => {
           </h1>
         ) : (
           <div className="mt-8 space-y-8">
-            <h1 className="text-3xl font-extrabold font-work-sans font-primary sm:text-4xl md:text-5xl md:leading-tight">
+            <h1 className="text-3xl font-extrabold font-secondary font-primary sm:text-4xl md:text-5xl md:leading-tight">
               Get your
               <span className="text-palette-primary"> Invite!</span>
-              <p className="text-base font-thin font-poppins">
+              <p className="text-base font-thin font-primary">
                 Use the email linked to your google or facebook account to get invited.
               </p>
             </h1>
@@ -144,7 +144,7 @@ const Footer = ({ invited, setInvited }) => {
                     </a>
                   </div>
                 </div>
-                <div className="flex items-center justify-center w-full h-8 mx-auto mt-4 text-sm text-gray-400 uppercase font-extrathin font-poppins">
+                <div className="flex items-center justify-center w-full h-8 mx-auto mt-4 text-sm text-gray-400 uppercase font-extrathin font-primary">
                   © 2021 socii. all rights reserved.
                 </div>
               </div>

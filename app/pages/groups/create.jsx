@@ -79,13 +79,13 @@ export default function Create() {
           <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand border-[3px]">
             <HiOutlineUserGroup className="w-8 h-8 text-white" />
           </div>
-          <div className="pt-4 pb-1 text-4xl font-bold text-center font-work-sans">
+          <div className="pt-4 pb-1 text-4xl font-bold text-center font-secondary">
             Create an Investment
           </div>
-          <div className="pb-4 text-4xl font-bold text-center font-work-sans">
+          <div className="pb-4 text-4xl font-bold text-center font-secondary">
             Group
           </div>
-          <label className="ml-4 font-bold text-md font-work-sans">
+          <label className="ml-4 font-bold text-md font-secondary">
             Name
             <div className="flex flex-row">
               <input
@@ -108,7 +108,7 @@ export default function Create() {
               </div>
             </div>
           </label>
-          <label className="ml-4 font-bold text-md font-work-sans">
+          <label className="ml-4 font-bold text-md font-secondary">
             Short description
             <input
               className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
@@ -117,14 +117,14 @@ export default function Create() {
               onChange={(e) => setGroupDescription(e.target.value)}
             />
           </label>
-          <label className="mx-4 mt-4 font-bold text-md font-work-sans">
+          <label className="mx-4 mt-4 font-bold text-md font-secondary">
             Group Privacy
             <PrivacyOptions
               privacyOption={privacyOption}
               setPrivacyOption={setPrivacyOption}
             />
           </label>
-          <label className="flex flex-col mx-4 mb-4 font-bold text-md font-work-sans">
+          <label className="flex flex-col mx-4 mb-4 font-bold text-md font-secondary">
             Initial Lump-Sum
             <AmountOptions
               AmountOptions={groupLumpSumOptions}
@@ -133,7 +133,7 @@ export default function Create() {
               srLabel={"Initial Lump Sum Amount"}
             />
           </label>
-          <label className="flex flex-col m-4 font-bold text-md font-work-sans">
+          <label className="flex flex-col m-4 font-bold text-md font-secondary">
             Deposit Schedule
             {/* 
             // ! Legally the group members will have to ensure this balance is maintained.

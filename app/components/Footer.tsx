@@ -54,7 +54,7 @@ export default function Footer({ showSearchCard, setShowSearchCard }: FooterProp
   ]
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white font-poppins text-tiny text-brand-dark">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white font-primary text-tiny text-brand-dark">
       {links.map((link) => {
         return (
           <a

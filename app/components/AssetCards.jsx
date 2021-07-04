@@ -39,7 +39,7 @@ export default function SmallAssetPctChangeCard({
             </div>
           </div>
         </div>
-        <div className="inline-block w-full ml-2 overflow-hidden text-xs font-semibold tracking-wider text-gray-600 uppercase \ overflow-ellipsis">
+        <div className="inline-block w-full ml-2 text-xs font-semibold tracking-wider text-gray-600 uppercase overflow-ellipsis">
           {tickerSymbol} &bull; {shortName}
         </div>
       </div>

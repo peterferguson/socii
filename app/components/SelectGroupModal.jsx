@@ -1,6 +1,6 @@
-import GroupSelectorRadioGroup from '@components/GroupSelector'
-import React, { Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import GroupSelectorRadioGroup from "@components/GroupSelector"
+import React, { Fragment } from "react"
+import { Dialog, Transition } from "@headlessui/react"
 
 export default function SelectGroupModal({
   userGroups,
@@ -52,7 +52,7 @@ export default function SelectGroupModal({
             <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium text-gray-900 font-poppins pb-4"
+                className="text-lg font-medium text-gray-900 font-primary pb-4"
               >
                 Select a group to invest with:
               </Dialog.Title>

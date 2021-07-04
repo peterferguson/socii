@@ -45,7 +45,7 @@ export default function Enter(props) {
         <div className="absolute inset-0 z-0 bg-black/10"></div>
         <div className="z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
           <div className="text-center">
-            <h2 className="mt-6 text-4xl font-bold text-gray-900 font-poppins">
+            <h2 className="mt-6 text-4xl font-bold text-gray-900 font-primary">
               Welcome to <Logo />
             </h2>
             <p className="mt-2 text-base text-gray-600">

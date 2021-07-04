@@ -3,8 +3,8 @@ import React from "react"
 export default function AboutUs() {
   return (
     <div className="flex flex-col h-screen p-12 text-brand leading-20">
-      <h1 className="p-4 font-bold font-poppins text-8xl">About Us</h1>
-      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
+      <h1 className="p-4 font-bold font-primary text-8xl">About Us</h1>
+      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-primary">
         Invest with Friends
       </h2>
       <p className="p-4 mx-auto">
@@ -13,7 +13,7 @@ export default function AboutUs() {
         is hard. But it is probably one of the best and most fun ways of learning about
         investing.
       </p>
-      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
+      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-primary">
         {" "}
         The Problem with Group Investing
       </h2>
@@ -35,7 +35,7 @@ export default function AboutUs() {
         portfolio has done if the individual has other holdings in the account), the
         learning together then also diminishes over time.
       </p>
-      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-poppins">
+      <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-primary">
         {" "}
         Social Investing{" "}
       </h2>

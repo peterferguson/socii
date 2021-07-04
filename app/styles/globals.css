@@ -6,7 +6,7 @@
 
 @layer components {
   .btn {
-    @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand;
+    @apply flex-1 font-secondary rounded p-2 m-4 text-white bg-brand;
   }
 
   .btn:hover {
@@ -26,7 +26,7 @@
 
   .outline-btn {
     @apply bg-transparent mr-auto text-brand rounded shadow p-2 border 
-      border-brand font-work-sans;
+      border-brand font-secondary;
   }
 
   .outline-btn:hover {

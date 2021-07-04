@@ -47,7 +47,7 @@ const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
   ssr: false,
 })
 
-export default function Group({client}) {
+export default function Group({ client }) {
   const is1Col = useMediaQuery({ minWidth: 800 })
   const router = useRouter()
   const { groupName } = router.query
@@ -63,7 +63,7 @@ export default function Group({client}) {
       ) : (
         <div className="flex">
           <div className="flex-auto p-8">
-            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">
+            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
               holdings
             </div>
             <GroupColumn groupName={groupName} />

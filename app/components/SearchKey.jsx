@@ -19,7 +19,7 @@ export function SlashSearchKey() {
   return (
     <span className="hidden text-sm text-gray-400 border border-gray-300 sm:block leading-5 py-0.5 px-1.5 rounded-md">
       <span className="sr-only">Press </span>
-      <kbd className="font-poppins">
+      <kbd className="font-primary">
         <abbr title="Command" className="p-1 no-underline">
           /
         </abbr>

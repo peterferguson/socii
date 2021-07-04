@@ -74,7 +74,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
                           <span className="text-tiny overflow-ellipsis">
                             {group.description}
                           </span>
-                          <span className="text-tiny text-center bg-teal-200 text-white font-work-sans rounded-full p-1">
+                          <span className="text-tiny text-center bg-teal-200 text-white font-secondary rounded-full p-1">
                             {group.privacyOption} Group
                           </span>
                         </RadioGroup.Description>

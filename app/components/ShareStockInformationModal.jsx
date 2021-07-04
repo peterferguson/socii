@@ -108,7 +108,7 @@ export default function ShareStockInformationModal({
             <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium text-gray-900 font-poppins"
+                className="text-lg font-medium text-gray-900 font-primary"
               >
                 Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
                 <span span className="font-bold text-teal-300">
@@ -117,7 +117,7 @@ export default function ShareStockInformationModal({
                 !
               </Dialog.Title>
               <div className="mt-2">
-                <div className="text-sm font-poppins text-blueGray-500">
+                <div className="text-sm font-primary text-blueGray-500">
                   Select some data to tell your friends about!
                 </div>
                 <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
@@ -125,7 +125,7 @@ export default function ShareStockInformationModal({
                   selectedItems={selectedItems}
                   setSelectedItems={setSelectedItems}
                 />
-                <div className="text-sm font-poppins text-blueGray-500">
+                <div className="text-sm font-primary text-blueGray-500">
                   Got a price in mind?
                 </div>
                 <div className="pt-1 pb-2">
@@ -135,7 +135,7 @@ export default function ShareStockInformationModal({
                     pricePlaceholder={pricePlaceholder}
                   />
                 </div>
-                <div className="text-sm font-poppins text-blueGray-500">
+                <div className="text-sm font-primary text-blueGray-500">
                   Tell them your thoughts!
                 </div>
                 <div className="pt-2 mb-3">

@@ -43,7 +43,7 @@ import { useWindowSize } from "@lib/hooks"
 const CommandIcon = ({ text }) => (
   <div className="flex items-center w-16 h-6 ml-2 rounded-xl justify-evenly bg-brand">
     <LightningBoltSmall className="w-4 h-4 text-white -mr-1.5" />
-    <p className="text-xs font-bold text-white font-work-sans">{text}</p>
+    <p className="text-xs font-bold text-white font-secondary">{text}</p>
   </div>
 )
 

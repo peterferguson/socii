@@ -4,13 +4,13 @@ import { firestore } from "@lib/firebase"
 export default function Invites() {
   return (
     <>
-      <div className="p-4 font-bold text-md font-work-sans">
+      <div className="p-4 font-bold text-md font-secondary">
         Invite Friends
         <span className="pl-1 font-extrabold text-brand-dark">
           (Think carefully you only have 2 invites!)
         </span>
       </div>
-      <p className="px-4 pb-2 text-base font-semibold font-work-sans">
+      <p className="px-4 pb-2 text-base font-semibold font-secondary">
         Enter a UK Phone Number
       </p>
       <PhoneInvite className="px-4" />

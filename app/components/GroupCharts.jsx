@@ -105,7 +105,7 @@ export function GroupPieChart({
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-poppins bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
+          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
             {groupName}
           </div>
         </a>
@@ -185,7 +185,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {
           </div>
         </Link>
         <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
-          <div className="text-base font-extrabold tracking-wider uppercase text-brand-shade-darkest font-poppins">
+          <div className="text-base font-extrabold tracking-wider uppercase text-brand-shade-darkest font-primary">
             {tickerSymbol}
           </div>
           <div className="overflow-hidden font-thin tracking-wider uppercase text-brand-shade-darkest text-tiny">

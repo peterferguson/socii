@@ -67,7 +67,7 @@ export default function UserPage() {
             username={typeof pagename === "string" ? pagename : pagename?.[0]}
             photoURL={isUsersHomepage ? auth.currentUser?.photoURL || "" : ""}
           />
-          <div className="p-4 text-xl font-poppins text-brand">{pagename}</div>
+          <div className="p-4 text-xl font-primary text-brand">{pagename}</div>
         </div> */}
       <div className="flex flex-wrap justify-center">
         {!pagename ? <PortfolioSkeletons /> : <GroupPortfolios pagename={pagename} />}

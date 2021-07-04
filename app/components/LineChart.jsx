@@ -1,17 +1,20 @@
-import { FlexibleXYPlot, XAxis, LineSeries, AreaSeries, Crosshair } from "react-vis"
-import { useWindowSize } from "@lib/hooks"
-import "react-vis/dist/style.css"
-import React, { useEffect, useState } from "react"
 import { tailwindColorMap } from "@lib/constants"
-import { pnlBackgroundColor, pctChange } from "@utils/helper"
+import { useWindowSize } from "@lib/hooks"
+import { pctChange, pnlBackgroundColor } from "@utils/helper"
+import React, { useEffect, useState } from "react"
+import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
+import "react-vis/dist/style.css"
+import { useMediaQuery } from "react-responsive"
 
 export default function LineChart({
   timeseries,
   crosshairIndexValue,
   setCrosshairIndexValue,
+  widthScale = 0.65,
+  heightScale = 0.6,
 }) {
   const [width, height] = useWindowSize()
-
+  const is1Col = !useMediaQuery({ minWidth: 640 })
   const [crosshairValue, setCrosshairValue] = useState(false)
   const [pctChangeValue, setPctChangeValue] = useState(0.0)
 
@@ -46,15 +49,17 @@ export default function LineChart({
           setCrosshairValue(false)
           setCrosshairIndexValue(0)
         }}
-        height={height * 0.6}
-        width={width * 0.65}
+        height={height * heightScale}
+        width={width * widthScale}
         xType="time"
         margin={{ left: 10, bottom: 75, top: 10 }}
       >
-        <XAxis tickLabelAngle={-75} tickFormat={(d) => d.toLocaleDateString()} />
+        {!is1Col && (
+          <XAxis tickLabelAngle={-75} tickFormat={(d) => d.toLocaleDateString()} />
+        )}
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && <AreaSeries {...areaSeriesProps} />}
-        {crosshairValue && (
+        {crosshairValue && !is1Col && (
           <Crosshair
             values={[crosshairValue]}
             titleFormat={(d) => ({

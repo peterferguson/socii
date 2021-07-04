@@ -56,14 +56,14 @@ const MessagingChannelPreview = ({
       {AvatarGroup(members, styles)}
       <div className="flex flex-col items-center w-full mx-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
-          <p className="m-0 overflow-hidden text-base font-medium text-black font-work-sans max-w-[158px] overflow-ellipsis whitespace-nowrap">
+          <p className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">
             {channel.data.name || getChannelName(members, channelName)}
           </p>
-          <p className="pl-1 m-0 text-tiny font-work-sans text-trueGray-600">
+          <p className="pl-1 m-0 text-tiny font-secondary text-trueGray-600">
             {getTimeStamp(channel)}
           </p>
         </div>
-        <p className="h-4 m-0 overflow-hidden text-xs text-trueGray-600 font-work-sans overflow-ellipsis whitespace-nowrap max-w-[200px]">
+        <p className="h-4 m-0 overflow-hidden text-xs text-trueGray-600 font-secondary overflow-ellipsis whitespace-nowrap max-w-[200px]">
           {latestMessage || "Send a message"}
         </p>
       </div>

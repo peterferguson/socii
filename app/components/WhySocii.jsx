@@ -4,10 +4,10 @@ export default function WhySocii() {
   return (
     <section className="flex items-center justify-center h-screen bg-brand-shade-blue">
       <div className="w-2/3 pl-4 h-2/3 sm:p-0">
-        <h2 className="mt-12 text-4xl font-extrabold text-gray-100 font-poppins">
+        <h2 className="mt-12 text-4xl font-extrabold text-gray-100 font-primary">
           Investing with friends
         </h2>
-        <h2 className="mb-12 text-4xl font-extrabold text-gray-100 font-poppins">
+        <h2 className="mb-12 text-4xl font-extrabold text-gray-100 font-primary">
           has never been easier!
         </h2>
         <div className="max-w-lg mt-4 text-xl text-white leading-7">
@@ -18,7 +18,7 @@ export default function WhySocii() {
             <br />
             <br />
             Our process makes getting started as easy as:
-            <ul className="mt-4 font-bold font-poppins ">
+            <ul className="mt-4 font-bold font-primary ">
               <li>&nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp; Sign-up</li>
               <li>
                 &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp; Invite your friends

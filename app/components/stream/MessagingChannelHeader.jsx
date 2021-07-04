@@ -68,7 +68,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
     >
       <input
         autoFocus
-        className="w-full ml-6 font-bold outline-none font-poppins"
+        className="w-full ml-6 font-bold outline-none font-primary"
         onBlur={updateChannel}
         onChange={(e) => setChannelName(e.target.value)}
         placeholder="Type a new name for the chat"
@@ -95,7 +95,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
         )}
         {AvatarGroup(members, styles)}
         {!isEditing ? (
-          <div className="flex-1 pl-4 font-bold font-poppins">
+          <div className="flex-1 pl-4 font-bold font-primary">
             {channelName || title}
           </div>
         ) : (
