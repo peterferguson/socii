@@ -1,0 +1,4 @@
+GET https://api.notion.com/v1/databases/{{notionDb}}
+Authorization: Bearer {{notionSecret}}
+Content-type: application/json
+Notion-Version: 2021-05-13

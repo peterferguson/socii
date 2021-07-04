@@ -14,7 +14,7 @@ function Invite({ setInvited }) {
   async function handleSubmit(e) {
     e.preventDefault()
     setClicked(true)
-    await fetch("api/update-notion", {
+    await fetch("api/notion/requestInvite", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -26,11 +26,11 @@ function Invite({ setInvited }) {
 
   return (
     <form
-      className="flex justify-center flex-shrink w-full max-w-lg px-2 mx-auto font-secondary"
+      className="flex justify-center flex-shrink w-full max-w-lg px-2 mx-auto font-secondary group"
       onSubmit={handleSubmit}
     >
       <input
-        className="w-2/3 border border-r-0 rounded-l-lg border-palette-light focus:outline-none focus:ring-1 focus:ring-palette-primary"
+        className="w-2/3 border border-r-0 rounded-l-lg outline-none border-palette-light group-focus-within:ring-2 group-focus-within:ring-brand group-focus-within:border-transparent group-hover:ring-2 group-hover:ring-brand group-hover:border-transparent"
         type="email"
         required
         placeholder="Your email here"
@@ -40,8 +40,8 @@ function Invite({ setInvited }) {
         type="submit"
         className={tw(
           clicked ? "pointer-events-none opacity-75" : "",
-          `py-3 px-4 bg-brand hover:bg-palette-lighter text-white text-tiny sm:text-sm font-semibold rounded-r-lg border border-transparent 
-          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand`
+          `py-3 px-4 bg-brand group-hover:bg-palette-lighter text-white text-tiny sm:text-sm font-semibold rounded-r-lg border border-transparent 
+          outline-none group-focus-within:ring-2 group-focus-within:ring-brand group-focus-within:border-transparentactive:border-none active:ring-0 group-hover:ring-2 group-hover:ring-brand group-hover:border-transparent`
         )}
       >
         Get Invited
