@@ -89,7 +89,7 @@ export default function Sidebar() {
               <a
                 className={`flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 ${
                   item.isActive
-                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
+                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
                     : "text-brand-shade-darkest dark:text-gray-200 hover:text-brand-cyan"
                 }`}
                 href="/"

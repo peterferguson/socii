@@ -40,7 +40,7 @@ export default function Enter() {
 
   const signInPopUp = async (authProvider) => await auth.signInWithPopup(authProvider)
   return (
-    <main className="h-screen bg-brand-natural-light">
+    <main className="h-screen bg-brand-light">
       <div className="relative flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0 bg-black/10"></div>
         <div className="z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">

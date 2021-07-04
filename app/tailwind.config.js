@@ -18,9 +18,13 @@ module.exports = {
         brand: {
           // - brand colors based on DEFAULT using mycolors.space
           DEFAULT: "#3fbaeb",
+          light: {
+            est: "#E6F4F1",
+            er: "#EEFFF4",
+            DEFAULT: "#EEFCFF",
+            secondary: "#ECF4F9",
+          },
           natural: {
-            lightest: "#E6F4F1",
-            light: "#EEFCFF",
             dark: "#4C9CA9",
           },
           shade: {
@@ -54,7 +58,6 @@ module.exports = {
       fontFamily: {
         primary: ["Poppins", "sans-serif"],
         secondary: ['"Work Sans"', "sans-serif"],
-        
       },
       fontSize: {
         tiny: "0.625rem",

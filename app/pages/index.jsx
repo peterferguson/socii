@@ -26,7 +26,7 @@ export default function Home() {
 
 const Hero = ({ setInvited }) => {
   return (
-    <div className="h-screen grid grid-cols-2 bg-gradient-to-bl via-brand-natural-lightest to-brand-natural-light from-brand-shade-blue">
+    <div className="h-screen grid grid-cols-2 bg-gradient-to-bl via-brand-light-est to-brand-light from-brand-shade-blue">
       <div className="z-10 flex flex-col justify-center mx-auto">
         <div className="px-4 pt-4 text-6xl sm:text-8xl sm:pt-32 font-primary animate-fade-in-down">
           Invest Together.

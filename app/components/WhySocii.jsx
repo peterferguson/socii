@@ -36,7 +36,7 @@ export default function WhySocii() {
 
 export function OneTwoThree() {
   return (
-    <section className="flex items-center justify-center h-screen mx-auto bg-gradient-to-l from-brand-natural-lightest to-brand-natural-light">
+    <section className="flex items-center justify-center h-screen mx-auto bg-gradient-to-l from-brand-light-est to-brand-light">
       <div className="container p-4 mx-auto max-w-7xl sm:p-6 lg:p-8 dark:bg-gray-800">
         <div className="flex flex-wrap -mx-8">
           <div className="w-full px-8 lg:w-1/2">

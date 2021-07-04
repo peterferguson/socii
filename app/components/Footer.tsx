@@ -60,7 +60,7 @@ export default function Footer({ showSearchCard, setShowSearchCard }: FooterProp
           <a
             className={`block w-full px-3 py-3 text-xs text-center ${
               link.isActive
-                ? "font-extrabold border-t-4 border-brand bg-gradient-to-t from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
+                ? "font-extrabold border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
                 : ""
             } transition duration-300`}
             key={`${link.text}-key`}
