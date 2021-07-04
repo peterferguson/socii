@@ -6,7 +6,6 @@ const withPWA = require("next-pwa")
 
 module.exports = withPWA(
   withBundleAnalyzer({
-    future: { webpack5: true },
     images: {
       domains: ["lh6.googleusercontent.com", "lh3.googleusercontent.com"],
     },
