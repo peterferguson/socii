@@ -75,13 +75,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const nonStandardLayoutRoutes = ["/", "/enter"]
 
+  const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
+
   return (
     <UserContext.Provider value={userData}>
       <StreamContext.Provider value={{ client }}>
-        <main className="relative h-screen overflow-y-scroll bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900">
+        <main
+          className={`min-h-screen no-scrollbar
+          relative overflow-x-hidden overflow-y-scroll bg-gray-100 dark:bg-gray-800 
+          ${notMainLayout ? "" : "h-screen max-h-screen"}
+          rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900`}
+        >
           <Head />
           <>
-            {nonStandardLayoutRoutes.includes(router.asPath) ? (
+            {notMainLayout ? (
               <>
                 <Navigation {...props} />
                 <Component {...props} />
@@ -114,11 +121,11 @@ function MainLayout(props) {
   const is2Col = !useMediaQuery({ minWidth: 1024 })
 
   return (
-    <div className="flex items-start justify-between">
+    <div className="flex items-start">
       <Sidebar />
-      <div className="flex flex-col w-full pl-0 sm:p-4 sm:space-y-4">
+      <div className="flex flex-col items-start w-full pl-0 sm:pt-2 sm:px-2 sm:space-y-4">
         <NavHeader user={props.user} setShowSearchCard={props.setShowSearchCard} />
-        <div className="h-screen pt-2 pb-24 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0">
+        <div className="h-full pt-2 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0 no-scrollbar">
           <div className="flex flex-col flex-wrap sm:flex-row">
             {props.children}
             {client?.user && props.showActiveChannel && !is2Col && !isChatRoute && (

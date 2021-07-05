@@ -78,8 +78,8 @@ export default function Sidebar() {
   ]
 
   return (
-    <div className="relative hidden w-20 h-screen my-4 ml-4 shadow-lg sm:block lg:w-80">
-      <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
+        <div className="sticky top-2 left-2 mx-1 hidden w-20 h-screen shadow-lg sm:block lg:w-80">
+    <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
           <Logo className="text-2xl" />
         </div>

@@ -139,3 +139,17 @@ a {
     @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center;
   }
 }
+
+@layer utilities {
+  @variants responsive {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+  }
+}

@@ -8,10 +8,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html
-        lang="en"
-        className="w-full h-full max-h-full overflow-x-hidden max-w-screen bg-gray-50 md:no-scrollbar"
-      >
+      <Html lang="en" className="bg-gray-50 md:no-scrollbar">
         <Head>
           <link
             rel="apple-touch-icon"
@@ -32,7 +29,7 @@ class MyDocument extends Document {
           />
           <link rel="manifest" href="/manifest.json" />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00aba9" />
-          <link rel='shortcut icon' href='/favicons/favicon.ico' />
+          <link rel="shortcut icon" href="/favicons/favicon.ico" />
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#ffffff" />

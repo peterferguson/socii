@@ -73,7 +73,7 @@ function HeaderProfilePhoto({ user }) {
 export default function NavHeader({ user, setShowSearchCard }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   return (
-    <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+    <header className="sticky z-40 items-center w-full h-16 bg-white shadow-lg top-2 left-8 dark:bg-gray-700 rounded-2xl">
       <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
         <div className="relative flex items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
           {is1Col && <Logo className="text-2xl" />}
