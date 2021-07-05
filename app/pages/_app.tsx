@@ -1,3 +1,4 @@
+import "react-file-utils/dist/index.css"
 import Footer from "@components/Footer"
 import Head from "@components/Head"
 import Navigation from "@components/Navigation"
