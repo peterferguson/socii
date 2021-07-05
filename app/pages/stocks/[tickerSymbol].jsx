@@ -1,10 +1,6 @@
 import LineChart from "@components/LineChart"
 import SelectGroupModal from "@components/SelectGroupModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
-import {
-  TradingViewStockFinancials,
-  TradingViewStockProfile,
-} from "@components/TradingViewChart"
 import { tailwindColorMap } from "@lib/constants"
 import { SelectedGroupContext, UserContext } from "@lib/context"
 import { firestore } from "@lib/firebase"
@@ -22,12 +18,10 @@ export default function TickerPage({ tickerSymbols }) {
   const { user, userGroups } = useContext(UserContext)
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
-  timeseries = timeseries?.map((d) => {
-    return {
-      x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
-      y: d.close,
-    }
-  })
+  timeseries = timeseries?.map((d) => ({
+    x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
+    y: d.close,
+  }))
 
   const [openGroupModal, setOpenGroupModal] = useState(false)
   const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
@@ -85,23 +79,6 @@ export default function TickerPage({ tickerSymbols }) {
           )}
         </>
       )}
-      <div className="flex flex-col items-center justify-center sm:flex-row">
-        {/* // TODO: repsonive view */}
-        <TradingViewStockProfile
-          tickerSymbol={ticker.tickerSymbol}
-          exchange={ticker.exchange}
-          className="p-4 m-4"
-          height={height * 0.8}
-          width={width * 0.7}
-        />
-        <TradingViewStockFinancials
-          tickerSymbol={ticker.tickerSymbol}
-          exchange={ticker.exchange}
-          height={height * 0.8}
-          width={width * 0.7}
-          className="p-4 m-4 mb-12 sm:mb-4"
-        />
-      </div>
     </>
   )
 }
