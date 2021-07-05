@@ -13,8 +13,6 @@ import Custom404 from "../404"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
-
-  const [width, height] = useWindowSize()
   const { user, userGroups } = useContext(UserContext)
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 

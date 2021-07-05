@@ -135,6 +135,7 @@ export function StreamChannelList({
   const filter = { members: { $in: [client?.userID] } }
   const sort = [{ last_message_at: -1 }]
   const options = { state: true, presence: true, limit: 5 }
+  console.log(client);
   return (
     <div
       className={`

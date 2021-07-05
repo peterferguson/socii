@@ -78,10 +78,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserContext.Provider value={userData}>
       <StreamContext.Provider value={{ client }}>
-        <main
-          className="relative h-screen overflow-y-scroll bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900"
-          {...props}
-        >
+        <main className="relative h-screen overflow-y-scroll bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900">
           <Head />
           <>
             {nonStandardLayoutRoutes.includes(router.asPath) ? (
