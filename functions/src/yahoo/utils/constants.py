@@ -1,4 +1,4 @@
-key_stats_keys = [
+key_stats_keys: list[str] = [
     "maxAge",
     "priceHint",
     "enterpriseValue",
