@@ -80,24 +80,9 @@ export const stockProps = async ({
     for await (const key of Object.keys(ticker)) {
       // - duck typing check for date values
       if (typeof ticker[key].toMillis === "function") {
-        console.log(key);
-        
         ticker[key] = JSON.stringify(ticker[key].toDate())
       }
     }
-
-    console.log(typeof ticker?.timestamp.toMillis)
-
-    // if ("timeseriesLastUpdated" in ticker) {
-    //   ticker["timeseriesLastUpdated"] = JSON.stringify(
-    //     ticker?.timeseriesLastUpdated.toDate()
-    //   )
-    // }
-    // if ("logoColorLastUpdated" in ticker) {
-    //   ticker["logoColorLastUpdated"] = JSON.stringify(
-    //     ticker?.logoColorLastUpdated.toDate()
-    //   )
-    // }
 
     const timeseries: OHLCTimeseries = await tickerTimeseries(
       tickerDoc.ref,
