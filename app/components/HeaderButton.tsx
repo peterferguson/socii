@@ -3,7 +3,7 @@ import React from "react"
 export interface ButtonProps {
   name: string
   icon: () => JSX.Element
-  onClick: () => void
+  onClick?: () => void
   className?: string
 }
 
