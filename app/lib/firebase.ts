@@ -87,7 +87,8 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   return await tickerDoc.id
 }
 
-export function signOut(router, firstname) {
+export function signOut(router) {
+  const firstname = userFirstName(auth.currentUser)
   toast.dismiss()
   toast(`Bye for now ${firstname}!`, { icon: "👋" })
   auth.signOut()

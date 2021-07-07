@@ -5,11 +5,20 @@ import { HiCog, HiMail } from "react-icons/hi"
 import HeaderButton from "./HeaderButton"
 import { HeaderProfilePhoto } from "./HeaderProfilePhoto"
 import { Searchbar } from "./Searchbar"
+import { signOut, userFirstName } from "@lib/firebase"
+import Router from "next/router"
+import { VscSignOut } from "react-icons/vsc"
 
 const dropdownItems = [
   {
     name: "Messages",
     href: "#",
+    notificationCount: 13,
+    leftIcon: () => <HiMail className="w-6 h-6" />,
+  },
+  {
+    name: "Log Out",
+    onClick: () => signOut(Router, userFirstName(user)),
     notificationCount: 13,
     leftIcon: () => <HiMail className="w-6 h-6" />,
   },
