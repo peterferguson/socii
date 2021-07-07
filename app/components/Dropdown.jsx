@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { Popover, Transition } from "@headlessui/react"
 import { UserContext } from "@lib/context"
-import { signOut, userFirstName } from "@lib/firebase"
+import { signOut } from "@lib/firebase"
 import Link from "next/link"
-import { useRouter } from "next/router"
-import React, { Fragment, useContext, useState } from "react"
+import Router from "next/router"
+import React, { Fragment, useContext, useEffect } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
   HiMenu,
@@ -17,46 +17,66 @@ import {
 } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 
-export default function Dropdown() {
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  // const [openSettings, setOpenSettings] = useState(false);
-  const { user, username } = useContext(UserContext)
-  const router = useRouter()
+// TODO: Add bitcoin svg to navigate to crypto page
+const dropdownItems = [
+  {
+    name: "Invites",
+    description: "Invite your friends to the alpha",
+    href: "/user/invites",
+    icon: HiOutlineAtSymbol,
+  },
+  {
+    name: "Stocks",
+    description: "Search our stock universe",
+    href: "/stocks",
+    icon: ({ className }) => <FaGlobeEurope className={`-mb-1 ${className}`} />,
+  },
+  {
+    name: "Crypto",
+    description: "Search our crypto universe",
+    href: "/crypto",
+    icon: ({ className }) => <FaBitcoin className={`-mb-1 ${className}`} />,
+    disabled: true,
+  },
+  {
+    name: "Porfolio",
+    description: "Keep track of your growth",
+    href: `/user/portfolio`,
+    icon: HiOutlineChartPie,
+  },
+  {
+    name: "Chat",
+    description: "Chat with friends about investments!",
+    href: "/chat",
+    icon: ({ className }) => <HiOutlineChat className={`-mb-1 ${className}`} />,
+  },
+  {
+    name: "Settings",
+    description: "Adjust your settings",
+    href: "",
+    icon: HiOutlineCog,
+    rightIcon: HiOutlineChevronRight,
+    disabled: true,
+  },
+]
 
-  // TODO: Add bitcoin svg to navigate to crypto page
-  const dropdownItems = [
-    {
-      name: "Invites",
-      description: "Invite your friends to the alpha",
-      href: "/user/invites",
-      icon: HiOutlineAtSymbol,
-    },
-    {
-      name: "Stocks",
-      description: "Search our stock universe",
-      href: "/stocks",
-      icon: ({ className }) => <FaGlobeEurope className={`-mb-1 ${className}`} />,
-    },
-    {
-      name: "Crypto",
-      description: "Search our crypto universe",
-      href: "/crypto",
-      icon: ({ className }) => <FaBitcoin className={`-mb-1 ${className}`} />,
-      disabled: true,
-    },
-    {
-      name: "Porfolio",
-      description: "Keep track of your growth",
-      href: `/user/portfolio`,
-      icon: HiOutlineChartPie,
-    },
-    {
-      name: "Chat",
-      description: "Chat with friends about investments!",
-      href: "/chat",
-      icon: ({ className }) => <HiOutlineChat className={`-mb-1 ${className}`} />,
-    },
-    {
+const grayedDropdownItems = [
+  {
+    name: "Sign Out",
+    description: "",
+    href: "",
+    icon: VscSignOut,
+    onClick: () => signOut(Router),
+  },
+]
+
+export default function Dropdown() {
+  // const [dropdownOpen, setDropdownOpen] = useState(false)
+  // // const [openSettings, setOpenSettings] = useState(false);
+  const { username } = useContext(UserContext)
+
+  useEffect(() => {
+    dropdownItems.unshift({
       name: "Groups",
       description: "View all of your Groups",
       href: `/user/${username}`,
@@ -64,26 +84,9 @@ export default function Dropdown() {
       rightIcon: HiOutlineChevronRight,
       disabled: true,
       // onClick: () => setOpenSettings(!openSettings),
-    },
-    {
-      name: "Settings",
-      description: "Adjust your settings",
-      href: "",
-      icon: HiOutlineCog,
-      rightIcon: HiOutlineChevronRight,
-      disabled: true,
-    },
-  ]
-
-  const grayedDropdownItems = [
-    {
-      name: "Sign Out",
-      description: "",
-      href: "",
-      icon: VscSignOut,
-      onClick: () => signOut(router, userFirstName(user)),
-    },
-  ]
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Popover className="relative z-50 inline-block p-4 text-left">

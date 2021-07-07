@@ -1,6 +1,6 @@
-import { SlashSearchKey } from "@components/SearchKey";
-import React from "react";
-import { HiOutlineSearch } from "react-icons/hi";
+import { SlashSearchKey } from "@components/SearchKey"
+import React from "react"
+import { HiOutlineSearch } from "react-icons/hi"
 
 export function Searchbar({ setShowSearchCard }) {
   return (
@@ -13,11 +13,12 @@ export function Searchbar({ setShowSearchCard }) {
         <input
           type="text"
           className="block w-full pl-10 pr-4 leading-normal text-gray-400 bg-gray-100 border-none py-1.5 rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-brand ring-opacity-90 dark:bg-gray-800"
-          placeholder="Search" />
-        <div className="absolute z-50 flex items-center justify-center w-auto h-10 p-3 pr-2 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
+          placeholder="Search"
+        />
+        <div className="absolute z-50 flex items-center justify-center w-auto h-10 mr-1 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
           <SlashSearchKey />
         </div>
       </div>
     </div>
-  );
+  )
 }

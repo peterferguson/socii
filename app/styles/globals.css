@@ -70,6 +70,10 @@
   }
 }
 
+.header-btn {
+  @apply p-2 text-brand-cyan-vivid bg-gray-100 align-middle rounded-full hover:text-white hover:bg-brand-cyan-vivid focus:outline-none;
+}
+
 /* 
  * Needed to remove the border line around the hits
  */
@@ -148,8 +152,8 @@ a {
     }
 
     .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
     }
   }
 }
