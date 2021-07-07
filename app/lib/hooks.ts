@@ -19,7 +19,6 @@ import {
   useState,
 } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
-import { useMediaQuery } from "react-responsive"
 import { useScroll } from "react-use"
 import { StreamChat } from "stream-chat"
 import useSWR from "swr"
@@ -454,6 +453,7 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 }
 
 export function useEventListener<T extends HTMLElement = HTMLDivElement>(
+  // eslint-disable-next-line no-undef
   eventName: keyof WindowEventMap,
   handler: (event: Event) => void,
   element?: RefObject<T>
