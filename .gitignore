@@ -123,3 +123,10 @@ sw.js.map
 
 # Checking for memory leaks
 *.heaptimeline
+
+# ide folders
+.vscode
+.idea
+.pytest_cache
+.mypy_cache
+__pycache__
