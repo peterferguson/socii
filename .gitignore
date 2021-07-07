@@ -127,5 +127,8 @@ sw.js.map
 # ide folders
 .vscode
 .idea
+
+# python 
+__pycache__
 .pytest_cache
 .mypy_cache

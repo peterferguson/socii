@@ -1,15 +1,22 @@
-from time import sleep
+import io
 import json
-from typing import Union
 import re
-import requests
 from datetime import datetime
+from time import sleep
+from typing import Union, Tuple, Optional
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
-import yahooquery as yq
-from rich import print
 import firebase_admin
+import requests
+import yahooquery as yq
+from colorthief import ColorThief
 from firebase_admin import firestore, storage
+from google.api_core.exceptions import NotFound
+from PIL import UnidentifiedImageError
+from rich import print
 from tqdm import tqdm
+
 
 # Helper Functions
 def willItFloat(string: str) -> Union[str, float]:
@@ -280,7 +287,33 @@ def uploadLogoUrl(ticker: str = "", isin: str = ""):
         makeLogoPublic(isin)
     except:
         print(f"{ticker} failed to make public at logos/{isin}.png")
-    
+
+
+def getDominantLogoColor(
+    ticker: str = "", isin: str = ""
+) -> Optional[Tuple[int, int, int]]:
+    def clamp(x):
+        return max(0, min(x, 255))
+
+    def to_hex(r, g, b):
+        return "#{0:02x}{1:02x}{2:02x}".format(clamp(r), clamp(g), clamp(b))
+
+    if not ticker and not isin:
+        return None
+    if not isin and ticker:
+        isin = tickerToISIN(ticker)
+
+    logo_url = (
+        f"https://storage.googleapis.com/sociiinvest.appspot.com/logos/{isin}.png"
+    )
+    try:
+        fd = urlopen(logo_url)
+        f = io.BytesIO(fd.read())
+        color_thief = ColorThief(f)
+    except UnidentifiedImageError:
+        return None
+
+    return to_hex(*color_thief.get_color(quality=10))
 
 
 if __name__ == "__main__":
@@ -438,18 +471,54 @@ if __name__ == "__main__":
         .where("marketCountry", "==", "United States of America")
         .where("exchangeAbbreviation", "!=", "PNK")
         .order_by("exchangeAbbreviation", "ASCENDING")
-        .limit(150)
     )
 
-    for snapshot in tqdm(query.get()):
-        ticker = snapshot.to_dict()
-        isin = ticker.get("ISIN")
-        tickerSymbol = ticker.get("tickerSymbol")
-        if not isin or not tickerSymbol:
-            continue
-        if isin in ["CA09088U1093", "CA33938T1049", "IL0010826357"]:
-            continue
-        uploadLogoUrl(isin=isin)
-        alphaVantageTimeseriesToFirestore(ticker=tickerSymbol, isin=isin)
+    # for snapshot in tqdm(query.get()):
+    #     ticker = snapshot.to_dict()
+    #     isin = ticker.get("ISIN")
+    #     tickerSymbol = ticker.get("tickerSymbol")
+    #     if not isin or not tickerSymbol:
+    #         continue
+    #     if isin in ["CA09088U1093", "CA33938T1049", "IL0010826357"]:
+    #         continue
+    #     uploadLogoUrl(isin=isin)
+    #     alphaVantageTimeseriesToFirestore(ticker=tickerSymbol, isin=isin)
 
-        sleep(60)
+    #     sleep(60)
+
+    # - Store dominant logo color
+    batch = client.batch()
+    count = 0
+    for index, doc_snapshot in enumerate(query.get()):
+        if index < 150:
+            continue
+        print(index)
+        if count > 499:
+            print("commiting batch")
+            batch.commit()
+            batch = client.batch()
+            count = 0
+        isin = doc_snapshot.id
+        try:
+            logo_color = getDominantLogoColor(isin=isin)
+        except HTTPError:
+            try:
+                makeLogoPublic(isin)
+                logo_color = getDominantLogoColor(isin=isin)
+            except NotFound:
+                continue
+        except NotFound:
+            continue
+        if not logo_color:
+            continue
+        batch.update(
+            client.document(f"tickers/{isin}"),
+            {
+                "logoColorLastUpdated": firestore.SERVER_TIMESTAMP,
+                "logoColor": logo_color,
+            },
+        )
+        count += 1
+    batch.commit()
+
+    # getDominantLogoColor("TSLA")
