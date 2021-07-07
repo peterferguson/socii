@@ -6,7 +6,7 @@
 
 @layer components {
   .btn {
-    @apply flex-1 font-work-sans rounded p-2 m-4 text-white bg-brand;
+    @apply flex-1 font-secondary rounded p-2 m-4 text-white bg-brand;
   }
 
   .btn:hover {
@@ -26,7 +26,7 @@
 
   .outline-btn {
     @apply bg-transparent mr-auto text-brand rounded shadow p-2 border 
-      border-brand font-work-sans;
+      border-brand font-secondary;
   }
 
   .outline-btn:hover {
@@ -68,6 +68,10 @@
       scrollbar-width: none; /* Firefox */
     }
   }
+}
+
+.header-btn {
+  @apply p-2 text-brand-cyan-vivid bg-gray-100 align-middle rounded-full hover:text-white hover:bg-brand-cyan-vivid focus:outline-none;
 }
 
 /* 
@@ -137,5 +141,19 @@ a {
 
   .str-chat__messaging-input {
     @apply bg-white shadow-md flex items-center p-2 relative mx-auto w-full justify-center;
+  }
+}
+
+@layer utilities {
+  @variants responsive {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
   }
 }

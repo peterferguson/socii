@@ -1,6 +1,6 @@
-import GroupSelectorRadioGroup from '@components/GroupSelector'
-import React, { Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import GroupSelectorRadioGroup from "@components/GroupSelector"
+import React, { Fragment } from "react"
+import { Dialog, Transition } from "@headlessui/react"
 
 export default function SelectGroupModal({
   userGroups,
@@ -49,10 +49,10 @@ export default function SelectGroupModal({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium text-gray-900 font-poppins pb-4"
+                className="pb-4 text-lg font-medium text-gray-900 font-primary"
               >
                 Select a group to invest with:
               </Dialog.Title>
@@ -63,10 +63,7 @@ export default function SelectGroupModal({
                 <div className="flex-grow" />
                 <button
                   type="button"
-                  className="flex-none justify-center px-4 py-2 text-sm font-medium \
-                    text-teal-900 bg-teal-100 border border-transparent rounded-md \
-                    hover:bg-teal-200 focus:outline-none focus-visible:ring-2 \
-                    focus-visible:ring-offset-2 focus-visible:ring-teal-500"
+                  className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent \ rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
                   onClick={letsGoClickHander}
                 >
                   Yes, Lets go! 🚀

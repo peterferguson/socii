@@ -7,12 +7,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        palette: {
+          darkest: "#1595c9",
+          dark: "#17a7e0",
+          primary: "#28b2e9",
+          light: "#56c2ed",
+          lighter: "#6dcbf0",
+          lightest: "#84d3f2",
+        },
         brand: {
           // - brand colors based on DEFAULT using mycolors.space
           DEFAULT: "#3fbaeb",
+          light: {
+            est: "#E6F4F1",
+            er: "#EEFFF4",
+            DEFAULT: "#EEFCFF",
+            secondary: "#ECF4F9",
+          },
           natural: {
-            lightest: "#E6F4F1",
-            light: "#EEFCFF",
             dark: "#4C9CA9",
           },
           shade: {
@@ -44,8 +56,8 @@ module.exports = {
         pink: colors.pink,
       },
       fontFamily: {
-        "work-sans": ['"Work Sans"', "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
+        primary: ["Poppins", "sans-serif"],
+        secondary: ['"Work Sans"', "sans-serif"],
       },
       fontSize: {
         tiny: "0.625rem",

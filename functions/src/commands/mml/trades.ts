@@ -53,8 +53,7 @@ const trade = (tradeType) => async (client, body) => {
 
   // * Dissect the intent & reply if understood
   // TODO: Need to create commands with description of input order in Stream
-  const intent = args?.[0] // ? Should be buy since we send to the buy webhook ... maybe just do a check on this?
-  const tickerSymbol = args?.[1].toUpperCase()
+  const tickerSymbol = args?.[0].toUpperCase()
 
   // ? Do we want to use a bot user, the user themselves or socii?
   // const botUser = { id: "investbot", name: "Invest Bot" };

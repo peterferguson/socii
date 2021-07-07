@@ -100,8 +100,8 @@ export default function Dashboard() {
             <div>
               {/* Card stats */}
               <div className="flex flex-wrap">
-                {cards.map((props) => (
-                  <BlockCard {...props} />
+                {cards.map((props, i) => (
+                  <BlockCard key={`card-${i}`} {...props} />
                 ))}
               </div>
             </div>
@@ -511,7 +511,7 @@ function PieChart({ groupName }) {
 {
   /* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
 <Link href={`/groups/${groupName}`}>
-  <div className="relative top-2 text-4xl text-brand font-poppins text-center z-10 cursor-pointer">
+  <div className="relative top-2 text-4xl text-brand font-primary text-center z-10 cursor-pointer">
     {groupName}
   </div>
 </Link>

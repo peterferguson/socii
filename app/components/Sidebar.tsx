@@ -57,6 +57,7 @@ export default function Sidebar() {
       icon: HiOutlineUserGroup,
       rightIcon: HiOutlineChevronRight,
       disabled: true,
+      isActive: router.asPath.includes(`/user/${username}`),
       // onClick: () => setOpenSettings(!openSettings),
     },
     {
@@ -78,7 +79,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <div className="relative hidden w-20 h-screen my-4 ml-4 shadow-lg sm:block lg:w-80">
+    <div className="sticky hidden w-20 h-screen mx-1 shadow-lg top-2 left-2 sm:block lg:w-80">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
           <Logo className="text-2xl" />
@@ -89,10 +90,9 @@ export default function Sidebar() {
               <a
                 className={`flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 ${
                   item.isActive
-                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-natural-light dark:from-gray-700 dark:to-gray-800"
+                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
                     : "text-brand-shade-darkest dark:text-gray-200 hover:text-brand-cyan"
                 }`}
-                href="/"
               >
                 <item.icon className="mx-auto text-xl lg:mx-0" />
                 <span className="hidden mx-4 text-sm font-normal lg:inline-flex">

@@ -20,7 +20,9 @@ export default function ComingSoon({ children, color, description = "" }: IComin
       >
         {children}
         <h1
-          className={`text-4xl font-bold uppercase text-${color} transition duration-500`}
+          className={tw(
+            `text-4xl font-bold uppercase text-${color} transition duration-500`
+          )}
         >
           Coming Soon
         </h1>

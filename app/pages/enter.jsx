@@ -1,4 +1,4 @@
-import Logo from "@components/logo"
+import Logo from "@components/Logo"
 import { UserContext } from "@lib/context"
 import {
   auth,
@@ -20,7 +20,7 @@ import { useMediaQuery } from "react-responsive"
 // TODO: Implement a route for invitees which has the invited email so we can bypass the auth verification & attach the email to whatever auth user is provided
 // TODO: Implement Apple login on iOS devices
 
-export default function Enter(props) {
+export default function Enter() {
   const { user, username } = useContext(UserContext)
 
   useEffect(() => {
@@ -40,12 +40,12 @@ export default function Enter(props) {
 
   const signInPopUp = async (authProvider) => await auth.signInWithPopup(authProvider)
   return (
-    <main className="h-screen bg-brand-natural-light">
+    <main className="h-screen bg-brand-light">
       <div className="relative flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0 bg-black/10"></div>
         <div className="z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
           <div className="text-center">
-            <h2 className="mt-6 text-4xl font-bold text-gray-900 font-poppins">
+            <h2 className="mt-6 text-4xl font-bold text-gray-900 font-primary">
               Welcome to <Logo />
             </h2>
             <p className="mt-2 text-base text-gray-600">

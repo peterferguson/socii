@@ -31,23 +31,22 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import LoadingIndicator from "@components/LoadingIndicator"
 import AuthCheck from "@components/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
-import Custom404 from "../../404"
-import { StreamContext, UserContext } from "@lib/context"
 import GroupColumn from "@components/GroupCharts"
-import { useMediaQuery } from "react-responsive"
-
-import React, { useContext } from "react"
-import { useRouter } from "next/router"
+import LoadingIndicator from "@components/LoadingIndicator"
+import { UserContext } from "@lib/context"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
+import React, { useContext } from "react"
+import { useMediaQuery } from "react-responsive"
+import Custom404 from "../../404"
 
 const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
   ssr: false,
 })
 
-export default function Group({client}) {
+export default function Group({ client }) {
   const is1Col = useMediaQuery({ minWidth: 800 })
   const router = useRouter()
   const { groupName } = router.query
@@ -63,7 +62,7 @@ export default function Group({client}) {
       ) : (
         <div className="flex">
           <div className="flex-auto p-8">
-            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-poppins">
+            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
               holdings
             </div>
             <GroupColumn groupName={groupName} />

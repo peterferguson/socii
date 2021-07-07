@@ -77,14 +77,11 @@ export const stockProps = async ({
     // * Get ticker company data
     let ticker = await tickerDoc.data()
 
-    if ("timestamp" in ticker) {
-      ticker["timestamp"] = JSON.stringify(ticker?.timestamp.toDate())
-    }
-
-    if ("timeseriesLastUpdated" in ticker) {
-      ticker["timeseriesLastUpdated"] = JSON.stringify(
-        ticker?.timeseriesLastUpdated.toDate()
-      )
+    for await (const key of Object.keys(ticker)) {
+      // - duck typing check for date values
+      if (typeof ticker[key].toMillis === "function") {
+        ticker[key] = JSON.stringify(ticker[key].toDate())
+      }
     }
 
     const timeseries: OHLCTimeseries = await tickerTimeseries(

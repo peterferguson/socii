@@ -18,7 +18,7 @@ const MessagingChannelList = ({
     <div className="flex flex-col px-3 py-3 pt-5 overflow-y-auto">
       <div className="flex items-center py-3 pl-5 mb-5">
         <Avatar image={image} name={name} size={40} />
-        <div className="flex text-base font-extrabold font-poppins">{name || id}</div>
+        <div className="flex text-base font-extrabold font-primary">{name || id}</div>
         <button
           className="flex items-center justify-center w-10 h-10 ml-auto mr-5 border rounded-full shadow-2xl cursor-pointer bg-blueGray-50 border-brand-natural-darkest focus:outline-none"
           onClick={onCreateChannel}

@@ -133,6 +133,7 @@ export default function SearchCard({
 
   useEffect(() => {
     if (isOpen) setIsOpen(!isOpen)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   // TODO Fix the dialog styling for mobile

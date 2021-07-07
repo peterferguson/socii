@@ -28,13 +28,13 @@ export default function FeatureSlider() {
   ]
   return (
     <>
-      <div className="py-8 text-black bg-gradient-to-b to-brand-lightTeal from-brand-natural-light">
+      <div className="py-8 text-black bg-gradient-to-br to-brand-lightTeal via-brand-light-est from-brand-light">
         <div className="container flex flex-col items-start mx-auto my-12 md:flex-row md:my-24">
           <div className="sticky flex flex-col w-full px-8 mt-2 md:top-36 lg:w-1/3 md:mt-12">
-            <p className="text-xs uppercase text-brand tracking-loose font-poppins">
+            <p className="text-xs uppercase text-brand tracking-loose font-primary">
               Social Investing
             </p>
-            <p className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-poppins">
+            <p className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-primary">
               What is <Logo className="text-3xl md:text-4xl" />?
             </p>
             <p className="mb-4 text-sm text-black md:text-base"></p>
@@ -58,13 +58,13 @@ export default function FeatureSlider() {
                     >
                       <div className="order-1 w-5/12"></div>
                       <div className="order-1 w-5/12 px-1 py-4 text-right">
-                        <p className="mb-3 text-sm text-brand font-poppins">
+                        <p className="mb-3 text-sm text-brand font-primary">
                           {item.supTitle}
                         </p>
-                        <div className="mb-3 text-lg font-bold md:text-2xl font-poppins">
+                        <div className="mb-3 text-lg font-bold md:text-2xl font-primary">
                           {item.title}
                         </div>
-                        <p className="text-xs leading-snug text-gray-500 md:text-base font-work-sans">
+                        <p className="text-xs leading-snug text-gray-500 md:text-base font-secondary">
                           {item.description}
                         </p>
                       </div>

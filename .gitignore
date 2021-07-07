@@ -1,4 +1,4 @@
-# Logs
+#Logs
 logs
 *.log
 npm-debug.log*
@@ -127,6 +127,8 @@ sw.js.map
 # ide folders
 .vscode
 .idea
+
+# python 
+__pycache__
 .pytest_cache
 .mypy_cache
-__pycache__

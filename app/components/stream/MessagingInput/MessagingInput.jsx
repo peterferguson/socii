@@ -10,14 +10,15 @@ import {
   useMessageInputContext,
 } from "stream-chat-react"
 
-import EmojiIcon from "@icons/stream/emoji.svg"
-import SendIcon from "@icons/stream/send.svg"
-import UseCommandIcon from "@icons/stream/command.svg"
-import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
+// import EmojiIcon from "@icons/stream/emoji.svg"
+// import SendIcon from "@icons/stream/send.svg"
+// import UseCommandIcon from "@icons/stream/command.svg"
+// import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
 
+import { HiOutlineEmojiHappy, HiOutlinePaperAirplane } from "react-icons/hi"
+import { BsLightning, BsLightningFill } from "react-icons/bs"
 import { FaDollarSign } from "react-icons/fa"
 import { UploadsPreview } from "./UploadsPreview"
-import { useWindowSize } from "@lib/hooks"
 
 // * Actions split by state
 
@@ -42,8 +43,8 @@ import { useWindowSize } from "@lib/hooks"
 
 const CommandIcon = ({ text }) => (
   <div className="flex items-center w-16 h-6 ml-2 rounded-xl justify-evenly bg-brand">
-    <LightningBoltSmall className="w-4 h-4 text-white -mr-1.5" />
-    <p className="text-xs font-bold text-white font-work-sans">{text}</p>
+    <BsLightningFill className="w-4 h-4 text-white -mr-1.5" />
+    <p className="text-xs font-bold text-white font-secondary">{text}</p>
   </div>
 )
 
@@ -72,10 +73,10 @@ const commandTypes = {
 
 // * Icons for buttons in input section
 const emojiButtons = {
-  emoji: { icon: EmojiIcon },
+  emoji: { icon: HiOutlineEmojiHappy },
   ticker: { icon: FaDollarSign },
-  command: { icon: UseCommandIcon },
-  submit: { icon: SendIcon },
+  command: { icon: BsLightning },
+  submit: { icon: HiOutlinePaperAirplane, className: "rotate-90" },
 }
 
 const useCommand = () => {
@@ -268,13 +269,13 @@ const MessagingInput = (props) => {
   )
 }
 
-const EmojiButton = ({ emojiButton, onClick }) => (
+const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
   <div
     className="flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
     role="button"
     aria-roledescription="button"
     onClick={onClick}
-    ref={emojiButton.ref ? emojiButton.ref : null}
+    ref={ref || null}
   >
     <emojiButton.icon
       className={`h-5 w-5 md:h-6 md:w-6 ${
@@ -282,6 +283,6 @@ const EmojiButton = ({ emojiButton, onClick }) => (
       }`}
     />
   </div>
-)
+))
 
 export default memo(MessagingInput)

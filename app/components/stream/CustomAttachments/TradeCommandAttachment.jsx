@@ -193,7 +193,7 @@ const MMLNumberInput = ({ tagKey, value, onChange, name, currency, decimals = 2 
     <div className="flex flex-row m-2 border rounded shadow">
       <span
         key={tagKey}
-        className="flex items-center px-3 text-sm font-bold rounded rounded-r-none sm:text-base font-poppins bg-grey-200 text-grey-400"
+        className="flex items-center px-3 text-sm font-bold rounded rounded-r-none sm:text-base font-primary bg-grey-200 text-grey-400"
       >
         {name}
         {CurrencyIcon && <CurrencyIcon className="ml-2 mb-0.5" />}

@@ -5,7 +5,7 @@ export default function PriceInput({
   setPrice,
   pricePlaceholder = "0.00",
   defaultCurrency = "USD",
-  textStyling = "font-poppins text-sm text-blueGray-500",
+  textStyling = "font-primary text-sm text-blueGray-500",
   showPrice = true,
 }) {
   const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency)

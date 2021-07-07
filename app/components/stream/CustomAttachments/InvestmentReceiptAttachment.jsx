@@ -30,7 +30,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
           price: cost,
         }}
       />
-      {/* <span className="uppercase text-brand font-poppins">Complete</span> */}
+      {/* <span className="uppercase text-brand font-primary">Complete</span> */}
     </div>
   )
 }

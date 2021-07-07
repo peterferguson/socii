@@ -49,26 +49,13 @@ export default function StockDisplay({ tickerSymbols }) {
     }
   }, [isVisible])
 
-  // const tradingViewSymbols = {
-  //   symbols: tickerSymbols.map(({ ticker }) => {
-  //     return {
-  //       proName: `${ticker.exchange}:${ticker.tickerSymbol}`,
-  //       title: ticker.tickerSymbol,
-  //     }
-  //   }),
-  // }
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
   return (
     // TODO: Create our own version of this Ticker Tape banner
     <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
-      {/* <div className="flex flex-col">
-        {isBrowser && <TradingViewStockTickerTape tickerSymbols={tradingViewSymbols} />}
-        {isBrowser && <TradingViewStockTickerQuotes />}
-      </div> */}
-
       <Link href="/stocks/popular">
-        <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-work-sans text-brand-dark">
+        <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-secondary text-brand-dark">
           Popular Stocks
           <div className="flex-grow" />
           <FiChevronRight className="h-8 cursor-pointer mt-0.5" />

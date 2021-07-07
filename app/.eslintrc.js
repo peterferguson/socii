@@ -12,6 +12,10 @@ module.exports = {
     "plugin:tailwind/recommended",
     // "plugin:tailwindcss/recommended",
   ],
+  globals: {
+    React: true,
+    JSX: true,
+  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -28,6 +32,8 @@ module.exports = {
   rules: {
     "react/prop-types": 0,
     "react/display-name": 0,
+    "no-unused-vars": 0,
+    "react/react-in-jsx-scope": 0,
     "react/jsx-no-target-blank": 0,
   },
   settings: {

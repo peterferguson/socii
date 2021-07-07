@@ -28,7 +28,7 @@ export default function UserPhoto({
 
   return !photo.current ? (
     <div
-      className={`${className} flex items-center justify-center bg-${getRandomTailwindColor()} m-auto font-poppins`}
+      className={`${className} flex items-center justify-center bg-${getRandomTailwindColor()} m-auto font-primary`}
     >
       {username?.[0]}
     </div>

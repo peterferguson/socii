@@ -12,7 +12,7 @@ export default function PieCard({ className, groupName, data, scaling, radius, t
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative z-10 text-4xl text-center cursor-pointer top-2 text-brand font-poppins">
+          <div className="relative z-10 text-4xl text-center cursor-pointer top-2 text-brand font-primary">
             {groupName}
           </div>
         </a>
@@ -37,7 +37,7 @@ export function PieCardSkeleton({ scaling, radius }) {
   }
   return (
     <div className="m-0 mb-2 rounded-none shadow-2xl bg-gray-50 sm:rounded-xl sm:m-4 sm:mb-4">
-      <div className="pt-4 -mb-8 text-xl text-center font-poppins">
+      <div className="pt-4 -mb-8 text-xl text-center font-primary">
         <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
       </div>
       <DonutChart

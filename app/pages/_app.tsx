@@ -1,9 +1,7 @@
 import Footer from "@components/Footer"
 import Head from "@components/Head"
+import { MainLayout } from "@components/MainLayout"
 import Navigation from "@components/Navigation"
-import NavHeader from "@components/NavHeader"
-import Sidebar from "@components/Sidebar"
-import ChatSidebar from "@components/stream/ChatSidebar"
 import { toastProps } from "@lib/constants"
 import { StreamContext, UserContext } from "@lib/context"
 import { useStream, useUserData } from "@lib/hooks"
@@ -13,9 +11,10 @@ import { isBrowser } from "@utils/helper"
 import { AppProps } from "next/app"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useContext, useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
+import "react-file-utils/dist/index.css"
 import { useMediaQuery } from "react-responsive"
-import { Chat, ChatContext } from "stream-chat-react"
+import { Chat } from "stream-chat-react"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
@@ -23,9 +22,6 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 
 const SearchCard = dynamic(() => import("components/SearchCard"), { ssr: true })
 
-const StreamChatWithNoSSR = dynamic(() => import("components/stream/Chat"), {
-  ssr: false,
-})
 
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
@@ -74,16 +70,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const nonStandardLayoutRoutes = ["/", "/enter"]
 
+  const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
+
   return (
     <UserContext.Provider value={userData}>
       <StreamContext.Provider value={{ client }}>
         <main
-          className="relative h-screen overflow-y-scroll bg-gray-100 dark:bg-gray-800 rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900"
-          {...props}
+          className={`min-h-screen no-scrollbar
+          relative overflow-x-hidden overflow-y-scroll bg-gray-100 dark:bg-gray-800 
+          ${notMainLayout ? "" : "h-screen max-h-screen"}
+          rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900`}
         >
           <Head />
           <>
-            {nonStandardLayoutRoutes.includes(router.asPath) ? (
+            {notMainLayout ? (
               <>
                 <Navigation {...props} />
                 <Component {...props} />
@@ -108,28 +108,3 @@ const ComponentContainer = (props) => (
     <MainLayout {...props} />
   </Chat>
 )
-
-function MainLayout(props) {
-  const { client } = useContext(ChatContext)
-  const router = useRouter()
-  const isChatRoute = router.pathname.includes("/chat")
-  const is2Col = !useMediaQuery({ minWidth: 1024 })
-
-  return (
-    <div className="flex items-start justify-between">
-      <Sidebar />
-      <div className="flex flex-col w-full pl-0 sm:p-4 sm:space-y-4">
-        <NavHeader user={props.user} setShowSearchCard={props.setShowSearchCard} />
-        <div className="h-screen pt-2 pb-24 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0">
-          <div className="flex flex-col flex-wrap sm:flex-row">
-            {props.children}
-            {client?.user && props.showActiveChannel && !is2Col && !isChatRoute && (
-              <StreamChatWithNoSSR {...props} />
-            )}
-          </div>
-        </div>
-      </div>
-      <ChatSidebar {...props} />
-    </div>
-  )
-}
