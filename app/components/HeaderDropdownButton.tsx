@@ -17,7 +17,6 @@ interface DropdownButtonProps extends ButtonProps {
 }
 
 export default function HeaderDropdownButton(props: DropdownButtonProps) {
-  console.log(props.items.filter((item) => item.notificationCount > 0).length > 0)
   return (
     <Popover>
       <Popover.Button
