@@ -49,20 +49,21 @@ export default function HeaderButton(props: ButtonProps) {
   )
 }
 
-function DropdownMenuItem(
-  props: DropdownItemProps,
-  { notificationCount = 0 }: DropdownItemProps
-) {
+function DropdownMenuItem(props: DropdownItemProps) {
   return (
     <li className="flex" onClick={props.onClick}>
       <Link href={props.href}>
-        <a className="inline-flex items-center justify-start w-full px-2 py-1 text-sm font-semibold text-black transition-colors duration-150 rounded-md hover:bg-brand-light hover:text-palette-light">
+        <a className="inline-flex items-center justify-start w-full px-2 py-1 text-sm font-semibold text-black transition-colors duration-150 rounded-md hover:bg-brand-light hover:text-brand-cyan-vivid">
           {!!props.leftIcon && <props.leftIcon />}
-          <span>{props.name}</span>
-          <div className="flex-grow"></div>
-          <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full justify-self-end dark:text-red-100 dark:bg-red-600">
-            {notificationCount}
+          <span className="inline-flex items-center justify-center pl-2">
+            {props.name}
           </span>
+          <div className="flex-grow"></div>
+          {props.notificationCount > 0 && (
+            <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full justify-self-end dark:text-red-100 dark:bg-red-600">
+              {props.notificationCount}
+            </span>
+          )}
           {!!props.rightIcon && <props.rightIcon />}
         </a>
       </Link>
