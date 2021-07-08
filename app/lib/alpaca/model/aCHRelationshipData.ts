@@ -50,7 +50,14 @@ export class ACHRelationshipData {
   ]
 
   static from(json) {
-    return Object.assign(new ACHRelationshipData(), json)
+    // - convert baseName to name
+    for (const { baseName, name } of this.attributeTypeMap) {
+      if (baseName !== name) {
+        Object.assign(json, { [name]: json[baseName] })
+        delete json[baseName]
+      }
+    }
+    return Object.assign(new this(), json)
   }
 
   static getAttributeTypeMap() {
