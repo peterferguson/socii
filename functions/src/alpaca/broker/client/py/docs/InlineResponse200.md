@@ -1,0 +1,47 @@
+# InlineResponse200
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **str** |  | [optional] 
+**account_number** | **str** |  | [optional] 
+**status** | [**AccountStatus**](AccountStatus.md) |  | [optional] 
+**currency** | **str** |  | [optional] 
+**buying_power** | **str** |  | [optional] 
+**regt_buying_power** | **str** |  | [optional] 
+**daytrading_buying_power** | **str** |  | [optional] 
+**cash** | **str** |  | [optional] 
+**cash_withdrawable** | **str** |  | [optional] 
+**cash_transferable** | **str** |  | [optional] 
+**pending_transfer_out** | **str** |  | [optional] 
+**portfolio_value** | **str** |  | [optional] 
+**pattern_day_trader** | **bool** |  | [optional] 
+**trading_blocked** | **bool** |  | [optional] 
+**transfers_blocked** | **bool** |  | [optional] 
+**account_blocked** | **bool** |  | [optional] 
+**created_at** | **str** |  | [optional] 
+**trade_suspended_by_user** | **bool** |  | [optional] 
+**multiplier** | **str** |  | [optional] 
+**shorting_enabled** | **bool** |  | [optional] 
+**equity** | **str** |  | [optional] 
+**last_equity** | **str** |  | [optional] 
+**long_market_value** | **str** |  | [optional] 
+**short_market_value** | **str** |  | [optional] 
+**initial_margin** | **str** |  | [optional] 
+**maintenance_margin** | **str** |  | [optional] 
+**last_maintenance_margin** | **str** |  | [optional] 
+**sma** | **str** |  | [optional] 
+**daytrade_count** | **int** |  | [optional] 
+**previous_close** | **str** |  | [optional] 
+**last_long_market_value** | **str** |  | [optional] 
+**last_short_market_value** | **str** |  | [optional] 
+**last_cash** | **str** |  | [optional] 
+**last_initial_margin** | **str** |  | [optional] 
+**last_regt_buying_power** | **str** |  | [optional] 
+**last_daytrading_buying_power** | **str** |  | [optional] 
+**last_buying_power** | **str** |  | [optional] 
+**last_daytrade_count** | **int** |  | [optional] 
+**clearing_broker** | **str** |  | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
