@@ -1,0 +1,13 @@
+POST http://localhost:3000/api/alpaca/trade
+content-type: application/json
+
+{
+  # Firm account id 
+  "account_id": "933ab506-9e30-3001-8230-50dc4e12861c",
+  "symbol": "AAPL",
+  "qty": "2.5",
+  "side": "buy",
+  "type": "market",
+  "time_in_force": "day",
+  "commission": "0"
+}
