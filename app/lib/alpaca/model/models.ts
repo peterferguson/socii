@@ -352,12 +352,11 @@ export class ObjectSerializer {
       let instance: { [index: string]: any } = {}
       for (let index = 0; index < attributeTypes.length; index++) {
         let attributeType = attributeTypes[index]
-        // console.log(attributeType)
-        instance[attributeType.baseName] = ObjectSerializer.serialize(
-          data[attributeType.name],
+        instance[attributeType.name] = ObjectSerializer.serialize(
+          data[attributeType.baseName],
           attributeType.type
         )
-        // console.log(instance[attributeType.baseName])
+        console.log(instance[attributeType.baseName])
       }
       return instance
     }
