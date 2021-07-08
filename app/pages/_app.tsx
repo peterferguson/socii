@@ -22,7 +22,6 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 
 const SearchCard = dynamic(() => import("components/SearchCard"), { ssr: true })
 
-
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -68,7 +67,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
-  const nonStandardLayoutRoutes = ["/", "/enter"]
+  const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
 
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
 
