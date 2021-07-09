@@ -10,19 +10,9 @@ export default function CryptoHome() {
   const color = "bitcoin"
   const [body, setBody] = useState(null)
   const { user } = useContext(UserContext)
-  const config = new Configuration({
-    username: process.env.NEXT_PUBLIC_ALPACA_KEY,
-    password: process.env.NEXT_PUBLIC_ALPACA_SECRET,
-  })
 
-  // console.log(user.getIdToken());
-
-  const assetClient = new AssetsApi(config)
-
-  useEffect(() => {
-    assetClient.assetsSymbolGet({ symbol: "TSLA" }).then(({ body }) => setBody(body))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  console.log(user.getIdToken());
+  
 
   return (
     <>
