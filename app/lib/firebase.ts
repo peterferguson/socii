@@ -52,6 +52,7 @@ export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
 // - Types
 export type DocumentReference = firebase.firestore.DocumentReference
 export type DocumentData = firebase.firestore.DocumentData
+export type FirebaseUser = firebase.User
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

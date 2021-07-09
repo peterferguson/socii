@@ -3,7 +3,7 @@ import React from "react"
 import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
 
 interface IComingSoon {
-  children: React.ReactChildren
+  children: React.ReactNode
   color: string
   description: string
 }
