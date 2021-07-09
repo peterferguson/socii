@@ -352,21 +352,8 @@ export class ObjectSerializer {
       let instance: { [index: string]: any } = {}
       for (let index = 0; index < attributeTypes.length; index++) {
         let attributeType = attributeTypes[index]
-
-        // TODO: This following code doesnt work for all the api objects
-        // - the following works for the postOrder endpoint
-        // instance[attributeType.baseName] = ObjectSerializer.serialize(
-        //   data[attributeType.name],
-        //   attributeType.type
-        // )
-        // - the following works for the createAccount endpoint
-        // instance[attributeType.name] = ObjectSerializer.serialize(
-        //   data[attributeType.baseName],
-        //   attributeType.type
-        // )
-
         instance[attributeType.baseName] = ObjectSerializer.serialize(
-          data[attributeType.name],
+          data[attributeType.baseName] ?? data[attributeType.name],
           attributeType.type
         )
       }

@@ -1,25 +1,25 @@
-GET http://localhost:3000/api/alpaca/account
+GET http://localhost:3000/api/alpaca/createAccount
 content-type: application/json
 
 {
   "contact": {
-    "email_address": "cool_alpaca@example.com",
-    "phone_number": "555-666-7788",
-    "street_address": ["20 N San Mateo Dr"],
-    "city": "San Mateo",
-    "state": "CA",
-    "postal_code": "94401",
-    "country": "USA"
+    "email_address": "peter@socii.com",
+    "phone_number": "+447825501123",
+    "street_address": ["30 Donnybrook St"],
+    "city": "Belfast",
+    "state": "",
+    "postal_code": "BT97DD",
+    "country": "GBR"
   },
   "identity": {
-    "given_name": "John",
-    "family_name": "Doe",
-    "date_of_birth": "1990-01-01",
-    "tax_id": "666-55-4321",
-    "tax_id_type": "USA_SSN",
-    "country_of_citizenship": "USA",
-    "country_of_birth": "USA",
-    "country_of_tax_residence": "USA",
+    "given_name": "Peter",
+    "family_name": "Ferguson",
+    "date_of_birth": "1995-01-07",
+    "tax_id": "AA123456C",
+    "tax_id_type": "GBR_NINO",
+    "country_of_citizenship": "GBR",
+    "country_of_birth": "GBR",
+    "country_of_tax_residence": "GBR",
     "funding_source": ["employment_income"]
   },
   "disclosures": {
