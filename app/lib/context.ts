@@ -13,6 +13,7 @@ export const UserContext = createContext({
   userGroups: null,
 } as User)
 
+// TODO: Not sure this is the correct use of a context ... I think it is not!
 export const SelectedGroupContext = createContext({
   selectedGroup: null,
   changeSelectedGroup: (selectedGroup) => {},
