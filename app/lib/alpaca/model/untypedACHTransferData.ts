@@ -55,6 +55,7 @@ export class UntypedACHTransferData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace UntypedACHTransferData {
   export enum DirectionEnum {
     Incoming = <any>"INCOMING",

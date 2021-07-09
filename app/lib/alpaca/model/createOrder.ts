@@ -134,6 +134,7 @@ export class CreateOrder {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace CreateOrder {
   export enum SideEnum {
     Buy = <any>"buy",

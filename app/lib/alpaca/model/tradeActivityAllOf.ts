@@ -95,6 +95,7 @@ export class TradeActivityAllOf {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace TradeActivityAllOf {
   export enum TypeEnum {
     Fill = <any>"fill",

@@ -146,6 +146,7 @@ export class ActivityItem {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace ActivityItem {
   export enum TypeEnum {
     Fill = <any>"fill",

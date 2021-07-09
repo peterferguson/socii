@@ -113,6 +113,7 @@ export class BatchJournalResponse {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace BatchJournalResponse {
   export enum EntryTypeEnum {
     Jnlc = <any>"JNLC",

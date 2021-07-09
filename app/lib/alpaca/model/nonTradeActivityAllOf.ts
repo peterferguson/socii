@@ -77,6 +77,7 @@ export class NonTradeActivityAllOf {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace NonTradeActivityAllOf {
   export enum StatusEnum {
     Executed = <any>"executed",

@@ -146,6 +146,7 @@ export class Identity {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace Identity {
   export enum TaxIdTypeEnum {
     UsaSsn = <any>"USA_SSN",

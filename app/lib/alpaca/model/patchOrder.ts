@@ -83,6 +83,7 @@ export class PatchOrder {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace PatchOrder {
   export enum TimeInForceEnum {
     Day = <any>"day",

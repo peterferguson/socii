@@ -47,6 +47,7 @@ export class UntypedTransferData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace UntypedTransferData {
   export enum DirectionEnum {
     Incoming = <any>"INCOMING",

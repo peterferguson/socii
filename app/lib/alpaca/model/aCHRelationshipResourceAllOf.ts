@@ -47,6 +47,7 @@ export class ACHRelationshipResourceAllOf {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace ACHRelationshipResourceAllOf {
   export enum StatusEnum {
     Queued = <any>"QUEUED",

@@ -160,6 +160,7 @@ export class JournalResource {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace JournalResource {
   export enum StatusEnum {
     Pending = <any>"pending",

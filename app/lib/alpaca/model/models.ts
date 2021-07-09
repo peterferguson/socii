@@ -442,7 +442,7 @@ export class ApiKeyAuth implements Authentication {
 
   applyToRequest(requestOptions: localVarRequest.Options): void {
     if (this.location == "query") {
-      ;(<any>requestOptions.qs)[this.paramName] = this.apiKey
+      (<any>requestOptions.qs)[this.paramName] = this.apiKey
     } else if (this.location == "header" && requestOptions && requestOptions.headers) {
       requestOptions.headers[this.paramName] = this.apiKey
     } else if (this.location == "cookie" && requestOptions && requestOptions.headers) {

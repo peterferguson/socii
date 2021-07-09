@@ -65,6 +65,7 @@ export class TransferResourceAllOf {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace TransferResourceAllOf {
   export enum TypeEnum {
     Ach = <any>"ach",

@@ -80,6 +80,7 @@ export class JournalData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace JournalData {
   export enum EntryTypeEnum {
     Jnlc = <any>"JNLC",

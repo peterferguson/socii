@@ -1,4 +1,4 @@
-import { AccountCreationObject, AccountsApi, ObjectSerializer } from "@lib/alpaca/api"
+import { AccountCreationObject, AccountsApi } from "@lib/alpaca/api"
 import { NextApiRequest, NextApiResponse } from "next"
 import { cors } from "@utils/middleware"
 
@@ -13,4 +13,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const account = AccountCreationObject.from(body)
   res.end(JSON.stringify((await accountClient.accountsPost(account)).body))
 }
-

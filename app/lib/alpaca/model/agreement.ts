@@ -56,6 +56,7 @@ export class Agreement {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace Agreement {
   export enum AgreementEnum {
     MarginAgreement = <any>"margin_agreement",

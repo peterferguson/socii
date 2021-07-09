@@ -98,6 +98,7 @@ export class ACHRelationshipResource {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace ACHRelationshipResource {
   export enum BankAccountTypeEnum {
     Checking = <any>"CHECKING",

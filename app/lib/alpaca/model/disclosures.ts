@@ -86,6 +86,7 @@ export class Disclosures {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace Disclosures {
   export enum EmploymentStatusEnum {
     Unemployed = <any>"unemployed",

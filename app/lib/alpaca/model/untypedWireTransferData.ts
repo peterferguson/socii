@@ -61,6 +61,7 @@ export class UntypedWireTransferData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace UntypedWireTransferData {
   export enum DirectionEnum {
     Incoming = <any>"INCOMING",

@@ -89,6 +89,7 @@ export class BankData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace BankData {
   export enum BankCodeTypeEnum {
     Aba = <any>"ABA",

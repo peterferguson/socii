@@ -115,6 +115,7 @@ export class TransferResource {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace TransferResource {
   export enum TypeEnum {
     Ach = <any>"ach",

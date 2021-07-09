@@ -78,6 +78,7 @@ export class TransferData {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace TransferData {
   export enum TransferTypeEnum {
     Ach = <any>"ach",

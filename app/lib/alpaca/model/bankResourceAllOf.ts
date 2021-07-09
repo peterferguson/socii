@@ -47,6 +47,7 @@ export class BankResourceAllOf {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace BankResourceAllOf {
   export enum StatusEnum {
     Queued = <any>"QUEUED",

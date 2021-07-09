@@ -233,6 +233,7 @@ export class OrderObject {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace OrderObject {
   export enum OrderClassEnum {
     Simple = <any>"simple",

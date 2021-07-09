@@ -95,6 +95,7 @@ export class InlineResponse2006 {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace InlineResponse2006 {
   export enum StatusEnum {
     Active = <any>"ACTIVE",

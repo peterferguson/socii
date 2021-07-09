@@ -101,6 +101,7 @@ export class JournalJNLS {
   }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace JournalJNLS {
   export enum StatusEnum {
     Pending = <any>"pending",
