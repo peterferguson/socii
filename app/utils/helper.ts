@@ -297,3 +297,9 @@ export const iexQuote = async (tickerSymbol: string, filter: string) => {
 export function tw(...classes: (false | null | undefined | string)[]): string {
   return classes.filter(Boolean).join(" ")
 }
+
+/**
+ * Get first name from firebase user
+ * @param  {string} ticker
+ */
+export const userFirstName = (user) => user.displayName.split(" ")?.[0]

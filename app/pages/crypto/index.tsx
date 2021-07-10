@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react"
+import { fetcher } from "@utils/helper"
 import { UserContext } from "@lib/context"
 import { FaBitcoin } from "react-icons/fa"
 import ComingSoon from "../../components/ComingSoon"
-import { AssetsApi, Configuration } from "@lib/alpaca/test"
+import useSWR from "swr"
 
 export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
@@ -11,7 +12,12 @@ export default function CryptoHome() {
   const [body, setBody] = useState(null)
   const { user } = useContext(UserContext)
 
-  console.log(user.getIdToken());
+  const { data, error } = useSWR(
+    user ? ["/api/alpaca/TSLA", user.getIdToken()] : null,
+    fetcher
+  )
+
+  console.log(data);
   
 
   return (

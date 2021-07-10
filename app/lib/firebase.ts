@@ -5,6 +5,7 @@ import "firebase/firestore"
 import "firebase/functions"
 // import "firebase/performance"
 
+import { userFirstName } from "@utils/helper"
 import toast from "react-hot-toast"
 
 export const firebaseConfig = {
@@ -69,12 +70,6 @@ export async function getUserWithUsername(username) {
   const userDoc = (await query.get()).docs?.[0]
   return userDoc
 }
-
-/**
- * Get first name from firebase user
- * @param  {string} ticker
- */
-export const userFirstName = (user) => user.displayName.split(" ")?.[0]
 
 /**
  * Gets a ticker/{isin} document ISIN by querying the ticker

@@ -1,5 +1,11 @@
 import { CurrencyCode } from "@lib/constants"
-import { auth, firestore } from "@lib/firebase"
+import { UserContext } from "@lib/context"
+import {
+  auth,
+  facebookAuthProvider,
+  firestore,
+  googleAuthProvider,
+} from "@lib/firebase"
 import {
   currencyConversion,
   fetcher,
@@ -8,20 +14,25 @@ import {
   isEmpty,
   isPromise,
   round,
+  userFirstName
 } from "@utils/helper"
 import Cookie from "js-cookie"
+import Router from "next/router"
 import {
   RefObject,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
+import toast from "react-hot-toast"
 import { useScroll } from "react-use"
 import { StreamChat } from "stream-chat"
 import useSWR from "swr"
+import { createUser } from "./db"
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
@@ -528,4 +539,146 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>(
   useEventListener("resize", updateSize)
 
   return size
+}
+
+export const useAuth = () => useContext(UserContext)
+
+//Ref https://docs.react2025.com/firebase/use-auth
+export const useProvideAuth = () => {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const handleUser = async (rawUser) => {
+    console.log("handleUser called", new Date())
+    if (rawUser) {
+      const user = await formatUser(rawUser)
+      const { token, ...userWithoutToken } = user
+
+      createUser(user.uid, userWithoutToken)
+      setUser(user)
+
+      setLoading(false)
+      return user
+    } else {
+      setUser(false)
+      setLoading(false)
+      return false
+    }
+  }
+
+  const signinWithEmail = (email, password, redirect) => {
+    setLoading(true)
+    return auth.signInWithEmailAndPassword(email, password).then((response) => {
+      handleUser(response.user)
+
+      if (redirect) {
+        Router.push(redirect)
+      }
+    })
+  }
+
+  // const signinWithTwitter = (redirect) => {
+  //   setLoading(true)
+  //   return auth.signInWithPopup(new TwitterAuthProvider()).then((response) => {
+  //     handleUser(response.user)
+
+  //     if (redirect) {
+  //       Router.push(redirect)
+  //     }
+  //   })
+  // }
+
+  const signinWithFacebook = (redirect) => {
+    setLoading(true)
+    return auth.signInWithPopup(facebookAuthProvider).then((response) => {
+      handleUser(response.user)
+
+      if (redirect) {
+        Router.push(redirect)
+      }
+    })
+  }
+  const signinWithGoogle = (redirect) => {
+    setLoading(true)
+    return auth.signInWithPopup(googleAuthProvider).then((response) => {
+      handleUser(response.user)
+
+      if (redirect) {
+        Router.push(redirect)
+      }
+    })
+  }
+
+  const signout = () => {
+    return auth.signOut().then(() => {
+      const firstname = userFirstName(auth.currentUser)
+      toast.dismiss()
+      toast(`Bye for now ${firstname}!`, { icon: "👋" })
+      handleUser(false)
+    })
+  }
+
+  useEffect(() => {
+    const unsubscribe = auth.onIdTokenChanged(handleUser)
+    return () => unsubscribe()
+  }, [])
+
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     if (user) {
+  //       const token = await firebase
+  //         .auth()
+  //         .currentUser.getIdToken(/* forceRefresh */ true);
+  //       setUser(user);
+  //       console.log('refreshed token');
+  //     }
+  //   }, 30 * 60 * 1000 /*every 30min, assuming token expires every 1hr*/);
+  //   return () => clearInterval(interval);
+  // }, [user]); // needs to depend on user to have closure on a valid user object in callback fun
+
+  const getFreshToken = async () => {
+    console.log("getFreshToken called", new Date())
+    const currentUser = auth.currentUser
+    if (currentUser) {
+      const token = await currentUser.getIdToken(false)
+      return `${token}`
+    } else {
+      return ""
+    }
+  }
+
+  return {
+    user,
+    loading,
+    signinWithEmail,
+    // signinWithGitHub,
+    // signinWithTwitter,
+    signinWithFacebook,
+    signinWithGoogle,
+    signout,
+    getFreshToken,
+  }
+}
+
+// const getStripeRole = async () => {
+//   await firebase.auth().currentUser.getIdToken(true);
+//   const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
+//   return decodedToken.claims.stripeRole || 'free';
+// };
+
+const formatUser = async (user) => {
+  // const token = await user.getIdToken(/* forceRefresh */ true);
+  const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
+  const { token, expirationTime } = decodedToken
+  console.log(token)
+  return {
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName,
+    provider: user.providerData[0].providerId,
+    photoUrl: user.photoURL,
+    token,
+    expirationTime,
+    // stripeRole: await getStripeRole(),
+  }
 }
