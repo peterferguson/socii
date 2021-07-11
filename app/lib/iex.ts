@@ -1,5 +1,5 @@
 const token = process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY
-const apiversion = "stable" 
+const apiversion = "stable"
 
 /*
  * Interface definitions of the response types
@@ -11,7 +11,7 @@ interface StockSymbol {
   isEnabled: boolean
   name: string
   symbol: string
-  type: 'cs' | 'et' | 'ps' | 'bo' | 'su' | 'N/A' | string
+  type: "cs" | "et" | "ps" | "bo" | "su" | "N/A" | string
 }
 
 interface QuoteResponse {
@@ -19,17 +19,17 @@ interface QuoteResponse {
   companyName: string
   primaryExchange: string
   sector: string
-  calculationPrice: 'tops' | 'sip' | 'previousClose' | 'close'
+  calculationPrice: "tops" | "sip" | "previousClose" | "close"
   open: number
   openTime: number
   close: number
   closeTime: number
   latestPrice: number
   latestSource:
-    | 'IEX real time price'
-    | '15 minute delayed price'
-    | 'Close'
-    | 'Previous close'
+    | "IEX real time price"
+    | "15 minute delayed price"
+    | "Close"
+    | "Previous close"
   latestTime: string
   latestUpdate: number
   latestVolume: number
@@ -61,15 +61,15 @@ interface QuoteResponse {
  * catch-all string.
  */
 export type ChartRangeOption =
-  | '5y'
-  | '2y'
-  | '1y'
-  | 'ytd'
-  | '6m'
-  | '3m'
-  | '1m'
-  | '1d'
-  | 'dynamic'
+  | "5y"
+  | "2y"
+  | "1y"
+  | "ytd"
+  | "6m"
+  | "3m"
+  | "1m"
+  | "1d"
+  | "dynamic"
   | string
 
 interface ChartItem {
@@ -122,7 +122,7 @@ interface OpenCloseResponse {
  * et – Exchange Traded Fund (ETF)
  * (blank) = Not Available, i.e., Warrant, Note, or (non-filing) Closed Ended Funds
  */
-type IssueType = 'ad' | 're' | 'ce' | 'si' | 'lp' | 'cs' | 'et' | ''
+type IssueType = "ad" | "re" | "ce" | "si" | "lp" | "cs" | "et" | ""
 
 interface CompanyResponse {
   symbol: string
@@ -231,7 +231,7 @@ type NewsRange =
   | 49
   | 50
 
-type SplitRange = '5y' | '2y' | '1y' | 'ytd' | '6m' | '3m' | '1m'
+type SplitRange = "5y" | "2y" | "1y" | "ytd" | "6m" | "3m" | "1m"
 
 interface Split {
   exDate: string
@@ -336,7 +336,7 @@ interface EarningsResponse {
   earnings: Earning[]
 }
 
-type DividendRange = '5y' | '2y' | '1y' | 'ytd' | '6m' | '3m' | '1m'
+type DividendRange = "5y" | "2y" | "1y" | "ytd" | "6m" | "3m" | "1m"
 
 interface Dividend {
   exDate: string
@@ -346,14 +346,14 @@ interface Dividend {
   amount: number
   flag: string // TODO: API docs don't mention this, but this can probably be an enum
   type:
-    | 'Dividend income'
-    | 'Interest income'
-    | 'Stock dividend'
-    | 'Short term capital gain'
-    | 'Medium term capital gain'
-    | 'Long term capital gain'
-    | 'Unspecified term capital gain'
-  qualified: 'P' | 'Q' | 'N' | '' | null // TODO: API Docs say null here, but we need to confirm if that ever happens
+    | "Dividend income"
+    | "Interest income"
+    | "Stock dividend"
+    | "Short term capital gain"
+    | "Medium term capital gain"
+    | "Long term capital gain"
+    | "Unspecified term capital gain"
+  qualified: "P" | "Q" | "N" | "" | null // TODO: API Docs say null here, but we need to confirm if that ever happens
   indicated: string // TODO: API docs don't mention this, but this can probably be an enum
 }
 
@@ -367,7 +367,7 @@ interface DelayedQuoteResponse {
   processedTime: number
 }
 
-type MarketList = 'mostactive' | 'gainers' | 'losers' | 'iexvolume' | 'iexpercent'
+type MarketList = "mostactive" | "gainers" | "losers" | "iexvolume" | "iexpercent"
 
 interface EffectiveSpread {
   volume: number // TODO: API docs say this is a string, but it looks like it's a number

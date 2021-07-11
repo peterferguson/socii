@@ -1,0 +1,83 @@
+# Get all accounts
+GET http://localhost:3000/api/alpaca/accounts
+content-type: application/json
+authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjhmNDMyMDRhMTc5MTVlOGJlN2NjZDdjYjI2NGRmNmVhMzgzYzQ5YWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiUGV0ZXIgRmVyZ3Vzb24iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1UV2UzUkMyYnFjQS9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNtcWhlUkoxLWgxUEJ4b2tZa0U3eGNRajdDMmpRL3M5Ni1jL3Bob3RvLmpwZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zb2NpaWludmVzdCIsImF1ZCI6InNvY2lpaW52ZXN0IiwiYXV0aF90aW1lIjoxNjI1OTE0NjY3LCJ1c2VyX2lkIjoiN0ZoZnN0QkV6dFl0VlBEZ2tibWt1TTB5bzE4MiIsInN1YiI6IjdGaGZzdEJFenRZdFZQRGdrYm1rdU0weW8xODIiLCJpYXQiOjE2MjYwMzkzODEsImV4cCI6MTYyNjA0Mjk4MSwiZW1haWwiOiJwZXRlcmZlcmd1c29uOTVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMTA1MDI2NTc1NTI5MTYxMTA3MTUiXSwiZW1haWwiOlsicGV0ZXJmZXJndXNvbjk1QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.fOtBC29QDm3mU0ejoNtOp4KM_CYF0t1vkZu8-YR5_mJ6qbb5AVPY4KXlbLmho9zsxKpq85qF7Rcf_o35kGzMKj6jEOn8n1OeBoWhj-iQRAoKnNFZRAnLCEkyLh2n6b14rUlyjys-aYyFQm_DH3UDf9-0EE5yJAsaxN6xbM03cYEaN_DvvEMOgYH4U0UAQVDk0kmZ_V_DCQwvNsXbUxK1TkJO8rV-pcmFEGhFfGHfvmR4lemHv3czizFkSfZTVlC7Y3PjLxo524tXJ_0d4cFqD0Q6HqrAYZVUfyAedo5hKlxqpSu4iBJ5Ula5wn1Sf20PIXxDh4uLFBjXX2KxQHsLjA
+
+{
+  "query": "c7b69d40-b3bf-44fb-bb89-61e69bdb09ff"
+}
+
+# Get specific account
+###
+GET http://localhost:3000/api/alpaca/accounts
+content-type: application/json
+authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjhmNDMyMDRhMTc5MTVlOGJlN2NjZDdjYjI2NGRmNmVhMzgzYzQ5YWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiUGV0ZXIgRmVyZ3Vzb24iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1UV2UzUkMyYnFjQS9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNtcWhlUkoxLWgxUEJ4b2tZa0U3eGNRajdDMmpRL3M5Ni1jL3Bob3RvLmpwZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zb2NpaWludmVzdCIsImF1ZCI6InNvY2lpaW52ZXN0IiwiYXV0aF90aW1lIjoxNjI1OTE0NjY3LCJ1c2VyX2lkIjoiN0ZoZnN0QkV6dFl0VlBEZ2tibWt1TTB5bzE4MiIsInN1YiI6IjdGaGZzdEJFenRZdFZQRGdrYm1rdU0weW8xODIiLCJpYXQiOjE2MjYwMzkzODEsImV4cCI6MTYyNjA0Mjk4MSwiZW1haWwiOiJwZXRlcmZlcmd1c29uOTVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMTA1MDI2NTc1NTI5MTYxMTA3MTUiXSwiZW1haWwiOlsicGV0ZXJmZXJndXNvbjk1QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.fOtBC29QDm3mU0ejoNtOp4KM_CYF0t1vkZu8-YR5_mJ6qbb5AVPY4KXlbLmho9zsxKpq85qF7Rcf_o35kGzMKj6jEOn8n1OeBoWhj-iQRAoKnNFZRAnLCEkyLh2n6b14rUlyjys-aYyFQm_DH3UDf9-0EE5yJAsaxN6xbM03cYEaN_DvvEMOgYH4U0UAQVDk0kmZ_V_DCQwvNsXbUxK1TkJO8rV-pcmFEGhFfGHfvmR4lemHv3czizFkSfZTVlC7Y3PjLxo524tXJ_0d4cFqD0Q6HqrAYZVUfyAedo5hKlxqpSu4iBJ5Ula5wn1Sf20PIXxDh4uLFBjXX2KxQHsLjA
+
+{
+  "query": "c7b69d40-b3bf-44fb-bb89-61e69bdb09ff"
+}
+
+# Create account
+###
+POST http://localhost:3000/api/alpaca/accounts
+content-type: application/json
+authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjhmNDMyMDRhMTc5MTVlOGJlN2NjZDdjYjI2NGRmNmVhMzgzYzQ5YWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiUGV0ZXIgRmVyZ3Vzb24iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1UV2UzUkMyYnFjQS9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNtcWhlUkoxLWgxUEJ4b2tZa0U3eGNRajdDMmpRL3M5Ni1jL3Bob3RvLmpwZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zb2NpaWludmVzdCIsImF1ZCI6InNvY2lpaW52ZXN0IiwiYXV0aF90aW1lIjoxNjI1OTE0NjY3LCJ1c2VyX2lkIjoiN0ZoZnN0QkV6dFl0VlBEZ2tibWt1TTB5bzE4MiIsInN1YiI6IjdGaGZzdEJFenRZdFZQRGdrYm1rdU0weW8xODIiLCJpYXQiOjE2MjYwMzkzODEsImV4cCI6MTYyNjA0Mjk4MSwiZW1haWwiOiJwZXRlcmZlcmd1c29uOTVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMTA1MDI2NTc1NTI5MTYxMTA3MTUiXSwiZW1haWwiOlsicGV0ZXJmZXJndXNvbjk1QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.fOtBC29QDm3mU0ejoNtOp4KM_CYF0t1vkZu8-YR5_mJ6qbb5AVPY4KXlbLmho9zsxKpq85qF7Rcf_o35kGzMKj6jEOn8n1OeBoWhj-iQRAoKnNFZRAnLCEkyLh2n6b14rUlyjys-aYyFQm_DH3UDf9-0EE5yJAsaxN6xbM03cYEaN_DvvEMOgYH4U0UAQVDk0kmZ_V_DCQwvNsXbUxK1TkJO8rV-pcmFEGhFfGHfvmR4lemHv3czizFkSfZTVlC7Y3PjLxo524tXJ_0d4cFqD0Q6HqrAYZVUfyAedo5hKlxqpSu4iBJ5Ula5wn1Sf20PIXxDh4uLFBjXX2KxQHsLjA
+
+{
+  "contact": {
+    "email_address": "peter@socii.com",
+    "phone_number": "+447825501123",
+    "street_address": ["30 Donnybrook St"],
+    "city": "Belfast",
+    "state": "",
+    "postal_code": "BT97DD",
+    "country": "GBR"
+  },
+  "identity": {
+    "given_name": "Peter",
+    "family_name": "Ferguson",
+    "date_of_birth": "1995-01-07",
+    "tax_id": "AA123456C",
+    "tax_id_type": "GBR_NINO",
+    "country_of_citizenship": "GBR",
+    "country_of_birth": "GBR",
+    "country_of_tax_residence": "GBR",
+    "funding_source": ["employment_income"]
+  },
+  "disclosures": {
+    "is_control_person": false,
+    "is_affiliated_exchange_or_finra": false,
+    "is_politically_exposed": false,
+    "immediate_family_exposed": false
+  },
+  "agreements": [
+    {
+      "agreement": "margin_agreement",
+      "signed_at": "2020-09-11T18:09:33Z",
+      "ip_address": "185.13.21.99"
+    },
+    {
+      "agreement": "account_agreement",
+      "signed_at": "2020-09-11T18:13:44Z",
+      "ip_address": "185.13.21.99"
+    },
+    {
+      "agreement": "customer_agreement",
+      "signed_at": "2020-09-11T18:13:44Z",
+      "ip_address": "185.13.21.99"
+    }
+  ],
+  "documents": [
+    {
+      "document_type": "cip_result",
+      "content": "VGhlcmUgYXJlIG5vIHdpbGQgYWxwYWNhcy4=",
+      "mime_type": "application/pdf"
+    },
+    {
+      "document_type": "identity_verification",
+      "document_sub_type": "passport",
+      "content": "QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=",
+      "mime_type": "image/jpeg"
+    }
+  ]
+}
