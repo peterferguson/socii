@@ -34,6 +34,7 @@ export const cors = initMiddleware(
   })
 )
 
+// Verify the firebase auth token on the server-side (in vercel functions)
 export function withAuth(handler) {
   return async (req, res) => {
     const authHeader = req.headers.authorization

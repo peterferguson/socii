@@ -298,7 +298,6 @@ export const useTickerPrice = (
       )
       setExpired?.(false)
     }
-    console.log(price)
   }, [expired, price, setExpired, setPrice, tickerSymbol])
 
   return price

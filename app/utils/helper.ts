@@ -2,6 +2,7 @@ import { CurrencyCode } from "@lib/constants"
 import firebase, { DocumentReference, firestore, tickerToISIN } from "@lib/firebase"
 import { OHLCTimeseries } from "@lib/types"
 import FirebaseUser from "@models/FirebaseUser"
+import fetch from "isomorphic-unfetch"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
@@ -57,7 +58,19 @@ export function validateEmail(email: string) {
 
 export const fetchJSON = async (url) => (await fetch(url)).json()
 
-export const fetcher = (url) => fetch(url).then((r) => r.json())
+export async function fetcher<JSON = any>(
+  url: string,
+  options?: object
+): Promise<JSON> {
+  const res = await fetch(url, options)
+  return res.json()
+}
+export const fetchWithToken = (url: string, token: string) =>
+  fetcher(url, {
+    headers: {
+      Authorization: `Basic ${token}`,
+    },
+  })
 
 // TODO: Needs refactored
 // TODO: Remove the timeseries query so we can pull it separately and load other data first

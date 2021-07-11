@@ -1,23 +1,11 @@
-import React, { useState, useEffect, useContext } from "react"
-import { fetcher } from "@utils/helper"
-import { useAuth } from "@lib/hooks"
+import React from "react"
 import { FaBitcoin } from "react-icons/fa"
 import ComingSoon from "../../components/ComingSoon"
-import useSWR from "swr"
 
 export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
-  const [body, setBody] = useState(null)
-  const { user } = useAuth()
-
-  // const { data, error } = useSWR(
-  //   user ? ["/api/alpaca/TSLA", user.token] : null,
-  //   fetcher
-  // )
-
-  // console.log(data)
 
   return (
     <>
@@ -29,7 +17,6 @@ export default function CryptoHome() {
       >
         <FaBitcoin className={`w-24 h-24 text-${color}`} />
       </ComingSoon>
-      <div className="text-3xl">{body}</div>
     </>
   )
 }

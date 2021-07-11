@@ -34,7 +34,7 @@ const MessagingChannelPreview = ({
   isSidebar,
 }: IMessagingChannelPreview) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
-  const channelName = activeChannel.data.id.split("-").join(" ")
+  const channelName = channel.data.id.split("-").join(" ")
   const is2Col = !useMediaQuery({ minWidth: 1024 })
   const channelNameAsMember = [{ user: { name: channelName } }]
 

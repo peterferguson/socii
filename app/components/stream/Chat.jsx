@@ -60,11 +60,11 @@ export default function StreamChat({
   const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
 
   // - Truth table
-  // is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
-  //    T   |       T         |                       T
-  //    T   |       F         |                       F
-  //    F   |       T         |                       T
-  //    F   |       F         |                       T
+  // ! is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
+  // !    T   |       T         |                       T
+  // !    T   |       F         |                       F
+  // !    F   |       T         |                       T
+  // !    F   |       F         |                       T
 
   const streamProps = {
     client,
