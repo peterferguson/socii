@@ -1,8 +1,8 @@
-import PieCard, { PieCardSkeleton } from "@components/PieCard"
 import DonutChart from "@components/DonutChart"
+import PieCard, { PieCardSkeleton } from "@components/PieCard"
+import { logoBaseUrl } from "@lib/constants"
 import { firestore } from "@lib/firebase"
-import { iexQuote, logoUrl, round } from "@utils/helper"
-
+import { iexQuote } from "@utils/helper"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"
@@ -183,7 +183,6 @@ interface IStockCard {
 
 function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {
   const tickerSymbol = holding.tickerSymbol
-
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   return (
@@ -197,7 +196,7 @@ function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {
           <div className="items-center justify-center flex-none flex-grow-0 m-auto rounded-full cursor-pointer">
             <img
               className="w-10 h-10 mx-2 rounded-full ring-1 ring-brand-shade-darkest"
-              src={logoUrl(holding.ISIN)}
+              src={`${logoBaseUrl}/$(holding.ISIN}.png`}
               alt={`${tickerSymbol} logo`}
             />
           </div>
