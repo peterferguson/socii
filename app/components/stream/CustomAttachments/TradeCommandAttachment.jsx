@@ -1,10 +1,15 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { currencyIcons } from "@lib/constants"
-import { UserContext } from "@lib/context"
 import { tradeSubmission } from "@lib/firebase"
-import { useInterval, useLocalCurrency, useShareCost, useTickerPrice } from "@lib/hooks"
+import {
+  useAuth,
+  useInterval,
+  useLocalCurrency,
+  useShareCost,
+  useTickerPrice,
+} from "@lib/hooks"
 import { currencyConversion, fetcher, getTickerData } from "@utils/helper"
-import React, { Suspense, useContext, useEffect, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
@@ -22,8 +27,8 @@ const MML = React.lazy(async () => {
   return { default: mml.MML }
 })
 
-const TradeCommandAttachment = ({ attachment, tradeType }) => {
-  const { username } = useContext(UserContext)
+const TradeCommandAttachment = ({ attachment }) => {
+  const { username } = useAuth()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 

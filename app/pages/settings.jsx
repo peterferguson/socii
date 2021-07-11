@@ -1,8 +1,8 @@
-import { UserContext } from "@lib/context"
-import React, { useContext } from "react"
+import { useAuth } from "@lib/hooks"
+import React from "react"
 
 export default function Settings() {
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
   return (
     <>
       <div className="w-full sm:w-1/2 xl:w-1/3">
@@ -757,7 +757,7 @@ export default function Settings() {
                       <td className="px-2 py-3 text-center cursor-pointer md:px-3 hover:text-blue-500">
                         7
                       </td>
-                      <td className="relative px-2 py-3 text-center cursor-pointer md:px-3 md:px-2 lg:px-3 hover:text-blue-500">
+                      <td className="relative px-2 py-3 text-center cursor-pointer md:px-3 lg:px-3 hover:text-blue-500">
                         8
                         <span className="absolute bottom-0 w-2 h-2 bg-yellow-500 rounded-full left-1/2 transform -translate-x-1/2"></span>
                       </td>

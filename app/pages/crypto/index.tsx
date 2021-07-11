@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
 import { fetcher } from "@utils/helper"
-import { UserContext } from "@lib/context"
+import { useAuth } from "@lib/hooks"
 import { FaBitcoin } from "react-icons/fa"
 import ComingSoon from "../../components/ComingSoon"
 import useSWR from "swr"
@@ -10,15 +10,14 @@ export default function CryptoHome() {
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
   const [body, setBody] = useState(null)
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
 
-  const { data, error } = useSWR(
-    user ? ["/api/alpaca/TSLA", user.getIdToken()] : null,
-    fetcher
-  )
+  // const { data, error } = useSWR(
+  //   user ? ["/api/alpaca/TSLA", user.token] : null,
+  //   fetcher
+  // )
 
-  console.log(data);
-  
+  // console.log(data)
 
   return (
     <>

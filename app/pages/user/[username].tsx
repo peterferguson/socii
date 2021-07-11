@@ -10,12 +10,11 @@
 import AuthCheck from "@components/AuthCheck"
 import GroupColumn from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
-import UserPhoto from "@components/UserPhoto"
-import { UserContext } from "@lib/context"
-import { auth, firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
+import { useAuth } from "@lib/hooks"
 
 const PortfolioSkeletons = () => (
   <>
@@ -56,7 +55,7 @@ function GroupPortfolios({ pagename }): JSX.Element {
 export default function UserPage() {
   const router = useRouter()
   const { username: pagename } = router.query
-  // const { username } = useContext(UserContext)
+  // const { username } = useAuth()
 
   // const isUsersHomepage = pagename === username
 

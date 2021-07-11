@@ -3,16 +3,26 @@ import AvatarGroup from "@components/stream/AvatarGroup"
 import { getTimeStamp } from "@utils/helper"
 import useMediaQuery from "react-responsive"
 
+import { Channel } from "stream-chat"
 import React, { useContext } from "react"
 import { ChatContext } from "stream-chat-react"
 
-const getChannelName = (members, defaultName) => {
+const getChannelName = (members: string | any[], defaultName: string) => {
   if (!members.length || members.length === 1)
     return members?.[0]?.user.name || defaultName
 
   return `${members?.[0]?.user.name || defaultName}, ${
     members[1]?.user.name || defaultName
   }`
+}
+
+interface IMessagingChannelPreview {
+  channel: Channel
+  latestMessage?: string | JSX.Element
+  setActiveChannel?: (channel: Channel) => void
+  setShowActiveChannel: (bool: boolean) => void
+  toggleHideChannelList: () => void
+  isSidebar: boolean
 }
 
 const MessagingChannelPreview = ({
@@ -22,9 +32,9 @@ const MessagingChannelPreview = ({
   setShowActiveChannel,
   toggleHideChannelList,
   isSidebar,
-}) => {
+}: IMessagingChannelPreview) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
-  const channelName = channel.data.id.split("-").join(" ")
+  const channelName = activeChannel.data.id.split("-").join(" ")
   const is2Col = !useMediaQuery({ minWidth: 1024 })
   const channelNameAsMember = [{ user: { name: channelName } }]
 
@@ -56,16 +66,16 @@ const MessagingChannelPreview = ({
       {AvatarGroup(members, styles)}
       <div className="flex flex-col items-center w-full mx-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
-          <p className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">
+          <span className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">
             {channel.data.name || getChannelName(members, channelName)}
-          </p>
-          <p className="pl-1 m-0 text-tiny font-secondary text-trueGray-600">
+          </span>
+          <span className="pl-1 m-0 text-tiny font-secondary text-trueGray-600">
             {getTimeStamp(channel)}
-          </p>
+          </span>
         </div>
-        <p className="h-4 m-0 overflow-hidden text-xs text-trueGray-600 font-secondary overflow-ellipsis whitespace-nowrap max-w-[200px]">
+        <span className="h-4 m-0 overflow-hidden text-xs text-trueGray-600 font-secondary overflow-ellipsis whitespace-nowrap max-w-[200px]">
           {latestMessage || "Send a message"}
-        </p>
+        </span>
       </div>
     </div>
   )

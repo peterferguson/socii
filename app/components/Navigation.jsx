@@ -1,6 +1,6 @@
 import Logo from "@components/Logo"
 import MacSearchKey from "@components/SearchKey"
-import { UserContext } from "@lib/context"
+import { userContext } from "@lib/context"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
@@ -8,7 +8,7 @@ import { HiOutlineSearch } from "react-icons/hi"
 const Dropdown = dynamic(() => import("components/Dropdown"))
 
 export default function Navigation(props) {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(userContext)
   const router = useRouter()
 
   return (

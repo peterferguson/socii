@@ -4,6 +4,13 @@ import { MdChatBubbleOutline } from "react-icons/md"
 import { Avatar, ChatContext } from "stream-chat-react"
 import { SkeletonLoader } from "./SkeletonLoader"
 
+interface IMessagingChannelList {
+  children?: React.ReactNode
+  error?: boolean
+  loading: boolean
+  onCreateChannel: () => void
+}
+
 const MessagingChannelList = ({
   children,
   error = false,

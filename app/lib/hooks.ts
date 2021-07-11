@@ -1,21 +1,23 @@
 import { CurrencyCode } from "@lib/constants"
-import { UserContext } from "@lib/context"
+import { userContext, streamContext } from "@lib/context"
 import {
   auth,
-  facebookAuthProvider,
+  FacebookAuthProvider,
   firestore,
-  googleAuthProvider,
+  GoogleAuthProvider,
 } from "@lib/firebase"
 import {
   currencyConversion,
   fetcher,
+  formatUser,
   iexQuote,
   isBrowser,
   isEmpty,
   isPromise,
   round,
-  userFirstName
+  userFirstName,
 } from "@utils/helper"
+import firebase from "firebase"
 import Cookie from "js-cookie"
 import Router from "next/router"
 import {
@@ -27,45 +29,23 @@ import {
   useRef,
   useState,
 } from "react"
-import { useAuthState } from "react-firebase-hooks/auth"
 import toast from "react-hot-toast"
 import { useScroll } from "react-use"
 import { StreamChat } from "stream-chat"
 import useSWR from "swr"
+import { UrlObject } from "url"
 import { createUser } from "./db"
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY
 
-export function useUserData() {
-  const [user] = useAuthState(auth)
-  const [username, setUsername] = useState(null)
-  const [userGroups, setUserGroups] = useState(null)
+export const useStream = () => useContext(streamContext)
 
-  // TODO: This happens every so often which is causing extra reads for the groups &
-  // TODO: replication is stopped by the set but it is still unnessecary reads!
-
-  useEffect(() => {
-    const getUserData = () => {
-      // allows us to turn off the realtime data feed when finished
-      let unsubscribe: () => void
-
-      const userRef = firestore.collection("users").doc(user.uid)
-      unsubscribe = userRef.onSnapshot((doc) => {
-        const userData = doc.data()
-        setUsername(userData?.username)
-        setUserGroups(userData?.groups)
-      })
-
-      return unsubscribe
-    }
-    if (user) getUserData()
-  }, [user])
-
-  return { user, username, userGroups }
-}
-
-export const useStream = (uid: string, username: any, displayName: string) => {
-  const streamClient = useRef(null)
+export const useProvideStream = (
+  uid: string,
+  username: string,
+  displayName: string
+) => {
+  const streamClient = useRef<StreamChat | null>(null)
 
   useEffect(() => {
     streamClient.current = StreamChat.getInstance(apiKey, { timeout: 1000 })
@@ -88,7 +68,7 @@ export const useStream = (uid: string, username: any, displayName: string) => {
     if (uid && username && !streamClient.current?.user) connectStreamUser()
   }, [uid, username, displayName])
 
-  return { streamClient: streamClient.current }
+  return { client: streamClient.current }
 }
 
 export const useWindowSize = () => {
@@ -244,17 +224,26 @@ export const useCurrencyConversion = (
   }
 }
 
-const getter = (k, asCookie) => (asCookie ? Cookie.get(k) : localStorage.getItem(k))
-const setter = (k, v, asCookie) =>
-  asCookie ? Cookie.set(k, v) : localStorage.setItem(k, v)
+const getter = (k: string, asCookie: boolean) =>
+  asCookie ? Cookie.getJSON(k) : JSON.parse(localStorage.getItem(k))
+const setter = (k: string, v: string | object, asCookie: boolean) => {
+  return asCookie
+    ? Cookie.set(k, JSON.stringify(v))
+    : localStorage.setItem(k, JSON.stringify(v))
+}
+
+interface PersistenceDefaultValueFunction {
+  func: () => any
+  args: any[]
+}
 
 export const usePersistentState = (
-  defaultValue: any | Promise<any>,
+  defaultValue: any | PersistenceDefaultValueFunction | Promise<any>,
   key: string,
   asCookie: boolean = false
 ) => {
   const [value, setValue] = useState(() => {
-    const persistentValue = JSON.parse(getter(key, asCookie) || null)
+    const persistentValue = getter(key, asCookie) || null
     if (persistentValue !== null && !isEmpty(persistentValue)) return persistentValue
     // - Allows us to send an object with the keys func & args as defaultValue
     // TODO: This works in node but is not setting correct value in localStorage
@@ -265,8 +254,8 @@ export const usePersistentState = (
   useEffect(() => {
     isPromise(value)
       ? // - if the value is a promise resolve it before storing in cache
-        value.then((r) => setter(key, JSON.stringify(r), asCookie))
-      : setter(key, JSON.stringify(value), asCookie)
+        value.then((r: string | object) => setter(key, r, asCookie))
+      : setter(key, value, asCookie)
   }, [key, value, asCookie])
   return [value, setValue]
 }
@@ -284,7 +273,10 @@ export const useTickerPrice = (
   expired = false,
   setExpired = null
 ): PriceData => {
-  const [price, setPrice] = usePersistentState("", `${tickerSymbol}-price`)
+  const [price, setPrice] = usePersistentState(
+    { price: 0, percentChange: 0, lastUpdated: new Date(0).toISOString() },
+    `${tickerSymbol}-price`
+  )
 
   // TODO: Implement cache clearing logic
   // TODO: Implement different price/chart collection policies for more popular stocks
@@ -306,9 +298,10 @@ export const useTickerPrice = (
       )
       setExpired?.(false)
     }
+    console.log(price)
   }, [expired, price, setExpired, setPrice, tickerSymbol])
 
-  return price || { price: 0, percentChange: 0, lastUpdated: new Date(0).toISOString() }
+  return price
 }
 
 // ! taken from https://usehooks-typescript.com/react-hook/use-script
@@ -541,14 +534,16 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>(
   return size
 }
 
-export const useAuth = () => useContext(UserContext)
+export const useAuth = () => useContext(userContext)
 
 //Ref https://docs.react2025.com/firebase/use-auth
 export const useProvideAuth = () => {
   const [user, setUser] = useState(null)
+  const [username, setUsername] = useState(null)
+  const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const handleUser = async (rawUser) => {
+  const handleUser = async (rawUser: firebase.User | null) => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
@@ -556,7 +551,6 @@ export const useProvideAuth = () => {
 
       createUser(user.uid, userWithoutToken)
       setUser(user)
-
       setLoading(false)
       return user
     } else {
@@ -566,16 +560,14 @@ export const useProvideAuth = () => {
     }
   }
 
-  const signinWithEmail = (email, password, redirect) => {
-    setLoading(true)
-    return auth.signInWithEmailAndPassword(email, password).then((response) => {
-      handleUser(response.user)
-
-      if (redirect) {
-        Router.push(redirect)
-      }
-    })
-  }
+  // const signinWithEmail = async (email: string, password: string, redirect: string | UrlObject) => {
+  //   setLoading(true)
+  //   const response = await auth.signInWithEmailAndPassword(email, password)
+  //   handleUser(response.user)
+  //   if (redirect) {
+  //     Router.push(redirect)
+  //   }
+  // }
 
   // const signinWithTwitter = (redirect) => {
   //   setLoading(true)
@@ -588,40 +580,51 @@ export const useProvideAuth = () => {
   //   })
   // }
 
-  const signinWithFacebook = (redirect) => {
+  const signinWithFacebook = async (redirect: string | UrlObject) => {
     setLoading(true)
-    return auth.signInWithPopup(facebookAuthProvider).then((response) => {
-      handleUser(response.user)
-
-      if (redirect) {
-        Router.push(redirect)
-      }
-    })
+    const response = await auth.signInWithPopup(new FacebookAuthProvider())
+    handleUser(response.user)
+    if (redirect) {
+      Router.push(redirect)
+    }
   }
-  const signinWithGoogle = (redirect) => {
+  const signinWithGoogle = async (redirect: string | UrlObject) => {
     setLoading(true)
-    return auth.signInWithPopup(googleAuthProvider).then((response) => {
-      handleUser(response.user)
-
-      if (redirect) {
-        Router.push(redirect)
-      }
-    })
+    const response = await auth.signInWithPopup(new GoogleAuthProvider())
+    handleUser(response.user)
+    if (redirect) {
+      Router.push(redirect)
+    }
   }
 
-  const signout = () => {
-    return auth.signOut().then(() => {
-      const firstname = userFirstName(auth.currentUser)
-      toast.dismiss()
-      toast(`Bye for now ${firstname}!`, { icon: "👋" })
-      handleUser(false)
-    })
+  const signout = async (redirect: string | UrlObject = "/") => {
+    await auth.signOut()
+    const firstname = userFirstName(user)
+    toast.dismiss()
+    toast(`Bye for now ${firstname}!`, { icon: "👋" })
+    handleUser(null)
+    Router.push(redirect)
   }
 
   useEffect(() => {
     const unsubscribe = auth.onIdTokenChanged(handleUser)
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    const getUserData = () => {
+      // allows us to turn off the realtime data feed when finished
+      const userRef = firestore.collection("users").doc(user.uid)
+      const unsubscribe = userRef.onSnapshot((doc) => {
+        const userData = doc.data()
+        setUsername(userData?.username)
+        setUserGroups(userData?.groups)
+      })
+
+      return unsubscribe
+    }
+    if (user) getUserData()
+  }, [user])
 
   // useEffect(() => {
   //   const interval = setInterval(async () => {
@@ -649,36 +652,15 @@ export const useProvideAuth = () => {
 
   return {
     user,
+    username,
+    userGroups,
     loading,
-    signinWithEmail,
+    // signinWithEmail,
     // signinWithGitHub,
     // signinWithTwitter,
     signinWithFacebook,
     signinWithGoogle,
     signout,
     getFreshToken,
-  }
-}
-
-// const getStripeRole = async () => {
-//   await firebase.auth().currentUser.getIdToken(true);
-//   const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
-//   return decodedToken.claims.stripeRole || 'free';
-// };
-
-const formatUser = async (user) => {
-  // const token = await user.getIdToken(/* forceRefresh */ true);
-  const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
-  const { token, expirationTime } = decodedToken
-  console.log(token)
-  return {
-    uid: user.uid,
-    email: user.email,
-    name: user.displayName,
-    provider: user.providerData[0].providerId,
-    photoUrl: user.photoURL,
-    token,
-    expirationTime,
-    // stripeRole: await getStripeRole(),
   }
 }

@@ -1,6 +1,6 @@
 import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { UserContext } from "@lib/context"
+import { userContext } from "@lib/context"
 import { firestore, arrayUnion } from "@lib/firebase"
 
 import {
@@ -16,7 +16,7 @@ const MML = React.lazy(async () => {
 })
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(userContext)
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 

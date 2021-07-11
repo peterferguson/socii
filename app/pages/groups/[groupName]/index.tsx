@@ -35,10 +35,10 @@ import AuthCheck from "@components/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
 import GroupColumn from "@components/GroupCharts"
 import LoadingIndicator from "@components/LoadingIndicator"
-import { UserContext } from "@lib/context"
+import { useAuth, useStream } from "@lib/hooks"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React from "react"
 import { useMediaQuery } from "react-responsive"
 import Custom404 from "../../404"
 
@@ -46,12 +46,15 @@ const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
   ssr: false,
 })
 
-export default function Group({ client }) {
+export default function Group() {
   const is1Col = useMediaQuery({ minWidth: 800 })
   const router = useRouter()
-  const { groupName } = router.query
-  const { userGroups } = useContext(UserContext)
-  // const { streamClient } = useContext(StreamContext)
+  let { groupName } = router.query
+  const { userGroups } = useAuth()
+
+  if (Array.isArray(groupName)) groupName = groupName[0]
+
+  const { client } = useStream()
   // TODO: Use skeleton loaders for chat
 
   return (
@@ -70,7 +73,7 @@ export default function Group({ client }) {
           {is1Col && (
             <AuthCheck>
               <ClientOnly>
-                <StreamChatWithNoSSR client={client} className="flex-auto" />
+                <StreamChatWithNoSSR client={client} />
               </ClientOnly>
             </AuthCheck>
           )}

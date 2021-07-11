@@ -8,12 +8,13 @@ import {
 } from "@components/stream"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useState, useContext } from "react"
+import React, { useContext, useState } from "react"
 import { useMediaQuery } from "react-responsive"
+import { StreamChat as Client } from "stream-chat"
 import {
   Channel,
-  ChatContext,
   ChannelList,
+  ChatContext,
   MessageInput,
   MessageList,
   Window,
@@ -32,10 +33,17 @@ const TypingIndicator = dynamic(() => import("@components/stream/TypingIndicator
   ssr: false,
 })
 
+// interface IStreamChat {
+//   client: Client
+//   setShowActiveChannel?: () => void
+//   isSidebar?: boolean
+// }
+
 export default function StreamChat({
   client,
   setShowActiveChannel,
   isSidebar = false,
+  // }: IStreamChat) {
 }) {
   let is1Col = !useMediaQuery({ minWidth: 640 })
   is1Col = isSidebar ? true : is1Col
@@ -111,7 +119,6 @@ export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
           />
           <MessageList
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-            TypingIndicator={TypingIndicator}
             // messageLimit={5} // TODO: Implement messageLimit to save on api calls
           />
           <MessageInput Input={MessagingInput} />
@@ -133,9 +140,8 @@ export function StreamChannelList({
 }) {
   const { client } = useContext(ChatContext)
   const filter = { members: { $in: [client?.userID] } }
-  const sort = [{ last_message_at: -1 }]
+  const sort = { last_message_at: -1 }
   const options = { state: true, presence: true, limit: 5 }
-  console.log(client);
   return (
     <div
       className={`
@@ -172,23 +178,3 @@ export function StreamChannelList({
     </div>
   )
 }
-
-/*
-? Convert this functionality to use the headlessui Transition component for clarity?
-1 Large screen functionality:
-* Channel list shown immediately but togglible. On toggle close with animation 
-* & resize message list container
-2 Small screen functionality:
-* Channel list hidden immediately but togglible. On toggle close with animation 
-* & don't resize message list container but allow clicking to toggle
-* -
-? Large screen & toggled off
-- Hide & resize (add hidden & translate out)
-? Large screen & toggled on
-- reshow (remove hidden & translate in)
-? Small screen & toggled off
-- Hide (add translate out & z-40)
-? Small screen & toggled on
-- Show over the top of the chat (translate in & z-40)
-*
-*/

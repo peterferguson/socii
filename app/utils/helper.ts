@@ -1,6 +1,7 @@
-import { tickerToISIN, firestore, DocumentReference } from "@lib/firebase"
 import { CurrencyCode } from "@lib/constants"
+import firebase, { DocumentReference, firestore, tickerToISIN } from "@lib/firebase"
 import { OHLCTimeseries } from "@lib/types"
+import FirebaseUser from "@models/FirebaseUser"
 
 const alphaVantageApiKey = process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY
 
@@ -48,7 +49,7 @@ export const currencyConversion = (
   toCurrency: CurrencyCode
 ) => `/api/av/currencyConversion?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}`
 
-export function validateEmail(email) {
+export function validateEmail(email: string) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
@@ -285,7 +286,7 @@ export const getTickerData = async (tickerSymbol) => {
  *
  * @returns {Boolean}
  */
-export function isPromise(promise): boolean {
+export function isPromise(promise: any): boolean {
   return !!promise && typeof promise.then === "function"
 }
 
@@ -302,4 +303,29 @@ export function tw(...classes: (false | null | undefined | string)[]): string {
  * Get first name from firebase user
  * @param  {string} ticker
  */
-export const userFirstName = (user) => user.displayName.split(" ")?.[0]
+export const userFirstName = (user: FirebaseUser) =>
+  user?.displayName?.split(" ")?.[0] ?? ""
+
+// const getStripeRole = async () => {
+//   await firebase.auth().currentUser.getIdToken(true);
+//   const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
+//   return decodedToken.claims.stripeRole || 'free';
+// };
+
+export const formatUser = async (user: firebase.User) => {
+  // const token = await user.getIdToken(/* forceRefresh */ true);
+  const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
+  const { token, expirationTime } = decodedToken
+  return {
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName,
+    provider: user.providerData[0].providerId,
+    photoUrl: user.photoURL,
+    emailVerified: user.emailVerified,
+    phoneNumber: user.phoneNumber,
+    token,
+    expirationTime,
+    // stripeRole: await getStripeRole(),
+  }
+}

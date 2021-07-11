@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
-
-import { UserContext } from "@lib/context"
-import { firestore } from "@lib/firebase"
 import CheckIcon from "@components/BackgroundCheck"
+import { firestore } from "@lib/firebase"
+import { useAuth } from "@lib/hooks"
 import debounce from "lodash/debounce"
-import { FiX } from "react-icons/fi"
-import toast from "react-hot-toast"
 import { useRouter } from "next/router"
+import React, { useCallback, useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { FiX } from "react-icons/fi"
 
 export default function Username(props) {
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
@@ -37,10 +36,11 @@ export default function Username(props) {
     }
   }
 
-  useEffect(() => {
-    checkUsername(username)
+  useEffect(
+    () => checkUsername(username),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username])
+    [username]
+  )
 
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
@@ -108,15 +108,7 @@ const createUsername = (e, user, username, router) => {
   const usernameRef = firestore.collection("usernames").doc(username)
 
   const batch = firestore.batch()
-  batch.set(userRef, {
-    username: username,
-    photoURL: user.photoURL,
-    displayName: user.displayName,
-    email: user.email,
-    emailVerified: user.emailVerified,
-    phoneNumber: user.phoneNumber,
-  })
+  batch.set(userRef, { username: username }, { merge: true })
   batch.set(usernameRef, { uid: user.uid })
-
   batch.commit().then(() => router.push(`/user/${username}`))
 }

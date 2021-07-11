@@ -1,5 +1,5 @@
 import Logo from "@components/Logo"
-import { UserContext } from "@lib/context"
+import { userContext } from "@lib/context"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import React, { useContext } from "react"
@@ -18,7 +18,7 @@ export default function Sidebar() {
   // TODO: Stateful selection of the nav item based on the route
   // - For now this is mocked with a simple enumeration of the list
   const router = useRouter()
-  const { username } = useContext(UserContext)
+  const { username } = useContext(userContext)
 
   const navItems = [
     {

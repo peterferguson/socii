@@ -2,18 +2,18 @@ import LineChart from "@components/LineChart"
 import SelectGroupModal from "@components/SelectGroupModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
 import { tailwindColorMap } from "@lib/constants"
-import { SelectedGroupContext, UserContext } from "@lib/context"
+import { selectedGroupContext } from "@lib/context"
 import { firestore } from "@lib/firebase"
-import { useWindowSize } from "@lib/hooks"
+import { useAuth } from "@lib/hooks"
 import { isBrowser, logoUrl, pctChange, pnlTextColor, stockProps } from "@utils/helper"
 import { useRouter } from "next/router"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import Custom404 from "../404"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
-  const { user, userGroups } = useContext(UserContext)
+  const { user, userGroups } = useAuth()
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
   timeseries = timeseries?.map((d) => ({
@@ -54,7 +54,7 @@ export default function TickerPage({ tickerSymbols }) {
       />
       {isBrowser && timeseries && (
         <>
-          <SelectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
+          <selectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
             {openGroupModal && (
               <SelectGroupModal
                 userGroups={userGroups}
@@ -63,7 +63,7 @@ export default function TickerPage({ tickerSymbols }) {
                 goClickHandler={() => setOpenStockSharingModal(true)}
               />
             )}
-          </SelectedGroupContext.Provider>
+          </selectedGroupContext.Provider>
           {openStockSharingModal && (
             <ShareStockInformationModal
               selectedGroup={selectedGroup}

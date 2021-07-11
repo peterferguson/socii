@@ -18,6 +18,7 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@components/*": ["components/*"],
+      "@models/*": ["models/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@public/*": ["public/*"],
@@ -33,6 +34,6 @@
     "pages/_app.tsx",
     "components/stream/MessagingInput/MessagingInput.jsx",
     "pages/api/commands.js"
-, "components/stream/Chat.jsx", "components/stream/MessagingChannelPreview.jsx"  ],
+, "components/stream/Chat.jsx", "components/stream/MessagingChannelPreview.tsx"  ],
   "exclude": ["node_modules"]
 }

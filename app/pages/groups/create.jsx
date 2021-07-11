@@ -6,18 +6,17 @@ import {
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
-import { UserContext } from "@lib/context"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
-import { useLocalCurrency } from "@lib/hooks"
+import { useAuth, useLocalCurrency } from "@lib/hooks"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
 
 export default function Create() {
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useAuth()
   const router = useRouter()
 
   const [groupName, setGroupName] = useState("")

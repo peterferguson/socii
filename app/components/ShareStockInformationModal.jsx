@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { alphaVantageQueryOptions } from "@lib/constants"
-import { StreamContext } from "@lib/context"
+import { useStream } from "@lib/hooks"
 import PriceInput from "@components/PriceInput"
 import MultiSelect from "@components/MultiSelect"
 import { alphaVantageQuery } from "@lib/firebase"
@@ -18,7 +18,7 @@ export default function ShareStockInformationModal({
   pricePlaceholder = "0.00",
 }) {
   const router = useRouter()
-  const { streamClient } = useContext(StreamContext)
+  const { streamClient } = useStream()
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])

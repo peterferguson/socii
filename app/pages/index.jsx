@@ -2,14 +2,14 @@ import Invite from "@components/Invite"
 import Logo from "@components/Logo"
 import SociiFeatureSlider from "@components/SociiFeatureSlider"
 import { OneTwoThree } from "@components/WhySocii"
-import { UserContext } from "@lib/context"
+import { useAuth } from "@lib/hooks"
 import { tw } from "@utils/helper"
-import React, { useContext, useState } from "react"
-import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
+import React, { useState } from "react"
+import { FaFacebook, FaMedium, FaTwitter } from "react-icons/fa"
 
 // TODO: Add is visible ref to each component to load the animations properly
 export default function Home() {
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
 
   const [invited, setInvited] = useState(false)
   return (

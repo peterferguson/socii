@@ -14,7 +14,7 @@ export default function Dashboard() {
 
   const router = useRouter()
   const groupName = router.query.groupName
-  // const { username, userGroups } = useContext(UserContext);
+  // const { username, userGroups } = useAuth();
 
   const cards = [
     {

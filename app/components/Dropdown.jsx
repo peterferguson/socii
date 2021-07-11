@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Popover, Transition } from "@headlessui/react"
-import { UserContext } from "@lib/context"
+import { userContext } from "@lib/context"
 import { signOut } from "@lib/firebase"
 import Link from "next/link"
 import Router from "next/router"
@@ -73,7 +73,7 @@ const grayedDropdownItems = [
 export default function Dropdown() {
   // const [dropdownOpen, setDropdownOpen] = useState(false)
   // // const [openSettings, setOpenSettings] = useState(false);
-  const { username } = useContext(UserContext)
+  const { username } = useContext(userContext)
 
   useEffect(() => {
     dropdownItems.unshift({

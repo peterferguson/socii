@@ -7,7 +7,12 @@ import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"
 
-export default function GroupColumnCard({ groupName, className }) {
+interface IGroupColumnCard {
+  groupName: string
+  className?: string
+}
+
+export default function GroupColumnCard({ groupName, className }: IGroupColumnCard) {
   const [currentPrices, setCurrentPrices] = useState([])
   const holdingsRef = firestore
     .collection(`groups/${groupName}/holdings`)
@@ -72,12 +77,18 @@ export default function GroupColumnCard({ groupName, className }) {
   )
 }
 
+interface IGroupPieChart {
+  groupName: string
+  holdingData: any
+  currentPrices: any
+  className?: string
+}
 export function GroupPieChart({
   groupName,
   holdingData,
   currentPrices,
   className = "",
-}) {
+}: IGroupPieChart) {
   const portfolioValue = holdingData
     ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
     .reduce((a, b) => a + b, 0)
@@ -129,7 +140,7 @@ export function GroupPieCard({
   holdingData,
   currentPrices,
   className = "",
-}) {
+}: IGroupPieChart) {
   const portfolioValue = holdingData
     ?.map(({ tickerSymbol, shares }) => currentPrices[tickerSymbol] * shares)
     .reduce((a, b) => a + b, 0)
@@ -161,6 +172,13 @@ export function GroupPieCard({
       }}
     />
   )
+}
+
+interface IStockCard {
+  holding: any
+  lastestPrice: number
+  currencySymbol?: string
+  index: number
 }
 
 function StockCard({ holding, latestPrice, currencySymbol = "$", index }) {

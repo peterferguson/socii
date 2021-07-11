@@ -1,4 +1,4 @@
-import { UserContext } from "@lib/context"
+import { userContext } from "@lib/context"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import {
@@ -18,7 +18,7 @@ type FooterProps = {
 
 export default function Footer({ showSearchCard, setShowSearchCard }: FooterProps) {
   const router = useRouter()
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useContext(userContext)
 
   const links = [
     {

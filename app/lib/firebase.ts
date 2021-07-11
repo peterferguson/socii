@@ -5,9 +5,6 @@ import "firebase/firestore"
 import "firebase/functions"
 // import "firebase/performance"
 
-import { userFirstName } from "@utils/helper"
-import toast from "react-hot-toast"
-
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
   authDomain: "sociiinvest.firebaseapp.com",
@@ -22,6 +19,7 @@ const londonRegion = "europe-west2"
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
 
+export default firebase
 export const auth = firebase.auth()
 export const storage = firebase.storage()
 export const firestore = firebase.firestore()
@@ -37,8 +35,8 @@ export const functions = firebase.app().functions(londonRegion)
 //   functions.useEmulator("localhost", 5001)
 // }
 
-export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
-export const facebookAuthProvider = new firebase.auth.FacebookAuthProvider()
+export const GoogleAuthProvider = firebase.auth.GoogleAuthProvider
+export const FacebookAuthProvider = firebase.auth.FacebookAuthProvider
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED
 export const recaptchaVerifier = firebase.auth.RecaptchaVerifier
 export const credentialWithLink = firebase.auth.EmailAuthProvider.credentialWithLink
@@ -53,14 +51,12 @@ export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
 // - Types
 export type DocumentReference = firebase.firestore.DocumentReference
 export type DocumentData = firebase.firestore.DocumentData
-export type FirebaseUser = firebase.User
+export type FirebaseUserInfo = firebase.UserInfo
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();
 
-// Helper Functions
-
-/**`
+/*
  * Gets a users/{uid} document with username
  * @param  {string} username
  */
@@ -71,7 +67,7 @@ export async function getUserWithUsername(username) {
   return userDoc
 }
 
-/**
+/*
  * Gets a ticker/{isin} document ISIN by querying the ticker
  * @param  {string} ticker
  */
@@ -81,12 +77,4 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   const query = tickerRef.where("tickerSymbol", "==", tickerSymbol).limit(1)
   const tickerDoc = (await query.get()).docs?.pop()
   return await tickerDoc.id
-}
-
-export function signOut(router) {
-  const firstname = userFirstName(auth.currentUser)
-  toast.dismiss()
-  toast(`Bye for now ${firstname}!`, { icon: "👋" })
-  auth.signOut()
-  if (router) router.push("/enter")
 }
