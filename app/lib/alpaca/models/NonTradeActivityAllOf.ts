@@ -77,6 +77,17 @@ export class NonTradeActivityAllOf {
     return NonTradeActivityAllOf.attributeTypeMap
   }
 
+  static from(json) {
+    // - convert baseName to name
+    for (const { baseName, name } of this.attributeTypeMap) {
+      if (baseName !== name) {
+        Object.assign(json, { [name]: json[baseName] })
+        delete json[baseName]
+      }
+    }
+    return Object.assign(new this(), json)
+  }
+
   public constructor() {}
 }
 

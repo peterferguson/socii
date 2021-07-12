@@ -1,25 +1,26 @@
-import { CreateOrder, TradingApi } from "@lib/alpaca/api"
+import { TradingApi, CreateOrder, config } from "@lib/alpaca"
 import { NextApiRequest, NextApiResponse } from "next"
-import { cors } from "@utils/middleware"
+import { withAuth, withCORS } from "@utils/middleware"
 
-const tradeClient = new TradingApi(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+const tradeClient = new TradingApi(config)
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await cors(req, res)
-
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req
 
   switch (method) {
     case "GET":
-      // try {
-      //   /* query accounts, empty queries return all accounts paginated by the 1000 */
-      //   const { query } = body
-      //   res
-      //     .status(200)
-      //     .end(JSON.stringify((await accountClient.accountsGet(query)).body))
-      // } catch (error) {
-      //   res.status(400).end(`Failed to retrieve account with error: ${error}`)
-      // }
+      try {
+        /* query accounts, empty queries return all accounts paginated by the 1000 */
+        const { account_id: accountId, order_id: orderId, status, symbols } = body
+        if (orderId)
+          res
+            .status(200)
+            .end(JSON.stringify(await tradeClient.getOrder(accountId, orderId)))
+        
+        res.status(200).end(JSON.stringify(await tradeClient.getOrders(accountId, status, )));
+      } catch (error) {
+        res.status(400).end(`Failed to retrieve account with error: ${error}`)
+      }
       break
     case "POST":
       try {
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { account_id: accountId, ...order } = body
         res.end(
           JSON.stringify(
-            (await tradeClient.postOrders(accountId, CreateOrder.from(order))).body
+            await tradeClient.postOrders(accountId, CreateOrder.from(order))
           )
         )
         break
@@ -39,9 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       try {
         /* cancel an order */
         const { account_id: accountId, order_id: orderId } = body
-        res.end(
-          JSON.stringify((await tradeClient.deleteOrder(accountId, orderId)).body)
-        )
+        res.end(JSON.stringify(await tradeClient.deleteOrder(accountId, orderId)))
         break
       } catch (error) {
         res.status(400).end(`Failed to create account with error: ${error}`)
@@ -52,3 +51,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       break
   }
 }
+
+export default withAuth(withCORS(handler))
