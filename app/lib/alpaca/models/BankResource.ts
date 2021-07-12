@@ -10,11 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { BankData } from "./BankData"
-import { BankResourceAllOf } from "./BankResourceAllOf"
-import { IdentifiedResource } from "./IdentifiedResource"
-import { HttpFile } from "../http/http"
-
 export class BankResource {
   "id": string
   "createdAt": Date

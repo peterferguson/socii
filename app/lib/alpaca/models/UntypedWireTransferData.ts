@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { UntypedTransferData } from "./UntypedTransferData"
-import { UntypedWireTransferDataAllOf } from "./UntypedWireTransferDataAllOf"
-import { HttpFile } from "../http/http"
-
 export class UntypedWireTransferData {
   "amount": string
   "direction": UntypedWireTransferDataDirectionEnum

@@ -1,8 +1,8 @@
 import { currencyFormatter, logoUrl, pnlBackgroundColor } from "@utils/helper"
-
 import router from "next/router"
 import React, { useEffect, useRef } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+
 
 export default function LogoPriceCardHeader({
   tickerSymbol,

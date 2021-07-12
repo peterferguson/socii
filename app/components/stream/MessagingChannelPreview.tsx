@@ -1,11 +1,11 @@
-import styles from "@styles/MessagingChannelPreview.module.css"
 import AvatarGroup from "@components/stream/AvatarGroup"
+import styles from "@styles/MessagingChannelPreview.module.css"
 import { getTimeStamp } from "@utils/helper"
-import useMediaQuery from "react-responsive"
-
-import { Channel } from "stream-chat"
 import React, { useContext } from "react"
+import useMediaQuery from "react-responsive"
+import { Channel } from "stream-chat"
 import { ChatContext } from "stream-chat-react"
+
 
 const getChannelName = (members: string | any[], defaultName: string) => {
   if (!members.length || members.length === 1)

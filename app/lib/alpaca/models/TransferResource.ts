@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { IdentifiedResource } from "./IdentifiedResource"
-import { TransferResourceAllOf } from "./TransferResourceAllOf"
-import { HttpFile } from "../http/http"
-
 export class TransferResource {
   "id": string
   "createdAt": Date

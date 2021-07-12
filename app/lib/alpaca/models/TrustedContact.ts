@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 /**
  * This model input is optional. However, the client should make reasonable effort to obtain the trusted contact information. See more details in [FINRA Notice 17-11](https://www.finra.org/sites/default/files/Regulatory-Notice-17-11.pdf)
  */

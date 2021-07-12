@@ -1,12 +1,9 @@
+import React from "react"
 import { Attachment } from "stream-chat-react"
 import {
-  StockDisplayAttachment,
-  InvestmentReceiptAttachment,
-  TradeCommandAttachment,
-  InvestCommandAttachment,
-  InvestmentConfirmationAttachment,
+    InvestCommandAttachment,
+    InvestmentConfirmationAttachment, InvestmentReceiptAttachment, StockDisplayAttachment, TradeCommandAttachment
 } from "./CustomAttachments"
-import React from "react"
 
 export default function CustomAttachment(props) {
   const { attachments } = props

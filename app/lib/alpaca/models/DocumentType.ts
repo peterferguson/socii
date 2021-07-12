@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 /**
  * - identity_verification:   identity verification document - address_verification:   address verification document - date_of_birth_verification:   date of birth verification document - tax_id_verification:   tax ID verification document - account_approval_letter:   407 approval letter - cip_result:   initial CIP result
  */

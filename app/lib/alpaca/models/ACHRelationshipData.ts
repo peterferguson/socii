@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 export class ACHRelationshipData {
   "accountOwnerName": string
   "bankAccountType": ACHRelationshipDataBankAccountTypeEnum

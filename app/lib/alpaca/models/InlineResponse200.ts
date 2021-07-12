@@ -11,7 +11,6 @@
  */
 
 import { AccountStatus } from "./AccountStatus"
-import { HttpFile } from "../http/http"
 
 export class InlineResponse200 {
   "id"?: string

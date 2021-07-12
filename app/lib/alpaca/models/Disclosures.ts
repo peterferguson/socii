@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 /**
  * Disclosures fields denote if the account owner falls under each category defined by FINRA rule. The client has to ask questions for the end user and the values should reflect their answers.  If one of the answers is true (yes), the account goes into ACTION_REQUIRED status.
  */

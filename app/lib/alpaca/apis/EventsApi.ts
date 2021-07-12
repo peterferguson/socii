@@ -1,14 +1,13 @@
 // TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { Configuration } from "../configuration"
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from "../http/http"
-import * as FormData from "form-data"
-import { ObjectSerializer } from "../models/ObjectSerializer"
-import { ApiException } from "./exception"
-import { isCodeInRange } from "../util"
-
+import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
+import { ObjectSerializer } from "../models/ObjectSerializer"
+import { isCodeInRange } from "../util"
+import { BaseAPIRequestFactory } from "./baseapi"
+import { ApiException } from "./exception"
+
 
 /**
  * no description

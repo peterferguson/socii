@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 /**
  * Hold information about the result of KYC.
  */

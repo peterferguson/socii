@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { TransferDataAllOf } from "./TransferDataAllOf"
-import { HttpFile } from "../http/http"
-
 export class TransferData {
   "transferType": TransferDataTransferTypeEnum
   "timing"?: TransferDataTimingEnum

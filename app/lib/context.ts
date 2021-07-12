@@ -1,5 +1,5 @@
-import { createContext } from "react"
 import User from "@models/User"
+import { createContext } from "react"
 import { StreamChat } from "stream-chat"
 
 export const userContext = createContext({

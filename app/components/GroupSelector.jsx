@@ -1,9 +1,9 @@
-import { firestore } from "@lib/firebase"
-import { selectedGroupContext } from "@lib/context"
-import React, { useState, useContext } from "react"
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
-import { RadioGroup } from "@headlessui/react"
 import CheckIcon from "@components/BackgroundCheck"
+import { RadioGroup } from "@headlessui/react"
+import { selectedGroupContext } from "@lib/context"
+import { firestore } from "@lib/firebase"
+import React, { useContext, useState } from "react"
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 
 export default function GroupSelectorRadioGroup({ groupNames, className = "" }) {
   const { selectedGroup, changeSelectedGroup } = useContext(selectedGroupContext)

@@ -11,7 +11,6 @@
  */
 
 import { ActivityType } from "./ActivityType"
-import { HttpFile } from "../http/http"
 
 /**
  * Base for activity types

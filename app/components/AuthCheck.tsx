@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { userContext } from "@lib/context"
+import Link from "next/link"
 import React, { useContext } from "react"
 
 interface AuthCheckProps {

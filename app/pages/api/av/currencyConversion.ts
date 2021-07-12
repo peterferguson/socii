@@ -2,8 +2,8 @@
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
 })
-import { NextApiRequest, NextApiResponse } from "next"
 import { cors } from "@utils/middleware"
+import { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res)

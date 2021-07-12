@@ -1,7 +1,7 @@
 import { uncamelCase } from "@utils/helper"
-
 import router from "next/router"
 import React from "react"
+
 
 const StockDisplayAttachment = ({ attachment }) => {
   const tickerSymbol = attachment?.name

@@ -1,6 +1,6 @@
-import { iexClient } from "../index"
-import { NextApiRequest, NextApiResponse } from "next"
 import { cors } from "@utils/middleware"
+import { NextApiRequest, NextApiResponse } from "next"
+import { iexClient } from "../index"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res)

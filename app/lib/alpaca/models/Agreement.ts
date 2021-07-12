@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 export class Agreement {
   /**
    * - margin_agreement: Alpaca Margin Agreement - account_agreement: Alpaca Account Agreement - customer_agreement: Alpaca Customer Agreement

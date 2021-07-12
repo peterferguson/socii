@@ -1,18 +1,17 @@
 // TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { Configuration } from "../configuration"
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from "../http/http"
-import * as FormData from "form-data"
-import { ObjectSerializer } from "../models/ObjectSerializer"
-import { ApiException } from "./exception"
-import { isCodeInRange } from "../util"
-
+import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
 import { ACHRelationshipData } from "../models/ACHRelationshipData"
 import { ACHRelationshipResource } from "../models/ACHRelationshipResource"
 import { BankData } from "../models/BankData"
 import { BankResource } from "../models/BankResource"
+import { ObjectSerializer } from "../models/ObjectSerializer"
 import { TransferData } from "../models/TransferData"
 import { TransferResource } from "../models/TransferResource"
+import { isCodeInRange } from "../util"
+import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
+import { ApiException } from "./exception"
+
 
 /**
  * no description
@@ -59,14 +58,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.DELETE
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
 
     let authMethod = null
     // Apply auth methods
@@ -116,14 +107,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
-
     let authMethod = null
     // Apply auth methods
     authMethod = config.authMethods["BasicAuth"]
@@ -171,14 +154,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.DELETE
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
 
     let authMethod = null
     // Apply auth methods
@@ -422,13 +397,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(
@@ -486,13 +454,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(
@@ -551,13 +512,6 @@ export class FundingApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(

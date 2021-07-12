@@ -2,12 +2,12 @@ import { userContext } from "@lib/context"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import {
-  HiOutlineAnnotation,
-  HiOutlineCog,
-  HiOutlineGlobe,
-  HiOutlineHome,
-  HiOutlineSearch,
-  HiOutlineUserGroup,
+    HiOutlineAnnotation,
+    HiOutlineCog,
+    HiOutlineGlobe,
+    HiOutlineHome,
+    HiOutlineSearch,
+    HiOutlineUserGroup
 } from "react-icons/hi"
 
 type FooterProps = {

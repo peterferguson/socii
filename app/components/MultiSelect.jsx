@@ -1,7 +1,7 @@
 import { uncamelCase } from "@utils/helper"
 import React, { useState } from "react"
-
 import { FiChevronDown, FiX } from "react-icons/fi"
+
 const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
   const [dropdown, setDropdown] = useState(false)
   const [dropdownItems, setDropdownItems] = useState(items)

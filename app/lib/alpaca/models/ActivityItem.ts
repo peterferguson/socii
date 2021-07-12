@@ -11,9 +11,6 @@
  */
 
 import { ActivityType } from "./ActivityType"
-import { NonTradeActivity } from "./NonTradeActivity"
-import { TradeActivity } from "./TradeActivity"
-import { HttpFile } from "../http/http"
 
 export class ActivityItem {
   "id"?: string

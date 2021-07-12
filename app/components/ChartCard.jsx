@@ -1,11 +1,11 @@
-import "react-vis/dist/style.css"
 import { tailwindColorMap } from "@lib/constants"
-import { pctChange } from "@utils/helper"
 import { OHLC } from "@lib/types"
-import { string } from "prop-types"
+import { pctChange } from "@utils/helper"
 import Link from "next/link"
+import { string } from "prop-types"
 import React, { useEffect, useRef, useState } from "react"
 import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
+import "react-vis/dist/style.css"
 
 export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, data }) {
   const [logoNotFound, setLogoNotFound] = useState(false)

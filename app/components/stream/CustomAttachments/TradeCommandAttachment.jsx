@@ -2,18 +2,18 @@ import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { currencyIcons } from "@lib/constants"
 import { tradeSubmission } from "@lib/firebase"
 import {
-  useAuth,
-  useInterval,
-  useLocalCurrency,
-  useShareCost,
-  useTickerPrice,
+    useAuth,
+    useInterval,
+    useLocalCurrency,
+    useShareCost,
+    useTickerPrice
 } from "@lib/hooks"
 import { currencyConversion, fetcher, getTickerData } from "@utils/helper"
 import React, { Suspense, useEffect, useState } from "react"
 import {
-  LoadingIndicator,
-  useChannelStateContext,
-  useMessageContext,
+    LoadingIndicator,
+    useChannelStateContext,
+    useMessageContext
 } from "stream-chat-react"
 import useSWR from "swr"
 import MMLButton from "./MMLButton"

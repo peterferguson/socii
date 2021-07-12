@@ -12,7 +12,6 @@
 
 import { AccountStatus } from "./AccountStatus"
 import { KycResult } from "./KycResult"
-import { HttpFile } from "../http/http"
 
 export class Account {
   "id"?: string

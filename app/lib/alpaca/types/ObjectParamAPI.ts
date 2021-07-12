@@ -1,36 +1,46 @@
-import { ResponseContext, RequestContext, HttpFile } from "../http/http"
-import * as models from "../models/all"
+import {
+    AccountsApiRequestFactory,
+    AccountsApiResponseProcessor
+} from "../apis/AccountsApi"
+import { AssetsApiRequestFactory, AssetsApiResponseProcessor } from "../apis/AssetsApi"
+import {
+    CalendarApiRequestFactory,
+    CalendarApiResponseProcessor
+} from "../apis/CalendarApi"
+import { ClockApiRequestFactory, ClockApiResponseProcessor } from "../apis/ClockApi"
+import {
+    DocumentsApiRequestFactory,
+    DocumentsApiResponseProcessor
+} from "../apis/DocumentsApi"
+import { EventsApiRequestFactory, EventsApiResponseProcessor } from "../apis/EventsApi"
+import {
+    FundingApiRequestFactory,
+    FundingApiResponseProcessor
+} from "../apis/FundingApi"
+import {
+    JournalsApiRequestFactory,
+    JournalsApiResponseProcessor
+} from "../apis/JournalsApi"
+import { OAuthApiRequestFactory, OAuthApiResponseProcessor } from "../apis/OAuthApi"
+import {
+    TradingApiRequestFactory,
+    TradingApiResponseProcessor
+} from "../apis/TradingApi"
 import { Configuration } from "../configuration"
-
-import { ACHRelationshipData } from "../models/ACHRelationshipData"
-import { ACHRelationshipResource } from "../models/ACHRelationshipResource"
-import { ACHRelationshipResourceAllOf } from "../models/ACHRelationshipResourceAllOf"
 import { Account } from "../models/Account"
 import { AccountCreationObject } from "../models/AccountCreationObject"
 import { AccountExtended } from "../models/AccountExtended"
-import { AccountStatus } from "../models/AccountStatus"
 import { AccountUpdate } from "../models/AccountUpdate"
-import { Activity } from "../models/Activity"
+import { ACHRelationshipData } from "../models/ACHRelationshipData"
+import { ACHRelationshipResource } from "../models/ACHRelationshipResource"
 import { ActivityItem } from "../models/ActivityItem"
-import { ActivityType } from "../models/ActivityType"
-import { Agreement } from "../models/Agreement"
-import { ApplicationDocument } from "../models/ApplicationDocument"
 import { AssetResource } from "../models/AssetResource"
 import { BankData } from "../models/BankData"
 import { BankResource } from "../models/BankResource"
-import { BankResourceAllOf } from "../models/BankResourceAllOf"
 import { BatchJournalRequest } from "../models/BatchJournalRequest"
-import { BatchJournalRequestEntries } from "../models/BatchJournalRequestEntries"
 import { BatchJournalResponse } from "../models/BatchJournalResponse"
-import { Contact } from "../models/Contact"
 import { CreateOrder } from "../models/CreateOrder"
-import { CreateOrderStopLoss } from "../models/CreateOrderStopLoss"
-import { CreateOrderTakeProfit } from "../models/CreateOrderTakeProfit"
-import { Disclosures } from "../models/Disclosures"
-import { DocumentType } from "../models/DocumentType"
 import { DocumentUpload } from "../models/DocumentUpload"
-import { IdentifiedResource } from "../models/IdentifiedResource"
-import { Identity } from "../models/Identity"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse200 } from "../models/InlineResponse200"
@@ -44,34 +54,15 @@ import { InlineResponse2007 } from "../models/InlineResponse2007"
 import { InlineResponse2008 } from "../models/InlineResponse2008"
 import { InlineResponse207 } from "../models/InlineResponse207"
 import { JournalData } from "../models/JournalData"
-import { JournalJNLC } from "../models/JournalJNLC"
-import { JournalJNLS } from "../models/JournalJNLS"
 import { JournalResource } from "../models/JournalResource"
-import { KycResult } from "../models/KycResult"
-import { ModelError } from "../models/ModelError"
-import { NonTradeActivity } from "../models/NonTradeActivity"
-import { NonTradeActivityAllOf } from "../models/NonTradeActivityAllOf"
 import { OrderObject } from "../models/OrderObject"
 import { PatchOrder } from "../models/PatchOrder"
 import { Position } from "../models/Position"
-import { TradeActivity } from "../models/TradeActivity"
-import { TradeActivityAllOf } from "../models/TradeActivityAllOf"
 import { TransferData } from "../models/TransferData"
-import { TransferDataAllOf } from "../models/TransferDataAllOf"
 import { TransferResource } from "../models/TransferResource"
-import { TransferResourceAllOf } from "../models/TransferResourceAllOf"
-import { TrustedContact } from "../models/TrustedContact"
-import { UntypedACHTransferData } from "../models/UntypedACHTransferData"
-import { UntypedACHTransferDataAllOf } from "../models/UntypedACHTransferDataAllOf"
-import { UntypedTransferData } from "../models/UntypedTransferData"
-import { UntypedWireTransferData } from "../models/UntypedWireTransferData"
-import { UntypedWireTransferDataAllOf } from "../models/UntypedWireTransferDataAllOf"
+import { ObservableAccountsApi, ObservableAssetsApi, ObservableCalendarApi, ObservableClockApi, ObservableDocumentsApi, ObservableEventsApi, ObservableFundingApi, ObservableJournalsApi, ObservableOAuthApi, ObservableTradingApi } from "./ObservableAPI"
 
-import { ObservableAccountsApi } from "./ObservableAPI"
-import {
-  AccountsApiRequestFactory,
-  AccountsApiResponseProcessor,
-} from "../apis/AccountsApi"
+
 
 export interface AccountsApiAccountsAccountIdDocumentsUploadPostRequest {
   /**
@@ -738,8 +729,6 @@ export class ObjectAccountsApi {
   }
 }
 
-import { ObservableAssetsApi } from "./ObservableAPI"
-import { AssetsApiRequestFactory, AssetsApiResponseProcessor } from "../apis/AssetsApi"
 
 export interface AssetsApiAssetsAssetIdGetRequest {
   /**
@@ -809,11 +798,6 @@ export class ObjectAssetsApi {
   }
 }
 
-import { ObservableCalendarApi } from "./ObservableAPI"
-import {
-  CalendarApiRequestFactory,
-  CalendarApiResponseProcessor,
-} from "../apis/CalendarApi"
 
 export interface CalendarApiCalendarGetRequest {
   /**
@@ -857,8 +841,6 @@ export class ObjectCalendarApi {
   }
 }
 
-import { ObservableClockApi } from "./ObservableAPI"
-import { ClockApiRequestFactory, ClockApiResponseProcessor } from "../apis/ClockApi"
 
 export interface ClockApiClockGetRequest {}
 
@@ -885,11 +867,6 @@ export class ObjectClockApi {
   }
 }
 
-import { ObservableDocumentsApi } from "./ObservableAPI"
-import {
-  DocumentsApiRequestFactory,
-  DocumentsApiResponseProcessor,
-} from "../apis/DocumentsApi"
 
 export interface DocumentsApiAccountsAccountIdDocumentsDocumentIdDownloadGetRequest {
   /**
@@ -1001,8 +978,6 @@ export class ObjectDocumentsApi {
   }
 }
 
-import { ObservableEventsApi } from "./ObservableAPI"
-import { EventsApiRequestFactory, EventsApiResponseProcessor } from "../apis/EventsApi"
 
 export interface EventsApiEventsAccountsStatusGetRequest {
   /**
@@ -1110,11 +1085,6 @@ export class ObjectEventsApi {
   }
 }
 
-import { ObservableFundingApi } from "./ObservableAPI"
-import {
-  FundingApiRequestFactory,
-  FundingApiResponseProcessor,
-} from "../apis/FundingApi"
 
 export interface FundingApiDeleteAchRelationshipRequest {
   /**
@@ -1410,11 +1380,6 @@ export class ObjectFundingApi {
   }
 }
 
-import { ObservableJournalsApi } from "./ObservableAPI"
-import {
-  JournalsApiRequestFactory,
-  JournalsApiResponseProcessor,
-} from "../apis/JournalsApi"
 
 export interface JournalsApiDeleteJournalRequest {
   /**
@@ -1601,8 +1566,6 @@ export class ObjectJournalsApi {
   }
 }
 
-import { ObservableOAuthApi } from "./ObservableAPI"
-import { OAuthApiRequestFactory, OAuthApiResponseProcessor } from "../apis/OAuthApi"
 
 export interface OAuthApiOauthAuthorizePostRequest {
   /**
@@ -1705,11 +1668,6 @@ export class ObjectOAuthApi {
   }
 }
 
-import { ObservableTradingApi } from "./ObservableAPI"
-import {
-  TradingApiRequestFactory,
-  TradingApiResponseProcessor,
-} from "../apis/TradingApi"
 
 export interface TradingApiDeleteOrderRequest {
   /**

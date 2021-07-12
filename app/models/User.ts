@@ -1,5 +1,5 @@
-import FirebaseUser from "./FirebaseUser"
 import { UrlObject } from "url"
+import FirebaseUser from "./FirebaseUser"
 
 export default interface User {
   user: FirebaseUser

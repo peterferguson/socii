@@ -1,4 +1,4 @@
-import { config, ClockApi } from "@lib/alpaca/"
+import { ClockApi, config } from "@lib/alpaca/"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

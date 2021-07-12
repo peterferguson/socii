@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 /**
  * Identity is the model to provide account owner’s identity information.
  */

@@ -1,8 +1,8 @@
-import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-
-import { LoadingIndicator } from "stream-chat-react"
 import React, { Suspense } from "react"
+import { LoadingIndicator } from "stream-chat-react"
+import MMLButton from "./MMLButton"
+
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")

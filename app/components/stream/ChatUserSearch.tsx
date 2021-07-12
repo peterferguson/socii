@@ -1,17 +1,17 @@
 import XButton from "@icons/stream/XButton.svg"
 import _debounce from "lodash.debounce"
 import React, {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+    memo,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState
 } from "react"
 import { Avatar, ChatContext } from "stream-chat-react"
 import {
-  DefaultUserType,
-  DefaultUserTypeInternal,
+    DefaultUserType,
+    DefaultUserTypeInternal
 } from "stream-chat-react/dist/types/types"
 import { UserResponse } from "stream-chat/dist/types/types"
 

@@ -7,13 +7,13 @@ import Router from "next/router"
 import React, { Fragment, useContext, useEffect } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-  HiMenu,
-  HiOutlineAtSymbol,
-  HiOutlineChartPie,
-  HiOutlineChat,
-  HiOutlineChevronRight,
-  HiOutlineCog,
-  HiOutlineUserGroup,
+    HiMenu,
+    HiOutlineAtSymbol,
+    HiOutlineChartPie,
+    HiOutlineChat,
+    HiOutlineChevronRight,
+    HiOutlineCog,
+    HiOutlineUserGroup
 } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 

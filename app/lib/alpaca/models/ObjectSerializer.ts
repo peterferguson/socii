@@ -1,11 +1,11 @@
-export * from "./ACHRelationshipData"
-export * from "./ACHRelationshipResource"
-export * from "./ACHRelationshipResourceAllOf"
 export * from "./Account"
 export * from "./AccountCreationObject"
 export * from "./AccountExtended"
 export * from "./AccountStatus"
 export * from "./AccountUpdate"
+export * from "./ACHRelationshipData"
+export * from "./ACHRelationshipResource"
+export * from "./ACHRelationshipResourceAllOf"
 export * from "./Activity"
 export * from "./ActivityItem"
 export * from "./ActivityType"
@@ -63,68 +63,48 @@ export * from "./UntypedTransferData"
 export * from "./UntypedWireTransferData"
 export * from "./UntypedWireTransferDataAllOf"
 
-import {
-  ACHRelationshipData,
-  ACHRelationshipDataBankAccountTypeEnum,
-} from "./ACHRelationshipData"
-import {
-  ACHRelationshipResource,
-  ACHRelationshipResourceBankAccountTypeEnum,
-  ACHRelationshipResourceStatusEnum,
-} from "./ACHRelationshipResource"
-import {
-  ACHRelationshipResourceAllOf,
-  ACHRelationshipResourceAllOfStatusEnum,
-} from "./ACHRelationshipResourceAllOf"
 import { Account } from "./Account"
 import { AccountCreationObject } from "./AccountCreationObject"
 import { AccountExtended } from "./AccountExtended"
-import { AccountStatus } from "./AccountStatus"
 import { AccountUpdate } from "./AccountUpdate"
+import {
+    ACHRelationshipData
+} from "./ACHRelationshipData"
+import {
+    ACHRelationshipResource
+} from "./ACHRelationshipResource"
+import {
+    ACHRelationshipResourceAllOf
+} from "./ACHRelationshipResourceAllOf"
 import { Activity } from "./Activity"
 import {
-  ActivityItem,
-  ActivityItemTypeEnum,
-  ActivityItemSideEnum,
-  ActivityItemOrderStatusEnum,
-  ActivityItemStatusEnum,
+    ActivityItem
 } from "./ActivityItem"
-import { ActivityType } from "./ActivityType"
-import { Agreement, AgreementAgreementEnum } from "./Agreement"
+import { Agreement } from "./Agreement"
 import { ApplicationDocument } from "./ApplicationDocument"
 import { AssetResource } from "./AssetResource"
-import { BankData, BankDataBankCodeTypeEnum } from "./BankData"
+import { BankData } from "./BankData"
 import {
-  BankResource,
-  BankResourceBankCodeTypeEnum,
-  BankResourceStatusEnum,
+    BankResource
 } from "./BankResource"
-import { BankResourceAllOf, BankResourceAllOfStatusEnum } from "./BankResourceAllOf"
+import { BankResourceAllOf } from "./BankResourceAllOf"
 import {
-  BatchJournalRequest,
-  BatchJournalRequestEntryTypeEnum,
+    BatchJournalRequest
 } from "./BatchJournalRequest"
 import { BatchJournalRequestEntries } from "./BatchJournalRequestEntries"
 import {
-  BatchJournalResponse,
-  BatchJournalResponseEntryTypeEnum,
-  BatchJournalResponseStatusEnum,
+    BatchJournalResponse
 } from "./BatchJournalResponse"
 import { Contact } from "./Contact"
 import {
-  CreateOrder,
-  CreateOrderSideEnum,
-  CreateOrderTypeEnum,
-  CreateOrderTimeInForceEnum,
-  CreateOrderOrderClassEnum,
+    CreateOrder
 } from "./CreateOrder"
 import { CreateOrderStopLoss } from "./CreateOrderStopLoss"
 import { CreateOrderTakeProfit } from "./CreateOrderTakeProfit"
-import { Disclosures, DisclosuresEmploymentStatusEnum } from "./Disclosures"
-import { DocumentType } from "./DocumentType"
+import { Disclosures } from "./Disclosures"
 import { DocumentUpload } from "./DocumentUpload"
 import { IdentifiedResource } from "./IdentifiedResource"
-import { Identity, IdentityTaxIdTypeEnum, IdentityFundingSourceEnum } from "./Identity"
+import { Identity } from "./Identity"
 import { InlineObject } from "./InlineObject"
 import { InlineObject1 } from "./InlineObject1"
 import { InlineResponse200 } from "./InlineResponse200"
@@ -133,79 +113,53 @@ import { InlineResponse2002 } from "./InlineResponse2002"
 import { InlineResponse2003 } from "./InlineResponse2003"
 import { InlineResponse2004 } from "./InlineResponse2004"
 import { InlineResponse2005 } from "./InlineResponse2005"
-import { InlineResponse2006, InlineResponse2006StatusEnum } from "./InlineResponse2006"
+import { InlineResponse2006 } from "./InlineResponse2006"
 import { InlineResponse2007 } from "./InlineResponse2007"
 import { InlineResponse2008 } from "./InlineResponse2008"
 import { InlineResponse207 } from "./InlineResponse207"
-import { JournalData, JournalDataEntryTypeEnum } from "./JournalData"
-import { JournalJNLC, JournalJNLCStatusEnum } from "./JournalJNLC"
-import { JournalJNLS, JournalJNLSStatusEnum } from "./JournalJNLS"
-import { JournalResource, JournalResourceStatusEnum } from "./JournalResource"
+import { JournalData } from "./JournalData"
+import { JournalJNLC } from "./JournalJNLC"
+import { JournalJNLS } from "./JournalJNLS"
+import { JournalResource } from "./JournalResource"
 import { KycResult } from "./KycResult"
 import { ModelError } from "./ModelError"
-import { NonTradeActivity, NonTradeActivityStatusEnum } from "./NonTradeActivity"
+import { NonTradeActivity } from "./NonTradeActivity"
 import {
-  NonTradeActivityAllOf,
-  NonTradeActivityAllOfStatusEnum,
+    NonTradeActivityAllOf
 } from "./NonTradeActivityAllOf"
 import {
-  OrderObject,
-  OrderObjectOrderClassEnum,
-  OrderObjectOrderTypeEnum,
-  OrderObjectTypeEnum,
-  OrderObjectSideEnum,
-  OrderObjectTimeInForceEnum,
-  OrderObjectStatusEnum,
+    OrderObject
 } from "./OrderObject"
-import { PatchOrder, PatchOrderTimeInForceEnum } from "./PatchOrder"
+import { PatchOrder } from "./PatchOrder"
 import { Position } from "./Position"
 import {
-  TradeActivity,
-  TradeActivityTypeEnum,
-  TradeActivitySideEnum,
-  TradeActivityOrderStatusEnum,
+    TradeActivity
 } from "./TradeActivity"
 import {
-  TradeActivityAllOf,
-  TradeActivityAllOfTypeEnum,
-  TradeActivityAllOfSideEnum,
-  TradeActivityAllOfOrderStatusEnum,
+    TradeActivityAllOf
 } from "./TradeActivityAllOf"
 import {
-  TransferData,
-  TransferDataTransferTypeEnum,
-  TransferDataTimingEnum,
-  TransferDataDirectionEnum,
+    TransferData
 } from "./TransferData"
 import {
-  TransferDataAllOf,
-  TransferDataAllOfTransferTypeEnum,
-  TransferDataAllOfTimingEnum,
+    TransferDataAllOf
 } from "./TransferDataAllOf"
 import {
-  TransferResource,
-  TransferResourceTypeEnum,
-  TransferResourceStatusEnum,
-  TransferResourceDirectionEnum,
+    TransferResource
 } from "./TransferResource"
 import {
-  TransferResourceAllOf,
-  TransferResourceAllOfTypeEnum,
-  TransferResourceAllOfStatusEnum,
+    TransferResourceAllOf
 } from "./TransferResourceAllOf"
 import { TrustedContact } from "./TrustedContact"
 import {
-  UntypedACHTransferData,
-  UntypedACHTransferDataDirectionEnum,
+    UntypedACHTransferData
 } from "./UntypedACHTransferData"
 import { UntypedACHTransferDataAllOf } from "./UntypedACHTransferDataAllOf"
 import {
-  UntypedTransferData,
-  UntypedTransferDataDirectionEnum,
+    UntypedTransferData
 } from "./UntypedTransferData"
 import {
-  UntypedWireTransferData,
-  UntypedWireTransferDataDirectionEnum,
+    UntypedWireTransferData
 } from "./UntypedWireTransferData"
 import { UntypedWireTransferDataAllOf } from "./UntypedWireTransferDataAllOf"
 

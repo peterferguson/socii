@@ -1,9 +1,6 @@
 import Logo from "@components/Logo"
 import {
-  auth,
-  facebookAuthProvider,
-  googleAuthProvider,
-  userFirstName,
+    auth, userFirstName
 } from "@lib/firebase"
 import { useAuth } from "@lib/hooks"
 import router from "next/router"

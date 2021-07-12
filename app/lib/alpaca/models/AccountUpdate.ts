@@ -14,7 +14,6 @@ import { Contact } from "./Contact"
 import { Disclosures } from "./Disclosures"
 import { Identity } from "./Identity"
 import { TrustedContact } from "./TrustedContact"
-import { HttpFile } from "../http/http"
 
 export class AccountUpdate {
   "contact"?: Contact

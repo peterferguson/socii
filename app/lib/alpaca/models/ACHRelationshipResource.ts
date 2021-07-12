@@ -10,11 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { ACHRelationshipData } from "./ACHRelationshipData"
-import { ACHRelationshipResourceAllOf } from "./ACHRelationshipResourceAllOf"
-import { IdentifiedResource } from "./IdentifiedResource"
-import { HttpFile } from "../http/http"
-
 export class ACHRelationshipResource {
   "id": string
   "createdAt": Date

@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { UntypedACHTransferDataAllOf } from "./UntypedACHTransferDataAllOf"
-import { UntypedTransferData } from "./UntypedTransferData"
-import { HttpFile } from "../http/http"
-
 export class UntypedACHTransferData {
   "amount": string
   "direction": UntypedACHTransferDataDirectionEnum

@@ -14,7 +14,6 @@ import { firestore } from "@lib/firebase"
 import { useRouter } from "next/router"
 import React from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
-import { useAuth } from "@lib/hooks"
 
 const PortfolioSkeletons = () => (
   <>

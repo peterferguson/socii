@@ -1,5 +1,5 @@
-import React, { useState } from "react"
 import { currencySymbols } from "@lib/constants"
+import React, { useState } from "react"
 
 export default function PriceInput({
   setPrice,

@@ -11,7 +11,6 @@
  */
 
 import { DocumentType } from "./DocumentType"
-import { HttpFile } from "../http/http"
 
 /**
  * If an account has documents after the submission, it has the Document model in exchange with DocumentUpload.

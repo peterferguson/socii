@@ -1,6 +1,6 @@
 import { TradingApi } from "@lib/alpaca/api"
-import { NextApiRequest, NextApiResponse } from "next"
 import { cors } from "@utils/middleware"
+import { NextApiRequest, NextApiResponse } from "next"
 
 const tradeClient = new TradingApi(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 

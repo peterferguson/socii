@@ -1,9 +1,9 @@
 import React from "react"
 import { MessageInputContextProvider, useMessageInputContext } from "stream-chat-react"
-
 import { useCommandTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useCommandTrigger"
 import { useEmojiTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useEmojiTrigger"
 import { useUserTrigger } from "stream-chat-react/dist/components/MessageInput/hooks/useUserTrigger"
+
 
 const options = ["TSLA", "SPOT", "AAPL", "GME", "AMZN"]
 

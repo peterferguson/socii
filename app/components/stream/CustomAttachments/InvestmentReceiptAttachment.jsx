@@ -1,7 +1,7 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import React from "react"
-
 import { useMessageContext } from "stream-chat-react"
+
 
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list

@@ -1,6 +1,6 @@
-import { TradingApi, CreateOrder, config } from "@lib/alpaca"
-import { NextApiRequest, NextApiResponse } from "next"
+import { config, CreateOrder, TradingApi } from "@lib/alpaca"
 import { withAuth, withCORS } from "@utils/middleware"
+import { NextApiRequest, NextApiResponse } from "next"
 
 const tradeClient = new TradingApi(config)
 

@@ -1,13 +1,12 @@
 // TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { Configuration } from "../configuration"
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from "../http/http"
-import * as FormData from "form-data"
-import { ObjectSerializer } from "../models/ObjectSerializer"
-import { ApiException } from "./exception"
-import { isCodeInRange } from "../util"
-
+import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
 import { AssetResource } from "../models/AssetResource"
+import { ObjectSerializer } from "../models/ObjectSerializer"
+import { isCodeInRange } from "../util"
+import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
+import { ApiException } from "./exception"
+
 
 /**
  * no description
@@ -43,14 +42,6 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.GET
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
 
     let authMethod = null
     // Apply auth methods
@@ -93,14 +84,6 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
-
     let authMethod = null
     // Apply auth methods
     authMethod = config.authMethods["BasicAuth"]
@@ -127,14 +110,6 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.GET
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
 
     let authMethod = null
     // Apply auth methods

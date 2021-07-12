@@ -1,6 +1,6 @@
-import React from "react"
-import OutlineButton from "@components/OutlineButton"
 import Logo from "@components/Logo"
+import OutlineButton from "@components/OutlineButton"
+import React from "react"
 
 export default function FeatureSlider() {
   const timelineHeadings = [

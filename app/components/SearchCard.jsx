@@ -1,22 +1,22 @@
 import LoadingIndicator from "@components/LoadingIndicator"
 import { Dialog } from "@headlessui/react"
-import { FaSearch } from "react-icons/fa"
 import algoliasearch from "algoliasearch/lite"
 import debounce from "lodash/debounce"
-
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useAsync } from "react-async-hook"
+import { FaSearch } from "react-icons/fa"
 import {
-  Configure,
-  connectSearchBox,
-  connectStateResults,
-  Highlight,
-  Hits,
-  InstantSearch,
+    Configure,
+    connectSearchBox,
+    connectStateResults,
+    Highlight,
+    Hits,
+    InstantSearch
 } from "react-instantsearch-dom"
 import { iexQuote } from "utils/helper"
+
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,

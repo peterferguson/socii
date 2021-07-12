@@ -16,7 +16,6 @@ import { Disclosures } from "./Disclosures"
 import { DocumentUpload } from "./DocumentUpload"
 import { Identity } from "./Identity"
 import { TrustedContact } from "./TrustedContact"
-import { HttpFile } from "../http/http"
 
 export class AccountCreationObject {
   "contact"?: Contact

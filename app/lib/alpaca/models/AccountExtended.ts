@@ -18,7 +18,6 @@ import { Disclosures } from "./Disclosures"
 import { Identity } from "./Identity"
 import { KycResult } from "./KycResult"
 import { TrustedContact } from "./TrustedContact"
-import { HttpFile } from "../http/http"
 
 export class AccountExtended {
   "id"?: string

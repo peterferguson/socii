@@ -1,17 +1,16 @@
 // TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { Configuration } from "../configuration"
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from "../http/http"
-import * as FormData from "form-data"
-import { ObjectSerializer } from "../models/ObjectSerializer"
-import { ApiException } from "./exception"
-import { isCodeInRange } from "../util"
-
+import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
 import { BatchJournalRequest } from "../models/BatchJournalRequest"
 import { BatchJournalResponse } from "../models/BatchJournalResponse"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
 import { JournalData } from "../models/JournalData"
 import { JournalResource } from "../models/JournalResource"
+import { ObjectSerializer } from "../models/ObjectSerializer"
+import { isCodeInRange } from "../util"
+import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
+import { ApiException } from "./exception"
+
 
 /**
  * no description
@@ -47,14 +46,6 @@ export class JournalsApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.DELETE
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
 
     let authMethod = null
     // Apply auth methods
@@ -247,13 +238,6 @@ export class JournalsApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(
@@ -299,13 +283,6 @@ export class JournalsApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(

@@ -11,7 +11,6 @@
  */
 
 import { BatchJournalRequestEntries } from "./BatchJournalRequestEntries"
-import { HttpFile } from "../http/http"
 
 export class BatchJournalRequest {
   "entryType": BatchJournalRequestEntryTypeEnum

@@ -1,7 +1,7 @@
-import Image from "next/image"
-import React, { useContext } from "react"
-import Router from "next/router"
 import { userContext } from "@lib/context"
+import Image from "next/image"
+import Router from "next/router"
+import React, { useContext } from "react"
 
 export function ProfilePhoto() {
   // TODO: Add a transition to the logo -> logout

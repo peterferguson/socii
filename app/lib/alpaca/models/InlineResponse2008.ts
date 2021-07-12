@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from "../http/http"
-
 export class InlineResponse2008 {
   /**
    * OAuth code to exchange with a token later.

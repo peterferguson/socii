@@ -1,10 +1,10 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import {
-  currencyIcons,
-  groupDepositOptions,
-  groupLumpSumOptions,
-  groupPrivacyOptions,
+    currencyIcons,
+    groupDepositOptions,
+    groupLumpSumOptions,
+    groupPrivacyOptions
 } from "@lib/constants"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
 import { useAuth, useLocalCurrency } from "@lib/hooks"

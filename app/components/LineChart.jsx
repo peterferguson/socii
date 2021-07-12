@@ -2,9 +2,9 @@ import { tailwindColorMap } from "@lib/constants"
 import { useWindowSize } from "@lib/hooks"
 import { pctChange, pnlBackgroundColor } from "@utils/helper"
 import React, { useEffect, useState } from "react"
+import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
 import "react-vis/dist/style.css"
-import { useMediaQuery } from "react-responsive"
 
 export default function LineChart({
   timeseries,

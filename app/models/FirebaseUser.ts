@@ -1,4 +1,4 @@
-import firebase from "@lib/firebase"
+import firebase from "@lib/firebase";
 
 export default interface FirebaseUser extends firebase.UserInfo {
   provider: string

@@ -1,33 +1,33 @@
 import { CurrencyCode } from "@lib/constants"
-import { userContext, streamContext } from "@lib/context"
+import { streamContext, userContext } from "@lib/context"
 import {
-  auth,
-  FacebookAuthProvider,
-  firestore,
-  GoogleAuthProvider,
+    auth,
+    FacebookAuthProvider,
+    firestore,
+    GoogleAuthProvider
 } from "@lib/firebase"
 import {
-  currencyConversion,
-  fetcher,
-  formatUser,
-  iexQuote,
-  isBrowser,
-  isEmpty,
-  isPromise,
-  round,
-  userFirstName,
+    currencyConversion,
+    fetcher,
+    formatUser,
+    iexQuote,
+    isBrowser,
+    isEmpty,
+    isPromise,
+    round,
+    userFirstName
 } from "@utils/helper"
 import firebase from "firebase"
 import Cookie from "js-cookie"
 import Router from "next/router"
 import {
-  RefObject,
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
+    RefObject,
+    useCallback,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState
 } from "react"
 import toast from "react-hot-toast"
 import { useScroll } from "react-use"

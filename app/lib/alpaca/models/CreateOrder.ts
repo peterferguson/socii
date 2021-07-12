@@ -12,7 +12,6 @@
 
 import { CreateOrderStopLoss } from "./CreateOrderStopLoss"
 import { CreateOrderTakeProfit } from "./CreateOrderTakeProfit"
-import { HttpFile } from "../http/http"
 
 export class CreateOrder {
   "symbol": string

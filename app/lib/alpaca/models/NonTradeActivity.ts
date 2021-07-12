@@ -10,10 +10,7 @@
  * Do not edit the class manually.
  */
 
-import { Activity } from "./Activity"
 import { ActivityType } from "./ActivityType"
-import { NonTradeActivityAllOf } from "./NonTradeActivityAllOf"
-import { HttpFile } from "../http/http"
 
 export class NonTradeActivity {
   "id"?: string

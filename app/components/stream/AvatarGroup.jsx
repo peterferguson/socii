@@ -1,7 +1,7 @@
-import { getRandomImage, getInitials } from "@utils/helper"
-
+import { getInitials, getRandomImage } from "@utils/helper"
 import React from "react"
 import { Avatar } from "stream-chat-react"
+
 
 export default function AvatarGroup(members, styles) {
   if (members.length === 1) {

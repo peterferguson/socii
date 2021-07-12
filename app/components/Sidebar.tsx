@@ -1,16 +1,16 @@
 import Logo from "@components/Logo"
 import { userContext } from "@lib/context"
-import { useRouter } from "next/router"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-  HiOutlineAtSymbol,
-  HiOutlineChartPie,
-  HiOutlineChat,
-  HiOutlineChevronRight,
-  HiOutlineCog,
-  HiOutlineUserGroup,
+    HiOutlineAtSymbol,
+    HiOutlineChartPie,
+    HiOutlineChat,
+    HiOutlineChevronRight,
+    HiOutlineCog,
+    HiOutlineUserGroup
 } from "react-icons/hi"
 
 // - https://www.tailwind-kit.com/components/sidebar

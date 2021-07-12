@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { firestore } from "@lib/firebase"
-import { useCollectionData } from "react-firebase-hooks/firestore"
 import { Dialog } from "@headlessui/react"
+import { firestore } from "@lib/firebase"
+import React, { useEffect, useState } from "react"
+import { useCollectionData } from "react-firebase-hooks/firestore"
 
 export default function Invites() {
   return (

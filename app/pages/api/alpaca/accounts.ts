@@ -1,6 +1,6 @@
 import { AccountCreationObject, AccountsApi, config } from "@lib/alpaca"
-import { NextApiRequest, NextApiResponse } from "next"
 import { withAuth, withCORS } from "@utils/middleware"
+import { NextApiRequest, NextApiResponse } from "next"
 
 const accountClient = new AccountsApi(config)
 

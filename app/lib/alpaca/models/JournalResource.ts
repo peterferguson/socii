@@ -10,10 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { JournalJNLC } from "./JournalJNLC"
-import { JournalJNLS } from "./JournalJNLS"
-import { HttpFile } from "../http/http"
-
 export class JournalResource {
   /**
    * journal ID

@@ -1,12 +1,11 @@
-import { HttpLibrary } from "./http/http"
-import { Middleware, PromiseMiddleware, PromiseMiddlewareWrapper } from "./middleware"
-import { IsomorphicFetchHttpLibrary as DefaultHttpLibrary } from "./http/isomorphic-fetch"
-import { BaseServerConfiguration, server1 } from "./servers"
 import {
-  configureAuthMethods,
-  AuthMethods,
-  AuthMethodsConfiguration,
+    AuthMethods,
+    AuthMethodsConfiguration, configureAuthMethods
 } from "./auth/auth"
+import { HttpLibrary } from "./http/http"
+import { IsomorphicFetchHttpLibrary as DefaultHttpLibrary } from "./http/isomorphic-fetch"
+import { Middleware, PromiseMiddleware, PromiseMiddlewareWrapper } from "./middleware"
+import { BaseServerConfiguration, server1 } from "./servers"
 
 export interface Configuration {
   readonly baseServer: BaseServerConfiguration

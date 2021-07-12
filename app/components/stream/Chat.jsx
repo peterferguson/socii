@@ -1,23 +1,22 @@
 import {
-  CreateChatModal,
-  CustomTriggerProvider,
-  MessagingChannelHeader,
-  MessagingChannelList,
-  MessagingChannelPreview,
-  MessagingInput,
+    CreateChatModal,
+    CustomTriggerProvider,
+    MessagingChannelHeader,
+    MessagingChannelList,
+    MessagingChannelPreview,
+    MessagingInput
 } from "@components/stream"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext, useState } from "react"
 import { useMediaQuery } from "react-responsive"
-import { StreamChat as Client } from "stream-chat"
 import {
-  Channel,
-  ChannelList,
-  ChatContext,
-  MessageInput,
-  MessageList,
-  Window,
+    Channel,
+    ChannelList,
+    ChatContext,
+    MessageInput,
+    MessageList,
+    Window
 } from "stream-chat-react"
 
 const MessagingThread = dynamic(() => import("@components/stream/MessagingThread"), {

@@ -1,14 +1,12 @@
-import MMLButton from "./MMLButton"
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { userContext } from "@lib/context"
-import { firestore, arrayUnion } from "@lib/firebase"
-
-import {
-  LoadingIndicator,
-  useMessageContext,
-  useChannelStateContext,
-} from "stream-chat-react"
+import { arrayUnion, firestore } from "@lib/firebase"
 import React, { Suspense, useContext } from "react"
+import {
+    LoadingIndicator, useChannelStateContext, useMessageContext
+} from "stream-chat-react"
+import MMLButton from "./MMLButton"
+
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")

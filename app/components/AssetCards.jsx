@@ -1,7 +1,7 @@
 import { logoUrl, pctChange, pnlBackgroundColor, pnlTextColor } from "@utils/helper"
-
 import Link from "next/link"
 import React, { useState } from "react"
+
 
 export default function SmallAssetPctChangeCard({
   logoUrl,

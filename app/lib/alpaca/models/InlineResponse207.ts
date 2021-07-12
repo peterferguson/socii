@@ -11,7 +11,6 @@
  */
 
 import { OrderObject } from "./OrderObject"
-import { HttpFile } from "../http/http"
 
 export class InlineResponse207 {
   "id"?: string

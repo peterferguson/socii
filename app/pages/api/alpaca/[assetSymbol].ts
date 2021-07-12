@@ -1,6 +1,6 @@
 import { AssetsApi, config } from "@lib/alpaca/"
+import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
-import { withCORS, withAuth } from "@utils/middleware"
 
 const assetClient = new AssetsApi(config)
 

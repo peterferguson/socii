@@ -1,17 +1,16 @@
 // TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { Configuration } from "../configuration"
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from "../http/http"
-import * as FormData from "form-data"
-import { ObjectSerializer } from "../models/ObjectSerializer"
-import { ApiException } from "./exception"
-import { isCodeInRange } from "../util"
-
+import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse2006 } from "../models/InlineResponse2006"
 import { InlineResponse2007 } from "../models/InlineResponse2007"
 import { InlineResponse2008 } from "../models/InlineResponse2008"
+import { ObjectSerializer } from "../models/ObjectSerializer"
+import { isCodeInRange } from "../util"
+import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
+import { ApiException } from "./exception"
+
 
 /**
  * no description
@@ -45,13 +44,6 @@ export class OAuthApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(
@@ -171,13 +163,6 @@ export class OAuthApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
-    // Query Params
-
-    // Header Params
-
-    // Form Params
-
-    // Body Params
     const contentType = ObjectSerializer.getPreferredMediaType(["application/json"])
     requestContext.setHeaderParam("Content-Type", contentType)
     const serializedBody = ObjectSerializer.stringify(
