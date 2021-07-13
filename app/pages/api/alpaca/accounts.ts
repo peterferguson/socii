@@ -1,4 +1,4 @@
-import { AccountCreationObject, AccountsApi, config } from "@alpaca"
+import { AccountCreationObject, AccountsApi, config } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

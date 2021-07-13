@@ -1,4 +1,4 @@
-import { config, CreateOrder, TradingApi } from "../../../alpaca"
+import { config, CreateOrder, TradingApi } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -24,13 +24,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         } = body
 
         if (orderId)
-          res
+          return res
             .status(200)
             .end(JSON.stringify(await tradeClient.getOrder(accountId, orderId)))
 
-        tradeClient.
-
-        res
+        return res
           .status(200)
           .end(
             JSON.stringify(
@@ -69,8 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         /* cancel an order */
         const { account_id: accountId, order_id: orderId } = body
         res.end(JSON.stringify(await tradeClient.deleteOrder(accountId, orderId)))
-        if (!orderId)
-          res.end(JSON.stringify(await tradeClient.deleteOrders(accountId)))
+        if (!orderId) res.end(JSON.stringify(await tradeClient.deleteOrders(accountId)))
         break
       } catch (error) {
         res.status(400).end(`Failed to create account with error: ${error}`)

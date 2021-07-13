@@ -1,5 +1,6 @@
+import { IEXFinancial } from "./IEXFinancial"
 
 export interface IEXFinancialsResponse {
-  symbol: string;
-  financials: Financial[];
+  symbol: string
+  financials: IEXFinancial[]
 }

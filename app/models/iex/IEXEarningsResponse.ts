@@ -1,5 +1,6 @@
+import { IEXEarning } from "./IEXEarning"
 
 export interface IEXEarningsResponse {
-  symbol: string;
-  earnings: Earning[];
+  symbol: string
+  earnings: IEXEarning[]
 }
