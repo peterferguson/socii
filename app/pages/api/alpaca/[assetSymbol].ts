@@ -16,5 +16,3 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   res.end(JSON.stringify(await assetClient.getAssets()))
 }
-
-export default withAuth(withCORS(handler))
