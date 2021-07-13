@@ -1,5 +1,5 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { userContext } from "@contexts/authContext"
+import { useAuth } from "@hooks/useAuth"
 import { arrayUnion, firestore } from "@lib/firebase"
 import React, { Suspense, useContext } from "react"
 import {
@@ -15,7 +15,7 @@ const MML = React.lazy(async () => {
 })
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
-  const { user } = useContext(userContext)
+  const { user } = useAuth()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 

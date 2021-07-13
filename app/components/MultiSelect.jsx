@@ -1,4 +1,4 @@
-import { uncamelCase } from "@utils/helper"
+import { uncamelCase } from "@utils/uncamelCase"
 import React, { useState } from "react"
 import { FiChevronDown, FiX } from "react-icons/fi"
 

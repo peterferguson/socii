@@ -1,6 +1,7 @@
 import { useWindowSize } from "@hooks/useWindowSize"
 import { tailwindColorMap } from "@lib/constants"
-import { pctChange, pnlBackgroundColor } from "@utils/helper"
+import { pctChange } from "@utils/pctChange"
+import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React, { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"

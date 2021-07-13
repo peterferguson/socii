@@ -1,4 +1,4 @@
-import { tw } from "@utils/helper"
+import { tw } from "@utils/tw"
 import { useState } from "react"
 
 function Invite({ setInvited }) {

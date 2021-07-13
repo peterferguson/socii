@@ -1,6 +1,6 @@
 import { tailwindColorMap } from "@lib/constants"
 import { OHLC } from "@models/OHLC"
-import { pctChange } from "@utils/helper"
+import { pctChange } from "@utils/pctChange"
 import Link from "next/link"
 import { string } from "prop-types"
 import React, { useEffect, useRef, useState } from "react"

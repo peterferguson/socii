@@ -1,4 +1,4 @@
-import { userContext } from "@contexts/authContext"
+import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
 import React, { useContext } from "react"
 
@@ -8,7 +8,7 @@ interface AuthCheckProps {
 }
 
 export default function AuthCheck({ children, fallback }: AuthCheckProps) {
-  const { username } = useContext(userContext)
+  const { username } = useAuth()
 
   return username
     ? children

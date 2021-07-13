@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { userContext } from "@contexts/authContext"
+import { useAuth } from "@hooks/useAuth"
 import { Popover, Transition } from "@headlessui/react"
 import { signOut } from "@lib/firebase"
 import Link from "next/link"
@@ -7,13 +7,13 @@ import Router from "next/router"
 import React, { Fragment, useContext, useEffect } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-    HiMenu,
-    HiOutlineAtSymbol,
-    HiOutlineChartPie,
-    HiOutlineChat,
-    HiOutlineChevronRight,
-    HiOutlineCog,
-    HiOutlineUserGroup
+  HiMenu,
+  HiOutlineAtSymbol,
+  HiOutlineChartPie,
+  HiOutlineChat,
+  HiOutlineChevronRight,
+  HiOutlineCog,
+  HiOutlineUserGroup,
 } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 
@@ -73,7 +73,7 @@ const grayedDropdownItems = [
 export default function Dropdown() {
   // const [dropdownOpen, setDropdownOpen] = useState(false)
   // // const [openSettings, setOpenSettings] = useState(false);
-  const { username } = useContext(userContext)
+  const { username } = useAuth()
 
   useEffect(() => {
     dropdownItems.unshift({

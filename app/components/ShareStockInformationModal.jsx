@@ -1,7 +1,7 @@
 import MultiSelect from "@components/MultiSelect"
 import PriceInput from "@components/PriceInput"
 import { Dialog, Transition } from "@headlessui/react"
-import { useStream } from "@hooks"
+import { useStream } from "@hooks/useStream"
 import { alphaVantageQueryOptions } from "@lib/constants"
 import { alphaVantageQuery } from "@lib/firebase"
 import { useRouter } from "next/router"
