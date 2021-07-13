@@ -1,13 +1,13 @@
-import { userContext } from "@lib/context"
 import { useRouter } from "next/router"
+import { useAuth } from "@hooks/useAuth"
 import React, { useContext } from "react"
 import {
-    HiOutlineAnnotation,
-    HiOutlineCog,
-    HiOutlineGlobe,
-    HiOutlineHome,
-    HiOutlineSearch,
-    HiOutlineUserGroup
+  HiOutlineAnnotation,
+  HiOutlineCog,
+  HiOutlineGlobe,
+  HiOutlineHome,
+  HiOutlineSearch,
+  HiOutlineUserGroup,
 } from "react-icons/hi"
 
 type FooterProps = {
@@ -18,7 +18,7 @@ type FooterProps = {
 
 export default function Footer({ showSearchCard, setShowSearchCard }: FooterProps) {
   const router = useRouter()
-  const { user, username } = useContext(userContext)
+  const { user, username } = useAuth()
 
   const links = [
     {

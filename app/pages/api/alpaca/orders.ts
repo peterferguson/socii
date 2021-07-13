@@ -1,4 +1,4 @@
-import { config, CreateOrder, TradingApi } from "@lib/alpaca"
+import { config, CreateOrder, TradingApi } from "../../../alpaca"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -11,13 +11,41 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case "GET":
       try {
         /* query accounts, empty queries return all accounts paginated by the 1000 */
-        const { account_id: accountId, order_id: orderId, status, symbols } = body
+        const {
+          account_id: accountId,
+          order_id: orderId,
+          status,
+          limit,
+          after,
+          until,
+          direction,
+          nested,
+          symbols,
+        } = body
+
         if (orderId)
           res
             .status(200)
             .end(JSON.stringify(await tradeClient.getOrder(accountId, orderId)))
-        
-        res.status(200).end(JSON.stringify(await tradeClient.getOrders(accountId, status, )));
+
+        tradeClient.
+
+        res
+          .status(200)
+          .end(
+            JSON.stringify(
+              await tradeClient.getOrders(
+                accountId,
+                status,
+                limit,
+                after,
+                until,
+                direction,
+                nested,
+                symbols
+              )
+            )
+          )
       } catch (error) {
         res.status(400).end(`Failed to retrieve account with error: ${error}`)
       }
@@ -41,6 +69,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         /* cancel an order */
         const { account_id: accountId, order_id: orderId } = body
         res.end(JSON.stringify(await tradeClient.deleteOrder(accountId, orderId)))
+        if (!orderId)
+          res.end(JSON.stringify(await tradeClient.deleteOrders(accountId)))
         break
       } catch (error) {
         res.status(400).end(`Failed to create account with error: ${error}`)

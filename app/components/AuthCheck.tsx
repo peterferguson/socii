@@ -1,4 +1,4 @@
-import { userContext } from "@lib/context"
+import { userContext } from "@contexts/authContext"
 import Link from "next/link"
 import React, { useContext } from "react"
 

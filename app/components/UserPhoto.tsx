@@ -1,5 +1,5 @@
 import { firestore } from "@lib/firebase"
-import { getRandomTailwindColor } from "@utils/helper"
+import { getRandomTailwindColor } from "@utils/getRandomTailwindColor"
 import React, { useEffect, useRef } from "react"
 
 type UserPhotoProps = {

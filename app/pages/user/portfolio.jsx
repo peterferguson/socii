@@ -2,11 +2,10 @@ import { GroupPieCard } from "@components/GroupCharts"
 import { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
 import IEXQuery from "@lib/iex"
-import { fetchJSON } from "@utils/helper"
+import { fetchJSON } from "@utils"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
-
 
 export default function Dashboard() {
   // TODO: Sidebar with name, breakdown dashboard, activity feed & chat

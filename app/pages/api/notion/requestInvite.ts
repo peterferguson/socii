@@ -1,4 +1,4 @@
-import { notion } from "@utils/api/services"
+import { notion } from "@utils/notion"
 
 export default async function (req, res) {
   try {

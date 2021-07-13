@@ -1,5 +1,5 @@
+import { useWindowSize } from "@hooks/useWindowSize"
 import { tailwindColorMap } from "@lib/constants"
-import { useWindowSize } from "@lib/hooks"
 import { pctChange, pnlBackgroundColor } from "@utils/helper"
 import React, { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive"

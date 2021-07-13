@@ -1,5 +1,5 @@
 import Logo from "@components/Logo"
-import { useAuth } from "@lib/hooks"
+import { useAuth } from "hooks/useAuth"
 import React from "react"
 import { HiOutlineChevronDown, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"

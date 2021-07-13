@@ -35,14 +35,15 @@ import AuthCheck from "@components/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
 import GroupColumn from "@components/GroupCharts"
 import LoadingIndicator from "@components/LoadingIndicator"
-import { useAuth, useStream } from "@lib/hooks"
+import { useStream } from "@hooks"
+import { useAuth } from "hooks/useAuth"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
 import Custom404 from "../../404"
 
-const StreamChatWithNoSSR = dynamic(() => import("@components/stream/Chat"), {
+const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 

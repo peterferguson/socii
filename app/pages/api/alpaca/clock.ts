@@ -1,5 +1,5 @@
-import { ClockApi, config } from "@lib/alpaca/"
 import { withAuth, withCORS } from "@utils/middleware"
+import { config, ClockApi } from "../../../alpaca"
 import { NextApiRequest, NextApiResponse } from "next"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

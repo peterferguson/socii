@@ -17,6 +17,10 @@
     "baseUrl": "./",
     "paths": {
       "@lib/*": ["lib/*"],
+      "@hooks/*": ["hooks/*"],
+      "@alpaca/*": ["alpaca/*"],
+      "@stream/*": ["stream/*"],
+      "@contexts/*": ["contexts/*"],
       "@components/*": ["components/*"],
       "@models/*": ["models/*"],
       "@styles/*": ["styles/*"],
@@ -33,7 +37,9 @@
     "**/*.tsx",
     "pages/_app.tsx",
     "components/stream/MessagingInput/MessagingInput.jsx",
-    "pages/api/commands.js"
-, "components/stream/Chat.jsx", "components/stream/MessagingChannelPreview.tsx"  ],
+    "pages/api/commands.js",
+    "components/stream/Chat.jsx",
+    "components/stream/MessagingChannelPreview.tsx"
+  ],
   "exclude": ["node_modules"]
 }

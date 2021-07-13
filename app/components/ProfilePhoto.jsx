@@ -1,11 +1,11 @@
-import { userContext } from "@lib/context"
 import Image from "next/image"
 import Router from "next/router"
-import React, { useContext } from "react"
+import React from "react"
+import { useAuth } from "@hooks/useAuth"
 
 export function ProfilePhoto() {
   // TODO: Add a transition to the logo -> logout
-  const { user, username } = useContext(userContext)
+  const { user, username } = useAuth()
   return (
     <div className="relative flex items-center justify-end w-1/4 ml-5 mr-1 sm:mr-0 sm:right-auto">
       {user?.photoURL ? (

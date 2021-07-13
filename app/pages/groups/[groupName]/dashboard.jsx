@@ -1,12 +1,5 @@
-import { GroupPieCard } from "@components/GroupCharts"
-import { PieCardSkeleton } from "@components/PieCard"
-import { firestore } from "@lib/firebase"
-import IEXQuery from "@lib/iex"
-import { fetchJSON } from "@utils/helper"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
-
+import React from "react"
 
 export default function Dashboard() {
   // TODO: Sidebar with name, breakdown dashboard, activity feed & chat
@@ -447,83 +440,4 @@ function BlockCard({
       </div>
     </div>
   )
-}
-
-function PieChart({ groupName }) {
-  const [currentPrices, setCurrentPrices] = useState([])
-  const holdingsRef = firestore.collection(`groups/${groupName}/holdings`)
-
-  const [holdings, loading] = useCollectionDataOnce(holdingsRef)
-
-  useEffect(() => {
-    holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery()
-
-      fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
-        setCurrentPrices((previousState) => ({
-          ...previousState,
-          [tickerSymbol]: value,
-        }))
-      )
-    })
-  }, [holdings])
-
-  const holdingData = holdings?.map(
-    ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {
-      return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
-    }
-  )
-
-  return (
-    <>
-      <div className="w-full px-4 xl:w-4/12">
-        <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded shadow-lg">
-          <div className="px-4 py-3 mb-0 bg-transparent rounded-t">
-            <div className="flex flex-wrap items-center">
-              <div className="relative flex-1 flex-grow w-full max-w-full">
-                <h6 className="mb-1 text-xs font-semibold uppercase text-blueGray-400">
-                  Holdings
-                </h6>
-                <h2 className="text-xl font-semibold text-blueGray-700">
-                  Portfolio Allocation
-                </h2>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto p-4">
-            {/* Chart */}
-            {!loading ? (
-              <GroupPieCard
-                className={"bg-opacity-0 bg-gray-50"}
-                groupName={groupName}
-                holdingData={holdingData}
-                currentPrices={currentPrices}
-              />
-            ) : (
-              <PieCardSkeleton scaling={0.3} radius={250} />
-            )}
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-{
-  /* <div className="w-88 sm:w-full items-center justify-center flex flex-col bg-white rounded sm:rounded-xl shadow-2xl m-0 sm:m-4 mb-2 sm:mb-4">
-<Link href={`/groups/${groupName}`}>
-  <div className="relative top-2 text-4xl text-brand font-primary text-center z-10 cursor-pointer">
-    {groupName}
-  </div>
-</Link>
-<DonutChart
-  className="z-0 -mt-8"
-  data={pieData}
-  scaling={0.35}
-  radius={250}
-  text={{
-    main: `$${portfolioValue?.toFixed(2)}`,
-    sub: `${gain.toFixed(2)}%`,
-  }}
-/>
-</div> */
 }

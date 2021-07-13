@@ -1,7 +1,8 @@
 import { isEmpty } from "@utils/isEmpty"
 import { isPromise } from "@utils/isPromise"
 import { useEffect, useState } from "react"
-import { getter, setter } from "@utils/helper"
+import { storageGetter } from "@utils/storageGetter"
+import { storageSetter } from "@utils/storageSetter"
 
 interface PersistenceDefaultValueFunction {
   func: () => any
@@ -14,7 +15,7 @@ export const usePersistentState = (
   asCookie: boolean = false
 ) => {
   const [value, setValue] = useState(() => {
-    const persistentValue = getter(key, asCookie) || null
+    const persistentValue = storageGetter(key, asCookie) || null
     if (persistentValue !== null && !isEmpty(persistentValue)) return persistentValue
     // - Allows us to send an object with the keys func & args as defaultValue
     // TODO: This works in node but is not setting correct value in localStorage
@@ -25,8 +26,8 @@ export const usePersistentState = (
   useEffect(() => {
     isPromise(value)
       ? // - if the value is a promise resolve it before storing in cache
-        value.then((r: string | object) => setter(key, r, asCookie))
-      : setter(key, value, asCookie)
+        value.then((r: string | object) => storageSetter(key, r, asCookie))
+      : storageSetter(key, value, asCookie)
   }, [key, value, asCookie])
   return [value, setValue]
 }

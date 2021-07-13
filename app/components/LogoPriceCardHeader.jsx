@@ -1,4 +1,6 @@
-import { currencyFormatter, logoUrl, pnlBackgroundColor } from "@utils/helper"
+import { currencyFormatter } from "@utils/currencyFormatter"
+import { logoUrl } from "@utils/logoUrl"
+import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import router from "next/router"
 import React, { useEffect, useRef } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { userContext } from "@contexts/authContext"
 import { Popover, Transition } from "@headlessui/react"
-import { userContext } from "@lib/context"
 import { signOut } from "@lib/firebase"
 import Link from "next/link"
 import Router from "next/router"

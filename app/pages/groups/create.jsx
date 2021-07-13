@@ -1,13 +1,13 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
+import { useAuth, useLocalCurrency } from "@hooks"
 import {
-    currencyIcons,
-    groupDepositOptions,
-    groupLumpSumOptions,
-    groupPrivacyOptions
+  currencyIcons,
+  groupDepositOptions,
+  groupLumpSumOptions,
+  groupPrivacyOptions,
 } from "@lib/constants"
 import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
-import { useAuth, useLocalCurrency } from "@lib/hooks"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"

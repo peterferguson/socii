@@ -1,16 +1,16 @@
 import Logo from "@components/Logo"
-import { userContext } from "@lib/context"
+import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-    HiOutlineAtSymbol,
-    HiOutlineChartPie,
-    HiOutlineChat,
-    HiOutlineChevronRight,
-    HiOutlineCog,
-    HiOutlineUserGroup
+  HiOutlineAtSymbol,
+  HiOutlineChartPie,
+  HiOutlineChat,
+  HiOutlineChevronRight,
+  HiOutlineCog,
+  HiOutlineUserGroup,
 } from "react-icons/hi"
 
 // - https://www.tailwind-kit.com/components/sidebar
@@ -18,7 +18,7 @@ export default function Sidebar() {
   // TODO: Stateful selection of the nav item based on the route
   // - For now this is mocked with a simple enumeration of the list
   const router = useRouter()
-  const { username } = useContext(userContext)
+  const { username } = useAuth()
 
   const navItems = [
     {

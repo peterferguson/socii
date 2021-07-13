@@ -1,13 +1,13 @@
 import NavHeader from "@components/NavHeader"
 import Sidebar from "@components/Sidebar"
-import ChatSidebar from "@components/stream/ChatSidebar"
+import ChatSidebar from "@stream/components/ChatSidebar"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { ChatContext } from "stream-chat-react"
 
-const StreamChatWithNoSSR = dynamic(() => import("components/stream/Chat"), {
+const StreamChatWithNoSSR = dynamic(() => import("stream/components/Chat"), {
   ssr: false,
 })
 

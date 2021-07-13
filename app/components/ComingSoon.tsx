@@ -1,4 +1,4 @@
-import { tw } from "@utils/helper"
+import { tw } from "@utils/tw"
 import React from "react"
 import { FaFacebook, FaMedium, FaTwitter } from "react-icons/fa"
 

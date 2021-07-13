@@ -1,5 +1,5 @@
 import { tailwindColorMap } from "@lib/constants"
-import { OHLC } from "@lib/types"
+import { OHLC } from "@models/OHLC"
 import { pctChange } from "@utils/helper"
 import Link from "next/link"
 import { string } from "prop-types"

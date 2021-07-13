@@ -1,6 +1,6 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { firestore } from "@lib/firebase"
-import { useAuth } from "@lib/hooks"
+import { useAuth } from "@hooks/useAuth"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"

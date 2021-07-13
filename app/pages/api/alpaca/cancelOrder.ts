@@ -1,4 +1,4 @@
-import { TradingApi } from "@lib/alpaca/api"
+import { TradingApi } from "@alpaca/api"
 import { cors } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

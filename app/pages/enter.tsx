@@ -2,7 +2,7 @@ import Logo from "@components/Logo"
 import {
     auth, userFirstName
 } from "@lib/firebase"
-import { useAuth } from "@lib/hooks"
+import { useAuth } from "hooks/useAuth"
 import router from "next/router"
 import React, { useEffect } from "react"
 import toast from "react-hot-toast"

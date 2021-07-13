@@ -1,4 +1,4 @@
-import { OHLC } from "@lib/types"
+import { OHLC } from "@models/OHLC"
 import { cors } from "@utils/middleware"
 import admin from "firebase-admin"
 import { NextApiRequest, NextApiResponse } from "next"

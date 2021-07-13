@@ -15,7 +15,7 @@ import {
     Hits,
     InstantSearch
 } from "react-instantsearch-dom"
-import { iexQuote } from "utils/helper"
+import { iexQuote } from "utils/iexQuote"
 
 
 const algoliaClient = algoliasearch(

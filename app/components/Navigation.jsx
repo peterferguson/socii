@@ -1,6 +1,6 @@
 import Logo from "@components/Logo"
 import MacSearchKey from "@components/SearchKey"
-import { userContext } from "@lib/context"
+import { userContext } from "@contexts/authContext"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
