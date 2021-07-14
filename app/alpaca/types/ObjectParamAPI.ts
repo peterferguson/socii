@@ -729,7 +729,6 @@ export class ObjectAccountsApi {
   }
 }
 
-
 export interface AssetsApiAssetsAssetIdGetRequest {
   /**
    * The UUID of the required asset
@@ -769,7 +768,7 @@ export class ObjectAssetsApi {
   public assetsAssetIdGet(
     param: AssetsApiAssetsAssetIdGetRequest,
     options?: Configuration
-  ): Promise<void> {
+  ): Promise<AssetResource> {
     return this.api.assetsAssetIdGet(param.assetId, options).toPromise()
   }
 
@@ -781,7 +780,7 @@ export class ObjectAssetsApi {
   public assetsSymbolGet(
     param: AssetsApiAssetsSymbolGetRequest,
     options?: Configuration
-  ): Promise<void> {
+  ): Promise<AssetResource> {
     return this.api.assetsSymbolGet(param.symbol, options).toPromise()
   }
 

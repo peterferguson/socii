@@ -1,30 +1,30 @@
 import {
-    AccountsApiRequestFactory,
-    AccountsApiResponseProcessor
+  AccountsApiRequestFactory,
+  AccountsApiResponseProcessor,
 } from "../apis/AccountsApi"
 import { AssetsApiRequestFactory, AssetsApiResponseProcessor } from "../apis/AssetsApi"
 import {
-    CalendarApiRequestFactory,
-    CalendarApiResponseProcessor
+  CalendarApiRequestFactory,
+  CalendarApiResponseProcessor,
 } from "../apis/CalendarApi"
 import { ClockApiRequestFactory, ClockApiResponseProcessor } from "../apis/ClockApi"
 import {
-    DocumentsApiRequestFactory,
-    DocumentsApiResponseProcessor
+  DocumentsApiRequestFactory,
+  DocumentsApiResponseProcessor,
 } from "../apis/DocumentsApi"
 import { EventsApiRequestFactory, EventsApiResponseProcessor } from "../apis/EventsApi"
 import {
-    FundingApiRequestFactory,
-    FundingApiResponseProcessor
+  FundingApiRequestFactory,
+  FundingApiResponseProcessor,
 } from "../apis/FundingApi"
 import {
-    JournalsApiRequestFactory,
-    JournalsApiResponseProcessor
+  JournalsApiRequestFactory,
+  JournalsApiResponseProcessor,
 } from "../apis/JournalsApi"
 import { OAuthApiRequestFactory, OAuthApiResponseProcessor } from "../apis/OAuthApi"
 import {
-    TradingApiRequestFactory,
-    TradingApiResponseProcessor
+  TradingApiRequestFactory,
+  TradingApiResponseProcessor,
 } from "../apis/TradingApi"
 import { Configuration } from "../configuration"
 import { RequestContext, ResponseContext } from "../http/http"
@@ -944,7 +944,10 @@ export class ObservableAssetsApi {
    * Retrieve an asset by UUID
    * @param assetId The UUID of the required asset
    */
-  public assetsAssetIdGet(assetId: string, options?: Configuration): Observable<void> {
+  public assetsAssetIdGet(
+    assetId: string,
+    options?: Configuration
+  ): Observable<AssetResource> {
     const requestContextPromise = this.requestFactory.assetsAssetIdGet(assetId, options)
 
     // build promise chain
@@ -977,7 +980,10 @@ export class ObservableAssetsApi {
    * Retrieve an asset by symbol
    * @param symbol The symbol of the required asset
    */
-  public assetsSymbolGet(symbol: string, options?: Configuration): Observable<void> {
+  public assetsSymbolGet(
+    symbol: string,
+    options?: Configuration
+  ): Observable<AssetResource> {
     const requestContextPromise = this.requestFactory.assetsSymbolGet(symbol, options)
 
     // build promise chain

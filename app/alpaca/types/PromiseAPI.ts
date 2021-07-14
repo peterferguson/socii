@@ -446,7 +446,10 @@ export class PromiseAssetsApi {
    * Retrieve an asset by UUID
    * @param assetId The UUID of the required asset
    */
-  public assetsAssetIdGet(assetId: string, options?: Configuration): Promise<void> {
+  public assetsAssetIdGet(
+    assetId: string,
+    options?: Configuration
+  ): Promise<AssetResource> {
     const result = this.api.assetsAssetIdGet(assetId, options)
     return result.toPromise()
   }
@@ -456,7 +459,10 @@ export class PromiseAssetsApi {
    * Retrieve an asset by symbol
    * @param symbol The symbol of the required asset
    */
-  public assetsSymbolGet(symbol: string, options?: Configuration): Promise<void> {
+  public assetsSymbolGet(
+    symbol: string,
+    options?: Configuration
+  ): Promise<AssetResource> {
     const result = this.api.assetsSymbolGet(symbol, options)
     return result.toPromise()
   }

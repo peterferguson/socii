@@ -7,7 +7,6 @@ import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { ApiException } from "./exception"
 
-
 /**
  * no description
  */
@@ -42,6 +41,14 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
       HttpMethod.GET
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+    // Query Params
+
+    // Header Params
+
+    // Form Params
+
+    // Body Params
 
     let authMethod = null
     // Apply auth methods
@@ -84,6 +91,14 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
+    // Query Params
+
+    // Header Params
+
+    // Form Params
+
+    // Body Params
+
     let authMethod = null
     // Apply auth methods
     authMethod = config.authMethods["BasicAuth"]
@@ -111,6 +126,14 @@ export class AssetsApiRequestFactory extends BaseAPIRequestFactory {
     )
     requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
+    // Query Params
+
+    // Header Params
+
+    // Form Params
+
+    // Body Params
+
     let authMethod = null
     // Apply auth methods
     authMethod = config.authMethods["BasicAuth"]
@@ -130,12 +153,17 @@ export class AssetsApiResponseProcessor {
    * @params response Response returned by the server for a request to assetsAssetIdGet
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async assetsAssetIdGet(response: ResponseContext): Promise<void> {
+  public async assetsAssetIdGet(response: ResponseContext): Promise<AssetResource> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      return
+      const body: AssetResource = ObjectSerializer.deserialize(
+        ObjectSerializer.parse(await response.body.text(), contentType),
+        "AssetResource",
+        ""
+      ) as AssetResource
+      return body
     }
     if (isCodeInRange("404", response.httpStatusCode)) {
       throw new ApiException<string>(response.httpStatusCode, "Asset not found")
@@ -143,11 +171,11 @@ export class AssetsApiResponseProcessor {
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: void = ObjectSerializer.deserialize(
+      const body: AssetResource = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "void",
+        "AssetResource",
         ""
-      ) as void
+      ) as AssetResource
       return body
     }
 
@@ -165,12 +193,17 @@ export class AssetsApiResponseProcessor {
    * @params response Response returned by the server for a request to assetsSymbolGet
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async assetsSymbolGet(response: ResponseContext): Promise<void> {
+  public async assetsSymbolGet(response: ResponseContext): Promise<AssetResource> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      return
+      const body: AssetResource = ObjectSerializer.deserialize(
+        ObjectSerializer.parse(await response.body.text(), contentType),
+        "AssetResource",
+        ""
+      ) as AssetResource
+      return body
     }
     if (isCodeInRange("404", response.httpStatusCode)) {
       throw new ApiException<string>(response.httpStatusCode, "Asset not found")
@@ -178,11 +211,11 @@ export class AssetsApiResponseProcessor {
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: void = ObjectSerializer.deserialize(
+      const body: AssetResource = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "void",
+        "AssetResource",
         ""
-      ) as void
+      ) as AssetResource
       return body
     }
 
