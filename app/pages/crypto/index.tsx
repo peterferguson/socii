@@ -1,10 +1,9 @@
 import React from "react"
 import { FaBitcoin } from "react-icons/fa"
-import ComingSoon from "../../components/ComingSoon"
+import ComingSoon from "@components/ComingSoon"
 import useSWR from "swr"
 import { fetchWithToken } from "@utils/fetchWithToken"
-import { useHasMounted } from "@hooks/useHasMounted"
-import { useAuth } from "@hooks/useAuth"
+import { useHasMounted, useAuth } from "@hooks"
 
 export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
