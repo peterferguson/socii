@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2019",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -39,7 +39,9 @@
     "components/stream/MessagingInput/MessagingInput.jsx",
     "pages/api/commands.js",
     "components/stream/Chat.jsx",
-    "components/stream/MessagingChannelPreview.tsx"
+    "components/stream/MessagingChannelPreview.tsx",
+    "stream/components/Chat.jsx",
+    "pages/api/alpaca/requests/test.rest.ts"
   ],
   "exclude": ["node_modules"]
 }

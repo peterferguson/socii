@@ -21,61 +21,57 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           direction,
           nested,
           symbols,
-        } = body
-
-        if (orderId)
-          return res
-            .status(200)
-            .end(JSON.stringify(await tradeClient.getOrder(accountId, orderId)))
+        } = JSON.parse(body)
 
         return res
           .status(200)
           .end(
             JSON.stringify(
-              await tradeClient.getOrders(
-                accountId,
-                status,
-                limit,
-                after,
-                until,
-                direction,
-                nested,
-                symbols
-              )
+              await (orderId
+                ? tradeClient.getOrder(accountId, orderId)
+                : tradeClient.getOrders(
+                    accountId,
+                    status,
+                    limit,
+                    after,
+                    until,
+                    direction,
+                    nested,
+                    symbols
+                  ))
             )
           )
       } catch (error) {
-        res.status(400).end(`Failed to retrieve account with error: ${error}`)
+        return res.status(400).end(`Failed to retrieve account with error: ${error}`)
       }
-      break
     case "POST":
       try {
         /* create a new order */
-        const { account_id: accountId, ...order } = body
-        res.end(
+        const { account_id: accountId, ...order } = JSON.parse(body)
+        return res.end(
           JSON.stringify(
             await tradeClient.postOrders(accountId, CreateOrder.from(order))
           )
         )
-        break
       } catch (error) {
-        res.status(400).end(`Failed to create account with error: ${error}`)
+        return res.status(400).end(`Failed to create account with error: ${error}`)
       }
-      break
     case "DELETE":
       try {
         /* cancel an order */
-        const { account_id: accountId, order_id: orderId } = body
-        res.end(JSON.stringify(await tradeClient.deleteOrder(accountId, orderId)))
-        if (!orderId) res.end(JSON.stringify(await tradeClient.deleteOrders(accountId)))
-        break
+        const { account_id: accountId, order_id: orderId } = JSON.parse(body)
+        return res.end(
+          JSON.stringify(
+            await (orderId
+              ? tradeClient.deleteOrder(accountId, orderId)
+              : tradeClient.deleteOrders(accountId))
+          )
+        )
       } catch (error) {
-        res.status(400).end(`Failed to create account with error: ${error}`)
+        return res.status(400).end(`Failed to create account with error: ${error}`)
       }
-      break
     default:
-      res.status(405).end()
-      break
+      return res.status(405).end()
   }
 }
 

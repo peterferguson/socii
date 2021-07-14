@@ -15,7 +15,7 @@ export default function CryptoHome() {
   const mounted = useHasMounted()
 
   const { data, error } = useSWR(
-    mounted ? ["/api/alpaca/clock", user?.token] : null,
+    mounted ? ["/api/alpaca/assets", user?.token] : null,
     fetchWithToken
   )
 

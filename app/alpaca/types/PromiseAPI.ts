@@ -1,30 +1,30 @@
 import {
-    AccountsApiRequestFactory,
-    AccountsApiResponseProcessor
+  AccountsApiRequestFactory,
+  AccountsApiResponseProcessor,
 } from "../apis/AccountsApi"
 import { AssetsApiRequestFactory, AssetsApiResponseProcessor } from "../apis/AssetsApi"
 import {
-    CalendarApiRequestFactory,
-    CalendarApiResponseProcessor
+  CalendarApiRequestFactory,
+  CalendarApiResponseProcessor,
 } from "../apis/CalendarApi"
 import { ClockApiRequestFactory, ClockApiResponseProcessor } from "../apis/ClockApi"
 import {
-    DocumentsApiRequestFactory,
-    DocumentsApiResponseProcessor
+  DocumentsApiRequestFactory,
+  DocumentsApiResponseProcessor,
 } from "../apis/DocumentsApi"
 import { EventsApiRequestFactory, EventsApiResponseProcessor } from "../apis/EventsApi"
 import {
-    FundingApiRequestFactory,
-    FundingApiResponseProcessor
+  FundingApiRequestFactory,
+  FundingApiResponseProcessor,
 } from "../apis/FundingApi"
 import {
-    JournalsApiRequestFactory,
-    JournalsApiResponseProcessor
+  JournalsApiRequestFactory,
+  JournalsApiResponseProcessor,
 } from "../apis/JournalsApi"
 import { OAuthApiRequestFactory, OAuthApiResponseProcessor } from "../apis/OAuthApi"
 import {
-    TradingApiRequestFactory,
-    TradingApiResponseProcessor
+  TradingApiRequestFactory,
+  TradingApiResponseProcessor,
 } from "../apis/TradingApi"
 import { Configuration } from "../configuration"
 import { Account } from "../models/Account"
@@ -60,8 +60,18 @@ import { PatchOrder } from "../models/PatchOrder"
 import { Position } from "../models/Position"
 import { TransferData } from "../models/TransferData"
 import { TransferResource } from "../models/TransferResource"
-import { ObservableAccountsApi, ObservableAssetsApi, ObservableCalendarApi, ObservableClockApi, ObservableDocumentsApi, ObservableEventsApi, ObservableFundingApi, ObservableJournalsApi, ObservableOAuthApi, ObservableTradingApi } from "./ObservableAPI"
-
+import {
+  ObservableAccountsApi,
+  ObservableAssetsApi,
+  ObservableCalendarApi,
+  ObservableClockApi,
+  ObservableDocumentsApi,
+  ObservableEventsApi,
+  ObservableFundingApi,
+  ObservableJournalsApi,
+  ObservableOAuthApi,
+  ObservableTradingApi,
+} from "./ObservableAPI"
 
 export class PromiseAccountsApi {
   private api: ObservableAccountsApi
@@ -420,7 +430,6 @@ export class PromiseAccountsApi {
   }
 }
 
-
 export class PromiseAssetsApi {
   private api: ObservableAssetsApi
 
@@ -462,7 +471,6 @@ export class PromiseAssetsApi {
   }
 }
 
-
 export class PromiseCalendarApi {
   private api: ObservableCalendarApi
 
@@ -493,7 +501,6 @@ export class PromiseCalendarApi {
   }
 }
 
-
 export class PromiseClockApi {
   private api: ObservableClockApi
 
@@ -513,7 +520,6 @@ export class PromiseClockApi {
     return result.toPromise()
   }
 }
-
 
 export class PromiseDocumentsApi {
   private api: ObservableDocumentsApi
@@ -585,7 +591,6 @@ export class PromiseDocumentsApi {
   }
 }
 
-
 export class PromiseEventsApi {
   private api: ObservableEventsApi
 
@@ -647,7 +652,6 @@ export class PromiseEventsApi {
     return result.toPromise()
   }
 }
-
 
 export class PromiseFundingApi {
   private api: ObservableFundingApi
@@ -803,7 +807,6 @@ export class PromiseFundingApi {
   }
 }
 
-
 export class PromiseJournalsApi {
   private api: ObservableJournalsApi
 
@@ -910,7 +913,6 @@ export class PromiseJournalsApi {
   }
 }
 
-
 export class PromiseOAuthApi {
   private api: ObservableOAuthApi
 
@@ -973,7 +975,6 @@ export class PromiseOAuthApi {
     return result.toPromise()
   }
 }
-
 
 export class PromiseTradingApi {
   private api: ObservableTradingApi
