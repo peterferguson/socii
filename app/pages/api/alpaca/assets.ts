@@ -1,5 +1,4 @@
-import { AssetsApi } from "@alpaca/test/index"
-import { config } from "@alpaca/index"
+import { config, AssetsApi } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
