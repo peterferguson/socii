@@ -102,9 +102,9 @@ export default function Dashboard() {
         </div>
         <div className="w-full px-4 mx-auto -m-24 md:px-10">
           {/* Charts */}
-          <div className="flex flex-wrap">
+          {/* <div className="flex flex-wrap">
             <PieChart groupName={groupName} />
-          </div>
+          </div> */}
           {/* Tables */}
           <div className="flex flex-wrap mt-4">
             <div className="w-full px-4 mb-12 xl:w-8/12 xl:mb-0">

@@ -453,18 +453,18 @@ function PieChart({ groupName }) {
 
   const [holdings, loading] = useCollectionDataOnce(holdingsRef)
 
-  useEffect(() => {
-    holdings?.map(({ tickerSymbol }) => {
-      const iexClient = new IEXQuery()
+  // useEffect(() => {
+  //   holdings?.map(({ tickerSymbol }) => {
+  //     const iexClient = new IEXQuery()
 
-      fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
-        setCurrentPrices((previousState) => ({
-          ...previousState,
-          [tickerSymbol]: value,
-        }))
-      )
-    })
-  }, [holdings])
+  //     fetchJSON(iexClient.stockPrice(tickerSymbol)).then((value) =>
+  //       setCurrentPrices((previousState) => ({
+  //         ...previousState,
+  //         [tickerSymbol]: value,
+  //       }))
+  //     )
+  //   })
+  // }, [holdings])
 
   const holdingData = holdings?.map(
     ({ assetRef, tickerSymbol, shortName, avgPrice, shares }) => {

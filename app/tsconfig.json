@@ -47,6 +47,6 @@
     "components/stream/MessagingChannelPreview.tsx",
     "stream/components/Chat.jsx",
     "pages/api/alpaca/requests/test.rest.ts"
-  ],
+, "pages/groups/[groupName]/index.jsx"  ],
   "exclude": ["node_modules"]
 }
