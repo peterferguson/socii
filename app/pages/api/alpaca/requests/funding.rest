@@ -1,0 +1,17 @@
+# Post transfer (add money to account)
+## will need changed in prod as bank api must be setup to transfer in
+###
+POST http://localhost:3000/api/alpaca/funding
+content-type: application/json
+authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc3MTBiMDE3ZmQ5YjcxMWUwMDljNmMzNmIwNzNiOGE2N2NiNjgyMTEiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiamFtZXMgbWNjIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhkc25zQnJ5SUJPaG80ckJROXk5Z2oxRVRCeGk2LTNlUWQtUFQwPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3NvY2lpaW52ZXN0IiwiYXVkIjoic29jaWlpbnZlc3QiLCJhdXRoX3RpbWUiOjE2MjQ1NDcxNDUsInVzZXJfaWQiOiJzd0NWTTB0ejVlZml2alBOelpObDZCNEtoV0EyIiwic3ViIjoic3dDVk0wdHo1ZWZpdmpQTnpaTmw2QjRLaFdBMiIsImlhdCI6MTYyNjM4OTQ5NSwiZXhwIjoxNjI2MzkzMDk1LCJlbWFpbCI6ImphbWVzLm1jYzk0QGhvdG1haWwuY28udWsiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjExNTk2NDg1Nzk3NDA5MzE4NDAxNSJdLCJlbWFpbCI6WyJqYW1lcy5tY2M5NEBob3RtYWlsLmNvLnVrIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.hlpSxO7OTIGHRgqH1ykPK74ggKdoCbr9gBtgqRHdN0GqmbswXV7tt3QgeYHqhYAOqnsOChQrwV29N8deuUqd3dPgY-l2LilAoBRSANqFC-hLuZMHhuWfNLNqxu3Eq8ONjlm4xZnklNTIQ1GBNseezGnwKbKSgkoJec7UEwIh_atrkqWilkxFmB5tetLums1X2Oo19zEcszhy6seIhk3ySXSjV2anNUzn3p_V-KZjvjqkZIGC0KeUCkhWLBZnL17qvBjobogmKCe0uZbArUFFHSlUDyTwMj0fW7rG4LTAH8Cq_vYCgbYzpnosch3VE-S7I6fVB1X3G1AxccJN7CF2IA
+
+{
+"accountId": "2bd90dfc-949d-4601-b262-4f4cd201fa27",
+"transferData": {
+    "transfer_type": "ach",
+    "relationship_id": "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
+    "amount": "500",
+    "direction": "INCOMING"
+}
+
+}

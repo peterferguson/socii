@@ -10,11 +10,14 @@ export default function CryptoHome() {
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
   const { user } = useAuth()
+  console.log(user?.token)
 
   const mounted = useHasMounted()
 
   const { data, error } = useSWR(
-    mounted ? ["/api/alpaca/assets", user?.token] : null,
+    //mounted ? ["/api/alpaca/assets", user?.token] : null,
+    mounted ? ["/api/alpaca/accounts", user?.token] : null,
+
     fetchWithToken
   )
 
