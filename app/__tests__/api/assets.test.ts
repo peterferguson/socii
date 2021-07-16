@@ -57,12 +57,13 @@ describe("/api/alpaca/assets", () => {
 
         expect(res.status).toBe(200)
         const responseBody = await res.json()
-        expect(responseBody).toMatchSnapshot()
-        // for (const key of AssetResource.getAttributeTypeMap().map(({ name }) => name)) {
-        //   console.log(key)
-
-        //   expect(responseBody).toHaveProperty(key)
-        // }
+        // expect(responseBody).toMatchSnapshot() // ! Changes too often
+        expect(responseBody).toBeInstanceOf(Array)
+        expect(
+          responseBody
+            .map((asset) => AssetResource.from(asset))
+            .every((asset) => asset instanceof AssetResource)
+        ).toBe(true)
       },
     })
   })

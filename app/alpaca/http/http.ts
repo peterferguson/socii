@@ -2,7 +2,6 @@
 import * as FormData from "form-data"
 // typings of url-parse are incorrect...
 // @ts-ignore
-// import { URL } from "url-parse"
 import { from, Observable } from "../rxjsStub"
 
 export * from "./isomorphic-fetch"
@@ -101,13 +100,11 @@ export class RequestContext {
   }
 
   public setQueryParam(name: string, value: string) {
-    let queryObj = this.url.query
-    queryObj[name] = value
-    this.url.set("query", queryObj)
+    this.url.searchParams.append(name, value)
   }
 
   /**
-   * Sets a cookie with the name and value. NO check  for duplicate cookies is performed
+   * Sets a cookie with the name and value. NO check for duplicate cookies is performed
    *
    */
   public addCookie(name: string, value: string): void {
