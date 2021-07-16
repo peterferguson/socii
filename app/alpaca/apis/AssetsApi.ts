@@ -165,6 +165,9 @@ export class AssetsApiResponseProcessor {
       ) as AssetResource
       return body
     }
+    if (isCodeInRange("401", response.httpStatusCode)) {
+      throw new ApiException<string>(response.httpStatusCode, "Unauthorized")
+    }
     if (isCodeInRange("404", response.httpStatusCode)) {
       throw new ApiException<string>(response.httpStatusCode, "Asset not found")
     }
@@ -182,7 +185,7 @@ export class AssetsApiResponseProcessor {
     let body = response.body || ""
     throw new ApiException<string>(
       response.httpStatusCode,
-      'Unknown API Status Code!\nBody: "' + body + '"'
+      'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
     )
   }
 
@@ -205,6 +208,9 @@ export class AssetsApiResponseProcessor {
       ) as AssetResource
       return body
     }
+    if (isCodeInRange("401", response.httpStatusCode)) {
+      throw new ApiException<string>(response.httpStatusCode, "Unauthorized")
+    }
     if (isCodeInRange("404", response.httpStatusCode)) {
       throw new ApiException<string>(response.httpStatusCode, "Asset not found")
     }
@@ -222,7 +228,7 @@ export class AssetsApiResponseProcessor {
     let body = response.body || ""
     throw new ApiException<string>(
       response.httpStatusCode,
-      'Unknown API Status Code!\nBody: "' + body + '"'
+      'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
     )
   }
 
@@ -245,7 +251,9 @@ export class AssetsApiResponseProcessor {
       ) as Array<AssetResource>
       return body
     }
-
+    if (isCodeInRange("401", response.httpStatusCode)) {
+      throw new ApiException<string>(response.httpStatusCode, "Unauthorized")
+    }
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
       const body: Array<AssetResource> = ObjectSerializer.deserialize(
@@ -259,7 +267,7 @@ export class AssetsApiResponseProcessor {
     let body = response.body || ""
     throw new ApiException<string>(
       response.httpStatusCode,
-      'Unknown API Status Code!\nBody: "' + body + '"'
+      'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
     )
   }
 }

@@ -2,7 +2,6 @@
 import * as FormData from "form-data"
 // typings of url-parse are incorrect...
 // @ts-ignore
-import * as URLParse from "url-parse"
 import { from, Observable } from "../rxjsStub"
 
 export * from "./isomorphic-fetch"
@@ -47,7 +46,7 @@ export type RequestBody = undefined | string | FormData
 export class RequestContext {
   private headers: { [key: string]: string } = {}
   private body: RequestBody = undefined
-  private url: URLParse
+  private url: URL
 
   /**
    * Creates the request context using a http method and request resource url
@@ -56,7 +55,7 @@ export class RequestContext {
    * @param httpMethod http method
    */
   public constructor(url: string, private httpMethod: HttpMethod) {
-    this.url = new URLParse(url, true)
+    this.url = new URL(url)
   }
 
   /*
@@ -72,7 +71,7 @@ export class RequestContext {
    *
    */
   public setUrl(url: string) {
-    this.url = new URLParse(url, true)
+    this.url = new URL(url)
   }
 
   /**
@@ -101,13 +100,11 @@ export class RequestContext {
   }
 
   public setQueryParam(name: string, value: string) {
-    let queryObj = this.url.query
-    queryObj[name] = value
-    this.url.set("query", queryObj)
+    this.url.searchParams.append(name, value)
   }
 
   /**
-   * Sets a cookie with the name and value. NO check  for duplicate cookies is performed
+   * Sets a cookie with the name and value. NO check for duplicate cookies is performed
    *
    */
   public addCookie(name: string, value: string): void {

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,6 +17,7 @@
     "baseUrl": "./",
     "paths": {
       "@lib/*": ["lib/*"],
+      "@tests/*": ["__tests__/*"],
       "@hooks": ["hooks/index"],
       "@hooks/*": ["hooks/*"],
       "@alpaca/*": ["alpaca/*"],
@@ -30,6 +31,7 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@utils": ["utils/index"],
+      "@pages/*": ["pages/*"],
       "@public/*": ["public/*"],
       "@icons/*": ["public/icons/*"]
     },
@@ -40,13 +42,8 @@
     "custom.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.tsx",
-    "components/stream/MessagingInput/MessagingInput.jsx",
-    "pages/api/commands.js",
-    "components/stream/Chat.jsx",
-    "components/stream/MessagingChannelPreview.tsx",
-    "stream/components/Chat.jsx",
-    "pages/api/alpaca/requests/test.rest.ts"
-, "pages/groups/[groupName]/index.jsx"  ],
+    "**/*.js",
+    "**/*.jsx"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,9 +1,7 @@
 import admin from "firebase-admin"
 
-if (!admin.apps.length) {
-  // * Constant initialisation
-  admin.initializeApp()
-}
+// * Constant initialisation
+if (!admin.apps.length) admin.initializeApp()
 
 const firestore = admin.firestore()
 const auth = admin.auth()

@@ -4,7 +4,7 @@ export { config, createConfiguration } from "./configuration"
 export type { Configuration } from "./configuration"
 export * from "./http/http"
 export type { PromiseMiddleware as Middleware } from "./middleware"
-export * from "./models/all"
+export * from "./models"
 export * from "./servers"
 export {
     PromiseAccountsApi as AccountsApi,

@@ -5,6 +5,7 @@
     - [Replace `btoa` for base64 encoding the authorization header](#replace-btoa-for-base64-encoding-the-authorization-header)
     - [Add the config instantiation](#add-the-config-instantiation)
     - [Add json method to all models](#add-json-method-to-all-models)
+    - [Update the use of `url-parse` to `URL` in `http.ts`](#update-the-use-of-url-parse-to-url-in-httpts)
 
 ---
 
@@ -94,3 +95,16 @@ from JSON
     return Object.assign(new this(), json)
   }
 ```
+
+---
+
+### Update the use of `url-parse` to `URL` in `http.ts`
+
+- Remove `url-parse` import
+- Replace all instances of `URLParse` with `URL`
+- Replace `setQueryParam` method with:
+  ```ts
+  public setQueryParam(name: string, value: string) {
+    this.url.searchParams.append(name, value)
+  }
+  ```

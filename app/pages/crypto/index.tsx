@@ -1,25 +1,24 @@
-import React from "react"
-import { FaBitcoin } from "react-icons/fa"
 import ComingSoon from "@components/ComingSoon"
-import useSWR from "swr"
-import { fetchWithToken } from "@utils/fetchWithToken"
-import { useHasMounted, useAuth } from "@hooks"
+import { useAuth } from "@hooks/useAuth"
+import { fetcher } from "@utils/fetcher"
+import React, { useEffect, useState } from "react"
+import { FaBitcoin } from "react-icons/fa"
 
 export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
   const { user } = useAuth()
-  console.log(user?.token)
+  const [data, setData] = useState(null)
 
-  const mounted = useHasMounted()
-
-  const { data, error } = useSWR(
-    //mounted ? ["/api/alpaca/assets", user?.token] : null,
-    mounted ? ["/api/alpaca/accounts", user?.token] : null,
-
-    fetchWithToken
-  )
+  useEffect(() => {
+    if (user?.token)
+      fetcher("/api/alpaca/assets", {
+        method: "POST",
+        headers: { Authorization: `Basic ${user.token}` },
+        body: JSON.stringify({ symbol: "TSLA" }),
+      }).then((r) => setData(r))
+  }, [user?.token])
 
   return (
     <>
@@ -31,7 +30,7 @@ export default function CryptoHome() {
       >
         <FaBitcoin className={`w-24 h-24 text-${color}`} />
       </ComingSoon>
-      {!data && !error ? <div>loading...</div> : <div>{JSON.stringify(data)}</div>}
+      {!data ? <div>loading...</div> : <div>{JSON.stringify(data)}</div>}
     </>
   )
 }
