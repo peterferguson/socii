@@ -37,7 +37,8 @@ export async function handleAssets(
     case "GET":
       try {
         /* Get all assets */
-        assetClient.getAssets().then((r) => res.status(200).json(r))
+        const assets = await assetClient.getAssets()
+        res.status(200).json(assets)
       } catch (error) {
         res.status(400).end(`Failed to create account with error: ${error}`)
       }

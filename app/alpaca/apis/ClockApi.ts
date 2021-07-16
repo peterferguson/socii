@@ -1,12 +1,11 @@
 // TODO: better import syntax?
 import { Configuration } from "../configuration"
 import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
-import { InlineResponse2002 } from "../models/InlineResponse2002"
+import { ClockResponse } from "../models/ClockResponse"
 import { ObjectSerializer } from "../models/ObjectSerializer"
 import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory } from "./baseapi"
 import { ApiException } from "./exception"
-
 
 /**
  * no description
@@ -47,26 +46,26 @@ export class ClockApiResponseProcessor {
    * @params response Response returned by the server for a request to clockGet
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async clockGet(response: ResponseContext): Promise<InlineResponse2002> {
+  public async clockGet(response: ResponseContext): Promise<ClockResponse> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      const body: InlineResponse2002 = ObjectSerializer.deserialize(
+      const body: ClockResponse = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse2002",
+        "ClockResponse",
         ""
-      ) as InlineResponse2002
+      ) as ClockResponse
       return body
     }
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: InlineResponse2002 = ObjectSerializer.deserialize(
+      const body: ClockResponse = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse2002",
+        "ClockResponse",
         ""
-      ) as InlineResponse2002
+      ) as ClockResponse
       return body
     }
 

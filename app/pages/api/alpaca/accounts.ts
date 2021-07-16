@@ -12,10 +12,19 @@ async function handleAccounts(req: NextApiRequest, res: NextApiResponse) {
       try {
         /* query accounts, empty queries return all accounts paginated by the 1000 */
         const { query } = body
-        res.status(200).end(JSON.stringify(await accountClient.accountsGet(query)))
+        const queryResponse = await accountClient.accountsGet(query)
+        res.status(200).json(queryResponse)
       } catch (error) {
         res.status(400).end(`Failed to retrieve account with error: ${error}`)
       }
+      break
+    case "PATCH":
+      //TODO: Write update account code
+      // accountClient.patchAccount
+      break
+    case "DELETE":
+      //TODO: Write delete account code
+      // accountClient.deleteAccount
       break
     case "POST":
       try {

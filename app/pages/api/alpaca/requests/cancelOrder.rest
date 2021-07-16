@@ -1,7 +1,0 @@
-GET http://localhost:3000/api/alpaca/cancelOrder
-content-type: application/json
-
-{
-    "account_id": "933ab506-9e30-3001-8230-50dc4e12861c",
-    "order_id": "587c17c8-a0c5-45dd-963d-25f6664c325e"
-}

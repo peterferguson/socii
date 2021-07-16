@@ -1,30 +1,30 @@
 import {
-    AccountsApiRequestFactory,
-    AccountsApiResponseProcessor
+  AccountsApiRequestFactory,
+  AccountsApiResponseProcessor,
 } from "../apis/AccountsApi"
 import { AssetsApiRequestFactory, AssetsApiResponseProcessor } from "../apis/AssetsApi"
 import {
-    CalendarApiRequestFactory,
-    CalendarApiResponseProcessor
+  CalendarApiRequestFactory,
+  CalendarApiResponseProcessor,
 } from "../apis/CalendarApi"
 import { ClockApiRequestFactory, ClockApiResponseProcessor } from "../apis/ClockApi"
 import {
-    DocumentsApiRequestFactory,
-    DocumentsApiResponseProcessor
+  DocumentsApiRequestFactory,
+  DocumentsApiResponseProcessor,
 } from "../apis/DocumentsApi"
 import { EventsApiRequestFactory, EventsApiResponseProcessor } from "../apis/EventsApi"
 import {
-    FundingApiRequestFactory,
-    FundingApiResponseProcessor
+  FundingApiRequestFactory,
+  FundingApiResponseProcessor,
 } from "../apis/FundingApi"
 import {
-    JournalsApiRequestFactory,
-    JournalsApiResponseProcessor
+  JournalsApiRequestFactory,
+  JournalsApiResponseProcessor,
 } from "../apis/JournalsApi"
 import { OAuthApiRequestFactory, OAuthApiResponseProcessor } from "../apis/OAuthApi"
 import {
-    TradingApiRequestFactory,
-    TradingApiResponseProcessor
+  TradingApiRequestFactory,
+  TradingApiResponseProcessor,
 } from "../apis/TradingApi"
 import { Configuration } from "../configuration"
 import { Account } from "../models/Account"
@@ -44,8 +44,8 @@ import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse200 } from "../models/InlineResponse200"
-import { InlineResponse2001 } from "../models/InlineResponse2001"
-import { InlineResponse2002 } from "../models/InlineResponse2002"
+import { CalendarResponse } from "../models/CalendarResponse"
+import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
@@ -60,9 +60,18 @@ import { PatchOrder } from "../models/PatchOrder"
 import { Position } from "../models/Position"
 import { TransferData } from "../models/TransferData"
 import { TransferResource } from "../models/TransferResource"
-import { ObservableAccountsApi, ObservableAssetsApi, ObservableCalendarApi, ObservableClockApi, ObservableDocumentsApi, ObservableEventsApi, ObservableFundingApi, ObservableJournalsApi, ObservableOAuthApi, ObservableTradingApi } from "./ObservableAPI"
-
-
+import {
+  ObservableAccountsApi,
+  ObservableAssetsApi,
+  ObservableCalendarApi,
+  ObservableClockApi,
+  ObservableDocumentsApi,
+  ObservableEventsApi,
+  ObservableFundingApi,
+  ObservableJournalsApi,
+  ObservableOAuthApi,
+  ObservableTradingApi,
+} from "./ObservableAPI"
 
 export interface AccountsApiAccountsAccountIdDocumentsUploadPostRequest {
   /**
@@ -797,7 +806,6 @@ export class ObjectAssetsApi {
   }
 }
 
-
 export interface CalendarApiCalendarGetRequest {
   /**
    * The first date to retrieve data for. (Inclusive)
@@ -835,11 +843,10 @@ export class ObjectCalendarApi {
   public calendarGet(
     param: CalendarApiCalendarGetRequest,
     options?: Configuration
-  ): Promise<InlineResponse2001> {
+  ): Promise<CalendarResponse> {
     return this.api.calendarGet(param.start, param.end, options).toPromise()
   }
 }
-
 
 export interface ClockApiClockGetRequest {}
 
@@ -861,11 +868,10 @@ export class ObjectClockApi {
   public clockGet(
     param: ClockApiClockGetRequest,
     options?: Configuration
-  ): Promise<InlineResponse2002> {
+  ): Promise<ClockResponse> {
     return this.api.clockGet(options).toPromise()
   }
 }
-
 
 export interface DocumentsApiAccountsAccountIdDocumentsDocumentIdDownloadGetRequest {
   /**
@@ -977,7 +983,6 @@ export class ObjectDocumentsApi {
   }
 }
 
-
 export interface EventsApiEventsAccountsStatusGetRequest {
   /**
    *
@@ -1083,7 +1088,6 @@ export class ObjectEventsApi {
       .toPromise()
   }
 }
-
 
 export interface FundingApiDeleteAchRelationshipRequest {
   /**
@@ -1379,7 +1383,6 @@ export class ObjectFundingApi {
   }
 }
 
-
 export interface JournalsApiDeleteJournalRequest {
   /**
    *
@@ -1565,7 +1568,6 @@ export class ObjectJournalsApi {
   }
 }
 
-
 export interface OAuthApiOauthAuthorizePostRequest {
   /**
    *
@@ -1666,7 +1668,6 @@ export class ObjectOAuthApi {
     return this.api.oauthTokenPost(param.inlineObject, options).toPromise()
   }
 }
-
 
 export interface TradingApiDeleteOrderRequest {
   /**

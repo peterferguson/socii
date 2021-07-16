@@ -30,8 +30,8 @@ export * from "./Identity"
 export * from "./InlineObject"
 export * from "./InlineObject1"
 export * from "./InlineResponse200"
-export * from "./InlineResponse2001"
-export * from "./InlineResponse2002"
+export * from "./CalendarResponse"
+export * from "./ClockResponse"
 export * from "./InlineResponse2003"
 export * from "./InlineResponse2004"
 export * from "./InlineResponse2005"
@@ -67,38 +67,22 @@ import { Account } from "./Account"
 import { AccountCreationObject } from "./AccountCreationObject"
 import { AccountExtended } from "./AccountExtended"
 import { AccountUpdate } from "./AccountUpdate"
-import {
-    ACHRelationshipData
-} from "./ACHRelationshipData"
-import {
-    ACHRelationshipResource
-} from "./ACHRelationshipResource"
-import {
-    ACHRelationshipResourceAllOf
-} from "./ACHRelationshipResourceAllOf"
+import { ACHRelationshipData } from "./ACHRelationshipData"
+import { ACHRelationshipResource } from "./ACHRelationshipResource"
+import { ACHRelationshipResourceAllOf } from "./ACHRelationshipResourceAllOf"
 import { Activity } from "./Activity"
-import {
-    ActivityItem
-} from "./ActivityItem"
+import { ActivityItem } from "./ActivityItem"
 import { Agreement } from "./Agreement"
 import { ApplicationDocument } from "./ApplicationDocument"
 import { AssetResource } from "./AssetResource"
 import { BankData } from "./BankData"
-import {
-    BankResource
-} from "./BankResource"
+import { BankResource } from "./BankResource"
 import { BankResourceAllOf } from "./BankResourceAllOf"
-import {
-    BatchJournalRequest
-} from "./BatchJournalRequest"
+import { BatchJournalRequest } from "./BatchJournalRequest"
 import { BatchJournalRequestEntries } from "./BatchJournalRequestEntries"
-import {
-    BatchJournalResponse
-} from "./BatchJournalResponse"
+import { BatchJournalResponse } from "./BatchJournalResponse"
 import { Contact } from "./Contact"
-import {
-    CreateOrder
-} from "./CreateOrder"
+import { CreateOrder } from "./CreateOrder"
 import { CreateOrderStopLoss } from "./CreateOrderStopLoss"
 import { CreateOrderTakeProfit } from "./CreateOrderTakeProfit"
 import { Disclosures } from "./Disclosures"
@@ -108,8 +92,8 @@ import { Identity } from "./Identity"
 import { InlineObject } from "./InlineObject"
 import { InlineObject1 } from "./InlineObject1"
 import { InlineResponse200 } from "./InlineResponse200"
-import { InlineResponse2001 } from "./InlineResponse2001"
-import { InlineResponse2002 } from "./InlineResponse2002"
+import { CalendarResponse } from "./CalendarResponse"
+import { ClockResponse } from "./ClockResponse"
 import { InlineResponse2003 } from "./InlineResponse2003"
 import { InlineResponse2004 } from "./InlineResponse2004"
 import { InlineResponse2005 } from "./InlineResponse2005"
@@ -124,43 +108,21 @@ import { JournalResource } from "./JournalResource"
 import { KycResult } from "./KycResult"
 import { ModelError } from "./ModelError"
 import { NonTradeActivity } from "./NonTradeActivity"
-import {
-    NonTradeActivityAllOf
-} from "./NonTradeActivityAllOf"
-import {
-    OrderObject
-} from "./OrderObject"
+import { NonTradeActivityAllOf } from "./NonTradeActivityAllOf"
+import { OrderObject } from "./OrderObject"
 import { PatchOrder } from "./PatchOrder"
 import { Position } from "./Position"
-import {
-    TradeActivity
-} from "./TradeActivity"
-import {
-    TradeActivityAllOf
-} from "./TradeActivityAllOf"
-import {
-    TransferData
-} from "./TransferData"
-import {
-    TransferDataAllOf
-} from "./TransferDataAllOf"
-import {
-    TransferResource
-} from "./TransferResource"
-import {
-    TransferResourceAllOf
-} from "./TransferResourceAllOf"
+import { TradeActivity } from "./TradeActivity"
+import { TradeActivityAllOf } from "./TradeActivityAllOf"
+import { TransferData } from "./TransferData"
+import { TransferDataAllOf } from "./TransferDataAllOf"
+import { TransferResource } from "./TransferResource"
+import { TransferResourceAllOf } from "./TransferResourceAllOf"
 import { TrustedContact } from "./TrustedContact"
-import {
-    UntypedACHTransferData
-} from "./UntypedACHTransferData"
+import { UntypedACHTransferData } from "./UntypedACHTransferData"
 import { UntypedACHTransferDataAllOf } from "./UntypedACHTransferDataAllOf"
-import {
-    UntypedTransferData
-} from "./UntypedTransferData"
-import {
-    UntypedWireTransferData
-} from "./UntypedWireTransferData"
+import { UntypedTransferData } from "./UntypedTransferData"
+import { UntypedWireTransferData } from "./UntypedWireTransferData"
 import { UntypedWireTransferDataAllOf } from "./UntypedWireTransferDataAllOf"
 
 /* tslint:disable:no-unused-variable */
@@ -272,8 +234,8 @@ let typeMap: { [index: string]: any } = {
   InlineObject: InlineObject,
   InlineObject1: InlineObject1,
   InlineResponse200: InlineResponse200,
-  InlineResponse2001: InlineResponse2001,
-  InlineResponse2002: InlineResponse2002,
+  CalendarResponse: CalendarResponse,
+  ClockResponse: ClockResponse,
   InlineResponse2003: InlineResponse2003,
   InlineResponse2004: InlineResponse2004,
   InlineResponse2005: InlineResponse2005,

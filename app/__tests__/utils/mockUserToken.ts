@@ -1,12 +1,10 @@
-import {auth as serverAuth} from "@lib/firebase-admin"
-import {auth as clientAuth} from "@lib/firebase"
+import { auth as serverAuth } from "@lib/firebase-admin"
+import { auth as clientAuth } from "@lib/firebase"
 
 const sociiUid = "LkYfEBGDGTZqvZavPVZnoss2V4M2"
 
 export const mockUserToken = async () => {
   try {
-    console.log("here")
-
     const customToken = await serverAuth.createCustomToken(sociiUid, {
       isAdmin: true,
     })
