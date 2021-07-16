@@ -1,54 +1,51 @@
-import { config, AssetsApi } from "@alpaca/index"
+import { config, AssetsApi, AssetResource } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const assetClient = new AssetsApi(config)
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function handleAssets(
+  req: NextApiRequest,
+  res: NextApiResponse<AssetResource | AssetResource[]>
+) {
   const { body, method } = req
 
   switch (method) {
     case "POST": {
-      const { symbol, id } = JSON.parse(body) as {
+      const { symbol, id } = (typeof body === "string" ? JSON.parse(body) : body) as {
         symbol: string
         id: string
       }
+
       try {
         /* query assets either by id or symbol */
-        console.log(symbol)
-        console.log(id)
+        const assetResult = symbol
+          ? await assetClient.assetsSymbolGet(symbol)
+          : id
+          ? await assetClient.assetsAssetIdGet(id)
+          : null
 
-        if (symbol) {
-          console.log("symbol")
-          console.log(symbol)
-          return res
-            .status(200)
-            .end(JSON.stringify(await assetClient.assetsSymbolGet(symbol)))
-        }
-        if (id) {
-          console.log("id")
-          console.log(id)
-          return res
-            .status(200)
-            .end(JSON.stringify(await assetClient.assetsAssetIdGet(id)))
-        }
-        break
+        if (assetResult !== null) res.status(200).json(assetResult)
+        else res.status(422).end("If using 'POST' please provide `symbol` or `id`")
       } catch (error) {
-        return res
+        res
           .status(400)
           .end(`Failed to retrieve asset ${symbol ?? id ?? ""}  with error: ${error}`)
       }
+      break
     }
     case "GET":
       try {
         /* Get all assets */
-        return res.status(200).end(JSON.stringify(await assetClient.getAssets()))
+        assetClient.getAssets().then((r) => res.status(200).json(r))
       } catch (error) {
-        return res.status(400).end(`Failed to create account with error: ${error}`)
+        res.status(400).end(`Failed to create account with error: ${error}`)
       }
+      break
     default:
-      return res.status(405).end()
+      res.setHeader("Allow", ["GET", "POST"])
+      res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
 
-export default withAuth(withCORS(handler))
+export default withAuth(withCORS(handleAssets))

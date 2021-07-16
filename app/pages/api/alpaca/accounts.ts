@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 
 const accountClient = new AccountsApi(config)
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handleAccounts(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req
 
   switch (method) {
@@ -32,4 +32,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       break
   }
 }
-export default withAuth(withCORS(handler))
+export default withAuth(withCORS(handleAccounts))

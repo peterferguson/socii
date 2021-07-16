@@ -1,26 +1,9 @@
-//  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/test.rest.ts`
+//  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/assets.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
-import { auth as clientAuth } from "../../../../lib/firebase"
-import { auth as serverAuth } from "../../../../lib/firebase-admin"
 import fetch from "isomorphic-unfetch"
-
-const sociiUid = "LkYfEBGDGTZqvZavPVZnoss2V4M2"
+import { mockUserToken } from "@tests/utils/mockUserToken"
 
 const baseUrl = "http://localhost:3000/api/alpaca"
-
-const mockUserToken = async () => {
-  try {
-    const customToken = await serverAuth.createCustomToken(sociiUid, {
-      isAdmin: true,
-    })
-
-    const { user } = await clientAuth.signInWithCustomToken(customToken)
-    return await user.getIdToken()
-  } catch (err) {
-    console.log(err)
-    return
-  }
-}
 
 const getAssets = async ({ symbol, id }: { symbol?: string; id?: string }) => {
   const assetsUrl = `${baseUrl}/assets`

@@ -3,6 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
+    jest: true,
   },
   extends: [
     "eslint:recommended",
@@ -35,6 +36,12 @@ module.exports = {
     "no-unused-vars": 0,
     "react/react-in-jsx-scope": 0,
     "react/jsx-no-target-blank": 0,
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
   settings: {
     react: {
