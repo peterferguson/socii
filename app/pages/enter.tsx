@@ -34,12 +34,12 @@ export default function Enter() {
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
-  const signInPopUp = async (authProvider) => await auth.signInWithPopup(authProvider)
   return (
     <main className="h-screen bg-brand-light">
       <div className="relative flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 z-0 bg-black/10"></div>
-        <div className="z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
+        <div className="absolute inset-0 z-0 bg-black/10" />
+        <div className="relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-r from-green-400/60 to-brand/60 transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl" />
+        <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
           <div className="text-center">
             <h2 className="mt-6 text-4xl font-bold text-gray-900 font-primary">
               Welcome to <Logo />
@@ -51,7 +51,7 @@ export default function Enter() {
           {is1Col ? (
             <div className="flex flex-row items-center justify-center space-x-6">
               <span
-                className="inline-flex items-center justify-center  font-bold text-white bg-white border border-gray-300 rounded-full cursor-pointer w-11 h-11 hover:shadow-lg transition ease-in duration-300"
+                className="inline-flex items-center justify-center font-bold text-white bg-white border border-gray-300 rounded-full cursor-pointer w-11 h-11 hover:shadow-lg transition ease-in duration-300"
                 onClick={() => signinWithGoogle("/stocks")}
               >
                 <FcGoogle className="w-8 h-8" />
@@ -70,7 +70,7 @@ export default function Enter() {
                 onClick={() => signinWithGoogle("/stocks")}
               >
                 <FcGoogle className="absolute w-8 h-8 text-white left-[4.25rem]" />
-                <span className="flex items-center justify-center w-8/12 mx-auto text-sm font-thin text-black bg-white border border-gray-100 rounded-full h-11 hover:shadow-lg transition ease-in duration-300">
+                <span className="flex items-center justify-center w-8/12 mx-auto text-sm font-thin text-black bg-white border border-gray-200 rounded-full h-11 hover:shadow-lg transition ease-in duration-300">
                   Connect with Google
                 </span>
               </span>
