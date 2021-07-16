@@ -11,14 +11,13 @@ export default function CryptoHome() {
   const { user } = useAuth()
   const [data, setData] = useState(null)
 
-  console.log(!!user?.token)
-
   useEffect(() => {
-    fetcher("/api/alpaca/assets", {
-      method: "POST",
-      headers: { Authorization: `Basic ${user.token}` },
-      body: JSON.stringify({ symbol: "TSLA" }),
-    }).then((r) => setData(r))
+    if (user?.token)
+      fetcher("/api/alpaca/assets", {
+        method: "POST",
+        headers: { Authorization: `Basic ${user.token}` },
+        body: JSON.stringify({ symbol: "TSLA" }),
+      }).then((r) => setData(r))
   }, [user?.token])
 
   return (
