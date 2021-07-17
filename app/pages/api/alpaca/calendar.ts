@@ -17,10 +17,7 @@ export async function handleCalendar(
 
   switch (method) {
     case "POST": {
-      console.log(start, end)
       const dates = await calendarClient.calendarGet(start, end)
-      console.log(dates)
-
       res.status(200).json(dates)
       break
     }
