@@ -10,16 +10,16 @@ import { ProfilePhoto } from "./ProfilePhoto"
 import { Searchbar } from "./Searchbar"
 
 interface INavHeader {
-  setShowSearchCard: React.Dispatch<React.SetStateAction<Boolean>>
+  setShowSearchCard: React.Dispatch<React.SetStateAction<boolean>>
   showChat: boolean
-  setShowChat: React.Dispatch<React.SetStateAction<Boolean>>
+  setShowChat: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function NavHeader({
   setShowSearchCard,
   showChat,
   setShowChat,
-}: INavHeader) {
+}: INavHeader): JSX.Element {
   const { signout } = useAuth()
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const dropdownItems = [

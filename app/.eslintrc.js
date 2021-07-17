@@ -36,12 +36,7 @@ module.exports = {
     "no-unused-vars": 0,
     "react/react-in-jsx-scope": 0,
     "react/jsx-no-target-blank": 0,
-    "@typescript-eslint/no-unused-vars": [
-      2,
-      {
-        argsIgnorePattern: "^_",
-      },
-    ],
+    "@typescript-eslint/no-unused-vars": 0,
   },
   settings: {
     react: {

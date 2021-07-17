@@ -1,5 +1,5 @@
-import CloseThreadIcon from "@icons/stream/closeThreadIcon.svg"
 import React from "react"
+import { FiX } from "react-icons/fi"
 import { Thread } from "stream-chat-react"
 import { MessagingInput } from "./index"
 
@@ -16,22 +16,13 @@ const ThreadHeader = ({ closeThread, thread }) => {
         <p className="mr-5 text-lg font-bold font-primary">Thread</p>
         <p className="opacity-50 font-secondary">{getReplyCount()}</p>
       </div>
-      <CloseThreadIcon
-        className="w-8 h-8 mr-2 cursor-pointer"
-        onClick={(e) => closeThread(e)}
-      />
+      <FiX className="w-8 h-8 mr-2 cursor-pointer" onClick={(e) => closeThread(e)} />
     </div>
   )
 }
 
-const MessagingThread = () => {
-  return (
-    <Thread
-      MessageInput={MessagingInput}
-      ThreadHeader={ThreadHeader}
-      fullWidth={true}
-    />
-  )
-}
+const MessagingThread = () => (
+  <Thread MessageInput={MessagingInput} ThreadHeader={ThreadHeader} fullWidth={true} />
+)
 
 export default MessagingThread
