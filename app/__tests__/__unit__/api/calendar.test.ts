@@ -14,9 +14,7 @@ import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 const calendarTest = nextApiHandlerTest(handleCalendar, "/api/alpaca/calendar")
 
 // ! Calendar endpoint is broken due to a bug in Alpaca API openapi.yaml
-// - The response should be a CalendarResponse array not a single CalendarResponse
-// - Also the CalendarResponse should have the properties "session_open" & "session_close"
-// !
+// ! I have submitted a PR to fix it, but it's not merged yet.
 
 describe("/api/alpaca/calendar", () => {
   it(
@@ -39,7 +37,7 @@ describe("/api/alpaca/calendar", () => {
 
       expect(res.status).toBe(200)
       expect(Object.keys(response[0])).toEqual(
-        MarketDay.getAttributeTypeMap().map(({ baseName }) => baseName)
+        MarketDay.getAttributeTypeMap().map(({ name }) => name)
       )
       expect(MarketDay.from(response[0]) instanceof MarketDay).toBe(true)
 

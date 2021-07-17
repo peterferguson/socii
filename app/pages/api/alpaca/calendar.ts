@@ -1,12 +1,12 @@
 import { withAuth, withCORS } from "@utils/middleware"
-import { config, CalendarApi, CalendarResponse } from "@alpaca/index"
+import { config, CalendarApi, MarketDay } from "@alpaca/index"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const calendarClient = new CalendarApi(config)
 
 export async function handleCalendar(
   req: NextApiRequest,
-  res: NextApiResponse<CalendarResponse | CalendarResponse[]>
+  res: NextApiResponse<MarketDay | MarketDay[]>
 ) {
   const { body, method } = req
 

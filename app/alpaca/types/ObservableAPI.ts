@@ -45,7 +45,7 @@ import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse200 } from "../models/InlineResponse200"
-import { CalendarResponse } from "../models/CalendarResponse"
+import { MarketDay } from "../models/MarketDay"
 import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
@@ -1068,7 +1068,7 @@ export class ObservableCalendarApi {
     start?: string,
     end?: string,
     options?: Configuration
-  ): Observable<CalendarResponse> {
+  ): Observable<MarketDay[]> {
     const requestContextPromise = this.requestFactory.calendarGet(start, end, options)
 
     // build promise chain
