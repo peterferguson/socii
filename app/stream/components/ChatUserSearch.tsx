@@ -1,19 +1,19 @@
-import XButton from "@icons/stream/XButton.svg"
 import _debounce from "lodash.debounce"
 import React, {
-    memo,
-    useCallback,
-    useContext,
-    useEffect,
-    useRef,
-    useState
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from "react"
 import { Avatar, ChatContext } from "stream-chat-react"
 import {
-    DefaultUserType,
-    DefaultUserTypeInternal
+  DefaultUserType,
+  DefaultUserTypeInternal,
 } from "stream-chat-react/dist/types/types"
 import { UserResponse } from "stream-chat/dist/types/types"
+import { FiX } from "react-icons/fi"
 
 const UserResult = ({ user }) => (
   <li className="flex items-center justify-between h-12 p-2 m-0 cursor-pointer focus:bg-white">
@@ -185,7 +185,7 @@ const ChatUserSearch = ({
                 key={user.id}
               >
                 <div className="mr-2">{user.name}</div>
-                <XButton className="w-2 h-2" />
+                <FiX className="w-2 h-2" />
               </div>
             ))}
           </div>

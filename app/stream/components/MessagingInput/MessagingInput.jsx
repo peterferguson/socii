@@ -2,18 +2,17 @@ import React, { memo, useCallback, useContext, useReducer } from "react"
 import { ImageDropzone } from "react-file-utils"
 import { BsLightning, BsLightningFill } from "react-icons/bs"
 import { FaDollarSign } from "react-icons/fa"
-// import EmojiIcon from "@icons/stream/emoji.svg"
-// import SendIcon from "@icons/stream/send.svg"
-// import UseCommandIcon from "@icons/stream/command.svg"
-// import LightningBoltSmall from "@icons/stream/lightningBoltSmall.svg"
 import { HiOutlineEmojiHappy, HiOutlinePaperAirplane } from "react-icons/hi"
 import { logChatPromiseExecution } from "stream-chat"
 import {
-    ChannelActionContext, ChannelStateContext, ChatAutoComplete,
-    EmojiPicker, useMessageInputContext, useMessageInputState
+  ChannelActionContext,
+  ChannelStateContext,
+  ChatAutoComplete,
+  EmojiPicker,
+  useMessageInputContext,
+  useMessageInputState,
 } from "stream-chat-react"
 import { UploadsPreview } from "./UploadsPreview"
-
 
 // * Actions split by state
 

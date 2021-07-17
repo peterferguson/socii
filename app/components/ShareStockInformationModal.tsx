@@ -7,17 +7,27 @@ import { alphaVantageQuery } from "@lib/firebase"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 
+interface ShareStockInformationModalProps {
+  selectedGroup: string
+  tickerSymbol: string
+  tickerLogoUrl: string
+  openStockSharingModal: boolean
+  setOpenStockSharingModal: React.Dispatch<React.SetStateAction<boolean>>
+  goClickHandler?: () => void
+  pricePlaceholder?: string
+}
+
 export default function ShareStockInformationModal({
   selectedGroup,
   tickerSymbol,
   tickerLogoUrl,
   openStockSharingModal,
   setOpenStockSharingModal,
-  goClickHandler = () => {},
+  goClickHandler,
   pricePlaceholder = "0.00",
-}) {
+}: ShareStockInformationModalProps): React.ReactNode {
   const router = useRouter()
-  const { streamClient } = useStream()
+  const { client } = useStream()
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
@@ -30,19 +40,17 @@ export default function ShareStockInformationModal({
 
     const requiredQueryFields = ["name", "industry", "exchange"]
 
-    if (streamClient && streamClient.user) {
-      const channel = streamClient?.getChannelById(
+    if (client && client.user) {
+      const channel = client?.getChannelById(
         "messaging",
-        selectedGroup?.split(" ").join("-")
-      )
-
-      const asset = await alphaVantageQuery(
-        {
-          tickerSymbol,
-          queryFields: [...new Set([...requiredQueryFields, ...selectedItems])],
-        },
+        selectedGroup?.split(" ").join("-"),
         {}
       )
+
+      const asset = await alphaVantageQuery({
+        tickerSymbol,
+        queryFields: [...new Set([...requiredQueryFields, ...selectedItems])],
+      })
 
       const attachments = [
         {
@@ -59,7 +67,7 @@ export default function ShareStockInformationModal({
         // attachments,
         skip_push: true,
       })
-      const threadMessage = await channel.sendMessage({
+      const _threadMessage = await channel.sendMessage({
         text: "",
         attachments,
         parent_id: mainMessage.message.id,
@@ -110,10 +118,7 @@ export default function ShareStockInformationModal({
                 className="text-lg font-medium text-gray-900 font-primary"
               >
                 Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
-                <span span className="font-bold text-teal-300">
-                  {tickerSymbol}
-                </span>
-                !
+                <span className="font-bold text-teal-300">{tickerSymbol}</span>!
               </Dialog.Title>
               <div className="mt-2">
                 <div className="text-sm font-primary text-blueGray-500">
@@ -140,7 +145,7 @@ export default function ShareStockInformationModal({
                 <div className="pt-2 mb-3">
                   <textarea
                     className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 \ rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-                    rows="4"
+                    rows={4}
                     placeholder="Bruh the wallstreetbets bros love it!"
                     onChange={(e) => setMessage(e.target.value)}
                   />

@@ -19,10 +19,10 @@ export async function handleOrders(
   switch (method) {
     case "POST":
       try {
-        /* query orders, empty queries return all orders */
+        /* query orders, 'empty' queries return all orders */
         const {
-          account_id: accountId,
-          order_id: orderId,
+          accountId,
+          orderId,
           status,
           limit,
           after,
@@ -51,12 +51,12 @@ export async function handleOrders(
       break
     case "PATCH":
       // TODO: Update orders
-      // tradeClient.patchOrder(accountId, orderId)  
+      // tradeClient.patchOrder(accountId, orderId)
       break
     case "PUT":
       try {
         /* create a new order */
-        const { account_id: accountId, ...order } = JSON.parse(body)
+        const { accountId, ...order } = JSON.parse(body)
         const postResponse = await tradeClient.postOrders(
           accountId,
           CreateOrder.from(order)
@@ -69,7 +69,7 @@ export async function handleOrders(
     case "DELETE":
       try {
         /* cancel an order */
-        const { account_id: accountId, order_id: orderId } = JSON.parse(body)
+        const { accountId, orderId } = JSON.parse(body)
 
         const deleteResponse = await (orderId
           ? tradeClient.deleteOrder(accountId, orderId)
