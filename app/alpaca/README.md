@@ -6,6 +6,9 @@
     - [Add the config instantiation](#add-the-config-instantiation)
     - [Add json method to all models](#add-json-method-to-all-models)
     - [Update the use of `url-parse` to `URL` in `http.ts`](#update-the-use-of-url-parse-to-url-in-httpts)
+    - [Converting some exports to types](#converting-some-exports-to-types)
+    - [Incorrect(?) typing in constructor of `TransferData.ts`](#incorrect-typing-in-constructor-of-transferdatats)
+    - [Similarly for `TransferResource.ts`](#similarly-for-transferresourcets)
 
 ---
 
@@ -108,3 +111,61 @@ from JSON
     this.url.searchParams.append(name, value)
   }
   ```
+
+---
+
+### Converting some exports to types
+
+The index file re-exports some interfaces, these need to be exported as types
+
+```ts
+export { Configuration } from "./configuration"
+export { PromiseMiddleware as Middleware } from "./middleware"
+```
+
+becomes
+
+```ts
+export type { Configuration } from "./configuration"
+export type { PromiseMiddleware as Middleware } from "./middleware"
+```
+
+---
+
+### Incorrect(?) typing in constructor of `TransferData.ts`
+
+`this.transferType` is being set as `"TransferData"` however its an enum `TransferDataTransferTypeEnum` of only two options
+
+```ts
+export type TransferDataTransferTypeEnum = "ach" | "wire"
+```
+
+Thus simply remove it from the constructor
+
+```ts
+public constructor() {
+    this.transferType = "TransferData";
+}
+```
+
+becomes
+
+```ts
+public constructor() {}
+```
+
+---
+
+### Similarly for `TransferResource.ts`
+
+```ts
+public constructor() {
+    this.type = "TransferResource"
+}
+```
+
+becomes
+
+```ts
+public constructor() {}
+```

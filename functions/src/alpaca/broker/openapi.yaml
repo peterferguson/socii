@@ -1542,6 +1542,29 @@ components:
         - system_date
         - net_amount
         - description
+    MarketDay:
+      title: MarketDay
+      type: object
+      properties:
+        date:
+          type: string
+          example: "2021-04-06"
+        open:
+          type: string
+          example: "09:30"
+        close:
+          type: string
+          example: "16:00"
+        session_open:
+          type: string
+          example: "0700"
+        session_close:
+          type: string
+          example: "1900"
+      required:
+        - date
+        - open
+        - close
     AssetResource:
       title: AssetResource
       type: object
@@ -2120,7 +2143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssetResource'
+                $ref: "#/components/schemas/AssetResource"
         "404":
           description: Asset not found
   "/assets/{symbol}":
@@ -2144,7 +2167,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssetResource'
+                $ref: "#/components/schemas/AssetResource"
         "404":
           description: Asset not found
   /calendar:
@@ -2171,17 +2194,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  date:
-                    type: string
-                    example: "2021-04-06"
-                  open:
-                    type: string
-                    example: "09:30"
-                  close:
-                    type: string
-                    example: "16:00"
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarketDay"
   /clock:
     get:
       security:

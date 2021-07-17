@@ -1,7 +1,7 @@
 // TODO: better import syntax?
 import { Configuration } from "../configuration"
 import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
-import { CalendarResponse } from "../models/CalendarResponse"
+import { MarketDay } from "../models/MarketDay"
 import { ObjectSerializer } from "../models/ObjectSerializer"
 import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory } from "./baseapi"
@@ -69,26 +69,26 @@ export class CalendarApiResponseProcessor {
    * @params response Response returned by the server for a request to calendarGet
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async calendarGet(response: ResponseContext): Promise<CalendarResponse> {
+  public async calendarGet(response: ResponseContext): Promise<Array<MarketDay>> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      const body: CalendarResponse = ObjectSerializer.deserialize(
+      const body: Array<MarketDay> = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "CalendarResponse",
+        "Array<MarketDay>",
         ""
-      ) as CalendarResponse
+      ) as Array<MarketDay> 
       return body
     }
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: CalendarResponse = ObjectSerializer.deserialize(
+      const body: Array<MarketDay> = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "CalendarResponse",
+        "Array<MarketDay>",
         ""
-      ) as CalendarResponse
+      ) as Array<MarketDay> 
       return body
     }
 
