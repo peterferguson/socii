@@ -45,8 +45,8 @@ import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse200 } from "../models/InlineResponse200"
-import { InlineResponse2001 } from "../models/InlineResponse2001"
-import { InlineResponse2002 } from "../models/InlineResponse2002"
+import { MarketDay } from "../models/MarketDay"
+import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
@@ -1068,7 +1068,7 @@ export class ObservableCalendarApi {
     start?: string,
     end?: string,
     options?: Configuration
-  ): Observable<InlineResponse2001> {
+  ): Observable<MarketDay[]> {
     const requestContextPromise = this.requestFactory.calendarGet(start, end, options)
 
     // build promise chain
@@ -1115,7 +1115,7 @@ export class ObservableClockApi {
   /**
    * Query market clock
    */
-  public clockGet(options?: Configuration): Observable<InlineResponse2002> {
+  public clockGet(options?: Configuration): Observable<ClockResponse> {
     const requestContextPromise = this.requestFactory.clockGet(options)
 
     // build promise chain

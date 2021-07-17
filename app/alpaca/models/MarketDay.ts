@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 
-export class InlineResponse2001 {
-  "date"?: string
-  "open"?: string
-  "close"?: string
+export class MarketDay {
+  "date": string
+  "open": string
+  "close": string
+  "sessionOpen"?: string
+  "sessionClose"?: string
 
   static readonly discriminator: string | undefined = undefined
 
@@ -41,12 +43,23 @@ export class InlineResponse2001 {
       type: "string",
       format: "",
     },
+    {
+      name: "sessionOpen",
+      baseName: "session_open",
+      type: "string",
+      format: "",
+    },
+    {
+      name: "sessionClose",
+      baseName: "session_close",
+      type: "string",
+      format: "",
+    },
   ]
 
   static getAttributeTypeMap() {
-    return InlineResponse2001.attributeTypeMap
+    return MarketDay.attributeTypeMap
   }
-
   static from(json) {
     // - convert baseName to name
     for (const { baseName, name } of this.attributeTypeMap) {

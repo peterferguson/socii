@@ -4,7 +4,7 @@
 
 import React from "react"
 import { create, act } from "react-test-renderer"
-import Home from "../pages/index"
+import Home from "../../pages/index"
 
 it("renders homepage unchanged", () => {
   let root

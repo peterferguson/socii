@@ -1,12 +1,11 @@
 // TODO: better import syntax?
 import { Configuration } from "../configuration"
 import { HttpMethod, RequestContext, ResponseContext } from "../http/http"
-import { InlineResponse2001 } from "../models/InlineResponse2001"
+import { MarketDay } from "../models/MarketDay"
 import { ObjectSerializer } from "../models/ObjectSerializer"
 import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory } from "./baseapi"
 import { ApiException } from "./exception"
-
 
 /**
  * no description
@@ -70,26 +69,26 @@ export class CalendarApiResponseProcessor {
    * @params response Response returned by the server for a request to calendarGet
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async calendarGet(response: ResponseContext): Promise<InlineResponse2001> {
+  public async calendarGet(response: ResponseContext): Promise<Array<MarketDay>> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      const body: InlineResponse2001 = ObjectSerializer.deserialize(
+      const body: Array<MarketDay> = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse2001",
+        "Array<MarketDay>",
         ""
-      ) as InlineResponse2001
+      ) as Array<MarketDay> 
       return body
     }
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: InlineResponse2001 = ObjectSerializer.deserialize(
+      const body: Array<MarketDay> = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse2001",
+        "Array<MarketDay>",
         ""
-      ) as InlineResponse2001
+      ) as Array<MarketDay> 
       return body
     }
 

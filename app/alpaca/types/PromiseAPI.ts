@@ -44,8 +44,8 @@ import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
 import { InlineResponse200 } from "../models/InlineResponse200"
-import { InlineResponse2001 } from "../models/InlineResponse2001"
-import { InlineResponse2002 } from "../models/InlineResponse2002"
+import { MarketDay } from "../models/MarketDay"
+import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
@@ -501,7 +501,7 @@ export class PromiseCalendarApi {
     start?: string,
     end?: string,
     options?: Configuration
-  ): Promise<InlineResponse2001> {
+  ): Promise<MarketDay[]> {
     const result = this.api.calendarGet(start, end, options)
     return result.toPromise()
   }
@@ -521,7 +521,7 @@ export class PromiseClockApi {
   /**
    * Query market clock
    */
-  public clockGet(options?: Configuration): Promise<InlineResponse2002> {
+  public clockGet(options?: Configuration): Promise<ClockResponse> {
     const result = this.api.clockGet(options)
     return result.toPromise()
   }

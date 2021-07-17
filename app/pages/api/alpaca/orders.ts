@@ -1,16 +1,25 @@
-import { config, CreateOrder, TradingApi } from "@alpaca/index"
+import {
+  config,
+  CreateOrder,
+  OrderObject,
+  TradingApi,
+  InlineResponse207,
+} from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const tradeClient = new TradingApi(config)
 
-async function handleOrders(req: NextApiRequest, res: NextApiResponse) {
+export async function handleOrders(
+  req: NextApiRequest,
+  res: NextApiResponse<OrderObject | OrderObject[] | InlineResponse207[] | void>
+) {
   const { body, method } = req
 
   switch (method) {
-    case "GET":
+    case "POST":
       try {
-        /* query accounts, empty queries return all accounts paginated by the 1000 */
+        /* query orders, empty queries return all orders */
         const {
           account_id: accountId,
           order_id: orderId,
@@ -23,55 +32,57 @@ async function handleOrders(req: NextApiRequest, res: NextApiResponse) {
           symbols,
         } = JSON.parse(body)
 
-        return res
-          .status(200)
-          .end(
-            JSON.stringify(
-              await (orderId
-                ? tradeClient.getOrder(accountId, orderId)
-                : tradeClient.getOrders(
-                    accountId,
-                    status,
-                    limit,
-                    after,
-                    until,
-                    direction,
-                    nested,
-                    symbols
-                  ))
-            )
-          )
+        const queryResponse = await (orderId
+          ? tradeClient.getOrder(accountId, orderId)
+          : tradeClient.getOrders(
+              accountId,
+              status,
+              limit,
+              after,
+              until,
+              direction,
+              nested,
+              symbols
+            ))
+        res.status(200).json(queryResponse)
       } catch (error) {
-        return res.status(400).end(`Failed to retrieve account with error: ${error}`)
+        res.status(400).end(`Failed to retrieve account with error: ${error}`)
       }
-    case "POST":
+      break
+    case "PATCH":
+      // TODO: Update orders
+      // tradeClient.patchOrder(accountId, orderId)  
+      break
+    case "PUT":
       try {
         /* create a new order */
         const { account_id: accountId, ...order } = JSON.parse(body)
-        return res.end(
-          JSON.stringify(
-            await tradeClient.postOrders(accountId, CreateOrder.from(order))
-          )
+        const postResponse = await tradeClient.postOrders(
+          accountId,
+          CreateOrder.from(order)
         )
+        res.status(200).json(postResponse)
       } catch (error) {
-        return res.status(400).end(`Failed to create account with error: ${error}`)
+        res.status(400).end(`Failed to create account with error: ${error}`)
       }
+      break
     case "DELETE":
       try {
         /* cancel an order */
         const { account_id: accountId, order_id: orderId } = JSON.parse(body)
-        return res.end(
-          JSON.stringify(
-            await (orderId
-              ? tradeClient.deleteOrder(accountId, orderId)
-              : tradeClient.deleteOrders(accountId))
-          )
-        )
+
+        const deleteResponse = await (orderId
+          ? tradeClient.deleteOrder(accountId, orderId)
+          : tradeClient.deleteOrders(accountId))
+
+        res.status(207).json(deleteResponse)
       } catch (error) {
-        return res.status(400).end(`Failed to create account with error: ${error}`)
+        res.status(400).end(`Failed to create account with error: ${error}`)
       }
+      break
     default:
-      return res.status(405).end()
+      res.setHeader("Allow", ["PUT", "POST", "DELETE"])
+      res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
 

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export class InlineResponse2002 {
+export class ClockResponse {
   "timestamp"?: string
   "isOpen"?: boolean
   "nextOpen"?: string
@@ -51,7 +51,7 @@ export class InlineResponse2002 {
   ]
 
   static getAttributeTypeMap() {
-    return InlineResponse2002.attributeTypeMap
+    return ClockResponse.attributeTypeMap
   }
 
   static from(json) {
