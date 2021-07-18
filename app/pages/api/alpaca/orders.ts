@@ -70,7 +70,7 @@ export async function handleOrders(
             .json(ObjectSerializer.deserialize(queryResponse, "Array<OrderObject>", ""))
         }
       } catch (error) {
-        res.status(400).end(`Failed to retrieve account with error: ${error}`)
+        res.status(400).end(`Failed to retrieve order(s) with error: ${error}`)
       }
       break
     case "PATCH":
@@ -90,7 +90,7 @@ export async function handleOrders(
         if (error.message.includes("order isn't sent to exchange yet")) {
           res.status(422).end(error.message)
         } else {
-          res.status(400).end(`Failed to retrieve account with error: ${error}`)
+          res.status(400).end(`Failed to patch order with error: ${error}`)
         }
       }
       break
@@ -107,7 +107,7 @@ export async function handleOrders(
           .status(200)
           .json(ObjectSerializer.deserialize(postResponse, "OrderObject", ""))
       } catch (error) {
-        res.status(400).end(`Failed to create account with error: ${error}`)
+        res.status(400).end(`Failed to create order with error: ${error}`)
       }
       break
     case "DELETE":
