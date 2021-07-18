@@ -11,7 +11,6 @@ import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory, RequiredError } from "./baseapi"
 import { ApiException } from "./exception"
 
-
 /**
  * no description
  */
@@ -340,7 +339,7 @@ export class JournalsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'
@@ -379,7 +378,7 @@ export class JournalsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'
@@ -416,7 +415,7 @@ export class JournalsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'
@@ -477,7 +476,7 @@ export class JournalsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'
@@ -516,7 +515,7 @@ export class JournalsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'

@@ -8,7 +8,6 @@ import { isCodeInRange } from "../util"
 import { BaseAPIRequestFactory } from "./baseapi"
 import { ApiException } from "./exception"
 
-
 /**
  * no description
  */
@@ -185,7 +184,7 @@ export class EventsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'
@@ -224,7 +223,7 @@ export class EventsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'

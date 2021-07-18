@@ -9,6 +9,7 @@
     - [Converting some exports to types](#converting-some-exports-to-types)
     - [Incorrect(?) typing in constructor of `TransferData.ts`](#incorrect-typing-in-constructor-of-transferdatats)
     - [Similarly for `TransferResource.ts`](#similarly-for-transferresourcets)
+    - [ObjectSerialiser needs updated to coalesce nulls in data](#objectserialiser-needs-updated-to-coalesce-nulls-in-data)
 
 ---
 
@@ -168,4 +169,28 @@ becomes
 
 ```ts
 public constructor() {}
+```
+
+---
+
+### ObjectSerialiser needs updated to coalesce nulls in data
+
+Add coalescing for empty data keys
+
+```ts
+instance[attributeType.baseName] = ObjectSerializer.serialize(
+  data[attributeType.name],
+  attributeType.type,
+  attributeType.format
+)
+```
+
+becomes
+
+```ts
+instance[attributeType.baseName] = ObjectSerializer.serialize(
+  data[attributeType.name] ?? data[attributeType.baseName],
+  attributeType.type,
+  attributeType.format
+)
 ```

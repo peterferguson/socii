@@ -65,7 +65,12 @@ const testAccount = AccountCreationObject.from({
 // console.log(testAccount)
 
 try {
-  accountClient.accountsPost(testAccount).then((r) => console.log(r))
+  // - create account
+  // accountClient.accountsPost(testAccount).then((r) => console.log(r))
+  // - get all accounts
+  accountClient.accountsGet().then((r) => console.log(r))
+  // - get accounts activities
+  accountClient.accountsActivitiesGet().then((r) => console.log(r))
 } catch (e) {
   console.log(e)
 }
