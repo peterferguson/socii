@@ -1,6 +1,6 @@
 import { ClockApi, config } from "@alpaca/index"
-import { OrderObject, CreateOrder } from "@alpaca/models"
-import { handleOrders } from "@pages/api/alpaca/orders"
+import { OrderObject } from "@alpaca/models"
+import { handleOrders } from "@api/alpaca/orders"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
 
