@@ -17,7 +17,7 @@
     "baseUrl": "./",
     "paths": {
       "@lib/*": ["lib/*"],
-      "@api/*": ["api/*"],
+      "@api/*": ["pages/api/*"],
       "@tests/*": ["__tests__/*"],
       "@hooks": ["hooks/index"],
       "@hooks/*": ["hooks/*"],
