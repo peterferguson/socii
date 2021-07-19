@@ -1,20 +1,25 @@
-import { transferData , FundingApi, config } from "@alpaca/index"
+  /* TODO - see creating a transfer entity in alpaca docs. Bank resourse should be created for prod */
+
+import { TransferData , FundingApi, config } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const fundClient = new FundingApi(config)
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req
 
   switch (method) {
     case "POST": {
       try{
-          /* TODO - see creating a transfer entity in alpaca docs. Bank resourse should be created for prod */
         const accountId = body.accountId
-        const transfer = body.transferData
-        
-        res.status(200).end(JSON.stringify(await fundClient.postTransfers(accountId , transfer)))
+        const bodyTransfer = body.transferData
+        const transferData = new TransferData()
+
+         for (var key in bodyTransfer){
+          bodyTransfer[key]? transferData[key]=(bodyTransfer[key]): null
+         }
+        res.status(200).end(JSON.stringify(await fundClient.postTransfers(accountId , transferData)))
       } catch (error) {
         res.status(400).end(`Failed to post transfer with error: ${error}`)
       }
@@ -35,4 +40,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     //   break
   }
 }
-export default withAuth(withCORS(handler))
+export default withAuth(withCORS(handleFunding))
