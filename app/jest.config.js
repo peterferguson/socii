@@ -17,6 +17,7 @@ module.exports = {
     "^@model(.*)$": "<rootDir>/models$1",
     "^@styles(.*)$": "<rootDir>/styles$1",
     "^@utils(.*)$": "<rootDir>/utils$1",
+    "^@api(.*)$": "<rootDir>/pages/api$1",
     "^@lib(.*)$": "<rootDir>/lib$1",
     "^@hooks(.*)$": "<rootDir>/hooks$1",
     "^@pages(.*)$": "<rootDir>/pages$1",

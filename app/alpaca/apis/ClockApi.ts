@@ -69,7 +69,7 @@ export class ClockApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
 
     throw new ApiException<string>(
       response.httpStatusCode,

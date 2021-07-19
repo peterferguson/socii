@@ -78,7 +78,7 @@ export class CalendarApiResponseProcessor {
         ObjectSerializer.parse(await response.body.text(), contentType),
         "Array<MarketDay>",
         ""
-      ) as Array<MarketDay> 
+      ) as Array<MarketDay>
       return body
     }
 
@@ -88,11 +88,11 @@ export class CalendarApiResponseProcessor {
         ObjectSerializer.parse(await response.body.text(), contentType),
         "Array<MarketDay>",
         ""
-      ) as Array<MarketDay> 
+      ) as Array<MarketDay>
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + body + '"'

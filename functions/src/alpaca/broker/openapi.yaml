@@ -1638,6 +1638,42 @@ components:
           type: string
         change_today:
           type: string
+    PortfolioHistory:
+      title: PortfolioHistory
+      type: object
+      properties:
+        timestamp:
+          type: array
+          items:
+            type: int
+            description: epoch int
+          example: [1580826600000, 1580827500000, 1580828400000]
+        equity:
+          type: array
+          items:
+            type: number
+          description: equity value of the account in dollar amount as of the end of each time window
+          example: [27423.73, 27408.19, 27515.97]
+        profit_loss:
+          type: array
+          items:
+            type: number
+          description: profit/loss in dollar from the base value
+          example: [11.8, -3.74, 104.04]
+        profit_loss_pct:
+          type: array
+          items:
+            type: number
+          description: profit/loss in percentage from the base value
+          example: [0.000430469507254688, -0.0001364369455197062, 0.003795427757184554]
+        base_value:
+          type: number
+          description: basis in dollar of the profit loss calculation
+          example: 27411.93
+        timeframe:
+          type: string
+          description: time window size of each data element
+          example: "15Min"
   responses:
     Forbidden:
       description: Request is forbidden
@@ -3233,6 +3269,56 @@ paths:
       summary: List open positions for an account
       tags:
         - Trading
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Position"
+      operationId: get_positions
+      security:
+        - BasicAuth: []
+  "/trading/accounts/{account_id}/account/portfolio/history":
+    parameters:
+      - $ref: "#/components/parameters/AccountID"
+        in: path
+      - name: period
+        required: false
+        in: query
+        schema:
+          type: string
+        description: The duration of the data in number + unit, such as 1D
+      - name: timeframe
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+            - 1Min
+            - 5Min
+            - 15Min
+            - 1H
+            - 1D
+        description: The resolution of time window
+      - name: date_end
+        required: false
+        in: query
+        schema:
+          type: string
+        description: The date the data is returned up to, in “YYYY-MM-DD” format. Defaults to the current market date (rolls over at the market open if extended_hours is false, otherwise at 7am ET)
+      - name: extended_hours
+        required: false
+        in: query
+        schema:
+          type: boolean
+        description: If true, include extended hours in the result
+    get:
+      summary: Get timeseries data for equity and profit loss information of the account
+      tags:
+        - Account
       responses:
         "200":
           description: Success

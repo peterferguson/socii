@@ -182,7 +182,7 @@ export class AssetsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
@@ -225,7 +225,7 @@ export class AssetsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
@@ -264,7 +264,7 @@ export class AssetsApiResponseProcessor {
       return body
     }
 
-    let body = response.body || ""
+    let body = (await response.body.text()) || ""
     throw new ApiException<string>(
       response.httpStatusCode,
       'Unknown API Status Code!\nBody: "' + JSON.stringify(body) + '"'
