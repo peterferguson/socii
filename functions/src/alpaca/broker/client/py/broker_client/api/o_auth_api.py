@@ -17,7 +17,7 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from swagger_client.api_client import ApiClient
+from broker_client.api_client import ApiClient
 
 
 class OAuthApi(object):
@@ -47,11 +47,15 @@ class OAuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.oauth_authorize_post_with_http_info(body, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.oauth_authorize_post_with_http_info(
+                body, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.oauth_authorize_post_with_http_info(body, **kwargs)  # noqa: E501
+            (data) = self.oauth_authorize_post_with_http_info(
+                body, **kwargs
+            )  # noqa: E501
             return data
 
     def oauth_authorize_post_with_http_info(self, body, **kwargs):  # noqa: E501
@@ -70,25 +74,26 @@ class OAuthApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method oauth_authorize_post" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `oauth_authorize_post`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `oauth_authorize_post`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -102,34 +107,40 @@ class OAuthApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/oauth/authorize', 'POST',
+            "/oauth/authorize",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse2009',  # noqa: E501
+            response_type="InlineResponse2009",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def oauth_clients_client_id_get(self, client_id, **kwargs):  # noqa: E501
         """Returns an OAuth client.  # noqa: E501
@@ -149,14 +160,20 @@ class OAuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.oauth_clients_client_id_get_with_http_info(client_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.oauth_clients_client_id_get_with_http_info(
+                client_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.oauth_clients_client_id_get_with_http_info(client_id, **kwargs)  # noqa: E501
+            (data) = self.oauth_clients_client_id_get_with_http_info(
+                client_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def oauth_clients_client_id_get_with_http_info(self, client_id, **kwargs):  # noqa: E501
+    def oauth_clients_client_id_get_with_http_info(
+        self, client_id, **kwargs
+    ):  # noqa: E501
         """Returns an OAuth client.  # noqa: E501
 
         The endpoint returns the details of OAuth client to display in the authorization page.   # noqa: E501
@@ -175,39 +192,47 @@ class OAuthApi(object):
                  returns the request thread.
         """
 
-        all_params = ['client_id', 'response_type', 'redirect_uri', 'scope']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = [
+            "client_id",
+            "response_type",
+            "redirect_uri",
+            "scope",
+        ]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method oauth_clients_client_id_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'client_id' is set
-        if ('client_id' not in params or
-                params['client_id'] is None):
-            raise ValueError("Missing the required parameter `client_id` when calling `oauth_clients_client_id_get`")  # noqa: E501
+        if "client_id" not in params or params["client_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `client_id` when calling `oauth_clients_client_id_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'client_id' in params:
-            path_params['client_id'] = params['client_id']  # noqa: E501
+        if "client_id" in params:
+            path_params["client_id"] = params["client_id"]  # noqa: E501
 
         query_params = []
-        if 'response_type' in params:
-            query_params.append(('response_type', params['response_type']))  # noqa: E501
-        if 'redirect_uri' in params:
-            query_params.append(('redirect_uri', params['redirect_uri']))  # noqa: E501
-        if 'scope' in params:
-            query_params.append(('scope', params['scope']))  # noqa: E501
+        if "response_type" in params:
+            query_params.append(
+                ("response_type", params["response_type"])
+            )  # noqa: E501
+        if "redirect_uri" in params:
+            query_params.append(("redirect_uri", params["redirect_uri"]))  # noqa: E501
+        if "scope" in params:
+            query_params.append(("scope", params["scope"]))  # noqa: E501
 
         header_params = {}
 
@@ -216,27 +241,30 @@ class OAuthApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/oauth/clients/{client_id}', 'GET',
+            "/oauth/clients/{client_id}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse2007',  # noqa: E501
+            response_type="InlineResponse2007",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def oauth_token_post(self, body, **kwargs):  # noqa: E501
         """Issue a token.  # noqa: E501
@@ -253,8 +281,8 @@ class OAuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.oauth_token_post_with_http_info(body, **kwargs)  # noqa: E501
         else:
             (data) = self.oauth_token_post_with_http_info(body, **kwargs)  # noqa: E501
@@ -276,25 +304,26 @@ class OAuthApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method oauth_token_post" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `oauth_token_post`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `oauth_token_post`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -308,31 +337,37 @@ class OAuthApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/oauth/token', 'POST',
+            "/oauth/token",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse2008',  # noqa: E501
+            response_type="InlineResponse2008",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

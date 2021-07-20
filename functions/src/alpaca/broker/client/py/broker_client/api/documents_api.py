@@ -17,7 +17,7 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from swagger_client.api_client import ApiClient
+from broker_client.api_client import ApiClient
 
 
 class DocumentsApi(object):
@@ -32,7 +32,9 @@ class DocumentsApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def accounts_account_id_documents_document_id_download_get(self, account_id, document_id, **kwargs):  # noqa: E501
+    def accounts_account_id_documents_document_id_download_get(
+        self, account_id, document_id, **kwargs
+    ):  # noqa: E501
         """Download a document file that belongs to an account.  # noqa: E501
 
         The operation returns a pre-signed downloadable link as a redirect with HTTP status code 301 if one is found.   # noqa: E501
@@ -48,14 +50,22 @@ class DocumentsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.accounts_account_id_documents_document_id_download_get_with_http_info(account_id, document_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.accounts_account_id_documents_document_id_download_get_with_http_info(
+                account_id, document_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.accounts_account_id_documents_document_id_download_get_with_http_info(account_id, document_id, **kwargs)  # noqa: E501
+            (
+                data
+            ) = self.accounts_account_id_documents_document_id_download_get_with_http_info(
+                account_id, document_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def accounts_account_id_documents_document_id_download_get_with_http_info(self, account_id, document_id, **kwargs):  # noqa: E501
+    def accounts_account_id_documents_document_id_download_get_with_http_info(
+        self, account_id, document_id, **kwargs
+    ):  # noqa: E501
         """Download a document file that belongs to an account.  # noqa: E501
 
         The operation returns a pre-signed downloadable link as a redirect with HTTP status code 301 if one is found.   # noqa: E501
@@ -72,37 +82,40 @@ class DocumentsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'document_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "document_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method accounts_account_id_documents_document_id_download_get" % key
+                    " to method accounts_account_id_documents_document_id_download_get"
+                    % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `accounts_account_id_documents_document_id_download_get`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `accounts_account_id_documents_document_id_download_get`"
+            )  # noqa: E501
         # verify the required parameter 'document_id' is set
-        if ('document_id' not in params or
-                params['document_id'] is None):
-            raise ValueError("Missing the required parameter `document_id` when calling `accounts_account_id_documents_document_id_download_get`")  # noqa: E501
+        if "document_id" not in params or params["document_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `document_id` when calling `accounts_account_id_documents_document_id_download_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
-        if 'document_id' in params:
-            path_params['document_id'] = params['document_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
+        if "document_id" in params:
+            path_params["document_id"] = params["document_id"]  # noqa: E501
 
         query_params = []
 
@@ -113,10 +126,11 @@ class DocumentsApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/documents/{document_id}/download', 'GET',
+            "/accounts/{account_id}/documents/{document_id}/download",
+            "GET",
             path_params,
             query_params,
             header_params,
@@ -125,11 +139,12 @@ class DocumentsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def accounts_account_id_documents_get(self, account_id, **kwargs):  # noqa: E501
         """Return a list of account documents.  # noqa: E501
@@ -148,14 +163,20 @@ class DocumentsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.accounts_account_id_documents_get_with_http_info(account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.accounts_account_id_documents_get_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.accounts_account_id_documents_get_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.accounts_account_id_documents_get_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def accounts_account_id_documents_get_with_http_info(self, account_id, **kwargs):  # noqa: E501
+    def accounts_account_id_documents_get_with_http_info(
+        self, account_id, **kwargs
+    ):  # noqa: E501
         """Return a list of account documents.  # noqa: E501
 
         You can query account documents such as monthly  statements and trade confirms under an account.   # noqa: E501
@@ -173,37 +194,38 @@ class DocumentsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'start_date', 'end_date']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "start_date", "end_date"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_account_id_documents_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `accounts_account_id_documents_get`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `accounts_account_id_documents_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
-        if 'start_date' in params:
-            query_params.append(('start_date', params['start_date']))  # noqa: E501
-        if 'end_date' in params:
-            query_params.append(('end_date', params['end_date']))  # noqa: E501
+        if "start_date" in params:
+            query_params.append(("start_date", params["start_date"]))  # noqa: E501
+        if "end_date" in params:
+            query_params.append(("end_date", params["end_date"]))  # noqa: E501
 
         header_params = {}
 
@@ -212,27 +234,30 @@ class DocumentsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/documents', 'GET',
+            "/accounts/{account_id}/documents",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[InlineResponse2004]',  # noqa: E501
+            response_type="list[InlineResponse2004]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def documents_document_id_get(self, document_id, **kwargs):  # noqa: E501
         """Download a document file directly  # noqa: E501
@@ -249,14 +274,20 @@ class DocumentsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.documents_document_id_get_with_http_info(document_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.documents_document_id_get_with_http_info(
+                document_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.documents_document_id_get_with_http_info(document_id, **kwargs)  # noqa: E501
+            (data) = self.documents_document_id_get_with_http_info(
+                document_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def documents_document_id_get_with_http_info(self, document_id, **kwargs):  # noqa: E501
+    def documents_document_id_get_with_http_info(
+        self, document_id, **kwargs
+    ):  # noqa: E501
         """Download a document file directly  # noqa: E501
 
         The operation returns a pre-signed downloadable link as a redirect with HTTP status code 301 if one is found.   # noqa: E501
@@ -272,31 +303,32 @@ class DocumentsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['document_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["document_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method documents_document_id_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'document_id' is set
-        if ('document_id' not in params or
-                params['document_id'] is None):
-            raise ValueError("Missing the required parameter `document_id` when calling `documents_document_id_get`")  # noqa: E501
+        if "document_id" not in params or params["document_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `document_id` when calling `documents_document_id_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'document_id' in params:
-            path_params['document_id'] = params['document_id']  # noqa: E501
+        if "document_id" in params:
+            path_params["document_id"] = params["document_id"]  # noqa: E501
 
         query_params = []
 
@@ -307,10 +339,11 @@ class DocumentsApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/documents/{document_id}', 'GET',
+            "/documents/{document_id}",
+            "GET",
             path_params,
             query_params,
             header_params,
@@ -319,8 +352,9 @@ class DocumentsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

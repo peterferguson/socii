@@ -17,7 +17,7 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from swagger_client.api_client import ApiClient
+from broker_client.api_client import ApiClient
 
 
 class AccountsApi(object):
@@ -32,7 +32,9 @@ class AccountsApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def accounts_account_id_documents_upload_post(self, body, account_id, **kwargs):  # noqa: E501
+    def accounts_account_id_documents_upload_post(
+        self, body, account_id, **kwargs
+    ):  # noqa: E501
         """Upload a document to an already existing account  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -47,14 +49,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.accounts_account_id_documents_upload_post_with_http_info(body, account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.accounts_account_id_documents_upload_post_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.accounts_account_id_documents_upload_post_with_http_info(body, account_id, **kwargs)  # noqa: E501
+            (data) = self.accounts_account_id_documents_upload_post_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def accounts_account_id_documents_upload_post_with_http_info(self, body, account_id, **kwargs):  # noqa: E501
+    def accounts_account_id_documents_upload_post_with_http_info(
+        self, body, account_id, **kwargs
+    ):  # noqa: E501
         """Upload a document to an already existing account  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -70,35 +78,37 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body', 'account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body", "account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_account_id_documents_upload_post" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `accounts_account_id_documents_upload_post`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `accounts_account_id_documents_upload_post`"
+            )  # noqa: E501
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `accounts_account_id_documents_upload_post`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `accounts_account_id_documents_upload_post`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -108,21 +118,26 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/documents/upload', 'POST',
+            "/accounts/{account_id}/documents/upload",
+            "POST",
             path_params,
             query_params,
             header_params,
@@ -131,13 +146,16 @@ class AccountsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def accounts_activities_activity_type_get(self, activity_type, **kwargs):  # noqa: E501
+    def accounts_activities_activity_type_get(
+        self, activity_type, **kwargs
+    ):  # noqa: E501
         """Retrieve specific account activities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -151,14 +169,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.accounts_activities_activity_type_get_with_http_info(activity_type, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.accounts_activities_activity_type_get_with_http_info(
+                activity_type, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.accounts_activities_activity_type_get_with_http_info(activity_type, **kwargs)  # noqa: E501
+            (data) = self.accounts_activities_activity_type_get_with_http_info(
+                activity_type, **kwargs
+            )  # noqa: E501
             return data
 
-    def accounts_activities_activity_type_get_with_http_info(self, activity_type, **kwargs):  # noqa: E501
+    def accounts_activities_activity_type_get_with_http_info(
+        self, activity_type, **kwargs
+    ):  # noqa: E501
         """Retrieve specific account activities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -173,31 +197,32 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['activity_type']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["activity_type"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_activities_activity_type_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'activity_type' is set
-        if ('activity_type' not in params or
-                params['activity_type'] is None):
-            raise ValueError("Missing the required parameter `activity_type` when calling `accounts_activities_activity_type_get`")  # noqa: E501
+        if "activity_type" not in params or params["activity_type"] is None:
+            raise ValueError(
+                "Missing the required parameter `activity_type` when calling `accounts_activities_activity_type_get`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'activity_type' in params:
-            path_params['activity_type'] = params['activity_type']  # noqa: E501
+        if "activity_type" in params:
+            path_params["activity_type"] = params["activity_type"]  # noqa: E501
 
         query_params = []
 
@@ -208,27 +233,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/activities/{activity_type}', 'GET',
+            "/accounts/activities/{activity_type}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse20010',  # noqa: E501
+            response_type="InlineResponse20010",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def accounts_activities_get(self, **kwargs):  # noqa: E501
         """Retrieve account activities  # noqa: E501
@@ -246,8 +274,8 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.accounts_activities_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.accounts_activities_get_with_http_info(**kwargs)  # noqa: E501
@@ -270,33 +298,35 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['activity_type', '_date', 'until']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["activity_type", "_date", "until"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_activities_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'activity_type' in params:
-            query_params.append(('activity_type', params['activity_type']))  # noqa: E501
-        if '_date' in params:
-            query_params.append(('date', params['_date']))  # noqa: E501
-        if 'until' in params:
-            query_params.append(('until', params['until']))  # noqa: E501
+        if "activity_type" in params:
+            query_params.append(
+                ("activity_type", params["activity_type"])
+            )  # noqa: E501
+        if "_date" in params:
+            query_params.append(("date", params["_date"]))  # noqa: E501
+        if "until" in params:
+            query_params.append(("until", params["until"]))  # noqa: E501
 
         header_params = {}
 
@@ -305,27 +335,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/activities', 'GET',
+            "/accounts/activities",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse20010',  # noqa: E501
+            response_type="InlineResponse20010",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def accounts_get(self, **kwargs):  # noqa: E501
         """Retrieve all accounts  # noqa: E501
@@ -336,13 +369,13 @@ class AccountsApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param str query: The query supports partial match of account number, names, emails, etc.. Items can be space delimited. 
+        :param str query: The query supports partial match of account number, names, emails, etc.. Items can be space delimited.
         :return: list[Account]
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.accounts_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.accounts_get_with_http_info(**kwargs)  # noqa: E501
@@ -357,35 +390,35 @@ class AccountsApi(object):
         >>> result = thread.get()
 
         :param async_req bool
-        :param str query: The query supports partial match of account number, names, emails, etc.. Items can be space delimited. 
+        :param str query: The query supports partial match of account number, names, emails, etc.. Items can be space delimited.
         :return: list[Account]
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['query']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["query"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'query' in params:
-            query_params.append(('query', params['query']))  # noqa: E501
+        if "query" in params:
+            query_params.append(("query", params["query"]))  # noqa: E501
 
         header_params = {}
 
@@ -394,27 +427,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts', 'GET',
+            "/accounts",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Account]',  # noqa: E501
+            response_type="list[Account]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def accounts_post(self, body, **kwargs):  # noqa: E501
         """Create an account  # noqa: E501
@@ -430,8 +466,8 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.accounts_post_with_http_info(body, **kwargs)  # noqa: E501
         else:
             (data) = self.accounts_post_with_http_info(body, **kwargs)  # noqa: E501
@@ -452,25 +488,26 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method accounts_post" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `accounts_post`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `accounts_post`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -484,34 +521,40 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts', 'POST',
+            "/accounts",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Account',  # noqa: E501
+            response_type="Account",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def delete_account(self, account_id, **kwargs):  # noqa: E501
         """Request to close an account  # noqa: E501
@@ -527,11 +570,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.delete_account_with_http_info(account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.delete_account_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.delete_account_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.delete_account_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def delete_account_with_http_info(self, account_id, **kwargs):  # noqa: E501
@@ -549,31 +596,32 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method delete_account" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `delete_account`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `delete_account`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -584,10 +632,11 @@ class AccountsApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}', 'DELETE',
+            "/accounts/{account_id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
@@ -596,13 +645,16 @@ class AccountsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def delete_ach_relationship(self, account_id, ach_relationship_id, **kwargs):  # noqa: E501
+    def delete_ach_relationship(
+        self, account_id, ach_relationship_id, **kwargs
+    ):  # noqa: E501
         """Delete an existing ACH relationship  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -617,14 +669,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.delete_ach_relationship_with_http_info(account_id, ach_relationship_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.delete_ach_relationship_with_http_info(
+                account_id, ach_relationship_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.delete_ach_relationship_with_http_info(account_id, ach_relationship_id, **kwargs)  # noqa: E501
+            (data) = self.delete_ach_relationship_with_http_info(
+                account_id, ach_relationship_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def delete_ach_relationship_with_http_info(self, account_id, ach_relationship_id, **kwargs):  # noqa: E501
+    def delete_ach_relationship_with_http_info(
+        self, account_id, ach_relationship_id, **kwargs
+    ):  # noqa: E501
         """Delete an existing ACH relationship  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -640,37 +698,41 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'ach_relationship_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "ach_relationship_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method delete_ach_relationship" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `delete_ach_relationship`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `delete_ach_relationship`"
+            )  # noqa: E501
         # verify the required parameter 'ach_relationship_id' is set
-        if ('ach_relationship_id' not in params or
-                params['ach_relationship_id'] is None):
-            raise ValueError("Missing the required parameter `ach_relationship_id` when calling `delete_ach_relationship`")  # noqa: E501
+        if "ach_relationship_id" not in params or params["ach_relationship_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `ach_relationship_id` when calling `delete_ach_relationship`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
-        if 'ach_relationship_id' in params:
-            path_params['ach_relationship_id'] = params['ach_relationship_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
+        if "ach_relationship_id" in params:
+            path_params["ach_relationship_id"] = params[
+                "ach_relationship_id"
+            ]  # noqa: E501
 
         query_params = []
 
@@ -681,14 +743,16 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/ach_relationships/{ach_relationship_id}', 'DELETE',
+            "/accounts/{account_id}/ach_relationships/{ach_relationship_id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
@@ -697,11 +761,12 @@ class AccountsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def delete_recipient_bank(self, account_id, bank_id, **kwargs):  # noqa: E501
         """Delete a Bank Relationship for an account  # noqa: E501
@@ -718,14 +783,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.delete_recipient_bank_with_http_info(account_id, bank_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.delete_recipient_bank_with_http_info(
+                account_id, bank_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.delete_recipient_bank_with_http_info(account_id, bank_id, **kwargs)  # noqa: E501
+            (data) = self.delete_recipient_bank_with_http_info(
+                account_id, bank_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def delete_recipient_bank_with_http_info(self, account_id, bank_id, **kwargs):  # noqa: E501
+    def delete_recipient_bank_with_http_info(
+        self, account_id, bank_id, **kwargs
+    ):  # noqa: E501
         """Delete a Bank Relationship for an account  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -741,37 +812,39 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'bank_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "bank_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method delete_recipient_bank" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `delete_recipient_bank`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `delete_recipient_bank`"
+            )  # noqa: E501
         # verify the required parameter 'bank_id' is set
-        if ('bank_id' not in params or
-                params['bank_id'] is None):
-            raise ValueError("Missing the required parameter `bank_id` when calling `delete_recipient_bank`")  # noqa: E501
+        if "bank_id" not in params or params["bank_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `bank_id` when calling `delete_recipient_bank`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
-        if 'bank_id' in params:
-            path_params['bank_id'] = params['bank_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
+        if "bank_id" in params:
+            path_params["bank_id"] = params["bank_id"]  # noqa: E501
 
         query_params = []
 
@@ -782,10 +855,11 @@ class AccountsApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/recipient_banks/{bank_id}', 'DELETE',
+            "/accounts/{account_id}/recipient_banks/{bank_id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
@@ -794,11 +868,12 @@ class AccountsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def delete_transfer(self, account_id, transfer_id, **kwargs):  # noqa: E501
         """Request to close a transfer  # noqa: E501
@@ -815,14 +890,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.delete_transfer_with_http_info(account_id, transfer_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.delete_transfer_with_http_info(
+                account_id, transfer_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.delete_transfer_with_http_info(account_id, transfer_id, **kwargs)  # noqa: E501
+            (data) = self.delete_transfer_with_http_info(
+                account_id, transfer_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def delete_transfer_with_http_info(self, account_id, transfer_id, **kwargs):  # noqa: E501
+    def delete_transfer_with_http_info(
+        self, account_id, transfer_id, **kwargs
+    ):  # noqa: E501
         """Request to close a transfer  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -838,37 +919,39 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'transfer_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "transfer_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method delete_transfer" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `delete_transfer`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `delete_transfer`"
+            )  # noqa: E501
         # verify the required parameter 'transfer_id' is set
-        if ('transfer_id' not in params or
-                params['transfer_id'] is None):
-            raise ValueError("Missing the required parameter `transfer_id` when calling `delete_transfer`")  # noqa: E501
+        if "transfer_id" not in params or params["transfer_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `transfer_id` when calling `delete_transfer`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
-        if 'transfer_id' in params:
-            path_params['transfer_id'] = params['transfer_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
+        if "transfer_id" in params:
+            path_params["transfer_id"] = params["transfer_id"]  # noqa: E501
 
         query_params = []
 
@@ -879,14 +962,16 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/transfers/{transfer_id}', 'DELETE',
+            "/accounts/{account_id}/transfers/{transfer_id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
@@ -895,11 +980,12 @@ class AccountsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def events_accounts_status_get(self, **kwargs):  # noqa: E501
         """Subscribe to account status events (SSE).  # noqa: E501
@@ -919,11 +1005,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.events_accounts_status_get_with_http_info(**kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.events_accounts_status_get_with_http_info(
+                **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.events_accounts_status_get_with_http_info(**kwargs)  # noqa: E501
+            (data) = self.events_accounts_status_get_with_http_info(
+                **kwargs
+            )  # noqa: E501
             return data
 
     def events_accounts_status_get_with_http_info(self, **kwargs):  # noqa: E501
@@ -945,35 +1035,35 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['since', 'until', 'since_id', 'until_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["since", "until", "since_id", "until_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method events_accounts_status_get" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'since' in params:
-            query_params.append(('since', params['since']))  # noqa: E501
-        if 'until' in params:
-            query_params.append(('until', params['until']))  # noqa: E501
-        if 'since_id' in params:
-            query_params.append(('since_id', params['since_id']))  # noqa: E501
-        if 'until_id' in params:
-            query_params.append(('until_id', params['until_id']))  # noqa: E501
+        if "since" in params:
+            query_params.append(("since", params["since"]))  # noqa: E501
+        if "until" in params:
+            query_params.append(("until", params["until"]))  # noqa: E501
+        if "since_id" in params:
+            query_params.append(("since_id", params["since_id"]))  # noqa: E501
+        if "until_id" in params:
+            query_params.append(("until_id", params["until_id"]))  # noqa: E501
 
         header_params = {}
 
@@ -982,27 +1072,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/events/accounts/status', 'GET',
+            "/events/accounts/status",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse2005',  # noqa: E501
+            response_type="InlineResponse2005",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def get_account(self, account_id, **kwargs):  # noqa: E501
         """Retrieve an account.  # noqa: E501
@@ -1019,8 +1112,8 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.get_account_with_http_info(account_id, **kwargs)  # noqa: E501
         else:
             (data) = self.get_account_with_http_info(account_id, **kwargs)  # noqa: E501
@@ -1042,31 +1135,32 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_account" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `get_account`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `get_account`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1077,27 +1171,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}', 'GET',
+            "/accounts/{account_id}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='AccountExtended',  # noqa: E501
+            response_type="AccountExtended",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def get_ach_relationships(self, account_id, **kwargs):  # noqa: E501
         """Retrieve ACH Relationships for an account  # noqa: E501
@@ -1114,11 +1211,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_ach_relationships_with_http_info(account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.get_ach_relationships_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.get_ach_relationships_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.get_ach_relationships_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def get_ach_relationships_with_http_info(self, account_id, **kwargs):  # noqa: E501
@@ -1137,35 +1238,36 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'statuses']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "statuses"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_ach_relationships" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `get_ach_relationships`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `get_ach_relationships`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
-        if 'statuses' in params:
-            query_params.append(('statuses', params['statuses']))  # noqa: E501
+        if "statuses" in params:
+            query_params.append(("statuses", params["statuses"]))  # noqa: E501
 
         header_params = {}
 
@@ -1174,27 +1276,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/ach_relationships', 'GET',
+            "/accounts/{account_id}/ach_relationships",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[ACHRelationshipResource]',  # noqa: E501
+            response_type="list[ACHRelationshipResource]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def get_recipient_banks(self, account_id, **kwargs):  # noqa: E501
         """Retrieve bank relationships for an account  # noqa: E501
@@ -1212,11 +1317,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_recipient_banks_with_http_info(account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.get_recipient_banks_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.get_recipient_banks_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.get_recipient_banks_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def get_recipient_banks_with_http_info(self, account_id, **kwargs):  # noqa: E501
@@ -1236,37 +1345,38 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'status', 'bank_name']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "status", "bank_name"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_recipient_banks" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `get_recipient_banks`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `get_recipient_banks`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
-        if 'status' in params:
-            query_params.append(('status', params['status']))  # noqa: E501
-        if 'bank_name' in params:
-            query_params.append(('bank_name', params['bank_name']))  # noqa: E501
+        if "status" in params:
+            query_params.append(("status", params["status"]))  # noqa: E501
+        if "bank_name" in params:
+            query_params.append(("bank_name", params["bank_name"]))  # noqa: E501
 
         header_params = {}
 
@@ -1275,27 +1385,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/recipient_banks', 'GET',
+            "/accounts/{account_id}/recipient_banks",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[BankResource]',  # noqa: E501
+            response_type="list[BankResource]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def get_trading_account(self, account_id, **kwargs):  # noqa: E501
         """Retrieve trading details for an account.  # noqa: E501
@@ -1312,11 +1425,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.get_trading_account_with_http_info(account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.get_trading_account_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.get_trading_account_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.get_trading_account_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def get_trading_account_with_http_info(self, account_id, **kwargs):  # noqa: E501
@@ -1335,31 +1452,32 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_trading_account" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `get_trading_account`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `get_trading_account`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1370,27 +1488,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/trading/accounts/{account_id}/account', 'GET',
+            "/trading/accounts/{account_id}/account",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='InlineResponse200',  # noqa: E501
+            response_type="InlineResponse200",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def get_transfers(self, account_id, **kwargs):  # noqa: E501
         """Return a list of transfers for an account.  # noqa: E501
@@ -1410,11 +1531,13 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
             return self.get_transfers_with_http_info(account_id, **kwargs)  # noqa: E501
         else:
-            (data) = self.get_transfers_with_http_info(account_id, **kwargs)  # noqa: E501
+            (data) = self.get_transfers_with_http_info(
+                account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def get_transfers_with_http_info(self, account_id, **kwargs):  # noqa: E501
@@ -1436,39 +1559,40 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['account_id', 'direction', 'limit', 'offset']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["account_id", "direction", "limit", "offset"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method get_transfers" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `get_transfers`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `get_transfers`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
-        if 'direction' in params:
-            query_params.append(('direction', params['direction']))  # noqa: E501
-        if 'limit' in params:
-            query_params.append(('limit', params['limit']))  # noqa: E501
-        if 'offset' in params:
-            query_params.append(('offset', params['offset']))  # noqa: E501
+        if "direction" in params:
+            query_params.append(("direction", params["direction"]))  # noqa: E501
+        if "limit" in params:
+            query_params.append(("limit", params["limit"]))  # noqa: E501
+        if "offset" in params:
+            query_params.append(("offset", params["offset"]))  # noqa: E501
 
         header_params = {}
 
@@ -1477,27 +1601,30 @@ class AccountsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/transfers', 'GET',
+            "/accounts/{account_id}/transfers",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[TransferResource]',  # noqa: E501
+            response_type="list[TransferResource]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def patch_account(self, body, account_id, **kwargs):  # noqa: E501
         """Update an account  # noqa: E501
@@ -1514,11 +1641,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.patch_account_with_http_info(body, account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.patch_account_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.patch_account_with_http_info(body, account_id, **kwargs)  # noqa: E501
+            (data) = self.patch_account_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def patch_account_with_http_info(self, body, account_id, **kwargs):  # noqa: E501
@@ -1537,35 +1668,37 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body', 'account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body", "account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method patch_account" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `patch_account`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `patch_account`"
+            )  # noqa: E501
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `patch_account`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `patch_account`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1575,34 +1708,40 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}', 'PATCH',
+            "/accounts/{account_id}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Account',  # noqa: E501
+            response_type="Account",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def post_ach_relationships(self, body, account_id, **kwargs):  # noqa: E501
         """Create an ACH Relationship  # noqa: E501
@@ -1619,14 +1758,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.post_ach_relationships_with_http_info(body, account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.post_ach_relationships_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.post_ach_relationships_with_http_info(body, account_id, **kwargs)  # noqa: E501
+            (data) = self.post_ach_relationships_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def post_ach_relationships_with_http_info(self, body, account_id, **kwargs):  # noqa: E501
+    def post_ach_relationships_with_http_info(
+        self, body, account_id, **kwargs
+    ):  # noqa: E501
         """Create an ACH Relationship  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1642,35 +1787,37 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body', 'account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body", "account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method post_ach_relationships" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `post_ach_relationships`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `post_ach_relationships`"
+            )  # noqa: E501
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `post_ach_relationships`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `post_ach_relationships`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1680,34 +1827,40 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/ach_relationships', 'POST',
+            "/accounts/{account_id}/ach_relationships",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='ACHRelationshipResource',  # noqa: E501
+            response_type="ACHRelationshipResource",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def post_recipient_banks(self, body, account_id, **kwargs):  # noqa: E501
         """Create a Bank Relationship for an account  # noqa: E501
@@ -1724,14 +1877,20 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.post_recipient_banks_with_http_info(body, account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.post_recipient_banks_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.post_recipient_banks_with_http_info(body, account_id, **kwargs)  # noqa: E501
+            (data) = self.post_recipient_banks_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
             return data
 
-    def post_recipient_banks_with_http_info(self, body, account_id, **kwargs):  # noqa: E501
+    def post_recipient_banks_with_http_info(
+        self, body, account_id, **kwargs
+    ):  # noqa: E501
         """Create a Bank Relationship for an account  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1747,35 +1906,37 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body', 'account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body", "account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method post_recipient_banks" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `post_recipient_banks`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `post_recipient_banks`"
+            )  # noqa: E501
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `post_recipient_banks`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `post_recipient_banks`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1785,34 +1946,40 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/recipient_banks', 'POST',
+            "/accounts/{account_id}/recipient_banks",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='BankResource',  # noqa: E501
+            response_type="BankResource",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def post_transfers(self, body, account_id, **kwargs):  # noqa: E501
         """Request a new transfer  # noqa: E501
@@ -1830,11 +1997,15 @@ class AccountsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.post_transfers_with_http_info(body, account_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if kwargs.get("async_req"):
+            return self.post_transfers_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
         else:
-            (data) = self.post_transfers_with_http_info(body, account_id, **kwargs)  # noqa: E501
+            (data) = self.post_transfers_with_http_info(
+                body, account_id, **kwargs
+            )  # noqa: E501
             return data
 
     def post_transfers_with_http_info(self, body, account_id, **kwargs):  # noqa: E501
@@ -1854,35 +2025,37 @@ class AccountsApi(object):
                  returns the request thread.
         """
 
-        all_params = ['body', 'account_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
+        all_params = ["body", "account_id"]  # noqa: E501
+        all_params.append("async_req")
+        all_params.append("_return_http_data_only")
+        all_params.append("_preload_content")
+        all_params.append("_request_timeout")
 
         params = locals()
-        for key, val in six.iteritems(params['kwargs']):
+        for key, val in six.iteritems(params["kwargs"]):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method post_transfers" % key
                 )
             params[key] = val
-        del params['kwargs']
+        del params["kwargs"]
         # verify the required parameter 'body' is set
-        if ('body' not in params or
-                params['body'] is None):
-            raise ValueError("Missing the required parameter `body` when calling `post_transfers`")  # noqa: E501
+        if "body" not in params or params["body"] is None:
+            raise ValueError(
+                "Missing the required parameter `body` when calling `post_transfers`"
+            )  # noqa: E501
         # verify the required parameter 'account_id' is set
-        if ('account_id' not in params or
-                params['account_id'] is None):
-            raise ValueError("Missing the required parameter `account_id` when calling `post_transfers`")  # noqa: E501
+        if "account_id" not in params or params["account_id"] is None:
+            raise ValueError(
+                "Missing the required parameter `account_id` when calling `post_transfers`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'account_id' in params:
-            path_params['account_id'] = params['account_id']  # noqa: E501
+        if "account_id" in params:
+            path_params["account_id"] = params["account_id"]  # noqa: E501
 
         query_params = []
 
@@ -1892,31 +2065,37 @@ class AccountsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'body' in params:
-            body_params = params['body']
+        if "body" in params:
+            body_params = params["body"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['BasicAuth']  # noqa: E501
+        auth_settings = ["BasicAuth"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/accounts/{account_id}/transfers', 'POST',
+            "/accounts/{account_id}/transfers",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='TransferResource',  # noqa: E501
+            response_type="TransferResource",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=params.get("async_req"),
+            _return_http_data_only=params.get("_return_http_data_only"),
+            _preload_content=params.get("_preload_content", True),
+            _request_timeout=params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

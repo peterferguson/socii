@@ -1,36 +1,38 @@
-# swagger_client.JournalsApi
+# broker_client.JournalsApi
 
 All URIs are relative to *https://broker-api.sandbox.alpaca.markets/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**delete_journal**](JournalsApi.md#delete_journal) | **DELETE** /journals/{journal_id} | Cancel a pending journal.
-[**events_journals_status_get**](JournalsApi.md#events_journals_status_get) | **GET** /events/journals/status | Subscribe to journal events (SSE).
-[**get_journals**](JournalsApi.md#get_journals) | **GET** /journals | Return a list of requested journals.
-[**post_journals**](JournalsApi.md#post_journals) | **POST** /journals | Request a journal.
+| Method                                                                      | HTTP request                      | Description                          |
+| --------------------------------------------------------------------------- | --------------------------------- | ------------------------------------ |
+| [**delete_journal**](JournalsApi.md#delete_journal)                         | **DELETE** /journals/{journal_id} | Cancel a pending journal.            |
+| [**events_journals_status_get**](JournalsApi.md#events_journals_status_get) | **GET** /events/journals/status   | Subscribe to journal events (SSE).   |
+| [**get_journals**](JournalsApi.md#get_journals)                             | **GET** /journals                 | Return a list of requested journals. |
+| [**post_journals**](JournalsApi.md#post_journals)                           | **POST** /journals                | Request a journal.                   |
 
 # **delete_journal**
+
 > delete_journal(journal_id)
 
 Cancel a pending journal.
 
-You can cancel journals while they are in the pending status. An attempt to cancel already-executed journals will return an error. 
+You can cancel journals while they are in the pending status. An attempt to cancel already-executed journals will return an error.
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.JournalsApi(swagger_client.ApiClient(configuration))
-journal_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | 
+api_instance = broker_client.JournalsApi(broker_client.ApiClient(configuration))
+journal_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str |
 
 try:
     # Cancel a pending journal.
@@ -41,9 +43,9 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **journal_id** | [**str**](.md)|  | 
+| Name           | Type           | Description | Notes |
+| -------------- | -------------- | ----------- | ----- |
+| **journal_id** | [**str**](.md) |             |
 
 ### Return type
 
@@ -55,32 +57,34 @@ void (empty response body)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: Not defined
+- **Content-Type**: Not defined
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **events_journals_status_get**
+
 > InlineResponse2006 events_journals_status_get(since=since, until=until, since_id=since_id, until_id=until_id)
 
 Subscribe to journal events (SSE).
 
-Query Params Rules: - `since` required if `until` specified - `since_id` required if `until_id` specified - `since` and `since_id` can’t be used at the same time Behavior: - if `since` or `since_id` not specified this will not return any historic data - if `until` or `until_id` reached stream will end (status 200) 
+Query Params Rules: - `since` required if `until` specified - `since_id` required if `until_id` specified - `since` and `since_id` can’t be used at the same time Behavior: - if `since` or `since_id` not specified this will not return any historic data - if `until` or `until_id` reached stream will end (status 200)
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.JournalsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.JournalsApi(broker_client.ApiClient(configuration))
 since = '2013-10-20T19:20:30+01:00' # datetime |  (optional)
 until = '2013-10-20T19:20:30+01:00' # datetime |  (optional)
 since_id = 56 # int |  (optional)
@@ -96,12 +100,12 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **since** | **datetime**|  | [optional] 
- **until** | **datetime**|  | [optional] 
- **since_id** | **int**|  | [optional] 
- **until_id** | **int**|  | [optional] 
+| Name         | Type         | Description | Notes      |
+| ------------ | ------------ | ----------- | ---------- |
+| **since**    | **datetime** |             | [optional] |
+| **until**    | **datetime** |             | [optional] |
+| **since_id** | **int**      |             | [optional] |
+| **until_id** | **int**      |             | [optional] |
 
 ### Return type
 
@@ -113,30 +117,32 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_journals**
+
 > list[JournalResource] get_journals(after=after, before=before, status=status, entry_type=entry_type, to_account=to_account, from_account=from_account)
 
 Return a list of requested journals.
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.JournalsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.JournalsApi(broker_client.ApiClient(configuration))
 after = '2013-10-20' # date | by settle_date (optional)
 before = '2013-10-20' # date | by settle_date (optional)
 status = 'status_example' # str |  (optional)
@@ -154,14 +160,14 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **after** | **date**| by settle_date | [optional] 
- **before** | **date**| by settle_date | [optional] 
- **status** | **str**|  | [optional] 
- **entry_type** | **str**|  | [optional] 
- **to_account** | [**str**](.md)|  | [optional] 
- **from_account** | [**str**](.md)|  | [optional] 
+| Name             | Type           | Description    | Notes      |
+| ---------------- | -------------- | -------------- | ---------- |
+| **after**        | **date**       | by settle_date | [optional] |
+| **before**       | **date**       | by settle_date | [optional] |
+| **status**       | **str**        |                | [optional] |
+| **entry_type**   | **str**        |                | [optional] |
+| **to_account**   | [**str**](.md) |                | [optional] |
+| **from_account** | [**str**](.md) |                | [optional] |
 
 ### Return type
 
@@ -173,33 +179,35 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **post_journals**
+
 > JournalResource post_journals(body)
 
 Request a journal.
 
-A journal can be JNLC (move cash) or JNLS (move shares), dictated by `entry_type`. Generally, journal requests are subject to approval and starts from the `pending` status. The status changes are propagated through the Event API. Under certain conditions agreed for the partner, such journal transactions that meet the criteria are executed right away. 
+A journal can be JNLC (move cash) or JNLS (move shares), dictated by `entry_type`. Generally, journal requests are subject to approval and starts from the `pending` status. The status changes are propagated through the Event API. Under certain conditions agreed for the partner, such journal transactions that meet the criteria are executed right away.
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.JournalsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.JournalData() # JournalData | 
+api_instance = broker_client.JournalsApi(broker_client.ApiClient(configuration))
+body = broker_client.JournalData() # JournalData |
 
 try:
     # Request a journal.
@@ -211,9 +219,9 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **body** | [**JournalData**](JournalData.md)|  | 
+| Name     | Type                              | Description | Notes |
+| -------- | --------------------------------- | ----------- | ----- |
+| **body** | [**JournalData**](JournalData.md) |             |
 
 ### Return type
 
@@ -225,8 +233,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

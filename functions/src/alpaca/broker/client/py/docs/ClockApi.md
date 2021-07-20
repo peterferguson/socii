@@ -1,30 +1,32 @@
-# swagger_client.ClockApi
+# broker_client.ClockApi
 
 All URIs are relative to *https://broker-api.sandbox.alpaca.markets/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**clock_get**](ClockApi.md#clock_get) | **GET** /clock | Query market clock
+| Method                                 | HTTP request   | Description        |
+| -------------------------------------- | -------------- | ------------------ |
+| [**clock_get**](ClockApi.md#clock_get) | **GET** /clock | Query market clock |
 
 # **clock_get**
+
 > InlineResponse2003 clock_get()
 
 Query market clock
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.ClockApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.ClockApi(broker_client.ApiClient(configuration))
 
 try:
     # Query market clock
@@ -35,6 +37,7 @@ except ApiException as e:
 ```
 
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -47,8 +50,7 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

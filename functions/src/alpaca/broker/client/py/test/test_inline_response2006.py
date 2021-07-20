@@ -14,9 +14,9 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.models.inline_response2006 import InlineResponse2006  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.models.inline_response2006 import InlineResponse2006  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestInlineResponse2006(unittest.TestCase):
@@ -31,9 +31,9 @@ class TestInlineResponse2006(unittest.TestCase):
     def testInlineResponse2006(self):
         """Test InlineResponse2006"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = swagger_client.models.inline_response2006.InlineResponse2006()  # noqa: E501
+        # model = broker_client.models.inline_response2006.InlineResponse2006()  # noqa: E501
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -23,7 +23,7 @@ pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
 
 Then import the package:
 ```python
-import swagger_client 
+import broker_client 
 ```
 
 ### Setuptools
@@ -37,7 +37,7 @@ python setup.py install --user
 
 Then import the package:
 ```python
-import swagger_client
+import broker_client
 ```
 
 ## Getting Started
@@ -47,17 +47,17 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.DocumentUpload() # DocumentUpload | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.DocumentUpload() # DocumentUpload | 
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -66,12 +66,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->accounts_account_id_documents_upload_post: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 activity_type = 'activity_type_example' # str | 
 
 try:
@@ -81,12 +81,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->accounts_activities_activity_type_get: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 activity_type = 'activity_type_example' # str | The type of activity you wish to query (optional)
 _date = '_date_example' # str |  (optional)
 until = 'until_example' # str |  (optional)
@@ -98,12 +98,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->accounts_activities_get: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 query = 'query_example' # str | The query supports partial match of account number, names, emails, etc.. Items can be space delimited.  (optional)
 
 try:
@@ -113,13 +113,13 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->accounts_get: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.AccountCreationObject() # AccountCreationObject | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.AccountCreationObject() # AccountCreationObject | 
 
 try:
     # Create an account
@@ -128,12 +128,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->accounts_post: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -142,12 +142,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->delete_account: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 ach_relationship_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | ACH relationship identifier
 
@@ -157,12 +157,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->delete_ach_relationship: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 bank_id = 'bank_id_example' # str | 
 
@@ -172,12 +172,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->delete_recipient_bank: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = 'account_id_example' # str | 
 transfer_id = 'transfer_id_example' # str | 
 
@@ -187,12 +187,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->delete_transfer: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 since = '2013-10-20T19:20:30+01:00' # datetime |  (optional)
 until = '2013-10-20T19:20:30+01:00' # datetime |  (optional)
 since_id = 56 # int |  (optional)
@@ -205,12 +205,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->events_accounts_status_get: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -220,12 +220,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->get_account: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 statuses = 'statuses_example' # str | Comma-separated status values (optional)
 
@@ -236,12 +236,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->get_ach_relationships: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | 
 status = 'status_example' # str |  (optional)
 bank_name = 'bank_name_example' # str |  (optional)
@@ -253,12 +253,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->get_recipient_banks: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -268,12 +268,12 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->get_trading_account: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | 
 direction = 'direction_example' # str |  (optional)
 limit = 1.2 # float |  (optional)
@@ -286,13 +286,13 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->get_transfers: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.AccountUpdate() # AccountUpdate | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.AccountUpdate() # AccountUpdate | 
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -302,13 +302,13 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->patch_account: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.ACHRelationshipData() # ACHRelationshipData | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.ACHRelationshipData() # ACHRelationshipData | 
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -318,13 +318,13 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->post_ach_relationships: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.BankData() # BankData | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.BankData() # BankData | 
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | Account identifier.
 
 try:
@@ -334,13 +334,13 @@ try:
 except ApiException as e:
     print("Exception when calling AccountsApi->post_recipient_banks: %s\n" % e)
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AccountsApi(swagger_client.ApiClient(configuration))
-body = swagger_client.TransferData() # TransferData | 
+api_instance = broker_client.AccountsApi(broker_client.ApiClient(configuration))
+body = broker_client.TransferData() # TransferData | 
 account_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # str | 
 
 try:

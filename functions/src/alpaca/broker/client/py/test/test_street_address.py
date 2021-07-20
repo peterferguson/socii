@@ -14,9 +14,9 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.models.street_address import StreetAddress  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.models.street_address import StreetAddress  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestStreetAddress(unittest.TestCase):
@@ -31,9 +31,9 @@ class TestStreetAddress(unittest.TestCase):
     def testStreetAddress(self):
         """Test StreetAddress"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = swagger_client.models.street_address.StreetAddress()  # noqa: E501
+        # model = broker_client.models.street_address.StreetAddress()  # noqa: E501
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
