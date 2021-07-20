@@ -3,7 +3,7 @@
 
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import  { handleAccounts }  from "@pages/api/alpaca/accounts"
-import { AccountCreationObject , AccountUpdate } from "@alpaca/models"
+import { AccountCreationObject , AccountUpdate, Account } from "@alpaca/models"
 import { performance } from "perf_hooks"
 //import {testAccount} from "../../../pages/api/alpaca/requests/accounts"
 // potentially change extenstion 
@@ -16,9 +16,13 @@ import { performance } from "perf_hooks"
   4. Performance check (responsed in a reasonable time)
 */
 
+//TODO futureproof numbers
+const setupEmail = "tests"+Math.floor(Math.random()*100000)+"@socii.com"
+const setupEmailUpdate = "tests"+Math.floor(Math.random()*100000)+"@socii.com"
+let tmpAccountId: string="" 
 const testAccount = {
     contact: {
-      email_address: "tests6@socii.com",
+      email_address: setupEmail,
       phone_number: "+442137981999",
       street_address: ["123 Social Drive"],
       city: "Belfast",
@@ -73,23 +77,19 @@ const testAccount = {
         mime_type: "image/jpeg",
       },
     ],
-  }
-
+}
 const testUpdate = {
 
     contact: {
-        "email_address": "tests6@socii.com"
+      "email_address": setupEmailUpdate
     },
 }
-
-
-console.log(testUpdate)
 
 const accountsTest = nextApiHandlerTest(handleAccounts, "/api/alpaca/accounts")
 
 describe.skip("/api/alpaca/accounts", () => {
   it(
-    "check if an account has been succesfully creaated",
+    "Check if an account has been succesfully CREATED",
     accountsTest(async ({ fetch }) => {
       const startTime = performance.now()
       const res = await fetch({
@@ -98,48 +98,69 @@ describe.skip("/api/alpaca/accounts", () => {
         body: JSON.stringify(testAccount),
       })
       const finishTime = performance.now()
-
       expect(res.status).toBe(201)
-      expect(await res.json()).toEqual(AccountCreationObject) // potentially more specific?
-      //expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in one second
-      console.log(finishTime - startTime)
+        const accountResponse = Account.from(await res.json())
+      // TODO check full attribute list.. seems to be generating something differet to response
+      expect(typeof accountResponse.id === 'string')
+        tmpAccountId = accountResponse.id
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in one second
+        console.log(finishTime - startTime)
     })
   )
   it(
-    "checks if an emil has been updated for an account",
+    "Check if an account can be found",
+    accountsTest(async ({ fetch }) => {
+      const startTime = performance.now()
+      const res = await fetch({
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({accountId: tmpAccountId}),
+      })
+
+      const finishTime = performance.now()
+      expect(res.status).toBe(200)
+        const accountResponse = Account.from(await res.json())
+      // TODO check full attribute list.. seems to be generating something differet to response
+      expect(accountResponse.id === tmpAccountId)
+        tmpAccountId = accountResponse.id
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in one second
+        console.log(finishTime - startTime)
+    })
+  )
+  it(
+    "checks if an email has been updated for an account PATCH",
     accountsTest(async ({ fetch }) => {
       const startTime = performance.now()
       const res = await fetch({
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: {
-            accountId: "1ccad4f7-336b-4fff-a52c-c422b79cca9e",
-            updateBody: testUpdate
-        }
-    
+        body: JSON.stringify({ accountId: tmpAccountId , accountUpdate: testUpdate})   
       })
-      const finishTime = performance.now()
 
-      expect(res.status).toBe(204)
-      //expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in one second
-      console.log(finishTime - startTime)
+      const finishTime = performance.now()
+      expect(res.status).toBe(200)
+        const accountResponse: Account = Account.from(await res.json())
+        tmpAccountId = accountResponse.id
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in one second
+        console.log(finishTime - startTime)
     })
   )
-
   it(
-    "deletes an account",
+    // Potentially add further check to see if account exists ??
+    "test DELETE an account",
     accountsTest(async ({ fetch }) => {
       const startTime = performance.now()
       const res = await fetch({
         method: "DELETE",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ accountId: "47be7a48-13bc-485d-903a-73ea337d156a" }),
+        body: JSON.stringify({ accountId: tmpAccountId }),
       })
+
       const finishTime = performance.now()
       console.log(finishTime - startTime)
-
       expect(res.status).toBe(204)
-      //expect(finishTime - startTime).toBeLessThanOrEqual(1500) // - runs in 1.5 seconds
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - runs in 1 second
     })
   )
+  
 })
