@@ -145,7 +145,7 @@ export function TransferResourceFromJSON(json: any): TransferResource {
     return TransferResourceFromJSONTyped(json, false);
 }
 
-export function TransferResourceFromJSONTyped(json: any, ignoreDiscriminator: boolean): TransferResource {
+export function TransferResourceFromJSONTyped(json: any, ignoreDiscriminator: boolean): TransferResource | Untyped {
     if ((json === undefined) || (json === null)) {
         return json;
     }

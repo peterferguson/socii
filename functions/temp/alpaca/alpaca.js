@@ -14,11 +14,12 @@ const baseURL = "https://broker-api.sandbox.alpaca.markets/"
 
 const getAssets = async () => {
   try {
-    return await getJSON(`${baseURL}/v1/assets`, { Authorization: `Basic ${authHeader}` })
+    return await getJSON(`${baseURL}/v1/assets`, {
+      Authorization: `Basic ${authHeader}`,
+    })
   } catch (err) {
     console.log(err)
   }
 }
 
 // console.log(getAssets())
-
