@@ -126,7 +126,7 @@ describe("/api/alpaca/orders", () => {
     "verifies the order was patched by querying all orders",
     ordersTest(async ({ fetch }) => {
       if (!orderId) throw new Error("orderId not found")
-
+      //TODO: Add isMarketOpen condition
       const startTime = performance.now()
 
       const res = await fetch({
