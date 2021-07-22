@@ -1,6 +1,11 @@
 // README Funding tests rely on data which must match that of accounts found in the broker
 // this should be updated as we move to a specific test broker rather than our own accounts
 
+
+/* 
+ ! SANDBOX ONLY SUPPORTS ACH TRANSFERS AT THE MOMENT
+*/
+
 import { handleFunding } from "@pages/api/alpaca/funding"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
@@ -24,9 +29,9 @@ describe("/api/alpaca/funding", () => {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          accountId: process.env.ALPACA_FIRM_ACCOUNT,
+          accountId: process.env.ALPACA_TEST_ACCOUNT,
           transferData: {
-            transferType: "ach",
+            transferType: "wire",
             relationshipId: "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
             amount: "500",
             direction: "INCOMING",
@@ -39,8 +44,8 @@ describe("/api/alpaca/funding", () => {
       expect(await res.json()).toMatchObject({
         id: expect.any(String),
         relationshipId: "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
-        accountId: "2bd90dfc-949d-4601-b262-4f4cd201fa27",
-        type: "ach",
+        accountId: process.env.ALPACA_TEST_ACCOUNT,
+        type: "wire",
         status: "QUEUED",
         amount: "500",
         direction: "INCOMING",
