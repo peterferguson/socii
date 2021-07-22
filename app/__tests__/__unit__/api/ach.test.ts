@@ -18,14 +18,14 @@ let accountId: string = process.env.ALPACA_TEST_ACCOUNT
 
 describe("/api/alpaca/ach", () => {
   it(
-    "check if the test bank resource is connected to the account, querying it by name `name`",
+    "check if the test account already has an ach relationship",
     achTest(async ({ fetch }) => {
       const startTime = performance.now()
 
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ accountId }),
+        body: JSON.stringify({ accountId, statuses: ["ACTIVE"] }),
       })
       const finishTime = performance.now()
       const responseBody = await res.json()
@@ -33,20 +33,16 @@ describe("/api/alpaca/ach", () => {
       expect(res.status).toBe(200)
       expect(responseBody).toBeInstanceOf(Array)
 
-      const filteredArray = responseBody.filter(
-        (ach) => ach.nickname === achData.nickname
-      )
-      if (filteredArray.length > 0) {
-        expect(filteredArray.length).toBe(1)
-        expect(filteredArray[0]).toMatchObject({ ...achData })
-        achRelationshipId = filteredArray[0].id
+      if (responseBody.length) {
+        expect(responseBody[0]).toMatchObject({ ...achData })
+        achRelationshipId = responseBody[0].id
       }
       expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
     })
   )
 
   it(
-    "deletes the pre-existing bank account",
+    "deletes the pre-existing ach relationship",
     achTest(async ({ fetch }) => {
       if (achRelationshipId) {
         const startTime = performance.now()
@@ -64,31 +60,27 @@ describe("/api/alpaca/ach", () => {
   )
 
   it(
-    "check if the test bank resource has been deleted",
+    "check if the test ach relationship has been deleted",
     achTest(async ({ fetch }) => {
       const startTime = performance.now()
 
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ accountId }),
+        body: JSON.stringify({ accountId, statuses: ["ACTIVE"] }),
       })
       const finishTime = performance.now()
       const responseBody = (await res.json()).map(ACHRelationshipResource.from)
 
       expect(res.status).toBe(200)
       expect(responseBody).toBeInstanceOf(Array)
-
-      const filteredArray = responseBody.filter(
-        (ach) => ach.nickname === achData.nickname
-      )
-      expect(filteredArray.length).toBe(0)
+      expect(responseBody.length).toBe(0)
       expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
     })
   )
 
   it(
-    "adds a bank account to a user account",
+    "adds a ach relationship to an account",
     achTest(async ({ fetch }) => {
       const startTime = performance.now()
       const res = await fetch({
@@ -117,7 +109,7 @@ describe("/api/alpaca/ach", () => {
   )
 
   it(
-    "verifies the bank resource is connected to the account, querying it by `name`",
+    "verifies the ach relationship is connected to the account",
     achTest(async ({ fetch }) => {
       if (!achRelationshipId) throw new Error("achRelationshipId not found")
 
@@ -126,7 +118,10 @@ describe("/api/alpaca/ach", () => {
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ accountId }),
+        body: JSON.stringify({
+          accountId,
+          statuses: ["ACTIVE,QUEUED,APPROVED,PENDING"],
+        }),
       })
       const finishTime = performance.now()
       const responseBody = await res.json()
@@ -159,7 +154,7 @@ describe("/api/alpaca/ach", () => {
     })
   )
   it(
-    "verifies the bank resource has been deleted from the account, querying it by `name`",
+    "verifies the ach relationship has been deleted from the account",
     achTest(async ({ fetch }) => {
       if (!achRelationshipId) throw new Error("achRelationshipId not found")
 
@@ -168,15 +163,17 @@ describe("/api/alpaca/ach", () => {
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ accountId }),
+        body: JSON.stringify({
+          accountId,
+          statuses: ["ACTIVE,QUEUED,APPROVED,PENDING"],
+        }),
       })
       const finishTime = performance.now()
       const responseBody = await res.json()
 
       expect(res.status).toBe(200)
       expect(responseBody).toBeInstanceOf(Array)
-      const filteredArray = responseBody.filter((ach) => ach.id === achRelationshipId)
-      expect(filteredArray.length).toBe(0)
+      expect(responseBody.length).toBe(0)
       expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
     })
   )

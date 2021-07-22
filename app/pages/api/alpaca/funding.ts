@@ -16,6 +16,8 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
     case "POST": {
       // - If transfer data is included - post the transfer
       if (transferData) {
+        console.log(transferData)
+        console.log(TransferData.from(transferData))
         try {
           const postTransfer = await fundClient.postTransfers(
             accountId,
@@ -25,6 +27,7 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
             .status(200)
             .json(ObjectSerializer.deserialize(postTransfer, typeof postTransfer, ""))
         } catch (error) {
+          console.log(error)
           res.status(400).end(`Failed to post transfer with error: ${error}`)
         }
       }
@@ -39,6 +42,7 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
               ObjectSerializer.deserialize(getTransfers, "Array<TransferResource>", "")
             )
         } catch (error) {
+          console.log(error)
           res.status(400).end(`Failed to get transfers list with error: ${error}`)
         }
       }
@@ -50,6 +54,7 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
         await fundClient.deleteTransfer(accountId, transferData.id)
         res.status(204).end(`Deleted transfer with id ${transferData.id}`)
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to delete transfer with error: ${error}`)
       }
       break

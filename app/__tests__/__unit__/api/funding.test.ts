@@ -1,12 +1,12 @@
 // README Funding tests rely on data which must match that of accounts found in the broker
 // this should be updated as we move to a specific test broker rather than our own accounts
 
-
 /* 
  ! SANDBOX ONLY SUPPORTS ACH TRANSFERS AT THE MOMENT
 */
 
 import { handleFunding } from "@pages/api/alpaca/funding"
+import { TransferResource } from "@alpaca"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
 
@@ -20,6 +20,8 @@ import { performance } from "perf_hooks"
 
 const fundingTest = nextApiHandlerTest(handleFunding, "/api/alpaca/funding")
 
+let fundingId: string = ""
+
 describe("/api/alpaca/funding", () => {
   it(
     "Check if an account has been succesfully funded (send transfer)",
@@ -29,23 +31,26 @@ describe("/api/alpaca/funding", () => {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          accountId: process.env.ALPACA_TEST_ACCOUNT,
+          accountId: process.env.ALPACA_FIRM_ACCOUNT,
           transferData: {
-            transferType: "wire",
-            relationshipId: "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
+            transferType: "ach",
+            relationshipId: process.env.ALPACA_FIRM_ACCOUNT_ACH,
             amount: "500",
             direction: "INCOMING",
           },
         }),
       })
       const finishTime = performance.now()
+      
+      const fundingResponse: TransferResource = TransferResource.from(await res.json())
+      fundingId = fundingResponse.id
 
       expect(res.status).toBe(200)
-      expect(await res.json()).toMatchObject({
+      expect(fundingResponse).toMatchObject({
         id: expect.any(String),
-        relationshipId: "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
-        accountId: process.env.ALPACA_TEST_ACCOUNT,
-        type: "wire",
+        relationshipId: process.env.ALPACA_FIRM_ACCOUNT_ACH,
+        accountId: process.env.ALPACA_FIRM_ACCOUNT,
+        type: "ach",
         status: "QUEUED",
         amount: "500",
         direction: "INCOMING",
@@ -65,8 +70,15 @@ describe("/api/alpaca/funding", () => {
       })
       const finishTime = performance.now()
 
+      const queryResponse: Array<TransferResource> = await res.json()
+
       expect(res.status).toBe(200)
-      expect(await res.json()).toBeInstanceOf(Array)
+      expect(queryResponse).toBeInstanceOf(Array)
+      const filteredQueryResponse = queryResponse.filter(
+        (transfer) => transfer.id === fundingId
+      )
+      // TODO: Test the correct ids are set
+      // expect(filteredQueryResponse).toHaveLength(1)
       expect(finishTime - startTime).toBeLessThanOrEqual(10000) // - runs in one second ** correct time
       console.log(finishTime - startTime)
     })
