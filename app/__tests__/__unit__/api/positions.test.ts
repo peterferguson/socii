@@ -24,16 +24,10 @@ describe("/api/alpaca/positions", () => {
       if (positionsResponse.length === 0) {
         expect(1).toBe(1)
       } else {
-        // - Check all positions have all the required fields of a `Position`
         expect(
-          positionsResponse.length ===
-            positionsResponse.filter((position) =>
-              Object.keys(position).map((key) =>
-                Position.getAttributeTypeMap()
-                  .map(({ name }) => name)
-                  .includes(key)
-              )
-            )
+          positionsResponse.every((position) =>
+            ["symbol", "qty", "exchange"].every((key) => key in position)
+          )
         ).toBe(true)
       }
       expect(finishTime - startTime).toBeLessThan(1000)
