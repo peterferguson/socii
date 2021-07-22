@@ -1,9 +1,8 @@
 // README Funding tests rely on data which must match that of accounts found in the broker
 // this should be updated as we move to a specific test broker rather than our own accounts
 
+import { handleFunding } from "@pages/api/alpaca/funding"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
-import  { handleFunding }  from "@pages/api/alpaca/funding"
-import { AssetResource, TransferData , TransferResource } from "@alpaca/models"
 import { performance } from "perf_hooks"
 
 /*
@@ -13,13 +12,6 @@ import { performance } from "perf_hooks"
   3. Correct response headers
   4. Performance check (responsed in a reasonable time)
 */
-const testAccountId = "2bd90dfc-949d-4601-b262-4f4cd201fa27"
-const testTransfer= {
-  "transferType" : "ach",
-  "relationshipId" : "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
-  "amount" : "500",
-  "direction" : "INCOMING",
-}
 
 const fundingTest = nextApiHandlerTest(handleFunding, "/api/alpaca/funding")
 
@@ -31,7 +23,15 @@ describe("/api/alpaca/funding", () => {
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({accountId: testAccountId , transferData: testTransfer}),
+        body: JSON.stringify({
+          accountId: process.env.ALPACA_FIRM_ACCOUNT,
+          transferData: {
+            transferType: "ach",
+            relationshipId: "4140bbf6-49e1-4340-9b84-b9a8c6b38b89",
+            amount: "500",
+            direction: "INCOMING",
+          },
+        }),
       })
       const finishTime = performance.now()
 
@@ -56,7 +56,7 @@ describe("/api/alpaca/funding", () => {
       const res = await fetch({
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({accountId: testAccountId})
+        body: JSON.stringify({ accountId: process.env.ALPACA_FIRM_ACCOUNT }),
       })
       const finishTime = performance.now()
 
@@ -66,5 +66,4 @@ describe("/api/alpaca/funding", () => {
       console.log(finishTime - startTime)
     })
   )
-
 })

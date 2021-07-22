@@ -1,5 +1,4 @@
-import { JournalsApi, config, JournalData } from "@alpaca/index"
-import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
+import { ObjectSerializer, JournalsApi, config, JournalData } from "@alpaca/index"
 import { NextApiResponse, NextApiRequest } from "next"
 
 const journalApi = new JournalsApi(config)
@@ -39,8 +38,8 @@ export async function handleJournal(req: NextApiRequest, res: NextApiResponse) {
     case "DELETE":
       try {
         const { journalId } = body
-        const deleteResponse = await journalApi.deleteJournal(journalId)
-        res.status(200).end(`Delete journal entry with id ${journalId}`)
+        await journalApi.deleteJournal(journalId)
+        res.status(204).end(`Delete journal entry with id ${journalId}`)
       } catch (error) {
         res.status(400).end(`Failed to delete journal entry with error: ${error}`)
       }
