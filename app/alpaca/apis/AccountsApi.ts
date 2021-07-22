@@ -946,6 +946,7 @@ export class AccountsApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     // Path Params
+    //console.log("_______" ,  accountId)
     const localVarPath = "/accounts/{account_id}".replace(
       "{" + "account_id" + "}",
       encodeURIComponent(String(accountId))
