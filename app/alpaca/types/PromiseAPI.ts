@@ -411,7 +411,6 @@ export class PromiseAccountsApi {
     options?: Configuration
   ): Promise<BankResource> {
     const result = this.api.postRecipientBanks(accountId, bankData, options)
-    result.toPromise().then(console.log)
     return result.toPromise()
   }
 

@@ -34,7 +34,6 @@ export async function handleBanking(req: NextApiRequest, res: NextApiResponse) {
           status ?? "",
           name ?? ""
         )
-        console.log(bankAccounts)
 
         res
           .status(200)
