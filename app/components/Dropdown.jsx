@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { useAuth } from "@hooks/useAuth"
 import { Popover, Transition } from "@headlessui/react"
-import { signOut } from "@lib/firebase"
+import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
-import Router from "next/router"
-import React, { Fragment, useContext, useEffect } from "react"
+import React, { Fragment, useEffect } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
   HiMenu,
@@ -60,20 +58,19 @@ const dropdownItems = [
   },
 ]
 
-const grayedDropdownItems = [
-  {
-    name: "Sign Out",
-    description: "",
-    href: "",
-    icon: VscSignOut,
-    onClick: () => signOut(Router),
-  },
-]
-
 export default function Dropdown() {
   // const [dropdownOpen, setDropdownOpen] = useState(false)
   // // const [openSettings, setOpenSettings] = useState(false);
-  const { username } = useAuth()
+  const { username, signout } = useAuth()
+  const grayedDropdownItems = [
+    {
+      name: "Sign Out",
+      description: "",
+      href: "",
+      icon: VscSignOut,
+      onClick: signout,
+    },
+  ]
 
   useEffect(() => {
     dropdownItems.unshift({

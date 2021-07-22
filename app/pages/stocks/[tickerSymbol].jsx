@@ -1,10 +1,10 @@
 import LineChart from "@components/LineChart"
 import SelectGroupModal from "@components/SelectGroupModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
-import { tailwindColorMap } from "@lib/constants"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
-import { firestore } from "@lib/firebase"
 import { useAuth } from "@hooks/useAuth"
+import { tailwindColorMap } from "@lib/constants"
+import { firestore } from "@lib/firebase"
 import { isBrowser } from "@utils/isBrowser"
 import { logoUrl } from "@utils/logoUrl"
 import { pctChange } from "@utils/pctChange"
@@ -19,6 +19,9 @@ export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
   const { user, userGroups } = useAuth()
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
+
+  console.log(tickerSymbols)
+  console.log(ticker)
 
   timeseries = timeseries?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
@@ -38,7 +41,10 @@ export default function TickerPage({ tickerSymbols }) {
     const setLogoUrl = async () =>
       setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
 
-    if (ticker) setLogoUrl()
+    if (ticker) {
+      console.log(ticker.ISIN)
+      setLogoUrl()
+    }
   }, [ticker])
 
   if (router.isFallback) return <div>Loading...</div>
