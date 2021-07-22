@@ -30,7 +30,7 @@ export * from "./IdentifiedResource"
 export * from "./Identity"
 export * from "./InlineObject"
 export * from "./InlineObject1"
-export * from "./InlineResponse200"
+export * from "./TradingAccount"
 export * from "./InlineResponse2003"
 export * from "./InlineResponse2004"
 export * from "./InlineResponse2005"
@@ -92,7 +92,7 @@ import { IdentifiedResource } from "./IdentifiedResource"
 import { Identity } from "./Identity"
 import { InlineObject } from "./InlineObject"
 import { InlineObject1 } from "./InlineObject1"
-import { InlineResponse200 } from "./InlineResponse200"
+import { TradingAccount } from "./TradingAccount"
 import { InlineResponse2003 } from "./InlineResponse2003"
 import { InlineResponse2004 } from "./InlineResponse2004"
 import { InlineResponse2005 } from "./InlineResponse2005"
@@ -233,7 +233,7 @@ let typeMap: { [index: string]: any } = {
   Identity: Identity,
   InlineObject: InlineObject,
   InlineObject1: InlineObject1,
-  InlineResponse200: InlineResponse200,
+  TradingAccount: TradingAccount,
   MarketDay: MarketDay,
   ClockResponse: ClockResponse,
   InlineResponse2003: InlineResponse2003,

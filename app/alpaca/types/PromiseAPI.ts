@@ -43,7 +43,7 @@ import { CreateOrder } from "../models/CreateOrder"
 import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
-import { InlineResponse200 } from "../models/InlineResponse200"
+import { TradingAccount } from "../models/TradingAccount"
 import { MarketDay } from "../models/MarketDay"
 import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
@@ -344,7 +344,7 @@ export class PromiseAccountsApi {
   public getTradingAccount(
     accountId: string,
     options?: Configuration
-  ): Promise<InlineResponse200> {
+  ): Promise<TradingAccount> {
     const result = this.api.getTradingAccount(accountId, options)
     return result.toPromise()
   }

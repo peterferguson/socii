@@ -44,7 +44,7 @@ import { CreateOrder } from "../models/CreateOrder"
 import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
-import { InlineResponse200 } from "../models/InlineResponse200"
+import { TradingAccount } from "../model/TradingAccount"
 import { MarketDay } from "../models/MarketDay"
 import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
@@ -675,7 +675,7 @@ export class ObservableAccountsApi {
   public getTradingAccount(
     accountId: string,
     options?: Configuration
-  ): Observable<InlineResponse200> {
+  ): Observable<TradingAccount> {
     const requestContextPromise = this.requestFactory.getTradingAccount(
       accountId,
       options

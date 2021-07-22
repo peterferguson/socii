@@ -12,7 +12,7 @@
 
 import { AccountStatus } from "./AccountStatus"
 
-export class InlineResponse200 {
+export class TradingAccount {
   "id"?: string
   "accountNumber"?: string
   "status"?: AccountStatus
@@ -298,7 +298,7 @@ export class InlineResponse200 {
   ]
 
   static getAttributeTypeMap() {
-    return InlineResponse200.attributeTypeMap
+    return TradingAccount.attributeTypeMap
   }
 
   static from(json) {
