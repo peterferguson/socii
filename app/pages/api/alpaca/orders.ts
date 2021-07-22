@@ -70,6 +70,7 @@ export async function handleOrders(
             .json(ObjectSerializer.deserialize(queryResponse, "Array<OrderObject>", ""))
         }
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to retrieve order(s) with error: ${error}`)
       }
       break
@@ -87,6 +88,7 @@ export async function handleOrders(
           .status(200)
           .json(ObjectSerializer.deserialize(patchResponse, "OrderObject", ""))
       } catch (error) {
+        console.log(error)
         if (error.message.includes("order isn't sent to exchange yet")) {
           res.status(422).end(error.message)
         } else {
@@ -107,6 +109,7 @@ export async function handleOrders(
           .status(200)
           .json(ObjectSerializer.deserialize(postResponse, "OrderObject", ""))
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to create order with error: ${error}`)
       }
       break
@@ -131,6 +134,7 @@ export async function handleOrders(
             )
         }
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to delete order with error: ${error}`)
       }
       break
