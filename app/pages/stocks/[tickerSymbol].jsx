@@ -1,4 +1,3 @@
-import LineChart from "@components/LineChart"
 import SelectGroupModal from "@components/SelectGroupModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
@@ -12,16 +11,14 @@ import { pnlTextColor } from "@utils/pnlTextColor"
 import { stockProps } from "@utils/stockProps"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import { useMediaQuery } from "react-responsive"
 import Custom404 from "../404"
+import { PriceCard } from "@components/PriceCard"
+import { Chart } from "@components/Chart"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
   const { user, userGroups } = useAuth()
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
-
-  console.log(tickerSymbols)
-  console.log(ticker)
 
   timeseries = timeseries?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
@@ -41,10 +38,7 @@ export default function TickerPage({ tickerSymbols }) {
     const setLogoUrl = async () =>
       setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
 
-    if (ticker) {
-      console.log(ticker.ISIN)
-      setLogoUrl()
-    }
+    if (ticker) setLogoUrl()
   }, [ticker])
 
   if (router.isFallback) return <div>Loading...</div>
@@ -167,99 +161,6 @@ function TickerComponents({
         highlightedClose={highlightedClose}
       />
     </>
-  )
-}
-
-function PriceCard({
-  logoUrl,
-  tickerSymbol,
-  shortName,
-  currentPrice,
-  gainColor,
-  currencySymbol = "$",
-  movingMonthlyPctChange,
-}) {
-  return (
-    <div className="p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-gray-800">
-      <div className="flex items-center">
-        <img
-          className="w-16 h-auto mx-auto rounded-full shadow-lg"
-          src={logoUrl}
-          alt={`${tickerSymbol} logo`}
-        />
-        <div className="flex flex-col">
-          <span className="ml-2 font-bold tracking-wider text-gray-700 uppercase text-md dark:text-white">
-            {tickerSymbol}
-          </span>
-          <br />
-          <span className="ml-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-white">
-            {shortName}
-          </span>
-        </div>
-      </div>
-      <div className="flex flex-col justify-start">
-        <p className="my-4 text-4xl font-bold text-left text-gray-700 dark:text-gray-100">
-          {currentPrice}
-          <span className="text-sm">{currencySymbol}</span>
-        </p>
-        <div className={`flex items-center text-sm ${gainColor}`}>
-          <svg
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 1792 1792"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1408 1216q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z"></path>
-          </svg>
-          <span>{movingMonthlyPctChange.toFixed(2)}%</span>
-          <span className="text-gray-400 align-bottom text-tiny">vs last month</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Chart({
-  timeseries,
-  crosshairIndexValue,
-  setCrosshairIndexValue,
-  highlightedChange,
-  highlightedClose,
-}) {
-  const is1Col = !useMediaQuery({ minWidth: 640 })
-  return (
-    <div className="flex items-center justify-center w-full h-2/3 ">
-      <div className="w-full p-2 m-4 bg-white shadow-lg rounded-xl">
-        <div className="flex justify-between w-full h-20">
-          <div className="flex-grow"></div>
-          <div className="flex-none p-2 sm:p-4">
-            <span className="z-10 text-lg leading-4 sm:text-4xl">
-              ${highlightedClose}
-              {highlightedChange && (
-                <p className={`flex text-tiny ${pnlTextColor(highlightedChange)}`}>
-                  {`(${highlightedChange})%`}
-                </p>
-              )}
-              <p className="flex text-gray-300 text-tiny">
-                {`on ${timeseries[crosshairIndexValue].x.toLocaleDateString()}`}
-              </p>
-            </span>
-          </div>
-        </div>
-        {timeseries ? (
-          <LineChart
-            crosshairIndexValue={crosshairIndexValue}
-            setCrosshairIndexValue={setCrosshairIndexValue}
-            timeseries={timeseries}
-            heightScale={is1Col ? 0.35 : 0.6}
-            widthScale={is1Col ? 0.8 : 0.65}
-          />
-        ) : (
-          <div>Loading</div>
-        )}
-      </div>
-    </div>
   )
 }
 
