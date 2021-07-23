@@ -1,7 +1,7 @@
 import Invite from "@components/Invite"
 import Logo from "@components/Logo"
 import SociiFeatureSlider from "@components/SociiFeatureSlider"
-import { OneTwoThree } from "@components/WhySocii"
+import { OneTwoThree } from "@components/OneTwoThree"
 import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
 import React, { useState } from "react"

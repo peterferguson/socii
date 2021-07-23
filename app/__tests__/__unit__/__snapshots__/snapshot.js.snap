@@ -79,7 +79,7 @@ Array [
               Investing with friends
             </h2>
             <h2
-              className="mb-4 text-4xl font-extrabold underline lg:text-4xl font-heading dark:text-white"
+              className="mb-4 text-4xl font-extrabold text-transparent bg-gradient-to-r bg-clip-text to-brand-lightGreen from-brand via-brand-cyan-vivid lg:text-4xl font-heading dark:text-white"
             >
               has never been easier!
             </h2>
@@ -109,7 +109,7 @@ Array [
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/10"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   1
                 </span>
@@ -130,13 +130,13 @@ Array [
               </div>
             </li>
             <li
-              className="flex p-2 -mx-4 border-2 border-transparent rounded-xl transition duration-300 hover:border-brand hover:btn-transition animate-fade-in-down "
+              className="flex p-2 -mx-4 border-2 border-transparent rounded-xl transition duration-300 hover:border-brand hover:btn-transition animate-fade-in-down"
             >
               <div
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/10"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   2
                 </span>
@@ -157,13 +157,13 @@ Array [
               </div>
             </li>
             <li
-              className="flex p-2 -mx-4 border-2 border-transparent rounded-xl transition duration-300 hover:border-brand hover:btn-transition animate-fade-in-down "
+              className="flex p-2 -mx-4 border-2 border-transparent rounded-xl transition duration-300 hover:border-brand hover:btn-transition animate-fade-in-down"
             >
               <div
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/10"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   3
                 </span>
