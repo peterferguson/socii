@@ -21,8 +21,8 @@ export const HeaderButtonChildren = (props: IHeaderButton) => (
           <span
             aria-hidden="true"
             className={`
-            absolute inline-block w-3 h-3 bg-red-600 border-2 border-white 
-            rounded-full top-0 right-0 dark:border-gray-800
+            absolute w-3 h-3 animate-pulse bg-red-600 border-2 border-white 
+            rounded-full -top-0.5 -right-0.5 dark:border-gray-800
             `}
           />
         )}

@@ -44,7 +44,7 @@ describe("/api/alpaca/banking", () => {
         })
         bankId = filteredArray[0].id
       }
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
 
@@ -61,7 +61,7 @@ describe("/api/alpaca/banking", () => {
         const finishTime = performance.now()
 
         expect(res.status).toBe(204)
-        expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+        expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
       }
     })
   )
@@ -84,7 +84,7 @@ describe("/api/alpaca/banking", () => {
 
       const filteredArray = responseBody.filter((bank) => bank.name === bankData.name)
       expect(filteredArray.length).toBe(0)
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
 
@@ -109,7 +109,7 @@ describe("/api/alpaca/banking", () => {
         bankCode: bankData.bank_code,
         bankCodeType: "BIC",
       })
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
 
@@ -134,7 +134,7 @@ describe("/api/alpaca/banking", () => {
       const filteredArray = responseBody.filter((bank) => bank.id === bankId)
       expect(filteredArray.length).toBe(1)
       expect(filteredArray[0]).toMatchObject({ name: bankData.name })
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
 
@@ -152,7 +152,7 @@ describe("/api/alpaca/banking", () => {
       const finishTime = performance.now()
 
       expect(res.status).toBe(204)
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
   it(
@@ -174,7 +174,7 @@ describe("/api/alpaca/banking", () => {
       expect(responseBody).toBeInstanceOf(Array)
       const filteredArray = responseBody.filter((bank) => bank.id === bankId)
       expect(filteredArray.length).toBe(0)
-      expect(finishTime - startTime).toBeLessThanOrEqual(750) // - units: ms
+      expect(finishTime - startTime).toBeLessThanOrEqual(1000) // - units: ms
     })
   )
 })
