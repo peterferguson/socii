@@ -33,9 +33,9 @@ export const HeaderButtonChildren = (props: IHeaderButton) => (
 
 export default function HeaderButton(props: IHeaderButton) {
   return (
-    <div className="relative" onClick={props.onClick}>
+    <div onClick={props.onClick}>
       <button
-        className={`header-btn ${props.className || ""}`}
+        className={`header-btn relative ${props.className || ""}`}
         aria-label={props.name}
         aria-haspopup="true"
       >

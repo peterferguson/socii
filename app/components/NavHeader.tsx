@@ -43,7 +43,6 @@ export default function NavHeader({
               icon={() => <HiOutlineMail className="w-6 h-6" />}
               onClick={() => setShowChat(!showChat)}
               hasNotifications={true}
-              className="relative"
             />
             <HeaderDropdownButton
               name="Settings Dropdown"
