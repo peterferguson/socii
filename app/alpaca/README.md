@@ -9,7 +9,7 @@
     - [Converting some exports to types](#converting-some-exports-to-types)
     - [Incorrect(?) typing in constructor of `TransferData.ts`](#incorrect-typing-in-constructor-of-transferdatats)
     - [Similarly for `TransferResource.ts`](#similarly-for-transferresourcets)
-    - [ObjectSerialiser needs updated to coalesce nulls in data](#objectserialiser-needs-updated-to-coalesce-nulls-in-data)
+    - [ObjectSerialiser serialize & deserialize methods need to coalesce nulls in data](#objectserialiser-serialize--deserialize-methods-need-to-coalesce-nulls-in-data)
 
 ---
 
@@ -173,7 +173,7 @@ public constructor() {}
 
 ---
 
-### ObjectSerialiser needs updated to coalesce nulls in data
+### ObjectSerialiser serialize & deserialize methods need to coalesce nulls in data
 
 Add coalescing for empty data keys
 
@@ -190,6 +190,26 @@ becomes
 ```ts
 instance[attributeType.baseName] = ObjectSerializer.serialize(
   data[attributeType.name] ?? data[attributeType.baseName],
+  attributeType.type,
+  attributeType.format
+)
+```
+
+and also
+
+```ts
+instance[attributeType.baseName] = ObjectSerializer.serialize(
+  data[attributeType.baseName],
+  attributeType.type,
+  attributeType.format
+)
+```
+
+becomes
+
+```ts
+instance[attributeType.name] = ObjectSerializer.deserialize(
+  data[attributeType.baseName] ?? data[attributeType.name],
   attributeType.type,
   attributeType.format
 )

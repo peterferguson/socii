@@ -391,7 +391,7 @@ export class ObjectSerializer {
       for (let index in attributeTypes) {
         let attributeType = attributeTypes[index]
         instance[attributeType.name] = ObjectSerializer.deserialize(
-          data[attributeType.baseName],
+          data[attributeType.baseName] ?? data[attributeType.name],
           attributeType.type,
           attributeType.format
         )
