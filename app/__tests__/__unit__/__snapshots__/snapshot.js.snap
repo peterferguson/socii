@@ -34,10 +34,10 @@ Array [
         Future With Friends.
       </div>
       <div
-        className="mt-8 ml-8 sm:ml-32 sm:mt-16"
+        className="my-12 ml-8 sm:ml-32 sm:mt-16"
       >
         <form
-          className="flex justify-center flex-shrink w-full max-w-lg px-2 mx-auto font-secondary group"
+          className="flex justify-center w-full max-w-lg px-2 mx-auto font-secondary group"
           onSubmit={[Function]}
         >
           <input
@@ -74,9 +74,14 @@ Array [
             className="pb-12 mb-12 border-b lg:mb-0 lg:pb-0 lg:border-b-0"
           >
             <h2
-              className="mb-4 text-3xl font-bold lg:text-4xl font-heading dark:text-white"
+              className="mb-4 text-4xl font-bold lg:text-4xl font-heading dark:text-white"
             >
-              Investing with friends has never been easier!
+              Investing with friends
+            </h2>
+            <h2
+              className="mb-4 text-4xl font-extrabold underline lg:text-4xl font-heading dark:text-white"
+            >
+              has never been easier!
             </h2>
             <p
               className="mb-8 leading-loose text-gray-600 dark:text-gray-300"
@@ -87,7 +92,7 @@ Array [
               >
                 socii
               </span>
-               being able to invest with friends meant setting up an investment club. A cumbersome process with legal, tax & audit issues to worry about
+               investing with friends meant setting up an investment club. A clumsy process with many legal, tax & auditory issues to worry about
             </p>
           </div>
         </div>
@@ -120,7 +125,7 @@ Array [
                 <p
                   className="leading-loose text-gray-600 dark:text-gray-300"
                 >
-                  All elements are responsive and provide the best display in all screen size. It's magic !
+                  Get a free account to start Investing with friends.
                 </p>
               </div>
             </li>
@@ -147,7 +152,7 @@ Array [
                 <p
                   className="leading-loose text-gray-600 dark:text-gray-300"
                 >
-                  Flexibility is the key. All team is available 24/24 and joinable every day on our hotline.
+                  Invite your friends to join your investment club.
                 </p>
               </div>
             </li>
@@ -174,7 +179,7 @@ Array [
                 <p
                   className="leading-loose text-gray-600 dark:text-gray-300"
                 >
-                  Our Software are ecologic and responsable. Green is not just a color, it's a way of life.
+                  Once everyone is signed up, simply start discussing & placing orders!
                 </p>
               </div>
             </li>
@@ -281,17 +286,17 @@ Array [
                 <p
                   className="mb-3 text-sm text-brand font-primary"
                 >
-                  Group Trade Execution
+                  Incorporation Free
                 </p>
                 <div
                   className="mb-3 text-lg font-bold md:text-2xl font-primary"
                 >
-                  Execute Trades Directly From Chat
+                  No Incorporation
                 </div>
                 <p
                   className="text-xs leading-snug text-gray-500 md:text-base font-secondary"
                 >
-                  Use chat bot to set up & execute trades
+                  No need to create a company just to invest with friends!
                 </p>
               </div>
             </div>
@@ -333,17 +338,17 @@ Array [
                 <p
                   className="mb-3 text-sm text-brand font-primary"
                 >
-                  Incorporation Free
+                  Group Trade Execution
                 </p>
                 <div
                   className="mb-3 text-lg font-bold md:text-2xl font-primary"
                 >
-                  No Incorporation
+                  Execute Trades Directly From Chat
                 </div>
                 <p
                   className="text-xs leading-snug text-gray-500 md:text-base font-secondary"
                 >
-                  No need to create a company just to invest with friends!
+                  Use chat bot to set up & execute trades
                 </p>
               </div>
             </div>
@@ -377,7 +382,7 @@ Array [
           </p>
         </h1>
         <form
-          className="flex justify-center flex-shrink w-full max-w-lg px-2 mx-auto font-secondary group"
+          className="flex justify-center w-full max-w-lg px-2 mx-auto font-secondary group"
           onSubmit={[Function]}
         >
           <input

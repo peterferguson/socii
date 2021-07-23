@@ -11,9 +11,9 @@ export default function FeatureSlider() {
         "Chat with friends in group chats & forums about potential investments",
     },
     {
-      supTitle: "Group Trade Execution",
-      title: "Execute Trades Directly From Chat",
-      description: "Use chat bot to set up & execute trades",
+      supTitle: "Incorporation Free",
+      title: "No Incorporation",
+      description: "No need to create a company just to invest with friends!",
     },
     {
       supTitle: "Competitive Leagues",
@@ -21,9 +21,9 @@ export default function FeatureSlider() {
       description: "Go head to head with and gain investment ideas from other groups",
     },
     {
-      supTitle: "Incorporation Free",
-      title: "No Incorporation",
-      description: "No need to create a company just to invest with friends!",
+      supTitle: "Group Trade Execution",
+      title: "Execute Trades Directly From Chat",
+      description: "Use chat bot to set up & execute trades",
     },
   ]
   return (

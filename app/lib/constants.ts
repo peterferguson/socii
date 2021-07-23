@@ -171,4 +171,4 @@ export const toastProps: ToastProps = {
 }
 
 export const logoBaseUrl: string =
-  "https://storage.googleapis.com/sociiinvest.appspot.com/logos/"
+  "https://storage.googleapis.com/sociiinvest.appspot.com/logos"

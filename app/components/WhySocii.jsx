@@ -41,13 +41,17 @@ export function OneTwoThree() {
         <div className="flex flex-wrap -mx-8">
           <div className="w-full px-8 lg:w-1/2">
             <div className="pb-12 mb-12 border-b lg:mb-0 lg:pb-0 lg:border-b-0">
-              <h2 className="mb-4 text-3xl font-bold lg:text-4xl font-heading dark:text-white">
-                Investing with friends has never been easier!
+              <h2 className="mb-4 text-4xl font-bold lg:text-4xl font-heading dark:text-white">
+                Investing with friends
               </h2>
+              <h2 className="mb-4 text-4xl font-extrabold underline lg:text-4xl font-heading dark:text-white">
+                has never been easier!
+              </h2>
+              {/* <div className="bg-brand/30 h-12 w-92"/> */}
               <p className="mb-8 leading-loose text-gray-600 dark:text-gray-300">
-                Before <span className="font-bold">socii</span> being able to invest
-                with friends meant setting up an investment club. A cumbersome process
-                with legal, tax & audit issues to worry about
+                Before <span className="font-bold">socii</span> investing with friends
+                meant setting up an investment club. A clumsy process with many legal,
+                tax & auditory issues to worry about
               </p>
               {/* <div className="w-full md:w-1/3">
                 <button
@@ -72,8 +76,7 @@ export function OneTwoThree() {
                     Sign Up
                   </h3>
                   <p className="leading-loose text-gray-600 dark:text-gray-300">
-                    All elements are responsive and provide the best display in all
-                    screen size. It&#x27;s magic !
+                    Get a free account to start Investing with friends.
                   </p>
                 </div>
               </li>
@@ -88,8 +91,7 @@ export function OneTwoThree() {
                     Invite Your Friends
                   </h3>
                   <p className="leading-loose text-gray-600 dark:text-gray-300">
-                    Flexibility is the key. All team is available 24/24 and joinable
-                    every day on our hotline.
+                    Invite your friends to join your investment club.
                   </p>
                 </div>
               </li>
@@ -104,8 +106,8 @@ export function OneTwoThree() {
                     Start Investing Together
                   </h3>
                   <p className="leading-loose text-gray-600 dark:text-gray-300">
-                    Our Software are ecologic and responsable. Green is not just a
-                    color, it&#x27;s a way of life.
+                    Once everyone is signed up, simply start discussing & placing
+                    orders!
                   </p>
                 </div>
               </li>
