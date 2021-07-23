@@ -11,7 +11,8 @@ import { NextApiRequest, NextApiResponse } from "next"
 const accountClient = new AccountsApi(config)
 
 export async function handleAch(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
   const { accountId, achData, statuses } = body
 
   switch (method) {

@@ -8,7 +8,8 @@ export async function handleAssets(
   req: NextApiRequest,
   res: NextApiResponse<AssetResource | AssetResource[]>
 ) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
 
   switch (method) {
     case "POST": {

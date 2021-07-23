@@ -4,7 +4,8 @@ import { NextApiResponse, NextApiRequest } from "next"
 const journalApi = new JournalsApi(config)
 
 export async function handleJournal(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
   switch (method) {
     case "GET":
       try {

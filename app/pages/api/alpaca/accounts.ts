@@ -12,7 +12,8 @@ import { NextApiRequest, NextApiResponse } from "next"
 const accountClient = new AccountsApi(config)
 
 export async function handleAccounts(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
   const { type, accountId } = body
 
   switch (method) {

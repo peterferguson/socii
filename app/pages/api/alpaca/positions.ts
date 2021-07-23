@@ -8,13 +8,18 @@ export async function handlePositions(
   req: NextApiRequest,
   res: NextApiResponse<Position[]>
 ) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
 
   switch (method) {
     case "POST":
       try {
         const { accountId } = body
+        console.log(accountId)
+
         const positions = await tradingApi.getPositions(accountId)
+        console.log(positions)
+
         res
           .status(200)
           .json(ObjectSerializer.deserialize(positions, "Array<Position>", ""))

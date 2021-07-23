@@ -9,7 +9,8 @@ import { NextApiRequest, NextApiResponse } from "next"
 const fundClient = new FundingApi(config)
 
 export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
   const { accountId, transferData } = body
 
   switch (method) {

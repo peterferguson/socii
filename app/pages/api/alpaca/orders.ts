@@ -36,7 +36,8 @@ export async function handleOrders(
   req: NextApiRequest,
   res: NextApiResponse<OrderObject | OrderObject[] | InlineResponse207[] | void>
 ) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
 
   const reqBody = (typeof body !== "object" ? JSON.parse(body) : body) || {}
 
