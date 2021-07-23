@@ -10,6 +10,7 @@ import "react-vis/dist/style.css"
 export default function LineChart({
   timeseries,
   crosshairIndexValue,
+  color,
   setCrosshairIndexValue,
   widthScale = 0.65,
   heightScale = 0.6,
@@ -25,7 +26,7 @@ export default function LineChart({
 
   const lineSeriesProps = {
     animation: true,
-    color: "#0fa9e6",
+    color: color ?? "#0fa9e6",
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries,

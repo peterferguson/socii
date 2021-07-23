@@ -1,12 +1,17 @@
-import LineChart from "@components/LineChart";
-import { pnlTextColor } from "@utils/pnlTextColor";
-import React from "react";
-import { useMediaQuery } from "react-responsive";
+import LineChart from "@components/LineChart"
+import { pnlTextColor } from "@utils/pnlTextColor"
+import React from "react"
+import { useMediaQuery } from "react-responsive"
 
 export function Chart({
-  timeseries, crosshairIndexValue, setCrosshairIndexValue, highlightedChange, highlightedClose,
+  timeseries,
+  crosshairIndexValue,
+  setCrosshairIndexValue,
+  highlightedChange,
+  highlightedClose,
+  color,
 }) {
-  const is1Col = !useMediaQuery({ minWidth: 640 });
+  const is1Col = !useMediaQuery({ minWidth: 640 })
   return (
     <div className="flex items-center justify-center w-full h-2/3 ">
       <div className="w-full p-2 m-4 bg-white shadow-lg rounded-xl">
@@ -29,14 +34,16 @@ export function Chart({
         {timeseries ? (
           <LineChart
             crosshairIndexValue={crosshairIndexValue}
+            color={color}
             setCrosshairIndexValue={setCrosshairIndexValue}
             timeseries={timeseries}
             heightScale={is1Col ? 0.35 : 0.6}
-            widthScale={is1Col ? 0.8 : 0.65} />
+            widthScale={is1Col ? 0.8 : 0.65}
+          />
         ) : (
           <div>Loading</div>
         )}
       </div>
     </div>
-  );
+  )
 }
