@@ -1,4 +1,5 @@
 import SelectGroupModal from "@components/SelectGroupModal"
+import SelectInvestActionModal from "@components/SelectInvestActionModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
 import { useAuth } from "@hooks/useAuth"
@@ -20,12 +21,19 @@ export default function TickerPage({ tickerSymbols }) {
   const { user, userGroups } = useAuth()
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
+
+  // - Get the users positions, this will not depend on userGroups for being able to trade
+  // - but will restrict the groups that can sell the ticker! 
+  // 1 If the user has a position show the buy vs sell option first then the group selection
+  // 2 If the user has no position group selection first
+  
   timeseries = timeseries?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
     y: d.close,
   }))
 
   const [openGroupModal, setOpenGroupModal] = useState(false)
+  const [openSelectInvestActionModal, setOpenSelectInvestActionModal] = useState(false)
   const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
   const [tickerLogoUrl, setTickerLogoUrl] = useState("")
   const [selectedGroup, setSelectedGroup] = useState(
@@ -64,10 +72,19 @@ export default function TickerPage({ tickerSymbols }) {
                 userGroups={userGroups}
                 openGroupModal={openGroupModal}
                 setOpenGroupModal={setOpenGroupModal}
-                goClickHandler={() => setOpenStockSharingModal(true)}
+                goClickHandler={() => setOpenSelectInvestActionModal(true)}
               />
             )}
           </selectedGroupContext.Provider>
+          {openSelectInvestActionModal && (
+            <SelectInvestActionModal
+              tickerSymbol={ticker.tickerSymbol}
+              tickerLogoUrl={tickerLogoUrl}
+              openSelectInvestActionModal={openSelectInvestActionModal}
+              setOpenSelectInvestActionModal={setOpenSelectInvestActionModal}
+              goClickHandler={() => setOpenStockSharingModal(true)}
+            />
+          )}
           {openStockSharingModal && (
             <ShareStockInformationModal
               selectedGroup={selectedGroup}

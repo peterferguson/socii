@@ -14,6 +14,8 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
     setGroupSelected(group.name)
   }
 
+  // TODO: Implement a higher-level check to see if the user/selectedGroup holds stock already.
+
   const groups = groupNames.map((name) => {
     const docRef = firestore.doc(`groups/${name}`)
 

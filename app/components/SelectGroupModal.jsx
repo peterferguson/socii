@@ -57,7 +57,8 @@ export default function SelectGroupModal({
                 Select a group to invest with:
               </Dialog.Title>
               <div className="mt-2">
-                <GroupSelectorRadioGroup groupNames={userGroups} />
+                {/** TODO Add a loader here  */}
+                {userGroups && <GroupSelectorRadioGroup groupNames={userGroups} />}
               </div>
               <div className="flex mt-4">
                 <div className="flex-grow" />
