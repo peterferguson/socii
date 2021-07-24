@@ -1,6 +1,6 @@
 import React from "react";
 
-export function PriceCard({
+export default function PriceCard({
   logoUrl, tickerSymbol, shortName, currentPrice, gainColor, currencySymbol = "$", movingMonthlyPctChange,
 }) {
   return (

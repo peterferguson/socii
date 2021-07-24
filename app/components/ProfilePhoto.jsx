@@ -3,7 +3,7 @@ import Router from "next/router"
 import React from "react"
 import { useAuth } from "@hooks/useAuth"
 
-export function ProfilePhoto() {
+export default function ProfilePhoto() {
   // TODO: Add a transition to the logo -> logout
   const { user, username } = useAuth()
   return (

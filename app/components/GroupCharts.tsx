@@ -1,5 +1,4 @@
-import DonutChart from "@components/DonutChart"
-import PieCard, { PieCardSkeleton } from "@components/PieCard"
+import { DonutChart, PieCard, PieCardSkeleton } from "@components"
 import { logoBaseUrl } from "@lib/constants"
 import { firestore } from "@lib/firebase"
 import { iexQuote } from "@utils/iexQuote"

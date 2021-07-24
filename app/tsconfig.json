@@ -27,6 +27,7 @@
       "@stream/*": ["stream/*"],
       "@contexts/*": ["contexts/*"],
       "@contexts": ["contexts/index"],
+      "@components": ["components/index"],
       "@components/*": ["components/*"],
       "@models/*": ["models/*"],
       "@styles/*": ["styles/*"],

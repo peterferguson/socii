@@ -3,7 +3,7 @@ import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
 
-export function Chart({
+export default function Chart({
   timeseries,
   crosshairIndexValue,
   setCrosshairIndexValue,

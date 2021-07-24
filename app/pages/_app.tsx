@@ -1,7 +1,4 @@
-import Footer from "@components/Footer"
-import Head from "@components/Head"
-import { MainLayout } from "@components/MainLayout"
-import Navigation from "@components/Navigation"
+import { Footer, Head, MainLayout, Navigation } from "@components/index"
 import { AuthProvider } from "@contexts/AuthProvider"
 import { StreamProvider } from "@contexts/StreamProvider"
 import { useStream } from "@hooks/useStream"

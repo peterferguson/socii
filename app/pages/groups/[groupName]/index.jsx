@@ -31,10 +31,7 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import AuthCheck from "@components/AuthCheck"
-import ClientOnly from "@components/ClientOnly"
-import GroupColumn from "@components/GroupCharts"
-import LoadingIndicator from "@components/LoadingIndicator"
+import { AuthCheck, ClientOnly, GroupColumn, LoadingIndicator } from "@components"
 import { useStream } from "@hooks/useStream"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"

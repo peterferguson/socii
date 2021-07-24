@@ -1,5 +1,4 @@
-import AuthCheck from "@components/AuthCheck"
-import ClientOnly from "@components/ClientOnly"
+import { AuthCheck, ClientOnly } from "@components"
 import dynamic from "next/dynamic"
 import React, { useContext } from "react"
 import { ChatContext } from "stream-chat-react"

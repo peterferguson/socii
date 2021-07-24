@@ -1,6 +1,6 @@
 import React from "react"
 
-export function OneTwoThree() {
+export default function OneTwoThree() {
   const steps = [
     {
       heading: "Sign Up",
