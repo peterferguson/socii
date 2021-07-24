@@ -1,44 +1,64 @@
 import SelectGroupModal from "@components/SelectGroupModal"
+import SelectOrderTypeModal from "@components/SelectOrderTypeModal"
 import SelectInvestActionModal from "@components/SelectInvestActionModal"
 import ShareStockInformationModal from "@components/ShareStockInformationModal"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
 import { useAuth } from "@hooks/useAuth"
-import { tailwindColorMap } from "@lib/constants"
 import { firestore } from "@lib/firebase"
 import { isBrowser } from "@utils/isBrowser"
 import { logoUrl } from "@utils/logoUrl"
-import { pctChange } from "@utils/pctChange"
-import { pnlTextColor } from "@utils/pnlTextColor"
 import { stockProps } from "@utils/stockProps"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import Custom404 from "../404"
-import { PriceCard } from "@components/PriceCard"
-import { Chart } from "@components/Chart"
+import { fetcher } from "@utils/fetcher"
+import useSWR from "swr"
+import { TickerSymbolPageMainContent } from "@components/TickerSymbolPageMainContent"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
   const { user, userGroups } = useAuth()
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
-
-  // - Get the users positions, this will not depend on userGroups for being able to trade
-  // - but will restrict the groups that can sell the ticker! 
-  // 1 If the user has a position show the buy vs sell option first then the group selection
-  // 2 If the user has no position group selection first
-  
-  timeseries = timeseries?.map((d) => ({
-    x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
-    y: d.close,
-  }))
-
   const [openGroupModal, setOpenGroupModal] = useState(false)
+  const [openSelectOrderTypeModal, setOpenSelectOrderTypeModal] = useState(false)
   const [openSelectInvestActionModal, setOpenSelectInvestActionModal] = useState(false)
   const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
   const [tickerLogoUrl, setTickerLogoUrl] = useState("")
   const [selectedGroup, setSelectedGroup] = useState(
     userGroups ? userGroups?.[0] : null
   )
+  const [positions, setPositions] = useState([])
+
+  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaId
+
+  // ? Maybe execute this in the background? Or just use the data already in the db?
+  useEffect(() => {
+    const getPositions = async () => {
+      setPositions(
+        await fetcher("/api/alpaca/positions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${user?.token}` },
+          body: JSON.stringify({ accountId: alpacaId }),
+        })
+      )
+    }
+    if (user?.token) getPositions()
+  }, [user, alpacaId])
+
+  const holding = positions.filter(
+    (position) => position.symbol === ticker?.tickerSymbol
+  )[0]
+
+  // - Get the users positions, this will not depend on userGroups for being able to trade
+  // - but will restrict the groups that can sell the ticker!
+  // 1 If the user has a position show the buy vs sell option first then the group selection
+  // 2 If the user has no position group selection first
+
+  timeseries = timeseries?.map((d) => ({
+    x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
+    y: d.close,
+  }))
 
   const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
 
@@ -49,6 +69,11 @@ export default function TickerPage({ tickerSymbols }) {
     if (ticker) setLogoUrl()
   }, [ticker])
 
+  const investHandler = () => {
+    if (!user) router.push("/enter")
+    holding ? setOpenSelectInvestActionModal(true) : setOpenGroupModal(true)
+  }
+
   if (router.isFallback) return <div>Loading...</div>
 
   // TODO: Replace with skeleton loaders
@@ -56,14 +81,17 @@ export default function TickerPage({ tickerSymbols }) {
 
   return (
     <>
-      <TickerComponents
+      <TickerSymbolPageMainContent
         user={user}
         ticker={ticker}
         timeseries={timeseries}
         tickerLogoUrl={tickerLogoUrl}
         router={router}
-        setOpenGroupModal={setOpenGroupModal}
+        investHandler={investHandler}
       />
+      {/* FIXME: This is next to unreadable! */}
+      {/* ! The modals are routed between with on click actions */}
+      {/* FIXME: Also all modals could be loaded dynamically */}
       {isBrowser && timeseries && (
         <>
           <selectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
@@ -72,17 +100,35 @@ export default function TickerPage({ tickerSymbols }) {
                 userGroups={userGroups}
                 openGroupModal={openGroupModal}
                 setOpenGroupModal={setOpenGroupModal}
-                goClickHandler={() => setOpenSelectInvestActionModal(true)}
+                goClickHandler={() =>
+                  holding
+                    ? setOpenSelectOrderTypeModal(true)
+                    : setOpenSelectInvestActionModal(true)
+                }
               />
             )}
           </selectedGroupContext.Provider>
+          {openSelectOrderTypeModal && (
+            <SelectOrderTypeModal
+              tickerSymbol={ticker.tickerSymbol}
+              tickerLogoUrl={tickerLogoUrl}
+              openSelectOrderTypeModal={openSelectOrderTypeModal}
+              setOpenSelectOrderTypeModal={setOpenSelectOrderTypeModal}
+              goClickHandler={() => setOpenStockSharingModal(true)}
+            />
+          )}
           {openSelectInvestActionModal && (
             <SelectInvestActionModal
               tickerSymbol={ticker.tickerSymbol}
               tickerLogoUrl={tickerLogoUrl}
               openSelectInvestActionModal={openSelectInvestActionModal}
               setOpenSelectInvestActionModal={setOpenSelectInvestActionModal}
-              goClickHandler={() => setOpenStockSharingModal(true)}
+              goClickHandler={
+                () =>
+                  holding ? setOpenGroupModal(true) : setOpenStockSharingModal(true)
+                // TODO: Need to add a state for the selected components of the modals
+                // TODO: This re-routing will depend on the selected component
+              }
             />
           )}
           {openStockSharingModal && (
@@ -102,81 +148,24 @@ export default function TickerPage({ tickerSymbols }) {
   )
 }
 
-function TickerComponents({
-  user,
-  ticker,
-  timeseries,
-  tickerLogoUrl,
-  router,
-  setOpenGroupModal,
-}) {
-  const tickerSymbol = ticker?.tickerSymbol
-
-  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
-  const [gainColor, setGainColor] = useState("text-gray-400")
-
-  const latestClose = timeseries?.[0]?.y
-  const highlightedClose = timeseries[crosshairIndexValue]?.y
-  let movingMonthlyClose = highlightedClose
-
-  try {
-    movingMonthlyClose = timeseries[crosshairIndexValue + 21]?.y
-  } catch (err) {
-    console.log(err)
-  }
-
-  const movingMonthlyPctChange = pctChange(highlightedClose, movingMonthlyClose)
-
-  const lastMonthPctChange = pctChange(latestClose, timeseries[21]?.y)
-
-  // * Show the pct change of highlighted value versus today
-  const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
-
-  const handleInvest = () => {
-    if (!user) router.push("/enter")
-    else setOpenGroupModal(true)
-  }
-
-  const tickerProps = {
-    logoUrl: tickerLogoUrl,
-    tickerSymbol: tickerSymbol,
-    shortName: ticker.shortName,
-    currentPrice: latestClose,
-    movingMonthlyPctChange: movingMonthlyPctChange,
-  }
-
-  useEffect(() => {
-    setGainColor(tailwindColorMap[pnlTextColor(lastMonthPctChange)])
-  }, [lastMonthPctChange])
+// TODO: Create a card for displaying the current holding information & splits by group on interaction
+const TickerHoldingCard = ({ holding }) => {
+  console.log(holding?.avgEntryPrice)
+  console.log(holding?.qty)
+  console.log(holding?.side)
+  console.log(holding?.marketValue)
+  console.log(holding?.costBasis)
+  console.log(holding?.unrealizedPl)
+  console.log(holding?.unrealizedPlpc)
+  console.log(holding?.unrealizedIntradayPl)
+  console.log(holding?.unrealizedIntradayPlpc)
+  console.log(holding?.currentPrice)
+  console.log(holding?.lastdayPrice)
+  console.log(holding?.changeToday)
 
   return (
     <>
-      <div className="flex flex-col w-full sm:flex-row">
-        {/* <SmallAssetCard {...tickerProps} /> */}
-        <div className="flex-none pt-4 pl-0 sm:pl-8 ">
-          <PriceCard
-            {...tickerProps}
-            movingMonthlyPctChange={lastMonthPctChange}
-            gainColor={gainColor}
-          />
-        </div>
-        <div className="flex-grow hidden sm:block" />
-        <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-          <div
-            className="mx-0 mt-4 mb-0 text-center btn btn-transition"
-            onClick={() => handleInvest()}
-          >
-            <span className="z-10 w-12 h-4 text-4xl">Invest</span>
-          </div>
-        </div>
-      </div>
-      <Chart
-        timeseries={timeseries}
-        crosshairIndexValue={crosshairIndexValue}
-        setCrosshairIndexValue={setCrosshairIndexValue}
-        highlightedChange={highlightedChange}
-        highlightedClose={highlightedClose}
-      />
+      <div className=""></div>
     </>
   )
 }

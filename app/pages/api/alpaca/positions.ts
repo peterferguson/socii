@@ -15,10 +15,8 @@ export async function handlePositions(
     case "POST":
       try {
         const { accountId } = body
-        console.log(accountId)
 
         const positions = await tradingApi.getPositions(accountId)
-        console.log(positions)
 
         res
           .status(200)

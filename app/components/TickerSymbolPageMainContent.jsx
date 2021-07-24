@@ -11,7 +11,7 @@ export function TickerSymbolPageMainContent({
   timeseries,
   tickerLogoUrl,
   router,
-  setOpenGroupModal,
+  investHandler,
 }) {
   const tickerSymbol = ticker?.tickerSymbol
 
@@ -34,11 +34,6 @@ export function TickerSymbolPageMainContent({
 
   // * Show the pct change of highlighted value versus today
   const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
-
-  const handleInvest = () => {
-    if (!user) router.push("/enter")
-    else setOpenGroupModal(true)
-  }
 
   const tickerProps = {
     logoUrl: tickerLogoUrl,
@@ -67,7 +62,7 @@ export function TickerSymbolPageMainContent({
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
           <div
             className="mx-0 mt-4 mb-0 text-center btn btn-transition"
-            onClick={() => handleInvest()}
+            onClick={() => investHandler()}
           >
             <span className="z-10 w-12 h-4 text-4xl">Invest</span>
           </div>
