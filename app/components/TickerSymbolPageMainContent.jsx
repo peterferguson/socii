@@ -57,8 +57,10 @@ export default function TickerSymbolPageMainContent({
         </div>
         <div className="flex-grow hidden sm:block" />
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+          {/* log for tailwind jit compiler  */}
           <div
-            className={`mx-0 mt-4 mb-0 text-center btn btn-transition bg-[${ticker.logoColor}]`}
+            style={{ "background-color": ticker.logoColor }}
+            className="mx-0 mt-4 mb-0 text-center btn btn-transition"
             onClick={() => investHandler()}
           >
             <span className="z-10 w-12 h-4 text-4xl">Invest</span>
