@@ -354,7 +354,6 @@ export class TradingApiRequestFactory extends BaseAPIRequestFactory {
       contentType
     )
     requestContext.setBody(serializedBody)
-    console.log(serializedBody)
 
     let authMethod = null
     // Apply auth methods

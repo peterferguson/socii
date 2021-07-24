@@ -14,12 +14,12 @@ export class BankData {
   "name": string
   "bankCode": string
   "bankCodeType": BankDataBankCodeTypeEnum
+  "accountNumber": string
   "country"?: string
   "stateProvince"?: string
   "postalCode"?: string
   "city"?: string
   "streetAddress"?: string
-  "accountNumber": string
 
   static readonly discriminator: string | undefined = undefined
 
@@ -92,7 +92,7 @@ export class BankData {
   static from(json) {
     // - convert baseName to name
     for (const { baseName, name } of this.attributeTypeMap) {
-      if (baseName !== name) {
+      if (baseName !== name && !(name in json)) {
         Object.assign(json, { [name]: json[baseName] })
         delete json[baseName]
       }

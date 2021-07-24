@@ -1,10 +1,23 @@
-export * from './AccountsApi';
-export * from './AssetsApi';
-export * from './CalendarApi';
-export * from './ClockApi';
-export * from './DocumentsApi';
-export * from './EventsApi';
-export * from './FundingApi';
-export * from './JournalsApi';
-export * from './OAuthApi';
-export * from './TradingApi';
+export * from "./AccountsApi"
+export * from "./AssetsApi"
+export * from "./CalendarApi"
+export * from "./ClockApi"
+export * from "./DocumentsApi"
+export * from "./EventsApi"
+export * from "./FundingApi"
+export * from "./JournalsApi"
+export * from "./OAuthApi"
+export * from "./TradingApi"
+
+export { EventsAccountsStatusGetRequest } from "./EventsApi"
+export { DeleteAchRelationshipRequest } from "./FundingApi"
+export { DeleteRecipientBankRequest } from "./FundingApi"
+export { DeleteTransferRequest } from "./FundingApi"
+export { GetAchRelationshipsRequest } from "./FundingApi"
+export { GetRecipientBanksRequest } from "./FundingApi"
+export { GetTransfersDirectionEnum } from "./FundingApi"
+export { GetTransfersRequest } from "./FundingApi"
+export { PostAchRelationshipsRequest } from "./FundingApi"
+export { PostRecipientBanksRequest } from "./FundingApi"
+export { PostTransfersRequest } from "./FundingApi"
+export { EventsJournalsStatusGetRequest } from "./JournalsApi"

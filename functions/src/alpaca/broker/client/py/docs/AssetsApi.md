@@ -1,14 +1,15 @@
-# swagger_client.AssetsApi
+# broker_client.AssetsApi
 
 All URIs are relative to *https://broker-api.sandbox.alpaca.markets/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**assets_asset_id_get**](AssetsApi.md#assets_asset_id_get) | **GET** /assets/{asset_id} | Retrieve an asset by UUID
-[**assets_get**](AssetsApi.md#assets_get) | **GET** /assets | Retrieve all assets
-[**assets_symbol_get**](AssetsApi.md#assets_symbol_get) | **GET** /assets/{symbol} | Retrieve an asset by symbol
+| Method                                                      | HTTP request               | Description                 |
+| ----------------------------------------------------------- | -------------------------- | --------------------------- |
+| [**assets_asset_id_get**](AssetsApi.md#assets_asset_id_get) | **GET** /assets/{asset_id} | Retrieve an asset by UUID   |
+| [**assets_get**](AssetsApi.md#assets_get)                   | **GET** /assets            | Retrieve all assets         |
+| [**assets_symbol_get**](AssetsApi.md#assets_symbol_get)     | **GET** /assets/{symbol}   | Retrieve an asset by symbol |
 
 # **assets_asset_id_get**
+
 > assets_asset_id_get(asset_id)
 
 Retrieve an asset by UUID
@@ -16,19 +17,20 @@ Retrieve an asset by UUID
 Returns the requested asset, if found
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AssetsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AssetsApi(broker_client.ApiClient(configuration))
 asset_id = 'asset_id_example' # str | The UUID of the required asset
 
 try:
@@ -40,9 +42,9 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **asset_id** | **str**| The UUID of the required asset | 
+| Name         | Type    | Description                    | Notes |
+| ------------ | ------- | ------------------------------ | ----- |
+| **asset_id** | **str** | The UUID of the required asset |
 
 ### Return type
 
@@ -54,12 +56,13 @@ void (empty response body)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: Not defined
+- **Content-Type**: Not defined
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **assets_get**
+
 > InlineResponse2001 assets_get()
 
 Retrieve all assets
@@ -67,19 +70,20 @@ Retrieve all assets
 Returns all assets
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AssetsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AssetsApi(broker_client.ApiClient(configuration))
 
 try:
     # Retrieve all assets
@@ -90,6 +94,7 @@ except ApiException as e:
 ```
 
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -102,12 +107,13 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **assets_symbol_get**
+
 > assets_symbol_get(symbol)
 
 Retrieve an asset by symbol
@@ -115,19 +121,20 @@ Retrieve an asset by symbol
 Returns the requested asset, if found
 
 ### Example
+
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.rest import ApiException
 from pprint import pprint
 # Configure HTTP basic authorization: BasicAuth
-configuration = swagger_client.Configuration()
+configuration = broker_client.Configuration()
 configuration.username = 'YOUR_USERNAME'
 configuration.password = 'YOUR_PASSWORD'
 
 # create an instance of the API class
-api_instance = swagger_client.AssetsApi(swagger_client.ApiClient(configuration))
+api_instance = broker_client.AssetsApi(broker_client.ApiClient(configuration))
 symbol = 'symbol_example' # str | The symbol of the required asset
 
 try:
@@ -139,9 +146,9 @@ except ApiException as e:
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **symbol** | **str**| The symbol of the required asset | 
+| Name       | Type    | Description                      | Notes |
+| ---------- | ------- | -------------------------------- | ----- |
+| **symbol** | **str** | The symbol of the required asset |
 
 ### Return type
 
@@ -153,8 +160,7 @@ void (empty response body)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: Not defined
+- **Content-Type**: Not defined
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

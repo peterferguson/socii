@@ -8,7 +8,8 @@ export async function handleCalendar(
   req: NextApiRequest,
   res: NextApiResponse<MarketDay | MarketDay[]>
 ) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
 
   const { start, end } = body
 

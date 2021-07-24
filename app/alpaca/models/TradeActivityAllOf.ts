@@ -99,7 +99,7 @@ export class TradeActivityAllOf {
   static from(json) {
     // - convert baseName to name
     for (const { baseName, name } of this.attributeTypeMap) {
-      if (baseName !== name) {
+      if (baseName !== name && !(name in json)) {
         Object.assign(json, { [name]: json[baseName] })
         delete json[baseName]
       }

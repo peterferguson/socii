@@ -14,9 +14,11 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.models.one_of_journal_resource import OneOfJournalResource  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.models.one_of_journal_resource import (
+    OneOfJournalResource,
+)  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestOneOfJournalResource(unittest.TestCase):
@@ -31,9 +33,9 @@ class TestOneOfJournalResource(unittest.TestCase):
     def testOneOfJournalResource(self):
         """Test OneOfJournalResource"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = swagger_client.models.one_of_journal_resource.OneOfJournalResource()  # noqa: E501
+        # model = broker_client.models.one_of_journal_resource.OneOfJournalResource()  # noqa: E501
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

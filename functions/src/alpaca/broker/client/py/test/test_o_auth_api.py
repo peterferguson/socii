@@ -14,9 +14,9 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.api.o_auth_api import OAuthApi  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.api.o_auth_api import OAuthApi  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestOAuthApi(unittest.TestCase):
@@ -50,5 +50,5 @@ class TestOAuthApi(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -14,9 +14,9 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.models.account_status import AccountStatus  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.models.account_status import AccountStatus  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestAccountStatus(unittest.TestCase):
@@ -31,9 +31,9 @@ class TestAccountStatus(unittest.TestCase):
     def testAccountStatus(self):
         """Test AccountStatus"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = swagger_client.models.account_status.AccountStatus()  # noqa: E501
+        # model = broker_client.models.account_status.AccountStatus()  # noqa: E501
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

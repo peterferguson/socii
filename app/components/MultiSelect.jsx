@@ -25,7 +25,7 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
     <div className="flex flex-col items-center w-full mx-auto">
       <div className="w-full">
         <div className="relative flex flex-col items-center">
-          <div className="flex w-full p-1 my-2 bg-white border border-gray-300 shadow-sm \ rounded-md">
+          <div className="flex w-full p-1 my-2 bg-white border border-gray-300 shadow-sm rounded-md">
             <div className="flex flex-wrap flex-auto" onClick={toggleDropdown}>
               {selectedItems.map((tag, index) => {
                 return (
@@ -69,17 +69,17 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
 }
 
 const Dropdown = ({ items, addItem }) => {
-  // tODO: Add dropdown open on dropdown funcitonality
+  // TODO: Add dropdown open on dropdown funcitonality
   return (
     <div
       id="dropdown"
-      className="absolute left-0 z-40 w-10/12 h-full ml-6 -mt-2 overflow-y-auto bg-white rounded shadow top-100 \ max-h-56"
+      className="absolute left-0 z-40 w-10/12 h-full ml-6 -mt-2 overflow-y-auto bg-white rounded shadow top-100 max-h-56"
     >
       {items.sort().map((item) => {
         return (
           <div
             key={`${item}-key`}
-            className="w-full border-b border-gray-100 rounded-t cursor-pointer \ hover:bg-teal-100"
+            className="w-full border-b border-gray-100 rounded-t cursor-pointer hover:bg-teal-100"
             onClick={() => addItem(item)}
           >
             <div className="relative flex p-2 mx-2 leading-6 hover:border-teal-100">
@@ -93,3 +93,31 @@ const Dropdown = ({ items, addItem }) => {
 }
 
 export default Multiselect
+
+// TODO: Implement a better verison of the multiselect
+
+
+// import "@styles/Multiselect.module.css"
+// import Select from "react-select"
+// import Tippy from '@tippyjs/react';
+// import { components } from "react-select"
+
+// const MultiValueContainer = (props) => {
+//   console.log(props)
+//   return (
+//     <Tippy content={<span>Tooltip</span>}>
+//       <components.MultiValueContainer {...props} />
+//     </Tippy>
+//   )
+// }
+
+// export default ({ items, selectedItems, setSelectedItems }) => (
+//   <Select
+//     defaultValue={items[0]}
+//     label="Select Data Point"
+//     isMulti={true}
+//     components={{ MultiValueContainer }}
+//     options={items}
+//     classNamePrefix="react-select"
+//   />
+// )

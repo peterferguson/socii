@@ -10,6 +10,12 @@ class MyDocument extends Document {
     return (
       <Html lang="en" className="bg-gray-50 md:no-scrollbar">
         <Head>
+          {/* Google Analytics */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `G-F7JH023N5Q`,
+            }}
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"

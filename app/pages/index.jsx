@@ -1,7 +1,7 @@
 import Invite from "@components/Invite"
 import Logo from "@components/Logo"
 import SociiFeatureSlider from "@components/SociiFeatureSlider"
-import { OneTwoThree } from "@components/WhySocii"
+import { OneTwoThree } from "@components/OneTwoThree"
 import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
 import React, { useState } from "react"
@@ -16,7 +16,7 @@ export default function Home() {
     <>
       {!user && <PromotionBanner />}
       {/* TODO Add a wave transition animation to this gradient */}
-      <Hero user={user} setInvited={setInvited} />
+      <Hero invited={invited} setInvited={setInvited} />
       <OneTwoThree />
       <SociiFeatureSlider />
       <Footer invited={invited} setInvited={setInvited} />
@@ -24,7 +24,7 @@ export default function Home() {
   )
 }
 
-const Hero = ({ setInvited }) => {
+const Hero = ({ invited, setInvited }) => {
   return (
     <div className="h-screen grid grid-cols-2 bg-gradient-to-bl via-brand-light-est to-brand-light from-brand-shade-blue">
       <div className="z-10 flex flex-col justify-center mx-auto">
@@ -37,8 +37,8 @@ const Hero = ({ setInvited }) => {
         <div className="px-4 pb-4 text-2xl sm:text-4xl font-primary animate-fade-in-up">
           Future With Friends.
         </div>
-        <div className="mt-8 ml-8 sm:ml-32 sm:mt-16">
-          <Invite setInvited={setInvited} className="mx-auto" />
+        <div className="my-12 ml-8 sm:ml-32 sm:mt-16">
+          <Invite invited={invited} setInvited={setInvited} className="mx-auto" />
         </div>
       </div>
     </div>

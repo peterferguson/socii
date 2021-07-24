@@ -11,7 +11,7 @@ import { ActivityItem } from "../models/ActivityItem"
 import { BankData } from "../models/BankData"
 import { BankResource } from "../models/BankResource"
 import { DocumentUpload } from "../models/DocumentUpload"
-import { InlineResponse200 } from "../models/InlineResponse200"
+import { TradingAccount } from "../models/TradingAccount"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { ObjectSerializer } from "../models/ObjectSerializer"
 import { TransferData } from "../models/TransferData"
@@ -1694,28 +1694,26 @@ export class AccountsApiResponseProcessor {
    * @params response Response returned by the server for a request to getTradingAccount
    * @throws ApiException if the response code was not in [200, 299]
    */
-  public async getTradingAccount(
-    response: ResponseContext
-  ): Promise<InlineResponse200> {
+  public async getTradingAccount(response: ResponseContext): Promise<TradingAccount> {
     const contentType = ObjectSerializer.normalizeMediaType(
       response.headers["content-type"]
     )
     if (isCodeInRange("200", response.httpStatusCode)) {
-      const body: InlineResponse200 = ObjectSerializer.deserialize(
+      const body: TradingAccount = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse200",
+        "TradingAccount",
         ""
-      ) as InlineResponse200
+      ) as TradingAccount
       return body
     }
 
     // Work around for missing responses in specification, e.g. for petstore.yaml
     if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: InlineResponse200 = ObjectSerializer.deserialize(
+      const body: TradingAccount = ObjectSerializer.deserialize(
         ObjectSerializer.parse(await response.body.text(), contentType),
-        "InlineResponse200",
+        "TradingAccount",
         ""
-      ) as InlineResponse200
+      ) as TradingAccount
       return body
     }
 

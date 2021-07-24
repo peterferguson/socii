@@ -36,7 +36,8 @@ export async function handleOrders(
   req: NextApiRequest,
   res: NextApiResponse<OrderObject | OrderObject[] | InlineResponse207[] | void>
 ) {
-  const { body, method } = req
+  let { body, method } = req
+  body = typeof body === "string" ? JSON.parse(body) : body
 
   const reqBody = (typeof body !== "object" ? JSON.parse(body) : body) || {}
 
@@ -70,6 +71,7 @@ export async function handleOrders(
             .json(ObjectSerializer.deserialize(queryResponse, "Array<OrderObject>", ""))
         }
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to retrieve order(s) with error: ${error}`)
       }
       break
@@ -87,6 +89,7 @@ export async function handleOrders(
           .status(200)
           .json(ObjectSerializer.deserialize(patchResponse, "OrderObject", ""))
       } catch (error) {
+        console.log(error)
         if (error.message.includes("order isn't sent to exchange yet")) {
           res.status(422).end(error.message)
         } else {
@@ -107,6 +110,7 @@ export async function handleOrders(
           .status(200)
           .json(ObjectSerializer.deserialize(postResponse, "OrderObject", ""))
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to create order with error: ${error}`)
       }
       break
@@ -131,6 +135,7 @@ export async function handleOrders(
             )
         }
       } catch (error) {
+        console.log(error)
         res.status(400).end(`Failed to delete order with error: ${error}`)
       }
       break

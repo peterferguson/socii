@@ -14,9 +14,9 @@ from __future__ import absolute_import
 
 import unittest
 
-import swagger_client
-from swagger_client.models.disclosures import Disclosures  # noqa: E501
-from swagger_client.rest import ApiException
+import broker_client
+from broker_client.models.disclosures import Disclosures  # noqa: E501
+from broker_client.rest import ApiException
 
 
 class TestDisclosures(unittest.TestCase):
@@ -31,9 +31,9 @@ class TestDisclosures(unittest.TestCase):
     def testDisclosures(self):
         """Test Disclosures"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = swagger_client.models.disclosures.Disclosures()  # noqa: E501
+        # model = broker_client.models.disclosures.Disclosures()  # noqa: E501
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
