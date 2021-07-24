@@ -61,7 +61,7 @@ export function TickerSymbolPageMainContent({
         <div className="flex-grow hidden sm:block" />
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
           <div
-            className="mx-0 mt-4 mb-0 text-center btn btn-transition"
+            className={`mx-0 mt-4 mb-0 text-center btn btn-transition bg-[${ticker.logoColor}]`}
             onClick={() => investHandler()}
           >
             <span className="z-10 w-12 h-4 text-4xl">Invest</span>
