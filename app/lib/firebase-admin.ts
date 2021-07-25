@@ -7,5 +7,6 @@ const firestore = admin.firestore()
 const auth = admin.auth()
 
 const arrayUnion = admin.firestore.FieldValue.arrayUnion
+const fromDate = admin.firestore.Timestamp.fromDate
 
-export { firestore, auth, arrayUnion }
+export { firestore, auth, arrayUnion, fromDate }

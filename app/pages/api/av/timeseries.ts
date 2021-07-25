@@ -1,7 +1,7 @@
 import { OHLC } from "@models/OHLC"
 import { cors } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
-import { firestore } from "@lib/firebase-admin"
+import { firestore, fromDate } from "@lib/firebase-admin"
 // const bent = require("bent"))
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const timestampNumber =
       typeof timestamp !== "number" ? timestamp.getTime() : timestamp
 
-    const timestampFirestoreDate = admin.firestore.Timestamp.fromDate(
+    const timestampFirestoreDate = fromDate(
       typeof timestamp !== "number" ? timestamp : new Date(timestamp)
     )
 
