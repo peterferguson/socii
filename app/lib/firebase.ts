@@ -7,20 +7,18 @@ import "firebase/storage"
 
 const londonRegion = "europe-west2"
 
-
 export const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
-    authDomain: "sociiinvest.firebaseapp.com",
-    projectId: "sociiinvest",
-    storageBucket: "sociiinvest.appspot.com",
-    messagingSenderId: "584929113403",
-    appId: "1:584929113403:web:73fa9920cb14c1cc19b31e",
-    measurementId: "G-F7JH023N5Q",
-  }
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
+  authDomain: "sociiinvest.firebaseapp.com",
+  projectId: "sociiinvest",
+  storageBucket: "sociiinvest.appspot.com",
+  messagingSenderId: "584929113403",
+  appId: "1:584929113403:web:73fa9920cb14c1cc19b31e",
+  measurementId: "G-F7JH023N5Q",
+}
 
 // if (!firebase.apps.length) firebase.initializeApp(process.env.FIREBASE_CONFIG)
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
-
 
 export default firebase
 export const auth = firebase.auth()
@@ -31,7 +29,7 @@ export const functions = firebase.app().functions(londonRegion)
 if (
   process.env.NODE_ENV === "development" &&
   "_delegate" in firestore &&
-  !firestore?._delegate._settings.host?.includes("local")
+  !firestore?.["_delegate"]._settings.host?.includes("local")
   // ! Stops NextJS hot reloading from re-executing this code
 ) {
   firestore.useEmulator("localhost", 8080)

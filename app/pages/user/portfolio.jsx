@@ -1,9 +1,7 @@
-import { GroupPieCard } from "@components/StockCard"
-import { PieCardSkeleton } from "@components/PieCard"
+import { GroupPieCard, PieCardSkeleton } from "@components"
 import { firestore } from "@lib/firebase"
-import { fetchJSON } from "@utils/fetchJSON"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
 
 export default function Dashboard() {
