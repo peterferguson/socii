@@ -8,7 +8,7 @@
 // -
 
 import AuthCheck from "@components/AuthCheck"
-import GroupColumn from "@components/GroupCharts"
+import GroupColumn from "@components/GroupColumnCard"
 import { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
 import { useRouter } from "next/router"

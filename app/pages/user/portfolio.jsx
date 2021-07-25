@@ -1,4 +1,4 @@
-import { GroupPieCard } from "@components/GroupCharts"
+import { GroupPieCard } from "@components/StockCard"
 import { PieCardSkeleton } from "@components/PieCard"
 import { firestore } from "@lib/firebase"
 import { fetchJSON } from "@utils/fetchJSON"

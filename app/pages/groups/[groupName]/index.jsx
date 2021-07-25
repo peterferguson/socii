@@ -31,7 +31,7 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import { AuthCheck, ClientOnly, GroupColumn, LoadingIndicator } from "@components"
+import { AuthCheck, ClientOnly, GroupColumnCard, LoadingIndicator } from "@components"
 import { useStream } from "@hooks/useStream"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
@@ -66,7 +66,7 @@ export default function Group() {
             <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
               holdings
             </div>
-            <GroupColumn groupName={groupName} />
+            <GroupColumnCard groupName={groupName} />
           </div>
           {is1Col && (
             <AuthCheck>
