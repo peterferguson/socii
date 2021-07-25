@@ -1,6 +1,7 @@
 import { error } from "firebase-functions/lib/logger"
-import { firestore, increment } from "./index.js"
+import { firestore, increment, serverTimestamp } from "./index.js"
 import { streamClient } from "./utils/helper.js"
+import { config, FundingApi, TransferData } from "./alpaca/broker/client/ts/index"
 
 /*
  * Increment the investorCount value on a group when a new investor is added to the investors collection
@@ -33,6 +34,68 @@ export const incrementInvestors = async (change, context) => {
     // Deleting document : subtract one from count
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(-1) })
   }
+  return
+}
+
+/*
+ * On a new investor joining a group, deposit the initial amount to the users balance
+ * Usage as follows:
+ *
+ * functions.firestore.document('groups/{groupName}/investors/{investorUsername}')
+ * .onCreate(initiateDeposit)
+ *
+ * @param change
+ * @param context
+ * @returns
+ */
+export const initialDeposit = async (snapshot, context) => {
+  const { groupName } = context.params
+
+  const fundClient = new FundingApi(config)
+
+  // - Get the investor from the snapshot
+  const { uid } = snapshot.data()
+
+  const userRef = firestore.doc(`users/${uid}`)
+  const groupRef = firestore.doc(`groups/${groupName}`)
+  const fundingRef = firestore.doc(`users/${uid}/funding/${groupName}`)
+  const groupData = (await groupRef.get()).data()
+
+  const initialDeposit: number = groupData.initialDeposit
+  const subscriptionAmount: number = groupData.subscriptionAmount
+
+  const { alpacaID, alpacaACH } = (await userRef.get()).data()
+
+  // - Execute the funding transaction
+
+  try {
+    const postTransfer = await fundClient.postTransfers(
+      alpacaID,
+      TransferData.from({
+        amount: initialDeposit,
+        transferType: "ach",
+        relationshipId: alpacaACH,
+        direction: "INCOMING",
+      })
+    )
+
+    fundingRef.set({
+      subscriptionAmount,
+      initialDeposit,
+      startDate: serverTimestamp(),
+      deposits: [
+        {
+          initialDeposit,
+          date: postTransfer.createdAt,
+          id: postTransfer.id,
+          direction: postTransfer.direction,
+        },
+      ],
+    })
+  } catch (error) {
+    console.error(error)
+  }
+
   return
 }
 
