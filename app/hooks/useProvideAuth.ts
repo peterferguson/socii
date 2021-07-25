@@ -25,7 +25,7 @@ export const useProvideAuth = () => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
-      const { token, ...userWithoutToken } = user
+      const { token, expirationTime, ...userWithoutToken } = user
 
       createUser(user.uid, userWithoutToken)
       setUser(user)

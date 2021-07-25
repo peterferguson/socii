@@ -17,8 +17,6 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
     case "POST": {
       // - If transfer data is included - post the transfer
       if (transferData) {
-        console.log(transferData)
-        console.log(TransferData.from(transferData))
         try {
           const postTransfer = await fundClient.postTransfers(
             accountId,
