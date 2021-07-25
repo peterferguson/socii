@@ -64,36 +64,43 @@ export const initialDeposit = async (snapshot, context) => {
   const initialDeposit: number = groupData.initialDeposit
   const subscriptionAmount: number = groupData.subscriptionAmount
 
+  const totalAmount = initialDeposit + subscriptionAmount
+
   const { alpacaID, alpacaACH } = (await userRef.get()).data()
 
+  if (totalAmount === 0) return
+
   // - Execute the funding transaction
+  if (totalAmount > 0 && alpacaACH && alpacaID) {
+    try {
+      const postTransfer = await fundClient.postTransfers(
+        alpacaID,
+        TransferData.from({
+          amount: totalAmount,
+          transferType: "ach",
+          relationshipId: alpacaACH,
+          direction: "INCOMING",
+        })
+      )
 
-  try {
-    const postTransfer = await fundClient.postTransfers(
-      alpacaID,
-      TransferData.from({
-        amount: initialDeposit,
-        transferType: "ach",
-        relationshipId: alpacaACH,
-        direction: "INCOMING",
+      fundingRef.set({
+        subscriptionAmount,
+        initialDeposit,
+        startDate: serverTimestamp(),
+        deposits: [
+          {
+            amount: totalAmount,
+            date: postTransfer.createdAt,
+            id: postTransfer.id,
+            direction: postTransfer.direction,
+          },
+        ],
       })
-    )
-
-    fundingRef.set({
-      subscriptionAmount,
-      initialDeposit,
-      startDate: serverTimestamp(),
-      deposits: [
-        {
-          initialDeposit,
-          date: postTransfer.createdAt,
-          id: postTransfer.id,
-          direction: postTransfer.direction,
-        },
-      ],
-    })
-  } catch (error) {
-    console.error(error)
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    console.error(`User with id ${uid} was missing alpacaID or alpacaACH`)
   }
 
   return

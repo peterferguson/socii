@@ -32,7 +32,7 @@ export default function TickerPage({ tickerSymbols }) {
   )
   const [positions, setPositions] = useState([])
 
-  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaId
+  const { alpacaId } = user
 
   // ? Maybe execute this in the background? Or just use the data already in the db?
   useEffect(() => {
