@@ -24,7 +24,7 @@ export default function CryptoHome() {
     <>
       <ComingSoon
         color={color}
-        description="Alternative investment vechicles are important for a portfolios
+        description="Alternative investment vehicles are important for a portfolios
       diversity. That is why we are pushing to bring crypto to socii as quickly as
       possible"
       >

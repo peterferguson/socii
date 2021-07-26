@@ -7,13 +7,14 @@ import {
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
-import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
+import { firestore } from "@lib/firebase"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
+import { createGroup } from "@lib/db"
 
 export default function Create() {
   const { user, username } = useAuth()
@@ -153,21 +154,22 @@ export default function Create() {
           </label>
           <button
             className="w-11/12 my-8 btn"
-            onClick={(e) =>
-              isValidGroupName
-                ? createGroup(
-                    e,
-                    router,
-                    user,
-                    username,
-                    groupName,
-                    privacyOption,
-                    depositOption,
-                    lumpSumOption,
-                    groupDescription
-                  )
-                : null
-            }
+            onClick={(e) => {
+              e.preventDefault()
+              if (isValidGroupName) {
+                createGroup(
+                  user,
+                  username,
+                  groupName,
+                  privacyOption,
+                  depositOption,
+                  lumpSumOption,
+                  groupDescription
+                )
+
+                router.push(`/groups/${groupName}`)
+              }
+            }}
           >
             Create!
           </button>
@@ -186,7 +188,7 @@ function AmountOptions({
   srLabel,
 }) {
   const [localCurrency] = useLocalCurrency()
-  const LocalCurrencyIcon = currencyIcons[localCurrency].icon
+  // const LocalCurrencyIcon = currencyIcons[localCurrency].icon
   return (
     <div className={`w-11/12 mt-4 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={amountOption} onChange={setAmountOption}>
@@ -299,44 +301,4 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
       </RadioGroup>
     </div>
   )
-}
-
-const createGroup = async (
-  e,
-  router,
-  user,
-  username,
-  groupName,
-  privacyOption,
-  depositOption,
-  lumpSumOption,
-  groupDescription
-) => {
-  e.preventDefault()
-
-  // TODO: Need to fix rules to allow user creation. (userGroupRef isn't accessible)
-
-  const userGroupRef = firestore.collection("users").doc(user.uid)
-  const groupRef = firestore.collection("groups").doc(groupName)
-  const investorsRef = groupRef.collection("investors").doc(username)
-
-  const batch = firestore.batch()
-
-  batch.update(userGroupRef, { groups: arrayUnion(groupName) })
-  batch.set(groupRef, {
-    groupDescription,
-    groupName,
-    privacyOption,
-    groupType: "", // TODO: Implement group types (dividend/active/value/growth)
-    cashBalance: depositOption.amount + lumpSumOption.amount, //TODO: Add this to the payment ledger
-    joinFee: lumpSumOption.amount,
-    membershipFee: depositOption.amount,
-    startDate: serverTimestamp(),
-    investorCount: 1, // TODO: Increment this on addition of new investors
-  })
-  batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() })
-  await batch.commit()
-
-  // Imperative navigation after doc is set
-  router.push(`/groups/${groupName}`)
 }

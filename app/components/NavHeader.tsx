@@ -1,13 +1,15 @@
-import Logo from "@components/Logo"
-import { useAuth } from "hooks/useAuth"
+import {
+  HeaderButton,
+  HeaderDropdownButton,
+  Logo,
+  ProfilePhoto,
+  Searchbar,
+} from "@components"
+import { useAuth } from "@hooks/useAuth"
 import React from "react"
 import { HiOutlineChevronDown, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { useMediaQuery } from "react-responsive"
-import HeaderButton from "./HeaderButton"
-import HeaderDropdownButton from "./HeaderDropdownButton"
-import { ProfilePhoto } from "./ProfilePhoto"
-import { Searchbar } from "./Searchbar"
 
 interface INavHeader {
   setShowSearchCard: React.Dispatch<React.SetStateAction<boolean>>

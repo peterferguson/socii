@@ -7,6 +7,8 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
 adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)
 
+process.env.ALPACA_KEY = functions.config().alpaca.key
+process.env.ALPACA_SECRET = functions.config().alpaca.secret
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
@@ -46,6 +48,10 @@ module.exports = {
     .region(london)
     .firestore.document("groups/{groupName}/investors/{investorUsername}")
     .onWrite(databaseOperations.incrementInvestors),
+  initialDeposit: functions
+    .region(london)
+    .firestore.document("groups/{groupName}/investors/{investorUsername}")
+    .onCreate(databaseOperations.initialDeposit),
   onTickerCreated: functions
     .region(london)
     .firestore.document("ticker/{isin}")

@@ -33,7 +33,7 @@ export default function SelectInvestActionModal({
           <FaArrowUp className="w-6 h-6 text-teal-400" />
         </div>
       ),
-      name: "Buy specifed cash amount",
+      name: `Buy ${tickerSymbol}`,
       description: `
       Buy as little as $1 of ${tickerSymbol} shares
       `,
@@ -44,10 +44,10 @@ export default function SelectInvestActionModal({
           <FaArrowDown className="w-6 h-6 text-brand-cyan-vivid" />
         </div>
       ),
-
-      name: "Buy specifed share amount",
+      
+      name: `Sell ${tickerSymbol}`,
       description: `
-      Buy as little as 0.000000001 ${tickerSymbol} shares
+      Sell as little as 0.000000001 ${tickerSymbol} shares
       `,
     },
     {

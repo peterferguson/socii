@@ -25,7 +25,7 @@ export const useProvideAuth = () => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
-      const { token, ...userWithoutToken } = user
+      const { token, expirationTime, ...userWithoutToken } = user
 
       createUser(user.uid, userWithoutToken)
       setUser(user)
@@ -55,6 +55,7 @@ export const useProvideAuth = () => {
   //     }
   //   })
   // }
+  
   const signinWithFacebook = async (redirect: string | UrlObject) => {
     setLoading(true)
     const response = await auth.signInWithPopup(new FacebookAuthProvider())
@@ -113,6 +114,7 @@ export const useProvideAuth = () => {
   //   }, 30 * 60 * 1000 /*every 30min, assuming token expires every 1hr*/);
   //   return () => clearInterval(interval);
   // }, [user]); // needs to depend on user to have closure on a valid user object in callback fun
+
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
     const currentUser = auth.currentUser

@@ -6,4 +6,8 @@ if (!admin.apps.length) admin.initializeApp()
 const firestore = admin.firestore()
 const auth = admin.auth()
 
-export { firestore, auth }
+const arrayUnion = admin.firestore.FieldValue.arrayUnion
+const serverTimestamp = admin.firestore.FieldValue.serverTimestamp
+const fromDate = admin.firestore.Timestamp.fromDate
+
+export { firestore, auth, arrayUnion, fromDate }

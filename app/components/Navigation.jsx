@@ -1,5 +1,4 @@
-import Logo from "@components/Logo"
-import MacSearchKey from "@components/SearchKey"
+import { Logo, SearchKey } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -43,7 +42,7 @@ function SearchBar({ setShowSearchCard }) {
         <span className="text-gray-400">
           Search<span className="hidden text-gray-400 sm:inline">: TSLA</span>
         </span>
-        <MacSearchKey />
+        <SearchKey />
       </button>
     </div>
   )

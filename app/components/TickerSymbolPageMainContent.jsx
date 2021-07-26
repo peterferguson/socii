@@ -1,16 +1,13 @@
+import { Chart, PriceCard } from "@components/index"
 import { tailwindColorMap } from "@lib/constants"
 import { pctChange } from "@utils/pctChange"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React, { useEffect, useState } from "react"
-import { PriceCard } from "@components/PriceCard"
-import { Chart } from "@components/Chart"
 
-export function TickerSymbolPageMainContent({
-  user,
+export default function TickerSymbolPageMainContent({
   ticker,
   timeseries,
   tickerLogoUrl,
-  router,
   investHandler,
 }) {
   const tickerSymbol = ticker?.tickerSymbol
@@ -60,7 +57,9 @@ export function TickerSymbolPageMainContent({
         </div>
         <div className="flex-grow hidden sm:block" />
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+          {/* log for tailwind jit compiler  */}
           <div
+            style={{ "background-color": ticker.logoColor }}
             className="mx-0 mt-4 mb-0 text-center btn btn-transition"
             onClick={() => investHandler()}
           >

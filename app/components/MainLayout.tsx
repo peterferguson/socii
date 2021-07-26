@@ -1,5 +1,4 @@
-import NavHeader from "@components/NavHeader"
-import Sidebar from "@components/Sidebar"
+import { NavHeader, Sidebar } from "@components"
 import ChatSidebar from "@stream/components/ChatSidebar"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -11,7 +10,7 @@ const StreamChatWithNoSSR = dynamic(() => import("stream/components/Chat"), {
   ssr: false,
 })
 
-export function MainLayout(props) {
+export default function MainLayout(props) {
   const { client } = useContext(ChatContext)
   const router = useRouter()
   const isChatRoute = router.pathname.includes("/chat")

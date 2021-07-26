@@ -20,6 +20,8 @@ firebase-debug.*.log*
 # Google Service Account Json
 serviceAccountKey.json
 
+# OS Specific
+*.DS_Store
 
 # Runtime data
 pids

@@ -1,5 +1,5 @@
 import { pnlTextColor } from "@utils/pnlTextColor"
-import { useWindowSize } from "hooks"
+import { useWindowSize } from "@hooks"
 import React, { useState } from "react"
 import { Hint, RadialChart } from "react-vis"
 import "react-vis/dist/style.css"

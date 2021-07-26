@@ -1,5 +1,4 @@
-import MultiSelect from "@components/MultiSelect"
-import PriceInput from "@components/PriceInput"
+import { MultiSelect, PriceInput } from "@components"
 import { Dialog, Transition } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
 import { alphaVantageQueryOptions } from "@lib/constants"

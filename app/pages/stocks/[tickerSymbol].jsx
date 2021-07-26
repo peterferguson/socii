@@ -1,7 +1,10 @@
-import SelectGroupModal from "@components/SelectGroupModal"
-import SelectOrderTypeModal from "@components/SelectOrderTypeModal"
-import SelectInvestActionModal from "@components/SelectInvestActionModal"
-import ShareStockInformationModal from "@components/ShareStockInformationModal"
+import {
+  SelectGroupModal,
+  SelectOrderTypeModal,
+  SelectInvestActionModal,
+  ShareStockInformationModal,
+  TickerSymbolPageMainContent,
+} from "@components/index"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
 import { useAuth } from "@hooks/useAuth"
 import { firestore } from "@lib/firebase"
@@ -13,7 +16,6 @@ import React, { useEffect, useState } from "react"
 import Custom404 from "../404"
 import { fetcher } from "@utils/fetcher"
 import useSWR from "swr"
-import { TickerSymbolPageMainContent } from "@components/TickerSymbolPageMainContent"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
@@ -30,7 +32,7 @@ export default function TickerPage({ tickerSymbols }) {
   )
   const [positions, setPositions] = useState([])
 
-  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaId
+  const { alpacaId } = user
 
   // ? Maybe execute this in the background? Or just use the data already in the db?
   useEffect(() => {
@@ -82,11 +84,9 @@ export default function TickerPage({ tickerSymbols }) {
   return (
     <>
       <TickerSymbolPageMainContent
-        user={user}
         ticker={ticker}
         timeseries={timeseries}
         tickerLogoUrl={tickerLogoUrl}
-        router={router}
         investHandler={investHandler}
       />
       {/* FIXME: This is next to unreadable! */}
