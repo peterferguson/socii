@@ -12,7 +12,7 @@ export default function Navigation(props) {
 
   return (
     <div className="sticky top-0 z-50 flex flex-row w-full mx-auto bg-gray-50">
-      <div className="p-4">
+      <div className="flex items-center justify-center mx-auto">
         <Logo className="text-4xl" />
       </div>
       <div className="flex-grow"></div>

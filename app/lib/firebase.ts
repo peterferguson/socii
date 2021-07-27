@@ -26,15 +26,15 @@ export const storage = firebase.storage()
 export const firestore = firebase.firestore()
 export const functions = firebase.app().functions(londonRegion)
 
-if (
-  process.env.NODE_ENV === "development" &&
-  "_delegate" in firestore &&
-  !firestore?.["_delegate"]._settings.host?.includes("local")
-  // ! Stops NextJS hot reloading from re-executing this code
-) {
-  firestore.useEmulator("localhost", 8080)
-  functions.useEmulator("localhost", 5001)
-}
+// if (
+//   process.env.NODE_ENV === "development" &&
+//   "_delegate" in firestore &&
+//   !firestore?.["_delegate"]._settings.host?.includes("local")
+//   // ! Stops NextJS hot reloading from re-executing this code
+// ) {
+//   firestore.useEmulator("localhost", 8080)
+//   functions.useEmulator("localhost", 5001)
+// }
 
 export const GoogleAuthProvider = firebase.auth.GoogleAuthProvider
 export const FacebookAuthProvider = firebase.auth.FacebookAuthProvider

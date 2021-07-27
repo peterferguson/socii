@@ -15,6 +15,10 @@ module.exports = {
           lighter: "#6dcbf0",
           lightest: "#84d3f2",
         },
+        logo: {
+          blue: "#29b7c3",
+          teal: "#42b59d",
+        },
         brand: {
           // - brand colors based on DEFAULT using mycolors.space
           DEFAULT: "#3fbaeb",
