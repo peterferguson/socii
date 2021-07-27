@@ -207,16 +207,117 @@ Array [
         >
           What is 
           <a
-            className="text-3xl md:text-4xl font-primary inline-flex"
+            className="text-3xl md:text-4xl font-primary mx-4 inline-flex items-center justify-center"
             href="/"
             onClick={[Function]}
             onMouseEnter={[Function]}
           >
-            soc
             <span
-              className="text-3xl md:text-4xl bg-clip-text text-transparent           bg-gradient-to-r from-green-400 to-brand font-primary"
+              className="-mr-0.5"
             >
-              ii
+              s
+            </span>
+            <span
+              className="mt-[0.425rem]"
+            >
+              <div
+                style={
+                  Object {
+                    "boxSizing": "border-box",
+                    "display": "inline-block",
+                    "margin": 0,
+                    "maxWidth": "100%",
+                    "overflow": "hidden",
+                    "position": "relative",
+                  }
+                }
+              >
+                <div
+                  style={
+                    Object {
+                      "boxSizing": "border-box",
+                      "display": "block",
+                      "maxWidth": "100%",
+                    }
+                  }
+                >
+                  <img
+                    alt=""
+                    aria-hidden={true}
+                    role="presentation"
+                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+                    style={
+                      Object {
+                        "border": "none",
+                        "display": "block",
+                        "margin": 0,
+                        "maxWidth": "100%",
+                        "padding": 0,
+                      }
+                    }
+                  />
+                </div>
+                <noscript>
+                  <img
+                    decoding="async"
+                    src="/_next/image?url=%2Ffavicons%2Fsocii.svg&w=64&q=75"
+                    srcSet="/_next/image?url=%2Ffavicons%2Fsocii.svg&w=32&q=75 1x, /_next/image?url=%2Ffavicons%2Fsocii.svg&w=64&q=75 2x"
+                    style={
+                      Object {
+                        "border": "none",
+                        "bottom": 0,
+                        "boxSizing": "border-box",
+                        "display": "block",
+                        "height": 0,
+                        "left": 0,
+                        "margin": "auto",
+                        "maxHeight": "100%",
+                        "maxWidth": "100%",
+                        "minHeight": "100%",
+                        "minWidth": "100%",
+                        "objectFit": undefined,
+                        "objectPosition": undefined,
+                        "padding": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 0,
+                        "width": 0,
+                      }
+                    }
+                  />
+                </noscript>
+                <img
+                  decoding="async"
+                  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                  style={
+                    Object {
+                      "border": "none",
+                      "bottom": 0,
+                      "boxSizing": "border-box",
+                      "display": "block",
+                      "height": 0,
+                      "left": 0,
+                      "margin": "auto",
+                      "maxHeight": "100%",
+                      "maxWidth": "100%",
+                      "minHeight": "100%",
+                      "minWidth": "100%",
+                      "objectFit": undefined,
+                      "objectPosition": undefined,
+                      "padding": 0,
+                      "position": "absolute",
+                      "right": 0,
+                      "top": 0,
+                      "width": 0,
+                    }
+                  }
+                />
+              </div>
+            </span>
+            <span
+              className="-ml-0.5"
+            >
+              cii
             </span>
           </a>
           ?
@@ -411,16 +512,117 @@ Array [
             className="py-8 mt-2 bg-white dark:bg-gray-800"
           >
             <a
-              className="text-5xl font-primary inline-flex"
+              className="text-5xl font-primary mx-4 inline-flex items-center justify-center"
               href="/"
               onClick={[Function]}
               onMouseEnter={[Function]}
             >
-              soc
               <span
-                className="text-5xl bg-clip-text text-transparent           bg-gradient-to-r from-green-400 to-brand font-primary"
+                className="-mr-0.5"
               >
-                ii
+                s
+              </span>
+              <span
+                className="mt-[0.425rem]"
+              >
+                <div
+                  style={
+                    Object {
+                      "boxSizing": "border-box",
+                      "display": "inline-block",
+                      "margin": 0,
+                      "maxWidth": "100%",
+                      "overflow": "hidden",
+                      "position": "relative",
+                    }
+                  }
+                >
+                  <div
+                    style={
+                      Object {
+                        "boxSizing": "border-box",
+                        "display": "block",
+                        "maxWidth": "100%",
+                      }
+                    }
+                  >
+                    <img
+                      alt=""
+                      aria-hidden={true}
+                      role="presentation"
+                      src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+                      style={
+                        Object {
+                          "border": "none",
+                          "display": "block",
+                          "margin": 0,
+                          "maxWidth": "100%",
+                          "padding": 0,
+                        }
+                      }
+                    />
+                  </div>
+                  <noscript>
+                    <img
+                      decoding="async"
+                      src="/_next/image?url=%2Ffavicons%2Fsocii.svg&w=64&q=75"
+                      srcSet="/_next/image?url=%2Ffavicons%2Fsocii.svg&w=32&q=75 1x, /_next/image?url=%2Ffavicons%2Fsocii.svg&w=64&q=75 2x"
+                      style={
+                        Object {
+                          "border": "none",
+                          "bottom": 0,
+                          "boxSizing": "border-box",
+                          "display": "block",
+                          "height": 0,
+                          "left": 0,
+                          "margin": "auto",
+                          "maxHeight": "100%",
+                          "maxWidth": "100%",
+                          "minHeight": "100%",
+                          "minWidth": "100%",
+                          "objectFit": undefined,
+                          "objectPosition": undefined,
+                          "padding": 0,
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
+                          "width": 0,
+                        }
+                      }
+                    />
+                  </noscript>
+                  <img
+                    decoding="async"
+                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                    style={
+                      Object {
+                        "border": "none",
+                        "bottom": 0,
+                        "boxSizing": "border-box",
+                        "display": "block",
+                        "height": 0,
+                        "left": 0,
+                        "margin": "auto",
+                        "maxHeight": "100%",
+                        "maxWidth": "100%",
+                        "minHeight": "100%",
+                        "minWidth": "100%",
+                        "objectFit": undefined,
+                        "objectPosition": undefined,
+                        "padding": 0,
+                        "position": "absolute",
+                        "right": 0,
+                        "top": 0,
+                        "width": 0,
+                      }
+                    }
+                  />
+                </div>
+              </span>
+              <span
+                className="-ml-0.5"
+              >
+                cii
               </span>
             </a>
             <div
