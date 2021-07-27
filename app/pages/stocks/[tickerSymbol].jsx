@@ -15,7 +15,6 @@ import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import Custom404 from "../404"
 import { fetcher } from "@utils/fetcher"
-import useSWR from "swr"
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
@@ -32,7 +31,29 @@ export default function TickerPage({ tickerSymbols }) {
   )
   const [positions, setPositions] = useState([])
 
-  const { alpacaId } = user
+  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
+
+  // !
+  // !
+  // !
+  // !
+  // !
+  // !
+  // !
+  // TODO:
+  // TODO:
+  // TODO: Write a reducer to handle the state flow of the modals & dynamically import the modals
+  // TODO: Display a my position section if the user holds the stock
+  // TODO: Breakdown the positions into groups if the user holds the stock
+  // TODO:
+  // TODO:
+  // !
+  // !
+  // !
+  // !
+  // !
+  // !
+  // !
 
   // ? Maybe execute this in the background? Or just use the data already in the db?
   useEffect(() => {
@@ -45,12 +66,15 @@ export default function TickerPage({ tickerSymbols }) {
         })
       )
     }
-    if (user?.token) getPositions()
+    if (user?.token && alpacaId) getPositions()
   }, [user, alpacaId])
 
   const holding = positions.filter(
     (position) => position.symbol === ticker?.tickerSymbol
   )[0]
+
+  console.log(holding)
+
 
   // - Get the users positions, this will not depend on userGroups for being able to trade
   // - but will restrict the groups that can sell the ticker!
