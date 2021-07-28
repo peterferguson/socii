@@ -1,5 +1,5 @@
 import { OHLCTimeseries } from "@models/OHLCTimseries"
-import { serializeObjectDateKeys } from "./serializeObjectDateKeys"
+import { logoUrl } from "@utils/logoUrl"
 import { tickerExistsSubquery } from "./tickerExistsSubquery"
 import { tickerTimeseries } from "./tickerTimeseries"
 
@@ -25,6 +25,10 @@ export const stockProps = async ({
     // * serialize the dates broke due to nesting of the ticker data
     // * therefore just going to stringify the ticker data then parse it
     ticker = JSON.parse(JSON.stringify(ticker))
+
+    // FIXME: shouldnt really need a use effect here!
+
+    if (!ticker.logoUrl) ticker.logoUrl = await logoUrl(ticker.ISIN)
 
     const timeseries: OHLCTimeseries = await tickerTimeseries(
       tickerDoc.ref,

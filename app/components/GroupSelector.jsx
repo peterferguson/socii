@@ -5,13 +5,12 @@ import { firestore } from "@lib/firebase"
 import React, { useContext, useState } from "react"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 
-export default function GroupSelectorRadioGroup({ groupNames, className = "" }) {
-  const { selectedGroup, changeSelectedGroup } = useContext(selectedGroupContext)
-  const [groupSelected, setGroupSelected] = useState(selectedGroup)
+export default function GroupSelectorRadioGroup({ groupNames, send, className = "" }) {
+  const [groupSelected, setGroupSelected] = useState(null)
 
   const setSelectedGroup = (group) => {
-    changeSelectedGroup(group.name)
     setGroupSelected(group.name)
+    send("SELECT_GROUP", { groupName: group.name })
   }
 
   // TODO: Implement a higher-level check to see if the user/selectedGroup holds stock already.
@@ -20,6 +19,7 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
     const docRef = firestore.doc(`groups/${name}`)
 
     // TODO: Fix this! Works for now but could lead to bugs!
+    // ! For example if the user id added to a group when this is open it will break.
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value] = useDocumentDataOnce(docRef)
 
@@ -42,15 +42,14 @@ export default function GroupSelectorRadioGroup({ groupNames, className = "" }) 
             <RadioGroup.Option
               key={group.name}
               value={group}
-              className={({ active }) =>
-                `${
+              className={({ active }) => `bg-white relative rounded-lg shadow-md px-4 
+                py-2 cursor-pointer focus:outline-none flex-1
+                ${
                   active
                     ? "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
                     : ""
                 }
-                               bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer
-                               focus:outline-none flex-1`
-              }
+                `}
             >
               {({ checked }) => (
                 <>

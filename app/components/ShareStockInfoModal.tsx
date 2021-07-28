@@ -6,7 +6,7 @@ import { alphaVantageQuery } from "@lib/firebase"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 
-interface ShareStockInformationModalProps {
+interface ShareStockInfoModalProps {
   selectedGroup: string
   tickerSymbol: string
   tickerLogoUrl: string
@@ -16,7 +16,7 @@ interface ShareStockInformationModalProps {
   pricePlaceholder?: string
 }
 
-export default function ShareStockInformationModal({
+export default function ShareStockInfoModal({
   selectedGroup,
   tickerSymbol,
   tickerLogoUrl,
@@ -24,7 +24,7 @@ export default function ShareStockInformationModal({
   setOpenStockSharingModal,
   goClickHandler,
   pricePlaceholder = "0.00",
-}: ShareStockInformationModalProps): React.ReactNode {
+}: ShareStockInfoModalProps): React.ReactNode {
   const router = useRouter()
   const { client } = useStream()
   const [message, setMessage] = useState("")

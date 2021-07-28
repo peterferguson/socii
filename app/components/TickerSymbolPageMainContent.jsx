@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react"
 export default function TickerSymbolPageMainContent({
   ticker,
   timeseries,
-  tickerLogoUrl,
   investHandler,
 }) {
   const tickerSymbol = ticker?.tickerSymbol
@@ -33,7 +32,7 @@ export default function TickerSymbolPageMainContent({
   const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
 
   const tickerProps = {
-    logoUrl: tickerLogoUrl,
+    logoUrl: ticker.logoUrl,
     tickerSymbol: tickerSymbol,
     shortName: ticker.shortName,
     currentPrice: latestClose,
@@ -57,7 +56,6 @@ export default function TickerSymbolPageMainContent({
         </div>
         <div className="flex-grow hidden sm:block" />
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-          {/* log for tailwind jit compiler  */}
           <div
             style={{ "background-color": ticker.logoColor }}
             className="mx-0 mt-4 mb-0 text-center btn btn-transition"

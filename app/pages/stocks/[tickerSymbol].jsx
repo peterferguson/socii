@@ -1,61 +1,61 @@
-import {
-  SelectGroupModal,
-  SelectOrderTypeModal,
-  SelectInvestActionModal,
-  ShareStockInformationModal,
-  TickerSymbolPageMainContent,
-} from "@components/index"
-import { selectedGroupContext } from "@contexts/selectedGroupContext"
+import { default as MainContent } from "@components/TickerSymbolPageMainContent"
 import { useAuth } from "@hooks/useAuth"
 import { firestore } from "@lib/firebase"
-import { isBrowser } from "@utils/isBrowser"
-import { logoUrl } from "@utils/logoUrl"
-import { stockProps } from "@utils/stockProps"
+import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
+import { fetcher, isBrowser, stockProps } from "@utils"
+import { useMachine } from "@xstate/react"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import Custom404 from "../404"
-import { fetcher } from "@utils/fetcher"
+
+const modals = {
+  ["active.shareInformation"]: {
+    component: dynamic(() => import("../../components/ShareStockInfoModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  ["active.chooseGroup"]: {
+    component: dynamic(() => import("../../components/SelectGroupModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  ["active.investAction"]: {
+    component: dynamic(() => import("../../components/SelectInvestActionModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  ["active.orderType"]: {
+    component: dynamic(() => import("../../components/SelectOrderTypeModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  returnToLastScreen: {
+    component: dynamic(() => import("../../components/returnToLastScreenModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  // limitOrder:
+  // shareOrder:
+  // cashOrder:
+}
 
 export default function TickerPage({ tickerSymbols }) {
   const router = useRouter()
-  const { user, userGroups } = useAuth()
+  const { user } = useAuth()
+  const [state, send] = useMachine(stockInvestButtonMachine)
   let { ticker, timeseries } = tickerSymbols?.[0] || {}
 
-  const [openGroupModal, setOpenGroupModal] = useState(false)
-  const [openSelectOrderTypeModal, setOpenSelectOrderTypeModal] = useState(false)
-  const [openSelectInvestActionModal, setOpenSelectInvestActionModal] = useState(false)
-  const [openStockSharingModal, setOpenStockSharingModal] = useState(false)
-  const [tickerLogoUrl, setTickerLogoUrl] = useState("")
-  const [selectedGroup, setSelectedGroup] = useState(
-    userGroups ? userGroups?.[0] : null
-  )
-  const [positions, setPositions] = useState([])
-
   const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
-
-  // !
-  // !
-  // !
-  // !
-  // !
-  // !
-  // !
-  // TODO:
-  // TODO:
-  // TODO: Write a reducer to handle the state flow of the modals & dynamically import the modals
+  const [positions, setPositions] = useState([])
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
-  // TODO:
-  // TODO:
-  // !
-  // !
-  // !
-  // !
-  // !
-  // !
-  // !
-
-  // ? Maybe execute this in the background? Or just use the data already in the db?
+  // TODO: Add this as an entry transition to the machine `idle` state
   useEffect(() => {
     const getPositions = async () => {
       setPositions(
@@ -66,72 +66,56 @@ export default function TickerPage({ tickerSymbols }) {
         })
       )
     }
-    if (user?.token && alpacaId) getPositions()
+    if (user?.token && alpacaId) {
+      getPositions()
+      const holding = positions.filter(
+        (position) => position.symbol === ticker?.tickerSymbol
+      )[0]
+      if (holding) {
+        send("UPDATE_HOLDING", { holding })
+      }
+    }
   }, [user, alpacaId])
 
-  const holding = positions.filter(
-    (position) => position.symbol === ticker?.tickerSymbol
-  )[0]
+  const modalStateName = Object.keys(modals).filter(
+    (modal) =>
+      JSON.stringify(state.value)
+        .replace(/[^a-zA-Z:]+/gi, "")
+        .replace(":", ".") === modal
+  )?.[0]
 
-  console.log(holding)
+  const Modal = modalStateName ? modals[modalStateName]?.component : null
 
-
-  // - Get the users positions, this will not depend on userGroups for being able to trade
-  // - but will restrict the groups that can sell the ticker!
-  // 1 If the user has a position show the buy vs sell option first then the group selection
-  // 2 If the user has no position group selection first
-
+  // - Deserialize the timeseries data
   timeseries = timeseries?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
     y: d.close,
   }))
 
-  const changeSelectedGroup = (groupName) => setSelectedGroup(groupName)
-
-  useEffect(() => {
-    const setLogoUrl = async () =>
-      setTickerLogoUrl(ticker.logoUrl || logoUrl(ticker.ISIN))
-
-    if (ticker) setLogoUrl()
-  }, [ticker])
-
-  const investHandler = () => {
-    if (!user) router.push("/enter")
-    holding ? setOpenSelectInvestActionModal(true) : setOpenGroupModal(true)
-  }
+  const investHandler = () => (state.matches("active") ? send("CLOSE") : send("CLICK"))
 
   if (router.isFallback) return <div>Loading...</div>
 
   // TODO: Replace with skeleton loaders
   if (!tickerSymbols) return <Custom404 />
 
+  console.log("latest state: ", state.value)
+
   return (
     <>
-      <TickerSymbolPageMainContent
+      <MainContent
         ticker={ticker}
         timeseries={timeseries}
-        tickerLogoUrl={tickerLogoUrl}
         investHandler={investHandler}
       />
+      {Modal ? (
+        <Modal tickerSymbol={ticker.tickerSymbol} state={state} send={send} />
+      ) : null}
       {/* FIXME: This is next to unreadable! */}
       {/* ! The modals are routed between with on click actions */}
       {/* FIXME: Also all modals could be loaded dynamically */}
-      {isBrowser && timeseries && (
+      {/* {isBrowser && timeseries && (
         <>
-          <selectedGroupContext.Provider value={{ selectedGroup, changeSelectedGroup }}>
-            {openGroupModal && (
-              <SelectGroupModal
-                userGroups={userGroups}
-                openGroupModal={openGroupModal}
-                setOpenGroupModal={setOpenGroupModal}
-                goClickHandler={() =>
-                  holding
-                    ? setOpenSelectOrderTypeModal(true)
-                    : setOpenSelectInvestActionModal(true)
-                }
-              />
-            )}
-          </selectedGroupContext.Provider>
           {openSelectOrderTypeModal && (
             <SelectOrderTypeModal
               tickerSymbol={ticker.tickerSymbol}
@@ -141,22 +125,8 @@ export default function TickerPage({ tickerSymbols }) {
               goClickHandler={() => setOpenStockSharingModal(true)}
             />
           )}
-          {openSelectInvestActionModal && (
-            <SelectInvestActionModal
-              tickerSymbol={ticker.tickerSymbol}
-              tickerLogoUrl={tickerLogoUrl}
-              openSelectInvestActionModal={openSelectInvestActionModal}
-              setOpenSelectInvestActionModal={setOpenSelectInvestActionModal}
-              goClickHandler={
-                () =>
-                  holding ? setOpenGroupModal(true) : setOpenStockSharingModal(true)
-                // TODO: Need to add a state for the selected components of the modals
-                // TODO: This re-routing will depend on the selected component
-              }
-            />
-          )}
-          {openStockSharingModal && (
-            <ShareStockInformationModal
+            {openStockSharingModal && (
+            <ShareStockInfoModal
               selectedGroup={selectedGroup}
               tickerSymbol={ticker.tickerSymbol}
               tickerLogoUrl={tickerLogoUrl}
@@ -167,7 +137,7 @@ export default function TickerPage({ tickerSymbols }) {
             />
           )}
         </>
-      )}
+      )} */}
     </>
   )
 }

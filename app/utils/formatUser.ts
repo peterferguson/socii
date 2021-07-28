@@ -1,4 +1,4 @@
-import firebase from "@lib/firebase";
+import firebase from "@lib/firebase"
 
 // const getStripeRole = async () => {
 //   await firebase.auth().currentUser.getIdToken(true);
@@ -8,10 +8,9 @@ import firebase from "@lib/firebase";
 
 export const formatUser = async (user: firebase.User) => {
   // const token = await user.getIdToken(/* forceRefresh */ true);
-  const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true);
-  const { token, expirationTime } = decodedToken;
-  if (process.env.NODE_ENV !== "production")
-    console.log(token);
+  const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
+  const { token, expirationTime } = decodedToken
+  if (process.env.NODE_ENV !== "production") console.log(token)
   return {
     uid: user.uid,
     email: user.email,
@@ -23,5 +22,5 @@ export const formatUser = async (user: firebase.User) => {
     token,
     expirationTime,
     // stripeRole: await getStripeRole(),
-  };
-};
+  }
+}

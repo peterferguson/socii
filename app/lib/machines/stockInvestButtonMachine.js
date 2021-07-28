@@ -1,8 +1,7 @@
 import { createMachine, assign } from "xstate"
 
-const selectGroup = assign({
-  group: (_context, event) => event.value,
-})
+const selectGroup = assign({ group: (_context, event) => event.groupName })
+const updateHolding = assign({ hasHolding: (_context, event) => !!event.holding })
 
 const updateHistoryStack = (thisState) =>
   assign({
@@ -15,21 +14,23 @@ const reinstatePreviousState = assign({
   currentStateName: (ctx) => ctx.historyStack[ctx.historyStack.length - 2],
 })
 
-export const investButtonMachine = createMachine(
+export const stockInvestButtonMachine = createMachine(
   {
     id: "investButton",
     initial: "idle",
     context: {
-      holding: [1],
+      hasHolding: false,
       group: "",
       side: "",
-      currentStateName: "idle",
       orderType: "",
+      // - The following context is used to keep track of the state history
+      currentStateName: "idle",
       historyStack: [],
     },
     states: {
       idle: {
         on: {
+          UPDATE_HOLDING: { actions: updateHolding },
           CLICK: [
             {
               target: "active.investAction",
@@ -54,13 +55,14 @@ export const investButtonMachine = createMachine(
       },
       returnToLastScreen: {
         on: {
-          agree: [
+          CLOSE: { target: "#inactive", actions: updateHistoryStack("inactive") },
+          AGREE: [
             {
               target: "#active.hist",
               actions: reinstatePreviousState,
             },
           ],
-          disagree: [
+          DISAGREE: [
             {
               target: "active.investAction",
               cond: "hasHolding",
@@ -156,7 +158,7 @@ export const investButtonMachine = createMachine(
   },
   {
     guards: {
-      hasHolding: (ctx) => ctx.holding.length > 0,
+      hasHolding: (ctx) => ctx.hasHolding,
       previouslyOnInvestAction: (ctx) => {
         const filteredStack = ctx.historyStack
           .filter((state) => state !== ctx.currentStateName)
