@@ -104,7 +104,7 @@ const StockSharingModal = ({
             <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium text-gray-900 font-primary"
+                className="text-lg font-medium text-gray-900 font-primary leading-6"
               >
                 Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
                 <span className="font-bold text-teal-300">{tickerSymbol}</span>!
@@ -133,7 +133,7 @@ const StockSharingModal = ({
                 </div>
                 <div className="pt-2 mb-3">
                   <textarea
-                    className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 \ rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                    className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                     rows={4}
                     placeholder="Bruh the wallstreetbets bros love it!"
                     onChange={(e) => setMessage(e.target.value)}
@@ -144,7 +144,7 @@ const StockSharingModal = ({
                 <div className="flex-grow" />
                 <button
                   type="button"
-                  className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent \ rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
+                  className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
                   onClick={sendMessageClickHandler}
                 >
                   To the moon 🌕

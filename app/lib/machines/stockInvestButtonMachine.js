@@ -1,18 +1,34 @@
 import { createMachine, assign } from "xstate"
 
+// - helper functions
+const lastActiveState = (ctx) => {
+  const filteredStack = dirtyActiveStates(ctx).filter(
+    (state) => state !== ctx.currentStateName
+  )
+  return filteredStack[filteredStack.length - 1]
+}
+
+const dirtyActiveStates = (ctx) => {
+  return ctx.historyStack.filter(
+    (k) => !["inactive", "idle", "returnToLastScreen"].includes(k)
+  )
+}
+
+const wasOnState = (ctx, stateName) => lastActiveState(ctx) === stateName
+
+// - updates to state context
 const selectGroup = assign({ group: (_ctx, e) => e.groupName })
+const resetChoices = assign({ group: "", side: "", orderType: "" })
 const updateHolding = assign({ hasHolding: (_ctx, e) => !!e.holding })
 const setOrderType = (order) => assign({ orderType: order })
-
 const updateHistoryStack = (thisState) =>
   assign({
     currentStateName: thisState,
     historyStack: (ctx) => ctx.historyStack.concat(ctx.currentStateName),
   })
-
 const reinstatePreviousState = assign({
   historyStack: (ctx) => ctx.historyStack.concat(ctx.currentStateName),
-  currentStateName: (ctx) => ctx.historyStack[ctx.historyStack.length - 2],
+  currentStateName: (ctx) => lastActiveState(ctx),
 })
 
 // TODO: Remove the returnToLastPage Question if they only got one page in!
@@ -50,10 +66,17 @@ export const stockInvestButtonMachine = createMachine(
       inactive: {
         id: "inactive",
         on: {
-          CLICK: {
-            target: "returnToLastScreen",
-            actions: updateHistoryStack("returnToLastScreen"),
-          },
+          CLICK: [
+            {
+              target: "#active.hist",
+              actions: reinstatePreviousState,
+              cond: "onlyEnteredFirstPage",
+            },
+            {
+              target: "returnToLastScreen",
+              actions: updateHistoryStack("returnToLastScreen"),
+            },
+          ],
         },
       },
       returnToLastScreen: {
@@ -69,11 +92,11 @@ export const stockInvestButtonMachine = createMachine(
             {
               target: "active.investAction",
               cond: "hasHolding",
-              actions: updateHistoryStack("investAction"),
+              actions: [updateHistoryStack("investAction"), resetChoices],
             },
             {
               target: "active.chooseGroup",
-              actions: updateHistoryStack("chooseGroup"),
+              actions: [updateHistoryStack("chooseGroup"), resetChoices],
             },
           ],
         },
@@ -89,9 +112,13 @@ export const stockInvestButtonMachine = createMachine(
         states: {
           hist: { type: "history" },
           chooseGroup: {
-            exit: selectGroup,
             on: {
               SELECT_GROUP: [
+                {
+                  target: "shareInformation",
+                  cond: "wantsToShare",
+                  actions: [updateHistoryStack("shareInformation"), selectGroup],
+                },
                 {
                   target: "orderType",
                   cond: "previouslyOnInvestAction",
@@ -178,15 +205,11 @@ export const stockInvestButtonMachine = createMachine(
   },
   {
     guards: {
+      onlyEnteredFirstPage: (ctx) => new Set(dirtyActiveStates(ctx)).size === 1,
       previouslyChooseGroup: (ctx) => !!ctx.group,
       hasHolding: (ctx) => ctx.hasHolding,
-      previouslyOnInvestAction: (ctx) => {
-        const filteredStack = ctx.historyStack
-          .filter((state) => state !== ctx.currentStateName)
-          .filter((state) => state !== "inactive")
-          .filter((state) => state !== "returnToLastScreen")
-        return filteredStack[filteredStack.length - 1] === "investAction"
-      },
+      wantsToShare: (ctx) => wasOnState(ctx, "investAction") && !ctx.side,
+      previouslyOnInvestAction: (ctx) => wasOnState(ctx, "investAction"),
       previouslyIdleOrInactive: (ctx) => {
         return ["idle", "inactive", "returnToLastScreen"].includes(
           ctx.historyStack[ctx.historyStack.length - 1]

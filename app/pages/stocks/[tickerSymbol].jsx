@@ -1,8 +1,11 @@
-import { default as MainContent } from "@components/TickerSymbolPageMainContent"
+import { Chart, PriceCard } from "@components/index"
 import { useAuth } from "@hooks/useAuth"
+import { tailwindColorMap } from "@lib/constants"
 import { firestore } from "@lib/firebase"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
-import { fetcher, isBrowser, stockProps } from "@utils"
+import { fetcher, stockProps } from "@utils"
+import { pctChange } from "@utils/pctChange"
+import { pnlTextColor } from "@utils/pnlTextColor"
 import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -92,7 +95,37 @@ export default function TickerPage({ tickerSymbols }) {
     y: d.close,
   }))
 
-  const investHandler = () => (state.matches("active") ? send("CLOSE") : send("CLICK"))
+  const [crosshairIndexValue, setCrosshairIndexValue] = useState(0)
+  const [gainColor, setGainColor] = useState("text-gray-400")
+
+  const latestClose = timeseries?.[0]?.y
+  const highlightedClose = timeseries[crosshairIndexValue]?.y
+  let movingMonthlyClose = highlightedClose
+
+  try {
+    movingMonthlyClose = timeseries[crosshairIndexValue + 21]?.y
+  } catch (err) {
+    null
+  }
+
+  const movingMonthlyPctChange = pctChange(highlightedClose, movingMonthlyClose)
+
+  const lastMonthPctChange = pctChange(latestClose, timeseries[21]?.y)
+
+  // * Show the pct change of highlighted value versus today
+  const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
+
+  const tickerProps = {
+    logoUrl: ticker.logoUrl,
+    tickerSymbol: ticker.tickerSymbol,
+    shortName: ticker.shortName,
+    currentPrice: latestClose,
+    movingMonthlyPctChange: movingMonthlyPctChange,
+  }
+
+  useEffect(() => {
+    setGainColor(tailwindColorMap[pnlTextColor(lastMonthPctChange)])
+  }, [lastMonthPctChange])
 
   if (router.isFallback) return <div>Loading...</div>
 
@@ -101,10 +134,35 @@ export default function TickerPage({ tickerSymbols }) {
 
   return (
     <>
-      <MainContent
-        ticker={ticker}
+      <div className="flex flex-col w-full sm:flex-row">
+        {/* <SmallAssetCard {...tickerProps} /> */}
+        <div className="flex-none pt-4 pl-0 sm:pl-8 ">
+          <PriceCard
+            {...tickerProps}
+            movingMonthlyPctChange={lastMonthPctChange}
+            gainColor={
+              
+            }
+          />
+        </div>
+        <div className="flex-grow hidden sm:block" />
+        <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+          <div
+            style={{ "background-color": ticker.logoColor }}
+            className="mx-0 mt-4 mb-0 text-center btn btn-transition"
+            onClick={() => (state.matches("active") ? send("CLOSE") : send("CLICK"))}
+          >
+            <span className="z-10 w-12 h-4 text-4xl">Invest</span>
+          </div>
+        </div>
+      </div>
+      <Chart
+        color={ticker?.logoColor}
         timeseries={timeseries}
-        investHandler={investHandler}
+        crosshairIndexValue={crosshairIndexValue}
+        setCrosshairIndexValue={setCrosshairIndexValue}
+        highlightedChange={highlightedChange}
+        highlightedClose={highlightedClose}
       />
       {Modal ? (
         <Modal tickerSymbol={ticker.tickerSymbol} state={state} send={send} />
