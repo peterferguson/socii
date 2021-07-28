@@ -2,10 +2,11 @@ import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import React, { useState } from "react"
 
-export default function OrderTypeSelector({ orderTypes, className = "" }) {
+export default function OrderTypeSelector({ orderTypes, send, className = "" }) {
   const [orderTypeSelected, setOrderTypeSelected] = useState(null)
 
-  const setSelectedOrderType = (order: { name: any }) => {
+  const setSelectedOrderType = (order) => {
+    send(order.actionName)
     setOrderTypeSelected(order.name)
   }
 
@@ -19,13 +20,14 @@ export default function OrderTypeSelector({ orderTypes, className = "" }) {
               key={`${orderType}-${i}`}
               value={orderType}
               className={({ active }) =>
-                `${
-                  active
-                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
-                    : ""
-                }
-                bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer
-                focus:outline-none flex-1`
+                `bg-white relative rounded-lg shadow-md px-4 py-2 cursor-pointer
+                  focus:outline-none flex-1
+                  ${
+                    active
+                      ? "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
+                      : ""
+                  }
+                `
               }
             >
               {({ checked }) => (

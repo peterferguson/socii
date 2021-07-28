@@ -6,37 +6,21 @@ import { alphaVantageQuery } from "@lib/firebase"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 
-interface ShareStockInfoModalProps {
-  selectedGroup: string
-  tickerSymbol: string
-  tickerLogoUrl: string
-  openStockSharingModal: boolean
-  setOpenStockSharingModal: React.Dispatch<React.SetStateAction<boolean>>
-  goClickHandler?: () => void
-  pricePlaceholder?: string
-}
-
-export default function ShareStockInfoModal({
-  selectedGroup,
+const StockSharingModal = ({
   tickerSymbol,
   tickerLogoUrl,
-  openStockSharingModal,
-  setOpenStockSharingModal,
-  goClickHandler,
+  state,
+  send,
   pricePlaceholder = "0.00",
-}: ShareStockInfoModalProps): React.ReactNode {
+}) => {
   const router = useRouter()
   const { client } = useStream()
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
-
-  const closeModal = () => setOpenStockSharingModal(false)
+  const { group: selectedGroup } = state.context
 
   const sendMessageClickHandler = async () => {
-    closeModal()
-    goClickHandler()
-
     const requiredQueryFields = ["name", "industry", "exchange"]
 
     if (client && client.user) {
@@ -46,6 +30,8 @@ export default function ShareStockInfoModal({
         {}
       )
 
+      // - This being a client-side function call is slowing the UX down
+      // TODO: Query Firebase here & if not found then run this function!
       const asset = await alphaVantageQuery({
         tickerSymbol,
         queryFields: [...new Set([...requiredQueryFields, ...selectedItems])],
@@ -61,6 +47,9 @@ export default function ShareStockInfoModal({
           asset: asset.data,
         },
       ]
+
+      send("CLOSE")
+      
       const mainMessage = await channel.sendMessage({
         text: message || `Hey I think we should check out ${tickerSymbol}!`,
         // attachments,
@@ -73,17 +62,18 @@ export default function ShareStockInfoModal({
         show_in_channel: false,
         skip_push: true,
       })
+      router.push(`/groups/${selectedGroup}`)
     }
-    router.push(`/groups/${selectedGroup}`)
+
   }
 
   return (
-    <Transition appear show={openStockSharingModal} as={Fragment}>
+    <Transition appear show={state.matches("active.shareInformation")} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
-        open={openStockSharingModal}
-        onClose={closeModal}
+        open={state.matches("active.shareInformation")}
+        onClose={() => send("CLOSE")}
       >
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
@@ -167,3 +157,5 @@ export default function ShareStockInfoModal({
     </Transition>
   )
 }
+
+export default StockSharingModal

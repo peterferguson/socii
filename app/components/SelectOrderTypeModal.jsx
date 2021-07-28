@@ -1,58 +1,56 @@
-import InvestActionSelector from "@components/InvestActionSelector"
+import OrderTypeSelector from "@components/OrderTypeSelector"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment } from "react"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
-import { HiShare } from "react-icons/hi"
+import { AiOutlineNumber } from "react-icons/ai"
+import { FaDollarSign } from "react-icons/fa"
+import { HiOutlineArrowNarrowDown } from "react-icons/hi"
 
-const actions = (tickerSymbol) => [
-  {
-    icon: () => (
-      <div className="p-2 rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2">
-        <FaArrowUp className="w-6 h-6 text-teal-400" />
-      </div>
-    ),
-    name: `Buy ${tickerSymbol}`,
-    description: `
-    Buy as little as $1 of ${tickerSymbol} shares
+const orderTypes = (tickerSymbol, side) => {
+  const capitalSide = side === "buy" ? "Buy" : "Sell"
+  return [
+    {
+      icon: () => (
+        <div className="p-2 rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2">
+          <FaDollarSign className="w-6 h-6 text-teal-400" />
+        </div>
+      ),
+      name: `${capitalSide} specific cash amount`,
+      description: `${capitalSide} as little as $1 of ${tickerSymbol} shares`,
+      actionName: "SELECT_CASH_ORDER",
+    },
+    {
+      icon: () => (
+        <div className="p-2 rounded-full bg-brand/30 mr-1.5 sm:mr-2">
+          <AiOutlineNumber className="w-6 h-6 text-brand-cyan-vivid" />
+        </div>
+      ),
+      name: `${capitalSide} specific amount of shares`,
+      description: `${capitalSide} as little as 0.000000001 ${tickerSymbol} shares`,
+      actionName: "SELECT_SHARE_ORDER",
+    },
+    {
+      icon: () => (
+        <div className="p-2 bg-pink-200 rounded-full mr-1.5 sm:mr-2">
+          <HiOutlineArrowNarrowDown className="w-6 h-6 -rotate-45 text-brand-pink" />
+        </div>
+      ),
+      name: `${capitalSide} if ${tickerSymbol} reaches a specified price or lower`,
+      description: `
+    ${capitalSide} ${tickerSymbol} using a limit order.
+    No fractionals and at least 1 share
     `,
-    actionName: "CHOOSE_BUY",
-  },
-  {
-    icon: () => (
-      <div className="p-2 rounded-full bg-brand/30 mr-1.5 sm:mr-2">
-        <FaArrowDown className="w-6 h-6 text-brand-cyan-vivid" />
-      </div>
-    ),
+      actionName: "SELECT_LIMIT_ORDER",
+    },
+  ]
+}
 
-    name: `Sell ${tickerSymbol}`,
-    description: `
-    Sell as little as 0.000000001 ${tickerSymbol} shares
-    `,
-    actionName: "CHOOSE_SELL",
-  },
-  {
-    icon: () => (
-      <div className="p-2 rounded-full bg-brand-light-secondary mr-1.5 sm:mr-2">
-        <HiShare className="w-6 h-6 text-brand" />
-      </div>
-    ),
-    name: `Share ${tickerSymbol} with a group`,
-    description: `
-    Tell your friends about ${tickerSymbol}
-    `,
-    actionName: "CHOOSE_SHARE",
-  },
-]
-
-const SelectInvestActionModal = ({ tickerSymbol, state, send }) => (
-  <Transition appear show={state.matches("active.investAction")} as={Fragment}>
+const SelectOrderTypeModal = ({ tickerSymbol, state, send }) => (
+  <Transition appear show={state.matches("active.orderType")} as={Fragment}>
     <Dialog
       as="div"
       className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
-      open={state.matches("active.investAction")}
-      onClose={() => {
-        send("CLOSE")
-      }}
+      open={state.matches("active.ordeType")}
+      onClose={() => send("CLOSE")}
     >
       <div className="min-h-screen px-4 text-center">
         <Transition.Child
@@ -85,13 +83,11 @@ const SelectInvestActionModal = ({ tickerSymbol, state, send }) => (
               as="h3"
               className="pb-4 text-lg font-medium text-gray-900 font-primary"
             >
-              Select an action:
+              Select an order type:
             </Dialog.Title>
             <div className="mt-2">
-              <InvestActionSelector
-                actions={actions(tickerSymbol).filter((k) =>
-                  !state.context.hasHolding ? k.name.match(/Buy|Share/) : true
-                )}
+              <OrderTypeSelector
+                orderTypes={orderTypes(tickerSymbol, state.context.side)}
                 send={send}
               />
             </div>
@@ -112,4 +108,4 @@ const SelectInvestActionModal = ({ tickerSymbol, state, send }) => (
   </Transition>
 )
 
-export default SelectInvestActionModal
+export default SelectOrderTypeModal

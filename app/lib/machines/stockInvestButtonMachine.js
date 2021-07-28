@@ -1,7 +1,8 @@
 import { createMachine, assign } from "xstate"
 
-const selectGroup = assign({ group: (_context, event) => event.groupName })
-const updateHolding = assign({ hasHolding: (_context, event) => !!event.holding })
+const selectGroup = assign({ group: (_ctx, e) => e.groupName })
+const updateHolding = assign({ hasHolding: (_ctx, e) => !!e.holding })
+const setOrderType = (order) => assign({ orderType: order })
 
 const updateHistoryStack = (thisState) =>
   assign({
@@ -13,6 +14,8 @@ const reinstatePreviousState = assign({
   historyStack: (ctx) => ctx.historyStack.concat(ctx.currentStateName),
   currentStateName: (ctx) => ctx.historyStack[ctx.historyStack.length - 2],
 })
+
+// TODO: Remove the returnToLastPage Question if they only got one page in!
 
 export const stockInvestButtonMachine = createMachine(
   {
@@ -114,29 +117,46 @@ export const stockInvestButtonMachine = createMachine(
                   actions: updateHistoryStack("shareInformation"),
                 },
               ],
-              CHOOSE_BUY: {
-                actions: [assign({ side: "buy" }), updateHistoryStack("chooseGroup")],
-                target: "chooseGroup",
-              },
-              CHOOSE_SELL: {
-                actions: [assign({ side: "sell" }), updateHistoryStack("chooseGroup")],
-                target: "chooseGroup",
-              },
+              CHOOSE_BUY: [
+                {
+                  target: "orderType",
+                  actions: [assign({ side: "buy" }), updateHistoryStack("orderType")],
+                  cond: "previouslyChooseGroup",
+                },
+                {
+                  target: "chooseGroup",
+                  actions: [assign({ side: "buy" }), updateHistoryStack("chooseGroup")],
+                },
+              ],
+              CHOOSE_SELL: [
+                {
+                  target: "orderType",
+                  actions: [assign({ side: "sell" }), updateHistoryStack("orderType")],
+                  cond: "previouslyChooseGroup",
+                },
+                {
+                  target: "chooseGroup",
+                  actions: [
+                    assign({ side: "sell" }),
+                    updateHistoryStack("chooseGroup"),
+                  ],
+                },
+              ],
             },
           },
           orderType: {
             on: {
               SELECT_LIMIT_ORDER: {
                 target: "limitOrder",
-                actions: updateHistoryStack("limitOrder"),
+                actions: [updateHistoryStack("limitOrder"), setOrderType("limit")],
               },
               SELECT_CASH_ORDER: {
                 target: "cashOrder",
-                actions: updateHistoryStack("cashOrder"),
+                actions: [updateHistoryStack("cashOrder"), setOrderType("cash")],
               },
               SELECT_SHARE_ORDER: {
                 target: "shareOrder",
-                actions: updateHistoryStack("shareOrder"),
+                actions: [updateHistoryStack("shareOrder"), setOrderType("shares")],
               },
             },
           },
@@ -158,6 +178,7 @@ export const stockInvestButtonMachine = createMachine(
   },
   {
     guards: {
+      previouslyChooseGroup: (ctx) => !!ctx.group,
       hasHolding: (ctx) => ctx.hasHolding,
       previouslyOnInvestAction: (ctx) => {
         const filteredStack = ctx.historyStack

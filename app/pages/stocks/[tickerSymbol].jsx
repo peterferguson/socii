@@ -11,7 +11,7 @@ import Custom404 from "../404"
 
 const modals = {
   ["active.shareInformation"]: {
-    component: dynamic(() => import("../../components/ShareStockInfoModal"), {
+    component: dynamic(() => import("../../components/StockSharingModal"), {
       ssr: false,
       loading: () => <p>Loading...</p>,
     }),
@@ -55,7 +55,7 @@ export default function TickerPage({ tickerSymbols }) {
   const [positions, setPositions] = useState([])
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
-  // TODO: Add this as an entry transition to the machine `idle` state
+  // TODO: Add back buttons to modals
   useEffect(() => {
     const getPositions = async () => {
       setPositions(
@@ -99,8 +99,6 @@ export default function TickerPage({ tickerSymbols }) {
   // TODO: Replace with skeleton loaders
   if (!tickerSymbols) return <Custom404 />
 
-  console.log("latest state: ", state.value)
-
   return (
     <>
       <MainContent
@@ -111,33 +109,6 @@ export default function TickerPage({ tickerSymbols }) {
       {Modal ? (
         <Modal tickerSymbol={ticker.tickerSymbol} state={state} send={send} />
       ) : null}
-      {/* FIXME: This is next to unreadable! */}
-      {/* ! The modals are routed between with on click actions */}
-      {/* FIXME: Also all modals could be loaded dynamically */}
-      {/* {isBrowser && timeseries && (
-        <>
-          {openSelectOrderTypeModal && (
-            <SelectOrderTypeModal
-              tickerSymbol={ticker.tickerSymbol}
-              tickerLogoUrl={tickerLogoUrl}
-              openSelectOrderTypeModal={openSelectOrderTypeModal}
-              setOpenSelectOrderTypeModal={setOpenSelectOrderTypeModal}
-              goClickHandler={() => setOpenStockSharingModal(true)}
-            />
-          )}
-            {openStockSharingModal && (
-            <ShareStockInfoModal
-              selectedGroup={selectedGroup}
-              tickerSymbol={ticker.tickerSymbol}
-              tickerLogoUrl={tickerLogoUrl}
-              openStockSharingModal={openStockSharingModal}
-              setOpenStockSharingModal={setOpenStockSharingModal}
-              goClickHandler={() => {}}
-              pricePlaceholder={timeseries?.[0]?.y.toString()}
-            />
-          )}
-        </>
-      )} */}
     </>
   )
 }

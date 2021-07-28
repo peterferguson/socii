@@ -2,10 +2,11 @@ import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import React, { useState } from "react"
 
-export default function OrderTypeSelector({ actions, className = "" }) {
+export default function OrderTypeSelector({ actions, send, className = "" }) {
   const [actionSelected, setActionSelected] = useState(null)
 
-  const setSelectedAction = (action: { name: any }) => {
+  const setSelectedAction = (action: { name: string; actionName: string }) => {
+    send(action.actionName)
     setActionSelected(action.name)
   }
 
