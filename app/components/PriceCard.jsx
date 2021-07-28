@@ -1,7 +1,13 @@
-import React from "react";
+import React from "react"
 
 export default function PriceCard({
-  logoUrl, tickerSymbol, shortName, currentPrice, gainColor, currencySymbol = "$", movingMonthlyPctChange,
+  logoUrl,
+  tickerSymbol,
+  shortName,
+  currentPrice,
+  gainColor,
+  currencySymbol = "$",
+  movingMonthlyPctChange,
 }) {
   return (
     <div className="p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-gray-800">
@@ -9,9 +15,10 @@ export default function PriceCard({
         <img
           className="w-16 h-auto mx-auto rounded-full shadow-lg"
           src={logoUrl}
-          alt={`${tickerSymbol} logo`} />
+          alt={`${tickerSymbol} logo`}
+        />
         <div className="flex flex-col">
-          <span className="ml-2 font-bold tracking-wider text-gray-700 uppercase text-md dark:text-white">
+          <span className="ml-2 font-bold tracking-wider text-gray-700 uppercase text-base dark:text-white">
             {tickerSymbol}
           </span>
           <br />
@@ -40,5 +47,5 @@ export default function PriceCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

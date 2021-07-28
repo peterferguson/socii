@@ -44,7 +44,7 @@ const actions = (tickerSymbol) => [
   },
 ]
 
-const SelectInvestActionModal = ({ tickerSymbol, state, send }) => (
+const SelectInvestActionModal = ({ ticker, state, send }) => (
   <Transition appear show={state.matches("active.investAction")} as={Fragment}>
     <Dialog
       as="div"
@@ -89,7 +89,7 @@ const SelectInvestActionModal = ({ tickerSymbol, state, send }) => (
             </Dialog.Title>
             <div className="mt-2">
               <InvestActionSelector
-                actions={actions(tickerSymbol).filter((k) =>
+                actions={actions(ticker.tickerSymbol).filter((k) =>
                   !state.context.hasHolding ? k.name.match(/Buy|Share/) : true
                 )}
                 send={send}

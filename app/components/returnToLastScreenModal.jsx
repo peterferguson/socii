@@ -1,8 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment } from "react"
 
-// TODO: Add blurred background
-
 const returnToLastScreenModal = ({ state, send }) => (
   <Transition appear show={state.matches("returnToLastScreen")} as={Fragment}>
     <Dialog
@@ -50,8 +48,8 @@ const returnToLastScreenModal = ({ state, send }) => (
             </Dialog.Title>
             <div className="mt-2">
               <p className="text-gray-500 text-tiny sm:text-sm">
-                You previously clicked this button. Would you like to
-                pick up where you left off?
+                You previously clicked this button. Would you like to pick up where you
+                left off?
               </p>
             </div>
 

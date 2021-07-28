@@ -53,7 +53,7 @@ export default function StockCard({
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div> */}
-          <div className="overflow-hidden font-semibold tracking-wider text-black uppercase text-md overflow-ellipsis">
+          <div className="overflow-hidden font-semibold tracking-wider text-black uppercase text-base overflow-ellipsis">
             {latestPrice ? (
               `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
             ) : (

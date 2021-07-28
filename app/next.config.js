@@ -9,7 +9,11 @@ module.exports = withPWA(
   withImages(
     withBundleAnalyzer({
       images: {
-        domains: ["lh6.googleusercontent.com", "lh3.googleusercontent.com"],
+        domains: [
+          "storage.googleapis.com",
+          "lh6.googleusercontent.com",
+          "lh3.googleusercontent.com",
+        ],
       },
       purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds
       pwa: {

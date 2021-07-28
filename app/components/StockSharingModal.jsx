@@ -6,19 +6,14 @@ import { alphaVantageQuery } from "@lib/firebase"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 
-const StockSharingModal = ({
-  tickerSymbol,
-  tickerLogoUrl,
-  state,
-  send,
-  pricePlaceholder = "0.00",
-}) => {
+const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
   const { client } = useStream()
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
   const { group: selectedGroup } = state.context
+  const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
   const sendMessageClickHandler = async () => {
     const requiredQueryFields = ["name", "industry", "exchange"]
@@ -49,7 +44,7 @@ const StockSharingModal = ({
       ]
 
       send("CLOSE")
-      
+
       const mainMessage = await channel.sendMessage({
         text: message || `Hey I think we should check out ${tickerSymbol}!`,
         // attachments,
@@ -64,7 +59,6 @@ const StockSharingModal = ({
       })
       router.push(`/groups/${selectedGroup}`)
     }
-
   }
 
   return (

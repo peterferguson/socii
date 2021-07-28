@@ -44,7 +44,7 @@ const orderTypes = (tickerSymbol, side) => {
   ]
 }
 
-const SelectOrderTypeModal = ({ tickerSymbol, state, send }) => (
+const SelectOrderTypeModal = ({ ticker, state, send }) => (
   <Transition appear show={state.matches("active.orderType")} as={Fragment}>
     <Dialog
       as="div"
@@ -87,7 +87,7 @@ const SelectOrderTypeModal = ({ tickerSymbol, state, send }) => (
             </Dialog.Title>
             <div className="mt-2">
               <OrderTypeSelector
-                orderTypes={orderTypes(tickerSymbol, state.context.side)}
+                orderTypes={orderTypes(ticker.tickerSymbol, state.context.side)}
                 send={send}
               />
             </div>

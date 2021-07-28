@@ -43,9 +43,24 @@ const modals = {
       loading: () => <p>Loading...</p>,
     }),
   },
-  // limitOrder:
-  // shareOrder:
-  // cashOrder:
+  ["active.limitOrder"]: {
+    component: dynamic(() => import("../../components/OrderModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  ["active.shareOrder"]: {
+    component: dynamic(() => import("../../components/OrderModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
+  ["active.cashOrder"]: {
+    component: dynamic(() => import("../../components/OrderModal"), {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }),
+  },
 }
 
 export default function TickerPage({ tickerSymbols }) {
@@ -140,9 +155,7 @@ export default function TickerPage({ tickerSymbols }) {
           <PriceCard
             {...tickerProps}
             movingMonthlyPctChange={lastMonthPctChange}
-            gainColor={
-              
-            }
+            gainColor={gainColor}
           />
         </div>
         <div className="flex-grow hidden sm:block" />
@@ -165,7 +178,7 @@ export default function TickerPage({ tickerSymbols }) {
         highlightedClose={highlightedClose}
       />
       {Modal ? (
-        <Modal tickerSymbol={ticker.tickerSymbol} state={state} send={send} />
+        <Modal ticker={ticker} state={state} send={send} />
       ) : null}
     </>
   )
