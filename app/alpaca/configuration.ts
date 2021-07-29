@@ -1,6 +1,7 @@
 import {
-    AuthMethods,
-    AuthMethodsConfiguration, configureAuthMethods
+  AuthMethods,
+  AuthMethodsConfiguration,
+  configureAuthMethods,
 } from "./auth/auth"
 import { HttpLibrary } from "./http/http"
 import { IsomorphicFetchHttpLibrary as DefaultHttpLibrary } from "./http/isomorphic-fetch"

@@ -130,7 +130,7 @@ module.exports = {
         "-1": "-1",
       },
       screens: {
-        thin: "400px",
+        thin: "375px",
         lgr: "1152px",
       },
       spacing: {

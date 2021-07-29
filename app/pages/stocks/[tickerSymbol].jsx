@@ -1,4 +1,4 @@
-import { Chart, PriceCard } from "@components/index"
+import { Chart, PriceCard, PriceHeading } from "@components/index"
 import { useAuth } from "@hooks/useAuth"
 import { tailwindColorMap } from "@lib/constants"
 import { firestore } from "@lib/firebase"
@@ -63,7 +63,7 @@ const modals = {
   },
 }
 
-export default function TickerPage({ tickerSymbols }) {
+export default function TickerPage({ tickerSymbols, price }) {
   const router = useRouter()
   const { user } = useAuth()
   const [state, send] = useMachine(stockInvestButtonMachine)
@@ -138,9 +138,10 @@ export default function TickerPage({ tickerSymbols }) {
     movingMonthlyPctChange: movingMonthlyPctChange,
   }
 
-  useEffect(() => {
-    setGainColor(tailwindColorMap[pnlTextColor(lastMonthPctChange)])
-  }, [lastMonthPctChange])
+  useEffect(
+    () => setGainColor(tailwindColorMap[pnlTextColor(lastMonthPctChange)]),
+    [lastMonthPctChange]
+  )
 
   if (router.isFallback) return <div>Loading...</div>
 
@@ -155,7 +156,7 @@ export default function TickerPage({ tickerSymbols }) {
           <PriceCard
             {...tickerProps}
             movingMonthlyPctChange={lastMonthPctChange}
-            gainColor={gainColor}
+            initialPrice={price}
           />
         </div>
         <div className="flex-grow hidden sm:block" />
@@ -177,9 +178,7 @@ export default function TickerPage({ tickerSymbols }) {
         highlightedChange={highlightedChange}
         highlightedClose={highlightedClose}
       />
-      {Modal ? (
-        <Modal ticker={ticker} state={state} send={send} />
-      ) : null}
+      {Modal ? <Modal ticker={ticker} state={state} send={send} /> : null}
     </>
   )
 }
@@ -209,7 +208,13 @@ const TickerHoldingCard = ({ holding }) => {
 // TODO: Remove tooltip and color price in the graph display of values
 
 export async function getStaticProps({ params }) {
-  // TODO add username section here based on the users portfolio
+  const { Client } = require("iexjs")
+
+  const iexClient = new Client({
+    api_token: process.env.NEXT_PUBLIC_IEXCLOUD_PUBLIC_KEY,
+    version: "stable",
+  })
+
   const { tickerSymbol } = params
   let props
 
@@ -218,8 +223,16 @@ export async function getStaticProps({ params }) {
     .where("tickerSymbol", "==", tickerSymbol)
     .limit(1)
 
+  const price = await iexClient.quote(tickerSymbol, {
+    filter: "latestPrice,changePercent,iexRealtimePrice",
+  })
+
+  props = await stockProps({ tickerQuery, timeseriesLimit: 100 })
+
   try {
-    props = await stockProps({ tickerQuery, timeseriesLimit: 100 })
+    props = {
+      props: { ...props.props, price },
+    }
   } catch (e) {
     return {
       redirect: {
