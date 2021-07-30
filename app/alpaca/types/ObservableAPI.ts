@@ -40,13 +40,11 @@ import { BankData } from "../models/BankData"
 import { BankResource } from "../models/BankResource"
 import { BatchJournalRequest } from "../models/BatchJournalRequest"
 import { BatchJournalResponse } from "../models/BatchJournalResponse"
+import { ClockResponse } from "../models/ClockResponse"
 import { CreateOrder } from "../models/CreateOrder"
 import { DocumentUpload } from "../models/DocumentUpload"
 import { InlineObject } from "../models/InlineObject"
 import { InlineObject1 } from "../models/InlineObject1"
-import { TradingAccount } from "../models/TradingAccount"
-import { MarketDay } from "../models/MarketDay"
-import { ClockResponse } from "../models/ClockResponse"
 import { InlineResponse2003 } from "../models/InlineResponse2003"
 import { InlineResponse2004 } from "../models/InlineResponse2004"
 import { InlineResponse2005 } from "../models/InlineResponse2005"
@@ -56,9 +54,11 @@ import { InlineResponse2008 } from "../models/InlineResponse2008"
 import { InlineResponse207 } from "../models/InlineResponse207"
 import { JournalData } from "../models/JournalData"
 import { JournalResource } from "../models/JournalResource"
+import { MarketDay } from "../models/MarketDay"
 import { OrderObject } from "../models/OrderObject"
 import { PatchOrder } from "../models/PatchOrder"
 import { Position } from "../models/Position"
+import { TradingAccount } from "../models/TradingAccount"
 import { TransferData } from "../models/TransferData"
 import { TransferResource } from "../models/TransferResource"
 import { from, map, mergeMap, Observable, of } from "../rxjsStub"
@@ -2190,6 +2190,113 @@ export class ObservableOAuthApi {
   }
 }
 
+import {
+  PortfolioApiRequestFactory,
+  PortfolioApiResponseProcessor,
+} from "../apis/PortfolioApi"
+export class ObservablePortfolioApi {
+  private requestFactory: PortfolioApiRequestFactory
+  private responseProcessor: PortfolioApiResponseProcessor
+  private configuration: Configuration
+
+  public constructor(
+    configuration: Configuration,
+    requestFactory?: PortfolioApiRequestFactory,
+    responseProcessor?: PortfolioApiResponseProcessor
+  ) {
+    this.configuration = configuration
+    this.requestFactory =
+      requestFactory || new PortfolioApiRequestFactory(configuration)
+    this.responseProcessor = responseProcessor || new PortfolioApiResponseProcessor()
+  }
+
+  /**
+   * Get timeseries data for equity and profit loss information of the account
+   * @param accountId Account identifier.
+   * @param period The duration of the data in number + unit, such as 1D
+   * @param timeframe The resolution of time window
+   * @param dateEnd The date the data is returned up to, in “YYYY-MM-DD” format. Defaults to the current market date (rolls over at the market open if extended_hours is false, otherwise at 7am ET)
+   * @param extendedHours If true, include extended hours in the result
+   */
+  public getPortfolioHistory(
+    accountId: string,
+    period?: string,
+    timeframe?: "1Min" | "5Min" | "15Min" | "1H" | "1D",
+    dateEnd?: string,
+    extendedHours?: boolean,
+    options?: Configuration
+  ): Observable<PortfolioHistory> {
+    const requestContextPromise = this.requestFactory.getPortfolioHistory(
+      accountId,
+      period,
+      timeframe,
+      dateEnd,
+      extendedHours,
+      options
+    )
+
+    // build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise)
+    for (let middleware of this.configuration.middleware) {
+      middlewarePreObservable = middlewarePreObservable.pipe(
+        mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+      )
+    }
+
+    return middlewarePreObservable
+      .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+      .pipe(
+        mergeMap((response: ResponseContext) => {
+          let middlewarePostObservable = of(response)
+          for (let middleware of this.configuration.middleware) {
+            middlewarePostObservable = middlewarePostObservable.pipe(
+              mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+            )
+          }
+          return middlewarePostObservable.pipe(
+            map((rsp: ResponseContext) =>
+              this.responseProcessor.getPortfolioHistory(rsp)
+            )
+          )
+        })
+      )
+  }
+
+  /**
+   * List open positions for an account
+   * @param accountId Account identifier.
+   */
+  public getPositions(
+    accountId: string,
+    options?: Configuration
+  ): Observable<Array<Position>> {
+    const requestContextPromise = this.requestFactory.getPositions(accountId, options)
+
+    // build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise)
+    for (let middleware of this.configuration.middleware) {
+      middlewarePreObservable = middlewarePreObservable.pipe(
+        mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+      )
+    }
+
+    return middlewarePreObservable
+      .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+      .pipe(
+        mergeMap((response: ResponseContext) => {
+          let middlewarePostObservable = of(response)
+          for (let middleware of this.configuration.middleware) {
+            middlewarePostObservable = middlewarePostObservable.pipe(
+              mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+            )
+          }
+          return middlewarePostObservable.pipe(
+            map((rsp: ResponseContext) => this.responseProcessor.getPositions(rsp))
+          )
+        })
+      )
+  }
+}
 export class ObservableTradingApi {
   private requestFactory: TradingApiRequestFactory
   private responseProcessor: TradingApiResponseProcessor
@@ -2380,41 +2487,6 @@ export class ObservableTradingApi {
           }
           return middlewarePostObservable.pipe(
             map((rsp: ResponseContext) => this.responseProcessor.getOrders(rsp))
-          )
-        })
-      )
-  }
-
-  /**
-   * List open positions for an account
-   * @param accountId Account identifier.
-   */
-  public getPositions(
-    accountId: string,
-    options?: Configuration
-  ): Observable<Array<Position>> {
-    const requestContextPromise = this.requestFactory.getPositions(accountId, options)
-
-    // build promise chain
-    let middlewarePreObservable = from<RequestContext>(requestContextPromise)
-    for (let middleware of this.configuration.middleware) {
-      middlewarePreObservable = middlewarePreObservable.pipe(
-        mergeMap((ctx: RequestContext) => middleware.pre(ctx))
-      )
-    }
-
-    return middlewarePreObservable
-      .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
-      .pipe(
-        mergeMap((response: ResponseContext) => {
-          let middlewarePostObservable = of(response)
-          for (let middleware of this.configuration.middleware) {
-            middlewarePostObservable = middlewarePostObservable.pipe(
-              mergeMap((rsp: ResponseContext) => middleware.post(rsp))
-            )
-          }
-          return middlewarePostObservable.pipe(
-            map((rsp: ResponseContext) => this.responseProcessor.getPositions(rsp))
           )
         })
       )

@@ -3271,7 +3271,7 @@ paths:
     get:
       summary: List open positions for an account
       tags:
-        - Trading
+        - Portfolio
       responses:
         "200":
           description: Success
@@ -3321,16 +3321,14 @@ paths:
     get:
       summary: Get timeseries data for equity and profit loss information of the account
       tags:
-        - Account
+        - Portfolio
       responses:
         "200":
           description: Success
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Position"
-      operationId: get_positions
+                $ref: "#/components/schemas/PortfolioHistory"
+      operationId: get_portfolio_history
       security:
         - BasicAuth: []

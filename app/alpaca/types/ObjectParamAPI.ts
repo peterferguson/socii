@@ -57,6 +57,7 @@ import { JournalData } from "../models/JournalData"
 import { JournalResource } from "../models/JournalResource"
 import { OrderObject } from "../models/OrderObject"
 import { PatchOrder } from "../models/PatchOrder"
+import { PortfolioHistory } from "../models/PortfolioHistory"
 import { Position } from "../models/Position"
 import { TransferData } from "../models/TransferData"
 import { TransferResource } from "../models/TransferResource"
@@ -1669,6 +1670,100 @@ export class ObjectOAuthApi {
   }
 }
 
+import { ObservablePortfolioApi } from "./ObservableAPI"
+import {
+  PortfolioApiRequestFactory,
+  PortfolioApiResponseProcessor,
+} from "../apis/PortfolioApi"
+
+export interface PortfolioApiGetPortfolioHistoryRequest {
+  /**
+   * Account identifier.
+   * @type string
+   * @memberof PortfolioApigetPortfolioHistory
+   */
+  accountId: string
+  /**
+   * The duration of the data in number + unit, such as 1D
+   * @type string
+   * @memberof PortfolioApigetPortfolioHistory
+   */
+  period?: string
+  /**
+   * The resolution of time window
+   * @type &#39;1Min&#39; | &#39;5Min&#39; | &#39;15Min&#39; | &#39;1H&#39; | &#39;1D&#39;
+   * @memberof PortfolioApigetPortfolioHistory
+   */
+  timeframe?: "1Min" | "5Min" | "15Min" | "1H" | "1D"
+  /**
+   * The date the data is returned up to, in “YYYY-MM-DD” format. Defaults to the current market date (rolls over at the market open if extended_hours is false, otherwise at 7am ET)
+   * @type string
+   * @memberof PortfolioApigetPortfolioHistory
+   */
+  dateEnd?: string
+  /**
+   * If true, include extended hours in the result
+   * @type boolean
+   * @memberof PortfolioApigetPortfolioHistory
+   */
+  extendedHours?: boolean
+}
+
+export interface PortfolioApiGetPositionsRequest {
+  /**
+   * Account identifier.
+   * @type string
+   * @memberof PortfolioApigetPositions
+   */
+  accountId: string
+}
+
+export class ObjectPortfolioApi {
+  private api: ObservablePortfolioApi
+
+  public constructor(
+    configuration: Configuration,
+    requestFactory?: PortfolioApiRequestFactory,
+    responseProcessor?: PortfolioApiResponseProcessor
+  ) {
+    this.api = new ObservablePortfolioApi(
+      configuration,
+      requestFactory,
+      responseProcessor
+    )
+  }
+
+  /**
+   * Get timeseries data for equity and profit loss information of the account
+   * @param param the request object
+   */
+  public getPortfolioHistory(
+    param: PortfolioApiGetPortfolioHistoryRequest,
+    options?: Configuration
+  ): Promise<PortfolioHistory> {
+    return this.api
+      .getPortfolioHistory(
+        param.accountId,
+        param.period,
+        param.timeframe,
+        param.dateEnd,
+        param.extendedHours,
+        options
+      )
+      .toPromise()
+  }
+
+  /**
+   * List open positions for an account
+   * @param param the request object
+   */
+  public getPositions(
+    param: PortfolioApiGetPositionsRequest,
+    options?: Configuration
+  ): Promise<Array<Position>> {
+    return this.api.getPositions(param.accountId, options).toPromise()
+  }
+}
 export interface TradingApiDeleteOrderRequest {
   /**
    * Account identifier.
@@ -1757,15 +1852,6 @@ export interface TradingApiGetOrdersRequest {
    * @memberof TradingApigetOrders
    */
   symbols?: string
-}
-
-export interface TradingApiGetPositionsRequest {
-  /**
-   * Account identifier.
-   * @type string
-   * @memberof TradingApigetPositions
-   */
-  accountId: string
 }
 
 export interface TradingApiPatchOrderRequest {
@@ -1877,17 +1963,6 @@ export class ObjectTradingApi {
         options
       )
       .toPromise()
-  }
-
-  /**
-   * List open positions for an account
-   * @param param the request object
-   */
-  public getPositions(
-    param: TradingApiGetPositionsRequest,
-    options?: Configuration
-  ): Promise<Array<Position>> {
-    return this.api.getPositions(param.accountId, options).toPromise()
   }
 
   /**

@@ -260,46 +260,6 @@ export class TradingApiRequestFactory extends BaseAPIRequestFactory {
   }
 
   /**
-   * List open positions for an account
-   * @param accountId Account identifier.
-   */
-  public async getPositions(
-    accountId: string,
-    options?: Configuration
-  ): Promise<RequestContext> {
-    let config = options || this.configuration
-
-    // verify required parameter 'accountId' is not null or undefined
-    if (accountId === null || accountId === undefined) {
-      throw new RequiredError(
-        "Required parameter accountId was null or undefined when calling getPositions."
-      )
-    }
-
-    // Path Params
-    const localVarPath = "/trading/accounts/{account_id}/positions".replace(
-      "{" + "account_id" + "}",
-      encodeURIComponent(String(accountId))
-    )
-
-    // Make Request Context
-    const requestContext = config.baseServer.makeRequestContext(
-      localVarPath,
-      HttpMethod.GET
-    )
-    requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-    let authMethod = null
-    // Apply auth methods
-    authMethod = config.authMethods["BasicAuth"]
-    if (authMethod) {
-      await authMethod.applySecurityAuthentication(requestContext)
-    }
-
-    return requestContext
-  }
-
-  /**
    * Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order.
    * Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order.
    * @param accountId Account identifier.
@@ -624,43 +584,6 @@ export class TradingApiResponseProcessor {
         "Array<OrderObject>",
         ""
       ) as Array<OrderObject>
-      return body
-    }
-
-    let body = (await response.body.text()) || ""
-    throw new ApiException<string>(
-      response.httpStatusCode,
-      'Unknown API Status Code!\nBody: "' + body + '"'
-    )
-  }
-
-  /**
-   * Unwraps the actual response sent by the server from the response context and deserializes the response content
-   * to the expected objects
-   *
-   * @params response Response returned by the server for a request to getPositions
-   * @throws ApiException if the response code was not in [200, 299]
-   */
-  public async getPositions(response: ResponseContext): Promise<Array<Position>> {
-    const contentType = ObjectSerializer.normalizeMediaType(
-      response.headers["content-type"]
-    )
-    if (isCodeInRange("200", response.httpStatusCode)) {
-      const body: Array<Position> = ObjectSerializer.deserialize(
-        ObjectSerializer.parse(await response.body.text(), contentType),
-        "Array<Position>",
-        ""
-      ) as Array<Position>
-      return body
-    }
-
-    // Work around for missing responses in specification, e.g. for petstore.yaml
-    if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-      const body: Array<Position> = ObjectSerializer.deserialize(
-        ObjectSerializer.parse(await response.body.text(), contentType),
-        "Array<Position>",
-        ""
-      ) as Array<Position>
       return body
     }
 

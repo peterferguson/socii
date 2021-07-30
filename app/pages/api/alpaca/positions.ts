@@ -1,8 +1,9 @@
-import { TradingApi, Position, config } from "@alpaca/index"
+import { config, PortfolioApi, Position } from "@alpaca/index"
 import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
-import { NextApiRequest, NextApiResponse } from "next"
 import { withAuth, withCORS } from "@utils/middleware"
-const tradingApi = new TradingApi(config)
+import { NextApiRequest, NextApiResponse } from "next"
+
+const portfolioApi = new PortfolioApi(config)
 
 export async function handlePositions(
   req: NextApiRequest,
@@ -16,7 +17,7 @@ export async function handlePositions(
       try {
         const { accountId } = body
 
-        const positions = await tradingApi.getPositions(accountId)
+        const positions = await portfolioApi.getPositions(accountId)
 
         res
           .status(200)
