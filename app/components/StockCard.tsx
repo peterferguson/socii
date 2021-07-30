@@ -1,4 +1,5 @@
 import { logoBaseUrl } from "@lib/constants"
+import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 
@@ -28,7 +29,9 @@ export default function StockCard({
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="items-center justify-center flex-none flex-grow-0 m-auto rounded-full cursor-pointer">
             {holding?.ISIN && (
-              <img
+              <Image
+                width={"40px"}
+                height={"40px"}
                 className="w-10 h-10 mx-2 rounded-full ring-1 ring-brand-shade-darkest"
                 src={`${logoBaseUrl}/${holding.ISIN}.png`}
                 alt={`${tickerSymbol} logo`}
@@ -53,7 +56,7 @@ export default function StockCard({
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div> */}
-          <div className="overflow-hidden font-semibold tracking-wider text-black uppercase text-base overflow-ellipsis">
+          <div className="overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis">
             {latestPrice ? (
               `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
             ) : (

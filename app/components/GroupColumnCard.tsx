@@ -4,6 +4,7 @@ import {
   GroupPieChart,
   PieCardSkeleton,
 } from "@components"
+import { useAuth } from "@hooks"
 import { firestore } from "@lib/firebase"
 import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
@@ -15,6 +16,9 @@ export interface IGroupColumnCard {
 }
 
 export default function GroupColumnCard({ groupName, className }: IGroupColumnCard) {
+  const {
+    user: { token },
+  } = useAuth()
   const [currentPrices, setCurrentPrices] = useState([])
   const holdingsRef = firestore
     .collection(`groups/${groupName}/holdings`)
@@ -24,13 +28,15 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   useEffect(() => {
     holdings?.map(async ({ tickerSymbol }) => {
-      const { latestPrice } = await iexQuote(tickerSymbol, "latestPrice")
+      const { latestPrice } = await iexQuote(tickerSymbol, "latestPrice", token)
 
       setCurrentPrices((previousState) => ({
         ...previousState,
         [tickerSymbol]: latestPrice,
       }))
     })
+    // - dont want the effect to run token is updated
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [holdings])
 
   const holdingData = holdings?.map(

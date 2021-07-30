@@ -2,7 +2,7 @@ import Logo from "@components/Logo"
 import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
   HiOutlineAtSymbol,
@@ -39,7 +39,7 @@ export default function Sidebar() {
     {
       name: "Portfolio",
       description: "Keep track of your growth",
-      href: `/user/portfolio`,
+      href: `/user/${username}/portfolio`,
       icon: HiOutlineChartPie,
       isActive: router.asPath.includes("portfolio"),
     },
@@ -57,7 +57,7 @@ export default function Sidebar() {
       icon: HiOutlineUserGroup,
       rightIcon: HiOutlineChevronRight,
       disabled: true,
-      isActive: router.asPath.includes(`/user/${username}`),
+      isActive: router.asPath === `/user/${username}`,
       // onClick: () => setOpenSettings(!openSettings),
     },
     {
@@ -79,7 +79,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <div className="sticky hidden w-20 h-screen mx-1 shadow-lg top-2 left-2 sm:block lg:w-80">
+    <div className="sticky hidden w-20 h-screen mx-1 shadow-lg top-2 left-2 sm:block lg:w-52">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
           <Logo className="text-2xl" />

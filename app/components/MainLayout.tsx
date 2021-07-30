@@ -18,7 +18,9 @@ export default function MainLayout(props) {
 
   const [showChat, setShowChat] = useState(false)
 
-  // TODO: Add toggle chat button and change responsiveness
+  // TODO: Add default component sizes
+  // 1, 2, 3, 4 column components
+  // - Something like a <FourColumnComponent>{props.children}</FourColumnComponent>
 
   return (
     <div className="flex items-start">

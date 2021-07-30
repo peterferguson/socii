@@ -21,7 +21,7 @@ const PriceHeading = ({
   return (
     <span className={`text-lg font-primary p-1 ${className}`}>
       {currencyFormatter(realtimePrice, currency)} &bull;
-      <span className={`p-1 ${pnlColor}`}>{percentChange.toFixed(3)}%</span>
+      <span className={`p-1 ${pnlColor}`}>{percentChange?.toFixed(3)}%</span>
     </span>
   )
 }

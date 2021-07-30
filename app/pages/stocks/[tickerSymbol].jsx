@@ -93,6 +93,7 @@ export default function TickerPage({ tickerSymbols, price }) {
         send("UPDATE_HOLDING", { holding })
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, alpacaId])
 
   const modalStateName = Object.keys(modals).filter(
