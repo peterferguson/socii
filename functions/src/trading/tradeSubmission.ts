@@ -19,7 +19,7 @@ import {
 - tradeConfirmation
 1. Add the uid/username of the agreesToTrade array
 2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update 
-2. holdings and send confirmation message with the price at which the asset was purchased
+2. holdings and send confirmation message with the price at which the asset was purchased 
 */
 export const tradeSubmission = async (
   data: { groupName?: string; messageId?: string },

@@ -22,11 +22,11 @@ import { updateHolding } from "./updateHolding.js"
 
 export const tradeConfirmation = async (change, context) => {
     logger.log("into trade confirm______")
-      // - document at groups/{groupName}/trades/{messageId}
+      // - document at groups/{groupName}/trades/{messageId} 
       const { groupName, messageId } = context.params
       const tradeData = await change.after.data()
     
-      // TODO add executed = pending to all orders as they are sent.
+      // TODO add executed = pending to all orders as they are sent..
       if (tradeData.executed=="true") return  // - do nothing
     
       // - Data to update the state of the trade on completion of function
@@ -45,8 +45,8 @@ export const tradeConfirmation = async (change, context) => {
     
       const ISIN = tradeData.assetRef.split("/").pop()
       tradeData.assetRef = firestore.doc(tradeData.assetRef)
-    
-      ///////// TODO reinstate this
+     
+      ////////// TODO reinstate this
     // //   const { latestPrice, isUSMarketOpen } = await iexClient.quote(
     // //     tradeData.tickerSymbol,
     // //     {

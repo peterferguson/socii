@@ -25,7 +25,7 @@ export const updateHolding = async (
 
     const {groupName , tradeData, messageId} = data
 
-    // TODO add executed = pending to all orders as they are sent.
+    // TODO add executed = pending to all orders as they are sent..
     if (tradeData.executed=="true") return  // - do nothing
 
     // - Data to update the state of the trade on completion of function

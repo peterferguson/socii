@@ -33,7 +33,7 @@ import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
  
 module.exports = {
-  // 1 Document Listeners
+  // 1 Document Listeners 
   tradeConfirmation: functions
     .region(london)
     .firestore.document("groups/{groupName}/trades/{messageId}")
