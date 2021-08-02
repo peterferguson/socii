@@ -29,8 +29,6 @@ export async function storeEvents(
       batch = firestore.batch()
     }
     const event_id = event.event_id
-    console.log(`Storing event ${event_id}`)
-    console.log(since_id)
 
     if (since_id == event_id) continue
     const docRef = eventsRef.doc(event.event_id.toString())
