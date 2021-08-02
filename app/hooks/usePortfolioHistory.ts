@@ -30,5 +30,5 @@ export const usePortfolioHistory = () => {
       setTimeseries(portfolioHistoryToTimeseries(PortfolioHistory.from(history)))
   }, [history])
 
-  return [history, timeseries]
+  return { history, timeseries, error }
 }

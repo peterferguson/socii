@@ -19,5 +19,5 @@ export const usePositions = () => {
     },
     { refreshInterval: 3600 * 1000, refreshWhenOffline: false }
   )
-  return positions
+  return { positions, error }
 }

@@ -1,21 +1,26 @@
 import React from "react"
-import { FaArrowUp, FaPercent } from "react-icons/fa"
+import { FaArrowUp, FaUsers } from "react-icons/fa"
 import SummaryCard from "./SummaryCard"
 
 const TopPerformerSummaryCard = () => {
   const props = {
-    Title: () => <span>Performance vs. Market</span>,
-    subTitle: "49,65%",
-    ImgComponent: () => <FaPercent />,
-    iconColor: "blue-500",
-    headingColor: "text-emerald-500",
+    Title: () => (
+      <span>
+        Top Performer: <span className="text-emerald-500">(TSLA)</span>
+      </span>
+    ),
+    subTitle: "924",
+    ImgComponent: () => <FaUsers />,
+    iconColor: "pink-500", // - tw jit border-pink-500 text-pink-500
+    headingColor: "text-red-500",
     Heading: () => (
       <h1 className="inline-flex space-x-1">
         <FaArrowUp /> <span> 3.48%</span>
       </h1>
     ),
-    headingSubText: "Since yesterday",
+    headingSubText: "Since last week",
   }
+
   return <SummaryCard {...props} />
 }
 

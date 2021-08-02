@@ -2,7 +2,7 @@ import React from "react"
 import { usePositions } from "@hooks/usePositions"
 
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
-  const positions = usePositions()
+  const { positions } = usePositions()
   return (
     <div className="w-full px-4 mb-12 xl:mb-0">
       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white shadow-lg rounded-2xl">

@@ -7,7 +7,7 @@ export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
-  const positions = usePositions()
+  const { positions } = usePositions()
 
   return (
     <>

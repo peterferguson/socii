@@ -18,7 +18,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const [crosshairValue, setCrosshairValue] = useState(false)
 
-  const [_history, timeseries] = usePortfolioHistory()
+  const { timeseries } = usePortfolioHistory()
 
   const lineSeriesProps = {
     animation: true,
@@ -30,7 +30,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
     onNearestX: (data) => setCrosshairValue(data),
   }
 
-  const quartiles = getQuartiles(timeseries?.equity.map((tick) => tick.y))
+  const quartiles = getQuartiles(timeseries?.equity?.map((tick) => tick.y))
 
   // TODO: add dashed line for the starting equity
 

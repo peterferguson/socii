@@ -1,25 +1,29 @@
+import { usePortfolioHistory } from "@hooks"
 import React from "react"
 import { FaArrowUp, FaChartBar } from "react-icons/fa"
 import SummaryCard from "./SummaryCard"
 
 const PortfolioValueSummaryCard = () => {
+  const { history } = usePortfolioHistory()
   const props = {
     Title: () => (
       <span>
         Portfolio Value
         <br />
+        <br />
       </span>
     ),
-    subTitle: "350,907",
+    subTitle: `$ ${history?.equity?.slice(-1)[0]}`,
     ImgComponent: () => <FaChartBar />,
-    iconColor: "red-500",
+    iconColor: "red-500", // - tw jit border-red-500 text-red-500
     headingColor: "text-emerald-500",
     Heading: () => (
       <h1 className="inline-flex space-x-1">
-        <FaArrowUp /> <span> 3.48%</span>
+        <FaArrowUp />{" "}
+        <span> {(history?.profitLossPct?.slice(-1)[0] * 100).toFixed(3)}%</span>
       </h1>
     ),
-    headingSubText: "Since last month",
+    headingSubText: "Since yesterday",
   }
   return <SummaryCard {...props} />
 }
