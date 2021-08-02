@@ -26,7 +26,7 @@ const Dashboard = () => (
       </div>
       <div className="w-full px-2 mx-auto">
         {/* Tables */}
-        {/* <PortfolioHistoryCard /> */}
+        <PortfolioHistoryCard />
         <div className="flex flex-wrap w-full mt-4">
           <StockTable stockTableMeta={stockTableMeta} />
         </div>
@@ -66,7 +66,7 @@ export const stockTableMeta = {
     },
   },
   Equity: {
-    alpacaAttr: "market_value",
+    alpacaAttr: "marketValue",
     Component: ({ position, attr }) => (
       <td
         key={`position-${attr}`}
@@ -88,7 +88,7 @@ export const stockTableMeta = {
     ),
   },
   Gain: {
-    alpacaAttr: "unrealized_pl",
+    alpacaAttr: "unrealizedPl",
     Component: ({ position, attr }) => (
       <td
         key={`position-${attr}`}
@@ -102,7 +102,7 @@ export const stockTableMeta = {
     ),
   },
   "Gain %": {
-    alpacaAttr: "unrealized_plpc",
+    alpacaAttr: "unrealizedPlpc",
     Component: ({ position, attr }) => (
       <GainPctBar key={`position-${attr}`} gainPct={position[attr]} />
     ),

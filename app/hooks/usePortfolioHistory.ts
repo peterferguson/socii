@@ -26,7 +26,8 @@ export const usePortfolioHistory = () => {
   )
 
   useEffect(() => {
-    if (history) setTimeseries(portfolioHistoryToTimeseries(history))
+    if (history)
+      setTimeseries(portfolioHistoryToTimeseries(PortfolioHistory.from(history)))
   }, [history])
 
   return [history, timeseries]

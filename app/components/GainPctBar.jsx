@@ -8,7 +8,7 @@ const GainPctBar = ({ gainPct }) => {
   return (
     <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
       <div className="flex items-center space-x-1">
-        <span className="">{gainPct * 100}%</span>
+        <span className="">{(gainPct * 100).toFixed(3)}%</span>
         <div className="w-full">
           <div className="flex h-2 overflow-hidden bg-red-200 rounded text-tiny">
             <div

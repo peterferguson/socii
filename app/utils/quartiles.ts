@@ -1,4 +1,5 @@
-export const quantile = (array: number[], percentile: number) => {
+export const quantile = (array: number[], percentile: number): number | null => {
+  if (!array || array?.length === 0) return
   array.sort((a: number, b: number) => a - b)
   const index = percentile * (array.length - 1)
   if (Math.floor(index) == index) {

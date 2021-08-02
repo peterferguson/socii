@@ -3,8 +3,15 @@ import { getQuartiles } from "@utils/quartiles"
 import dayjs from "dayjs"
 import React, { useState } from "react"
 import { useMediaQuery } from "react-responsive"
-import { Crosshair, FlexibleXYPlot, LineSeries, XAxis, YAxis } from "react-vis"
-import { usePortfolioHistory } from "../hooks/usePortfolioHistory"
+import {
+  Crosshair,
+  ChartLabel,
+  FlexibleXYPlot,
+  LineSeries,
+  XAxis,
+  YAxis,
+} from "react-vis"
+import { usePortfolioHistory } from "@hooks/usePortfolioHistory"
 
 const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => {
   const [width, height] = useWindowSize()
@@ -19,10 +26,12 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries?.equity,
+    curve: "curveMonotoneX",
     onNearestX: (data) => setCrosshairValue(data),
   }
 
-  console.log(getQuartiles(timeseries?.equity.map((tick) => tick.y)))
+  const quartiles = getQuartiles(timeseries?.equity.map((tick) => tick.y))
+  console.log(quartiles)
 
   return timeseries ? (
     <div className="flex items-center justify-center mx-auto">
@@ -31,7 +40,8 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
         height={height * heightScale}
         width={width * widthScale}
         xType="time"
-        margin={{ left: 10, bottom: 75, top: 10 }}
+        yDomain={[Math.min(...quartiles) * 0.9, Math.max(...quartiles) * 1.1]}
+        margin={{ left: 50, bottom: 75, top: 10 }}
       >
         {!is1Col && (
           <XAxis
@@ -39,11 +49,13 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
             tickFormat={(d) => dayjs(d).format("DD/MM/YYYY")}
           />
         )}
-        <YAxis
-          hideLine
-          tickValues={getQuartiles(timeseries?.equity.map((tick) => tick.y))}
-          title="Equity"
-          titleAngle={90}
+        <YAxis hideLine tickValues={quartiles} />
+        <ChartLabel
+          text="Equity"
+          includeMargin={false}
+          xPercent={0}
+          yPercent={0.06}
+          style={{ textAnchor: "end" }}
         />
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && (

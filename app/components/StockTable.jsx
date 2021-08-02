@@ -1,28 +1,8 @@
 import React from "react"
-import usePositions from "@hooks/usePositions"
+import { usePositions } from "@hooks/usePositions"
 
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
-  // const positions = usePositions()
-  const positions = [
-    {
-      asset_id: "904837e3-3b76-47ec-b432-046db621571b",
-      symbol: "AAPL",
-      exchange: "NASDAQ",
-      asset_class: "us_equity",
-      avg_entry_price: "100.0",
-      qty: "5",
-      side: "long",
-      market_value: "600.0",
-      cost_basis: "500.0",
-      unrealized_pl: "100.0",
-      unrealized_plpc: "0.20",
-      unrealized_intraday_pl: "10.0",
-      unrealized_intraday_plpc: "0.0084",
-      current_price: "120.0",
-      lastday_price: "119.0",
-      change_today: "0.0084",
-    },
-  ]
+  const positions = usePositions()
   return (
     <div className="w-full px-4 mb-12 xl:mb-0">
       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white shadow-lg rounded-2xl">
@@ -36,11 +16,9 @@ const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
         <div className="block w-full overflow-x-auto">
           {/* Projects table */}
           <table className="items-center w-full bg-transparent border-collapse">
+            <StockTableHeader headings={Object.keys(stockTableMeta)} />
             {positions ? (
-              <>
-                <StockTableHeader headings={Object.keys(stockTableMeta)} />
-                <StockTableBody positions={positions} meta={stockTableMeta} />
-              </>
+              <StockTableBody positions={positions} meta={stockTableMeta} />
             ) : (
               // Add a loader if there are no positions
               <div>loading...</div>
