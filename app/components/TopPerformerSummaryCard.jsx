@@ -1,6 +1,6 @@
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
-import { FaArrowDown, FaArrowUp, FaUsers } from "react-icons/fa"
+import { FaArrowDown, FaArrowUp, FaStar } from "react-icons/fa"
 import SummaryCard from "./SummaryCard"
 
 const TopPerformerSummaryCard = () => {
@@ -14,7 +14,7 @@ const TopPerformerSummaryCard = () => {
       </span>
     ),
     subTitle: "924",
-    ImgComponent: () => <FaUsers />,
+    ImgComponent: () => <FaStar />,
     iconColor: "pink-500", // - tw jit border-pink-500 text-pink-500
     Heading: () => (
       <h1 className={`inline-flex space-x-1 ${pnlColor}`}>

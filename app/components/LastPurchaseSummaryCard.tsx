@@ -11,6 +11,7 @@ const LastPurchaseSummaryCard = () => {
   const percentage = 3
   const pnlColor = pnlTextColor(percentage)
 
+  // TODO: Once the orders are being recorded in firebase from the events then change this
   const props = {
     Title: () => (
       <>
