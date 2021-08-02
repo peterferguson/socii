@@ -7,7 +7,11 @@ import { firestore, serverTimestamp } from "./firebase-admin"
 !
 */
 
-export async function storeEvents(eventType: string, eventData: string) {
+export async function storeEvents(
+  eventType: string,
+  eventData: string,
+  since_id?: number
+) {
   const eventsRef = firestore.collection(`${eventType}Events`)
 
   const events = eventData
@@ -24,6 +28,11 @@ export async function storeEvents(eventType: string, eventData: string) {
       await batch.commit()
       batch = firestore.batch()
     }
+    const event_id = event.event_id
+    console.log(`Storing event ${event_id}`)
+    console.log(since_id)
+
+    if (since_id == event_id) continue
     const docRef = eventsRef.doc(event.event_id.toString())
     batch.set(docRef, {
       type: eventType,
@@ -33,4 +42,12 @@ export async function storeEvents(eventType: string, eventData: string) {
   }
 
   await batch.commit()
+}
+
+// - Get the latest event_id from each events collection
+export async function getLatestEventId(type: string): Promise<string> {
+  const eventsRef = firestore.collection(`${type}Events`)
+  const query = eventsRef.orderBy("event_id", "desc").limit(1)
+  const eventDoc = (await query.get()).docs?.[0]
+  return eventDoc.id
 }

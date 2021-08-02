@@ -4,6 +4,7 @@ import { arrayUnion, serverTimestamp, firestore } from "./firebase"
 /*
 !
 ! This file is for functions which perform CRUD operations on Firebase
+! These operations can be called from the client OR THE SERVER
 !
 */
 

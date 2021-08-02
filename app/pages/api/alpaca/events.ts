@@ -1,6 +1,7 @@
 import { config } from "@alpaca/index"
-import { storeEvents } from "@lib/firebase/server/db"
+import { getLatestEventId, storeEvents } from "@lib/firebase/server/db"
 import { withCORS } from "@utils/middleware"
+import { IncomingMessage } from "http"
 import { BaseServer, sseGetRequest } from "@utils/sseGetRequest"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -16,13 +17,24 @@ const alpacaEventEndpoints = {
 
 export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   const {
-    body: { type, since, until, since_id, until_id },
+    headers: { authorization },
+    body,
     method,
   } = req
+  let { type, since, until, since_id, until_id } = body
 
   if (method !== "POST") {
     res.setHeader("Allow", ["POST"])
     res.status(405).end(`Method ${method} Not Allowed`)
+  }
+
+  if (authorization !== `Bearer ${process.env.NEXT_PUBLIC_FIREBASE_KEY}`) {
+    res.status(401).end("The request is not authorized")
+    return
+  }
+
+  if (!(since || until || since_id || until_id)) {
+    since_id = await getLatestEventId(type)
   }
 
   const queryParams = { since, until, since_id, until_id }
@@ -44,7 +56,7 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
 
       await sseGetRequest(
         `${baseServer.url}/events/${alpacaEventEndpoints[type]}?${query}`,
-        responseCallback(res, type)
+        responseCallback(res, type, since_id)
       )
     } catch (e) {
       console.log(e)
@@ -60,34 +72,38 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export const responseCallback = (res: NextApiResponse, type: string) => (response) => {
-  let data = []
-  const headerDate =
-    response.headers && response.headers.date
-      ? response.headers.date
-      : "no response date"
+export const responseCallback =
+  (res: NextApiResponse, type: string, since_id: number) =>
+  (response: IncomingMessage) => {
+    let data = []
+    const headerDate =
+      response.headers && response.headers.date
+        ? response.headers.date
+        : "no response date"
 
-  console.log("Headers:", response.headers)
-  console.log("Status Code:", response.statusCode)
-  console.log("Date in Response header:", headerDate)
+    console.log("Headers:", response.headers)
+    console.log("Status Code:", response.statusCode)
+    console.log("Date in Response header:", headerDate)
 
-  response.on("data", (chunk) => {
-    if (chunk.toString().indexOf("index,nofollow") == -1) {
-      console.log(Buffer.from(chunk).toString())
-      data.push(chunk)
-    }
-  })
+    response.on("data", (chunk) => {
+      if (chunk.toString().indexOf("index,nofollow") == -1) {
+        console.log(Buffer.from(chunk).toString())
+        data.push(chunk)
+      }
+    })
 
-  response.on("end", async () => {
-    response.destroy()
-    await storeEvents(type, Buffer.concat(data).toString())
-    res.end(
-      `Response from ${type} endpoint has ended: ${Buffer.concat(data).toString()}`
-    )
-  })
+    response.on("end", async () => {
+      response.destroy()
+      await storeEvents(type, Buffer.concat(data).toString(), since_id)
+      res
+        .status(200)
+        .end(
+          `Response from ${type} endpoint has ended: ${Buffer.concat(data).toString()}`
+        )
+    })
 
-  setTimeout(() => {
-    response.emit("end")
-    console.log("timing out")
-  }, 5000)
-}
+    setTimeout(() => {
+      response.emit("end")
+      console.log("timing out")
+    }, 5000)
+  }
