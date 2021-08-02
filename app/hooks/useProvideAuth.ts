@@ -16,7 +16,7 @@ import { UrlObject } from "url"
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState(undefined)
   const [username, setUsername] = useState(null)
   const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)

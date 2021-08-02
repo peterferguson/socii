@@ -86,7 +86,7 @@ export default function Create() {
           <div className="pb-4 text-4xl font-bold text-center font-secondary">
             Group
           </div>
-          <label className="ml-4 font-bold text-base font-secondary">
+          <label className="ml-4 text-base font-bold font-secondary">
             Name
             <div className="flex flex-row">
               <input
@@ -109,7 +109,7 @@ export default function Create() {
               </div>
             </div>
           </label>
-          <label className="ml-4 font-bold text-base font-secondary">
+          <label className="ml-4 text-base font-bold font-secondary">
             Short description
             <input
               className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
@@ -118,14 +118,14 @@ export default function Create() {
               onChange={(e) => setGroupDescription(e.target.value)}
             />
           </label>
-          <label className="mx-4 mt-4 font-bold text-base font-secondary">
+          <label className="mx-4 mt-4 text-base font-bold font-secondary">
             Group Privacy
             <PrivacyOptions
               privacyOption={privacyOption}
               setPrivacyOption={setPrivacyOption}
             />
           </label>
-          <label className="flex flex-col mx-4 mb-4 font-bold text-base font-secondary">
+          <label className="flex flex-col mx-4 mb-4 text-base font-bold font-secondary">
             Initial Lump-Sum
             <AmountOptions
               AmountOptions={groupLumpSumOptions}
@@ -134,7 +134,7 @@ export default function Create() {
               srLabel={"Initial Lump Sum Amount"}
             />
           </label>
-          <label className="flex flex-col m-4 font-bold text-base font-secondary">
+          <label className="flex flex-col m-4 text-base font-bold font-secondary">
             Deposit Schedule
             {/* 
             // ! Legally the group members will have to ensure this balance is maintained.

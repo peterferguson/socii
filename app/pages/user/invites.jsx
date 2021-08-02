@@ -6,7 +6,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore"
 export default function Invites() {
   return (
     <>
-      <div className="p-4 font-bold text-base font-secondary">
+      <div className="p-4 text-base font-bold font-secondary">
         Invite Friends
         <span className="pl-1 font-extrabold text-brand-dark">
           (Think carefully you only have 2 invites!)
