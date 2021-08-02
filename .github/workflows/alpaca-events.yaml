@@ -1,0 +1,60 @@
+name: Event Stream Polling
+on:
+  schedule:
+    # Run job every 30 minutes
+    - cron: "*/30 0 * * *"
+jobs:
+  trades:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call events API route with type param = `trades`
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/alpaca/events' \
+          -H "Content-Type: application/json" \
+          --data '{"type":"trades"}' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+
+  journals:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call events API route with type param = `journals`
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/alpaca/events' \
+          -H "Content-Type: application/json" \
+          --data '{"type":"journals"}' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+
+  accounts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call events API route with type param = `accounts`
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/alpaca/events' \
+          -H "Content-Type: application/json" \
+          --data '{"type":"accounts"}' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+
+  transfers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call events API route with type param = `transfers`
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/alpaca/events' \
+          -H "Content-Type: application/json" \
+          --data '{"type":"transfers"}' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+
+  nonTradingActivity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call events API route with type param = `nonTradingActivity`
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/alpaca/events' \
+          -H "Content-Type: application/json" \
+          --data '{"type":"nonTradingActivity"}' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
