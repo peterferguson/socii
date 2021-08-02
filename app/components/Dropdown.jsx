@@ -16,7 +16,16 @@ import {
 import { VscSignOut } from "react-icons/vsc"
 
 // TODO: Add bitcoin svg to navigate to crypto page
-const dropdownItems = [
+const dropdownItems = (username) => [
+  {
+    name: "Groups",
+    description: "View all of your Groups",
+    href: `/user/${username}`,
+    icon: HiOutlineUserGroup,
+    rightIcon: HiOutlineChevronRight,
+    disabled: true,
+    // onClick: () => setOpenSettings(!openSettings),
+  },
   {
     name: "Invites",
     description: "Invite your friends to the alpha",
@@ -39,7 +48,7 @@ const dropdownItems = [
   {
     name: "Porfolio",
     description: "Keep track of your growth",
-    href: `/user/portfolio`,
+    href: `/user/${username}/portfolio`,
     icon: HiOutlineChartPie,
   },
   {
@@ -58,32 +67,18 @@ const dropdownItems = [
   },
 ]
 
-export default function Dropdown() {
-  // const [dropdownOpen, setDropdownOpen] = useState(false)
-  // // const [openSettings, setOpenSettings] = useState(false);
-  const { username, signout } = useAuth()
-  const grayedDropdownItems = [
-    {
-      name: "Sign Out",
-      description: "",
-      href: "",
-      icon: VscSignOut,
-      onClick: signout,
-    },
-  ]
+const grayedDropdownItems = (signout) => [
+  {
+    name: "Sign Out",
+    description: "",
+    href: "",
+    icon: VscSignOut,
+    onClick: signout,
+  },
+]
 
-  useEffect(() => {
-    dropdownItems.unshift({
-      name: "Groups",
-      description: "View all of your Groups",
-      href: `/user/${username}`,
-      icon: HiOutlineUserGroup,
-      rightIcon: HiOutlineChevronRight,
-      disabled: true,
-      // onClick: () => setOpenSettings(!openSettings),
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+export default function Dropdown() {
+  const { username, signout } = useAuth()
 
   return (
     <Popover className="relative z-50 inline-block p-4 text-left">
@@ -108,12 +103,12 @@ export default function Dropdown() {
             >
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative bg-white grid gap-8 p-7">
-                  {dropdownItems.map((item) => (
+                  {dropdownItems(username).map((item) => (
                     <DropdownItem key={`key-${item.name}`} item={item} />
                   ))}
                 </div>
                 <div className="p-4 bg-gray-50">
-                  {grayedDropdownItems.map((item) => (
+                  {grayedDropdownItems(signout).map((item) => (
                     <DropdownItem key={`key-${item.name}`} item={item} open={open} />
                   ))}
                 </div>

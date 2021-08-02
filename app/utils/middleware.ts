@@ -34,36 +34,32 @@ export const cors = initMiddleware(
   })
 )
 
-export function withCORS(handler) {
-  return async (req, res) => {
-    await cors(req, res)
-    return handler(req, res)
-  }
+export const withCORS = (handler) => async (req, res) => {
+  await cors(req, res)
+  return handler(req, res)
 }
 
 // Verify the firebase auth token on the server-side (in vercel functions)
-export function withAuth(handler) {
-  return async (req, res) => {
-    const authHeader = req.headers.authorization
-    if (!authHeader) res.status(401).end("Not authenticated. No Auth header")
+export const withAuth = (handler) => async (req, res) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader) res.status(401).end("Not authenticated. No Auth header")
 
-    const token = authHeader.split(" ")[1]
-    let decodedToken
-    try {
-      decodedToken = await auth.verifyIdToken(token)
-      if (!decodedToken || !decodedToken.uid)
-        return res.status(401).end("Not authenticated")
-      req.uid = decodedToken.uid
-    } catch (error) {
-      console.log(error.errorInfo)
-      const errorCode = error.errorInfo.code
-      error.status = 401
-      if (errorCode === "auth/internal-error") error.status = 500
+  const token = authHeader.split(" ")[1]
+  let decodedToken
+  try {
+    decodedToken = await auth.verifyIdToken(token)
+    if (!decodedToken || !decodedToken.uid)
+      return res.status(401).end("Not authenticated")
+    req.uid = decodedToken.uid
+  } catch (error) {
+    console.log(error.errorInfo)
+    const errorCode = error.errorInfo.code
+    error.status = 401
+    if (errorCode === "auth/internal-error") error.status = 500
 
-      //TODO handlle firebase admin errors in more detail
-      return res.status(error.status).json({ error: errorCode })
-    }
-
-    return handler(req, res)
+    //TODO handlle firebase admin errors in more detail
+    return res.status(error.status).json({ error: errorCode })
   }
+
+  return handler(req, res)
 }

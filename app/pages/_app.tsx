@@ -3,8 +3,6 @@ import { AuthProvider } from "@contexts/AuthProvider"
 import { StreamProvider } from "@contexts/StreamProvider"
 import { useStream } from "@hooks/useStream"
 import { toastProps } from "@lib/constants"
-import "@styles/Chat.css"
-import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
 import { AppProps } from "next/app"
 import dynamic from "next/dynamic"
@@ -13,6 +11,9 @@ import React, { useEffect, useState } from "react"
 import "react-file-utils/dist/index.css"
 import { useMediaQuery } from "react-responsive"
 import { Chat } from "stream-chat-react"
+
+import "@styles/Chat.css"
+import "@styles/globals.css"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,

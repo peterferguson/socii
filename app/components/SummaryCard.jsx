@@ -9,8 +9,8 @@ export default function SummaryCard({
   headingSubText,
 }) {
   return (
-    <div className="h-40 px-4 mt-4 max-w-[230px] max-h-40">
-      <div className="relative flex flex-col h-full min-w-0 mb-6 break-words bg-white rounded shadow-lg xl:mb-0">
+    <div className="h-40 px-4 mt-4">
+      <div className="relative flex flex-col h-full min-w-0 mb-6 break-words bg-white shadow-lg max-w-[235px] rounded-2xl xl:mb-0">
         <div className="flex-auto p-4">
           <div className="flex">
             <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
