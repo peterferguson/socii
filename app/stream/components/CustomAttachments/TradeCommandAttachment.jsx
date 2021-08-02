@@ -1,14 +1,14 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { currencyIcons } from "@lib/constants"
-import { tradeSubmission } from "@lib/firebase/client/firebase"
-import { useShareCost } from "@hooks/useShareCost"
 import { useInterval } from "@hooks/useInterval"
 import { useLocalCurrency } from "@hooks/useLocalCurrency"
+import { useShareCost } from "@hooks/useShareCost"
 import { useTickerPrice } from "@hooks/useTickerPrice"
-import { useAuth } from "hooks/useAuth"
+import { currencyIcons } from "@lib/constants"
+import { tradeSubmission } from "@lib/firebase/client/firebase"
 import { currencyConversion } from "@utils/currencyConversion"
 import { fetcher } from "@utils/fetcher"
 import { getTickerData } from "@utils/getTickerData"
+import { useAuth } from "hooks/useAuth"
 import React, { Suspense, useEffect, useState } from "react"
 import {
   LoadingIndicator,

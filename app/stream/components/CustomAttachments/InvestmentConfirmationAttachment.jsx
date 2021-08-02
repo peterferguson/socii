@@ -1,7 +1,7 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useAuth } from "@hooks/useAuth"
 import { arrayUnion, firestore } from "@lib/firebase/client/firebase"
-import React, { Suspense, useContext } from "react"
+import React, { Suspense } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,

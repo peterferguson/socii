@@ -10,7 +10,9 @@ export const formatUser = async (user: firebase.User) => {
   // const token = await user.getIdToken(/* forceRefresh */ true);
   const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
   const { token, expirationTime } = decodedToken
-  if (process.env.NODE_ENV !== "production") console.log(token)
+  // if (process.env.NODE_ENV !== "production")
+  console.log(token)
+
   return {
     uid: user.uid,
     email: user.email,
