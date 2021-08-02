@@ -85,7 +85,6 @@ export class TransferData {
     }
     return Object.assign(new this(), json)
   }
-
   public constructor() {}
 }
 

@@ -16,7 +16,7 @@ const achTest = nextApiHandlerTest(handleAch, "/api/alpaca/ach")
 let achRelationshipId: string = ""
 let accountId: string = process.env.ALPACA_TEST_ACCOUNT
 
-describe("/api/alpaca/ach", () => {
+describe.skip("/api/alpaca/ach", () => {
   it(
     "check if the test account already has an ach relationship",
     achTest(async ({ fetch }) => {

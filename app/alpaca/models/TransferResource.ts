@@ -127,7 +127,6 @@ export class TransferResource {
     }
     return Object.assign(new this(), json)
   }
-
   public constructor() {}
 }
 

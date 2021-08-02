@@ -22,7 +22,7 @@ const fundingTest = nextApiHandlerTest(handleFunding, "/api/alpaca/funding")
 
 let fundingId: string = ""
 
-describe("/api/alpaca/funding", () => {
+describe.skip("/api/alpaca/funding", () => {
   it(
     "Check if an account has been succesfully funded (send transfer)",
     fundingTest(async ({ fetch }) => {

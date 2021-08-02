@@ -5,7 +5,7 @@ import { Position } from "@alpaca/index"
 
 const positionsTest = nextApiHandlerTest(handlePositions, "/api/alpaca/positions")
 
-describe("/api/alpaca/positions", () => {
+describe.skip("/api/alpaca/positions", () => {
   it(
     "gets all open positions for an account",
     positionsTest(async ({ fetch }) => {

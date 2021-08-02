@@ -36,7 +36,7 @@ beforeAll(async () => {
   }
 })
 
-describe("/api/alpaca/orders", () => {
+describe.skip("/api/alpaca/orders", () => {
   it(
     "creates an order",
     ordersTest(async ({ fetch }) => {

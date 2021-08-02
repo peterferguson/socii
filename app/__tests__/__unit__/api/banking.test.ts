@@ -16,7 +16,7 @@ const bankingTest = nextApiHandlerTest(handleBanking, "/api/alpaca/banking")
 let bankId: string = ""
 let accountId: string = process.env.ALPACA_TEST_ACCOUNT
 
-describe("/api/alpaca/banking", () => {
+describe.skip("/api/alpaca/banking", () => {
   it(
     "check if the test bank resource is connected to the account, querying it by name `name`",
     bankingTest(async ({ fetch }) => {
