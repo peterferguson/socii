@@ -8,7 +8,7 @@
  *
  * @param data
  * @param context
- * @returns updateStatus: String to indicate status of update
+ * @returns tradeUpdateData if needed
  */
 import { logger } from "firebase-functions" 
 import {
@@ -19,19 +19,16 @@ import {
 } from "../index.js"
 
 export const updateHolding = async (
-    data: { groupName?: string; messageId?: string; tradeData?: any},
+    data: { groupName?: string; messageId?: string; tradeData?: any; executionStatus?: string},
     context?: any
     ) => {
 
-    const {groupName , tradeData, messageId} = data
-
-    // TODO add executed = pending to all orders as they are sent..
-    if (tradeData.executed=="true") return  // - do nothing
+    const {groupName , tradeData, messageId, executionStatus} = data
 
     // - Data to update the state of the trade on completion of function
     // - Should also stop infinite loops
     // - can be set to success, pending, failed
-    var tradeUpdateData = { executed: "pending" }
+    var tradeUpdateData = { executionStatus: executionStatus , pnlPercentage: {}}
 
     const latestPrice = tradeData.latestPrice
     const ISIN = tradeData.assetRef.split("/").pop()
@@ -54,13 +51,12 @@ logger.log("holding data: ", holdingData)
     case "update":
         holdingDocRef.update(holdingData)
         groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
-        if (pnlPercentage) tradeUpdateData["pnlPercentage"] = pnlPercentage
-        return "complete"
+        if (pnlPercentage) tradeUpdateData.pnlPercentage = pnlPercentage
+        return tradeUpdateData
         break
     case "set":
         holdingDocRef.set(holdingData)
         groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
-        return "complete"
         break
     default:
         // - Secondary execution check (this time on the holding doc) ... do nothing

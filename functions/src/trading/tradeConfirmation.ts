@@ -18,25 +18,27 @@ import {
   CreateOrder 
 } from "../alpaca/broker/client/ts/index"
 import { updateHolding } from "./updateHolding.js"
+import { journalShares } from "./journalShares.js"
 
+/*
+- tradeConfirmation
+1. Add the uid/username of the agreesToTrade array
+2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update 
+2. holdings and send confirmation message with the price at which the asset was purchased 
+*/
 
 export const tradeConfirmation = async (change, context) => {
-    logger.log("into trade confirm______")
       // - document at groups/{groupName}/trades/{messageId} 
       const { groupName, messageId } = context.params
       const tradeData = await change.after.data()
     
       // TODO add executed = pending to all orders as they are sent..
-      if (tradeData.executed=="true") return  // - do nothing
+      // can be: success, pending, failed
+      if (tradeData.executionStatus!=="pending") return  // - do nothing
     
-      // - Data to update the state of the trade on completion of function
-      // - Should also stop infinite loops
-      // - can be set to success, pending, failed
-      var tradeUpdateData = { executed: "pending" }
     
       const tradeClient = new TradingApi(config)
       const ALPACA_FIRM_ACCOUNT = "83af97bb-aa1b-37cd-9807-f76eec49fd1c"
-     
     
       const groupRef = await firestore.collection("groups").doc(groupName)
       let { cashBalance, investorCount } = (await groupRef.get()).data()
@@ -112,7 +114,8 @@ export const tradeConfirmation = async (change, context) => {
              tradeData.timeInForce,
              tradeData.shares,
              tradeData.type,
-             tradeData.price,)
+             tradeData.price,
+             tradeData.executionStatus,)
 
         try{
           //breakdown message into alpaca form and send to broker
@@ -134,33 +137,50 @@ export const tradeConfirmation = async (change, context) => {
                 return status
             }
           
-          var status = determineStatus(postOrder.status)
+          var executionStatus = determineStatus(postOrder.status)
         }
         catch (err) {
             logger.log(error(err))
-            status = "failed"
+            executionStatus = "failed"
         }  
         
         const channel = streamClient.channel("messaging", groupName)
 
-          switch (status) {
+          // TODO
+          // - maybe the below is heavy on wirtes?
+          // writing to the holding ref when pending then updating a field when executed
+          // could be reduced by just writing when success, but may lose info
+
+          switch (executionStatus) {
             case "success":
-                // 1. Batch update holdings
-                await updateHolding({groupName, messageId , tradeData})
-                // 2. send a message with the finalised price
-                await channel.sendMessage(investmentReceiptMML(tradeData))
-                return change.after.ref.update(tradeUpdateData)
-                break
+              // 1. Batch update holdings.
+              // if profit was set for a sell, update the document with the returned value
+              const updateInformation = await updateHolding({groupName, messageId , tradeData, executionStatus})
+              const tradeUpdateInfo = updateInformation.pnlPercentage? updateInformation: {executionStatus: "failed"}
+              
+              // 2. Send a message with the finalised price
+              await channel.sendMessage(investmentReceiptMML(tradeData))
+              
+              // 3. Journal funds to individual alpaca accounts for holding
+              journalShares(tradeData.agreesToTrade, tradeData.qty)
+
+              return change.after.ref.update(tradeUpdateInfo)
+              break
     
             case "pending":
-              // create function to listen to events monitoring status
-              // TODO display real message  
+              // 1. Reduce the group balance to avoid missunderstandings of available balance
+              // TODO - handle the return of this balance if order fails
+              groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
+              // 2. TODO create function to listen to events monitoring status
+
+              // 3. send a message to inform about pending order
+              // TODO display more useful message  
               await channel.sendMessage(investmentPendingMML(tradeData))
               break
+
             case "failed":
-              // update doc
               await channel.sendMessage(investmentFailedMML(tradeData))
-              return change.after.ref.update(tradeUpdateData = {executed: "failed"})
+              return change.after.ref.update({executionStatus: "failed"})
               break
             // - Catch all commands sent by user not by action
             default:

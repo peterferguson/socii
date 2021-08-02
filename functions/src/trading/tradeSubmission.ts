@@ -15,12 +15,8 @@ import {
 1. Verify that the data has been sent with all the correct keys
 2. Add the trade to the trade collection in firestore properties include all of the above
 2. and also a agreement list for each investor
-
-- tradeConfirmation
-1. Add the uid/username of the agreesToTrade array
-2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update 
-2. holdings and send confirmation message with the price at which the asset was purchased 
 */
+
 export const tradeSubmission = async (
   data: { groupName?: string; messageId?: string },
   context: any
@@ -48,8 +44,9 @@ export const tradeSubmission = async (
     ////////// REMOVE - for testing until correct data is sent
     timeInForce: "gtc",
     type: "market",
-    executed: "pending",
-    limitPrice: ""
+    executionStatus: "pending",
+    limitPrice: "",
+    qty: verifiedData.shares
     ////////// REMOVE - for testing until correct data is sent
   })
 
@@ -68,8 +65,6 @@ export const tradeSubmission = async (
     return await channel.sendMessage(message)
   }
 }
-
-
 
 const verifyUser = (context) => {
     // * Checking that the user is authenticated.
