@@ -20,9 +20,8 @@ export const useTickerPrice = (
   tickerSymbol: string,
   expirationTime = 3 * 60
 ): PriceData => {
-  const {
-    user: { token },
-  } = useAuth()
+  const { user } = useAuth()
+  const token = user?.token
   const [price, setPrice] = usePersistentState(
     {
       price: 0,
@@ -66,9 +65,8 @@ export const useTickerPriceSWR = (
   expirationTime: number = 3 * 60 * 1000, // - swr uses milliseconds (3 minutes default)
   initialData: PriceData
 ): { price: Price; isLoading: boolean; isError: boolean } => {
-  const {
-    user: { token },
-  } = useAuth()
+  const { user } = useAuth()
+  const token = user?.token
   const { data, error } = useSWR(
     [
       `/api/iex/quote/${tickerSymbol}?filter=latestPrice,changePercent,iexRealtimePrice`,

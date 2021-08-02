@@ -34,7 +34,9 @@ export function LogoAlone({ width = "64px", height = "64px" }: ILogoImage) {
   return (
     <>
       <Link href="/">
-        <Image src="/favicons/socii.svg" width={width} height={height} />
+        <a>
+          <Image src="/favicons/socii.svg" width={width} height={height} />
+        </a>
       </Link>
     </>
   )

@@ -1,8 +1,19 @@
+import { usePortfolioHistory, useMarketData } from "@hooks"
+
 import React from "react"
 import { FaArrowUp, FaPercent } from "react-icons/fa"
 import SummaryCard from "./SummaryCard"
 
 const VsMarketSummaryCard = () => {
+  const { history } = usePortfolioHistory()
+  const { market } = useMarketData()
+
+  const equityChange = history?.profitLossPct?.slice(-1)[0]
+  const marketChange = market?.changePercent * 100
+
+  console.log(`equityChange: ${equityChange}`)
+  console.log(`marketChange: ${marketChange}`)
+
   const props = {
     Title: () => <span>Performance vs. Market</span>,
     subTitle: "49,65%",
