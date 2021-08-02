@@ -5,7 +5,6 @@ export default function SummaryCard({
   subTitle,
   ImgComponent,
   iconColor,
-  headingColor,
   Heading,
   headingSubText,
 }) {
@@ -33,7 +32,7 @@ export default function SummaryCard({
             </div>
           </div>
           <p className="mt-4 text-sm text-blueGray-400">
-            <span className={`${headingColor} mr-2 flex`}>
+            <span className="flex mr-2">
               <Heading />
             </span>
             <span className="whitespace-nowrap"> {headingSubText}</span>
