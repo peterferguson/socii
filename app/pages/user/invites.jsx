@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"
 

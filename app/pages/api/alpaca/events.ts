@@ -1,26 +1,22 @@
-// ! Events in the [documentation](https://alpaca.markets/docs/broker/api-references/events/)
-// ! do not match up to those in the openapi.yaml!
-import { EventsApiRequestFactory } from "@alpaca/apis/EventsApi"
 import { config } from "@alpaca/index"
+import { storeEvents } from "@lib/firebase/server/db"
 import { withCORS } from "@utils/middleware"
-import { BaseServer, httpResponseCallback, sseGetRequest } from "@utils/sseGetRequest"
+import { BaseServer, sseGetRequest } from "@utils/sseGetRequest"
 import { NextApiRequest, NextApiResponse } from "next"
-
-const eventsRequestFactory = new EventsApiRequestFactory(config)
-
-// ! The naive approach doesn't work since the sse is not encoded in the OAS3 spec
-// const events = new EventsApi(config)
-// events.eventsJournalsStatusGet(since).then((r) => console.log(r))
-
-// ! This wil expose all the events from alpaca to the client!
-// ! We need to filter out the events that don't apply to that user!
-// ! Or implement some cheap server to store these events in firestore!
 
 export default withCORS(handleEvents)
 
+const alpacaEventEndpoints = {
+  accounts: "accounts/status",
+  journals: "journals/status",
+  trades: "trades",
+  transfers: "transfers/status",
+  nonTradingActivity: "nta",
+}
+
 export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   const {
-    body: { type, since, until, sinceId, untilId },
+    body: { type, since, until, since_id, until_id },
     method,
   } = req
 
@@ -29,7 +25,7 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  const queryParams = { since, until, sinceId, untilId }
+  const queryParams = { since, until, since_id, until_id }
 
   const query = Object.keys(queryParams)
     .filter((key) => queryParams[key] !== undefined)
@@ -42,31 +38,56 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
     ...config.baseServer,
   }
 
-  const alpacaEventEndpoints = {
-    accounts: "accounts/status",
-    journals: "journels/status",
-    trades: "trades",
-    transfers: "transfers/status",
-    "non-trading-activity": "nta",
-  }
-  console.log(`${baseServer.url}/${alpacaEventEndpoints[type]}?${query}`)
-
   if (type in alpacaEventEndpoints) {
     try {
+      console.log(`${baseServer.url}/events/${alpacaEventEndpoints[type]}?${query}`)
+
       await sseGetRequest(
-        `${baseServer.url}/${alpacaEventEndpoints[type]}?${query}`,
-        httpResponseCallback(res, type)
+        `${baseServer.url}/events/${alpacaEventEndpoints[type]}?${query}`,
+        responseCallback(res, type)
       )
     } catch (e) {
       console.log(e)
     }
   } else {
     res.status(422).end(`Please provide one of the following types:
-       - "accounts"
-       - "journals"
-       - "trades"
-       - "transfers"
-       - "non-trading-activity"
-      as \`type\` in the request body.`)
+    - "accounts"
+    - "journals"
+    - "trades"
+    - "transfers"
+    - "non-trading-activity"
+    as \`type\` in the request body.`)
   }
+}
+
+export const responseCallback = (res: NextApiResponse, type: string) => (response) => {
+  let data = []
+  const headerDate =
+    response.headers && response.headers.date
+      ? response.headers.date
+      : "no response date"
+
+  console.log("Headers:", response.headers)
+  console.log("Status Code:", response.statusCode)
+  console.log("Date in Response header:", headerDate)
+
+  response.on("data", (chunk) => {
+    if (chunk.toString().indexOf("index,nofollow") == -1) {
+      console.log(Buffer.from(chunk).toString())
+      data.push(chunk)
+    }
+  })
+
+  response.on("end", async () => {
+    response.destroy()
+    await storeEvents(type, Buffer.concat(data).toString())
+    res.end(
+      `Response from ${type} endpoint has ended: ${Buffer.concat(data).toString()}`
+    )
+  })
+
+  setTimeout(() => {
+    response.emit("end")
+    console.log("timing out")
+  }, 5000)
 }

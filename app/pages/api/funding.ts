@@ -1,5 +1,5 @@
 import { config, FundingApi, TransferData } from "@alpaca/index"
-import { arrayUnion, firestore } from "@lib/firebase-admin"
+import { arrayUnion, firestore } from "@lib/firebase/server/firebase-admin"
 import dayjs from "dayjs"
 import { NextApiRequest, NextApiResponse } from "next"
 

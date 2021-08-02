@@ -1,4 +1,6 @@
+import FirebaseUser from "@models/FirebaseUser"
 import { arrayUnion, serverTimestamp, firestore } from "./firebase"
+
 /*
 !
 ! This file is for functions which perform CRUD operations on Firebase
@@ -42,13 +44,13 @@ export async function tickerToISIN(ticker: string): Promise<string> {
 }
 
 export async function createGroup(
-  user,
-  username,
-  groupName,
-  privacyOption,
-  depositOption,
-  lumpSumOption,
-  groupDescription
+  user: FirebaseUser,
+  username: string,
+  groupName: string,
+  privacyOption: { name: string; description: string },
+  depositOption: { amount: number },
+  lumpSumOption: { amount: number },
+  groupDescription: string
 ) {
   const userGroupRef = firestore.doc(`users/${user.uid}`)
   const groupRef = firestore.doc(`groups/${groupName}`)

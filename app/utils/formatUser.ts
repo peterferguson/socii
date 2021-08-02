@@ -1,4 +1,4 @@
-import firebase from "@lib/firebase"
+import firebase from "@lib/firebase/client/firebase"
 
 // const getStripeRole = async () => {
 //   await firebase.auth().currentUser.getIdToken(true);

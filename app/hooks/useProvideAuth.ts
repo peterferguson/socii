@@ -1,10 +1,10 @@
-import { createUser } from "@lib/db"
+import { createUser } from "@lib/firebase/client/db"
 import {
   auth,
   FacebookAuthProvider,
   firestore,
   GoogleAuthProvider,
-} from "@lib/firebase"
+} from "@lib/firebase/client/firebase"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import firebase from "firebase"

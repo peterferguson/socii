@@ -1,4 +1,4 @@
-import { auth } from "@lib/firebase-admin"
+import { auth } from "@lib/firebase/server/firebase-admin"
 import Cors from "cors"
 
 const allowedOrigins = [

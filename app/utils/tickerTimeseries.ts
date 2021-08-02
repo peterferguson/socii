@@ -1,7 +1,6 @@
-import { DocumentReference } from "@lib/firebase";
-import { OHLCTimeseries } from "@models/OHLCTimseries";
-import { fetcher } from "./fetcher";
-
+import { DocumentReference } from "@lib/firebase/client/firebase"
+import { OHLCTimeseries } from "@models/OHLCTimseries"
+import { fetcher } from "./fetcher"
 
 export const tickerTimeseries = async (
   tickerRef: DocumentReference,
@@ -12,22 +11,22 @@ export const tickerTimeseries = async (
   const timeseriesRef = tickerRef
     .collection("timeseries")
     .orderBy("timestamp", "desc")
-    .limit(limit);
+    .limit(limit)
 
-  let timeseriesDocs = (await timeseriesRef.get()).docs;
+  let timeseriesDocs = (await timeseriesRef.get()).docs
 
-  let timeseries: OHLCTimeseries;
+  let timeseries: OHLCTimeseries
 
   if (timeseriesDocs.length === 0) {
     // * Get timeseries data from api
-    const isin = tickerRef.path.split("/").pop();
+    const isin = tickerRef.path.split("/").pop()
 
     timeseries = await fetcher(
       `/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
-    );
+    )
   } else {
     timeseries = timeseriesDocs.map((doc) => {
-      const { open, high, low, close, volume } = doc.data();
+      const { open, high, low, close, volume } = doc.data()
 
       return {
         open,
@@ -36,9 +35,9 @@ export const tickerTimeseries = async (
         close,
         volume,
         timestamp: parseInt(doc.id) * 1000,
-      };
-    });
+      }
+    })
   }
 
-  return timeseries;
-};
+  return timeseries
+}

@@ -7,14 +7,14 @@ import {
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
-import { createGroup } from "@lib/db"
+import { createGroup } from "@lib/firebase/client/db"
 
 export default function Create() {
   const { user, username } = useAuth()

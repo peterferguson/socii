@@ -1,7 +1,7 @@
 import { OHLC } from "@models/OHLC"
 import { cors } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
-import { firestore, fromDate } from "@lib/firebase-admin"
+import { firestore, fromDate } from "@lib/firebase/server/firebase-admin"
 // const bent = require("bent"))
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,

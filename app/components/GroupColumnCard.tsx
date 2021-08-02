@@ -5,7 +5,7 @@ import {
   PieCardSkeleton,
 } from "@components"
 import { useAuth } from "@hooks"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
 import { useCollectionData } from "react-firebase-hooks/firestore"

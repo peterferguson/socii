@@ -1,5 +1,5 @@
 import { AssetCard } from "@components/AssetCards"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { stockProps } from "@utils"
 import React from "react"
 

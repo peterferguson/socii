@@ -1,6 +1,6 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { currencyIcons } from "@lib/constants"
-import { tradeSubmission } from "@lib/firebase"
+import { tradeSubmission } from "@lib/firebase/client/firebase"
 import { useShareCost } from "@hooks/useShareCost"
 import { useInterval } from "@hooks/useInterval"
 import { useLocalCurrency } from "@hooks/useLocalCurrency"

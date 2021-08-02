@@ -1,6 +1,6 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
 import { logoUrl } from "@utils/logoUrl"
 import { stockProps } from "@utils/stockProps"

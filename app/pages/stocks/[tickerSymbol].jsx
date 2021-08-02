@@ -1,7 +1,7 @@
 import { Chart, PriceCard, PriceHeading } from "@components/index"
 import { useAuth } from "@hooks/useAuth"
 import { tailwindColorMap } from "@lib/constants"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { fetcher, stockProps } from "@utils"
 import { pctChange } from "@utils/pctChange"
@@ -93,7 +93,7 @@ export default function TickerPage({ tickerSymbols, price }) {
         send("UPDATE_HOLDING", { holding })
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, alpacaId])
 
   const modalStateName = Object.keys(modals).filter(

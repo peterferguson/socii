@@ -1,7 +1,7 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import { selectedGroupContext } from "@contexts/selectedGroupContext"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import React, { useContext, useState } from "react"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 

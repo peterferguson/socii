@@ -1,4 +1,4 @@
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { getRandomTailwindColor } from "@utils/getRandomTailwindColor"
 import React, { useEffect, useRef } from "react"
 

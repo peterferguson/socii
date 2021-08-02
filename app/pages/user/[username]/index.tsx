@@ -10,7 +10,7 @@
 import AuthCheck from "@components/AuthCheck"
 import GroupColumn from "@components/GroupColumnCard"
 import { PieCardSkeleton } from "@components/PieCard"
-import { firestore } from "@lib/firebase"
+import { firestore } from "@lib/firebase/client/firebase"
 import { useRouter } from "next/router"
 import React from "react"
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore"
