@@ -1,17 +1,18 @@
-import { GainPctBar, PortfolioHistoryCard, StockTable, SummaryCard } from "@components"
+import {
+  GainPctBar,
+  LastPurchaseSummaryCard,
+  PortfolioHistoryCard,
+  PortfolioValueSummaryCard,
+  StockTable,
+  TopPerformerSummaryCard,
+  VsMarketSummaryCard,
+} from "@components"
 import { logoUrl } from "@utils/logoUrl"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
-import {
-  FaArrowDown,
-  FaArrowUp,
-  FaChartBar,
-  FaChartPie,
-  FaPercent,
-  FaUsers,
-} from "react-icons/fa"
 import "react-vis/dist/style.css"
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 const Dashboard = () => (
   <>
@@ -19,9 +20,7 @@ const Dashboard = () => (
       <div className="w-full px-2 mx-auto">
         {/* Card stats */}
         <div className="flex flex-wrap items-center justify-center mx-auto">
-          {cards.map((props, i) => (
-            <SummaryCard key={`card-${i}`} {...props} />
-          ))}
+          {cards.map((card, i) => card(`card-${i}`))}
         </div>
       </div>
       <div className="w-full px-2 mx-auto">
@@ -96,7 +95,11 @@ export const stockTableMeta = {
       >
         <div className="flex items-center">
           ${position[attr]}
-          <FaArrowUp className="ml-2 mb-0.5 text-emerald-500" />
+          {position[attr] > 0 ? (
+            <FaArrowUp className="ml-2 mb-0.5 text-emerald-500" />
+          ) : (
+            <FaArrowDown className="ml-2 text-red-500 mb-0.5" />
+          )}
         </div>
       </td>
     ),
@@ -110,76 +113,8 @@ export const stockTableMeta = {
 }
 
 const cards = [
-  {
-    Title: () => <span>Portfolio Value</span>,
-    subTitle: "350,907",
-    ImgComponent: () => (
-      <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-red-500 rounded-full shadow-lg">
-        <FaChartBar />
-      </div>
-    ),
-    headingColor: "text-emerald-500",
-    Heading: () => (
-      <>
-        <FaArrowUp /> 3.48%
-      </>
-    ),
-    headingSubText: "Since last month",
-  },
-  {
-    Title: () => (
-      <span>
-        Top Performer: <span className="text-emerald-500">(TSLA)</span>
-      </span>
-    ),
-    subTitle: "924",
-    ImgComponent: () => (
-      <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-pink-500 rounded-full shadow-lg">
-        <FaUsers />
-      </div>
-    ),
-    headingColor: "text-red-500",
-    Heading: () => (
-      <>
-        <FaArrowDown /> 1.10%
-      </>
-    ),
-    headingSubText: "Since last week",
-  },
-  {
-    Title: () => (
-      <>
-        Latest Purchase: <span className="text-emerald-500">(TSLA)</span>
-      </>
-    ),
-    subTitle: "2,356",
-    ImgComponent: () => (
-      <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-orange-500 rounded-full shadow-lg">
-        <FaChartPie />
-      </div>
-    ),
-    headingColor: "text-emerald-500",
-    Heading: () => (
-      <>
-        <FaArrowUp /> 3.48%
-      </>
-    ),
-    headingSubText: "Since last week",
-  },
-  {
-    Title: () => <span>Performance vs. Market</span>,
-    subTitle: "49,65%",
-    ImgComponent: () => (
-      <div className="inline-flex items-center justify-center w-12 h-12 p-3 text-center text-white bg-blue-500 rounded-full shadow-lg">
-        <FaPercent />
-      </div>
-    ),
-    headingColor: "text-emerald-500",
-    Heading: () => (
-      <>
-        <FaArrowUp /> 12%
-      </>
-    ),
-    headingSubText: "Since yesterday",
-  },
+  (key: React.Key) => <PortfolioValueSummaryCard key={key} />,
+  (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
+  (key: React.Key) => <VsMarketSummaryCard key={key} />,
+  (key: React.Key) => <TopPerformerSummaryCard key={key} />,
 ]

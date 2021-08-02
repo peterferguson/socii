@@ -31,7 +31,8 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
   }
 
   const quartiles = getQuartiles(timeseries?.equity.map((tick) => tick.y))
-  console.log(quartiles)
+
+  // TODO: add dashed line for the starting equity
 
   return timeseries ? (
     <div className="flex items-center justify-center mx-auto">
