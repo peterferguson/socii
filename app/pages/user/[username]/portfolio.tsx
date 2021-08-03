@@ -19,7 +19,7 @@ const Dashboard = () => (
     <div className="flex flex-col w-full bg-blueGray-100">
       <div className="w-full px-2 mx-auto">
         {/* Card stats */}
-        <div className="flex flex-wrap items-center justify-center mx-auto">
+        <div className="items-center justify-center mx-auto grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((card, i) => card(`card-${i}`))}
         </div>
       </div>

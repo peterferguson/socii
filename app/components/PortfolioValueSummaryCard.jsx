@@ -9,13 +9,7 @@ const PortfolioValueSummaryCard = () => {
   const percentage = history?.profitLossPct?.slice(-1)[0] * 100
   const pnlColor = pnlTextColor(percentage)
   const props = {
-    Title: () => (
-      <span>
-        Portfolio Value
-        <br />
-        <br />
-      </span>
-    ),
+    Title: () => <span className="mb-8">Portfolio Value</span>,
     subTitle: `$ ${history?.equity?.slice(-1)[0]}`,
     ImgComponent: () => <FaChartBar />,
     iconColor: "red-500", // - tw jit border-red-500 text-red-500
