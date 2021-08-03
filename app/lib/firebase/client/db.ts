@@ -113,7 +113,7 @@ export const getTickerData = async (tickerSymbol) => {
  * @param  {string} messgeId
  * @param  {string} uid
  */
-const agreesToTrade = async (groupName, messageId, uid) => {
+export const agreesToTrade = async (groupName, messageId, uid) => {
   const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
   await tradesRef.update({ agreesToTrade: arrayUnion(`users/${uid}`) })
 }
