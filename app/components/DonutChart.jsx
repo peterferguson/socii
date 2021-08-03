@@ -14,9 +14,7 @@ export default function DonutChart({
   skeleton = false,
 }) {
   const [value, setValue] = useState(false)
-
   let [width, height] = useWindowSize()
-
   if (!scaleToWindow) {
     width = 350
     height = 300
@@ -38,22 +36,26 @@ export default function DonutChart({
 
   // TODO: Add skeleton ternary for the portfolio header
   return (
-    <RadialChart {...chartProps}>
-      <div className="w-full mx-auto text-xl text-center text-gray-600 font-primary -mt-52 z-1">
-        <div className="uppercase text-tiny leading-4 ">portfolio</div>
-        {text.main}
-        <div
-          className={`font-primary text-lg mx-auto ${pnlTextColor(
-            parseFloat(text.sub)
-          )}`}
-        >
-          <div className="w-5/12 h-1 my-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
-          <div className="uppercase text-tiny leading-4 ">gain</div>
+    <>
+      {data && (
+        <RadialChart {...chartProps}>
+          <div className="w-full mx-auto text-xl text-center text-gray-600 font-primary -mt-52 z-1">
+            <div className="uppercase text-tiny leading-4 ">portfolio</div>
+            {text.main}
+            <div
+              className={`font-primary text-lg mx-auto ${pnlTextColor(
+                parseFloat(text.sub)
+              )}`}
+            >
+              <div className="w-5/12 h-1 my-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
+              <div className="uppercase text-tiny leading-4 ">gain</div>
 
-          {text.sub}
-        </div>
-      </div>
-      {value !== false && skeleton === false && <Hint value={value} />}
-    </RadialChart>
+              {text.sub}
+            </div>
+          </div>
+          {value !== false && skeleton === false && <Hint value={value} />}
+        </RadialChart>
+      )}
+    </>
   )
 }

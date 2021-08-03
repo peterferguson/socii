@@ -36,7 +36,7 @@ export function PieCardSkeleton({ scaling, radius }) {
     sub: <div className="w-12 h-4 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />,
   }
   return (
-    <div className="m-0 mb-2 rounded-none shadow-2xl bg-gray-50 sm:rounded-xl sm:m-4 sm:mb-4">
+    <div className="m-0 mb-2 rounded-none shadow-md bg-gray-50 sm:rounded-xl sm:m-4 sm:mb-4">
       <div className="pt-4 -mb-8 text-xl text-center font-primary">
         <div className="w-16 h-6 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
       </div>

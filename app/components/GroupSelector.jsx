@@ -1,35 +1,40 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
-import { selectedGroupContext } from "@contexts/selectedGroupContext"
 import { firestore } from "@lib/firebase/client/firebase"
-import React, { useContext, useState } from "react"
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
+import React, { useState, useEffect } from "react"
 
 export default function GroupSelectorRadioGroup({ groupNames, send, className = "" }) {
   const [groupSelected, setGroupSelected] = useState(null)
+  const [groups, setGroups] = useState(undefined)
 
   const setSelectedGroup = (group) => {
     setGroupSelected(group.name)
     send("SELECT_GROUP", { groupName: group.name })
   }
 
-  // TODO: Implement a higher-level check to see if the user/selectedGroup holds stock already.
+  useEffect(() => {
+    const getGroupData = () => {
+      const groupsRef = firestore
+        .collection(`groups`)
+        .where("groupName", "in", groupNames)
+      const unsubscribe = groupsRef.onSnapshot((snap) =>
+        setGroups(
+          snap.docs.map((doc) => {
+            const { groupName, type, privacyOption, groupDescription } = doc.data()
+            return {
+              name: groupName,
+              type,
+              privacyOption: privacyOption.name,
+              description: groupDescription,
+            }
+          })
+        )
+      )
 
-  const groups = groupNames.map((name) => {
-    const docRef = firestore.doc(`groups/${name}`)
-
-    // TODO: Fix this! Works for now but could lead to bugs!
-    // ! For example if the user id added to a group when this is open it will break.
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [value] = useDocumentDataOnce(docRef)
-
-    return {
-      name,
-      type: value?.type,
-      privacyOption: value?.privacyOption.name,
-      description: value?.groupDescription,
+      return unsubscribe
     }
-  })
+    if (groupNames?.length) getGroupData()
+  }, [groupNames])
 
   return (
     <div className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}>
@@ -38,7 +43,7 @@ export default function GroupSelectorRadioGroup({ groupNames, send, className = 
           Select an Investment Group
         </RadioGroup.Label>
         <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 sm:flex sm:flex-row">
-          {groups.map((group) => (
+          {groups?.map((group) => (
             <RadioGroup.Option
               key={group.name}
               value={group}
