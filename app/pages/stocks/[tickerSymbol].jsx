@@ -115,26 +115,26 @@ export default function TickerPage({ tickerSymbols, price }) {
   const [gainColor, setGainColor] = useState("text-gray-400")
 
   const latestClose = timeseries?.[0]?.y
-  const highlightedClose = timeseries[crosshairIndexValue]?.y
+  const highlightedClose = timeseries?.[crosshairIndexValue]?.y
   let movingMonthlyClose = highlightedClose
 
   try {
-    movingMonthlyClose = timeseries[crosshairIndexValue + 21]?.y
+    movingMonthlyClose = timeseries?.[crosshairIndexValue + 21]?.y
   } catch (err) {
     null
   }
 
   const movingMonthlyPctChange = pctChange(highlightedClose, movingMonthlyClose)
 
-  const lastMonthPctChange = pctChange(latestClose, timeseries[21]?.y)
+  const lastMonthPctChange = pctChange(latestClose, timeseries?.[21]?.y)
 
   // * Show the pct change of highlighted value versus today
   const highlightedChange = pctChange(latestClose, highlightedClose).toFixed(2)
 
   const tickerProps = {
-    logoUrl: ticker.logoUrl,
-    tickerSymbol: ticker.tickerSymbol,
-    shortName: ticker.shortName,
+    logoUrl: ticker?.logoUrl,
+    tickerSymbol: ticker?.tickerSymbol,
+    shortName: ticker?.shortName,
     currentPrice: latestClose,
     movingMonthlyPctChange: movingMonthlyPctChange,
   }

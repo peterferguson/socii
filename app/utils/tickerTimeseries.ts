@@ -21,8 +21,12 @@ export const tickerTimeseries = async (
     // * Get timeseries data from api
     const isin = tickerRef.path.split("/").pop()
 
+    // let baseUrl = "https://www.quandl.com/api/v3/datasets/WIKI/{}/data.json"
+    let baseUrl = "https://socii.app"
+    if (process.env.NODE_ENV !== "production") baseUrl = "http://localhost:3000"
+
     timeseries = await fetcher(
-      `/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
+      `${baseUrl}/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
     )
   } else {
     timeseries = timeseriesDocs.map((doc) => {
