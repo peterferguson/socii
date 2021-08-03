@@ -1,7 +1,6 @@
 import { Dialog } from "@headlessui/react"
 import { firestore } from "@lib/firebase/client/firebase"
 import React, { useEffect, useState } from "react"
-import { useCollectionData } from "react-firebase-hooks/firestore"
 
 export default function Invites() {
   return (
@@ -72,7 +71,8 @@ function PhoneInvite() {
 function SendInvites({ user }) {
   const numberOfInvites = 2 // * The number of invites available to each user
   const query = firestore.collection(`users/${user.uid}/invites`)
-  const [invites] = useCollectionData(query)
+  // const [invites] = useCollectionData(query)
+  const invites = []
 
   const [email, setEmail] = useState("")
 

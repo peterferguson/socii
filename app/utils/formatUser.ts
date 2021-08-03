@@ -1,4 +1,5 @@
 import firebase from "@lib/firebase/client/firebase"
+import { User } from "firebase/auth"
 
 // const getStripeRole = async () => {
 //   await firebase.auth().currentUser.getIdToken(true);
@@ -6,7 +7,7 @@ import firebase from "@lib/firebase/client/firebase"
 //   return decodedToken.claims.stripeRole || 'free';
 // };
 
-export const formatUser = async (user: firebase.User) => {
+export const formatUser = async (user: User) => {
   // const token = await user.getIdToken(/* forceRefresh */ true);
   const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
   const { token, expirationTime } = decodedToken

@@ -1,9 +1,9 @@
-import firebase from "firebase/app"
-import "firebase/auth"
-import "firebase/firestore"
-import "firebase/functions"
-import "firebase/storage"
 // import "firebase/performance"
+import { EmailAuthProvider, getAuth, RecaptchaVerifier } from "firebase/auth"
+import firebase from "firebase/compat/app"
+import "firebase/compat/firestore"
+import "firebase/compat/functions"
+import "firebase/compat/storage"
 
 const londonRegion = "europe-west2"
 
@@ -21,7 +21,7 @@ export const firebaseConfig = {
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
 
 export default firebase
-export const auth = firebase.auth()
+export const auth = getAuth()
 export const storage = firebase.storage()
 export const firestore = firebase.firestore()
 export const functions = firebase.app().functions(londonRegion)
@@ -36,21 +36,23 @@ export const functions = firebase.app().functions(londonRegion)
 //   functions.useEmulator("localhost", 5001)
 // }
 
-export const GoogleAuthProvider = firebase.auth.GoogleAuthProvider
-export const FacebookAuthProvider = firebase.auth.FacebookAuthProvider
+// - Utilities
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED
-export const recaptchaVerifier = firebase.auth.RecaptchaVerifier
-export const credentialWithLink = firebase.auth.EmailAuthProvider.credentialWithLink
+export const recaptchaVerifier = RecaptchaVerifier
+export const credentialWithLink = EmailAuthProvider.credentialWithLink
 export const increment = firebase.firestore.FieldValue.increment
 export const arrayUnion = firebase.firestore.FieldValue.arrayUnion
 export const fromDate = firebase.firestore.Timestamp.fromDate
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
+
+// - Callable Functions
 export const alphaVantageQuery = functions.httpsCallable("alphaVantageQuery")
 export const tradeSubmission = functions.httpsCallable("tradeSubmission")
 export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
 
 // - Types
 export type DocumentReference = firebase.firestore.DocumentReference
+export type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot
 export type DocumentData = firebase.firestore.DocumentData
 export type FirebaseUserInfo = firebase.UserInfo
 

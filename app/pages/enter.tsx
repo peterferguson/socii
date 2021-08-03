@@ -1,5 +1,4 @@
 import Logo from "@components/Logo"
-import { auth } from "@lib/firebase/client/firebase"
 import { userFirstName } from "@utils/userFirstName"
 import { useAuth } from "hooks/useAuth"
 import router from "next/router"

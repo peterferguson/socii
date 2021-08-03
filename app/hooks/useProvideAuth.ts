@@ -1,13 +1,16 @@
 import { createUser } from "@lib/firebase/client/db"
 import {
-  auth,
+  AuthProvider,
   FacebookAuthProvider,
-  firestore,
+  onIdTokenChanged,
   GoogleAuthProvider,
-} from "@lib/firebase/client/firebase"
+  signInWithPopup,
+  signOut,
+  User,
+} from "firebase/auth"
+import { auth, firestore } from "@lib/firebase/client/firebase"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
-import firebase from "firebase"
 import Router from "next/router"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -21,7 +24,7 @@ export const useProvideAuth = () => {
   const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const handleUser = async (rawUser: firebase.User | null) => {
+  const handleUser = async (rawUser: User | null) => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
@@ -40,41 +43,34 @@ export const useProvideAuth = () => {
 
   // const signinWithEmail = async (email: string, password: string, redirect: string | UrlObject) => {
   //   setLoading(true)
-  //   const response = await auth.signInWithEmailAndPassword(email, password)
+  //   const response = await signInWithEmailAndPassword(auth, email, password)
   //   handleUser(response.user)
   //   if (redirect) {
   //     Router.push(redirect)
   //   }
   // }
-  // const signinWithTwitter = (redirect) => {
-  //   setLoading(true)
-  //   return auth.signInWithPopup(new TwitterAuthProvider()).then((response) => {
-  //     handleUser(response.user)
-  //     if (redirect) {
-  //       Router.push(redirect)
-  //     }
-  //   })
-  // }
 
-  const signinWithFacebook = async (redirect: string | UrlObject) => {
+  const signinWithProvider = async (
+    provider: AuthProvider,
+    redirect: string | UrlObject = "/"
+  ) => {
     setLoading(true)
-    const response = await auth.signInWithPopup(new FacebookAuthProvider())
-    handleUser(response.user)
+    const result = await signInWithPopup(auth, provider)
+    handleUser(result.user)
+
     if (redirect) {
       Router.push(redirect)
     }
   }
-  const signinWithGoogle = async (redirect: string | UrlObject) => {
-    setLoading(true)
-    const response = await auth.signInWithPopup(new GoogleAuthProvider())
-    handleUser(response.user)
-    if (redirect) {
-      Router.push(redirect)
-    }
-  }
+
+  const signinWithFacebook = (redirect: string | UrlObject) =>
+    signinWithProvider(new FacebookAuthProvider(), redirect)
+
+  const signinWithGoogle = (redirect: string | UrlObject) =>
+    signinWithProvider(new GoogleAuthProvider(), redirect)
 
   const signout = async (redirect: string | UrlObject = "/") => {
-    await auth.signOut()
+    await signOut(auth)
     const firstname = userFirstName(user)
     toast.dismiss()
     toast(`Bye for now ${firstname}!`, { icon: "👋" })
@@ -83,7 +79,7 @@ export const useProvideAuth = () => {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onIdTokenChanged(handleUser)
+    const unsubscribe = onIdTokenChanged(auth, handleUser)
     return () => unsubscribe()
   }, [])
 
@@ -92,9 +88,9 @@ export const useProvideAuth = () => {
       // allows us to turn off the realtime data feed when finished
       const userRef = firestore.collection("users").doc(user.uid)
       const unsubscribe = userRef.onSnapshot((doc) => {
-        const userData = doc.data()
-        setUsername(userData?.username)
-        setUserGroups(userData?.groups)
+        const { username, groups } = doc.data()
+        setUsername(username)
+        setUserGroups(groups)
       })
 
       return unsubscribe
