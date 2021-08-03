@@ -13,10 +13,10 @@ export default function ChatSidebar({ setShowActiveChannel }) {
 
   // TODO: Fix chat styling in this view
   return (
-    <div className="sticky hidden h-screen mt-2 mr-4 shadow-lg top-2 right-2 lg:block xl:w-96 w-[500px]">
+    <div className={`absolute mt-2 mr-4 shadow-lg bottom-8 right-2 lg:block xl:w-96 w-[500px]`}>
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
-          <h2 className="text-2xl font-thin text-transparent font-primary bg-clip-text  bg-gradient-to-b from-brand to-brand-cyan">
+          <h2 className="text-2xl font-thin text-transparent font-primary bg-clip-text bg-gradient-to-b from-brand to-brand-cyan">
             Chat
           </h2>
         </div>
@@ -33,5 +33,5 @@ export default function ChatSidebar({ setShowActiveChannel }) {
         </AuthCheck>
       </div>
     </div>
-  )
+  );
 }

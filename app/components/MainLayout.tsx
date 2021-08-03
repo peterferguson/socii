@@ -32,7 +32,7 @@ export default function MainLayout(props) {
           setShowChat={setShowChat}
         />
         {/* Main Components */}
-        <div className="h-full w-full pt-2 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0 no-scrollbar">
+        <div className="w-full h-full pt-2 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0 no-scrollbar">
           <div className="flex flex-col flex-wrap sm:flex-row">
             {props.children}
             {client?.user && props.showActiveChannel && !is2Col && !isChatRoute && (

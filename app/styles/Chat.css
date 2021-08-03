@@ -36,7 +36,6 @@
 
 .str-chat {
   box-sizing: border-box;
-  height: calc(100vh - 96px);
   max-height: calc(100vh - 96px);
 }
 .str-chat *,
@@ -72,6 +71,7 @@
 .str-chat-channel-list {
   float: left; /* TODO Remove this when the cards are implemented*/
   background: white;
+  border-radius: 1rem;
 }
 
 .str-chat-channel {
