@@ -86,7 +86,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
 
   return (
     <Fragment>
-      <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 border-opacity-25">
+      <div className="flex items-center justify-between h-12 bg-white !rounded-t-xl md:h-16 border-opacity-25">
         {toggleHideChannelList && is2Col && (
           <FaList
             className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
