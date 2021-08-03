@@ -86,7 +86,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
 
   return (
     <Fragment>
-      <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 rounded-xl border-opacity-25">
+      <div className="flex items-center justify-between h-12 bg-white border-b-2 border-gray-200 rounded-b-none shadow-2xl md:h-16 border-opacity-25">
         {toggleHideChannelList && is2Col && (
           <FaList
             className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
@@ -101,42 +101,52 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
         ) : (
           <EditHeader />
         )}
-        <div>
+        <>
           <TypingIndicator />
           {usingSettings ? (
             !isEditing ? (
-              <div className="flex">
-                <ImPencil
-                  className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-                  onClick={() => {
-                    if (!isEditing) setIsEditing(true)
-                  }}
-                />
-                <ImUserPlus
-                  className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-                  onClick={() => {
-                    if (!isEditing) setIsEditing(true)
-                  }}
-                />
-                <ImBin
-                  className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-                  onClick={() => setShowDelete(true)}
-                />
-                <ImCross
-                  className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-                  onClick={() => setUsingSettings(false)}
-                />
+              <div className="flex mr-1">
+                <a className="mx-1">
+                  <ImPencil
+                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                    onClick={() => {
+                      if (!isEditing) setIsEditing(true)
+                    }}
+                  />
+                </a>
+                <a className="mx-1">
+                  <ImUserPlus
+                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                    onClick={() => {
+                      if (!isEditing) setIsEditing(true)
+                    }}
+                  />
+                </a>
+                <a className="mx-1">
+                  <ImBin
+                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                    onClick={() => setShowDelete(true)}
+                  />
+                </a>
+                <a className="mx-1">
+                  <ImCross
+                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                    onClick={() => setUsingSettings(false)}
+                  />
+                </a>
               </div>
             ) : (
-              <MdSave className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition" />
+              <MdSave className="w-5 h-5 text-brand hover:text-brand-dark btn-transition" />
             )
           ) : (
-            <HiOutlineCog
-              className="w-5 h-5 mr-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-              onClick={() => setUsingSettings(true)}
-            />
+            <a className="mr-4">
+              <HiOutlineCog
+                className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                onClick={() => setUsingSettings(true)}
+              />
+            </a>
           )}
-        </div>
+        </>
       </div>
       {showDelete && (
         <DeleteChannelModal
