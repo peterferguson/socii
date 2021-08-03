@@ -2,7 +2,7 @@ import { SlashSearchKey } from "@components/SearchKey"
 import React from "react"
 import { HiOutlineSearch } from "react-icons/hi"
 
-export function Searchbar({ setShowSearchCard }) {
+export default function Searchbar({ setShowSearchCard }) {
   return (
     <div className="container relative left-0 z-50 flex w-3/4 h-full">
       <div

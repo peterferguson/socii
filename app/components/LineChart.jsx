@@ -1,14 +1,16 @@
+import { useWindowSize } from "@hooks/useWindowSize"
 import { tailwindColorMap } from "@lib/constants"
-import { useWindowSize } from "@lib/hooks"
-import { pctChange, pnlBackgroundColor } from "@utils/helper"
+import { pctChange } from "@utils/pctChange"
+import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React, { useEffect, useState } from "react"
+import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
 import "react-vis/dist/style.css"
-import { useMediaQuery } from "react-responsive"
 
 export default function LineChart({
   timeseries,
   crosshairIndexValue,
+  color,
   setCrosshairIndexValue,
   widthScale = 0.65,
   heightScale = 0.6,
@@ -24,7 +26,7 @@ export default function LineChart({
 
   const lineSeriesProps = {
     animation: true,
-    color: "#0fa9e6",
+    color: color ?? "#0fa9e6",
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries,

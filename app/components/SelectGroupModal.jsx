@@ -1,27 +1,18 @@
 import GroupSelectorRadioGroup from "@components/GroupSelector"
-import React, { Fragment } from "react"
 import { Dialog, Transition } from "@headlessui/react"
+import React, { Fragment } from "react"
+import { useAuth } from "@hooks/useAuth"
 
-export default function SelectGroupModal({
-  userGroups,
-  openGroupModal,
-  setOpenGroupModal,
-  goClickHandler = () => {},
-}) {
-  const closeModal = () => setOpenGroupModal(false)
-
-  const letsGoClickHander = () => {
-    closeModal()
-    goClickHandler()
-  }
+const SelectGroupModal = ({ state, send }) => {
+  const { userGroups } = useAuth()
 
   return (
-    <Transition appear show={openGroupModal} as={Fragment}>
+    <Transition appear show={state.matches("active.chooseGroup")} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
-        open={openGroupModal}
-        onClose={closeModal}
+        open={state.matches("active.chooseGroup")}
+        onClose={() => send("CLOSE")}
       >
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
@@ -57,14 +48,17 @@ export default function SelectGroupModal({
                 Select a group to invest with:
               </Dialog.Title>
               <div className="mt-2">
-                <GroupSelectorRadioGroup groupNames={userGroups} />
+                {/** TODO Add a loader here  */}
+                {userGroups && (
+                  <GroupSelectorRadioGroup groupNames={userGroups} send={send} />
+                )}
               </div>
               <div className="flex mt-4">
                 <div className="flex-grow" />
                 <button
                   type="button"
                   className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent \ rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
-                  onClick={letsGoClickHander}
+                  onClick={() => {}}
                 >
                   Yes, Lets go! 🚀
                 </button>
@@ -76,3 +70,5 @@ export default function SelectGroupModal({
     </Transition>
   )
 }
+
+export default SelectGroupModal

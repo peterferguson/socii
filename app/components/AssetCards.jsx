@@ -1,5 +1,7 @@
-import { logoUrl, pctChange, pnlBackgroundColor, pnlTextColor } from "@utils/helper"
-
+import { logoUrl } from "@utils/logoUrl"
+import { pctChange } from "@utils/pctChange"
+import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
+import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
 import React, { useState } from "react"
 

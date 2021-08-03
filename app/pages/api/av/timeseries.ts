@@ -1,29 +1,11 @@
-import admin from "firebase-admin"
-import { NextApiRequest, NextApiResponse } from "next"
+import { OHLC } from "@models/OHLC"
 import { cors } from "@utils/middleware"
-import { OHLC } from "@lib/types"
+import { NextApiRequest, NextApiResponse } from "next"
+import { firestore, fromDate } from "@lib/firebase/server/firebase-admin"
 // const bent = require("bent"))
 const alpha = require("alphavantage")({
   key: process.env.NEXT_PUBLIC_ALPHAVANTAGE_API_KEY,
 })
-
-// const serviceAccount = require("../../../serviceAccountKey.json")
-// * Constant initialisation
-const credential = JSON.parse(
-  Buffer.from(process.env.GCLOUD_CREDENTIALS, "base64").toString()
-)
-
-const adminConfig = {
-  storageBucket: "sociiinvest.appspot.com",
-  projectId: "sociiinvest",
-  credential: admin.credential.cert(credential),
-}
-
-if (!admin.apps.length) {
-  admin.initializeApp(adminConfig)
-}
-
-const firestore = admin.firestore()
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await cors(req, res)
@@ -64,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const timestampNumber =
       typeof timestamp !== "number" ? timestamp.getTime() : timestamp
 
-    const timestampFirestoreDate = admin.firestore.Timestamp.fromDate(
+    const timestampFirestoreDate = fromDate(
       typeof timestamp !== "number" ? timestamp : new Date(timestamp)
     )
 

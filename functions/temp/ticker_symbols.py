@@ -1,21 +1,30 @@
 import io
 import json
+import os
 import re
 from datetime import datetime
 from time import sleep
-from typing import Union, Tuple, Optional
+from typing import Optional, Tuple, Union
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
 import firebase_admin
+import numpy as np
+import pandas as pd
+import pyEX as pyex
 import requests
 import yahooquery as yq
 from colorthief import ColorThief
+from dotenv import load_dotenv
 from firebase_admin import firestore, storage
 from google.api_core.exceptions import NotFound
-from PIL import UnidentifiedImageError
+from google.cloud.firestore import Client
+from google.cloud.storage import Bucket
+from PIL import Image, UnidentifiedImageError
 from rich import print
 from tqdm import tqdm
+
+load_dotenv()
 
 
 # Helper Functions
@@ -240,19 +249,6 @@ def yahooSummaryToFirestore(ticker: str = ""):
     client.document(f"tickers/{isin}/times/yahoo").set(data)
 
 
-def trading212TickersToFireStore():
-    with open("/Users/peter/Projects/socii/temp/t212_tickers.json", "r") as f:
-        ticker_mapping = json.load(f)
-        ticker_isins = [
-            isin
-            for ticker in ticker_mapping
-            if (isin := ticker.get("isin")) and isin[:2] not in ("GB", "US")
-        ]
-    for isin in tqdm(ticker_isins):
-        yahooDataToFirestore(isin)
-        sleep(1)
-
-
 def tickerToISIN(ticker: str) -> str:
     query = client.collection("tickers").where("tickerSymbol", "==", ticker).limit(1)
     results = query.get()
@@ -289,14 +285,17 @@ def uploadLogoUrl(ticker: str = "", isin: str = ""):
         print(f"{ticker} failed to make public at logos/{isin}.png")
 
 
+def clamp(x):
+    return max(0, min(x, 255))
+
+
+def to_hex(r, g, b):
+    return "#{0:02x}{1:02x}{2:02x}".format(clamp(r), clamp(g), clamp(b))
+
+
 def getDominantLogoColor(
     ticker: str = "", isin: str = ""
 ) -> Optional[Tuple[int, int, int]]:
-    def clamp(x):
-        return max(0, min(x, 255))
-
-    def to_hex(r, g, b):
-        return "#{0:02x}{1:02x}{2:02x}".format(clamp(r), clamp(g), clamp(b))
 
     if not ticker and not isin:
         return None
@@ -328,119 +327,86 @@ if __name__ == "__main__":
         credentials, options=dict(storageBucket="sociiinvest.appspot.com")
     )
 
-    client = firestore.client()
+    client: Client = firestore.client()
+    bucket: Bucket = storage.bucket()
+    iex = pyex.Client(api_token=os.environ.get("IEX_TOKEN", ""))
 
-    popular_tickers = [
-        "TSLA",
-        "ZM",
-        "AMZN",
-        "NFLX",
-        "NVDA",
-        "AAPL",
-        "SPOT",
-        "UBER",
-        "BABA",
-        "TTD",
-        "GME",
-    ] + [  # - these are not marked as popular
-        "GERN",
-        "AMC",
-        "XLF",
-        "WISH",
-        "SNDL",
-        "SPY",
-        "AAPL",
-        "CLNE",
-        "BACO",
-        "ORPH",
-        "NIO",
-        "GE",
-        "SQQQ",
-        "FT",
-        "TRCH",
-        "PLTR",
-        "T",
-        "WFC",
-        "GFI",
-        "EDU",
-        "AMD",
-        "INTC",
-        "XLE",
-        "QQQA",
-        "ALF",
-        "IWMV",
-        "VXX",
-        "FCX",
-        "HBANCLF",
-        "C",
-        "JPMA",
-        "ANPCN",
-        "NLY",
-        "NAKDUVXYE",
-        "EEM",
-        "MU",
-        "XOMA",
-        "AHT",
-        "BBVZ",
-        "ZOM",
-        "X",
-        "PFE",
-        "ITUB",
-        "MSFT",
-        "EWZ",
-        "PBR",
-        "EFA",
-        "CSCO",
-        "RIG",
-        "XPEV",
-        "TQQQ",
-        "SLV",
-        "TALC",
-        "CLOVI",
-        "IVR",
-        "ABEV",
-        "GDX",
-        "NOK",
-        "KO",
-        "ET",
-        "VALEH",
-        "HYG",
-        "TELLA",
-        "ATHA",
-        "GOLD",
-        "ERIC",
-        "SWNL",
-        "LU",
-        "AAL",
-        "JD",
-        "HL",
-        "TLT",
-        "CCL",
-        "CMCSA",
-        "SIRI",
-        "MUX",
-        "VXRTS",
-        "SDS",
-        "GM",
-        "KMIS",
-        "SESN",
-        "HPQ",
-        "SLB",
-        "VIAC",
-        "TSLA",
-        "BBD",
-        "LKCO",
-        "MO",
-        "NVDA",
-        "OXY",
-        "HPE",
-        "MRO",
-        "AUYS",
-        "SENS",
-        "WKHS",
-        "FB",
-        "BNL",
-    ]
+    with open("/Users/peter/Projects/socii/functions/temp/logos.csv", "r") as f:
+        logos = pd.read_csv(f)
+
+    logos["isin"] = logos["isin"].apply(
+        lambda x: x.replace("logos/", "").replace(".png", "")
+    )
+
+    # for doc in client.collection("tickers").list_documents():
+    #     print(doc.id)
+    #     break
+
+    with open(
+        "/Users/peter/projects/socii/functions/temp/alpaca/alpaca_stocks.csv", "r"
+    ) as f:
+        alpaca_stocks = pd.read_csv(f, sep=",")
+
+    # TODO: Add isin from iex to alpaca & hence firestore
+
+    with open("/Users/peter/Projects/socii/functions/temp/logos.csv", "a") as f:
+        for index, stock in tqdm(alpaca_stocks.iterrows()):
+            isin = stock["isin"]
+            symbol = stock["symbol"]
+            ticker_ref = client.document(f"tickers/{isin}")
+            ticker_snapshot = ticker_ref.get()
+            if not ticker_snapshot.exists or "alpaca" not in ticker_snapshot.to_dict():
+                #  - Add ticker to firestore
+                ticker_ref.set(
+                    {
+                        **yahooData(isin),
+                        "alpaca": {
+                            "id": stock["id"],
+                            "name": stock["name"],
+                            "symbol": stock["symbol"],
+                            "exchange": stock["exchange"],
+                            "fractionable": stock["fractionable"],
+                            "class": stock["class"],
+                            "lastUpdated": firestore.SERVER_TIMESTAMP,
+                        },
+                    }
+                )
+                print(f"Added yahoo data for {symbol} to 'tickers/{isin}'")
+            if isin not in logos["isin"].to_list() and isin is not np.nan:
+                try:
+                    url = iex.stocks.logo(stock["symbol"])["url"]
+                except Exception as e:
+                    print(e)
+                    continue
+                if url:
+                    logo = requests.get(url).content
+                    if logo:
+                        # - Save logo dominant color in firestore
+                        logo_bytes = io.BytesIO(logo)
+                        try:
+                            color_thief = ColorThief(logo_bytes)
+                            logo_color = to_hex(*color_thief.get_color(quality=10))
+                            ticker_ref.update({"logoColor": logo_color})
+                            print(
+                                f"Saved dominant logo color for {symbol} to 'tickers/{isin}'"
+                            )
+                        except Exception as e:
+                            print(e)
+                            continue
+                        #  - Store logo in storage
+                        try:
+                            blob = bucket.blob(f"logos/{isin}.png")
+                            blob.upload_from_string(logo)
+                            blob.make_public()
+                            f.write(f"\n{isin}")
+                            print(blob.public_url)
+                        except Exception as e:
+                            print(
+                                f"{stock['symbol']} failed to make upload to logos/{isin}.png"
+                            )
+                            print(e)
+
+    # TODO: Check that the isins also exist in the database... if not add yahoo data
 
     # # * Make popular tickers
     # for ticker in tqdm(popular_tickers):
@@ -466,12 +432,12 @@ if __name__ == "__main__":
     # alphaVantageTimeseriesToFirestore(ticker=ticker)
     # sleep(60)
 
-    query = (
-        client.collection("tickers")
-        .where("marketCountry", "==", "United States of America")
-        .where("exchangeAbbreviation", "!=", "PNK")
-        .order_by("exchangeAbbreviation", "ASCENDING")
-    )
+    # query = (
+    #     client.collection("tickers")
+    #     .where("marketCountry", "==", "United States of America")
+    #     .where("exchangeAbbreviation", "!=", "PNK")
+    #     .order_by("exchangeAbbreviation", "ASCENDING")
+    # )
 
     # for snapshot in tqdm(query.get()):
     #     ticker = snapshot.to_dict()
@@ -487,38 +453,38 @@ if __name__ == "__main__":
     #     sleep(60)
 
     # - Store dominant logo color
-    batch = client.batch()
-    count = 0
-    for index, doc_snapshot in enumerate(query.get()):
-        if index < 150:
-            continue
-        print(index)
-        if count > 499:
-            print("commiting batch")
-            batch.commit()
-            batch = client.batch()
-            count = 0
-        isin = doc_snapshot.id
-        try:
-            logo_color = getDominantLogoColor(isin=isin)
-        except HTTPError:
-            try:
-                makeLogoPublic(isin)
-                logo_color = getDominantLogoColor(isin=isin)
-            except NotFound:
-                continue
-        except NotFound:
-            continue
-        if not logo_color:
-            continue
-        batch.update(
-            client.document(f"tickers/{isin}"),
-            {
-                "logoColorLastUpdated": firestore.SERVER_TIMESTAMP,
-                "logoColor": logo_color,
-            },
-        )
-        count += 1
-    batch.commit()
+    # batch = client.batch()
+    # count = 0
+    # for index, doc_snapshot in enumerate(query.get()):
+    #     if index < 150:
+    #         continue
+    #     print(index)
+    #     if count > 499:
+    #         print("commiting batch")
+    #         batch.commit()
+    #         batch = client.batch()
+    #         count = 0
+    #     isin = doc_snapshot.id
+    #     try:
+    #         logo_color = getDominantLogoColor(isin=isin)
+    #     except HTTPError:
+    #         try:
+    #             makeLogoPublic(isin)
+    #             logo_color = getDominantLogoColor(isin=isin)
+    #         except NotFound:
+    #             continue
+    #     except NotFound:
+    #         continue
+    #     if not logo_color:
+    #         continue
+    #     batch.update(
+    #         client.document(f"tickers/{isin}"),
+    #         {
+    #             "logoColorLastUpdated": firestore.SERVER_TIMESTAMP,
+    #             "logoColor": logo_color,
+    #         },
+    #     )
+    #     count += 1
+    # batch.commit()
 
     # getDominantLogoColor("TSLA")

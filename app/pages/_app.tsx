@@ -1,13 +1,9 @@
-import Footer from "@components/Footer"
-import Head from "@components/Head"
-import { MainLayout } from "@components/MainLayout"
-import Navigation from "@components/Navigation"
+import { Footer, Head, MainLayout, Navigation } from "@components/index"
+import { AuthProvider } from "@contexts/AuthProvider"
+import { StreamProvider } from "@contexts/StreamProvider"
+import { useStream } from "@hooks/useStream"
 import { toastProps } from "@lib/constants"
-import { StreamContext, UserContext } from "@lib/context"
-import { useStream, useUserData } from "@lib/hooks"
-import "@styles/Chat.css"
-import "@styles/globals.css"
-import { isBrowser } from "@utils/helper"
+import { isBrowser } from "@utils/isBrowser"
 import { AppProps } from "next/app"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -15,6 +11,9 @@ import React, { useEffect, useState } from "react"
 import "react-file-utils/dist/index.css"
 import { useMediaQuery } from "react-responsive"
 import { Chat } from "stream-chat-react"
+
+import "@styles/Chat.css"
+import "@styles/globals.css"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
@@ -28,12 +27,6 @@ const SearchCard = dynamic(() => import("components/SearchCard"), { ssr: true })
 // }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const userData = useUserData()
-  const { streamClient: client } = useStream(
-    userData.user?.uid,
-    userData.username,
-    userData.user?.displayName
-  )
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const [showSearchCard, setShowSearchCard] = useState(false)
   const [showActiveChannel, setShowActiveChannel] = useState(false)
@@ -49,8 +42,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const props = {
     ...pageProps,
-    user: userData.user,
-    client,
     showSearchCard,
     setShowSearchCard,
     showActiveChannel,
@@ -61,9 +52,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
   useEffect(() => {
-    if (showActiveChannel) {
-      setShowActiveChannel(!showActiveChannel)
-    }
+    if (showActiveChannel) setShowActiveChannel(!showActiveChannel)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
@@ -72,8 +61,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
 
   return (
-    <UserContext.Provider value={userData}>
-      <StreamContext.Provider value={{ client }}>
+    <AuthProvider>
+      <StreamProvider>
         <main
           className={`min-h-screen no-scrollbar
           relative overflow-x-hidden overflow-y-scroll bg-gray-100 dark:bg-gray-800 
@@ -88,7 +77,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <Component {...props} />
               </>
             ) : (
-              <ComponentContainer {...props} user={userData.user}>
+              <ComponentContainer {...props}>
                 {isBrowser && <SearchCard {...props} />}
                 {isBrowser && <Component {...props} />}
                 {is1Col && <Footer {...props} />}
@@ -97,13 +86,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </>
           <Toaster {...toastProps} />
         </main>
-      </StreamContext.Provider>
-    </UserContext.Provider>
+      </StreamProvider>
+    </AuthProvider>
   )
 }
 
-const ComponentContainer = (props) => (
-  <Chat client={props.client} theme={`messaging ${props.theme}`}>
-    <MainLayout {...props} />
-  </Chat>
-)
+const ComponentContainer = (props) => {
+  const { client } = useStream()
+  return (
+    <Chat client={client} theme={`messaging ${props.theme}`}>
+      <MainLayout {...props} />
+    </Chat>
+  )
+}

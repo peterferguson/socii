@@ -129,6 +129,13 @@ a {
   user-select: text;
 }
 
+/* Remove spinner from number input */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 @layer components {
   .messaging-input__input-wrapper {
     @apply flex items-center min-h-[60px] min-w-[200px] max-w-[400px]  h-["fit-content"] z-[100] rounded-3xl 

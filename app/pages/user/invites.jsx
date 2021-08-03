@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react"
-import { firestore } from "@lib/firebase"
-import { useCollectionData } from "react-firebase-hooks/firestore"
 import { Dialog } from "@headlessui/react"
+import { firestore } from "@lib/firebase/client/firebase"
+import React, { useEffect, useState } from "react"
+import { useCollectionData } from "react-firebase-hooks/firestore"
 
 export default function Invites() {
   return (
     <>
-      <div className="p-4 font-bold text-md font-secondary">
+      <div className="p-4 text-base font-bold font-secondary">
         Invite Friends
         <span className="pl-1 font-extrabold text-brand-dark">
           (Think carefully you only have 2 invites!)
@@ -53,7 +53,7 @@ function PhoneInvite() {
             onChange={(e) => setDigits(e.target.value)}
           />
           <div
-            className={`bg-white text-md sm:text-md pt-1 sm:pt-0.5 ${
+            className={`bg-white text-base sm:text-base pt-1 sm:pt-0.5 ${
               phoneNumber.length === 13 ? "text-brand btn-transition" : "text-red-400"
             } p-0.5 align-middle`}
             onClick={phoneNumber.length === 13 ? null : null}

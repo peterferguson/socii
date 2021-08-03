@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,22 +17,40 @@
     "baseUrl": "./",
     "paths": {
       "@lib/*": ["lib/*"],
+      "@api/*": ["pages/api/*"],
+      "@tests/*": ["__tests__/*"],
+      "@hooks": ["hooks/index"],
+      "@hooks/*": ["hooks/*"],
+      "@alpaca/*": ["alpaca/*"],
+      "@alpaca": ["alpaca/index"],
+      "@stream": ["stream/index"],
+      "@stream/*": ["stream/*"],
+      "@contexts/*": ["contexts/*"],
+      "@contexts": ["contexts/index"],
+      "@components": ["components/index"],
       "@components/*": ["components/*"],
+      "@models/*": ["models/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
+      "@utils": ["utils/index"],
+      "@pages/*": ["pages/*"],
       "@public/*": ["public/*"],
       "@icons/*": ["public/icons/*"]
     },
     "esModuleInterop": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   },
   "include": [
     "next-env.d.ts",
     "custom.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.tsx",
-    "components/stream/MessagingInput/MessagingInput.jsx",
-    "pages/api/commands.js"
-, "components/stream/Chat.jsx", "components/stream/MessagingChannelPreview.jsx"  ],
+    "**/*.js",
+    "**/*.jsx"
+  ],
   "exclude": ["node_modules"]
 }

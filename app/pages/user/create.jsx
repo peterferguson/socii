@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
-
-import { UserContext } from "@lib/context"
-import { firestore } from "@lib/firebase"
 import CheckIcon from "@components/BackgroundCheck"
+import { firestore } from "@lib/firebase/client/firebase"
+import { useAuth } from "@hooks/useAuth"
 import debounce from "lodash/debounce"
-import { FiX } from "react-icons/fi"
-import toast from "react-hot-toast"
 import { useRouter } from "next/router"
+import React, { useCallback, useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { FiX } from "react-icons/fi"
+import {fetcher} from "@utils/fetcher"
 
 export default function Username(props) {
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [alpaca, setAlpaca] = useState(null)
+  const [ACH, setACH] = useState(null)
 
   const onChange = (e) => {
     // Force form value typed in form to match correct format
@@ -37,10 +39,11 @@ export default function Username(props) {
     }
   }
 
-  useEffect(() => {
-    checkUsername(username)
+  useEffect(
+    () => checkUsername(username),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username])
+    [username]
+  )
 
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
@@ -61,6 +64,123 @@ export default function Username(props) {
     }, 500),
     []
   )
+
+
+  async function CreateAlpaca(e) {
+    e.preventDefault()
+    // TODO - remove for beyond MVP - use user email instead of random//
+    const setupEmail = "tests"+Math.floor(Math.random()*100000)+"@socii.com"
+    const testAccount = {
+      contact: {
+        email_address: setupEmail,
+        phone_number: "+442137981999",
+        street_address: ["123 Social Drive"],
+        city: "Belfast",
+        state: "",
+        postal_code: "BT00AA",
+        country: "GBR",
+      },
+      identity: {
+        given_name: "TEST",
+        family_name: "ACCOUNT",
+        date_of_birth: "1995-01-07",
+        tax_id: "AA123456C",
+        tax_id_type: "GBR_NINO",
+        country_of_citizenship: "GBR",
+        country_of_birth: "GBR",
+        country_of_tax_residence: "GBR",
+        funding_source: ["employment_income"],
+      },
+      disclosures: {
+        is_control_person: false,
+        is_affiliated_exchange_or_finra: false,
+        is_politically_exposed: false,
+        immediate_family_exposed: false,
+      },
+      agreements: [
+        {
+          agreement: "margin_agreement",
+          signed_at: "2020-09-11T18:09:33Z",
+          ip_address: "185.13.21.99",
+        },
+        {
+          agreement: "account_agreement",
+          signed_at: "2020-09-11T18:13:44Z",
+          ip_address: "185.13.21.99",
+        },
+        {
+          agreement: "customer_agreement",
+          signed_at: "2020-09-11T18:13:44Z",
+          ip_address: "185.13.21.99",
+        },
+      ],
+      documents: [
+        {
+          document_type: "cip_result",
+          content: "VGhlcmUgYXJlIG5vIHdpbGQgYWxwYWNhcy4=",
+          mime_type: "application/pdf",
+        },
+        {
+          document_type: "identity_verification",
+          document_sub_type: "passport",
+          content: "QWxwYWNhcyBjYW5ub3QgbGl2ZSBhbG9uZS4=",
+          mime_type: "image/jpeg",
+        },
+      ],
+      trusted_contact: {
+        given_name: "Jame",
+        family_name: "Doe",
+        email_address: "jane.doe@example.com"      
+      }
+    }
+    const createAccount = async () => {
+      const res =await fetcher("/api/alpaca/accounts", {
+              method: "POST",
+              headers: { Authorization: `Basic ${user.token}` },
+              body: JSON.stringify(testAccount),
+            })
+      setAlpaca(res);
+    };
+    createAccount();
+  }
+
+  useEffect(() =>{
+    alpaca?.id ? CreateACH(alpaca?.id) : null
+  },[alpaca?.id])
+
+  async function CreateACH(id) {
+    const testACH ={
+      accountOwnerName: user.name +" "+ user.family_name,
+      bankAccountType: "SAVINGS",
+      bankAccountNumber: "32132231abc",
+      bankRoutingNumber: "121000359",
+      nickname: "FUNDING MONEY",
+     }
+     const createACH = async () => {
+      const res =await fetcher("/api/alpaca/ach", {
+              method: "PUT",
+              headers: { Authorization: `Basic ${user.token}` },
+              body: JSON.stringify({accountId: id , achData: testACH}),
+            })
+      setACH(res);
+    };
+    createACH();
+  }
+
+
+  useEffect(() =>{
+    ACH?.id ? CreateUsername(user, username, router) : null
+  },[ACH?.id])
+
+  const CreateUsername = ( user, username, router) => {
+    const userRef = firestore.collection(`users`).doc(user.uid)
+    const usernameRef = firestore.collection("usernames").doc(username)
+
+    const batch = firestore.batch()
+    batch.set(userRef, { username: username , alpacaID: alpaca.id , alpacaACH: ACH.id },  { merge: true })
+    batch.set(usernameRef, { uid: user.uid })
+    batch.commit().then(() => router.push(`/user/${username}`))
+  }
 
   return (
     <main className="flex items-center justify-center w-screen h-screen bg-gray-50">
@@ -87,36 +207,16 @@ export default function Username(props) {
               )}
             </div>
           </div>
-          <button
+         <button
             className="w-11/12 my-4 btn"
             onClick={(e) =>
-              isValidUsername ? createUsername(e, user, username, router) : null
+              isValidUsername ? CreateAlpaca(e) : null
             }
           >
             Choose!
-          </button>
+          </button> 
         </div>
       </form>
     </main>
   )
-}
-
-const createUsername = (e, user, username, router) => {
-  e.preventDefault()
-
-  const userRef = firestore.collection(`users`).doc(user.uid)
-  const usernameRef = firestore.collection("usernames").doc(username)
-
-  const batch = firestore.batch()
-  batch.set(userRef, {
-    username: username,
-    photoURL: user.photoURL,
-    displayName: user.displayName,
-    email: user.email,
-    emailVerified: user.emailVerified,
-    phoneNumber: user.phoneNumber,
-  })
-  batch.set(usernameRef, { uid: user.uid })
-
-  batch.commit().then(() => router.push(`/user/${username}`))
 }

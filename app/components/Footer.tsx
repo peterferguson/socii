@@ -1,5 +1,5 @@
-import { UserContext } from "@lib/context"
 import { useRouter } from "next/router"
+import { useAuth } from "@hooks/useAuth"
 import React, { useContext } from "react"
 import {
   HiOutlineAnnotation,
@@ -18,7 +18,7 @@ type FooterProps = {
 
 export default function Footer({ showSearchCard, setShowSearchCard }: FooterProps) {
   const router = useRouter()
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useAuth()
 
   const links = [
     {

@@ -111,3 +111,5 @@ yarn-error.log*
 **/public/workbox-*.js
 **/public/sw.js
 
+# jest
+jest.env.js

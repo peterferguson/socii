@@ -1,23 +1,23 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
+import { useAuth, useLocalCurrency } from "@hooks"
 import {
   currencyIcons,
   groupDepositOptions,
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
-import { UserContext } from "@lib/context"
-import { arrayUnion, firestore, serverTimestamp } from "@lib/firebase"
-import { useLocalCurrency } from "@lib/hooks"
+import { firestore } from "@lib/firebase/client/firebase"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
+import { createGroup } from "@lib/firebase/client/db"
 
 export default function Create() {
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useAuth()
   const router = useRouter()
 
   const [groupName, setGroupName] = useState("")
@@ -86,7 +86,7 @@ export default function Create() {
           <div className="pb-4 text-4xl font-bold text-center font-secondary">
             Group
           </div>
-          <label className="ml-4 font-bold text-md font-secondary">
+          <label className="ml-4 text-base font-bold font-secondary">
             Name
             <div className="flex flex-row">
               <input
@@ -109,7 +109,7 @@ export default function Create() {
               </div>
             </div>
           </label>
-          <label className="ml-4 font-bold text-md font-secondary">
+          <label className="ml-4 text-base font-bold font-secondary">
             Short description
             <input
               className="flex w-11/12 my-4 ml-3 mr-8 border rounded-lg appearance-none border-grey-200 shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
@@ -118,14 +118,14 @@ export default function Create() {
               onChange={(e) => setGroupDescription(e.target.value)}
             />
           </label>
-          <label className="mx-4 mt-4 font-bold text-md font-secondary">
+          <label className="mx-4 mt-4 text-base font-bold font-secondary">
             Group Privacy
             <PrivacyOptions
               privacyOption={privacyOption}
               setPrivacyOption={setPrivacyOption}
             />
           </label>
-          <label className="flex flex-col mx-4 mb-4 font-bold text-md font-secondary">
+          <label className="flex flex-col mx-4 mb-4 text-base font-bold font-secondary">
             Initial Lump-Sum
             <AmountOptions
               AmountOptions={groupLumpSumOptions}
@@ -134,7 +134,7 @@ export default function Create() {
               srLabel={"Initial Lump Sum Amount"}
             />
           </label>
-          <label className="flex flex-col m-4 font-bold text-md font-secondary">
+          <label className="flex flex-col m-4 text-base font-bold font-secondary">
             Deposit Schedule
             {/* 
             // ! Legally the group members will have to ensure this balance is maintained.
@@ -154,21 +154,22 @@ export default function Create() {
           </label>
           <button
             className="w-11/12 my-8 btn"
-            onClick={(e) =>
-              isValidGroupName
-                ? createGroup(
-                    e,
-                    router,
-                    user,
-                    username,
-                    groupName,
-                    privacyOption,
-                    depositOption,
-                    lumpSumOption,
-                    groupDescription
-                  )
-                : null
-            }
+            onClick={(e) => {
+              e.preventDefault()
+              if (isValidGroupName) {
+                createGroup(
+                  user,
+                  username,
+                  groupName,
+                  privacyOption,
+                  depositOption,
+                  lumpSumOption,
+                  groupDescription
+                )
+
+                router.push(`/groups/${groupName}`)
+              }
+            }}
           >
             Create!
           </button>
@@ -187,7 +188,7 @@ function AmountOptions({
   srLabel,
 }) {
   const [localCurrency] = useLocalCurrency()
-  const LocalCurrencyIcon = currencyIcons[localCurrency].icon
+  // const LocalCurrencyIcon = currencyIcons[localCurrency].icon
   return (
     <div className={`w-11/12 mt-4 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={amountOption} onChange={setAmountOption}>
@@ -215,7 +216,7 @@ function AmountOptions({
                       <div className="text-sm">
                         <RadioGroup.Label
                           as="p"
-                          className={`font-medium text-lg sm:text-md ${
+                          className={`font-medium text-lg sm:text-base ${
                             checked ? "text-brand" : "text-gray-900"
                           }`}
                         >
@@ -300,44 +301,4 @@ function PrivacyOptions({ className, privacyOption, setPrivacyOption }) {
       </RadioGroup>
     </div>
   )
-}
-
-const createGroup = async (
-  e,
-  router,
-  user,
-  username,
-  groupName,
-  privacyOption,
-  depositOption,
-  lumpSumOption,
-  groupDescription
-) => {
-  e.preventDefault()
-
-  // TODO: Need to fix rules to allow user creation. (userGroupRef isn't accessible)
-
-  const userGroupRef = firestore.collection("users").doc(user.uid)
-  const groupRef = firestore.collection("groups").doc(groupName)
-  const investorsRef = groupRef.collection("investors").doc(username)
-
-  const batch = firestore.batch()
-
-  batch.update(userGroupRef, { groups: arrayUnion(groupName) })
-  batch.set(groupRef, {
-    groupDescription,
-    groupName,
-    privacyOption,
-    groupType: "", // TODO: Implement group types (dividend/active/value/growth)
-    cashBalance: depositOption.amount + lumpSumOption.amount, //TODO: Add this to the payment ledger
-    joinFee: lumpSumOption.amount,
-    membershipFee: depositOption.amount,
-    startDate: serverTimestamp(),
-    investorCount: 1, // TODO: Increment this on addition of new investors
-  })
-  batch.set(investorsRef, { isFounder: true, joinDate: serverTimestamp() })
-  await batch.commit()
-
-  // Imperative navigation after doc is set
-  router.push(`/groups/${groupName}`)
 }

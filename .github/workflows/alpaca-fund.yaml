@@ -1,0 +1,14 @@
+name: Fund Account Daily
+on:
+  schedule:
+    # Run job at 7am every day
+    - cron: "0 7 * * *"
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call funding API route
+        run: |
+          curl --request POST \
+          --url 'https://socii.app/api/funding' \
+          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'

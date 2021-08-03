@@ -1,36 +1,37 @@
-import Logo from "@components/Logo"
-import { signOut } from "@lib/firebase"
-import Router from "next/router"
+import {
+  HeaderButton,
+  HeaderDropdownButton,
+  Logo,
+  ProfilePhoto,
+  Searchbar,
+} from "@components"
+import { useAuth } from "@hooks/useAuth"
 import React from "react"
 import { HiOutlineChevronDown, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { useMediaQuery } from "react-responsive"
-import HeaderButton from "./HeaderButton"
-import HeaderDropdownButton from "./HeaderDropdownButton"
-import { ProfilePhoto } from "./ProfilePhoto"
-import { Searchbar } from "./Searchbar"
-
-const dropdownItems = [
-  {
-    name: "Log Out",
-    onClick: () => signOut(Router),
-    notificationCount: 0,
-    leftIcon: () => <VscSignOut className="w-6 h-6" />,
-  },
-]
 
 interface INavHeader {
-  setShowSearchCard: React.Dispatch<React.SetStateAction<Boolean>>
+  setShowSearchCard: React.Dispatch<React.SetStateAction<boolean>>
   showChat: boolean
-  setShowChat: React.Dispatch<React.SetStateAction<Boolean>>
+  setShowChat: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function NavHeader({
   setShowSearchCard,
   showChat,
   setShowChat,
-}: INavHeader) {
+}: INavHeader): JSX.Element {
+  const { signout } = useAuth()
   const is1Col = !useMediaQuery({ minWidth: 640 })
+  const dropdownItems = [
+    {
+      name: "Log Out",
+      onClick: () => signout(),
+      notificationCount: 0,
+      leftIcon: () => <VscSignOut className="w-6 h-6" />,
+    },
+  ]
   return (
     <header className="sticky z-40 items-center w-full h-16 bg-white shadow-lg top-2 left-8 dark:bg-gray-700 rounded-2xl">
       <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">

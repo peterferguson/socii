@@ -1,5 +1,5 @@
-import React, { useState } from "react"
 import { currencySymbols } from "@lib/constants"
+import React, { useState } from "react"
 
 export default function PriceInput({
   setPrice,
@@ -9,6 +9,12 @@ export default function PriceInput({
   showPrice = true,
 }) {
   const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency)
+  let currencyList = Object.keys(currencySymbols)
+  // - get the index of the selectedCurrency
+  const selectedCurrencyIndex = currencyList.indexOf(selectedCurrency)
+
+  // - move selected currency to the first position
+  currencyList.splice(0, 0, currencyList.splice(selectedCurrencyIndex, 1)[0])
 
   return (
     <div className="text-blueGray-500">
@@ -43,7 +49,7 @@ export default function PriceInput({
             }}
             className="h-full py-0 pl-2 text-gray-500 bg-transparent border-transparent focus:ring-teal-500 focus:border-teal-500 pr-7 sm:text-sm rounded-md"
           >
-            {Object.keys(currencySymbols).map((currency) => (
+            {currencyList.map((currency) => (
               <option key={currency} value={currency}>
                 {currency}
               </option>

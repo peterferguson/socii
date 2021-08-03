@@ -1,9 +1,9 @@
-import { tw } from "@utils/helper"
+import { tw } from "@utils/tw"
 import React from "react"
-import { FaFacebook, FaTwitter, FaMedium } from "react-icons/fa"
+import { FaFacebook, FaMedium, FaTwitter } from "react-icons/fa"
 
 interface IComingSoon {
-  children: React.ReactChildren
+  children: React.ReactNode
   color: string
   description: string
 }

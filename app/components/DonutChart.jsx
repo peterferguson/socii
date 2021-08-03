@@ -1,8 +1,8 @@
+import { pnlTextColor } from "@utils/pnlTextColor"
+import { useWindowSize } from "@hooks"
 import React, { useState } from "react"
-import { RadialChart, Hint } from "react-vis"
-import { useWindowSize } from "@lib/hooks"
+import { Hint, RadialChart } from "react-vis"
 import "react-vis/dist/style.css"
-import { pnlTextColor } from "@utils/helper"
 
 export default function DonutChart({
   data,

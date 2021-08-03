@@ -1,6 +1,6 @@
 import { AssetCard } from "@components/AssetCards"
-import { firestore } from "@lib/firebase"
-import { stockProps } from "@utils/helper"
+import { firestore } from "@lib/firebase/client/firebase"
+import { stockProps } from "@utils"
 import React from "react"
 
 export default function Popular({ tickerSymbols }) {

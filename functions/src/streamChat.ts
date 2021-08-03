@@ -45,7 +45,7 @@ export const createGroup = async (change, context) => {
 
     const channel = streamClient.channel("messaging", groupName.split(" ").join("-"), {
       name: `${groupName} Group Chat`,
-      created_by: founderUsername,
+      created_by: { id: founderUsername },
     })
 
     try {

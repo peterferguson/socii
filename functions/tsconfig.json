@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "lib": ["es2019", "dom"],
+    "lib": ["esnext", "dom"],
     "module": "commonjs",
-    "target": "es2019",
+    "target": "esnext",
     "outDir": "lib",
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],

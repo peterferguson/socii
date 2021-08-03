@@ -1,13 +1,12 @@
 import LoadingIndicator from "@components/LoadingIndicator"
 import { Dialog } from "@headlessui/react"
-import { FaSearch } from "react-icons/fa"
 import algoliasearch from "algoliasearch/lite"
 import debounce from "lodash/debounce"
-
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useAsync } from "react-async-hook"
+import { FaSearch } from "react-icons/fa"
 import {
   Configure,
   connectSearchBox,
@@ -16,7 +15,7 @@ import {
   Hits,
   InstantSearch,
 } from "react-instantsearch-dom"
-import { iexQuote } from "utils/helper"
+import { iexQuote } from "@utils/iexQuote"
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
@@ -133,7 +132,7 @@ export default function SearchCard({
 
   useEffect(() => {
     if (isOpen) setIsOpen(!isOpen)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   // TODO Fix the dialog styling for mobile

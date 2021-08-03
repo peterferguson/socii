@@ -1,6 +1,5 @@
-import Logo from "@components/Logo"
-import MacSearchKey from "@components/SearchKey"
-import { UserContext } from "@lib/context"
+import { Logo, SearchKey } from "@components"
+import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext } from "react"
@@ -8,12 +7,12 @@ import { HiOutlineSearch } from "react-icons/hi"
 const Dropdown = dynamic(() => import("components/Dropdown"))
 
 export default function Navigation(props) {
-  const { user } = useContext(UserContext)
+  const { user } = useAuth()
   const router = useRouter()
 
   return (
     <div className="sticky top-0 z-50 flex flex-row w-full mx-auto bg-gray-50">
-      <div className="p-4">
+      <div className="flex items-center justify-center mx-auto">
         <Logo className="text-4xl" />
       </div>
       <div className="flex-grow"></div>
@@ -43,7 +42,7 @@ function SearchBar({ setShowSearchCard }) {
         <span className="text-gray-400">
           Search<span className="hidden text-gray-400 sm:inline">: TSLA</span>
         </span>
-        <MacSearchKey />
+        <SearchKey />
       </button>
     </div>
   )

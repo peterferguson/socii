@@ -169,3 +169,6 @@ export const toastProps: ToastProps = {
     duration: 5000,
   },
 }
+
+export const logoBaseUrl: string =
+  "https://storage.googleapis.com/sociiinvest.appspot.com/logos"
