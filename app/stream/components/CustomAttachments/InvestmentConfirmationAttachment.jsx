@@ -1,13 +1,13 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useAuth } from "@hooks/useAuth"
-import { arrayUnion, firestore } from "@lib/firebase/client/firebase"
+import { agreesToTrade } from "@lib/firebase/client/db"
 import React, { Suspense } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
   useMessageContext,
 } from "stream-chat-react"
-import MMLButton from "./MMLButton"
+import { InvestConfirmationMMLConverter } from "./converters/InvestConfirmationMMLConverter"
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
@@ -56,31 +56,5 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
     </div>
   )
 }
-
-const agreesToTrade = async (groupName, messageId, uid) => {
-  const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
-  await tradesRef.update({ agreesToTrade: arrayUnion(`users/${uid}`) })
-}
-
-/* Converters */
-
-const InvestConfirmationMMLConverter = () => (
-  <>
-    <div className="flex items-center justify-center w-full mx-auto space-x-2">
-      <MMLButton
-        key={`no-button`}
-        name="no"
-        className="w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400"
-        text="No"
-      />
-      <MMLButton
-        key={`yes-button`}
-        name="yes"
-        className="w-1/2 mx-2 outline-btn btn-transition"
-        text={"Yes"}
-      />
-    </div>
-  </>
-)
 
 export default InvestmentConfirmationAttachment

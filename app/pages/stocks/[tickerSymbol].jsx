@@ -225,7 +225,7 @@ export async function getStaticProps({ params }) {
     .limit(1)
 
   const price = await iexClient.quote(tickerSymbol, {
-    filter: "latestPrice,changePercent,iexRealtimePrice",
+    filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency",
   })
 
   props = await stockProps({ tickerQuery, timeseriesLimit: 100 })

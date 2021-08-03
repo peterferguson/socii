@@ -35,6 +35,16 @@ import { UploadsPreview } from "./UploadsPreview"
 
 // 2 Is handled in the onChange function (Maybe move all handling in here)
 
+// TODO
+// TODO
+// TODO
+// TODO
+// TODO: Convert this logic to a XState machine
+// TODO
+// TODO
+// TODO
+// TODO
+
 const CommandIcon = ({ text }) => (
   <div className="flex items-center w-16 h-6 ml-2 rounded-xl justify-evenly bg-brand">
     <BsLightningFill className="w-4 h-4 text-white -mr-1.5" />
@@ -140,6 +150,22 @@ const useCommand = () => {
   ]
 }
 
+const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
+  <div
+    className="flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
+    role="button"
+    aria-roledescription="button"
+    onClick={onClick}
+    ref={ref || null}
+  >
+    <emojiButton.icon
+      className={`h-5 w-5 md:h-6 md:w-6 ${
+        emojiButton?.className ? emojiButton?.className : ""
+      }`}
+    />
+  </div>
+))
+
 const MessagingInput = (props) => {
   const { acceptedFiles, maxNumberOfFiles, multipleUploads, channel } =
     useContext(ChannelStateContext)
@@ -179,6 +205,8 @@ const MessagingInput = (props) => {
     ...messageInputContext,
     ...messageInput,
     textareaRef: messageInputContext.textareaRef,
+    grow: true,
+    maxRows: 5,
   }
 
   const onChange = useCallback(
@@ -200,7 +228,6 @@ const MessagingInput = (props) => {
     },
     [command.mode, enterCommandMode, exitCommandMode, firstWordIsCommand, messageInput]
   )
-
   const onClickCommand = () => {
     messageInput.textareaRef.current.focus()
     messageInput.handleChange({
@@ -234,7 +261,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="flex items-center flex-grow bg-gray-100 border-2 border-gray-400 message-input-wrapper focus-within:bg-white min-h-[40px] z-[100] rounded-3xl focus-within:border-brand max-w-96">
+        <div className="message-input-wrapper min-h-[40px] max-w-96">
           {command.mode && !messageInput.numberOfUploads ? command.icon : null}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -244,13 +271,9 @@ const MessagingInput = (props) => {
             onSelectItem={messageInput.onSelectItem}
             onChange={onChange}
             value={messageInput.text}
-            rows={1}
-            maxRows={props.maxRows}
             placeholder="Send a message"
             onPaste={messageInput.onPaste}
-            grow={props.grow}
-            disabled={props.disabled}
-            additionalTextareaProps={{ ...props.additionalTextareaProps }}
+            grow={true}
           />
         </div>
       </ImageDropzone>
@@ -262,21 +285,5 @@ const MessagingInput = (props) => {
     </div>
   )
 }
-
-const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
-  <div
-    className="flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
-    role="button"
-    aria-roledescription="button"
-    onClick={onClick}
-    ref={ref || null}
-  >
-    <emojiButton.icon
-      className={`h-5 w-5 md:h-6 md:w-6 ${
-        emojiButton?.className ? emojiButton?.className : ""
-      }`}
-    />
-  </div>
-))
 
 export default memo(MessagingInput)

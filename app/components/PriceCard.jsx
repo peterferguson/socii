@@ -1,4 +1,4 @@
-import { useTickerPriceSWR } from "@hooks/useTickerPrice"
+import { useTickerPrice } from "@hooks/useTickerPrice"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
@@ -11,7 +11,7 @@ export default function PriceCard({
   movingMonthlyPctChange,
   initialPrice = undefined,
 }) {
-  const { price, isLoading, isError } = useTickerPriceSWR(
+  const { price, isLoading, isError } = useTickerPrice(
     tickerSymbol,
     3 * 60 * 1000,
     initialPrice

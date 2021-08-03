@@ -44,6 +44,18 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   return tickerDoc.id
 }
 
+/*
+ * Create a group document at groups/{groupId} with data.
+ * If group document exists overwrites old
+ *
+ * @param  {string} user
+ * @param  {string} username
+ * @param  {string} groupName
+ * @param  {string} privacyOption
+ * @param  {object} depositOption
+ * @param  {object} lumpSumOption
+ * @param  {string} groupDescription
+ */
 export async function createGroup(
   user: FirebaseUser,
   username: string,
@@ -77,4 +89,31 @@ export async function createGroup(
   })
 
   await batch.commit()
+}
+
+/*
+ * Gets the data from ticker/{isin} document by querying the `tickerSymbol`
+ * @param  {string} tickerSymbol
+ */
+export const getTickerData = async (tickerSymbol) => {
+  // - set the rate for the currency pair in local storage
+  const tickerQuery = firestore
+    .collectionGroup("data")
+    .where("symbol", "==", tickerSymbol)
+    .limit(1)
+  // const [snapshot, loading, error] = useCollectionOnce(query, options);
+  const tickerDoc = (await tickerQuery.get()).docs?.[0]
+  const ISIN = tickerDoc.ref.path.split("/")[1]
+  return { ...tickerDoc.data(), ISIN }
+}
+
+/*
+ * Check if user with `uid` has agreed to trade with `messageId` in group with `groupName`
+ * @param  {string} groupName
+ * @param  {string} messgeId
+ * @param  {string} uid
+ */
+const agreesToTrade = async (groupName, messageId, uid) => {
+  const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
+  await tradesRef.update({ agreesToTrade: arrayUnion(`users/${uid}`) })
 }

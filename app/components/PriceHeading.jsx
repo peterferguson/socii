@@ -1,4 +1,4 @@
-import { useTickerPriceSWR } from "@hooks/useTickerPrice"
+import { useTickerPrice } from "@hooks/useTickerPrice"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import { currencyFormatter } from "@utils/currencyFormatter"
 import React from "react"
@@ -13,7 +13,7 @@ const PriceHeading = ({
   const {
     price: { realtimePrice, percentChange },
     isLoading,
-  } = useTickerPriceSWR(tickerSymbol, 3 * 1000)
+  } = useTickerPrice(tickerSymbol, 3 * 1000)
 
   const pnlColor = pnlTextColor(percentChange)
 

@@ -1,24 +1,26 @@
 import { currencyFormatter } from "@utils/currencyFormatter"
-import { logoUrl } from "@utils/logoUrl"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
-import router from "next/router"
-import React, { useEffect, useRef } from "react"
+import React from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
-
+import { TickerLogo } from "./TickerLogo"
 
 export default function LogoPriceCardHeader({
   tickerSymbol,
-  tickerState,
+  priceChange,
+  price,
+  currency,
+  shares,
+  action,
+  ISIN,
   className = "",
 }) {
-  const { priceChange, price, currency, shares, action } = tickerState || {}
   const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
   const pnlColors = `${pnlBgColor} ${pnlBgColor
     .replace("bg", "text")
-    .replace("200", "700")}`
+    .replace("200", "500")}`
   return (
-    <div className={`cursor-pointer ${className}`}>
-      <TickerLogo tickerSymbol={tickerSymbol} />
+    <a className={className}>
+      <TickerLogo tickerSymbol={tickerSymbol} isin={ISIN} />
       <div className="w-auto h-auto p-1 text-center">
         <div
           className={
@@ -54,27 +56,7 @@ export default function LogoPriceCardHeader({
           />
         )}
       </div>
-    </div>
-  )
-}
-
-function TickerLogo({ tickerSymbol }) {
-  const logo = useRef(null)
-
-  useEffect(() => {
-    const getLogo = async () => {
-      logo.current = await logoUrl(tickerSymbol)
-    }
-    getLogo()
-  }, [tickerSymbol])
-
-  return (
-    <img
-      className="h-auto mx-auto rounded-full shadow-lg w-14"
-      src={logo.current}
-      alt={`${tickerSymbol} logo`}
-      onClick={() => router.push(`/stocks/${tickerSymbol}`)}
-    />
+    </a>
   )
 }
 
