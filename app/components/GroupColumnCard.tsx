@@ -38,11 +38,11 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   useEffect(() => {
     holdingInfo?.map(async ({ tickerSymbol }) => {
-      const { latestPrice } = await iexQuote(tickerSymbol, "latestPrice", token)
+      const price = await iexQuote(tickerSymbol, token)
 
       setCurrentPrices((previousState) => ({
         ...previousState,
-        [tickerSymbol]: latestPrice,
+        [tickerSymbol]: price.iexRealtimePrice || price.price,
       }))
     })
   }, [holdingInfo, token])
