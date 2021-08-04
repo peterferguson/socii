@@ -4,6 +4,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 const withImages = require("next-images")
 const withPWA = require("next-pwa")
+// const nodeExternals = require("webpack-node-externals")
 
 module.exports = withPWA(
   withImages(
@@ -24,7 +25,9 @@ module.exports = withPWA(
         buildExcludes: [/chunks\/images\/.*$/, /static\/image\/node_modules\/.*$/],
       },
       reactStrictMode: true,
-      webpack(config) {
+      webpack: (config, { isServer }) => {
+        // config.externalsPresets = { node: true } // in order to ignore built-in modules like path, fs, etc.
+        // config.externals = [nodeExternals()] // in order to ignore all modules in node_modules folder
         config.module.rules.push({
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
           loader: require.resolve("url-loader"),

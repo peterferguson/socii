@@ -9,7 +9,7 @@ import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
 
 export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, data }) {
   const [logoNotFound, setLogoNotFound] = useState(false)
-  const closeDelta = pctChange(data?.[0].close, data[data.length - 1].close)
+  const closeDelta = pctChange(data?.[0].close, data?.[data.length - 1].close)
 
   const pnlColor =
     closeDelta > 0 ? "bg-teal-200" : closeDelta < 0 ? "bg-red-200" : "bg-brand"
@@ -94,7 +94,7 @@ function Chart({ data, pnlColor }) {
     color: tailwindColorMap[pnlColor],
     strokeWidth,
     onNearestX: (d) => setCrosshairValue(d),
-    data: data.map((d) => {
+    data: data?.map((d) => {
       return {
         x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
         y: d.close,

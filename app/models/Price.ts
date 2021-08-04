@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 export interface Price {
   price: number
   percentChange: number
-  realtimePrice: number
+  iexRealtimePrice: number
   latestUpdate: dayjs.Dayjs | string
   currency: string
 }

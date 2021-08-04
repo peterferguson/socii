@@ -2,9 +2,10 @@ import { useTickerPrice } from "@hooks/useTickerPrice"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
+import { TickerLogo } from "./TickerLogo"
 
 export default function PriceCard({
-  logoUrl,
+  isin,
   tickerSymbol,
   shortName,
   currencySymbol = "$",
@@ -14,10 +15,11 @@ export default function PriceCard({
   return (
     <div className="p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-gray-800">
       <div className="flex items-center">
-        <img
-          className="w-16 h-auto mx-auto rounded-full shadow-lg"
-          src={logoUrl}
-          alt={`${tickerSymbol} logo`}
+        <TickerLogo
+          tickerSymbol={tickerSymbol}
+          isin={isin}
+          height="64px"
+          width="64px"
         />
         <div className="flex flex-col">
           <span className="ml-2 text-base font-bold tracking-wider text-gray-700 uppercase dark:text-white">
@@ -34,7 +36,7 @@ export default function PriceCard({
           <p className="w-32 h-12 my-4 text-4xl font-bold text-left text-gray-700 animate-pulse dark:text-gray-100" />
         ) : (
           <p className="my-4 text-4xl font-bold text-left text-gray-700 dark:text-gray-100">
-            {price.realtimePrice}
+            {price.iexRealtimePrice}
             <span className="text-sm">{currencySymbol}</span>
           </p>
         )}

@@ -1,9 +1,7 @@
 import { QuerySnapshot } from "@firebase/firestore"
-import { getAlphaVantageData } from "@lib/firebase/client/db"
-import { OHLCTimeseries } from "@models/OHLCTimseries"
+
 import { Price } from "@models/Price"
-import { logoUrl } from "@utils/logoUrl"
-import { tickerTimeseries } from "./tickerTimeseries"
+import { getTickerProps } from "./getTickerProps"
 const { Client } = require("iexjs")
 
 interface IgetTickersStaticProps {
@@ -20,43 +18,30 @@ export const getTickersStaticProps = async ({
   timeseriesLimit = 30,
   subQueryField = "",
 }: IgetTickersStaticProps) => {
-  const iexClient = new Client({
-    api_token: process.env.IEXCLOUD_PUBLIC_KEY,
-    version: "stable",
-  })
+  const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
 
   return {
     props: {
-      tickers: tickerDocs.docs.map(async (tickerDoc) => {
-        // * Get ticker company data
-        const ticker = tickerDoc.data()
-        let dataQuery
+      tickers: await Promise.all(
+        tickerDocs.docs.map(async (tickerDoc) => {
+          const { ticker, timeseries, dataQuery } = await getTickerProps(
+            tickerDoc,
+            timeseriesLimit,
+            subQueryField
+          )
 
-        const price: Price = await iexClient.quote(ticker.tickerSymbol, {
-          filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency",
+          const price: Price = await iexClient.quote(ticker.tickerSymbol, {
+            filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency",
+          })
+
+          return {
+            ticker: JSON.parse(JSON.stringify(ticker)), // - serialize nested dates
+            timeseries,
+            dataQuery,
+            price,
+          }
         })
-
-        // * serialize the dates broke due to nesting of the ticker data
-        // * therefore just going to stringify the ticker data then parse it
-
-        if (!ticker.logoUrl) ticker.logoUrl = await logoUrl(ticker.ISIN)
-
-        const timeseries: OHLCTimeseries = await tickerTimeseries(
-          ticker.tickerSymbol,
-          timeseriesLimit,
-          ticker.ISIN
-        )
-
-        if (subQueryField)
-          dataQuery = await getAlphaVantageData(ticker.tickerSymbol, subQueryField)
-
-        return {
-          ticker: JSON.parse(JSON.stringify(ticker)), // - serialize nested dates
-          timeseries,
-          dataQuery,
-          price,
-        }
-      }),
+      ),
     },
   }
 }

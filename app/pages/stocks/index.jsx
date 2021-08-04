@@ -1,8 +1,11 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
+import { useAuth } from "@hooks"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { getAlpacaStocks, getPopularTickersDocs } from "@lib/firebase/client/db"
+import { getMainPageStocks, getPopularTickersDocs } from "@lib/firebase/client/db"
+import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
+import { iexQuote } from "@utils/iexQuote"
 import { logoUrl } from "@utils/logoUrl"
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
@@ -13,8 +16,9 @@ export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
-  // - For infinite scroll
+  const { user } = useAuth()
 
+  // - For infinite scroll
   const [loadingMoreTickers, setLoadingMoreTickers] = useState(false)
   const moreTickers = useRef([])
   const lastTickerLoaded = useRef(null)
@@ -26,22 +30,32 @@ export default function StockDisplay({ tickers }) {
   useEffect(() => {
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
-      const tickerDocs = await getAlpacaStocks(lastTickerLoaded.current, 5)
+      const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, 5)
+      console.log(tickerDocs.docs)
 
-      lastTickerLoaded.current = tickerDocs.docs.slice(-1).pop()
+      lastTickerLoaded.current = tickerDocs.docs?.slice(-1).pop()
 
-      let {
-        props: { tickers },
-      } = await getTickersStaticProps({ tickerDocs })
+      const tickers = await Promise.all(
+        tickerDocs.docs?.map(async (tickerDoc) => {
+          const { tickerSymbol } = tickerDoc.data()
+          const props = await getTickerProps(tickerDoc)
+          const price = await iexQuote(tickerSymbol, user?.token)
+          return { ...props, price }
+        })
+      )
+
+      console.log(tickers)
+
       moreTickers.current.push(...tickers)
       setLoadingMoreTickers(false)
     }
     if (isVisible) {
+      console.log("loading more tickers")
       setLoadingMoreTickers(true)
       getMoreTickers()
       lastTickerRef.current = null
     }
-  }, [isVisible])
+  }, [isVisible, user?.token])
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
@@ -62,11 +76,11 @@ export default function StockDisplay({ tickers }) {
           const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
           return (
             <ChartCard
-              key={ticker.tickerSymbol}
+              key={ticker?.tickerSymbol}
               cardRef={isLastTicker ? lastTickerRef : null}
-              logoUrl={logoUrl(ticker.ISIN)}
-              tickerSymbol={ticker.tickerSymbol}
-              shortName={ticker.shortName}
+              logoUrl={logoUrl(ticker?.ISIN)}
+              tickerSymbol={ticker?.tickerSymbol}
+              shortName={ticker?.shortName}
               data={timeseries}
             />
           )

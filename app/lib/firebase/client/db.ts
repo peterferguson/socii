@@ -4,6 +4,7 @@ import {
   collection,
   collectionGroup,
   doc,
+  DocumentData,
   DocumentReference,
   getDoc,
   getDocs,
@@ -12,6 +13,7 @@ import {
   orderBy,
   query,
   QueryDocumentSnapshot,
+  QuerySnapshot,
   serverTimestamp,
   setDoc,
   startAfter,
@@ -191,21 +193,17 @@ export const getUserStreamToken = async (uid: string) => {
   return snapshot.data()?.token
 }
 
-export const getTickerDocs = async (tickerSymbols: string[]) => {
-  return await getDocs(
+export const getTickerDocs = async (tickerSymbols: string[]) =>
+  await getDocs(
     query(collection(firestore, "tickers"), where("tickerSymbol", "in", tickerSymbols))
   )
-}
 
 /*
  * Gets all popular tickers from tickers collection
  * @param  {string} username
  */
-export const getPopularTickersDocs = async () => {
-  return await getDocs(
-    query(collection(firestore, "tickers"), where("isPopular", "==", true))
-  )
-}
+export const getPopularTickersDocs = async () =>
+  await getDocs(query(collection(firestore, "tickers"), where("isPopular", "==", true)))
 
 /*
  * Get the alpha vantage data of a ticker allowing for a particular field to be queried
@@ -228,25 +226,39 @@ export const getAlphaVantageData = async (tickerSymbol: string, queryField: stri
   return { ...data, lastUpdate: data?.lastUpdate.toMillis() }
 }
 
-export const getTickerTimeseriesDocs = async (isin: string, pageLimit: number = 30) => {
-  return await getDocs(
+export const getTickerTimeseriesDocs = async (isin: string, pageLimit: number = 30) =>
+  await getDocs(
     query(
       collection(firestore, `tickers/${isin}/timeseries`),
       orderBy("timestamp", "desc"),
       limit(pageLimit)
     )
   )
-}
 
-export const getAlpacaStocks = async (
+export const getAlpacaStocks = async (): Promise<QuerySnapshot> =>
+  await getDocs(
+    query(
+      collection(firestore, "tickers"),
+      where("alpaca", "!=", ""),
+      orderBy("alpaca", "desc")
+    )
+  )
+
+export const getMainPageStocks = async (
   lastLoaded: DocumentReference,
   stockLimit: number
-) => {
-  const tickerQuery = query(
-    collection(firestore, "tickers"),
-    where("alpaca", "!=", ""),
-    startAfter(lastLoaded || 0),
-    limit(stockLimit)
+) =>
+  await getDocs(
+    query(
+      collection(firestore, "tickers"),
+      where("alpaca.lastUpdated", ">", new Date(0)),
+      orderBy("alpaca.lastUpdated", "asc"),
+      startAfter(lastLoaded ?? 0),
+      limit(stockLimit)
+    )
   )
-  return (await getDocs(tickerQuery)).docs
-}
+
+export const getGroupDocsByName = async (groupNames: string[]) =>
+  await getDocs(
+    query(collection(firestore, "groups"), where("groupName", "in", groupNames))
+  )

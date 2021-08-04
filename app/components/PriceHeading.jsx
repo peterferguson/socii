@@ -11,7 +11,7 @@ const PriceHeading = ({
 }) => {
   // - update price every three seconds on the order screen
   const {
-    price: { realtimePrice, percentChange },
+    price: { iexRealtimePrice, percentChange },
     isLoading,
   } = useTickerPrice(tickerSymbol, 3 * 1000)
 
@@ -20,7 +20,7 @@ const PriceHeading = ({
   // - Tailwind jit compiler needs this string as it is not used anywhere: text-red-300
   return (
     <span className={`text-lg font-primary p-1 ${className}`}>
-      {currencyFormatter(realtimePrice, currency)} &bull;
+      {currencyFormatter(iexRealtimePrice, currency)} &bull;
       <span className={`p-1 ${pnlColor}`}>{percentChange?.toFixed(3)}%</span>
     </span>
   )

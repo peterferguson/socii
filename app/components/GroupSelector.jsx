@@ -1,5 +1,6 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
+import { getGroupDocsByName } from "@lib/firebase/client/db"
 import { firestore } from "@lib/firebase/client/firebase"
 import React, { useState, useEffect } from "react"
 
@@ -13,26 +14,20 @@ export default function GroupSelectorRadioGroup({ groupNames, send, className = 
   }
 
   useEffect(() => {
-    const getGroupData = () => {
-      const groupsRef = firestore
-        .collection(`groups`)
-        .where("groupName", "in", groupNames)
-      const unsubscribe = groupsRef.onSnapshot((snap) =>
-        setGroups(
-          snap.docs.map((doc) => {
-            const { groupName, type, privacyOption, groupDescription } = doc.data()
-            return {
-              name: groupName,
-              type,
-              privacyOption: privacyOption.name,
-              description: groupDescription,
-            }
-          })
-        )
+    const getGroupData = async () => {
+      setGroups(
+        (await getGroupDocsByName(groupNames)).docs.map((doc) => {
+          const { groupName, type, privacyOption, groupDescription } = doc.data()
+          return {
+            name: groupName,
+            type,
+            privacyOption: privacyOption.name,
+            description: groupDescription,
+          }
+        })
       )
-
-      return unsubscribe
     }
+
     if (groupNames?.length) getGroupData()
   }, [groupNames])
 

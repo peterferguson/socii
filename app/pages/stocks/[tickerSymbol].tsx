@@ -1,13 +1,13 @@
 import { Chart, PriceCard } from "@components/index"
+import { usePositions } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import { getPopularTickersDocs, getTickerDocs } from "@lib/firebase/client/db"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
-import { fetcher } from "@utils"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import Custom404 from "../404"
 
 const modals = {
@@ -69,32 +69,7 @@ export default function TickerPage({ tickers }) {
   const { user } = useAuth()
 
   const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
-  const [positions, setPositions] = useState([])
-
-  // TODO: Display a my position section if the user holds the stock
-  // TODO: Breakdown the positions into groups if the user holds the stock
-  // TODO: Add back buttons to modals
-  useEffect(() => {
-    const getPositions = async () => {
-      setPositions(
-        await fetcher("/api/alpaca/positions", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${user?.token}` },
-          body: JSON.stringify({ accountId: alpacaId }),
-        })
-      )
-    }
-    if (user?.token && alpacaId) {
-      getPositions()
-      const holding = positions.filter(
-        (position) => position.symbol === ticker?.tickerSymbol
-      )[0]
-      if (holding) {
-        send("UPDATE_HOLDING", { holding })
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, alpacaId])
+  const { positions, error } = usePositions()
 
   // - State machine for the invest button
   const [state, send] = useMachine(stockInvestButtonMachine)
@@ -106,6 +81,16 @@ export default function TickerPage({ tickers }) {
   )?.[0]
 
   const Modal = modalStateName ? modals[modalStateName]?.component : null
+
+  // TODO: Display a my position section if the user holds the stock
+  // TODO: Breakdown the positions into groups if the user holds the stock
+  // TODO: Add back buttons to modals
+  useEffect(() => {
+    const holding = positions
+      ?.filter((position) => position.symbol === ticker?.tickerSymbol)
+      .pop()
+    if (holding) send("UPDATE_HOLDING", { holding })
+  }, [positions, send, ticker?.tickerSymbol])
 
   // TODO: Replace with skeleton loaders
   if (!tickers) return <Custom404 />
@@ -122,9 +107,9 @@ export default function TickerPage({ tickers }) {
       <div className="flex flex-col w-full sm:flex-row">
         <div className="flex-none pt-4 pl-0 sm:pl-8 ">
           <PriceCard
-            logoUrl={ticker.logoUrl}
-            tickerSymbol={ticker.tickerSymbol}
-            shortName={ticker.shortName}
+            isin={ticker?.isin}
+            tickerSymbol={ticker?.tickerSymbol}
+            shortName={ticker?.shortName}
             initialPrice={price}
           />
         </div>
@@ -152,7 +137,7 @@ export async function getStaticProps({ params: { tickerSymbol } }) {
     const props = await getTickersStaticProps({
       tickerDocs: await getTickerDocs([tickerSymbol]),
     })
-    return { props, revalidate: 3000 }
+    return { ...props, revalidate: 3000 }
   } catch (e) {
     return { redirect: { destination: "/404", permanent: false } }
   }

@@ -44,15 +44,15 @@ const TradeCommandAttachment = ({ attachment }) => {
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
   // latestUpdate, // TODO: Display this in the attachment
   const {
-    price: { price, realtimePrice, percentChange, currency },
+    price: { price, iexRealtimePrice, percentChange, currency },
   } = useTickerPrice(tickerSymbol)
 
   console.log(price)
-  console.log(realtimePrice)
+  console.log(iexRealtimePrice)
 
   useEffect(
-    () => setCurrentPrice(realtimePrice ? realtimePrice : price),
-    [realtimePrice, price]
+    () => setCurrentPrice(iexRealtimePrice ? iexRealtimePrice : price),
+    [iexRealtimePrice, price]
   )
 
   const [costPerShare, setCostPerShare] = useState({ currency, cost: currentPrice })

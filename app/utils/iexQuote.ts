@@ -1,6 +1,10 @@
 import { fetchWithToken } from "./fetchWithToken"
 
-export const iexQuote = async (tickerSymbol: string, filter: string, token: string) => {
+export const iexQuote = async (
+  tickerSymbol: string,
+  token: string,
+  filter: string = "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency"
+) => {
   return await fetchWithToken(
     `/api/iex/quote/${tickerSymbol}?filter=${filter}`,
     token,

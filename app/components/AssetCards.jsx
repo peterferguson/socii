@@ -4,6 +4,7 @@ import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
 import React, { useState } from "react"
+import { TickerLogo } from "./TickerLogo"
 
 export default function SmallAssetPctChangeCard({
   logoUrl,
@@ -94,7 +95,7 @@ export function SmallAssetCard({
             </div>
           </div>
         </div>
-        <div className="inline-block w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-gray-600 uppercase sm:mt-4 \ overflow-ellipsis">
+        <div className="inline-block w-full mt-2 ml-2 text-xs font-semibold tracking-wider text-gray-600 uppercase sm:mt-4 overflow-ellipsis">
           {tickerSymbol} &bull; {shortName}
         </div>
       </div>
@@ -102,74 +103,55 @@ export function SmallAssetCard({
   )
 }
 
-export function AssetCard({ tickerSymbol, logoUrl, shortName, price }) {
-  const pnlColor = pnlTextColor(price.percentChange)
-  const [logoNotFound, setLogoNotFound] = useState(false)
-  return (
-    <>
-      <Link href={`/stocks/${tickerSymbol}`}>
-        <a href={tickerSymbol}>
-          <header className="flex mb-auto flex-nowrap">
-            {!logoNotFound ? (
-              <img
-                className="mx-auto rounded-full shadow-lg h-14 w-14"
-                src={logoUrl}
-                alt={`${tickerSymbol} logo`}
-                onError={() => setLogoNotFound(true)}
-              />
-            ) : (
-              <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny">
-                {tickerSymbol}
-              </div>
-            )}
-            <p className="p-2 truncate">{shortName}</p>
-          </header>
-        </a>
-      </Link>
-      <Link href={`/stocks/${tickerSymbol}`}>
-        <div className="relative py-8 mx-3 align-middle grid grid-cols-none">
-          <h1 className="text-xl font-bold">{tickerSymbol}</h1>
-          <div>
-            <div className={`font-bold text-3xl ${pnlColor}`}>${price}</div>
+export const AssetCard = ({ tickerSymbol, isin, shortName, price }) => (
+  <>
+    <header className="flex mb-auto flex-nowrap">
+      <TickerLogo tickerSymbol={tickerSymbol} isin={isin} />
+      <p className="p-2 truncate">{shortName}</p>
+    </header>
+    <Link href={`/stocks/${tickerSymbol}`}>
+      <div className="relative py-8 mx-3 align-middle grid grid-cols-none">
+        <h1 className="text-xl font-bold">{tickerSymbol}</h1>
+        <div>
+          <div className={`font-bold text-3xl ${pnlTextColor(price.percentChange)}`}>
+            ${price.iexRealtimePrice}
           </div>
         </div>
-      </Link>
-    </>
-  )
-}
+      </div>
+    </Link>
+  </>
+)
 
-export function SectorAssetCard({
+export const SectorAssetCard = ({
   tickerSymbol,
-  logoUrl,
+  isin,
   shortName,
   price,
   sectorData,
-}) {
-  return (
-    <>
-      <AssetCard
-        tickerSymbol={tickerSymbol}
-        logoUrl={logoUrl}
-        shortName={shortName}
-        price={price}
-      />
-      <div className="flex flex-col pt-2 pb-4 mb-8 -mt-2 justify leading-8">
-        <a
-          className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
-          href={tickerSymbol}
-        >
-          {sectorData.sector}
-        </a>
-        <a
-          className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny \ rounded-3xl"
-          href={tickerSymbol}
-        >
-          {sectorData.industry}
-        </a>
-      </div>
-    </>
-  )
-}
+}) => (
+  <>
+    <AssetCard
+      tickerSymbol={tickerSymbol}
+      isin={isin}
+      shortName={shortName}
+      price={price}
+    />
+    <div className="flex flex-col pt-2 pb-4 mb-8 -mt-2 justify leading-8">
+      <a
+        className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny rounded-3xl"
+        href={tickerSymbol}
+      >
+        {sectorData?.sector}
+      </a>
+      <a
+        className="h-8 px-3 font-bold text-gray-400 uppercase truncate align-middle border-2 w-36 text-tiny rounded-3xl"
+        href={tickerSymbol}
+      >
+        {sectorData?.industry}
+      </a>
+    </div>
+  </>
+)
 
 export function BlockCard({ ticker, timeseries }) {
   return (

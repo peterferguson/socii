@@ -3,8 +3,6 @@ import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { getPopularTickersDocs } from "@lib/firebase/client/db"
 import React from "react"
 
-export default Popular
-
 // TODO: on click of chevron create a new view with only the popular stocks
 // TODO: large screen vertical cards - small horizontal cards
 const Popular = ({ tickers }) => (
@@ -42,3 +40,5 @@ export async function getStaticProps() {
     timeseriesLimit: 2,
   })
 }
+
+export default Popular
