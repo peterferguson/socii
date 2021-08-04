@@ -26,11 +26,7 @@ export default function Sidebar() {
     <div className="sticky hidden w-20 h-screen mx-1 shadow-lg top-2 left-2 sm:block lg:w-52">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6">
-          {!is2Col ? (
-            <Logo className="text-2xl" />
-          ) : (
-            <LogoAlone height="32px" width="32px" />
-          )}
+          {!is2Col ? <Logo className="text-2xl" /> : <LogoAlone className="text-4xl" />}
         </div>
         <nav className="mt-6">
           {navItems(router, username).map((item) => (

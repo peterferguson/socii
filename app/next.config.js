@@ -2,6 +2,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
+const path = require("path")
 const withImages = require("next-images")
 const withPWA = require("next-pwa")
 // const nodeExternals = require("webpack-node-externals")
@@ -9,6 +10,7 @@ const withPWA = require("next-pwa")
 module.exports = withPWA(
   withImages(
     withBundleAnalyzer({
+      exclude: path.resolve(__dirname, "public/icons/"),
       images: {
         domains: [
           "storage.googleapis.com",
@@ -29,8 +31,23 @@ module.exports = withPWA(
         // config.externalsPresets = { node: true } // in order to ignore built-in modules like path, fs, etc.
         // config.externals = [nodeExternals()] // in order to ignore all modules in node_modules folder
         config.module.rules.push({
-          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
+          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
           loader: require.resolve("url-loader"),
+        })
+
+        config.module.rules.push({
+          test: /\.svg$/,
+          use: [
+            {
+              loader: "@svgr/webpack",
+              options: {
+                icon: true,
+                dimensions: false,
+                // typescript: true,
+                // svgo: true,
+              },
+            },
+          ],
         })
 
         return config
