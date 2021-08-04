@@ -18,13 +18,18 @@ export const firebaseConfig = {
 }
 
 // if (!firebase.apps.length) firebase.initializeApp(process.env.FIREBASE_CONFIG)
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
+let app: firebase.app.App
+if (!firebase.apps.length) {
+  app = firebase.initializeApp(firebaseConfig)
+}
 
 export default firebase
 export const auth = getAuth()
-export const storage = firebase.storage()
+import { getFunctions, httpsCallable } from "firebase/functions"
+
+const functions = getFunctions(app, londonRegion)
 export const firestore = firebase.firestore()
-export const functions = firebase.app().functions(londonRegion)
+// export const functions = firebase.app().functions(londonRegion)
 
 // if (
 //   process.env.NODE_ENV === "development" &&
@@ -46,9 +51,9 @@ export const fromDate = firebase.firestore.Timestamp.fromDate
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 
 // - Callable Functions
-export const alphaVantageQuery = functions.httpsCallable("alphaVantageQuery")
-export const tradeSubmission = functions.httpsCallable("tradeSubmission")
-export const tradeConfirmation = functions.httpsCallable("tradeConfirmation")
+export const alphaVantageQuery = httpsCallable(functions, "alphaVantageQuery")
+export const tradeSubmission = httpsCallable(functions, "tradeSubmission")
+export const tradeConfirmation = httpsCallable(functions, "tradeConfirmation")
 
 // - Types
 export type DocumentReference = firebase.firestore.DocumentReference

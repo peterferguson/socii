@@ -1,4 +1,3 @@
-import firebase from "@lib/firebase/client/firebase"
 import { User } from "firebase/auth"
 
 // const getStripeRole = async () => {
@@ -8,7 +7,6 @@ import { User } from "firebase/auth"
 // };
 
 export const formatUser = async (user: User) => {
-  // const token = await user.getIdToken(/* forceRefresh */ true);
   const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true)
   const { token, expirationTime } = decodedToken
   // if (process.env.NODE_ENV !== "production")
