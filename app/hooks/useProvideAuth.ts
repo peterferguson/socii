@@ -1,4 +1,4 @@
-import { createUser } from "@lib/firebase/client/db"
+import { createUser, setUserState } from "@lib/firebase/client/db"
 import {
   AuthProvider,
   FacebookAuthProvider,
@@ -8,7 +8,7 @@ import {
   signOut,
   User,
 } from "firebase/auth"
-import { auth, firestore } from "@lib/firebase/client/firebase"
+import { auth } from "@lib/firebase/client/firebase"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import Router from "next/router"
@@ -84,18 +84,7 @@ export const useProvideAuth = () => {
   }, [])
 
   useEffect(() => {
-    const getUserData = () => {
-      // allows us to turn off the realtime data feed when finished
-      const userRef = firestore.collection("users").doc(user.uid)
-      const unsubscribe = userRef.onSnapshot((doc) => {
-        const { username, groups } = doc.data()
-        setUsername(username)
-        setUserGroups(groups)
-      })
-
-      return unsubscribe
-    }
-    if (user) getUserData()
+    if (user) setUserState(user.uid, setUsername, setUserGroups)
   }, [user])
 
   // useEffect(() => {

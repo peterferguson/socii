@@ -2,14 +2,7 @@ import { fetchWithToken } from "@utils/fetchWithToken"
 import dayjs from "dayjs"
 import useSWR from "swr"
 import { useAuth } from "./useAuth"
-
-interface Price {
-  price: number
-  percentChange: number
-  realtimePrice: number
-  latestUpdate: dayjs.Dayjs | string
-  currency: string
-}
+import { Price } from "@models/Price"
 
 export const useTickerPrice = (
   tickerSymbol: string,

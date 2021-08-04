@@ -8,15 +8,9 @@ export default function PriceCard({
   tickerSymbol,
   shortName,
   currencySymbol = "$",
-  movingMonthlyPctChange,
   initialPrice = undefined,
 }) {
-  const { price, isLoading, isError } = useTickerPrice(
-    tickerSymbol,
-    3 * 60 * 1000,
-    initialPrice
-  )
-
+  const { price, isLoading } = useTickerPrice(tickerSymbol, 3 * 60 * 1000, initialPrice)
   return (
     <div className="p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-gray-800">
       <div className="flex items-center">
@@ -47,8 +41,8 @@ export default function PriceCard({
         <div
           className={`flex items-center text-sm ${pnlTextColor(price?.percentChange)}`}
         >
-          {movingMonthlyPctChange > 0 ? <FaCaretUp /> : <FaCaretDown />}
-          <span>{movingMonthlyPctChange.toFixed(2)}%</span>
+          {price.percentChange > 0 ? <FaCaretUp /> : <FaCaretDown />}
+          <span>{price.percentChange.toFixed(2)}%</span>
           <span className="text-gray-400 align-bottom text-tiny"> vs last month</span>
         </div>
       </div>

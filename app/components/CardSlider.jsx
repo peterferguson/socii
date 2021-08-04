@@ -1,13 +1,19 @@
-import { AssetCard } from "@components/AssetCards"
+import { SectorAssetCard } from "@components/AssetCards"
 import React from "react"
 
-export default function CardSlider({ tickerSymbols }) {
+export default function CardSlider({ tickers }) {
   return (
     <section className="flex p-12 overflow-x-scroll">
-      {tickerSymbols.map(({ ticker, timeseries, sector }, i) => {
+      {tickers.map(({ ticker, queryData, price }, i) => {
         return (
           <article key={`slider-card-${i}`} className="slide-card">
-            <AssetCard ticker={ticker} timeseries={timeseries} sector={sector} />
+            <SectorAssetCard
+              tickerSymbol={ticker.tickerSymbol}
+              logoUrl={ticker.logoUrl}
+              shortName={ticker.shortName}
+              price={price}
+              sectorData={queryData}
+            />
           </article>
         )
       })}

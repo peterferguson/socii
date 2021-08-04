@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
-import {fetcher} from "@utils/fetcher"
+import { fetcher } from "@utils/fetcher"
 
 export default function Username(props) {
   const { user } = useAuth()
@@ -65,11 +65,10 @@ export default function Username(props) {
     []
   )
 
-
   async function CreateAlpaca(e) {
     e.preventDefault()
     // TODO - remove for beyond MVP - use user email instead of random//
-    const setupEmail = "tests"+Math.floor(Math.random()*100000)+"@socii.com"
+    const setupEmail = "tests" + Math.floor(Math.random() * 100000) + "@socii.com"
     const testAccount = {
       contact: {
         email_address: setupEmail,
@@ -130,54 +129,59 @@ export default function Username(props) {
       trusted_contact: {
         given_name: "Jame",
         family_name: "Doe",
-        email_address: "jane.doe@example.com"      
-      }
+        email_address: "jane.doe@example.com",
+      },
     }
     const createAccount = async () => {
-      const res =await fetcher("/api/alpaca/accounts", {
-              method: "POST",
-              headers: { Authorization: `Basic ${user.token}` },
-              body: JSON.stringify(testAccount),
-            })
-      setAlpaca(res);
-    };
-    createAccount();
+      const res = await fetcher("/api/alpaca/accounts", {
+        method: "POST",
+        headers: { Authorization: `Basic ${user.token}` },
+        body: JSON.stringify(testAccount),
+      })
+      setAlpaca(res)
+    }
+    createAccount()
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     alpaca?.id ? CreateACH(alpaca?.id) : null
-  },[alpaca?.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alpaca?.id])
 
   async function CreateACH(id) {
-    const testACH ={
-      accountOwnerName: user.name +" "+ user.family_name,
+    const testACH = {
+      accountOwnerName: user.name + " " + user.family_name,
       bankAccountType: "SAVINGS",
       bankAccountNumber: "32132231abc",
       bankRoutingNumber: "121000359",
       nickname: "FUNDING MONEY",
-     }
-     const createACH = async () => {
-      const res =await fetcher("/api/alpaca/ach", {
-              method: "PUT",
-              headers: { Authorization: `Basic ${user.token}` },
-              body: JSON.stringify({accountId: id , achData: testACH}),
-            })
-      setACH(res);
-    };
-    createACH();
+    }
+    const createACH = async () => {
+      const res = await fetcher("/api/alpaca/ach", {
+        method: "PUT",
+        headers: { Authorization: `Basic ${user.token}` },
+        body: JSON.stringify({ accountId: id, achData: testACH }),
+      })
+      setACH(res)
+    }
+    createACH()
   }
 
-
-  useEffect(() =>{
+  useEffect(() => {
     ACH?.id ? CreateUsername(user, username, router) : null
-  },[ACH?.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ACH?.id])
 
-  const CreateUsername = ( user, username, router) => {
+  const CreateUsername = (user, username, router) => {
     const userRef = firestore.collection(`users`).doc(user.uid)
     const usernameRef = firestore.collection("usernames").doc(username)
 
     const batch = firestore.batch()
-    batch.set(userRef, { username: username , alpacaID: alpaca.id , alpacaACH: ACH.id },  { merge: true })
+    batch.set(
+      userRef,
+      { username: username, alpacaID: alpaca.id, alpacaACH: ACH.id },
+      { merge: true }
+    )
     batch.set(usernameRef, { uid: user.uid })
     batch.commit().then(() => router.push(`/user/${username}`))
   }
@@ -207,14 +211,12 @@ export default function Username(props) {
               )}
             </div>
           </div>
-         <button
+          <button
             className="w-11/12 my-4 btn"
-            onClick={(e) =>
-              isValidUsername ? CreateAlpaca(e) : null
-            }
+            onClick={(e) => (isValidUsername ? CreateAlpaca(e) : null)}
           >
             Choose!
-          </button> 
+          </button>
         </div>
       </form>
     </main>

@@ -1,26 +1,19 @@
-import { DocumentReference } from "@lib/firebase/client/firebase"
+import { getTickerTimeseriesDocs, tickerToISIN } from "@lib/firebase/client/db"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { fetcher } from "./fetcher"
 
 export const tickerTimeseries = async (
-  tickerRef: DocumentReference,
+  tickerSymbol: string = "",
   limit: number = 30,
-  tickerSymbol: string
+  isin: string = ""
 ): Promise<OHLCTimeseries> => {
-  // * Get timeseries data
-  const timeseriesRef = tickerRef
-    .collection("timeseries")
-    .orderBy("timestamp", "desc")
-    .limit(limit)
-
-  let timeseriesDocs = (await timeseriesRef.get()).docs
+  const ISIN = isin ? isin : await tickerToISIN(tickerSymbol)
+  const timeseriesDocs = await getTickerTimeseriesDocs(ISIN, limit)
 
   let timeseries: OHLCTimeseries
 
-  if (timeseriesDocs.length === 0) {
+  if (timeseriesDocs.docs.length === 0) {
     // * Get timeseries data from api
-    const isin = tickerRef.path.split("/").pop()
-
     // let baseUrl = "https://www.quandl.com/api/v3/datasets/WIKI/{}/data.json"
     let baseUrl = "https://socii.app"
     if (process.env.NODE_ENV !== "production") baseUrl = "http://localhost:3000"
@@ -29,7 +22,7 @@ export const tickerTimeseries = async (
       `${baseUrl}/api/av/timeseries?tickerSymbol=${tickerSymbol}&ISIN=${isin}`
     )
   } else {
-    timeseries = timeseriesDocs.map((doc) => {
+    timeseries = timeseriesDocs.docs.map((doc) => {
       const { open, high, low, close, volume } = doc.data()
 
       return {

@@ -5,7 +5,7 @@ import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React, { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
-import "react-vis/dist/style.css"
+// import "react-vis/dist/style.css"
 
 export default function LineChart({
   timeseries,

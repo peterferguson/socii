@@ -1,9 +1,8 @@
 // import "firebase/performance"
+import { initializeApp } from "firebase/app"
 import { EmailAuthProvider, getAuth, RecaptchaVerifier } from "firebase/auth"
-import firebase from "firebase/compat/app"
-import "firebase/compat/firestore"
-import "firebase/compat/functions"
-import "firebase/compat/storage"
+import { getFirestore } from "firebase/firestore"
+import { getFunctions, httpsCallable } from "firebase/functions"
 
 const londonRegion = "europe-west2"
 
@@ -17,18 +16,11 @@ export const firebaseConfig = {
   measurementId: "G-F7JH023N5Q",
 }
 
-// if (!firebase.apps.length) firebase.initializeApp(process.env.FIREBASE_CONFIG)
-let app: firebase.app.App
-if (!firebase.apps.length) {
-  app = firebase.initializeApp(firebaseConfig)
-}
+const app = initializeApp(firebaseConfig)
 
-export default firebase
-export const auth = getAuth()
-import { getFunctions, httpsCallable } from "firebase/functions"
-
+export const auth = getAuth(app)
 const functions = getFunctions(app, londonRegion)
-export const firestore = firebase.firestore()
+export const firestore = getFirestore(app)
 // export const functions = firebase.app().functions(londonRegion)
 
 // if (
@@ -42,24 +34,13 @@ export const firestore = firebase.firestore()
 // }
 
 // - Utilities
-export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED
 export const recaptchaVerifier = RecaptchaVerifier
 export const credentialWithLink = EmailAuthProvider.credentialWithLink
-export const increment = firebase.firestore.FieldValue.increment
-export const arrayUnion = firebase.firestore.FieldValue.arrayUnion
-export const fromDate = firebase.firestore.Timestamp.fromDate
-export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 
 // - Callable Functions
 export const alphaVantageQuery = httpsCallable(functions, "alphaVantageQuery")
 export const tradeSubmission = httpsCallable(functions, "tradeSubmission")
 export const tradeConfirmation = httpsCallable(functions, "tradeConfirmation")
-
-// - Types
-export type DocumentReference = firebase.firestore.DocumentReference
-export type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot
-export type DocumentData = firebase.firestore.DocumentData
-export type FirebaseUserInfo = firebase.UserInfo
 
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

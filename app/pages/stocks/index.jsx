@@ -1,15 +1,15 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
-import { firestore } from "@lib/firebase/client/firebase"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
+import { getAlpacaStocks, getPopularTickersDocs } from "@lib/firebase/client/db"
+import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { logoUrl } from "@utils/logoUrl"
-import { stockProps } from "@utils/stockProps"
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
 
-export default function StockDisplay({ tickerSymbols }) {
+export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
@@ -25,22 +25,15 @@ export default function StockDisplay({ tickerSymbols }) {
 
   useEffect(() => {
     const getMoreTickers = async () => {
-      const query = firestore
-        .collection("tickers")
-        .where("marketCountry", "==", "United States of America")
-        .where("exchangeAbbreviation", "!=", "PNK")
-        .orderBy("exchangeAbbreviation", "asc")
-        .startAfter(lastTickerLoaded.current || 0)
-        .limit(5)
-
-      const tickerDocs = await query.get()
+      // - Next 5 alpaca stocks
+      const tickerDocs = await getAlpacaStocks(lastTickerLoaded.current, 5)
 
       lastTickerLoaded.current = tickerDocs.docs.slice(-1).pop()
 
       let {
-        props: { tickerSymbols },
-      } = await stockProps({ tickerDocs })
-      moreTickers.current.push(...tickerSymbols)
+        props: { tickers },
+      } = await getTickersStaticProps({ tickerDocs })
+      moreTickers.current.push(...tickers)
       setLoadingMoreTickers(false)
     }
     if (isVisible) {
@@ -62,12 +55,11 @@ export default function StockDisplay({ tickerSymbols }) {
           <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
         </div>
       </Link>
-      <CardSlider tickerSymbols={tickerSymbols} />
+      <CardSlider tickers={tickers} />
       {/* TODO: Charts are not resizing on container change */}
       <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-        {tickerSymbols.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
-          const isLastTicker =
-            i === tickerSymbols.concat(moreTickers.current).length - 1
+        {tickers.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
+          const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
           return (
             <ChartCard
               key={ticker.tickerSymbol}
@@ -79,15 +71,17 @@ export default function StockDisplay({ tickerSymbols }) {
             />
           )
         })}
+        {/* REFACTOR */}
         {/* Compensate for the footer */}
-        {is1Col && <div className=" h-36"></div>}
+        {is1Col && <div className="h-36"></div>}
       </div>
     </main>
   )
 }
 
-export async function getStaticProps(context) {
-  // * Get ticker name from firestore
-  const tickerQuery = firestore.collection("tickers").where("isPopular", "==", true)
-  return await stockProps({ tickerQuery, subQueryField: "industry" })
+export async function getStaticProps() {
+  return await getTickersStaticProps({
+    tickerDocs: await getPopularTickersDocs(),
+    subQueryField: "industry",
+  })
 }

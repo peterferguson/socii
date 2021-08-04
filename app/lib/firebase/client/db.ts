@@ -1,5 +1,26 @@
 import FirebaseUser from "@models/FirebaseUser"
-import { arrayUnion, serverTimestamp, firestore } from "./firebase"
+import {
+  arrayUnion,
+  collection,
+  collectionGroup,
+  doc,
+  DocumentReference,
+  getDoc,
+  getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  serverTimestamp,
+  setDoc,
+  startAfter,
+  updateDoc,
+  where,
+  writeBatch,
+} from "firebase/firestore"
+import React from "react"
+import { firestore } from "./firebase"
 
 /*
 !
@@ -14,11 +35,8 @@ import { arrayUnion, serverTimestamp, firestore } from "./firebase"
  * @param  {string} uid
  * @param  {any} data
  */
-export async function createUser(uid: string, data: any) {
-  return await firestore
-    .collection("users")
-    .doc(uid)
-    .set({ uid, ...data }, { merge: true })
+export async function createUser(uid: string, data: object) {
+  return await setDoc(doc(firestore, "users", uid), { uid, ...data }, { merge: true })
 }
 
 /*
@@ -26,10 +44,30 @@ export async function createUser(uid: string, data: any) {
  * @param  {string} username
  */
 export async function getUserWithUsername(username) {
-  const usersRef = firestore.collection("users")
-  const query = usersRef.where("username", "==", username).limit(1)
-  const userDoc = (await query.get()).docs?.[0]
+  const usersRef = collection(firestore, "users")
+  const userQuery = query(usersRef, where("username", "==", username), limit(1))
+  const querySnapshot = await getDocs(userQuery)
+  const userDoc = querySnapshot.docs?.pop()
   return userDoc
+}
+
+/*
+ * Gets all data for `auth` object from users/{uid}
+ * @param  {string} username
+ */
+export const setUserState = (
+  uid: string,
+  setUsername: React.Dispatch<React.SetStateAction<string>>,
+  setUserGroups: React.Dispatch<React.SetStateAction<string[]>>
+) => {
+  const userRef = doc(firestore, `users/${uid}`)
+  const unsubscribe = onSnapshot(userRef, (doc) => {
+    const { username, groups } = doc.data()
+    setUsername(username)
+    setUserGroups(groups)
+  })
+
+  return unsubscribe
 }
 
 /*
@@ -37,10 +75,13 @@ export async function getUserWithUsername(username) {
  * @param  {string} ticker
  */
 export async function tickerToISIN(ticker: string): Promise<string> {
-  const tickerSymbol = ticker.toUpperCase()
-  const tickerRef = firestore.collection("tickers")
-  const query = tickerRef.where("tickerSymbol", "==", tickerSymbol).limit(1)
-  const tickerDoc = (await query.get()).docs?.pop()
+  const tickerRef = collection(firestore, "tickers")
+  const tickerQuery = query(
+    tickerRef,
+    where("tickerSymbol", "==", ticker.toUpperCase()),
+    limit(1)
+  )
+  const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
   return tickerDoc.id
 }
 
@@ -65,11 +106,11 @@ export async function createGroup(
   lumpSumOption: { amount: number },
   groupDescription: string
 ) {
-  const userGroupRef = firestore.doc(`users/${user.uid}`)
-  const groupRef = firestore.doc(`groups/${groupName}`)
-  const investorsRef = firestore.doc(`groups/${groupName}/investors/${username}`)
+  const userGroupRef = doc(firestore, `users/${user.uid}`)
+  const groupRef = doc(firestore, `groups/${groupName}`)
+  const investorsRef = doc(firestore, `groups/${groupName}/investors/${username}`)
 
-  const batch = firestore.batch()
+  const batch = writeBatch(firestore)
   batch.update(userGroupRef, { groups: arrayUnion(groupName) })
   batch.set(groupRef, {
     groupDescription,
@@ -97,13 +138,14 @@ export async function createGroup(
  */
 export const getTickerData = async (tickerSymbol) => {
   // - set the rate for the currency pair in local storage
-  const tickerQuery = firestore
-    .collectionGroup("data")
-    .where("symbol", "==", tickerSymbol)
-    .limit(1)
-  // const [snapshot, loading, error] = useCollectionOnce(query, options);
-  const tickerDoc = (await tickerQuery.get()).docs?.[0]
+  const tickerQuery = query(
+    collectionGroup(firestore, "data"),
+    where("symbol", "==", tickerSymbol),
+    limit(1)
+  )
+  const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
   const ISIN = tickerDoc.ref.path.split("/")[1]
+  // TODO: Create a model of the ticker data
   return { ...tickerDoc.data(), ISIN }
 }
 
@@ -113,7 +155,98 @@ export const getTickerData = async (tickerSymbol) => {
  * @param  {string} messgeId
  * @param  {string} uid
  */
-export const agreesToTrade = async (groupName, messageId, uid) => {
-  const tradesRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
-  await tradesRef.update({ agreesToTrade: arrayUnion(`users/${uid}`) })
+export const agreesToTrade = async (
+  groupName: string,
+  messageId: string,
+  uid: string
+) => {
+  const tradesRef = doc(firestore, `groups/${groupName}/trades/${messageId}`)
+  await updateDoc(tradesRef, { agreesToTrade: arrayUnion(`users/${uid}`) })
+}
+
+/*
+ * Gets all data for `auth` object from users/{uid}
+ * @param  {string} username
+ */
+export const setHoldingData = (
+  groupName: string,
+  setHoldings: React.Dispatch<React.SetStateAction<QueryDocumentSnapshot[]>>
+) => {
+  const holdingsRef = query(
+    collection(firestore, `groups/${groupName}/holdings`),
+    where("shares", "!=", 0)
+  )
+  const unsubscribe = onSnapshot(holdingsRef, (snap) => setHoldings(snap.docs))
+
+  return unsubscribe
+}
+
+/*
+ * Gets a users stream token from users/{uid}/stream subcollection
+ * @param  {string} username
+ */
+export const getUserStreamToken = async (uid: string) => {
+  const tokenRef = doc(firestore, `users/${uid}/stream/${uid}`)
+  const snapshot = await getDoc(tokenRef)
+  return snapshot.data()?.token
+}
+
+export const getTickerDocs = async (tickerSymbols: string[]) => {
+  return await getDocs(
+    query(collection(firestore, "tickers"), where("tickerSymbol", "in", tickerSymbols))
+  )
+}
+
+/*
+ * Gets all popular tickers from tickers collection
+ * @param  {string} username
+ */
+export const getPopularTickersDocs = async () => {
+  return await getDocs(
+    query(collection(firestore, "tickers"), where("isPopular", "==", true))
+  )
+}
+
+/*
+ * Get the alpha vantage data of a ticker allowing for a particular field to be queried
+ * @param  {string} username
+ */
+export const getAlphaVantageData = async (tickerSymbol: string, queryField: string) => {
+  const dataQuery = query(
+    collectionGroup(firestore, "data"),
+    where("symbol", "==", tickerSymbol), // ! This identifies the AV doc over Yahoo
+    where(queryField, ">", "''"),
+    orderBy(queryField, "asc"),
+    limit(1)
+  )
+  // ! To get the Yahoo doc use "recommendations.symbol"
+
+  const dataDoc = (await getDocs(dataQuery)).docs?.pop()
+
+  const data = dataDoc.data()
+
+  return { ...data, lastUpdate: data?.lastUpdate.toMillis() }
+}
+
+export const getTickerTimeseriesDocs = async (isin: string, pageLimit: number = 30) => {
+  return await getDocs(
+    query(
+      collection(firestore, `tickers/${isin}/timeseries`),
+      orderBy("timestamp", "desc"),
+      limit(pageLimit)
+    )
+  )
+}
+
+export const getAlpacaStocks = async (
+  lastLoaded: DocumentReference,
+  stockLimit: number
+) => {
+  const tickerQuery = query(
+    collection(firestore, "tickers"),
+    where("alpaca", "!=", ""),
+    startAfter(lastLoaded || 0),
+    limit(stockLimit)
+  )
+  return (await getDocs(tickerQuery)).docs
 }

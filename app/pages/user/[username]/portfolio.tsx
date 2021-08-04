@@ -11,7 +11,7 @@ import { logoUrl } from "@utils/logoUrl"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
-import "react-vis/dist/style.css"
+// import "react-vis/dist/style.css"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 const Dashboard = () => (

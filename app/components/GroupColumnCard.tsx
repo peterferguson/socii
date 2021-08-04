@@ -5,7 +5,8 @@ import {
   StockCardSkeleton,
 } from "@components"
 import { useAuth } from "@hooks"
-import { firestore, QueryDocumentSnapshot } from "@lib/firebase/client/firebase"
+import { setHoldingData } from "@lib/firebase/client/db"
+import { QueryDocumentSnapshot } from "firebase/firestore"
 import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
 export interface IGroupColumnCard {
@@ -19,23 +20,15 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   } = useAuth()
 
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
-  const [holdingData, setHoldingData] = useState([])
+  const [holdingInfo, setHoldingInfo] = useState([])
   const [currentPrices, setCurrentPrices] = useState([])
 
   useEffect(() => {
-    const getHoldings = () => {
-      const holdingsRef = firestore
-        .collection(`groups/${groupName}/holdings`)
-        .where("shares", "!=", 0)
-      const unsubscribe = holdingsRef.onSnapshot((snap) => setHoldings(snap.docs))
-
-      return unsubscribe
-    }
-    if (groupName) getHoldings()
+    if (groupName) setHoldingData(groupName, setHoldings)
   }, [groupName])
 
   useEffect(() => {
-    setHoldingData(
+    setHoldingInfo(
       holdings?.map((doc) => {
         const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
         return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
@@ -44,7 +37,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   }, [holdings])
 
   useEffect(() => {
-    holdingData?.map(async ({ tickerSymbol }) => {
+    holdingInfo?.map(async ({ tickerSymbol }) => {
       const { latestPrice } = await iexQuote(tickerSymbol, "latestPrice", token)
 
       setCurrentPrices((previousState) => ({
@@ -52,31 +45,31 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
         [tickerSymbol]: latestPrice,
       }))
     })
-  }, [holdingData, token])
+  }, [holdingInfo, token])
 
   return (
     <div
       className={`flex flex-col items-center p-4 mx-auto mb-4 bg-white rounded shadow-2xl sm:rounded-xl ${className}`}
     >
-      {holdingData?.length !== 0 ? (
+      {holdingInfo?.length !== 0 ? (
         <GroupPieChart
           groupName={groupName}
-          holdingData={holdingData}
+          holdingData={holdingInfo}
           currentPrices={currentPrices}
         />
       ) : (
         <PieCardSkeleton scaling={0.3} radius={250} />
       )}
-      {holdingData?.length !== 0 && (
+      {holdingInfo?.length !== 0 && (
         <div className="w-full py-3 mb-8 -mt-8 text-center border-b border-gray-400 h-3.5">
           <span className="py-0 text-gray-400 bg-white px-2.5">
             {holdings?.length} Investments
           </span>
         </div>
       )}
-      {holdingData?.length !== 0 && (
+      {holdingInfo?.length !== 0 && (
         <ul>
-          {holdingData?.map((holding, index) => {
+          {holdingInfo?.map((holding, index) => {
             return currentPrices ? (
               <StockCard
                 key={`holding-${index}`}
