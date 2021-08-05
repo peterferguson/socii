@@ -35,7 +35,7 @@ export default function HeaderButton(props: IHeaderButton) {
   return (
     <div onClick={props.onClick}>
       <button
-        className={`header-btn relative ${props.className || ""}`}
+        className={`nav-btn !p-1 relative ${props.className || ""}`}
         aria-label={props.name}
         aria-haspopup="true"
       >

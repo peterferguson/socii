@@ -20,7 +20,7 @@ export default function HeaderDropdownButton(props: DropdownButtonProps) {
   return (
     <Popover>
       <Popover.Button
-        className="header-btn"
+        className="appearance-none !p-1 nav-btn"
         aria-label={props.name}
         aria-haspopup="true"
       >

@@ -6,22 +6,52 @@ import {
   Searchbar,
 } from "@components"
 import { useAuth } from "@hooks/useAuth"
-import React from "react"
+import algoliasearch from "algoliasearch/lite"
+import React, { useState } from "react"
 import { HiOutlineChevronDown, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
+import { Configure, InstantSearch } from "react-instantsearch-dom"
 import { useMediaQuery } from "react-responsive"
 
+const algoliaClient = algoliasearch(
+  process.env.NEXT_PUBLIC_ALGOLIA_ID,
+  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
+)
+
+const searchClient = {
+  search(requests) {
+    if (requests.every(({ params }) => !params.query)) {
+      return Promise.resolve({
+        results: requests.map(() => ({
+          hits: [],
+          nbHits: 0,
+          nbPages: 0,
+          page: 0,
+          processingTimeMS: 0,
+        })),
+      })
+    }
+
+    return algoliaClient.search(requests)
+  },
+}
+
+const searchProps = {
+  indexName: "tickers",
+  searchClient,
+  searchFunction: (helper) => {
+    // - No search of less than 2 characters
+    if (helper.state.query.length < 2) return
+    helper.search()
+  },
+}
+
 interface INavHeader {
-  setShowSearchCard: React.Dispatch<React.SetStateAction<boolean>>
   showChat: boolean
   setShowChat: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function NavHeader({
-  setShowSearchCard,
-  showChat,
-  setShowChat,
-}: INavHeader): JSX.Element {
+const NavHeader: React.FC<INavHeader> = ({ showChat, setShowChat }) => {
   const { signout } = useAuth()
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const dropdownItems = [
@@ -33,27 +63,32 @@ export default function NavHeader({
     },
   ]
   return (
-    <header className="sticky z-40 items-center w-full h-16 bg-white shadow-lg top-2 left-8 dark:bg-gray-700 rounded-2xl">
-      <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
-        <div className="relative flex items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
-          {is1Col && <Logo className="text-2xl" />}
-          <Searchbar setShowSearchCard={setShowSearchCard} />
-          <div className="flex justify-end w-1/4 space-x-1 sm:space-x-2">
-            {!is1Col && <ProfilePhoto />}
-            <HeaderButton
-              name="Messages"
-              icon={() => <HiOutlineMail className="w-6 h-6" />}
-              onClick={() => setShowChat(!showChat)}
-              hasNotifications={true}
-            />
-            <HeaderDropdownButton
-              name="Settings Dropdown"
-              icon={() => <HiOutlineChevronDown className="w-6 h-6" />}
-              items={dropdownItems}
-            />
+    <InstantSearch {...searchProps}>
+      <Configure hitsPerPage={3} />
+      <header className="sticky z-40 items-center w-full h-16 bg-white shadow-lg top-2 left-8 dark:bg-gray-700 rounded-2xl">
+        <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
+          <div className="relative flex items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
+            {is1Col && <Logo className="text-2xl" />}
+            <Searchbar />
+            <div className="flex justify-end w-1/4 space-x-1 sm:space-x-2">
+              {!is1Col && <ProfilePhoto />}
+              <HeaderButton
+                name="Messages"
+                icon={() => <HiOutlineMail className="w-6 h-6" />}
+                onClick={() => setShowChat(!showChat)}
+                hasNotifications={true}
+              />
+              <HeaderDropdownButton
+                name="Settings Dropdown"
+                icon={() => <HiOutlineChevronDown className="w-6 h-6" />}
+                items={dropdownItems}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </InstantSearch>
   )
 }
+
+export default NavHeader
