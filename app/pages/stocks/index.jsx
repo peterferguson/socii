@@ -11,6 +11,7 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
+import { ReactVisScript } from "scripts/ReactVisScript"
 
 export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -44,13 +45,10 @@ export default function StockDisplay({ tickers }) {
         })
       )
 
-      console.log(tickers)
-
       moreTickers.current.push(...tickers)
       setLoadingMoreTickers(false)
     }
     if (isVisible) {
-      console.log("loading more tickers")
       setLoadingMoreTickers(true)
       getMoreTickers()
       lastTickerRef.current = null
@@ -61,35 +59,38 @@ export default function StockDisplay({ tickers }) {
 
   return (
     // TODO: Create our own version of this Ticker Tape banner
-    <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
-      <Link href="/stocks/popular">
-        <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-secondary text-brand-dark">
-          Popular Stocks
-          <div className="flex-grow" />
-          <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
+    <>
+      <ReactVisScript />
+      <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
+        <Link href="/stocks/popular">
+          <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-secondary text-brand-dark">
+            Popular Stocks
+            <div className="flex-grow" />
+            <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
+          </div>
+        </Link>
+        <CardSlider tickers={tickers} />
+        {/* TODO: Charts are not resizing on container change */}
+        <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
+          {tickers.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
+            const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
+            return (
+              <ChartCard
+                key={ticker?.tickerSymbol}
+                cardRef={isLastTicker ? lastTickerRef : null}
+                logoUrl={logoUrl(ticker?.ISIN)}
+                tickerSymbol={ticker?.tickerSymbol}
+                shortName={ticker?.shortName}
+                data={timeseries}
+              />
+            )
+          })}
+          {/* REFACTOR */}
+          {/* Compensate for the footer */}
+          {is1Col && <div className="h-36"></div>}
         </div>
-      </Link>
-      <CardSlider tickers={tickers} />
-      {/* TODO: Charts are not resizing on container change */}
-      <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-        {tickers.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
-          const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
-          return (
-            <ChartCard
-              key={ticker?.tickerSymbol}
-              cardRef={isLastTicker ? lastTickerRef : null}
-              logoUrl={logoUrl(ticker?.ISIN)}
-              tickerSymbol={ticker?.tickerSymbol}
-              shortName={ticker?.shortName}
-              data={timeseries}
-            />
-          )
-        })}
-        {/* REFACTOR */}
-        {/* Compensate for the footer */}
-        {is1Col && <div className="h-36"></div>}
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 
