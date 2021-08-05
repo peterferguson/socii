@@ -1,6 +1,6 @@
-import { PortfolioHistory } from "@alpaca/models"
+import { PortfolioHistory } from "@models/alpaca/PortfolioHistory"
 import dayjs from "dayjs"
-import { PortfolioHistoryTimeseries } from "../models/PortfolioHistoryTimeseries"
+import { PortfolioHistoryTimeseries } from "@models/PortfolioHistoryTimeseries"
 
 export const portfolioHistoryToTimeseries = (
   history: PortfolioHistory

@@ -1,4 +1,4 @@
-import { PortfolioHistory } from "@alpaca/models"
+import { PortfolioHistory } from "@alpaca/models/PortfolioHistory"
 import { useAuth } from "@hooks"
 import { fetcher } from "@utils/fetcher"
 import { useEffect, useState } from "react"

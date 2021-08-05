@@ -1,4 +1,4 @@
-import { OrderObject } from "@alpaca/models";
+import { OrderObject } from "@models/alpaca";
 import { useAuth } from "@hooks";
 import { fetcher } from "@utils/fetcher";
 import useSWR from "swr";

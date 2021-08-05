@@ -1,4 +1,4 @@
-import { Position } from "@alpaca/models"
+import { Position } from "@models/alpaca"
 import { useAuth } from "@hooks"
 import { fetcher } from "@utils/fetcher"
 import useSWR from "swr"
