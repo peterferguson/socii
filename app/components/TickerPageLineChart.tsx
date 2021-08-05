@@ -1,28 +1,38 @@
 import { useWindowSize } from "@hooks/useWindowSize"
 import { tailwindColorMap } from "@lib/constants"
+import { TimeseriesTick } from "@models/TimeseriesTick"
 import { pctChange } from "@utils/pctChange"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React, { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
-// import "react-vis/dist/style.css"
 
-export default function LineChart({
+interface ITickerPageLineChart {
+  timeseries: TimeseriesTick[]
+  crosshairIndexValue: number
+  color: string
+  setCrosshairIndexValue: React.Dispatch<React.SetStateAction<number>>
+  widthScale?: number
+  heightScale?: number
+}
+
+export const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   timeseries,
-  crosshairIndexValue,
   color,
+  crosshairIndexValue,
   setCrosshairIndexValue,
   widthScale = 0.65,
   heightScale = 0.6,
-}) {
+}) => {
   const [width, height] = useWindowSize()
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const [crosshairValue, setCrosshairValue] = useState(false)
-  const [pctChangeValue, setPctChangeValue] = useState(0.0)
+  const [crosshairValue, setCrosshairValue] = useState<TimeseriesTick>()
+  const [pctChangeValue, setPctChangeValue] = useState<number>(0.0)
 
-  useEffect(() => {
-    setPctChangeValue(pctChange(timeseries?.[0].y, crosshairValue.y).toFixed(2))
-  }, [crosshairValue, timeseries])
+  useEffect(
+    () => setPctChangeValue(pctChange(timeseries?.[0].y, crosshairValue?.y)),
+    [crosshairValue, timeseries]
+  )
 
   const lineSeriesProps = {
     animation: true,
@@ -30,7 +40,7 @@ export default function LineChart({
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries,
-    onNearestX: (data, { index }) => {
+    onNearestX: (data: TimeseriesTick, { index }) => {
       setCrosshairValue(data)
       setCrosshairIndexValue(index)
     },
@@ -48,27 +58,32 @@ export default function LineChart({
     <div className="flex items-center justify-center mx-auto">
       <FlexibleXYPlot
         onMouseLeave={() => {
-          setCrosshairValue(false)
+          setCrosshairValue(undefined)
           setCrosshairIndexValue(0)
         }}
         height={height * heightScale}
         width={width * widthScale}
         xType="time"
-        margin={{ left: 10, bottom: 75, top: 10 }}
+        margin={{ left: 25, bottom: 75, top: 10 }}
       >
         {!is1Col && (
-          <XAxis tickLabelAngle={-75} tickFormat={(d) => d.toLocaleDateString()} />
+          <XAxis
+            tickLabelAngle={-75}
+            tickFormat={(d: Date) => d.toLocaleDateString()}
+          />
         )}
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && <AreaSeries {...areaSeriesProps} />}
         {crosshairValue && !is1Col && (
           <Crosshair
             values={[crosshairValue]}
-            titleFormat={(d) => ({
+            titleFormat={(t: TimeseriesTick[]) => ({
               title: "Date",
-              value: new Date(d?.[0].x).toLocaleDateString(),
+              value: new Date(t?.[0].x).toLocaleDateString(),
             })}
-            itemsFormat={(d) => [{ title: "Close price", value: d?.[0].y }]}
+            itemsFormat={(t: TimeseriesTick[]) => [
+              { title: "Close price", value: t?.[0].y },
+            ]}
           />
         )}
       </FlexibleXYPlot>

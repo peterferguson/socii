@@ -19,11 +19,8 @@ export const useTickerPrice = (
   )
   return {
     price: {
-      price: data?.latestPrice,
-      iexRealtimePrice: data?.iexRealtimePrice,
-      percentChange: data?.changePercent,
+      ...data,
       latestUpdate: dayjs(data?.latestUpdate),
-      currency: data?.currency,
     },
     isLoading: !error && !data,
     isError: error,

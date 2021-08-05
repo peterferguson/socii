@@ -8,10 +8,7 @@ export interface IChartCardChart {
   pnlColor: string
 }
 
-export const ChartCardChart: React.FC<IChartCardChart> = ({
-  data,
-  pnlColor,
-}: IChartCardChart) => {
+export const ChartCardChart: React.FC<IChartCardChart> = ({ data, pnlColor }) => {
   const middleDivRef = useRef(null)
   const [height, setHeight] = useState(null)
   const [width, setWidth] = useState(null)

@@ -42,7 +42,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
       setCurrentPrices((previousState) => ({
         ...previousState,
-        [tickerSymbol]: price.iexRealtimePrice || price.price,
+        [tickerSymbol]: price.iexRealtimePrice || price.latestPrice,
       }))
     })
   }, [holdingInfo, token])

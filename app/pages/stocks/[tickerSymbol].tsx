@@ -1,67 +1,19 @@
-import { Chart, PriceCard } from "@components/index"
+import { InvestButton } from "@components/InvestButton"
+import { InvestButtonModal } from "@components/InvestButtonModal"
+import PriceCard from "@components/PriceCard"
+import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import { getPopularTickersDocs, getTickerDocs } from "@lib/firebase/client/db"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
-import { getTickersStaticProps } from "@utils/getTickersStaticProps"
+import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
 import { useMachine } from "@xstate/react"
-import dynamic from "next/dynamic"
+import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect } from "react"
 import Custom404 from "../404"
 
-const modals = {
-  ["active.shareInformation"]: {
-    component: dynamic(() => import("../../components/StockSharingModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.chooseGroup"]: {
-    component: dynamic(() => import("../../components/SelectGroupModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.investAction"]: {
-    component: dynamic(() => import("../../components/SelectInvestActionModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.orderType"]: {
-    component: dynamic(() => import("../../components/SelectOrderTypeModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  returnToLastScreen: {
-    component: dynamic(() => import("../../components/returnToLastScreenModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.limitOrder"]: {
-    component: dynamic(() => import("../../components/OrderModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.shareOrder"]: {
-    component: dynamic(() => import("../../components/OrderModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-  ["active.cashOrder"]: {
-    component: dynamic(() => import("../../components/OrderModal"), {
-      ssr: false,
-      loading: () => <p>Loading...</p>,
-    }),
-  },
-}
-
-export default function TickerPage({ tickers }) {
+const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price } = tickers?.[0] || {}
   const logoColor: string = ticker?.logoColor || ""
 
@@ -73,14 +25,6 @@ export default function TickerPage({ tickers }) {
 
   // - State machine for the invest button
   const [state, send] = useMachine(stockInvestButtonMachine)
-  const modalStateName = Object.keys(modals).filter(
-    (modal) =>
-      JSON.stringify(state.value)
-        .replace(/[^a-zA-Z:]+/gi, "")
-        .replace(":", ".") === modal
-  )?.[0]
-
-  const Modal = modalStateName ? modals[modalStateName]?.component : null
 
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
@@ -115,27 +59,27 @@ export default function TickerPage({ tickers }) {
         </div>
         <div className="flex-grow hidden sm:block" />
         <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-          <div
-            style={{ backgroundColor: logoColor }}
-            className="mx-0 mt-4 mb-0 text-center btn btn-transition"
-            onClick={() => (state.matches("active") ? send("CLOSE") : send("CLICK"))}
-          >
-            <span className="z-10 w-12 h-4 text-4xl">Invest</span>
-          </div>
+          <InvestButton state={state} send={send} logoColor={logoColor} />
         </div>
       </div>
-      <Chart color={ticker?.logoColor} timeseries={timeseries} price={price} />
-      {Modal ? <Modal ticker={ticker} state={state} send={send} /> : null}
+      <TickerPageChartCard
+        color={ticker?.logoColor}
+        timeseries={timeseries}
+        price={price}
+      />
+      <InvestButtonModal ticker={ticker} state={state} send={send} />
     </>
   )
 }
 
 // TODO: Remove tooltip and color price in the graph display of values
 
-export async function getStaticProps({ params: { tickerSymbol } }) {
+export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
   try {
     const props = await getTickersStaticProps({
-      tickerDocs: await getTickerDocs([tickerSymbol]),
+      tickerDocs: await getTickerDocs(
+        typeof tickerSymbol === "string" ? [tickerSymbol] : tickerSymbol
+      ),
     })
     return { ...props, revalidate: 3000 }
   } catch (e) {
@@ -144,7 +88,7 @@ export async function getStaticProps({ params: { tickerSymbol } }) {
 }
 
 // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const paths = (await getPopularTickersDocs()).docs?.map((doc) => {
     const { tickerSymbol } = doc.data()
     return { params: { tickerSymbol } }
@@ -152,3 +96,5 @@ export async function getStaticPaths() {
 
   return { paths, fallback: true }
 }
+
+export default TickerPage
