@@ -3,14 +3,25 @@ import Image from "next/image"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
 
-export function TickerLogo({
-  tickerSymbol,
-  isin,
+interface ITickerLogoProps {
+  tickerSymbol: string
+  isin: string
+  className?: string
+  width?: string
+  height?: string
+}
+
+const DEFAULT_HEIGHT_AND_WIDTH = "56px"
+
+export const TickerLogo: React.FC<ITickerLogoProps> = ({
+  height,
+  width,
   className,
-  width = "56px",
-  height = "56px",
-}) {
+  isin,
+  tickerSymbol,
+}) => {
   const [logoURL, setLogoURL] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     const url = logoUrl(isin ? isin : tickerSymbol)
@@ -18,15 +29,16 @@ export function TickerLogo({
     else url.then((url) => setLogoURL(url))
   }, [isin, tickerSymbol])
 
-  return logoURL && (tickerSymbol || isin) ? (
-    <a className="flex items-center justify-center mx-auto rounded-full">
+  return logoURL && !isError ? (
+    <a className={`flex items-center justify-center mx-auto rounded-full ${className}`}>
       <Image
         src={logoURL}
-        className={`mx-auto rounded-full ${className}`}
-        height={height}
-        width={width}
+        className="mx-auto rounded-full"
+        height={height || DEFAULT_HEIGHT_AND_WIDTH}
+        width={width || DEFAULT_HEIGHT_AND_WIDTH}
         alt={`${tickerSymbol} logo`}
         onClick={() => router.push(`/stocks/${tickerSymbol}`)}
+        onError={() => setIsError(true)}
       />
     </a>
   ) : (
