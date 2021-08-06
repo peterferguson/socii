@@ -38,10 +38,10 @@ class MyDocument extends Document {
           <link rel="shortcut icon" href="/favicons/favicon.ico" />
           <meta name="apple-mobile-web-app-title" content="socii" />
           <meta name="application-name" content="socii" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="msapplication-TileColor" content="#010101" />
           {/* <!-- this sets the color of url bar  --> */}
-          <meta name="theme-color" content="#3fbaeb" />
-          {/* <meta name="theme-color" content="#ffffff" /> */}
+          <meta name="theme-color" content="#010101" />
+          {/* <meta name="theme-color" content="#010101" /> */}
         </Head>
         <body>
           <Main />

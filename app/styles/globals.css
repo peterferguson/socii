@@ -74,17 +74,38 @@
   @apply p-2 text-brand-cyan-vivid bg-gray-100 align-middle rounded-full hover:text-white hover:bg-brand-cyan-vivid focus:outline-none;
 }
 
-/* 
- * Needed to remove the border line around the hits
- */
+.nav-btn {
+  @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
+  text-brand-shade-darkest hover:text-brand-cyan;
+}
+.nav-btn-active {
+  @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
+  text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-light;
+}
+
+/* TODO Reinstate when dark mode is implemented */
+/* @media (prefers-color-scheme: dark) {
+  .nav-btn {
+    @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
+  text-gray-200 hover:text-brand-cyan;
+  }
+  .nav-btn:active {
+    @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
+    text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-gray-700 to-gray-800;
+  }
+} */
+
+/* Algolia Instant Search */
+/* TODO: Responsive search card */
+.ais-Hits {
+  @apply absolute top-12 sm:top-2 left-3 sm:left-6 w-full p-8 sm:p-8 sm:my-8 bg-gray-100/50
+  rounded-lg shadow-xl backdrop-filter backdrop-blur-lg bg-clip-padding z-50;
+}
+.ais-Hits-list {
+  @apply flex flex-wrap space-y-4 items-center justify-center;
+}
 .ais-Hits-item {
-  width: 75%;
-  padding: 4px 0px;
-  margin: auto;
-  border-width: 0px;
-  --tw-shadow: 0 0 #0000;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-    var(--tw-shadow);
+  @apply relative w-full max-w-md px-8 py-4 my-2 bg-white rounded-lg shadow-lg sm:my-0;
 }
 
 /** LoadingIndicator */
@@ -130,10 +151,10 @@ a {
 }
 
 /* Remove spinner from number input */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 @layer components {

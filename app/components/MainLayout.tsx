@@ -26,13 +26,9 @@ export default function MainLayout(props) {
     <div className="flex items-start">
       <Sidebar />
       <div className="flex flex-col items-start w-full pl-0 sm:pt-2 sm:px-2 sm:space-y-4">
-        <NavHeader
-          setShowSearchCard={props.setShowSearchCard}
-          showChat={showChat}
-          setShowChat={setShowChat}
-        />
+        <NavHeader showChat={showChat} setShowChat={setShowChat} />
         {/* Main Components */}
-        <div className="w-full h-full pt-2 pl-2 pr-2 overflow-auto sm:pt-0 sm:pr-0 sm:pl-0 no-scrollbar">
+        <div className="w-full h-full overflow-auto no-scrollbar">
           <div className="flex flex-col flex-wrap sm:flex-row">
             {props.children}
             {client?.user && props.showActiveChannel && !is2Col && !isChatRoute && (
