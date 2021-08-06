@@ -25,19 +25,24 @@ const PortfolioSkeletons = () => (
 function GroupPortfolios({ pagename }): JSX.Element {
   const { userGroups } = useAuth()
   return (
-    <>
-      {userGroups?.length !== 0 ? (
-        userGroups?.map((groupName, index) => (
-          <GroupColumn
-            key={`group-${index}`}
-            groupName={groupName}
-            className="w-full sm:w-1/2 xl:w-1/3"
-          />
-        ))
-      ) : (
-        <PortfolioSkeletons />
-      )}
-    </>
+    <div className="flex flex-col items-center justify-center w-full my-14 sm:my-0">
+      <div className="mx-auto text-3xl mb-4 font-primary text-brand-shade-darkest">
+        Group Portfolios
+      </div>
+      <div className="w-full grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto">
+        {userGroups?.length !== 0 ? (
+          userGroups?.map((groupName, index) => (
+            <GroupColumn
+              key={`group-${index}`}
+              groupName={groupName}
+              className="w-11/12 sm:w-2/3"
+            />
+          ))
+        ) : (
+          <PortfolioSkeletons />
+        )}
+      </div>
+    </div>
   )
 }
 

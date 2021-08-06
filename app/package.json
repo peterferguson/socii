@@ -64,7 +64,7 @@
     "react-responsive": "^8.2.0",
     "react-select": "^4.3.1",
     "react-use": "^17.2.4",
-    "react-vis": "1.11.7",
+    "react-vis": "^1.11.7",
     "request": "^2.88.2",
     "stream-chat": "^3.12.1",
     "stream-chat-react": "^6.4.2",

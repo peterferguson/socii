@@ -1,4 +1,5 @@
-import Logo, { LogoAlone } from "@components/Logo"
+import Logo from "@components/Logo"
+import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
@@ -25,19 +26,13 @@ export default function Sidebar() {
   return (
     <div className="sticky hidden w-20 h-screen mx-1 shadow-lg top-2 left-2 sm:block lg:w-52">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
-        <div className="flex items-center justify-center pt-6">
-          {!is2Col ? <Logo className="text-2xl" /> : <LogoAlone className="text-4xl" />}
+        <div className="flex items-center justify-center pt-6 mx-auto">
+          {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
         </div>
         <nav className="mt-6">
           {navItems(router, username).map((item) => (
             <Link href={item.href} key={`${item.name}-selector`}>
-              <a
-                className={`flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 ${
-                  item.isActive
-                    ? "text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
-                    : "text-brand-shade-darkest dark:text-gray-200 hover:text-brand-cyan"
-                }`}
-              >
+              <a className={`${item.isActive ? "nav-btn-active" : "nav-btn"}`}>
                 <item.icon className="mx-auto text-xl lg:mx-0" />
                 <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
                   {item.name}
@@ -91,13 +86,13 @@ const navItems = (router: NextRouter, username: string) => [
     isActive: router.asPath === `/user/${username}`,
     // onClick: () => setOpenSettings(!openSettings),
   },
-  {
-    name: "Invites",
-    description: "Invite your friends to the alpha",
-    href: "/user/invites",
-    icon: HiOutlineAtSymbol,
-    isActive: router.asPath.includes("invites"),
-  },
+  // {
+  //   name: "Invites",
+  //   description: "Invite your friends to the alpha",
+  //   href: "/user/invites",
+  //   icon: HiOutlineAtSymbol,
+  //   isActive: router.asPath.includes("invites"),
+  // },
   {
     name: "Settings",
     description: "Adjust your settings",

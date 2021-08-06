@@ -19,8 +19,6 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
   ssr: true,
 })
 
-const SearchCard = dynamic(() => import("components/SearchCard"), { ssr: true })
-
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -28,7 +26,6 @@ const SearchCard = dynamic(() => import("components/SearchCard"), { ssr: true })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const [showSearchCard, setShowSearchCard] = useState(false)
   const [showActiveChannel, setShowActiveChannel] = useState(false)
 
   // const scrollRef = useRef(null)
@@ -42,8 +39,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const props = {
     ...pageProps,
-    showSearchCard,
-    setShowSearchCard,
     showActiveChannel,
     setShowActiveChannel,
     theme,
@@ -78,7 +73,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               </>
             ) : (
               <ComponentContainer {...props}>
-                {isBrowser && <SearchCard {...props} />}
                 {isBrowser && <Component {...props} />}
                 {is1Col && <Footer {...props} />}
               </ComponentContainer>

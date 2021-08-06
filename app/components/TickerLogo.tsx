@@ -29,21 +29,25 @@ export const TickerLogo: React.FC<ITickerLogoProps> = ({
     else url.then((url) => setLogoURL(url))
   }, [isin, tickerSymbol])
 
-  return logoURL && !isError ? (
-    <a className={`flex items-center justify-center mx-auto rounded-full ${className}`}>
-      <Image
-        src={logoURL}
-        className="mx-auto rounded-full"
-        height={height || DEFAULT_HEIGHT_AND_WIDTH}
-        width={width || DEFAULT_HEIGHT_AND_WIDTH}
-        alt={`${tickerSymbol} logo`}
-        onClick={() => router.push(`/stocks/${tickerSymbol}`)}
-        onError={() => setIsError(true)}
-      />
+  return (
+    <a className={`flex items-center justify-center rounded-full ${className}`}>
+      {logoURL && !isError ? (
+        <Image
+          src={logoURL}
+          className="rounded-full"
+          height={height || DEFAULT_HEIGHT_AND_WIDTH}
+          width={width || DEFAULT_HEIGHT_AND_WIDTH}
+          alt={`${tickerSymbol} logo`}
+          onClick={() => router.push(`/stocks/${tickerSymbol}`)}
+          onError={() => setIsError(true)}
+        />
+      ) : (
+        <div
+          className={`flex items-center justify-center font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
+        >
+          {tickerSymbol}
+        </div>
+      )}
     </a>
-  ) : (
-    <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny">
-      {tickerSymbol}
-    </div>
   )
 }
