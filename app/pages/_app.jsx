@@ -1,30 +1,35 @@
-import { Footer, Head, MainLayout, Navigation } from "@components/index"
+import Head from "@components/Head"
 import { AuthProvider } from "@contexts/AuthProvider"
 import { StreamProvider } from "@contexts/StreamProvider"
 import { useStream } from "@hooks/useStream"
 import { toastProps } from "@lib/constants"
+import "@styles/Chat.css"
+import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
-import { AppProps } from "next/app"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import "react-file-utils/dist/index.css"
 import { useMediaQuery } from "react-responsive"
-import { Chat } from "stream-chat-react"
-
-import "@styles/Chat.css"
-import "@styles/globals.css"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
 })
+
+const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), {
+  ssr: false,
+})
+
+const Footer = dynamic(() => import("@components/Footer"))
+const MainLayout = dynamic(() => import("@components/MainLayout"))
+const Navigation = dynamic(() => import("@components/Navigation"))
 
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
 //   console.log(metric)
 // }
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const [showActiveChannel, setShowActiveChannel] = useState(false)
 
@@ -46,10 +51,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const router = useRouter()
 
-  useEffect(() => {
-    if (showActiveChannel) setShowActiveChannel(!showActiveChannel)
+  useEffect(
+    () => showActiveChannel && setShowActiveChannel(!showActiveChannel),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath])
+    [router.asPath]
+  )
 
   const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
 
