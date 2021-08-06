@@ -1,10 +1,10 @@
 import { tailwindColorMap } from "@lib/constants"
-import { OHLC } from "@models/OHLC"
+import { OHLCTimeseries } from "@models/OHLCTimseries"
 import React, { useEffect, useRef, useState } from "react"
 import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
 
 export interface IChartCardChart {
-  data: OHLC
+  data: OHLCTimeseries
   pnlColor: string
 }
 

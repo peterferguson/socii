@@ -34,7 +34,7 @@ export default function SearchResultsModal({ showSearchCard, setShowSearchCard }
     >
       <Popover.Panel>
         <Loading className="p-4" />
-        <Hits hitComponent={SearchHit} ref={hitsRef} />s
+        <Hits hitComponent={SearchHit} ref={hitsRef} />
         {/* <PoweredBy /> */}
         {/* TODO: Create load more button */}
         <button className="hidden" ref={hitsRef} tabIndex={-1}>
