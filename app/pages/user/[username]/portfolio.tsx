@@ -19,7 +19,8 @@ const Dashboard = () => (
     <div className="flex flex-col w-full bg-blueGray-100">
       <div className="w-full px-2 mx-auto">
         {/* Card stats */}
-        <div className="items-center justify-center mx-auto grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* TODO: Convert these into carousel cards organised by top percentage */}
+        <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((card, i) => card(`card-${i}`))}
         </div>
       </div>
@@ -33,6 +34,7 @@ const Dashboard = () => (
     </div>
   </>
 )
+
 export default Dashboard
 
 export const stockTableMeta = {

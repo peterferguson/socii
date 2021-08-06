@@ -23,18 +23,18 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   const [holdingInfo, setHoldingInfo] = useState([])
   const [currentPrices, setCurrentPrices] = useState([])
 
-  useEffect(() => {
-    if (groupName) setHoldingData(groupName, setHoldings)
-  }, [groupName])
+  useEffect(() => groupName && setHoldingData(groupName, setHoldings), [groupName])
 
-  useEffect(() => {
-    setHoldingInfo(
-      holdings?.map((doc) => {
-        const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
-        return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
-      })
-    )
-  }, [holdings])
+  useEffect(
+    () =>
+      setHoldingInfo(
+        holdings?.map((doc) => {
+          const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
+          return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
+        })
+      ),
+    [holdings]
+  )
 
   useEffect(() => {
     holdingInfo?.map(async ({ tickerSymbol }) => {
@@ -49,7 +49,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   return (
     <div
-      className={`flex flex-col items-center p-4 mx-auto mb-4 bg-white rounded shadow-2xl sm:rounded-xl ${className}`}
+      className={`flex flex-col items-center mx-auto p-4 mb-4 bg-white rounded shadow-lg sm:rounded-xl ${className}`}
     >
       {holdingInfo?.length !== 0 ? (
         <GroupPieChart
@@ -68,7 +68,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
         </div>
       )}
       {holdingInfo?.length !== 0 && (
-        <ul>
+        <ul className="w-full">
           {holdingInfo?.map((holding, index) => {
             return currentPrices ? (
               <StockCard

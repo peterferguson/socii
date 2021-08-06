@@ -2,6 +2,7 @@ import { logoBaseUrl } from "@lib/constants"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
+import { TickerLogo } from "./TickerLogo"
 
 interface IStockCard {
   holding: any
@@ -27,14 +28,13 @@ export default function StockCard({
     >
       <div className="flex p-2 bg-white">
         <Link href={`/stocks/${tickerSymbol}`}>
-          <div className="items-center justify-center flex-none flex-grow-0 m-auto rounded-full cursor-pointer">
+          <div className="flex items-center justify-center flex-none flex-grow-0 mr-3 rounded-full cursor-pointer">
             {holding?.ISIN && (
-              <Image
-                width={"40px"}
-                height={"40px"}
-                className="w-10 h-10 mx-2 rounded-full ring-1 ring-brand-shade-darkest"
-                src={`${logoBaseUrl}/${holding.ISIN}.png`}
-                alt={`${tickerSymbol} logo`}
+              <TickerLogo
+                isin={holding.ISIN}
+                tickerSymbol={tickerSymbol}
+                height="40"
+                width="40"
               />
             )}
           </div>
