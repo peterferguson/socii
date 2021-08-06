@@ -4,18 +4,22 @@ import useSWR from "swr"
 import { useAuth } from "./useAuth"
 import { Price } from "@models/Price"
 
-export const useTickerPrice = (
+export function useTickerPrice(
   tickerSymbol: string,
-  expirationTime: number = 3 * 60 * 1000, // - swr uses milliseconds (3 minutes default)
-  initialData: Price
-): { price: Price; isLoading: boolean; isError: boolean } => {
+  expirationTime?: number, // - swr uses milliseconds (3 minutes default)
+  initialData?: Price
+): { price: Price; isLoading: boolean; isError: boolean } {
   const { user } = useAuth()
   const token = user?.token
   const filters = "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency"
   const { data, error } = useSWR(
     [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token],
     fetchWithToken,
-    { refreshInterval: expirationTime, refreshWhenOffline: false, initialData }
+    {
+      refreshInterval: expirationTime ? expirationTime : 3 * 60 * 1000,
+      refreshWhenOffline: false,
+      initialData,
+    }
   )
   return {
     price: {

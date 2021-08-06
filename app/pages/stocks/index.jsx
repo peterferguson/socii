@@ -11,7 +11,6 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
-import { ReactVisScript } from "scripts/ReactVisScript"
 
 export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -32,7 +31,6 @@ export default function StockDisplay({ tickers }) {
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
       const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, 5)
-      console.log(tickerDocs.docs)
 
       lastTickerLoaded.current = tickerDocs.docs?.slice(-1).pop()
 
@@ -60,7 +58,6 @@ export default function StockDisplay({ tickers }) {
   return (
     // TODO: Create our own version of this Ticker Tape banner
     <>
-      <ReactVisScript />
       <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
         <Link href="/stocks/popular">
           <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-secondary text-brand-dark">

@@ -44,7 +44,7 @@ const TradeCommandAttachment = ({ attachment }) => {
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
   // latestUpdate, // TODO: Display this in the attachment
   const {
-    price: { price, iexRealtimePrice, percentChange, currency },
+    price: { price, iexRealtimePrice, changePercent, currency },
   } = useTickerPrice(tickerSymbol)
 
   console.log(price)
@@ -79,7 +79,7 @@ const TradeCommandAttachment = ({ attachment }) => {
           <LogoPriceCardHeader
             {...{
               price: currentPrice,
-              priceChange: percentChange,
+              priceChange: changePercent,
               currency,
               ISIN: isin,
               tickerSymbol,

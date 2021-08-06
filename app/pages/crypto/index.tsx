@@ -1,5 +1,4 @@
 import ComingSoon from "@components/ComingSoon"
-import { usePositions } from "@hooks"
 import React from "react"
 import { FaBitcoin } from "react-icons/fa"
 
@@ -7,7 +6,6 @@ export default function CryptoHome() {
   // ! In tailwind jit compile the code is scanned and the color must be explicit
   // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin
   const color = "bitcoin"
-  const { positions } = usePositions()
 
   return (
     <>
@@ -19,7 +17,6 @@ export default function CryptoHome() {
       >
         <FaBitcoin className={`w-24 h-24 text-${color}`} />
       </ComingSoon>
-      {!positions ? <div>loading...</div> : <div>{JSON.stringify(positions)}</div>}
     </>
   )
 }
