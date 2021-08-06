@@ -41,7 +41,7 @@ export default function PriceCard({
           </p>
         )}
         <div
-          className={`flex items-center text-sm ${pnlTextColor(price?.percentChange)}`}
+          className={`flex items-center text-sm ${pnlTextColor(price?.changePercent)}`}
         >
           {price.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
           <span>{price.changePercent.toFixed(2)}%</span>

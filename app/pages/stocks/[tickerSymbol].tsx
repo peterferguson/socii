@@ -49,7 +49,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   return (
     <>
       <div className="flex flex-col w-full sm:flex-row">
-        <div className="flex-none pt-4 pl-0 sm:pl-8 ">
+        <div className="flex-none pt-4 pl-0 sm:pl-1 ">
           <PriceCard
             isin={ticker?.isin}
             tickerSymbol={ticker?.tickerSymbol}
