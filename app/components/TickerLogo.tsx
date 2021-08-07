@@ -30,7 +30,10 @@ export const TickerLogo: React.FC<ITickerLogoProps> = ({
   }, [isin, tickerSymbol])
 
   return (
-    <a className={`flex items-center justify-center rounded-full ${className}`}>
+    <a
+      className={`flex items-center justify-center rounded-full ${className}`}
+      href={`/stocks/${tickerSymbol}`}
+    >
       {logoURL && !isError ? (
         <Image
           src={logoURL}

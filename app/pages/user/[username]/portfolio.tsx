@@ -1,18 +1,17 @@
-import {
-  GainPctBar,
-  LastPurchaseSummaryCard,
-  PortfolioHistoryCard,
-  PortfolioValueSummaryCard,
-  StockTable,
-  TopPerformerSummaryCard,
-  VsMarketSummaryCard,
-} from "@components"
+import GainPctBar from "@components/GainPctBar"
+import LastPurchaseSummaryCard from "@components/LastPurchaseSummaryCard"
+import PortfolioValueSummaryCard from "@components/PortfolioValueSummaryCard"
+import TopPerformerSummaryCard from "@components/TopPerformerSummaryCard"
+import VsMarketSummaryCard from "@components/VsMarketSummaryCard"
 import { logoUrl } from "@utils/logoUrl"
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
-// import "react-vis/dist/style.css"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+
+const StockTable = dynamic(() => import("@components/StockTable"), { ssr: false })
+const PortfolioHistoryCard = dynamic(() => import("@components/PortfolioHistoryCard"))
 
 const Dashboard = () => (
   <>

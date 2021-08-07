@@ -17,10 +17,9 @@ const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
           {/* Projects table */}
           <table className="items-center w-full bg-transparent border-collapse">
             <StockTableHeader headings={Object.keys(stockTableMeta)} />
-            {positions ? (
+            {positions && (
               <StockTableBody positions={positions} meta={stockTableMeta} />
-            ) : // Add a loader if there are no positions
-            null}
+            )}
           </table>
         </div>
       </div>

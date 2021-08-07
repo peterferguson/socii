@@ -33,6 +33,7 @@ export const useProvideAuth = () => {
       createUser(user.uid, userWithoutToken)
       setUser(user)
       setLoading(false)
+      console.log("handleUser Succeeded", new Date())
       return user
     } else {
       setUser(false)
@@ -58,9 +59,7 @@ export const useProvideAuth = () => {
     const result = await signInWithPopup(auth, provider)
     handleUser(result.user)
 
-    if (redirect) {
-      Router.push(redirect)
-    }
+    redirect && Router.push(redirect)
   }
 
   const signinWithFacebook = (redirect: string | UrlObject) =>
@@ -83,9 +82,7 @@ export const useProvideAuth = () => {
     return () => unsubscribe()
   }, [])
 
-  useEffect(() => {
-    if (user) setUserState(user.uid, setUsername, setUserGroups)
-  }, [user])
+  useEffect(() => user && setUserState(user.uid, setUsername, setUserGroups), [user])
 
   // useEffect(() => {
   //   const interval = setInterval(async () => {

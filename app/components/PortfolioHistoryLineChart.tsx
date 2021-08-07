@@ -12,11 +12,12 @@ import {
   YAxis,
 } from "react-vis"
 import { usePortfolioHistory } from "@hooks/usePortfolioHistory"
+import { TimeseriesTick } from "@models/TimeseriesTick"
 
 const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => {
   const [width, height] = useWindowSize()
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const [crosshairValue, setCrosshairValue] = useState(false)
+  const [crosshairValue, setCrosshairValue] = useState<TimeseriesTick>()
 
   const { timeseries } = usePortfolioHistory()
 
@@ -27,7 +28,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
     strokeWidth: 2,
     data: timeseries?.equity,
     curve: "curveMonotoneX",
-    onNearestX: (data) => setCrosshairValue(data),
+    onNearestX: (data: TimeseriesTick) => setCrosshairValue(data),
   }
 
   const quartiles = getQuartiles(timeseries?.equity?.map((tick) => tick.y))
@@ -37,7 +38,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
   return timeseries ? (
     <div className="flex items-center justify-center mx-auto">
       <FlexibleXYPlot
-        // onMouseLeave={() => setCrosshairValue(false)}
+        onMouseLeave={() => setCrosshairValue(undefined)}
         height={height * heightScale}
         width={width * widthScale}
         xType="time"

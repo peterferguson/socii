@@ -1,7 +1,14 @@
 import { tailwindColorMap } from "@lib/constants"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import React, { useEffect, useRef, useState } from "react"
-import { Crosshair, FlexibleXYPlot, LineSeries } from "react-vis"
+import { FlexibleXYPlot, LineSeries } from "react-vis"
+
+import dynamic from "next/dynamic"
+import { TimeseriesTick } from "@models/TimeseriesTick"
+
+const Crosshair = dynamic(() => import("react-vis").then((mod) => mod.Crosshair), {
+  ssr: false,
+}) as any
 
 export interface IChartCardChart {
   data: OHLCTimeseries
@@ -12,7 +19,7 @@ export const ChartCardChart: React.FC<IChartCardChart> = ({ data, pnlColor }) =>
   const middleDivRef = useRef(null)
   const [height, setHeight] = useState(null)
   const [width, setWidth] = useState(null)
-  const [crosshairValue, setCrosshairValue] = useState(false)
+  const [crosshairValue, setCrosshairValue] = useState<TimeseriesTick>()
 
   // TODO: Convert this into a useElementSize() hook from https://usehooks-typescript.com/react-hook/use-element-size
   useEffect(() => {
@@ -44,7 +51,7 @@ export const ChartCardChart: React.FC<IChartCardChart> = ({ data, pnlColor }) =>
         width={width}
         className="mx-auto"
         margin={{ bottom: 0, left: 10, right: 10 }}
-        onMouseLeave={() => setCrosshairValue(false)}
+        onMouseLeave={() => setCrosshairValue(undefined)}
       >
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && (

@@ -75,7 +75,7 @@ export default function StockDisplay({ tickers }) {
               <ChartCard
                 key={ticker?.tickerSymbol}
                 cardRef={isLastTicker ? lastTickerRef : null}
-                logoUrl={logoUrl(ticker?.ISIN)}
+                ISIN={ticker?.ISIN}
                 tickerSymbol={ticker?.tickerSymbol}
                 shortName={ticker?.shortName}
                 data={timeseries}

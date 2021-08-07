@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment, useState } from "react"
 import Image from "next/image"
 import PriceHeading from "./PriceHeading"
+import { TickerLogo } from "./TickerLogo"
 
 const orderScreenState = (state) =>
   state.matches("active.limitOrder") ||
@@ -28,8 +29,6 @@ const OrderModal = ({ ticker, state, send }) => {
       : String(amount).length < 6
       ? "text-3xl"
       : "text-2xl"
-
-  console.log(state.context.orderType)
 
   return (
     <Transition appear show={orderScreenState(state)} as={Fragment}>
@@ -68,12 +67,11 @@ const OrderModal = ({ ticker, state, send }) => {
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
               <Dialog.Title className="text-2xl font-medium text-gray-600 font-primary leading-6">
                 <div className="flex flex-col items-center">
-                  <Image
-                    src={ticker.logoUrl}
-                    height="64px"
-                    width="64x"
-                    className="mx-auto rounded-full"
-                    alt={`${ticker.tickerSymbol} logo`}
+                  <TickerLogo
+                    height="64"
+                    width="64"
+                    isin={ticker.ISIN}
+                    tickerSymbol={ticker.tickerSymbol}
                   />
                   <div className="flex flex-col text-center">
                     <span className="mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white">
