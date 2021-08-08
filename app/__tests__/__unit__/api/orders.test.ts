@@ -28,7 +28,11 @@ let order = {
 // TODO: Test different order types
 // -  Check if market is open and if so convert order to limit order
 beforeAll(async () => {
-  const isMarketOpen = (await new ClockApi(config).clockGet()).isOpen
+  const isMarketOpen = (
+    await new ClockApi(
+      config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+    ).clockGet()
+  ).isOpen
   if (isMarketOpen) {
     order.type = "limit"
     order.qty = "1" // Limit order cannot be fractional

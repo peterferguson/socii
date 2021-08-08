@@ -68,11 +68,5 @@ export function createConfiguration(conf: ConfigurationParameters = {}): Configu
   return configuration
 }
 
-export const config = createConfiguration({
-  authMethods: {
-    BasicAuth: {
-      username: process.env.ALPACA_KEY ?? "",
-      password: process.env.ALPACA_SECRET ?? "",
-    },
-  },
-})
+export const config = (username: string, password: string) =>
+  createConfiguration({ authMethods: { BasicAuth: { username, password } } })
