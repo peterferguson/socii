@@ -19,7 +19,7 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/stocks",
+  "start_url": "/enter",
   "scope": "/",
   "description": "Invest with Friends!",
   "theme_color": "#010101",
