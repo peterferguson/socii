@@ -2,9 +2,9 @@ import { pctChange } from "@utils/pctChange"
 import Link from "next/link"
 import React, { useState } from "react"
 import { ChartCardChartDynamic } from "./ChartCardChart.dynamic"
+import { TickerLogo } from "./TickerLogo"
 
-export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, data }) {
-  const [logoNotFound, setLogoNotFound] = useState(false)
+export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data }) {
   const closeDelta = pctChange(data?.[0].close, data?.[data.length - 1].close)
 
   const pnlColor =
@@ -18,20 +18,12 @@ export default function ChartCard({ cardRef, logoUrl, tickerSymbol, shortName, d
       <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
         <div className="justify-center flex-none w-20 mx-auto rounded-full">
           <Link href={`stocks/${tickerSymbol}`}>
-            <a>
-              {!logoNotFound ? (
-                <img
-                  className="w-10 h-10 mx-auto rounded-full shadow-lg"
-                  src={logoUrl}
-                  alt={`${tickerSymbol} logo`}
-                  onError={() => setLogoNotFound(true)}
-                />
-              ) : (
-                <div className="flex items-center justify-center w-10 h-10 mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg text-tiny">
-                  {tickerSymbol}
-                </div>
-              )}
-            </a>
+            <TickerLogo
+              isin={ISIN}
+              tickerSymbol={tickerSymbol}
+              height="40"
+              width="40"
+            />
           </Link>
           <Link href={`stocks/${tickerSymbol}`}>
             <a>
