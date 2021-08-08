@@ -47,7 +47,7 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   const baseServer: BaseServer = {
     url: "",
     variableConfiguration: undefined,
-    ...config.baseServer,
+    ...config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET).baseServer,
   }
 
   if (type in alpacaEventEndpoints) {
