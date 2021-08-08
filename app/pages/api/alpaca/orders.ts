@@ -10,7 +10,9 @@ import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const tradeClient = new TradingApi(config)
+const tradeClient = new TradingApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 interface OrderQueryParams {
   status?: "open" | "closed" | "all"

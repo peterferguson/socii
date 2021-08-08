@@ -6,7 +6,9 @@ import { Timeframe } from "@models/Timeframe"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const portfolioApi = new PortfolioApi(config)
+const portfolioApi = new PortfolioApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handlePortfolioHistory(
   req: NextApiRequest,

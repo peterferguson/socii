@@ -2,7 +2,9 @@ import { withAuth, withCORS } from "@utils/middleware"
 import { config, CalendarApi, MarketDay } from "@alpaca/index"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const calendarClient = new CalendarApi(config)
+const calendarClient = new CalendarApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleCalendar(
   req: NextApiRequest,

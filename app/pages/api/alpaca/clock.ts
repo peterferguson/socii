@@ -2,7 +2,9 @@ import { withAuth, withCORS } from "@utils/middleware"
 import { config, ClockApi, ClockResponse } from "@alpaca/index"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const clockClient = new ClockApi(config)
+const clockClient = new ClockApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleClock(
   req: NextApiRequest,

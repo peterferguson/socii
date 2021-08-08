@@ -6,7 +6,9 @@ import { ObjectSerializer, TransferData, FundingApi, config } from "@alpaca/inde
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const fundClient = new FundingApi(config)
+const fundClient = new FundingApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
   let { body, method } = req

@@ -2,7 +2,9 @@ import { config, AssetsApi, AssetResource } from "@alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const assetClient = new AssetsApi(config)
+const assetClient = new AssetsApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleAssets(
   req: NextApiRequest,

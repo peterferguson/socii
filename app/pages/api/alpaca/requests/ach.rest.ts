@@ -1,7 +1,9 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/ach.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
 import { config, AccountsApi } from "../../../../alpaca/index"
-const accountClient = new AccountsApi(config)
+const accountClient = new AccountsApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 try {
   // // - create a ach relationship

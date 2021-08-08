@@ -1,7 +1,9 @@
 import { ObjectSerializer, JournalsApi, config, JournalData } from "@alpaca/index"
 import { NextApiResponse, NextApiRequest } from "next"
 
-const journalApi = new JournalsApi(config)
+const journalApi = new JournalsApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleJournal(req: NextApiRequest, res: NextApiResponse) {
   let { body, method } = req

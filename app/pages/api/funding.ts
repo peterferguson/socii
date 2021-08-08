@@ -56,7 +56,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const accountsWithMissingDetails = []
         const erroredTransfers = []
-        const fundClient = new FundingApi(config)
+        const fundClient = new FundingApi(
+          config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+        )
 
         const accountsToFund = {}
         for (const { uid, ...rest } of needsFunded) {

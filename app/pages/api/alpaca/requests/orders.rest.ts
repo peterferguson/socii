@@ -1,7 +1,7 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/orders.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
 import { config, TradingApi, CreateOrder, PatchOrder } from "../../../../alpaca/index"
-const client = new TradingApi(config)
+const client = new TradingApi(config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET))
 
 const createThenDeleteOrder = async () => {
   const order = await client.postOrders(

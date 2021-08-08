@@ -8,7 +8,9 @@ import {
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 
-const accountClient = new AccountsApi(config)
+const accountClient = new AccountsApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export async function handleAch(req: NextApiRequest, res: NextApiResponse) {
   let { body, method } = req
