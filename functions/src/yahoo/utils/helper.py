@@ -1,5 +1,6 @@
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+import pandas as pd
 import yahooquery as yq
 from flask.wrappers import Request
 from werkzeug.datastructures import MultiDict
@@ -61,3 +62,30 @@ def yahoo_ticker_from_request(request: Request) -> Optional[yq.Ticker]:
         return None
 
     return get_ticker(ticker_symbol)
+
+
+def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
+    """Parse the request for the ticker symbol key `tickerSymbol` and return the
+    history based on the following parameters:
+        - `period`
+        - `interval`
+        - `start`
+        - `end`
+    """
+    ticker = yahoo_ticker_from_request(request)
+    period = parse_symbol_from_request("period", request) or "ytd"
+    interval = parse_symbol_from_request("interval", request) or "1d"
+    start = parse_symbol_from_request("start", request) or None
+    end = parse_symbol_from_request("end", request) or None
+
+    if not ticker:
+        return None
+
+    history = (
+        ticker.history(period=period, interval=interval, start=start, end=end)
+        .reset_index()
+        .set_index("symbol")
+    )
+    history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
+    history.rename(columns={"date": "timestamp"}, inplace=True)
+    return history.to_dict(orient="records")
