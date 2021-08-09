@@ -9,11 +9,11 @@ import https from "https"
 
 // // ! This doesn't work as the sse is not encoded in the OAS3 spec
 // // const events = new EventsApi(  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
-)
+// )
 // // events.eventsJournalsStatusGet(since).then((r) => console.log(r))
 
 // const requestFactory = new EventsApiRequestFactory(  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
-)
+// )
 
 // const handleEvents = async () => {
 //   const requestContext = await requestFactory.eventsJournalsStatusGet(since)
