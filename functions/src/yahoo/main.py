@@ -8,7 +8,7 @@ from flask.wrappers import Request
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from utils.helper import yahoo_ticker_from_request, get_history
+from utils.helper import yahoo_ticker_from_request, get_history, get_exchange_rate
 
 """ The following are a colleciton of HTTP Cloud Functions to be deployed on gcp.
     They are all HTTP functions and will use the yahooquery python library.
@@ -40,6 +40,10 @@ def get_key_summary(request: Request) -> str:
 def get_historical_prices(request: Request) -> str:
     history = get_history(request)
     return json.dumps(history)
+
+def get_currency_exchange_rate(request: Request) -> str:
+    converted = get_exchange_rate(request)
+    return json.dumps(converted)
 
 
 if __name__ == "__main__":

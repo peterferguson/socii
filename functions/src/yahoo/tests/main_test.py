@@ -47,6 +47,7 @@ def test_get_key_stats_has_correct_schema():
         ]
     )
 
+
 def test_get_historical_prices_returns_ohlc_dict():
     # TODO: Create a model for the data structure of the historical prices
     ticker = "TSLA"
@@ -65,3 +66,14 @@ def test_get_historical_prices_returns_ohlc_dict():
             in ["open", "high", "low", "close", "volume", "adjclose", "timestamp"]
         ]
     )
+
+
+def test_get_currency_exchange_rate_returns_conversion_dict():
+    # TODO: Create a model for the data structure of the conversion
+    data = {"fromCurrency": "USD", "toCurrency": "GBP"}
+    req = Mock(get_json=Mock(return_value=data), args=data)
+
+    result = json.loads(main.get_currency_exchange_rate(req))
+
+    assert isinstance(result, dict)
+    assert all([key for key in result.keys() if key in ["rate", "lastRefresh"]])

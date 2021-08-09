@@ -89,3 +89,25 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
     history.rename(columns={"date": "timestamp"}, inplace=True)
     return history.to_dict(orient="records")
+
+# - Some problem with the yahoo finance api... just do this client side
+
+# def get_exchange_rate(request: Request) -> Optional[Dict[str, Union[str, int]]]:
+#     """Gets the exchange rate for the currency pair `fromCurrency`-`toCurrency` of params
+#         `fromCurrency` and `toCurrency`
+
+#     Args:
+#         request (Request): GCP HTTP Function request
+
+#     Returns:
+#         Optional[Dict[str, Union[str, int]]]: exchange rate as a dictionary
+#     """
+#     fromCurrency = parse_symbol_from_request("fromCurrency", request)
+#     toCurrency = parse_symbol_from_request("toCurrency", request)
+#     period = parse_symbol_from_request("period", request) or "day"
+
+#     if not fromCurrency or not toCurrency:
+#         return None
+
+#     print(yq.currency_converter(fromCurrency, toCurrency, period))
+#     return yq.currency_converter(fromCurrency, toCurrency, period)
