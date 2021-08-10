@@ -10,13 +10,11 @@ import { useMediaQuery } from "react-responsive"
 interface ITickerPageLineChartProps {
   timeseries: OHLCTimeseries
   color: string
-  changePercent: number
 }
 
 const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
   timeseries,
   color,
-  changePercent,
 }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
