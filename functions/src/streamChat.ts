@@ -1,6 +1,6 @@
 import { log, error } from "firebase-functions/lib/logger"
 import { firestore } from "./index"
-import { streamClient } from "./utils/helper.js"
+import { streamClient } from "./utils/streamClient"
 
 /*
  * Create a stream token when a new user is created

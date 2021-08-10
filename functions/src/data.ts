@@ -1,10 +1,7 @@
-import { firestore, serverTimestamp } from "./index.js"
 import bent from "bent"
-
-// - Helper functions
-
-const filterKeys = (obj, keyList) =>
-  Object.fromEntries(Object.entries(obj).filter(([k]) => keyList.includes(k)))
+import { firestore, serverTimestamp, Timestamp } from "./index.js"
+import { cleanJsonResponse } from "./utils/cleanJsonResponse"
+import { filterKeys } from "./utils/filterKeys"
 
 // TODO: convert to using `alphavantage` library
 const alphaVantageCall = async (tickerSymbol, params) => {
@@ -19,35 +16,6 @@ const alphaVantageCall = async (tickerSymbol, params) => {
 
 const alphaVantageSummary = (tickerSymbol) => {
   return alphaVantageCall(tickerSymbol, { function: "OVERVIEW" })
-}
-
-const willItFloat = (str: string): string | number => {
-  const lettersRegex = /[a-zA-Z]/
-  if (lettersRegex.test(str)) return str
-  const parsed = parseFloat(str)
-  return isNaN(parsed) ? str : parsed
-}
-
-const isUpperCase = (str: string): boolean => {
-  return str === str.toUpperCase() && str !== str.toLowerCase()
-}
-
-const camelCase = (str: string): string => {
-  if (isUpperCase(str)) return str
-  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-    if (/\s+/.test(match)) return ""
-    return index === 0 ? match.toLowerCase() : match.toUpperCase()
-  })
-}
-
-const cleanJsonResponse = (response) => {
-  const keys = Object.keys(response)
-  let cleaned = {}
-  for (const key of keys) {
-    cleaned[camelCase(key)] =
-      response[key] === "None" ? null : willItFloat(response[key])
-  }
-  return cleaned
 }
 
 /**
@@ -73,15 +41,15 @@ export const alphaVantageQuery = async (data, context) => {
     .limit(1)
 
   const tickerSnapshot = await query.get()
-  const tickerRef = await tickerSnapshot.docs[0].ref
-  const ticker = await tickerSnapshot.docs[0].data()
+  const tickerRef = tickerSnapshot.docs[0].ref
+  const ticker = tickerSnapshot.docs[0].data()
 
   const dataRef = firestore.doc(`tickers/${ticker.ISIN}/data/alphaVantage`)
 
   const dataSnapshot = await dataRef.get()
 
   if (dataSnapshot.exists) {
-    return filterKeys(await dataSnapshot.data(), data.queryFields)
+    return filterKeys(dataSnapshot.data(), data.queryFields)
   } else {
     const response = await alphaVantageSummary(data.tickerSymbol)
     const exchange = response.Exchange || ""
@@ -101,4 +69,64 @@ export const alphaVantageQuery = async (data, context) => {
     batch.commit()
     return filterKeys(cleanResponse, data.queryFields)
   }
+}
+
+/**
+ * Callable HTTP Cloud Function to take alpha vantange timeseries response
+ * and store in firebase.
+ *
+ * @param {Object} req Cloud Function request context.
+ *                     More info: https://expressjs.com/en/api.html#req
+ *
+ *                     Request body must include the following attributes:
+ *                      executorRef: Firestore reference to the user or group which executed the trade,
+ *                      assetRef:   Firestore reference (also gives assetType)
+ *                      orderType:  This will be from a set of order types so should ensure it is within those too
+ *                      price:      Purchase amount (assumed to be in GBP unless currency is passed explicitly)
+ *                      shares:     Float defining proportion of asset aquired
+ * @param {Object} res Cloud Function response context.
+ *                     More info: https://expressjs.com/en/api.html#res
+ */
+
+export const storeTimeseries = async (data, context) => {
+  const { isin, timeseries } = data.body as {
+    isin: string
+    timeseries: { [key: string]: string | number }[]
+  }
+
+  // - `timeseries` dates should be in ISO 8601 format (e.g. "2021-08-06T00:00:00.000Z")
+  const lastUpdateQuery = firestore
+    .collection(`tickers/${isin}/timeseries`)
+    .orderBy("timestamp", "desc")
+    .limit(1)
+
+  const latestDoc = (await lastUpdateQuery.get()).docs.pop()
+
+  // - filter on latest
+  const latestTimestamp: Timestamp = latestDoc.data().timestamp
+  const newTicks = timeseries.filter(
+    (tick) => new Date(tick?.timestamp) > latestTimestamp.toDate()
+  )
+
+  // - update firestore with the timeseries data (should never be more than 500 points)
+  const batch = firestore.batch()
+  for (let ohlc of newTicks) {
+    const { timestamp, ...data } = ohlc
+
+    const ts = new Date(timestamp)
+    const timestampNumber = ts.getTime()
+    const timestampFirestoreDate = Timestamp.fromDate(ts)
+
+    const outputRef = firestore
+      .collection(`tickers/${isin}/timeseries`)
+      .doc(`${timestampNumber}`)
+
+    batch.set(outputRef, {
+      ...data,
+      timestamp: timestampFirestoreDate,
+    })
+  }
+  await batch.commit()
+
+  return
 }

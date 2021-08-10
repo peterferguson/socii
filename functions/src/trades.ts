@@ -1,22 +1,16 @@
-import { logger } from "firebase-functions" 
+import { logger } from "firebase-functions"
 import {
   firestore,
   serverTimestamp,
   increment,
   arrayUnion,
   HttpsError,
-} from "./index.js"
-import {
-  singleLineTemplateString,
   iexClient,
-  streamClient,
-  currencySymbols,
-} from "./utils/helper.js"
-import { 
-  config, 
-  TradingApi, 
-  CreateOrder 
-} from "./alpaca/broker/client/ts/index"
+} from "./index.js"
+import { singleLineTemplateString } from "./utils/singleLineTemplateString"
+import { currencySymbols } from "./utils/currencySymbols"
+import { streamClient } from "./utils/streamClient"
+import { config, TradingApi, CreateOrder } from "./alpaca/broker/client/ts/index"
 
 /*
 - tradeSubmission
@@ -70,21 +64,23 @@ export const tradeSubmission = async (
 }
 
 export const tradeConfirmation = async (change, context) => {
-logger.log("into trade confirm______")
+  logger.log("into trade confirm______")
   // - document at groups/{groupName}/trades/{messageId}
   const { groupName, messageId } = context.params
   /////const tradeData = change.after.data()
-  const tradeData = (await firestore
-  .doc("groups/JPT/trades/jam-5725494e-7e2c-479c-a06a-827da7609808").get()).data()
-
+  const tradeData = (
+    await firestore
+      .doc("groups/JPT/trades/jam-5725494e-7e2c-479c-a06a-827da7609808")
+      .get()
+  ).data()
 
   // TODO make consistent with use elsewhere, maybe change how this is done
-  if (tradeData.executed=="true") return // - do nothing
+  if (tradeData.executed == "true") return // - do nothing
 
   // - Data to update the state of the trade on completion of function
   // - Should also stop infinite loops
   // - can be set to success, pending, failed
-  var tradeUpdateData = { executed: "" }
+  let tradeUpdateData = { executed: "" }
 
   const tradeClient = new TradingApi(config)
   const ALPACA_FIRM_ACCOUNT = process.env.ALPACA_FIRM_ACCOUNT
@@ -92,7 +88,7 @@ logger.log("into trade confirm______")
   const groupRef = await firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  logger.log("cash bal______", cashBalance ,"investors______", investorCount)
+  logger.log("cash bal______", cashBalance, "investors______", investorCount)
 
   const ISIN = tradeData.assetRef.split("/").pop()
   tradeData.assetRef = firestore.doc(tradeData.assetRef)
@@ -152,81 +148,99 @@ logger.log("into trade confirm______")
   if (investorCount == 1 || tradeData.agreesToTrade.length === investorCount - 1) {
     // ! Execute Trade
 
-      //breakdown message into alpaca form
-      const postOrder = await tradeClient.postOrders(
-        ALPACA_FIRM_ACCOUNT,
-        CreateOrder.from({
-          symbol: tradeData.tickerSymbol,
-          side: tradeData.action,
-          timeInForce: tradeData.timeInForce,
-          qty: tradeData.shares,
-          type: tradeData.type,
-          limitPrice: tradeData.price,
-        })
+    //breakdown message into alpaca form
+    const postOrder = await tradeClient.postOrders(
+      ALPACA_FIRM_ACCOUNT,
+      CreateOrder.from({
+        symbol: tradeData.tickerSymbol,
+        side: tradeData.action,
+        timeInForce: tradeData.timeInForce,
+        qty: tradeData.shares,
+        type: tradeData.type,
+        limitPrice: tradeData.price,
+      })
+    )
+    const determineAlpacaStatus = (responseStatus) => {
+      const status = ["cancelled", "expired", "rejected", "suspended"].includes(
+        responseStatus
       )
-      const determineStatus =(responseStatus) => {
-        const status = ["cancelled" , "expired" , "rejected" ,"suspended" ].includes(responseStatus) ? "failed" :
-                        ["new", "done_for_day", "pending_cancel", "pending_replace",  "pending_new", "accepted_for_bidding", "stopped", "calculated", "accepted", "replaced" ].includes(responseStatus) ? "pending" :
-                         ["filled" ].includes(responseStatus) ? "success" : null
-            return status
-        }
-      
-      var status = determineStatus(postOrder.status)
-
-      switch (status) {
-        case "success":
-          // 1. Batch update holdings
-          const holdingDocRef = firestore.collection(`groups/${groupName}/holdings`).doc(ISIN)
-          const { type, holdingData, pnlPercentage } = await upsertHolding({
-            holdingDocRef,
-            tradeData,
-            messageId,
-          })
-
-          switch (type) {
-            case "update":
-              holdingDocRef.update(holdingData)
-              groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
-              if (pnlPercentage) tradeUpdateData["pnlPercentage"] = pnlPercentage
-              break
-            case "set":
-              holdingDocRef.set(holdingData)
-              groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
-              break
-            default:
-              // - Secondary execution check (this time on the holding doc) ... do nothing
-              return
-          }
-
-          // 2. send a message with the finalised price
-          const channel = streamClient.channel("messaging", groupName)
-          await channel.sendMessage(investmentReceiptMML(tradeData))
-
-          return change.after.ref.update(tradeUpdateData)
-          break
-
-        case "pending":
-          // create function to listen to events monitoring status
-          // TODO display real message  
-          await channel.sendMessage(`your trade is in the state ${postOrder.status}.. it has not been completed yet`)
-          return change.after.ref.update(tradeUpdateData = {executed: "pending"})
-          break
-        case "failed":
-          // update doc
-         
-          break
-        // - Catch all commands sent by user not by action
-        default:
-          // - Error on missing command args
-
-
-      }
-
-
-
+        ? "failed"
+        : [
+            "new",
+            "done_for_day",
+            "pending_cancel",
+            "pending_replace",
+            "pending_new",
+            "accepted_for_bidding",
+            "stopped",
+            "calculated",
+            "accepted",
+            "replaced",
+          ].includes(responseStatus)
+        ? "pending"
+        : ["filled"].includes(responseStatus)
+        ? "success"
+        : null
+      return status
     }
 
-  
+    let status = determineAlpacaStatus(postOrder.status)
+
+    switch (status) {
+      case "success":
+        // 1. Batch update holdings
+        const holdingDocRef = firestore
+          .collection(`groups/${groupName}/holdings`)
+          .doc(ISIN)
+        const { type, holdingData, pnlPercentage } = await upsertHolding({
+          holdingDocRef,
+          tradeData,
+          messageId,
+        })
+
+        switch (type) {
+          case "update":
+            holdingDocRef.update(holdingData)
+            groupRef.update({
+              cashBalance: cashBalance - tradeData.shares * latestPrice,
+            })
+            if (pnlPercentage) tradeUpdateData["pnlPercentage"] = pnlPercentage
+            break
+          case "set":
+            holdingDocRef.set(holdingData)
+            groupRef.update({
+              cashBalance: cashBalance - tradeData.shares * latestPrice,
+            })
+            break
+          default:
+            // - Secondary execution check (this time on the holding doc) ... do nothing
+            return
+        }
+
+        // 2. send a message with the finalised price
+        const channel = streamClient.channel("messaging", groupName)
+        await channel.sendMessage(investmentReceiptMML(tradeData))
+
+        return change.after.ref.update(tradeUpdateData)
+        break
+
+      case "pending":
+        // create function to listen to events monitoring status
+        // TODO display real message
+        await channel.sendMessage(
+          `your trade is in the state ${postOrder.status}.. it has not been completed yet`
+        )
+        return change.after.ref.update((tradeUpdateData = { executed: "pending" }))
+        break
+      case "failed":
+        // update doc
+
+        break
+      // - Catch all commands sent by user not by action
+      default:
+      // - Error on missing command args
+    }
+  }
 }
 
 /*
@@ -372,7 +386,6 @@ const verifyContent = async (data, context) => {
   optionalArgs.assetType = assetData.get("assetType")
   optionalArgs.shortName = assetData.get("shortName")
   optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
-  
 
   // * Inject data into requiredArgs
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))
