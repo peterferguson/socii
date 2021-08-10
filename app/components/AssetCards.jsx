@@ -1,5 +1,4 @@
 import { logoUrl } from "@utils/logoUrl"
-import { pctChange } from "@utils/pctChange"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
@@ -56,7 +55,6 @@ export function SmallAssetCard({
   currentPrice,
   monthlyPctChange,
   shortName,
-  currencySymbol = "$",
 }) {
   const [logoNotFound, setLogoNotFound] = useState(false)
   // TODO: Market state with some nice symbols like sun & moon for open & closed plus info on last updated
@@ -82,8 +80,7 @@ export function SmallAssetCard({
                 "text-2xl px-2 mx-1 rounded-full font-semibold w-full text-center inline-block"
               }
             >
-              {currencySymbol}
-              {currentPrice?.toFixed(2)}
+              ${currentPrice?.toFixed(2)}
             </div>
             <div
               className={`${pnlBackgroundColor(

@@ -6,17 +6,11 @@ import { TickerLogo } from "./TickerLogo"
 
 interface IStockCard {
   holding: any
-  lastestPrice: number
-  currencySymbol?: string
+  latestPrice: number
   index: number
 }
 
-export default function StockCard({
-  holding,
-  latestPrice,
-  currencySymbol = "$",
-  index,
-}) {
+export default function StockCard({ holding, latestPrice, index }: IStockCard) {
   const tickerSymbol = holding.tickerSymbol
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
@@ -58,7 +52,7 @@ export default function StockCard({
           </div> */}
           <div className="overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis">
             {latestPrice ? (
-              `${currencySymbol}${(latestPrice * holding.shares).toFixed(2)}`
+              `$${(latestPrice * holding.shares).toFixed(2)}`
             ) : (
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}

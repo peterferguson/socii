@@ -139,7 +139,6 @@ export async function createGroup(
  * @param  {string} tickerSymbol
  */
 export const getTickerData = async (tickerSymbol) => {
-  // - set the rate for the currency pair in local storage
   const tickerQuery = query(
     collectionGroup(firestore, "data"),
     where("symbol", "==", tickerSymbol),
