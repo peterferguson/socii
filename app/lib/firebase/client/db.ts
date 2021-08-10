@@ -187,7 +187,12 @@ export const setHoldingData = (
  * @param  {string} username
  */
 export const getUserStreamToken = async (uid: string) => {
-  const tokenRef = doc(firestore, `users/${uid}/stream/${uid}`)
+  const tokenRef = doc(
+    firestore,
+    `users/${uid}/stream/${
+      process.env.NODE_ENV === "production" ? "production" : "development"
+    }`
+  )
   const snapshot = await getDoc(tokenRef)
   return snapshot.data()?.token
 }
@@ -278,3 +283,10 @@ export const getLastMarketDay = async () => {
   const marketDayDoc = (await getDocs(marketDayQuery)).docs?.pop()
   return marketDayDoc.data()
 }
+
+export const groupNameExists = async (name: string) =>
+  (
+    await getDocs(
+      query(collection(firestore, "groups"), where("groupName", "==", name))
+    )
+  ).empty
