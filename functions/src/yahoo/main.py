@@ -12,6 +12,7 @@ import google.cloud.logging
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from utils.helper import get_history, yahoo_ticker_from_request
+from utils.middleware import cors
 
 # Instantiates a client
 client = google.cloud.logging.Client()
@@ -50,6 +51,7 @@ def get_key_summary(request: Request) -> str:
     return json.dumps(ticker.key_stats)
 
 
+@cors
 def get_historical_prices(request: Request) -> str:
     history = get_history(request)
     return json.dumps(history)
