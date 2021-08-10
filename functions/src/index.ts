@@ -9,12 +9,12 @@ admin.initializeApp(adminConfig)
 
 process.env.ALPACA_KEY = functions.config().alpaca.key
 process.env.ALPACA_SECRET = functions.config().alpaca.secret
+process.env.ALPACA_FIRM_ACCOUNT = functions.config().alpaca.firm_account
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
 process.env.IEX_TOKEN = functions.config().iex.api_key
-// TODO when we align to one alpaca test broker this should change to function.config
-//process.env.ALPACA_FIRM_ACCOUNT = functions.config().ALPACA_FIRM_ACCOUNT 
+
 const london = "europe-west2"
 
 // * Exportable utils
@@ -58,6 +58,10 @@ module.exports = {
     .region(london)
     .firestore.document("ticker/{isin}")
     .onCreate(algoliaSearch.onTickerCreated),
+  checkTradeStatus: functions
+    .region(london)
+    .firestore.document("tradesEvents/{orderId}")
+    .onCreate(trading.checkTradeStatus),
   // 2 HTTPS Triggers
   // 2.1 onRequest
   loadTickersToAlgolia: functions // TODO: Convert to use new firebase extension
