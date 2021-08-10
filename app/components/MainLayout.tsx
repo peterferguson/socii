@@ -28,7 +28,7 @@ export default function MainLayout(props) {
   return (
     <div className="flex items-start">
       <Sidebar />
-      <div className="flex flex-col items-start w-full h-screen pl-0 sm:pt-2 sm:px-2 sm:space-y-4">
+      <div className="flex flex-col items-start w-full h-screen px-2 sm:pt-2 sm:space-y-4">
         <NavHeader showChat={showChat} setShowChat={setShowChat} />
         {/* Main Components */}
         <div className="w-full h-full overflow-auto no-scrollbar">
