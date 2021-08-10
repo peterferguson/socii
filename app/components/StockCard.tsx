@@ -1,5 +1,3 @@
-import { logoBaseUrl } from "@lib/constants"
-import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 import { TickerLogo } from "./TickerLogo"

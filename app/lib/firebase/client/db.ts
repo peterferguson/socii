@@ -1,10 +1,10 @@
+import { MarketDay } from "@alpaca/models"
 import FirebaseUser from "@models/FirebaseUser"
 import {
   arrayUnion,
   collection,
   collectionGroup,
   doc,
-  DocumentData,
   DocumentReference,
   getDoc,
   getDocs,
@@ -261,3 +261,20 @@ export const getGroupDocsByName = async (groupNames: string[]) =>
   await getDocs(
     query(collection(firestore, "groups"), where("groupName", "in", groupNames))
   )
+
+export const setMarketDay = async (marketDay: MarketDay) => {
+  const date = marketDay.date.replace(/-/g, "")
+  const marketDayRef = doc(firestore, `marketCalendar/${date}`)
+  await setDoc(marketDayRef, { ...marketDay, date: parseInt(date) })
+  console.log(`Market day ${JSON.stringify(marketDay)} set`)
+}
+
+export const getLastMarketDay = async () => {
+  const marketDayQuery = query(
+    collection(firestore, `marketCalendar`),
+    orderBy("date", "desc"),
+    limit(1)
+  )
+  const marketDayDoc = (await getDocs(marketDayQuery)).docs?.pop()
+  return marketDayDoc.data()
+}
