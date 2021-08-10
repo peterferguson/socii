@@ -1,0 +1,7 @@
+POST http://localhost:5001/sociiinvest/europe-west2/get_historical_prices
+# POST  https://europe-west2-sociiinvest.cloudfunctions.net/get_historical_prices
+Content-type: application/json
+
+{
+    "tickerSymbol": "TSLA",   
+}

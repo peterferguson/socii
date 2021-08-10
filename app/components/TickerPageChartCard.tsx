@@ -10,11 +10,13 @@ import { useMediaQuery } from "react-responsive"
 interface ITickerPageLineChartProps {
   timeseries: OHLCTimeseries
   color: string
+  changePercent: number
 }
 
 const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
   timeseries,
   color,
+  changePercent,
 }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
@@ -34,26 +36,28 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
     <div className="flex items-center justify-center w-full h-2/3 ">
       <div className="w-full p-2 m-4 bg-white shadow-lg rounded-xl">
         <div className="flex justify-between w-full h-20">
-          <div className="flex-none p-2 sm:p-4">
-            <span className="z-10 text-lg text-left text-gray-700 dark:text-gray-100 leading-4 sm:text-4xl">
-              ${highlightedClose?.toFixed(2)}
-            </span>
-            <p className={`flex text-tiny ${pnlTextColor(highlightedChange)}`}>
-              {highlightedChange > 0 ? (
-                <FaArrowUp className="mr-0.5" />
-              ) : (
-                <FaArrowDown className="mr-0.5" />
-              )}
-              {`${highlightedChange?.toFixed(2)}%`}
-              {deserialisedTimeseries && (
-                <span className="text-gray-400 text-tiny">
-                  {` since ${deserialisedTimeseries?.[
-                    crosshairIndexValue
-                  ].x.toLocaleDateString()}`}
-                </span>
-              )}
-            </p>
-          </div>
+          {crosshairIndexValue !== timeseries?.length - 1 && (
+            <div className="flex-none p-2 sm:p-4">
+              <span className="z-10 text-lg text-left text-gray-700 dark:text-gray-100 leading-4 sm:text-4xl">
+                ${highlightedClose?.toFixed(2)}
+              </span>
+              <p className={`flex text-tiny ${pnlTextColor(highlightedChange)}`}>
+                {highlightedChange > 0 ? (
+                  <FaArrowUp className="mr-0.5" />
+                ) : (
+                  <FaArrowDown className="mr-0.5" />
+                )}
+                {`${highlightedChange?.toFixed(2)}%`}
+                {deserialisedTimeseries && (
+                  <span className="text-gray-400 text-tiny">
+                    {` since ${deserialisedTimeseries?.[
+                      crosshairIndexValue
+                    ]?.x.toLocaleDateString()}`}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
           <div className="flex-grow"></div>
         </div>
         {deserialisedTimeseries ? (

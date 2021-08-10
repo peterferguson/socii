@@ -5,7 +5,7 @@ import { cleanJsonResponse } from "./utils/cleanJsonResponse"
 import { filterKeys } from "./utils/filterKeys"
 // - whitelist cannot be accessed by the firestore client outside the yahoo folder
 // - but can be read by vercel here so adding the whitelist to the yahoo folder
-const whitelist = require("../yahoo/whitelist.json")
+const whitelist = require("../src/yahoo/whitelist.json")
 const cors = require("cors")({ origin: whitelist })
 
 // TODO: convert to using `alphavantage` library

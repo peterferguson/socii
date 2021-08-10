@@ -1,5 +1,6 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
+import io
 import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pandas as pd
 import yahooquery as yq
@@ -82,12 +83,14 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
     if not ticker:
         return None
 
+    buffer = io.StringIO()
     history = (
         ticker.history(period=period, interval=interval, start=start, end=end)
         .reset_index()
         .set_index("symbol")
     )
-    logging.info(f"history dataframe info: {history.info(verbose=True)}")
+    history.info(buf=buffer)
+    logging.info(f"history dataframe info: {buffer.getvalue()}")
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
     history.rename(columns={"date": "timestamp"}, inplace=True)
     return history.to_dict(orient="records")

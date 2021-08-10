@@ -41,7 +41,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   // - Push the latest price to the array
   useEffect(() => {
     if (price)
-      timeseries.push({
+      timeseries?.push({
         timestamp:
           typeof price?.latestUpdate !== "string" && price?.latestUpdate?.unix() * 1000,
         close: price?.iexRealtimePrice || price?.latestPrice,
@@ -82,7 +82,10 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               <InvestButton state={state} send={send} logoColor={logoColor} />
             </div>
           </div>
-          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
+          <TickerPageChartCard
+            color={ticker?.logoColor}
+            timeseries={timeseries}
+          />
           <InvestButtonModal ticker={ticker} state={state} send={send} />
         </>
       )}

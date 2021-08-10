@@ -1,4 +1,5 @@
-POST http://localhost:5001/sociiinvest/europe-west2/storeTimeseries
+# POST http://localhost:5001/sociiinvest/europe-west2/storeTimeseries
+POST  https://europe-west2-sociiinvest.cloudfunctions.net/storeTimeseries
 Content-type: application/json
 
 {

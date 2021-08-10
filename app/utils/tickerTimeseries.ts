@@ -1,7 +1,7 @@
 import { getTickerTimeseriesDocs, tickerToISIN } from "@lib/firebase/client/db"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { fetcher } from "./fetcher"
-import { isLastMarketDay } from "./isLastMarketDay"
+import { newerThanLastMarketDay } from "./newerThanLastMarketDay"
 
 export const tickerTimeseries = async (
   tickerSymbol: string = "",
@@ -13,21 +13,24 @@ export const tickerTimeseries = async (
 
   // - Query if the latest doc is the last market day
   const latestTimestamp = timeseriesDocs[timeseriesDocs.length - 1].id
-  const timestampIsLastMarketDay = await isLastMarketDay(latestTimestamp)
+  const isUpdateToDate = await newerThanLastMarketDay(latestTimestamp)
 
-  if (timestampIsLastMarketDay) {
-    return timeseriesDocs.map((doc) => {
-      const { open, high, low, close, volume } = doc.data()
+  if (isUpdateToDate) {
+    return timeseriesDocs
+      .map((doc) => {
+        const { open, high, low, close, volume } = doc.data()
+        const timestamp = parseInt(doc.id)
 
-      return {
-        open,
-        high,
-        low,
-        close,
-        volume,
-        timestamp: parseInt(doc.id) * 1000,
-      }
-    })
+        return {
+          open,
+          high,
+          low,
+          close,
+          volume,
+          timestamp: timestamp / 1e10 < 1 ? timestamp * 1000 : timestamp,
+        }
+      })
+      .sort((a, b) => a.timestamp - b.timestamp)
   } else {
     // * Get timeseries data from api
 
@@ -43,16 +46,10 @@ export const tickerTimeseries = async (
       // TODO: Convert this to run for all the popular tickers at once!
       const timeseries = await fetcher(timeseriesBaseUrl, {
         method: "POST",
+        mode: "cors",
         body: JSON.stringify({ tickerSymbol }),
         headers: { "Content-Type": "application/json" },
       })
-
-      // const storeTimeseriesBaseUrl = `${
-      //   process.env.NODE_ENV === "production"
-      //     ? "https://socii.app"
-      //     : "http://localhost:5001/sociiinvest/europe-west2"
-      // }
-      //     /storeTimeseries`
 
       // TODO: take this out of the client side call for new stocks to be displayed
       // - store timeseries data in firebase
