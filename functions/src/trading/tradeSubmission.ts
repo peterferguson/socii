@@ -39,22 +39,14 @@ export const tradeSubmission = async (
     ...verifiedData,
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
-
-    // TODO //
-    ////////// REMOVE - for testing until correct data is sent
-    timeInForce: "gtc",
-    type: "market",
     executionStatus: "pending",
-    limitPrice: "",
-    qty: verifiedData.shares
-    ////////// REMOVE - for testing until correct data is sent
   })
 
   if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
       ...verifiedData,
-      cost: verifiedData.price, //TODO: Review the usage of cost and price here
+      price: verifiedData.price, 
       parent_id: messageId,
       show_in_channel: false,
     })
@@ -81,12 +73,13 @@ const verifyUser = (context) => {
       username: "",
       groupName: "",
       assetRef: null,
-      orderType: "",
-      cost: 0,
+      type: "",
       price: 0,
-      shares: 0,
-      action: "",
+      qty: 0,
+      side: "",
       messageId: "",
+      timeInForce: "",
+      symbol:"",
       // - messageId will allow us to track whether the trade has already been submitted
       // - (until epheremal messages work). Also we can use a collectionGroup query
       // - to find the particular trade in question for each message.
@@ -99,6 +92,7 @@ const verifyUser = (context) => {
       executionCurrency: "GBP",
       assetCurrency: "USD",
       executorRef: `users/${context.auth.uid}`,
+      limitPrice:"",
     }
   
     // * Check for default args and assign them if they exist
@@ -145,10 +139,10 @@ const verifyUser = (context) => {
   
   const confirmInvestmentMML = ({
     username,
-    action,
-    tickerSymbol,
-    cost,
-    shares,
+    side,
+    symbol,
+    price,
+    qty,
     parent_id,
     show_in_channel,
   }) => {
@@ -156,15 +150,15 @@ const verifyUser = (context) => {
     const mmlmessage = {
       user_id: username,
       text: singleLineTemplateString`
-      Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
-      for ${cost}. Do you agree that the group should execute this trade?
+      Hey ${username} wants the group to ${side} ${qty} shares of ${symbol} 
+      for ${price}. Do you agree that the group should execute this trade?
       `,
-      command: action,
+      command: side,
       parent_id: parent_id || null,
       show_in_channel: show_in_channel || null,
       attachments: [
         {
-          tickerSymbol: tickerSymbol,
+          tickerSymbol: symbol,
           type: "investmentConfirmation",
           mml: mmlstring,
           actions: [

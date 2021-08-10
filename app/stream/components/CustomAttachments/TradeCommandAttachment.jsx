@@ -56,16 +56,16 @@ const TradeCommandAttachment = ({ attachment }) => {
   )
 
   const [costPerShare, setCostPerShare] = useState({ currency, cost: currentPrice })
-  const { data: exchangeRate, isLoading: isLoadingExchangeRate } =
-    useCurrencyConversion(currency, localCurrency)
+  // const { data: exchangeRate, isLoading: isLoadingExchangeRate } =
+  //   useCurrencyConversion(currency, localCurrency)
 
   useEffect(() => {
     setCostPerShare(() => ({
-      cost: isLoadingExchangeRate ? currentPrice : currentPrice * exchangeRate?.rate,
-      currency: isLoadingExchangeRate ? currency : localCurrency,
+      cost:  currentPrice ,
+      currency:  currency ,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPrice, exchangeRate])
+  }, [currentPrice])
 
   const groupName = channel.cid.split(":").pop()
 
@@ -98,18 +98,20 @@ const TradeCommandAttachment = ({ attachment }) => {
                   executionCurrency: localCurrency,
                   assetCurrency: currency,
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                  price: price,
-                  cost: parseFloat(data.cost || data.amount),
-                  shares: parseFloat(data.shares),
+                  price: currentPrice,
+                  //cost: parseFloat(data.cost || data.amount),
+                  qty: parseFloat(data.shares),
+                  symbol: tickerSymbol,
+                  timeInForce: "gtc",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
                 }
                 //TODO: Review redundancy with orderType (may not be with limit orders)
                 // - Write to firestore & send confirmation message in thread
                 if ("buy" in data) {
-                  tradeSubmission({ ...tradeArgs, orderType: "BUY", action: "buy" })
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
                 }
                 if ("sell" in data) {
-                  tradeSubmission({ ...tradeArgs, orderType: "SELL", action: "sell" })
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
                 }
               }}
               Loading={LoadingIndicator}

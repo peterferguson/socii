@@ -22,7 +22,7 @@ import { journalShares } from "./journalShares.js"
 
 /*
 - tradeConfirmation
-1. Add the uid/username of the agreesToTrade array
+1. Add the uid/username/alpacaID of the agreesToTrade array
 2. Once trade is agreed (agreesToTrade.len() === investors.len()) then we can update 
 2. holdings and send confirmation message with the price at which the asset was purchased 
 */
@@ -31,32 +31,30 @@ export const tradeConfirmation = async (change, context) => {
       // - document at groups/{groupName}/trades/{messageId} 
       const { groupName, messageId } = context.params
       const tradeData = await change.after.data()
-    
+
       // TODO add executed = pending to all orders as they are sent..
       // can be: success, pending, failed
       if (tradeData.executionStatus!=="pending") return  // - do nothing
     
     
       const tradeClient = new TradingApi(config)
-      const ALPACA_FIRM_ACCOUNT = "83af97bb-aa1b-37cd-9807-f76eec49fd1c"
+      const ALPACA_FIRM_ACCOUNT = process.env.ALPACA_FIRM_ACCOUNT
     
       const groupRef = await firestore.collection("groups").doc(groupName)
       let { cashBalance, investorCount } = (await groupRef.get()).data()
     
-      logger.log("cash bal______", cashBalance ,"investors______", investorCount)
-    
       const ISIN = tradeData.assetRef.split("/").pop()
       tradeData.assetRef = firestore.doc(tradeData.assetRef)
      
-      ////////// TODO reinstate this
+      ////////// TODO reinstate this when testing in hours
     // //   const { latestPrice, isUSMarketOpen } = await iexClient.quote(
     // //     tradeData.tickerSymbol,
     // //     {
     // //       filter: "latestPrice,isUSMarketOpen",
     // //     }
     // //   )
-    const latestPrice = 687.20
-    logger.log("latest", latestPrice)
+    const latestPrice = 713.20
+    logger.log("latest", latestPrice, "and price: ",tradeData.price)
     //   // // // - do nothing if market is closed
     //   // if (!isUSMarketOpen) {
     //   //   // 2. send a message with the finalised price
@@ -71,14 +69,14 @@ export const tradeConfirmation = async (change, context) => {
       // ! Now asset price & currency is available along with cost & execution currency this should be simple
       // ! As stated below I think this should be a client-side check though
     
-      if (tradeData.shares * latestPrice > cashBalance && !isSell(tradeData.orderType)) {
+      if (tradeData.qty * latestPrice > cashBalance && !isSell(tradeData.type)) {
         // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
         // - A small variation should be somewhat enforced on the client-side.
         // - Assuming no massive jump in stock price.
         // TODO: Implement a client-side check on the cost vs cashBalance.
         // TODO: Need to distinguish shares bought by cost & those by share amount
     
-        tradeData.shares = (cashBalance / latestPrice) * 0.975
+        tradeData.qty = (cashBalance / latestPrice) * 0.975
     
         // - drop share amount to within 2.5% of total cashBalance.
         // ! This is arbitrary & maybe be another threshold decided upon by the group.
@@ -87,7 +85,7 @@ export const tradeConfirmation = async (change, context) => {
     
       if (
         (latestPrice - tradeData.price) / tradeData.price > 0.025 &&
-        !isSell(tradeData.orderType)
+        !isSell(tradeData.type)
       ) {
         logger.log(`The price has risen more than 2.5% since the price was agreed`)
         /* 
@@ -109,12 +107,13 @@ export const tradeConfirmation = async (change, context) => {
     
         logger.log(    
             ALPACA_FIRM_ACCOUNT,           
-            tradeData.tickerSymbol,
-             tradeData.action,
+            tradeData.symbol,
+             tradeData.side,
              tradeData.timeInForce,
-             tradeData.shares,
+             tradeData.qty,
              tradeData.type,
              tradeData.price,
+             tradeData.messageId,
              tradeData.executionStatus,)
 
         try{
@@ -122,12 +121,13 @@ export const tradeConfirmation = async (change, context) => {
           var postOrder = await tradeClient.postOrders(
             ALPACA_FIRM_ACCOUNT,
             CreateOrder.from({
-              symbol: tradeData.tickerSymbol,
-              side: tradeData.action,
+              symbol: tradeData.symbol,
+              side: tradeData.side,
               timeInForce: tradeData.timeInForce,
-              qty: tradeData.shares,
+              qty: tradeData.qty,
               type: tradeData.type,
-              limitPrice: tradeData.limitPrice,
+              limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null ,
+              client_order_id: `${groupName}|${tradeData.messageId}`
             })
           )
           const determineStatus =(responseStatus) => {
@@ -136,7 +136,6 @@ export const tradeConfirmation = async (change, context) => {
                              ["filled" ].includes(responseStatus) ? "success" : null
                 return status
             }
-          
           var executionStatus = determineStatus(postOrder.status)
         }
         catch (err) {
@@ -168,11 +167,14 @@ export const tradeConfirmation = async (change, context) => {
               break
     
             case "pending":
-              // 1. Reduce the group balance to avoid missunderstandings of available balance
-              // TODO - handle the return of this balance if order fails
-              groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
-              // 2. TODO create function to listen to events monitoring status
-
+              // 1. Withold balance or shares until pending order is resolved 
+              if(tradeData.side=="buy"){
+              groupRef.update({ cashBalance: cashBalance - tradeData.qty * latestPrice })}
+              if(tradeData.side=="sell"){
+                const holdingDocRef = firestore.collection(`groups/${groupName}/holdings`).doc(ISIN)
+                const holdingDataShares = (await holdingDocRef.get()).data().shares
+                holdingDocRef.update({shares: holdingDataShares - tradeData.qty})
+              }
               // 3. send a message to inform about pending order
               // TODO display more useful message  
               await channel.sendMessage(investmentPendingMML(tradeData))
@@ -201,16 +203,16 @@ export const tradeConfirmation = async (change, context) => {
       const mmlmessage = {
         user_id: "socii",
         text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${
-          isSell(tradeData.orderType) ? "sold" : "purchased"
+        ${tradeData.qty} shares of $${tradeData.symbol} ${
+          isSell(tradeData.side) ? "sold" : "purchased"
         } for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.cost}
+        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.price}
         `,
         attachments: [
           {
             type: "receipt",
             mml: mmlstring,
-            tickerSymbol: tradeData.tickerSymbol,
+            tickerSymbol: tradeData.symbol,
           },
         ],
       }
@@ -221,16 +223,16 @@ export const tradeConfirmation = async (change, context) => {
       const mmlmessage = {
         user_id: "socii",
         text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${
-          isSell(tradeData.orderType) ? "sale" : "purchase"
+        ${tradeData.qty} shares of $${tradeData.symbol} ${
+          isSell(tradeData.side) ? "sale" : "purchase"
         } for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.cost} IS PENDING
+        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.price} IS PENDING
         `,
         attachments: [
           {
             type: "receipt",
             mml: mmlstring,
-            tickerSymbol: tradeData.tickerSymbol,
+            tickerSymbol: tradeData.symbol,
           },
         ],
       }
@@ -241,15 +243,15 @@ export const tradeConfirmation = async (change, context) => {
       const mmlmessage = {
         user_id: "socii",
         text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${
-          isSell(tradeData.orderType) ? "sale" : "purchase"
+        ${tradeData.qty} shares of $${tradeData.symbol} ${
+          isSell(tradeData.side) ? "sale" : "purchase"
         } has failed and will not be executed
         `,
         attachments: [
           {
             type: "receipt",
             mml: mmlstring,
-            tickerSymbol: tradeData.tickerSymbol,
+            tickerSymbol: tradeData.symbol,
           },
         ],
       }

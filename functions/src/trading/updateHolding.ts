@@ -17,7 +17,7 @@ import {
   increment,
   arrayUnion,
 } from "../index.js"
-
+// TODO add sell capability!!
 export const updateHolding = async (
     data: { groupName?: string; messageId?: string; tradeData?: any; executionStatus?: string},
     context?: any
