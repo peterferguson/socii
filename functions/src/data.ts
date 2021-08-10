@@ -1,7 +1,12 @@
 import bent from "bent"
+import * as cors from "cors"
 import { firestore, serverTimestamp, Timestamp } from "./index.js"
 import { cleanJsonResponse } from "./utils/cleanJsonResponse"
 import { filterKeys } from "./utils/filterKeys"
+// - whitelist cannot be accessed by the firestore client outside the yahoo folder
+// - but can be read by vercel here so adding the whitelist to the yahoo folder
+const whitelist = require("../yahoo/whitelist.json")
+const cors = require("cors")({ origin: whitelist })
 
 // TODO: convert to using `alphavantage` library
 const alphaVantageCall = async (tickerSymbol, params) => {
@@ -88,45 +93,54 @@ export const alphaVantageQuery = async (data, context) => {
  *                     More info: https://expressjs.com/en/api.html#res
  */
 
-export const storeTimeseries = async (data, context) => {
-  const { isin, timeseries } = data.body as {
-    isin: string
-    timeseries: { [key: string]: string | number }[]
-  }
+export const storeTimeseries = (req, res) => {
+  cors(req, res, async () => {
+    const { isin, timeseries } = req.body as {
+      isin: string
+      timeseries: { [key: string]: string | number }[]
+    }
 
-  // - `timeseries` dates should be in ISO 8601 format (e.g. "2021-08-06T00:00:00.000Z")
-  const lastUpdateQuery = firestore
-    .collection(`tickers/${isin}/timeseries`)
-    .orderBy("timestamp", "desc")
-    .limit(1)
+    if (!timeseries.length || !isin)
+      return res.status(400).send("No isin or timeseries data")
 
-  const latestDoc = (await lastUpdateQuery.get()).docs.pop()
-
-  // - filter on latest
-  const latestTimestamp: Timestamp = latestDoc.data().timestamp
-  const newTicks = timeseries.filter(
-    (tick) => new Date(tick?.timestamp) > latestTimestamp.toDate()
-  )
-
-  // - update firestore with the timeseries data (should never be more than 500 points)
-  const batch = firestore.batch()
-  for (let ohlc of newTicks) {
-    const { timestamp, ...data } = ohlc
-
-    const ts = new Date(timestamp)
-    const timestampNumber = ts.getTime()
-    const timestampFirestoreDate = Timestamp.fromDate(ts)
-
-    const outputRef = firestore
+    // - `timeseries` dates should be in ISO 8601 format (e.g. "2021-08-06T00:00:00.000Z")
+    const lastUpdateQuery = firestore
       .collection(`tickers/${isin}/timeseries`)
-      .doc(`${timestampNumber}`)
+      .orderBy("timestamp", "desc")
+      .limit(1)
 
-    batch.set(outputRef, {
-      ...data,
-      timestamp: timestampFirestoreDate,
-    })
-  }
-  await batch.commit()
+    try {
+      const latestDoc = (await lastUpdateQuery.get()).docs.pop()
 
-  return
+      // - filter on latest
+      const latestTimestamp: Timestamp = latestDoc.data().timestamp
+      const newTicks = timeseries.filter(
+        (tick) => new Date(tick?.timestamp) > latestTimestamp.toDate()
+      )
+
+      // - update firestore with the timeseries data (should never be more than 500 points)
+      const batch = firestore.batch()
+      for (let ohlc of newTicks) {
+        const { timestamp, ...data } = ohlc
+
+        const ts = new Date(timestamp)
+        const timestampNumber = ts.getTime()
+        const timestampFirestoreDate = Timestamp.fromDate(ts)
+
+        const outputRef = firestore
+          .collection(`tickers/${isin}/timeseries`)
+          .doc(`${timestampNumber}`)
+
+        batch.set(outputRef, {
+          ...data,
+          timestamp: timestampFirestoreDate,
+        })
+      }
+      await batch.commit()
+
+      return res.status(200).send("OK")
+    } catch (err) {
+      return res.status(500).send(err)
+    }
+  })
 }

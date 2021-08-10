@@ -8,9 +8,11 @@ import * as databaseOperations from "./databaseOperations.js"
 import * as streamChat from "./streamChat.js"
 import * as trading from "./trading/index.js"
 const serviceAccount = require("../serviceAccountKey.json")
+
 const { Client } = require("iexjs")
 
 // * Constant initialisation
+
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
 adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)

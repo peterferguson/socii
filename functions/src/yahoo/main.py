@@ -51,7 +51,7 @@ def get_key_summary(request: Request) -> str:
     return json.dumps(ticker.key_stats)
 
 
-@cors
+@cors(methods=["POST"])
 def get_historical_prices(request: Request) -> str:
     history = get_history(request)
     return json.dumps(history)

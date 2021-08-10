@@ -1,38 +1,46 @@
 from flask.wrappers import Request
+import json
 
+with open("./whitelist.json") as f:
+    whitelist = json.load(f)
 
 # - CORS decorator for GCP functions
-def cors(fn):
-    """Decorator for adding CORS headers to a GCP API response.
+def cors(**kwargs):
+    methods = kwargs.get("methods", ["GET", "POST"])
+    content_type = kwargs.get("content_type", "application/json")
 
-    Args:
-        fn: The function to decorate.
-    """
+    def wrapper(fn):
+        """Decorator for adding CORS headers to a GCP API response.
 
-    def decorator(request: Request):
-        # For more information about CORS and CORS preflight requests, see:
-        # https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+        Args:
+            fn: The function to decorate.
+        """
+        def decorator(request: Request):
+            # Set CORS headers for the preflight request
+            if request.method == "OPTIONS":
+                # Allows GET requests from any origin with the Content-Type
+                # header and caches preflight response for an 3600s
+                headers = {
+                    "Access-Control-Allow-Origin": whitelist,
+                    "Access-Control-Allow-Methods": methods,
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Max-Age": "3600",
+                }
 
-        # Set CORS headers for the preflight request
-        if request.method == "OPTIONS":
-            # Allows GET requests from any origin with the Content-Type
-            # header and caches preflight response for an 3600s
+                return ("", 204, headers)
+
+            # Set CORS headers for the main request
             headers = {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Max-Age": "3600",
+                "Access-Control-Allow-Origin": whitelist,
+                "Content-Type": content_type,
             }
 
-            return ("", 204, headers)
+            return (fn(request), 200, headers)
 
-        # Set CORS headers for the main request
-        headers = {
-            "Access-Control-Allow-Origin": "*",
-            # - Assume all requests return JSON
-            "Content-Type": "application/json",
-        }
+        return decorator
 
-        return (fn(request), 200, headers)
+    return wrapper
 
-    return decorator
+
+if __name__ == "__main__":
+    print(whitelist)
