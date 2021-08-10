@@ -1,5 +1,4 @@
 import { getUserStreamToken } from "@lib/firebase/client/db"
-import { firestore } from "@lib/firebase/client/firebase"
 import { isBrowser } from "@utils/isBrowser"
 import { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"

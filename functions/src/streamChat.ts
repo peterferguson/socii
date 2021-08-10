@@ -20,7 +20,9 @@ export const generateToken = async (change, context) => {
 
   // TODO: redesign user collection to have profile & secret parts
   // TODO: Store this as a field on the users secrets subcollection
-  const tokenDocRef = firestore.collection(`users/${uid}/stream`).doc(uid)
+  const tokenDocRef = firestore
+    .collection(`users/${uid}/stream`)
+    .doc(process.env.NODE_ENV === "production" ? "production" : "development")
   tokenDocRef.set({ token: streamClient.createToken(username) })
 }
 
