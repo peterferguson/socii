@@ -1,17 +1,26 @@
-import { config, CalendarApi } from "@alpaca/index"
+import { config, CalendarApi, MarketDay } from "@alpaca/index"
+import { getLastMarketDay, setMarketDay } from "@lib/firebase/client/db"
 
 export const lastMarketDay = async () => {
-  const calendarClient = new CalendarApi(
-    config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
-  )
+  let lastDay = (await getLastMarketDay()) as MarketDay
 
-  const oneWeek = 60 * 60 * 24 * 1000 * 7 // - 1 week in ms
-  const todayDateStr = new Date().toISOString().slice(0, 10)
-  const startDateStr = new Date(new Date().getTime() - oneWeek)
-    .toISOString()
-    .slice(0, 10)
+  if (!lastDay) {
+    const calendarClient = new CalendarApi(
+      config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+    )
 
-  const calendar = await calendarClient.calendarGet(startDateStr, todayDateStr)
+    const oneWeek = 60 * 60 * 24 * 1000 * 7 // - 1 week in ms
+    const todayDateStr = new Date().toISOString().slice(0, 10)
+    const startDateStr = new Date(new Date().getTime() - oneWeek)
+      .toISOString()
+      .slice(0, 10)
 
-  return calendar.filter((day) => day.date !== todayDateStr).pop()
+    const calendar = await calendarClient.calendarGet(startDateStr, todayDateStr)
+
+    lastDay = calendar.filter((day) => day.date !== todayDateStr).pop()
+
+    await setMarketDay(lastDay)
+  }
+
+  return lastDay
 }

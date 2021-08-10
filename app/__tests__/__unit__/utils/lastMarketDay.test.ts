@@ -3,6 +3,12 @@ import { lastMarketDay } from "@utils/lastMarketDay"
 
 describe("utils/lastMarketDay", () => {
   it("checks that a `MarketDay` is returned", async () => {
-    expect(await lastMarketDay()).toBeInstanceOf(MarketDay)
+    expect(
+      Object.keys(await lastMarketDay()).every((key) =>
+        MarketDay.getAttributeTypeMap()
+          .map(({ name }) => name)
+          .includes(key)
+      )
+    ).toBe(true)
   })
 })
