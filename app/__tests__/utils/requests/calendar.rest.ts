@@ -24,7 +24,7 @@ require("dotenv").config({ path: "./.env.local" })
 //   .then((res) => res.json())
 //   .then((r) => console.log(r))
 
-import { config, CalendarApi } from "../../../../alpaca/index"
+import { config, CalendarApi } from "../../../alpaca/index"
 const cal = new CalendarApi(config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET))
 
 cal.calendarGet("2016-01-01", "2021-07-16").then((r) => console.log(r))

@@ -1,6 +1,6 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/accounts.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
-import { config, AccountsApi, AccountCreationObject } from "../../../../alpaca/index"
+import { config, AccountsApi, AccountCreationObject } from "../../../alpaca/index"
 const accountClient = new AccountsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
