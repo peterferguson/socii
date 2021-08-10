@@ -43,8 +43,8 @@ export default function PriceCard({
         <div
           className={`flex items-center text-sm ${pnlTextColor(price?.changePercent)}`}
         >
-          {price.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
-          <span>{price.changePercent.toFixed(2)}%</span>
+          {price?.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
+          <span>{price?.changePercent.toFixed(2)}%</span>
           <span className="text-gray-400 align-bottom text-tiny"> vs last month</span>
         </div>
       </div>
