@@ -86,9 +86,11 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
         .reset_index()
         .set_index("symbol")
     )
+    print(f"history dataframe info: {history.info(verbose=True)}")
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
     history.rename(columns={"date": "timestamp"}, inplace=True)
     return history.to_dict(orient="records")
+
 
 # - Some problem with the yahoo finance api... just do this client side
 
