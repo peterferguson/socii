@@ -50,8 +50,10 @@ export const getTickersStaticProps = async ({
             filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency",
           })
 
+          // TODO: Create a wrapper arround the price data to store it in firestore
+
           return {
-            ticker: JSON.parse(JSON.stringify(ticker)), // - serialize nested dates
+            ticker: JSON.parse(JSON.stringify(ticker)) || {}, // - serialize nested dates
             timeseries,
             dataQuery,
             price,

@@ -73,7 +73,7 @@ export default function StockDisplay({ tickers }) {
             const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
             return (
               <ChartCard
-                key={ticker?.tickerSymbol}
+                key={`${ticker?.tickerSymbol}-${i}`}
                 cardRef={isLastTicker ? lastTickerRef : null}
                 ISIN={ticker?.ISIN}
                 tickerSymbol={ticker?.tickerSymbol}
