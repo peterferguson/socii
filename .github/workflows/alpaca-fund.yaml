@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: Call funding API route
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/funding' \
           --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
