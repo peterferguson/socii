@@ -1,6 +1,4 @@
 export { alphaVantageQuery } from "./alphaVantageQuery"
-export { currencyConversion } from "./currencyConversion"
-export { currencyFormatter } from "./currencyFormatter"
 export { fetcher } from "./fetcher"
 export { fetchJSON } from "./fetchJSON"
 export { fetchWithToken } from "./fetchWithToken"

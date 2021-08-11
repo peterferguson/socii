@@ -1,3 +1,4 @@
+import { MarketDay } from "@alpaca/models"
 import { firestore, serverTimestamp } from "./firebase-admin"
 
 /*

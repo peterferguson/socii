@@ -59,7 +59,7 @@ export const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
       <FlexibleXYPlot
         onMouseLeave={() => {
           setCrosshairValue(undefined)
-          setCrosshairIndexValue(0)
+          setCrosshairIndexValue(timeseries.length - 1)
         }}
         height={height * heightScale}
         width={width * widthScale}

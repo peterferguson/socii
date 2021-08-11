@@ -1,5 +1,8 @@
-from typing import Any, Optional, Tuple, Union
+import io
+import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+import pandas as pd
 import yahooquery as yq
 from flask.wrappers import Request
 from werkzeug.datastructures import MultiDict
@@ -10,7 +13,7 @@ def get_ticker(ticker_symbol: str) -> yq.Ticker:
     ticker = ticker_symbol.upper()
     assert (
         1 < len(ticker) <= 6
-    ), "The provided `ticker_symbol` must be between 1 & 5 Characters long"
+    ), f"The provided `ticker_symbol` ({ticker_symbol}) must be between 1 & 5 Characters long"
     # TODO: Add yahoo ticker conversion i.e. London stocks should have .L suffix
     return yq.Ticker(ticker)
 
@@ -61,3 +64,56 @@ def yahoo_ticker_from_request(request: Request) -> Optional[yq.Ticker]:
         return None
 
     return get_ticker(ticker_symbol)
+
+
+def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
+    """Parse the request for the ticker symbol key `tickerSymbol` and return the
+    history based on the following parameters:
+        - `period`
+        - `interval`
+        - `start`
+        - `end`
+    """
+    ticker = yahoo_ticker_from_request(request)
+    period = parse_symbol_from_request("period", request) or "ytd"
+    interval = parse_symbol_from_request("interval", request) or "1d"
+    start = parse_symbol_from_request("start", request) or None
+    end = parse_symbol_from_request("end", request) or None
+
+    if not ticker:
+        return None
+
+    buffer = io.StringIO()
+    history = (
+        ticker.history(period=period, interval=interval, start=start, end=end)
+        .reset_index()
+        .set_index("symbol")
+    )
+    history.info(buf=buffer)
+    logging.info(f"history dataframe info: {buffer.getvalue()}")
+    history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
+    history.rename(columns={"date": "timestamp"}, inplace=True)
+    return history.to_dict(orient="records")
+
+
+# - Some problem with the yahoo finance api... just do this client side
+
+# def get_exchange_rate(request: Request) -> Optional[Dict[str, Union[str, int]]]:
+#     """Gets the exchange rate for the currency pair `fromCurrency`-`toCurrency` of params
+#         `fromCurrency` and `toCurrency`
+
+#     Args:
+#         request (Request): GCP HTTP Function request
+
+#     Returns:
+#         Optional[Dict[str, Union[str, int]]]: exchange rate as a dictionary
+#     """
+#     fromCurrency = parse_symbol_from_request("fromCurrency", request)
+#     toCurrency = parse_symbol_from_request("toCurrency", request)
+#     period = parse_symbol_from_request("period", request) or "day"
+
+#     if not fromCurrency or not toCurrency:
+#         return None
+
+#     print(yq.currency_converter(fromCurrency, toCurrency, period))
+#     return yq.currency_converter(fromCurrency, toCurrency, period)

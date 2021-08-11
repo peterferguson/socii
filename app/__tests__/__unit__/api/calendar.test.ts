@@ -41,8 +41,6 @@ describe("/api/alpaca/calendar", () => {
       )
       expect(MarketDay.from(response[0]) instanceof MarketDay).toBe(true)
 
-      //   expect(response).
-
       expect(finishTime - startTime).toBeLessThanOrEqual(750) // - runs in one second
       console.log(finishTime - startTime)
     })

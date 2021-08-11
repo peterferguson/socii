@@ -1,10 +1,10 @@
+import { MarketDay } from "@alpaca/models"
 import FirebaseUser from "@models/FirebaseUser"
 import {
   arrayUnion,
   collection,
   collectionGroup,
   doc,
-  DocumentData,
   DocumentReference,
   getDoc,
   getDocs,
@@ -139,7 +139,6 @@ export async function createGroup(
  * @param  {string} tickerSymbol
  */
 export const getTickerData = async (tickerSymbol) => {
-  // - set the rate for the currency pair in local storage
   const tickerQuery = query(
     collectionGroup(firestore, "data"),
     where("symbol", "==", tickerSymbol),
@@ -188,7 +187,12 @@ export const setHoldingData = (
  * @param  {string} username
  */
 export const getUserStreamToken = async (uid: string) => {
-  const tokenRef = doc(firestore, `users/${uid}/stream/${uid}`)
+  const tokenRef = doc(
+    firestore,
+    `users/${uid}/stream/${
+      process.env.NODE_ENV === "production" ? "production" : "development"
+    }`
+  )
   const snapshot = await getDoc(tokenRef)
   return snapshot.data()?.token
 }
@@ -262,3 +266,27 @@ export const getGroupDocsByName = async (groupNames: string[]) =>
   await getDocs(
     query(collection(firestore, "groups"), where("groupName", "in", groupNames))
   )
+
+export const setMarketDay = async (marketDay: MarketDay) => {
+  const date = marketDay.date.replace(/-/g, "")
+  const marketDayRef = doc(firestore, `marketCalendar/${date}`)
+  await setDoc(marketDayRef, { ...marketDay, date: parseInt(date) })
+  console.log(`Market day ${JSON.stringify(marketDay)} set`)
+}
+
+export const getLastMarketDay = async () => {
+  const marketDayQuery = query(
+    collection(firestore, `marketCalendar`),
+    orderBy("date", "desc"),
+    limit(1)
+  )
+  const marketDayDoc = (await getDocs(marketDayQuery)).docs?.pop()
+  return marketDayDoc.data()
+}
+
+export const groupNameExists = async (name: string) =>
+  (
+    await getDocs(
+      query(collection(firestore, "groups"), where("groupName", "==", name))
+    )
+  ).empty

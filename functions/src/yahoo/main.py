@@ -1,13 +1,28 @@
 import json
 import os
 import sys
+from typing import Any, Dict
 
 import yahooquery as yq
 from flask.wrappers import Request
 
+# Imports the Cloud Logging client library
+import google.cloud.logging
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from utils.helper import yahoo_ticker_from_request
+from utils.helper import get_history, yahoo_ticker_from_request
+from utils.middleware import cors
+
+# Instantiates a client
+client = google.cloud.logging.Client()
+
+# Retrieves a Cloud Logging handler based on the environment
+# you're running in and integrates the handler with the
+# Python logging module. By default this captures all logs
+# at INFO level and higher
+client.get_default_handler()
+client.setup_logging()
 
 """ The following are a colleciton of HTTP Cloud Functions to be deployed on gcp.
     They are all HTTP functions and will use the yahooquery python library.
@@ -36,8 +51,15 @@ def get_key_summary(request: Request) -> str:
     return json.dumps(ticker.key_stats)
 
 
+@cors(methods=["POST"])
+def get_historical_prices(request: Request) -> str:
+    history = get_history(request)
+    return json.dumps(history)
+
+
 if __name__ == "__main__":
     from rich import print
 
-    tsla = yq.Ticker("TSLA")
+    # tsla = yq.Ticker("TSLA")
     aapl = yq.Ticker("AAPL")
+    print(aapl.history().reset_index().set_index("symbol").to_dict("records"))

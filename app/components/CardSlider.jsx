@@ -1,4 +1,4 @@
-import { SectorAssetCard } from "@components/AssetCards"
+import { SectorAssetCard } from "@components/SectorAssetCard"
 import React from "react"
 
 export default function CardSlider({ tickers }) {

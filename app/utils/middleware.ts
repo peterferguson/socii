@@ -44,7 +44,7 @@ export const withAuth = (handler) => async (req, res) => {
   const authHeader = req.headers.authorization
   if (!authHeader) res.status(401).end("Not authenticated. No Auth header")
 
-  const token = authHeader.split(" ")[1]
+  const token = authHeader.split(" ").pop()
   let decodedToken
   try {
     decodedToken = await auth.verifyIdToken(token)

@@ -1,4 +1,4 @@
-import { AssetCard } from "@components/AssetCards"
+import { AssetCard } from "@components/AssetCard"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { getPopularTickersDocs } from "@lib/firebase/client/db"
 import React from "react"

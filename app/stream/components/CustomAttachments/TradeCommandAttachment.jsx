@@ -1,18 +1,14 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { useLocalCurrency } from "@hooks/useLocalCurrency"
-import { useCurrencyConversion } from "@hooks/useCurrencyConversion"
 import { useTickerPrice } from "@hooks/useTickerPrice"
 import { tickerToISIN } from "@lib/firebase/client/db"
 import { tradeSubmission } from "@lib/firebase/client/firebase"
-
 import { useAuth } from "hooks/useAuth"
-import React, { Suspense, useEffect, useState } from "react"
+import React, { Suspense, useEffect, useRef, useState } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
   useMessageContext,
 } from "stream-chat-react"
-import useSWR from "swr"
 import { TradeMMLConverter } from "./converters/TradeMMLConverter"
 
 // WARN: IEX called for each instance of a buy command message
@@ -25,48 +21,27 @@ const MML = React.lazy(async () => {
 })
 
 const TradeCommandAttachment = ({ attachment }) => {
-  const { username } = useAuth()
-  const { channel } = useChannelStateContext()
-  const { message } = useMessageContext()
-  const [tickerSymbol, _setTickerSymbol] = useState(
-    attachment?.tickerSymbol?.toUpperCase()
-  )
+  const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const [currentPrice, setCurrentPrice] = useState(undefined)
   const [isin, setIsin] = useState("")
 
-  useEffect(
-    () => tickerToISIN(tickerSymbol).then((data) => setIsin(data)),
-    [tickerSymbol]
-  )
+  const { username } = useAuth()
+  const { channel } = useChannelStateContext()
+  const { message } = useMessageContext()
 
-  const [localCurrency] = useLocalCurrency()
-
-  // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
-  // latestUpdate, // TODO: Display this in the attachment
   const {
-    price: { price, iexRealtimePrice, changePercent, currency },
-  } = useTickerPrice(tickerSymbol)
+    price: { price, iexRealtimePrice, changePercent },
+  } = useTickerPrice(tickerSymbol.current)
 
-  console.log(price)
-  console.log(iexRealtimePrice)
+  useEffect(() => tickerToISIN(tickerSymbol.current).then((data) => setIsin(data)), [])
 
   useEffect(
     () => setCurrentPrice(iexRealtimePrice ? iexRealtimePrice : price),
     [iexRealtimePrice, price]
   )
 
-  const [costPerShare, setCostPerShare] = useState({ currency, cost: currentPrice })
-  const { data: exchangeRate, isLoading: isLoadingExchangeRate } =
-    useCurrencyConversion(currency, localCurrency)
-
-  useEffect(() => {
-    setCostPerShare(() => ({
-      cost: isLoadingExchangeRate ? currentPrice : currentPrice * exchangeRate?.rate,
-      currency: isLoadingExchangeRate ? currency : localCurrency,
-    }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPrice, exchangeRate])
-
+  // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
+  // latestUpdate, // TODO: Display this in the attachment
   const groupName = channel.cid.split(":").pop()
 
   // TODO: add some logic to make the message ephemeral
@@ -80,14 +55,13 @@ const TradeCommandAttachment = ({ attachment }) => {
             {...{
               price: currentPrice,
               priceChange: changePercent,
-              currency,
               ISIN: isin,
-              tickerSymbol,
+              tickerSymbol: tickerSymbol.current,
             }}
           />
           <Suspense fallback={<LoadingIndicator />}>
             <MML
-              converters={converters(costPerShare)}
+              converters={converters(price)}
               source={attachment.mml}
               onSubmit={(data) => {
                 const tradeArgs = {
@@ -95,8 +69,8 @@ const TradeCommandAttachment = ({ attachment }) => {
                   groupName,
                   assetRef: `tickers/${isin}`,
                   messageId: message.id,
-                  executionCurrency: localCurrency,
-                  assetCurrency: currency,
+                  executionCurrency: "USD",
+                  assetCurrency: "USD",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
                   price: price,
                   cost: parseFloat(data.cost || data.amount),
@@ -123,7 +97,7 @@ const TradeCommandAttachment = ({ attachment }) => {
 
 // TODO: Add different views of the buy card for users who did not submit it
 // - Creates a object of all actions and their CustomMMLConverterFunctions
-const converters = ({ cost, currency }) =>
+const converters = (cost) =>
   Object.assign(
     {},
     ...["buy", "sell"].map((type) => ({
@@ -133,7 +107,6 @@ const converters = ({ cost, currency }) =>
           {...tag.node.attributes}
           tagKey={tag.key}
           costPerShare={cost}
-          currency={currency}
           tradeType={type}
         />
       ),

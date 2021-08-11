@@ -61,7 +61,7 @@ export const ChartCardChart: React.FC<IChartCardChart> = ({ data, pnlColor }) =>
               title: "Date",
               value: new Date(d?.[0].x).toLocaleDateString(),
             })}
-            itemsFormat={(d) => [{ title: "Close price", value: d?.[0].y }]}
+            itemsFormat={(d) => [{ title: "Close price", value: d?.[0].y.toFixed(2) }]}
           />
         )}
       </FlexibleXYPlot>
