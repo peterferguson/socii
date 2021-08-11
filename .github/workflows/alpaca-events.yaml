@@ -2,14 +2,14 @@ name: Event Stream Polling
 on:
   schedule:
     # Run job every 30 minutes
-    - cron: "*/30 0 * * *"
+    - cron: "*/30 * * * *"
 jobs:
   trades:
     runs-on: ubuntu-latest
     steps:
       - name: Call events API route with type param = `trades`
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/alpaca/events' \
           -H "Content-Type: application/json" \
           --data '{"type":"trades"}' \
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Call events API route with type param = `journals`
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/alpaca/events' \
           -H "Content-Type: application/json" \
           --data '{"type":"journals"}' \
@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Call events API route with type param = `accounts`
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/alpaca/events' \
           -H "Content-Type: application/json" \
           --data '{"type":"accounts"}' \
@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Call events API route with type param = `transfers`
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/alpaca/events' \
           -H "Content-Type: application/json" \
           --data '{"type":"transfers"}' \
@@ -53,7 +53,7 @@ jobs:
     steps:
       - name: Call events API route with type param = `nonTradingActivity`
         run: |
-          curl --request POST \
+          curl --fail --show-error --request POST \
           --url 'https://socii.app/api/alpaca/events' \
           -H "Content-Type: application/json" \
           --data '{"type":"nonTradingActivity"}' \
