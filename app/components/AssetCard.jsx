@@ -13,8 +13,8 @@ export const AssetCard = ({ tickerSymbol, isin, shortName, price }) => (
       <a className="relative py-8 mx-3 align-middle grid grid-cols-none">
         <h1 className="text-xl font-bold">{tickerSymbol}</h1>
         <div>
-          <div className={`font-bold text-3xl ${pnlTextColor(price.changePercent)}`}>
-            ${price.iexRealtimePrice.toFixed(2)}
+          <div className={`font-bold text-3xl ${pnlTextColor(price?.changePercent)}`}>
+            ${price?.iexRealtimePrice.toFixed(2)}
           </div>
         </div>
       </a>

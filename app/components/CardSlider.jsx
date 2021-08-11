@@ -8,9 +8,9 @@ export default function CardSlider({ tickers }) {
         return (
           <article key={`slider-card-${i}`} className="slide-card">
             <SectorAssetCard
-              tickerSymbol={ticker.tickerSymbol}
-              logoUrl={ticker.logoUrl}
-              shortName={ticker.shortName}
+              tickerSymbol={ticker?.tickerSymbol}
+              logoUrl={ticker?.logoUrl}
+              shortName={ticker?.shortName}
               price={price}
               sectorData={queryData}
             />

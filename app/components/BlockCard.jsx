@@ -8,7 +8,7 @@ export const BlockCard = ({ ticker, timeseries }) => (
         <div className="flex flex-wrap">
           <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
             <h5 className="text-xs font-bold uppercase text-blueGray-400">
-              {ticker.tickerSymbol}
+              {ticker?.tickerSymbol}
             </h5>
             <span className="text-xl font-semibold text-blueGray-700">
               ${timeseries[timeseries.length - 1].close}
@@ -19,7 +19,7 @@ export const BlockCard = ({ ticker, timeseries }) => (
               <img
                 className="flex-none w-12 rounded"
                 src={logoUrl(ticker.ISIN)}
-                alt={`${ticker.tickerSymbol} logo`}
+                alt={`${ticker?.tickerSymbol} logo`}
               />
               <p className="p-2 truncate">{ticker.shortName}</p>
             </div>
