@@ -7,7 +7,8 @@ import {
   groupLumpSumOptions,
   groupPrivacyOptions,
 } from "@lib/constants"
-import { createGroup, groupNameExists } from "@lib/firebase/client/db"
+import { createGroup } from "@lib/firebase/client/db/createGroup"
+import { groupNameExists } from "@lib/firebase/client/db/groupNameExists"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"

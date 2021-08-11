@@ -1,4 +1,4 @@
-import { getAlphaVantageData } from "@lib/firebase/client/db"
+import { getAlphaVantageData } from "@lib/firebase/client/db/getAlphaVantageData"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { DocumentData } from "firebase/firestore"
 import { tickerTimeseries } from "./tickerTimeseries"

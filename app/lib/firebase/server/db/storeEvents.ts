@@ -1,12 +1,4 @@
-import { MarketDay } from "@alpaca/models"
-import { firestore, serverTimestamp } from "./firebase-admin"
-
-/*
-!
-! This file is for functions which perform CRUD operations on Firebase
-! That occur only on the server.
-!
-*/
+import { firestore, serverTimestamp } from "../firebase-admin"
 
 export async function storeEvents(
   eventType: string,
@@ -41,12 +33,4 @@ export async function storeEvents(
   }
 
   await batch.commit()
-}
-
-// - Get the latest event_id from each events collection
-export async function getLatestEventId(type: string): Promise<string> {
-  const eventsRef = firestore.collection(`${type}Events`)
-  const query = eventsRef.orderBy("event_id", "desc").limit(1)
-  const eventDoc = (await query.get()).docs?.[0]
-  return eventDoc.id
 }

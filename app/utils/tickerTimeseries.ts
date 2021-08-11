@@ -1,4 +1,5 @@
-import { getTickerTimeseriesDocs, tickerToISIN } from "@lib/firebase/client/db"
+import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
+import { getTickerTimeseriesDocs } from "@lib/firebase/client/db/getTickerTimeseriesDocs"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { fetcher } from "./fetcher"
 import { newerThanLastMarketDay } from "./newerThanLastMarketDay"
