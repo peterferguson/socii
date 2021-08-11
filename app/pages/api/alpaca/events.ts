@@ -1,5 +1,6 @@
 import { config } from "@alpaca/index"
-import { getLatestEventId, storeEvents } from "@lib/firebase/server/db"
+import { storeEvents } from "@lib/firebase/server/storeEvents"
+import { getLatestEventId } from "@lib/firebase/server/db/getLatestEventId"
 import { withCORS } from "@utils/middleware"
 import { IncomingMessage } from "http"
 import { BaseServer, sseGetRequest } from "@utils/sseGetRequest"

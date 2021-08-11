@@ -18,7 +18,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
 }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
-  const [crosshairIndexValue, setCrosshairIndexValue] = useState(timeseries.length - 1)
+  const [crosshairIndexValue, setCrosshairIndexValue] = useState(timeseries?.length - 1)
 
   const deserialisedTimeseries = timeseries?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),

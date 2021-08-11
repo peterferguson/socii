@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
 
-      // - Tickers
+      /* Tickers */
       match /tickers/{ISIN} {
       	allow read;
         allow write: if false;
@@ -20,7 +20,7 @@ service cloud.firestore {
         allow write: if false;
       }
 
-      // - Users
+      /* Users */
       match /users/{userId} {
       	allow read;
         allow create: if authenticated();
@@ -45,7 +45,7 @@ service cloud.firestore {
         allow update: if isValidUsername(username);
       }
 
-      //  - Groups
+      /* Groups */
       match /groups/{groupName} {
         allow read, create:  if authenticated();
         allow update: if isGroupMember(groupName);
@@ -91,6 +91,13 @@ service cloud.firestore {
       	allow read;
         allow write;
         }
+
+      /* Collection Groups */
+      match /data/{serviceId} {
+        allow read;
+        allow update: if authenticated();
+        allow create: if authenticated();
+      }
 
       /* Helper functions */
 

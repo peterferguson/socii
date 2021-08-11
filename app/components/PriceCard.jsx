@@ -35,7 +35,7 @@ export default function PriceCard({
         ) : (
           <p className="my-4 text-4xl font-bold text-left text-gray-700 dark:text-gray-100">
             <span className="text-sm">$</span>
-            {(price?.iexRealtimePrice || price?.latestPrice).toFixed(2)}
+            {(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </p>
         )}
         <div
@@ -44,7 +44,7 @@ export default function PriceCard({
           )}`}
         >
           {price?.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
-          <span className="pr-1">{(price?.changePercent * 100).toFixed(2)}%</span>
+          <span className="pr-1">{(price?.changePercent * 100)?.toFixed(2)}%</span>
           <span className="text-gray-400  text-tiny -pb-0.5 ">on the day</span>
         </div>
       </div>

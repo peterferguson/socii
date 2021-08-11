@@ -1,4 +1,5 @@
-import { getTickerTimeseriesDocs, tickerToISIN } from "@lib/firebase/client/db"
+import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
+import { getTickerTimeseriesDocs } from "@lib/firebase/client/db/getTickerTimeseriesDocs"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { fetcher } from "./fetcher"
 import { newerThanLastMarketDay } from "./newerThanLastMarketDay"
@@ -12,7 +13,7 @@ export const tickerTimeseries = async (
   const timeseriesDocs = (await getTickerTimeseriesDocs(ISIN, limit)).docs
 
   // - Query if the latest doc is the last market day
-  const latestTimestamp = timeseriesDocs[timeseriesDocs.length - 1].id
+  const latestTimestamp = timeseriesDocs[timeseriesDocs.length - 1]?.id
   const isUpdateToDate = await newerThanLastMarketDay(latestTimestamp)
 
   if (isUpdateToDate) {

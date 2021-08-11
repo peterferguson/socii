@@ -5,7 +5,7 @@ import {
   StockCardSkeleton,
 } from "@components"
 import { useAuth } from "@hooks"
-import { setHoldingData } from "@lib/firebase/client/db"
+import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"

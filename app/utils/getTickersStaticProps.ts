@@ -35,6 +35,7 @@ export const getTickersStaticProps = async ({
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
+  console.log(`Loading ${tickerDocs.size} tickers`)
 
   return {
     props: {
@@ -49,8 +50,7 @@ export const getTickersStaticProps = async ({
 
             // TODO: Create a wrapper arround the price data to store it in firestore
             const price: Price = await iexClient.quote(ticker.tickerSymbol, {
-              filter:
-                "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency",
+              filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
             })
 
             return {

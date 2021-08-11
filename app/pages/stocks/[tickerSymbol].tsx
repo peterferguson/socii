@@ -3,7 +3,8 @@ import { InvestButtonModal } from "@components/InvestButtonModal"
 import PriceCard from "@components/PriceCard"
 import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions, useTickerPrice } from "@hooks"
-import { getPopularTickersDocs, getTickerDocs } from "@lib/firebase/client/db"
+import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
+import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
 import { useMachine } from "@xstate/react"
@@ -82,10 +83,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               <InvestButton state={state} send={send} logoColor={logoColor} />
             </div>
           </div>
-          <TickerPageChartCard
-            color={ticker?.logoColor}
-            timeseries={timeseries}
-          />
+          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
           <InvestButtonModal ticker={ticker} state={state} send={send} />
         </>
       )}
@@ -94,7 +92,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
 }
 
 // TODO: Remove tooltip and color price in the graph display of values
-
 export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
   try {
     const props = await getTickersStaticProps({
