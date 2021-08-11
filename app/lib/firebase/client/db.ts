@@ -138,7 +138,7 @@ export async function createGroup(
  * Gets the data from ticker/{isin} document by querying the `tickerSymbol`
  * @param  {string} tickerSymbol
  */
-export const getTickerData = async (tickerSymbol) => {
+export const getTickerData = async (tickerSymbol: string) => {
   const tickerQuery = query(
     collectionGroup(firestore, "data"),
     where("symbol", "==", tickerSymbol),

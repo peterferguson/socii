@@ -82,10 +82,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               <InvestButton state={state} send={send} logoColor={logoColor} />
             </div>
           </div>
-          <TickerPageChartCard
-            color={ticker?.logoColor}
-            timeseries={timeseries}
-          />
+          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
           <InvestButtonModal ticker={ticker} state={state} send={send} />
         </>
       )}
@@ -94,7 +91,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
 }
 
 // TODO: Remove tooltip and color price in the graph display of values
-
 export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
   try {
     const props = await getTickersStaticProps({
