@@ -59,7 +59,7 @@ const NavHeader: React.FC<INavHeader> = ({ showChat, setShowChat }) => {
   return (
     <InstantSearch {...searchProps}>
       <Configure hitsPerPage={3} />
-      <header className="sticky z-40 items-center w-full h-16 bg-white shadow-md top-2 left-8 dark:bg-gray-700 rounded-2xl">
+      <header className="sticky z-40 items-center h-16 mx-4 mt-2 bg-white shadow-md w-[calc(100%-32px)] dark:bg-gray-700 rounded-2xl">
         <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="flex items-center justify-between flex-grow w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <Searchbar />

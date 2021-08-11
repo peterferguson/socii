@@ -69,15 +69,13 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
       {!error && (
         <>
           <div className="flex flex-col w-full sm:flex-row">
-            <div className="flex-none pt-4 pl-0 sm:pl-1 ">
-              <PriceCard
-                isin={ticker?.isin}
-                tickerSymbol={ticker?.tickerSymbol}
-                shortName={ticker?.shortName}
-                price={price}
-                isPriceLoading={isLoading}
-              />
-            </div>
+            <PriceCard
+              isin={ticker?.isin}
+              tickerSymbol={ticker?.tickerSymbol}
+              shortName={ticker?.shortName}
+              price={price}
+              isPriceLoading={isLoading}
+            />
             <div className="flex-grow hidden sm:block" />
             <div className="flex-grow px-4 sm:flex-none sm:pl-8">
               <InvestButton state={state} send={send} logoColor={logoColor} />
