@@ -41,6 +41,6 @@ export const credentialWithLink = EmailAuthProvider.credentialWithLink
 export const alphaVantageQuery = httpsCallable(functions, "alphaVantageQuery")
 export const tradeSubmission = httpsCallable(functions, "tradeSubmission")
 export const tradeConfirmation = httpsCallable(functions, "tradeConfirmation")
-
+export const createAccounts = httpsCallable(functions, "createAccounts")
 // Initialize Performance Monitoring and get a reference to the service
 // export const perf = firebase.performance();

@@ -31,6 +31,7 @@ import * as algoliaSearch from "./algoliaSearch.js"
 import * as trading from "./trading/index.js"
 import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
+import * as accounts from "./accounts/index.js"
  
 module.exports = {
   // 1 Document Listeners 
@@ -72,4 +73,5 @@ module.exports = {
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),
   updateHolding: functions.region(london).https.onCall(trading.updateHolding),
+  createAccounts: functions.region(london).https.onCall(accounts.createAccounts),
 }

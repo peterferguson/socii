@@ -37,6 +37,7 @@ import { firestore } from "./firebase"
  * @param  {string} uid
  * @param  {any} data
  */
+// TODO remove this, seems pointless
 export async function createUser(uid: string, data: object) {
   return await setDoc(doc(firestore, "users", uid), { uid, ...data }, { merge: true })
 }
@@ -60,13 +61,15 @@ export async function getUserWithUsername(username) {
 export const setUserState = (
   uid: string,
   setUsername: React.Dispatch<React.SetStateAction<string>>,
-  setUserGroups: React.Dispatch<React.SetStateAction<string[]>>
+  setUserGroups: React.Dispatch<React.SetStateAction<string[]>>,
+  setUser: React.Dispatch<React.SetStateAction<any>>
 ) => {
   const userRef = doc(firestore, `users/${uid}`)
   const unsubscribe = onSnapshot(userRef, (doc) => {
-    const { username, groups } = doc.data()
+    const { username, groups , alpacaAccountId , alpacaACH} = doc.data()
     setUsername(username)
     setUserGroups(groups)
+    setUser((previousUser)=> ({...previousUser , alpacaAccountId, alpacaACH}))
   })
 
   return unsubscribe
