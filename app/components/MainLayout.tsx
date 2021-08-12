@@ -16,7 +16,7 @@ const StreamChatWithNoSSR = dynamic(() => import("stream/components/Chat"), {
 export default function MainLayout(props) {
   const { client } = useContext(ChatContext)
   const router = useRouter()
-  const isChatRoute = router.pathname.includes("/chat")
+  const isChatRoute = router.asPath?.includes("/chat")
   const is2Col = !useMediaQuery({ minWidth: 1024 })
 
   const [showChat, setShowChat] = useState(false)
