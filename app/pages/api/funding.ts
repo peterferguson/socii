@@ -4,8 +4,10 @@ import dayjs from "dayjs"
 import { NextApiRequest, NextApiResponse } from "next"
 
 /* 
-  ! This NEEDS to run within 30 seconds
+  ! This NEEDS to run within 10 seconds!
 */
+
+// TODO: move to firebase function
 
 /*
  * Funds alpaca accounts based on the date of creation of a group.
@@ -110,9 +112,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             erroredTransfers.push(uid)
           }
           batch.commit()
+
           const failedCount =
             accountsWithMissingDetails.length + erroredTransfers.length
           const successCount = Object.keys(accountsToFund).length - failedCount
+          
           if (successCount > 0)
             res.status(200).json({
               message: `Completed ${successCount} transfers with ${failedCount} failed. `,
