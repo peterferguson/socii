@@ -7,11 +7,7 @@ const returnToLastScreenModal = ({ state, send }) => (
       as="div"
       className="fixed inset-0 z-50 overflow-y-auto backdrop-filter backdrop-blur-lg"
       open={state.matches("returnToLastScreen")}
-      onClose={() => {
-        console.log("close")
-        console.log(state)
-        send("CLOSE")
-      }}
+      onClose={() => send("CLOSE")}
     >
       <div className="min-h-screen px-4 text-center">
         <Transition.Child

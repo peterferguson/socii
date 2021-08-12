@@ -1,8 +1,7 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import { getGroupDocsByName } from "@lib/firebase/client/db/getGroupDocsByName"
-import { firestore } from "@lib/firebase/client/firebase"
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 export default function GroupSelectorRadioGroup({ groupNames, send, className = "" }) {
   const [groupSelected, setGroupSelected] = useState(null)

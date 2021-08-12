@@ -1,6 +1,5 @@
 import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart.dynamic"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
-import { Price } from "@models/Price"
 import { pctChange } from "@utils/pctChange"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React, { useState } from "react"
