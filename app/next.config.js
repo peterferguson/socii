@@ -12,6 +12,7 @@ module.exports = withPWA(
     withBundleAnalyzer({
       exclude: path.resolve(__dirname, "public/icons/"),
       images: {
+        disableStaticImages: true,
         domains: [
           "storage.googleapis.com",
           "lh6.googleusercontent.com",
