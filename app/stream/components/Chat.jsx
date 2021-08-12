@@ -58,7 +58,8 @@ export default function StreamChat({
 
   const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
 
-  // - Truth table
+  // TODO: Convert to XState Machine
+  // - Truth table 
   // ! is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
   // !    T   |       T         |                       T
   // !    T   |       F         |                       F

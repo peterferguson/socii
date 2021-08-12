@@ -29,9 +29,10 @@ export const useProvideAuth = () => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
-      const { token, expirationTime, ...userWithoutToken } = user
+      // ! This user refresh causes intermitent permissions errors
+      // const { token, expirationTime, ...userWithoutToken } = user
 
-      createUser(user.uid, userWithoutToken)
+      // createUser(user.uid, userWithoutToken)
       setUser(user)
       setLoading(false)
       console.log("handleUser Succeeded", new Date())

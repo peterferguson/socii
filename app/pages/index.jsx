@@ -132,7 +132,7 @@ const Footer = ({ invited, setInvited }) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-center w-full h-8 mx-auto mt-4 text-sm text-gray-400 uppercase font-extrathin font-primary">
-                  © 2021 socii. all rights reserved.
+                  © 2021 socii ltd. all rights reserved.
                 </div>
               </div>
             </footer>
