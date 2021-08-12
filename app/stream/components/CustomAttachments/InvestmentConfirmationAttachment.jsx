@@ -1,6 +1,6 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useAuth } from "@hooks/useAuth"
-import { agreesToTrade } from "@lib/firebase/client/db"
+import { agreesToTrade } from "@lib/firebase/client/db/agreesToTrade"
 import React, { Suspense } from "react"
 import {
   LoadingIndicator,

@@ -1,4 +1,4 @@
-import { getAlphaVantageData } from "@lib/firebase/client/db"
+import { getAlphaVantageData } from "@lib/firebase/client/db/getAlphaVantageData"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { DocumentData } from "firebase/firestore"
 import { tickerTimeseries } from "./tickerTimeseries"
@@ -12,11 +12,11 @@ export const getTickerProps = async (
   const ticker = tickerDoc.data()
   let dataQuery = null
 
-  const timeseries: OHLCTimeseries = await tickerTimeseries(
+  const timeseries = ((await tickerTimeseries(
     ticker.tickerSymbol,
     timeseriesLimit,
     ticker.ISIN
-  )
+  )) || {}) as OHLCTimeseries
 
   // * serialize the dates broke due to nesting of the ticker data
   // * therefore just going to stringify the ticker data then parse it

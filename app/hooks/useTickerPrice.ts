@@ -12,6 +12,7 @@ export function useTickerPrice(
   const { user } = useAuth()
   const token = user?.token
   const filters = "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency"
+
   const { data, error } = useSWR(
     [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token],
     fetchWithToken,

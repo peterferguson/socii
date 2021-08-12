@@ -1,14 +1,9 @@
-import { logger } from "firebase-functions" 
-import {
-  firestore,
-  serverTimestamp,
-  HttpsError,
-} from "../index.js"
-import {
-  singleLineTemplateString,
-  streamClient,
-} from "../utils/helper.js"
-
+import { logger } from "firebase-functions"
+import { firestore, serverTimestamp, HttpsError } from "../index.js"
+import { allKeysContainedIn } from "../utils/allKeysContainedIn"
+import { streamClient } from "../utils/streamClient"
+import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
+import { verifyUser } from "../utils/verifyUser"
 
 /*
 - tradeSubmission
@@ -26,11 +21,11 @@ export const tradeSubmission = async (
   const { messageId } = data
 
   // * Create trade document
-  const groupRef = await firestore.collection("groups").doc(verifiedData.groupName)
+  const groupRef = firestore.collection("groups").doc(verifiedData.groupName)
 
   const { investorCount } = (await groupRef.get()).data()
 
-  const tradeRef = await firestore
+  const tradeRef = firestore
     .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
 
@@ -45,8 +40,11 @@ export const tradeSubmission = async (
   if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
-      ...verifiedData,
-      price: verifiedData.price, 
+      username: verifiedData.username,
+      side: verifiedData.side,
+      symbol: verifiedData.symbol,
+      cost: verifiedData.price,
+      qty: verifiedData.qty,
       parent_id: messageId,
       show_in_channel: false,
     })
@@ -57,16 +55,6 @@ export const tradeSubmission = async (
     return await channel.sendMessage(message)
   }
 }
-
-const verifyUser = (context) => {
-    // * Checking that the user is authenticated.
-    if (!context.auth) {
-      throw new HttpsError(
-        "failed-precondition",
-        "This function must be called while authenticated."
-      )
-    }
-  }
   
   const verifyContent = async (data, context) => {
     const requiredArgs = {
@@ -119,65 +107,4 @@ const verifyUser = (context) => {
   
     return { ...requiredArgs, ...optionalArgs }
   }
-  
-  const allKeysContainedIn = (object, other) => {
-    let keys = null
-  
-    switch (typeof object) {
-      case "object":
-        if (Array.isArray(object)) {
-          keys = object
-        } else {
-          keys = Object.keys(object)
-        }
-        break
-    }
-  
-    // Ensure that the object has all of the keys in `other`
-    return keys.every((key) => key in other)
-  }
-  
-  const confirmInvestmentMML = ({
-    username,
-    side,
-    symbol,
-    price,
-    qty,
-    parent_id,
-    show_in_channel,
-  }) => {
-    const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`
-    const mmlmessage = {
-      user_id: username,
-      text: singleLineTemplateString`
-      Hey ${username} wants the group to ${side} ${qty} shares of ${symbol} 
-      for ${price}. Do you agree that the group should execute this trade?
-      `,
-      command: side,
-      parent_id: parent_id || null,
-      show_in_channel: show_in_channel || null,
-      attachments: [
-        {
-          tickerSymbol: symbol,
-          type: "investmentConfirmation",
-          mml: mmlstring,
-          actions: [
-            {
-              name: "action",
-              text: "Yes",
-              type: "button",
-              value: "yes",
-            },
-            {
-              name: "action",
-              text: "No",
-              type: "button",
-              value: "no",
-            },
-          ],
-        },
-      ],
-    }
-    return mmlmessage
-  }
-  
+

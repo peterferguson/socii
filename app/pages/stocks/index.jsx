@@ -2,11 +2,11 @@ import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
 import { useAuth } from "@hooks"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { getMainPageStocks, getPopularTickersDocs } from "@lib/firebase/client/db"
+import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
+import { getMainPageStocks } from "@lib/firebase/client/db/getMainPageStocks"
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { iexQuote } from "@utils/iexQuote"
-import { logoUrl } from "@utils/logoUrl"
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
@@ -27,10 +27,14 @@ export default function StockDisplay({ tickers }) {
   const entry = useIntersectionObserver(lastTickerRef, {})
   const isVisible = !!entry?.isIntersecting
 
+  const is1Col = !useMediaQuery({ minWidth: 640 })
+  const is2Cols = !useMediaQuery({ minWidth: 1024 })
+
   useEffect(() => {
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
-      const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, 5)
+      const numTickers = is1Col ? 5 : is2Cols ? 10 : 15
+      const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, numTickers)
 
       lastTickerLoaded.current = tickerDocs.docs?.slice(-1).pop()
 
@@ -43,7 +47,7 @@ export default function StockDisplay({ tickers }) {
         })
       )
 
-      moreTickers.current.push(...tickers)
+      moreTickers.current.push(...tickers.filter((ticker) => !!ticker))
       setLoadingMoreTickers(false)
     }
     if (isVisible) {
@@ -51,9 +55,8 @@ export default function StockDisplay({ tickers }) {
       getMoreTickers()
       lastTickerRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, user?.token])
-
-  const is1Col = !useMediaQuery({ minWidth: 640 })
 
   return (
     // TODO: Create our own version of this Ticker Tape banner
@@ -73,7 +76,7 @@ export default function StockDisplay({ tickers }) {
             const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
             return (
               <ChartCard
-                key={ticker?.tickerSymbol}
+                key={`${ticker?.tickerSymbol}-${i}`}
                 cardRef={isLastTicker ? lastTickerRef : null}
                 ISIN={ticker?.ISIN}
                 tickerSymbol={ticker?.tickerSymbol}

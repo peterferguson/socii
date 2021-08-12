@@ -1,4 +1,4 @@
-import { tickerToISIN } from "@lib/firebase/client/db"
+import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
 
 export const logoUrl = (isin: string) => {
   const baseUrl = (endpoint: string) =>

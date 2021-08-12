@@ -1,5 +1,5 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import React, { useState, useEffect } from "react"
+import React, { useRef } from "react"
 import { useMessageContext } from "stream-chat-react"
 
 // WARN: IEX called for each instance of a buy command message
@@ -8,12 +8,9 @@ import { useMessageContext } from "stream-chat-react"
 
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
-  const [tickerSymbol, setTickerSymbol] = useState(
-    attachment?.tickerSymbol?.toUpperCase()
-  )
+  const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const shares = parseFloat(message.text.split(" shares")[0])
   const localPrice = message.text.split("cost of ").pop().trim()
-  const currencySymbol = localPrice.charAt(0)
   const action =
     message.text.split(" for")[0].split(" ").pop() === "sold" ? "sell" : "buy"
   const cost = parseFloat(localPrice.slice(1))
@@ -26,7 +23,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
       {tickerSymbol && (
         <LogoPriceCardHeader
           {...{
-            tickerSymbol,
+            tickerSymbol: tickerSymbol.current,
             action,
             shares,
             price: cost,

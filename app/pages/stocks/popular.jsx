@@ -1,6 +1,6 @@
-import { AssetCard } from "@components/AssetCards"
+import { AssetCard } from "@components/AssetCard"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
-import { getPopularTickersDocs } from "@lib/firebase/client/db"
+import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import React from "react"
 
 // TODO: on click of chevron create a new view with only the popular stocks

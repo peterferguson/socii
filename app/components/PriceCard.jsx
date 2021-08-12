@@ -1,4 +1,3 @@
-import { useTickerPrice } from "@hooks/useTickerPrice"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
@@ -8,10 +7,9 @@ export default function PriceCard({
   isin,
   tickerSymbol,
   shortName,
-  currencySymbol = "$",
-  initialPrice = undefined,
+  price,
+  isPriceLoading,
 }) {
-  const { price, isLoading } = useTickerPrice(tickerSymbol, 3 * 60 * 1000, initialPrice)
   return (
     <div className="p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-gray-800">
       <div className="flex items-center">
@@ -32,20 +30,22 @@ export default function PriceCard({
         </div>
       </div>
       <div className="flex flex-col justify-start">
-        {isLoading ? (
+        {isPriceLoading ? (
           <p className="w-32 h-12 my-4 text-4xl font-bold text-left text-gray-700 animate-pulse dark:text-gray-100" />
         ) : (
           <p className="my-4 text-4xl font-bold text-left text-gray-700 dark:text-gray-100">
-            {price.iexRealtimePrice}
-            <span className="text-sm">{currencySymbol}</span>
+            <span className="text-sm">$</span>
+            {(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </p>
         )}
         <div
-          className={`flex items-center text-sm ${pnlTextColor(price?.changePercent)}`}
+          className={`flex items-center text-sm pb-0.5 ${pnlTextColor(
+            price?.changePercent
+          )}`}
         >
-          {price.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
-          <span>{price.changePercent.toFixed(2)}%</span>
-          <span className="text-gray-400 align-bottom text-tiny"> vs last month</span>
+          {price?.changePercent > 0 ? <FaCaretUp /> : <FaCaretDown />}
+          <span className="pr-1">{(price?.changePercent * 100)?.toFixed(2)}%</span>
+          <span className="text-gray-400  text-tiny -pb-0.5 ">on the day</span>
         </div>
       </div>
     </div>

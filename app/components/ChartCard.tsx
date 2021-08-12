@@ -1,11 +1,11 @@
 import { pctChange } from "@utils/pctChange"
 import Link from "next/link"
-import React, { useState } from "react"
+import React from "react"
 import { ChartCardChartDynamic } from "./ChartCardChart.dynamic"
 import { TickerLogo } from "./TickerLogo"
 
 export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data }) {
-  const closeDelta = pctChange(data?.[0].close, data?.[data.length - 1].close)
+  const closeDelta = pctChange(data?.[data?.length - 1]?.close, data?.[0]?.close)
 
   const pnlColor =
     closeDelta > 0 ? "bg-teal-200" : closeDelta < 0 ? "bg-red-200" : "bg-brand"
@@ -43,12 +43,12 @@ export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data
         <ChartCardChartDynamic data={data} pnlColor={pnlColor} />
         <div className="flex flex-col items-center justify-center w-20">
           <div className="overflow-hidden text-sm font-semibold tracking-wider text-gray-600 uppercase overflow-ellipsis">
-            ${data?.[0].close}
+            ${data?.[data?.length - 1]?.close?.toFixed(2)}
           </div>
           <div
             className={`${pnlColor} text-black text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
           >
-            M: {closeDelta.toFixed(2)}%
+            M: {closeDelta?.toFixed(2)}%
           </div>
         </div>
       </div>

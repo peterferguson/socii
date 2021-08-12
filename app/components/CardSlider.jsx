@@ -1,4 +1,4 @@
-import { SectorAssetCard } from "@components/AssetCards"
+import { SectorAssetCard } from "@components/SectorAssetCard"
 import React from "react"
 
 export default function CardSlider({ tickers }) {
@@ -8,9 +8,9 @@ export default function CardSlider({ tickers }) {
         return (
           <article key={`slider-card-${i}`} className="slide-card">
             <SectorAssetCard
-              tickerSymbol={ticker.tickerSymbol}
-              logoUrl={ticker.logoUrl}
-              shortName={ticker.shortName}
+              tickerSymbol={ticker?.tickerSymbol}
+              logoUrl={ticker?.logoUrl}
+              shortName={ticker?.shortName}
               price={price}
               sectorData={queryData}
             />

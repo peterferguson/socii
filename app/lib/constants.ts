@@ -1,27 +1,4 @@
 import { ToastOptions, ToastPosition } from "react-hot-toast"
-import { FaDollarSign, FaEuroSign, FaPoundSign, FaYenSign } from "react-icons/fa"
-
-export const currencySymbols = {
-  AUD: "$",
-  CAD: "$",
-  CHF: "CHF",
-  EUR: "€",
-  GBP: "£",
-  JPY: "¥",
-  USD: "$",
-}
-
-export type CurrencyCode = "AUD" | "CAD" | "CHF" | "EUR" | "GBP" | "JPY" | "USD"
-
-export const currencyIcons = {
-  AUD: { icon: FaDollarSign, text: "$" },
-  CAD: { icon: FaDollarSign, text: "$" },
-  // CHF: "CHF",
-  EUR: { icon: FaEuroSign, text: "€" },
-  GBP: { icon: FaPoundSign, text: "£" },
-  JPY: { icon: FaYenSign, text: "¥" },
-  USD: { icon: FaDollarSign, text: "$" },
-}
 
 /*
  * Group Privacy Settings

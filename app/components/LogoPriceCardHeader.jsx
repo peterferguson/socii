@@ -1,4 +1,3 @@
-import { currencyFormatter } from "@utils/currencyFormatter"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
@@ -8,7 +7,6 @@ export default function LogoPriceCardHeader({
   tickerSymbol,
   priceChange,
   price,
-  currency,
   shares,
   action,
   ISIN,
@@ -30,7 +28,7 @@ export default function LogoPriceCardHeader({
         >
           {!shares ? (
             <>
-              {tickerSymbol} &bull; {currencyFormatter(price, currency)}
+              {tickerSymbol} &bull; ${price}
             </>
           ) : (
             <>
@@ -42,8 +40,7 @@ export default function LogoPriceCardHeader({
                     : "text-red-400"
                 }`}
               >
-                {action.toUpperCase()} {shares} Shares &bull;{" "}
-                {currencyFormatter(price, currency)}
+                {action.toUpperCase()} {shares} Shares &bull; ${price}
               </div>
             </>
           )}

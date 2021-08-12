@@ -1,4 +1,5 @@
-import { createUser, setUserState } from "@lib/firebase/client/db"
+import { createUser } from "@lib/firebase/client/db/createUser"
+import { setUserState } from "@lib/firebase/client/db/setUserState"
 import {
   AuthProvider,
   FacebookAuthProvider,

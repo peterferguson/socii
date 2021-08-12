@@ -2,9 +2,9 @@ import { InvestButton } from "@components/InvestButton"
 import { InvestButtonModal } from "@components/InvestButtonModal"
 import PriceCard from "@components/PriceCard"
 import TickerPageChartCard from "@components/TickerPageChartCard"
-import { usePositions } from "@hooks"
-import { useAuth } from "@hooks/useAuth"
-import { getPopularTickersDocs, getTickerDocs } from "@lib/firebase/client/db"
+import { usePositions, useTickerPrice } from "@hooks"
+import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
+import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
 import { useMachine } from "@xstate/react"
@@ -14,13 +14,16 @@ import React, { useEffect } from "react"
 import Custom404 from "../404"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
-  let { ticker, timeseries, price } = tickers?.[0] || {}
+  let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
   const logoColor: string = ticker?.logoColor || ""
+  const { price, isLoading } = useTickerPrice(
+    ticker?.tickerSymbol,
+    3 * 60 * 1000,
+    initialPrice
+  )
 
   const router = useRouter()
-  const { user } = useAuth()
 
-  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
   const { positions, error } = usePositions()
 
   // - State machine for the invest button
@@ -36,6 +39,21 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     if (holding) send("UPDATE_HOLDING", { holding })
   }, [positions, send, ticker?.tickerSymbol])
 
+  // - Push the latest price to the array
+  useEffect(() => {
+    if (price)
+      timeseries?.push({
+        timestamp:
+          typeof price?.latestUpdate !== "string" && price?.latestUpdate?.unix() * 1000,
+        close: price?.iexRealtimePrice || price?.latestPrice,
+        open: undefined,
+        high: undefined,
+        low: undefined,
+        volume: undefined,
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [price])
+
   // TODO: Replace with skeleton loaders
   if (!tickers) return <Custom404 />
 
@@ -48,32 +66,32 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
 
   return (
     <>
-      <div className="flex flex-col w-full sm:flex-row">
-        <div className="flex-none pt-4 pl-0 sm:pl-1 ">
-          <PriceCard
-            isin={ticker?.isin}
-            tickerSymbol={ticker?.tickerSymbol}
-            shortName={ticker?.shortName}
-            initialPrice={price}
-          />
-        </div>
-        <div className="flex-grow hidden sm:block" />
-        <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-          <InvestButton state={state} send={send} logoColor={logoColor} />
-        </div>
-      </div>
-      <TickerPageChartCard
-        color={ticker?.logoColor}
-        timeseries={timeseries}
-        price={price}
-      />
-      <InvestButtonModal ticker={ticker} state={state} send={send} />
+      {!error && (
+        <>
+          <div className="flex flex-col w-full sm:flex-row">
+            <div className="flex-none pt-4 pl-0 sm:pl-1 ">
+              <PriceCard
+                isin={ticker?.isin}
+                tickerSymbol={ticker?.tickerSymbol}
+                shortName={ticker?.shortName}
+                price={price}
+                isPriceLoading={isLoading}
+              />
+            </div>
+            <div className="flex-grow hidden sm:block" />
+            <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+              <InvestButton state={state} send={send} logoColor={logoColor} />
+            </div>
+          </div>
+          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
+          <InvestButtonModal ticker={ticker} state={state} send={send} />
+        </>
+      )}
     </>
   )
 }
 
 // TODO: Remove tooltip and color price in the graph display of values
-
 export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
   try {
     const props = await getTickersStaticProps({
@@ -81,7 +99,7 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
         typeof tickerSymbol === "string" ? [tickerSymbol] : tickerSymbol
       ),
     })
-    return { ...props, revalidate: 3000 }
+    return { ...props, revalidate: 8000 }
   } catch (e) {
     return { redirect: { destination: "/404", permanent: false } }
   }

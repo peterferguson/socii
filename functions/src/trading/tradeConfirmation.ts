@@ -1,24 +1,16 @@
-import { logger } from "firebase-functions" 
+import { logger } from "firebase-functions"
 import { error } from "firebase-functions/lib/logger"
-import {
-  firestore,
-  serverTimestamp,
-  increment,
-  arrayUnion,
-} from "../index.js"
-import {
-  singleLineTemplateString,
-  iexClient,
-  streamClient,
-  currencySymbols,
-} from "../utils/helper.js"
-import { 
-  config, 
-  TradingApi, 
-  CreateOrder 
-} from "../alpaca/broker/client/ts/index"
-import { updateHolding } from "./updateHolding.js"
+import { config, CreateOrder, TradingApi } from "../alpaca/broker/client/ts/index"
+import { firestore, iexClient } from "../index.js"
+import { determineAlpacaStatus } from "../utils/determineAlpacaStatus"
+import { isSell } from "../utils/isSell"
+import { streamClient } from "../utils/streamClient"
 import { journalShares } from "./journalShares.js"
+import { investmentFailedMML } from "./mml/investmentFailedMML"
+import { investmentPendingMML } from "./mml/investmentPendingMML"
+import { investmentReceiptMML } from "./mml/investmentReceiptMML"
+import { updateHolding } from "./updateHolding.js"
+import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 
 /*
 - tradeConfirmation
@@ -46,15 +38,16 @@ export const tradeConfirmation = async (change, context) => {
       const ISIN = tradeData.assetRef.split("/").pop()
       tradeData.assetRef = firestore.doc(tradeData.assetRef)
      
-      ////////// TODO reinstate this when testing in hours
-    // //   const { latestPrice, isUSMarketOpen } = await iexClient.quote(
-    // //     tradeData.tickerSymbol,
-    // //     {
-    // //       filter: "latestPrice,isUSMarketOpen",
-    // //     }
-    // //   )
-    const latestPrice = 713.20
+      ////// TODO reinstate this when testing in hours
+      const { latestPrice, isUSMarketOpen } = await iexClient.quote(
+        tradeData.tickerSymbol,
+        {
+          filter: "latestPrice,isUSMarketOpen",
+        }
+      )
+
     logger.log("latest", latestPrice, "and price: ",tradeData.price)
+  ///////// TODO reinstate this
     //   // // // - do nothing if market is closed
     //   // if (!isUSMarketOpen) {
     //   //   // 2. send a message with the finalised price
@@ -64,6 +57,9 @@ export const tradeConfirmation = async (change, context) => {
     //   // }
     ///////// TODO reinstate this
 
+  // TODO add executed = pending to all orders as they are sent..
+  // can be: success, pending, failed
+  if (tradeData.executionStatus !== "pending") return // - do nothing
 
       // TODO: Fix price checking
       // ! Now asset price & currency is available along with cost & execution currency this should be simple
@@ -170,11 +166,6 @@ export const tradeConfirmation = async (change, context) => {
               // 1. Withold balance or shares until pending order is resolved 
               if(tradeData.side=="buy"){
               groupRef.update({ cashBalance: cashBalance - tradeData.qty * latestPrice })}
-              if(tradeData.side=="sell"){
-                const holdingDocRef = firestore.collection(`groups/${groupName}/holdings`).doc(ISIN)
-                const holdingDataShares = (await holdingDocRef.get()).data().shares
-                holdingDocRef.update({shares: holdingDataShares - tradeData.qty})
-              }
               // 3. send a message to inform about pending order
               // TODO display more useful message  
               await channel.sendMessage(investmentPendingMML(tradeData))
@@ -198,65 +189,6 @@ export const tradeConfirmation = async (change, context) => {
      * Helper Functions
      */
     
-    const investmentReceiptMML = (tradeData) => {
-      const mmlstring = `<mml><investmentReceipt></investmentReceipt></mml>`
-      const mmlmessage = {
-        user_id: "socii",
-        text: singleLineTemplateString`
-        ${tradeData.qty} shares of $${tradeData.symbol} ${
-          isSell(tradeData.side) ? "sold" : "purchased"
-        } for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.price}
-        `,
-        attachments: [
-          {
-            type: "receipt",
-            mml: mmlstring,
-            tickerSymbol: tradeData.symbol,
-          },
-        ],
-      }
-      return mmlmessage
-    }
-    const investmentPendingMML = (tradeData) => {
-      const mmlstring = `<mml><investmentReceipt></investmentReceipt></mml>`
-      const mmlmessage = {
-        user_id: "socii",
-        text: singleLineTemplateString`
-        ${tradeData.qty} shares of $${tradeData.symbol} ${
-          isSell(tradeData.side) ? "sale" : "purchase"
-        } for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.price} IS PENDING
-        `,
-        attachments: [
-          {
-            type: "receipt",
-            mml: mmlstring,
-            tickerSymbol: tradeData.symbol,
-          },
-        ],
-      }
-      return mmlmessage
-    }
-    const investmentFailedMML = (tradeData) => {
-      const mmlstring = `<mml><investmentReceipt></investmentReceipt></mml>`
-      const mmlmessage = {
-        user_id: "socii",
-        text: singleLineTemplateString`
-        ${tradeData.qty} shares of $${tradeData.symbol} ${
-          isSell(tradeData.side) ? "sale" : "purchase"
-        } has failed and will not be executed
-        `,
-        attachments: [
-          {
-            type: "receipt",
-            mml: mmlstring,
-            tickerSymbol: tradeData.symbol,
-          },
-        ],
-      }
-      return mmlmessage
-    }
     
     const marketClosedMessage = async (assetRef) => {
       const assetData = await (await assetRef.get()).data()
@@ -268,6 +200,4 @@ export const tradeConfirmation = async (change, context) => {
       }
     }
     
-    const isSell = (orderType) => orderType.toLowerCase().includes("sell")
-    
-    
+  
