@@ -14,7 +14,7 @@ export default function OrderTypeSelector({ actions, send, className = "" }) {
     <div className={`w-11/12 pl-8 flex-grow max-w-md sm:max-w-none ${className}`}>
       <RadioGroup value={actionSelected} onChange={setSelectedAction}>
         <RadioGroup.Label className="sr-only">Order or Share?</RadioGroup.Label>
-        <div className="flex-col flex-grow space-x-0 sm:space-x-8 space-y-2 sm:space-y-0 sm:flex sm:flex-row">
+        <div className="flex-col flex-grow space-x-0 space-y-2 sm:space-y-4 sm:flex">
           {actions.map((action, i: number) => (
             <RadioGroup.Option
               key={`${action}-${i}`}
