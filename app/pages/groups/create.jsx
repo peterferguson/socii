@@ -28,26 +28,14 @@ export default function Create() {
   const [isValidGroupName, setisValidGroupName] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // TODO: Extract this and the username check into a single hook
   const onChange = (e) => {
     // Force form value typed in form to match correct format
     const val = e.target.value
     const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
-
-    // Only set form value if length is < 3 OR it passes regex
-    if (val.length >= 3) {
-      setGroupName(val)
-      setLoading(false)
-      setisValidGroupName(false)
-    } else {
-      setGroupName("")
-      setisValidGroupName(false)
-    }
-
-    if (re.test(val)) {
-      setGroupName(val)
-      setLoading(true)
-      setisValidGroupName(false)
-    }
+    setLoading(true)
+    re.test(val) ? setGroupName(val) : setGroupName("")
+    setisValidGroupName(false)
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,9 +48,8 @@ export default function Create() {
     debounce(async (name) => {
       if (name.length >= 3) {
         const empty = await groupNameExists(name)
-        empty
-          ? setisValidGroupName(empty)
-          : toast.error(`Sorry the group name ${name} is taken`)
+        setisValidGroupName(empty)
+        !empty && toast.error(`Sorry the group name ${name} is taken`)
         setLoading(false)
       }
     }, 500),

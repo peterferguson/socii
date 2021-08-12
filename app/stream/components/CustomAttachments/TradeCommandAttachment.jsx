@@ -1,7 +1,7 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useTickerPrice } from "@hooks/useTickerPrice"
 import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
-import { tradeSubmission } from "@lib/firebase/client/firebase"
+import { tradeSubmission } from "@lib/firebase/client/functions"
 import { useAuth } from "hooks/useAuth"
 import React, { Suspense, useEffect, useRef, useState } from "react"
 import {

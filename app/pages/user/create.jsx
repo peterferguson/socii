@@ -1,18 +1,12 @@
 import CheckIcon from "@components/BackgroundCheck"
-import { firestore, createAccounts } from "@lib/firebase/client/firebase"
 import { useAuth } from "@hooks/useAuth"
+import { usernameExists } from "@lib/firebase/client/db/usernameExits"
+import { createAccount } from "@lib/firebase/client/functions"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
-import {
-  collection,
-  getDocs,
-  limit,
-  query,
-  where,
-} from "firebase/firestore"
 
 export default function Username(props) {
   const { user } = useAuth()
@@ -20,36 +14,18 @@ export default function Username(props) {
   const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [alpaca, setAlpaca] = useState(null)
-  const [ACH, setACH] = useState(null)
 
+  // TODO: Extract this and the groupName check into a single hook
   const onChange = (e) => {
-    // Force form value typed in form to match correct format
     const val = e.target.value
     const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
-
-    // Only set form value if length is < 3 OR it passes regex
-    if (val.length >= 3) {
-      setUsername(val)
-      setLoading(false)
-      setisValidUsername(false)
-    } else {
-      setUsername("")
-      setisValidUsername(false)
-    }
-
-    if (re.test(val)) {
-      setUsername(val)
-      setLoading(true)
-      setisValidUsername(false)
-    }
+    setLoading(true)
+    re.test(val) ? setUsername(val) : setUsername("")
+    setisValidUsername(false)
   }
 
-  useEffect(
-    () => checkUsername(username),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [username]
-  )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => checkUsername(username), [username])
 
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
@@ -57,13 +33,9 @@ export default function Username(props) {
   const checkUsername = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {
-        const usersRef = collection(firestore, "users")
-        const userQuery = query(usersRef, where("username", "==", name), limit(1))
-        const {empty} = await getDocs(userQuery)
+        const empty = await usernameExists(username)
         setisValidUsername(empty)
-        if (!empty) {
-          toast.error(`Sorry the username ${name} is taken`)
-        }
+        !empty && toast.error(`Sorry the username ${name} is taken`)
         setLoading(false)
       }
     }, 500),
@@ -72,14 +44,18 @@ export default function Username(props) {
 
   const runAccountCreation = async (e, user, username) => {
     e.preventDefault()
-    const res = await createAccounts(user, username)
-    if(res=="true"){router.push(`/user/${username}`)}
-    else{console.log("ERROR creating accounts")}
+    console.log(user, username)
+    const { body } = await createAccount(user, username)
+    if (body?.status === "success") {
+      toast.success(body?.message)
+      router.push(`/user/${username}`)
+    } else {
+      toast.error(`Sorry there was a problem! ${body?.message}`)
+    }
   }
 
-
   return (
-    <main className="flex items-center justify-center w-screen h-screen">
+    <main className="flex items-center justify-center w-full">
       <form className="w-full my-16 sm:w-2/3">
         <div className="px-4 py-3 m-4 leading-tight text-gray-700 border border-gray-300 appearance-none bg-brand bg-opacity-10 rounded-xl sm:mb-3 focus:outline-none focus:bg-gray-50 focus:border-gray-500">
           <div className="p-4 text-xl font-bold font-secondary">Choose a username</div>
@@ -91,9 +67,9 @@ export default function Username(props) {
               onChange={onChange}
             />
             <div
-              className={`bg-white text-sm sm:text-tiny ${
+              className={`bg-white text-sm sm:text-tiny align-middle ${
                 isValidUsername ? "text-brand btn-transition" : "text-red-400"
-              } align-middle`}
+              }`}
               onKeyDown={null}
             >
               {isValidUsername ? (
@@ -105,7 +81,7 @@ export default function Username(props) {
           </div>
           <button
             className="w-11/12 my-4 btn"
-            onClick={(e) => (isValidUsername ?  runAccountCreation(e, user, username) : null)}
+            onClick={(e) => isValidUsername && runAccountCreation(e, user, username)}
           >
             Choose!
           </button>

@@ -1,6 +1,7 @@
 import {
-    AuthMethods,
-    AuthMethodsConfiguration, configureAuthMethods
+  AuthMethods,
+  AuthMethodsConfiguration,
+  configureAuthMethods,
 } from "./auth/auth"
 import { HttpLibrary } from "./http/http"
 import { IsomorphicFetchHttpLibrary as DefaultHttpLibrary } from "./http/isomorphic-fetch"
@@ -67,11 +68,5 @@ export function createConfiguration(conf: ConfigurationParameters = {}): Configu
   return configuration
 }
 
-export const config = createConfiguration({
-  authMethods: {
-    BasicAuth: {
-      username: process.env.ALPACA_KEY ?? "",
-      password: process.env.ALPACA_SECRET ?? "",
-    },
-  },
-})
+export const config = (username: string, password: string) =>
+  createConfiguration({ authMethods: { BasicAuth: { username, password } } })

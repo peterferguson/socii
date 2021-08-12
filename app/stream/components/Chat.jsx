@@ -59,7 +59,7 @@ export default function StreamChat({
   const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
 
   // TODO: Convert to XState Machine
-  // - Truth table 
+  // - Truth table
   // ! is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
   // !    T   |       T         |                       T
   // !    T   |       F         |                       F
@@ -139,9 +139,10 @@ export function StreamChannelList({
   isSidebar,
 }) {
   const { client } = useContext(ChatContext)
-  const filter = { members: { $in: [client?.userID] } }
-  const sort = { last_message_at: -1 }
-  const options = { state: true, presence: true, limit: 5 }
+  const filter = { type: "messaging", members: { $in: [client?.userID] } }
+  const options = { state: true, watch: true, presence: true, limit: 8 }
+  const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
+
   return (
     <div
       className={`
@@ -158,7 +159,7 @@ export function StreamChannelList({
         `}
     >
       <ChannelList
-        filter={filter}
+        filters={filter}
         sort={sort}
         options={options}
         showChannelSearch={true}

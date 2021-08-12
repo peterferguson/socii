@@ -1,1 +1,1 @@
-export {createAccounts} from "./createAccounts" 
+export {createAccount} from "./createAccount" 
