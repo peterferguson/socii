@@ -98,6 +98,10 @@ service cloud.firestore {
         allow update: if authenticated();
         allow create: if authenticated();
       }
+      match /funding/{fundsId} {
+        allow read;
+        allow write: if false;
+      }
 
       /* Helper functions */
 
