@@ -1,14 +1,15 @@
-import { Position } from "@models/alpaca"
 import { useAuth } from "@hooks"
+import { Position } from "@models/alpaca"
 import { fetcher } from "@utils/fetcher"
 import useSWR from "swr"
 
 export const usePositions = () => {
   const { user } = useAuth()
-  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
 
   const { data: positions, error } = useSWR<Position[]>(
-    user?.token && alpacaId ? ["/api/alpaca/positions", user.token, alpacaId] : null,
+    user?.token && user?.alpacaAccountId
+      ? ["/api/alpaca/positions", user.token, user.alpacaAccountId]
+      : null,
     (url, token, alpacaId) => {
       const res = fetcher(url, {
         method: "POST",

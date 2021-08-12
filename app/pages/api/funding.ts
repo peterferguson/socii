@@ -78,15 +78,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           console.log(`Funding account with uid ${uid} with $${totalAmount}`)
 
           const userRef = firestore.doc(`users/${uid}`)
-          const { alpacaID, alpacaACH } = (await userRef.get()).data()
+          const { alpacaAccountId, alpacaACH } = (await userRef.get()).data()
 
-          if (!alpacaID || !alpacaACH) {
+          if (!alpacaAccountId || !alpacaACH) {
             accountsWithMissingDetails.push(uid)
             continue
           }
           try {
             const postTransfer = await fundClient.postTransfers(
-              alpacaID,
+              alpacaAccountId,
               TransferData.from({
                 transferType: "ach",
                 relationshipId: alpacaACH,

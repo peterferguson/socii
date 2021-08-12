@@ -1,19 +1,19 @@
 import { PortfolioHistory } from "@alpaca/models/PortfolioHistory"
 import { useAuth } from "@hooks"
+import { PortfolioHistoryTimeseries } from "@models/PortfolioHistoryTimeseries"
 import { fetcher } from "@utils/fetcher"
+import { portfolioHistoryToTimeseries } from "@utils/portfolioHistoryToTimeseries"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { PortfolioHistoryTimeseries } from "@models/PortfolioHistoryTimeseries"
-import { portfolioHistoryToTimeseries } from "@utils/portfolioHistoryToTimeseries"
 
 export const usePortfolioHistory = () => {
   const { user } = useAuth()
   const [timeseries, setTimeseries] = useState<PortfolioHistoryTimeseries>(undefined)
 
-  const alpacaId = "933ab506-9e30-3001-8230-50dc4e12861c" // - user?.alpacaID
-
   const { data: history, error } = useSWR<PortfolioHistory>(
-    user?.token && alpacaId ? ["/api/alpaca/portfolio", user?.token, alpacaId] : null,
+    user?.token && user?.alpacaAccountId
+      ? ["/api/alpaca/portfolio", user?.token, user?.alpacaAccountId]
+      : null,
     (url, token, alpacaId) => {
       const res = fetcher(url, {
         method: "POST",
@@ -25,10 +25,12 @@ export const usePortfolioHistory = () => {
     { refreshInterval: 3600 * 1000, refreshWhenOffline: false }
   )
 
-  useEffect(() => {
-    if (history)
-      setTimeseries(portfolioHistoryToTimeseries(PortfolioHistory.from(history)))
-  }, [history])
+  useEffect(
+    () =>
+      history &&
+      setTimeseries(portfolioHistoryToTimeseries(PortfolioHistory.from(history))),
+    [history]
+  )
 
   return { history, timeseries, error }
 }

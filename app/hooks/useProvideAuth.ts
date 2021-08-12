@@ -84,8 +84,10 @@ export const useProvideAuth = () => {
     return () => unsubscribe()
   }, [])
 
-  useEffect(() => user && setUserState(user.uid, setUsername, setUserGroups, setUser), [user])
- 
+  useEffect(
+    () => user && setUserState(user.uid, setUsername, setUserGroups, setUser),
+    [user]
+  )
 
   // useEffect(() => {
   //   const interval = setInterval(async () => {
