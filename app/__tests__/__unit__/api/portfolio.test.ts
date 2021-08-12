@@ -8,7 +8,7 @@ const portfolioTest = nextApiHandlerTest(
   "/api/alpaca/portfolio"
 )
 
-describe("/api/alpaca/portfolio", () => {
+describe.skip("/api/alpaca/portfolio", () => {
   it(
     "gets an accounts portfolio history",
     portfolioTest(async ({ fetch }) => {

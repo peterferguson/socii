@@ -124,9 +124,9 @@ export const tradeConfirmation = async (change, context) => {
               symbol: tradeData.symbol,
               side: tradeData.side,
               timeInForce: tradeData.timeInForce,
-              qty: tradeData.qty,
+              qty: tradeData.qty, // remove and replace with notional 
               type: tradeData.type,
-              limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null ,
+              limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
               client_order_id: `${groupName}|${tradeData.messageId}`
             })
           )

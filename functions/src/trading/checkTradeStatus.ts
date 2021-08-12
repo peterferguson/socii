@@ -16,7 +16,7 @@ export const checkTradeStatus = async (change , context) => {
 
     const tradeRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
     const tradeData = (await tradeRef.get()).data()
-
+// TODO add sell function
     if (event == "fill"){
 
       // update holding

@@ -13,7 +13,7 @@ import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 
 const clockTest = nextApiHandlerTest(handleClock, "/api/alpaca/clock")
 
-describe("/api/alpaca/clock", () => {
+describe.skip("/api/alpaca/clock", () => {
   it(
     "gets the market time",
     clockTest(async ({ fetch }) => {
