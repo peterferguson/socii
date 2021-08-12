@@ -1,6 +1,6 @@
 import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
-import React, { useContext } from "react"
+import React from "react"
 
 interface AuthCheckProps {
   children: JSX.Element
