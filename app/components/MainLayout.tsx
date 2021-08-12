@@ -40,7 +40,7 @@ export default function MainLayout(props) {
           </div>
         </div>
       </div>
-      {/* {showChat && <ChatSidebar {...props} />} */}
+      {showChat && <ChatSidebar {...props} />}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { Logo, SearchKey } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React from "react"
 import { HiOutlineSearch } from "react-icons/hi"
 const Dropdown = dynamic(() => import("components/Dropdown"))
 

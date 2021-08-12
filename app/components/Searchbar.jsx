@@ -21,12 +21,12 @@ const Searchbar = connectSearchBox(({ refine }) => {
   const [showSearchCard, setShowSearchCard] = useState(false)
 
   return (
-    <Popover className="container relative left-0 z-50 flex flex-none w-1/2 h-full">
+    <Popover className="container relative left-0 z-50 flex flex-grow h-full">
       <Popover.Button
         aria-label={"Search Bar"}
         aria-haspopup="true"
         as="div"
-        className="flex items-center w-full h-full ml-2 appearance-none lg:w-64 group"
+        className="flex items-center w-full h-full ml-2 appearance-none group"
         onClick={() => setShowSearchCard(true)}
       >
         <HiOutlineSearch className="w-5 h-5 text-gray-400" />
