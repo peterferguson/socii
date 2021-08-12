@@ -15,8 +15,8 @@ export const formatUser = async (user: User) => {
   return {
     uid: user.uid,
     email: user.email,
-    name: user.displayName,
-    provider: user.providerData[0].providerId,
+    displayName: user.displayName,
+    providerId: user.providerData[0].providerId,
     photoUrl: user.photoURL,
     emailVerified: user.emailVerified,
     phoneNumber: user.phoneNumber,

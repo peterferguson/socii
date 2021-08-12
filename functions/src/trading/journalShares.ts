@@ -9,11 +9,12 @@
  * @returns
  */
 
-import { logger } from "firebase-functions"
-import { firestore } from "../index.js"
 import { config, JournalData, JournalsApi } from "../alpaca/broker/client/ts/index"
+import { firestore } from "../index.js"
 
-const journals = new JournalsApi(config)
+const journals = new JournalsApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 
 export const journalShares = async (
   data: { agreesToTrade?: []; qty?: any },
@@ -22,8 +23,6 @@ export const journalShares = async (
   const { agreesToTrade, qty } = data
 
   const journalQty = qty / agreesToTrade.length
-  // TODO replace with config let when Socii Test Broker shared
-  const ALPACA_FIRM_ACCOUNT = "83af97bb-aa1b-37cd-9807-f76eec49fd1c"
 
   for (let item in agreesToTrade) {
     ////////////
@@ -42,7 +41,7 @@ export const journalShares = async (
 
     const journal = await JournalData.from({
       entry_type: "JNLS",
-      from_account: ALPACA_FIRM_ACCOUNT,
+      from_account: process.env.ALPACA_FIRM_ACCOUNT,
       to_account: alpacaID,
       amount: journalQty,
     })

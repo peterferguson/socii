@@ -82,7 +82,9 @@ export const tradeConfirmation = async (change, context) => {
   // - can be set to success, pending, failed
   let tradeUpdateData = { executed: "" }
 
-  const tradeClient = new TradingApi(config)
+  const tradeClient = new TradingApi(
+    config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+  )
   const ALPACA_FIRM_ACCOUNT = process.env.ALPACA_FIRM_ACCOUNT
 
   const groupRef = await firestore.collection("groups").doc(groupName)

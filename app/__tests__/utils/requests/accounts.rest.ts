@@ -5,6 +5,24 @@ const accountClient = new AccountsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
 
+// console.log(testAccount)
+
+try {
+  // - create account
+  // accountClient.accountsPost(testAccount).then((r) => console.log(r))
+  // - delete account
+  accountClient
+  .deleteAccount("70a2501b-b31b-4904-80d9-f5c4a2fc66ed")
+  .then((r) => console.log(r))
+  // - get all accounts
+  // accountClient.accountsGet().then((r) => console.log(r))
+  // - get accounts activities
+  // accountClient.accountsActivitiesGet().then((r) => console.log(r))
+} catch (e) {
+  console.log(e)
+}
+
+
 const testAccount = AccountCreationObject.from({
   contact: {
     email_address: "tests@socii.com",
@@ -63,16 +81,3 @@ const testAccount = AccountCreationObject.from({
     },
   ],
 })
-
-// console.log(testAccount)
-
-try {
-  // - create account
-  // accountClient.accountsPost(testAccount).then((r) => console.log(r))
-  // - get all accounts
-  accountClient.accountsGet().then((r) => console.log(r))
-  // - get accounts activities
-  accountClient.accountsActivitiesGet().then((r) => console.log(r))
-} catch (e) {
-  console.log(e)
-}

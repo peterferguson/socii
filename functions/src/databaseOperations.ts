@@ -51,7 +51,9 @@ export const incrementInvestors = async (change, context) => {
 export const initialDeposit = async (snapshot, context) => {
   const { groupName } = context.params
 
-  const fundClient = new FundingApi(config)
+  const fundClient = new FundingApi(
+    config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+  )
 
   // - Get the investor from the snapshot
   const { uid } = snapshot.data()

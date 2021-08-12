@@ -14,9 +14,10 @@ const { Client } = require("iexjs")
 
 // * Constant initialisation
 
-const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
-adminConfig.credential = admin.credential.cert(serviceAccount)
-admin.initializeApp(adminConfig)
+// const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
+// adminConfig.credential = admin.credential.cert(serviceAccount)
+// admin.initializeApp(adminConfig)
+admin.initializeApp()
 
 process.env.ALPACA_KEY = functions.config().alpaca.key
 process.env.ALPACA_SECRET = functions.config().alpaca.secret
@@ -37,6 +38,7 @@ export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp
 export type Timestamp = admin.firestore.Timestamp
 export const Timestamp = admin.firestore.Timestamp
 export const arrayUnion = admin.firestore.FieldValue.arrayUnion
+export type UserInfo = admin.auth.UserInfo
 export const HttpsError = functions.https.HttpsError
 
 module.exports = {
@@ -80,5 +82,5 @@ module.exports = {
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),
   updateHolding: functions.region(london).https.onCall(trading.updateHolding),
-  createAccounts: functions.region(london).https.onCall(accounts.createAccounts),
+  createAccount: functions.region(london).https.onCall(accounts.createAccount),
 }
