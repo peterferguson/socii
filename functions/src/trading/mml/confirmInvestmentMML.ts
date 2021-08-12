@@ -1,21 +1,21 @@
 import { singleLineTemplateString } from "../../utils/singleLineTemplateString";
 
 export const confirmInvestmentMML = ({
-  username, action, tickerSymbol, cost, shares, parent_id, show_in_channel,
+  username, side, symbol, cost, qty, parent_id, show_in_channel,
 }) => {
   const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`;
   const mmlmessage = {
     user_id: username,
     text: singleLineTemplateString`
-      Hey ${username} wants the group to ${action} ${shares} shares of ${tickerSymbol} 
+      Hey ${username} wants the group to ${side} ${qty} shares of ${symbol} 
       for ${cost}. Do you agree that the group should execute this trade?
       `,
-    command: action,
+    command: side,
     parent_id: parent_id || null,
     show_in_channel: show_in_channel || null,
     attachments: [
       {
-        tickerSymbol: tickerSymbol,
+        tickerSymbol: symbol,
         type: "investmentConfirmation",
         mml: mmlstring,
         actions: [

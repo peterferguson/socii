@@ -72,18 +72,20 @@ const TradeCommandAttachment = ({ attachment }) => {
                   executionCurrency: "USD",
                   assetCurrency: "USD",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                  price: price,
-                  cost: parseFloat(data.cost || data.amount),
-                  shares: parseFloat(data.shares),
+                  price: currentPrice,
+                  //cost: parseFloat(data.cost || data.amount),
+                  qty: parseFloat(data.shares),
+                  symbol: tickerSymbol,
+                  timeInForce: "gtc",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
                 }
                 //TODO: Review redundancy with orderType (may not be with limit orders)
                 // - Write to firestore & send confirmation message in thread
                 if ("buy" in data) {
-                  tradeSubmission({ ...tradeArgs, orderType: "BUY", action: "buy" })
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
                 }
                 if ("sell" in data) {
-                  tradeSubmission({ ...tradeArgs, orderType: "SELL", action: "sell" })
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
                 }
               }}
               Loading={LoadingIndicator}

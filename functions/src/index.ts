@@ -4,6 +4,7 @@ import * as algoliaSearch from "./algoliaSearch.js"
 import * as commands from "./commands/index.js"
 import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
+import * as accounts from "./accounts/index.js"
 // * Import function modules
 import * as streamChat from "./streamChat.js"
 import * as trading from "./trading/index.js"
@@ -19,12 +20,11 @@ admin.initializeApp(adminConfig)
 
 process.env.ALPACA_KEY = functions.config().alpaca.key
 process.env.ALPACA_SECRET = functions.config().alpaca.secret
+process.env.ALPACA_FIRM_ACCOUNT = functions.config().alpaca.firm_account
 process.env.STREAM_API_SECRET = functions.config().stream.secret
 process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
 process.env.IEX_TOKEN = functions.config().iex.api_key
-// TODO when we align to one alpaca test broker this should change to function.config
-//process.env.ALPACA_FIRM_ACCOUNT = functions.config().ALPACA_FIRM_ACCOUNT
 
 export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
 
@@ -65,6 +65,10 @@ module.exports = {
     .region(london)
     .firestore.document("ticker/{isin}")
     .onCreate(algoliaSearch.onTickerCreated),
+  checkTradeStatus: functions
+    .region(london)
+    .firestore.document("tradesEvents/{orderId}")
+    .onCreate(trading.checkTradeStatus),
   // 2 HTTPS Triggers
   // 2.1 onRequest
   loadTickersToAlgolia: functions // TODO: Convert to use new firebase extension
@@ -76,4 +80,5 @@ module.exports = {
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),
   updateHolding: functions.region(london).https.onCall(trading.updateHolding),
+  createAccounts: functions.region(london).https.onCall(accounts.createAccounts),
 }

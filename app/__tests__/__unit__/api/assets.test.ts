@@ -13,7 +13,7 @@ import { performance } from "perf_hooks"
 
 const assetsTest = nextApiHandlerTest(handleAssets, "/api/alpaca/assets")
 
-describe("/api/alpaca/assets", () => {
+describe.skip("/api/alpaca/assets", () => {
   it(
     "queries an asset by symbol, specifically TSLA",
     assetsTest(async ({ fetch }) => {

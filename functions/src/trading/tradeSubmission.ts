@@ -34,22 +34,17 @@ export const tradeSubmission = async (
     ...verifiedData,
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
-
-    // TODO //
-    ////////// REMOVE - for testing until correct data is sent
-    timeInForce: "gtc",
-    type: "market",
     executionStatus: "pending",
-    limitPrice: "",
-    qty: verifiedData.shares,
-    ////////// REMOVE - for testing until correct data is sent
   })
 
   if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
-      ...verifiedData,
-      cost: verifiedData.price, //TODO: Review the usage of cost and price here
+      username: verifiedData.username,
+      side: verifiedData.side,
+      symbol: verifiedData.symbol,
+      cost: verifiedData.price,
+      qty: verifiedData.qty,
       parent_id: messageId,
       show_in_channel: false,
     })
@@ -60,55 +55,56 @@ export const tradeSubmission = async (
     return await channel.sendMessage(message)
   }
 }
-
-const verifyContent = async (
-  data: { [key: string]: any },
-  context: { auth: { uid: string } }
-) => {
-  const requiredArgs = {
-    username: "",
-    groupName: "",
-    assetRef: null,
-    orderType: "",
-    cost: 0,
-    price: 0,
-    shares: 0,
-    action: "",
-    messageId: "",
-    // - messageId will allow us to track whether the trade has already been submitted
-    // - (until epheremal messages work). Also we can use a collectionGroup query
-    // - to find the particular trade in question for each message.
+  
+  const verifyContent = async (data, context) => {
+    const requiredArgs = {
+      username: "",
+      groupName: "",
+      assetRef: null,
+      type: "",
+      price: 0,
+      qty: 0,
+      side: "",
+      messageId: "",
+      timeInForce: "",
+      symbol:"",
+      // - messageId will allow us to track whether the trade has already been submitted
+      // - (until epheremal messages work). Also we can use a collectionGroup query
+      // - to find the particular trade in question for each message.
+    }
+  
+    const optionalArgs = {
+      assetType: "",
+      shortName: "",
+      tickerSymbol: "",
+      executionCurrency: "GBP",
+      assetCurrency: "USD",
+      executorRef: `users/${context.auth.uid}`,
+      limitPrice:"",
+    }
+  
+    // * Check for default args and assign them if they exist
+    if (!allKeysContainedIn(requiredArgs, data)) {
+      throw new HttpsError(
+        "invalid-argument",
+        `Please ensure request has all of the following keys: ${JSON.stringify(
+          Object.keys(requiredArgs)
+        )}`
+      )
+    }
+  
+    const assetRef = firestore.doc(data.assetRef)
+    const assetData = await assetRef.get()
+  
+    requiredArgs.assetRef = assetRef
+    optionalArgs.assetType = assetData.get("assetType")
+    optionalArgs.shortName = assetData.get("shortName")
+    optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
+    
+  
+    // * Inject data into requiredArgs
+    Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))
+  
+    return { ...requiredArgs, ...optionalArgs }
   }
 
-  const optionalArgs = {
-    assetType: "",
-    shortName: "",
-    tickerSymbol: "",
-    executionCurrency: "GBP",
-    assetCurrency: "USD",
-    executorRef: `users/${context.auth.uid}`,
-  }
-
-  // * Check for default args and assign them if they exist
-  if (!allKeysContainedIn(requiredArgs, data)) {
-    throw new HttpsError(
-      "invalid-argument",
-      `Please ensure request has all of the following keys: ${JSON.stringify(
-        Object.keys(requiredArgs)
-      )}`
-    )
-  }
-
-  const assetRef = firestore.doc(data?.assetRef)
-  const assetData = await assetRef.get()
-
-  requiredArgs.assetRef = assetRef
-  optionalArgs.assetType = assetData.get("assetType")
-  optionalArgs.shortName = assetData.get("shortName")
-  optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
-
-  // * Inject data into requiredArgs
-  Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))
-
-  return { ...requiredArgs, ...optionalArgs }
-}
