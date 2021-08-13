@@ -1,13 +1,11 @@
 import { logger } from "firebase-functions"
-import { firestore, UserInfo } from "../index.js"
 import {
   AccountCreationObject,
-  Account,
   AccountsApi,
   ACHRelationshipData,
-  ACHRelationshipResource,
   config,
 } from "../alpaca/broker/client/ts/index"
+import { firestore, UserInfo } from "../index.js"
 
 interface FirebaseUser extends UserInfo {
   provider: string
@@ -23,13 +21,12 @@ export const createAccount = async (data, context) => {
   logger.log("started creating account")
 
   let alpacaAccountId: string, alpacaACH: string
+  const accountsClient = new AccountsApi(
+    config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+  )
 
   // - create an alpaca account
   try {
-    const accountsClient = new AccountsApi(
-      config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
-    )
-
     const alpacaAccount = await accountsClient.accountsPost(
       AccountCreationObject.from(mockAlpacaAccountDetails(user))
     )
@@ -43,9 +40,28 @@ export const createAccount = async (data, context) => {
 
     alpacaAccountId = alpacaAccount.id
     alpacaACH = achRelationship.id
-  } catch (e) {
-    logger.error("Failed to create Alpaca account")
-    logger.error(e)
+  } catch (error) {
+    logger.error("Failed to create Alpaca account: ", error)
+    if (error?.code === 409) {
+      try {
+        logger.error("Searching for user from alpaca based on email")
+        const alpacaUser = (await accountsClient.accountsGet(user.email)).pop()
+        if (alpacaUser) {
+          logger.log("Found user in alpaca")
+          alpacaAccountId = alpacaUser.id
+          logger.log("Getting ACH relationship")
+          const achRelationship = (
+            await accountsClient.getAchRelationships(alpacaAccountId, "APPROVED")
+          ).pop()
+          if (achRelationship) {
+            logger.log("Found ACH relationship")
+            alpacaACH = achRelationship.id
+          }
+        }
+      } catch (error) {
+        logger.error("Failed to find Alpaca account: ", error)
+      }
+    }
   }
 
   // - create user in firebase
