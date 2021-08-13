@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react"
 
 interface ITickerLogoProps {
   tickerSymbol: string
-  isin: string
+  isin?: string
   className?: string
   width?: string
   height?: string

@@ -10,7 +10,7 @@ export async function tickerToISIN(ticker: string): Promise<string> {
   const tickerRef = collection(firestore, "tickers")
   const tickerQuery = query(
     tickerRef,
-    where("tickerSymbol", "==", ticker.toUpperCase()),
+    where("tickerSymbol", "==", ticker?.toUpperCase()),
     limit(1)
   )
   const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()

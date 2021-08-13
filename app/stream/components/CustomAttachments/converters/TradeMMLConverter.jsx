@@ -32,7 +32,7 @@ export const TradeMMLConverter = ({ tagKey, costPerShare, tradeType }) => {
           key={`${tradeType}-button`}
           name={tradeType}
           className="flex-grow mx-2 outline-btn btn-transition"
-          text={tradeType.charAt(0).toUpperCase() + tradeType.slice(1)}
+          text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
         />
       </div>
     </div>

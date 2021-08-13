@@ -1,13 +1,32 @@
+import dynamic from "next/dynamic"
 import React from "react"
 import { Attachment } from "stream-chat-react"
-import {
-    InvestCommandAttachment,
-    InvestmentConfirmationAttachment, InvestmentReceiptAttachment, StockDisplayAttachment, TradeCommandAttachment
-} from "./CustomAttachments"
+
+const InvestCommandAttachment = dynamic(
+  () => import("./CustomAttachments/InvestCommandAttachment"),
+  { ssr: false }
+)
+const InvestmentConfirmationAttachment = dynamic(
+  () => import("./CustomAttachments/InvestmentConfirmationAttachment"),
+  { ssr: false }
+)
+const InvestmentReceiptAttachment = dynamic(
+  () => import("./CustomAttachments/InvestmentReceiptAttachment"),
+  { ssr: false }
+)
+const StockDisplayAttachment = dynamic(
+  () => import("./CustomAttachments/StockDisplayAttachment"),
+  { ssr: false }
+)
+const TradeCommandAttachment = dynamic(
+  () => import("./CustomAttachments/TradeCommandAttachment"),
+  { ssr: false }
+)
 
 export default function CustomAttachment(props) {
   const { attachments } = props
   const [attachment] = attachments || []
+  console.log(attachment)
 
   switch (attachment?.type) {
     case "receipt":

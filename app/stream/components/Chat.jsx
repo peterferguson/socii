@@ -108,7 +108,7 @@ export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
             ? client.channel("messaging", groupName?.split(" ").join("-"))
             : null
         }
-        maxNumberOfFiles={10}
+        maxNumberOfFiles={3}
         multipleUploads={true}
         Attachment={CustomAttachment}
         TriggerProvider={CustomTriggerProvider}
@@ -119,7 +119,7 @@ export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
           />
           <MessageList
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-            // messageLimit={5} // TODO: Implement messageLimit to save on api calls
+            messageLimit={5}
           />
           <MessageInput Input={MessagingInput} />
         </Window>
