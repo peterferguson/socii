@@ -1,7 +1,7 @@
 # Local
 POST http://localhost:5001/sociiinvest/europe-west2/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"trades"}
 
@@ -9,28 +9,28 @@ Authorization: Bearer CK71HIRTN216RINOSIS1
 
 POST http://localhost:5001/sociiinvest/europe-west2/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"accounts"}
 
 ###
 POST http://localhost:5001/sociiinvest/europe-west2/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"journals"}
 
 ###
 POST http://localhost:5001/sociiinvest/europe-west2/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"transfers"}
 
 ###
 POST http://localhost:5001/sociiinvest/europe-west2/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"nonTradingActivity"}
 
@@ -40,7 +40,7 @@ Authorization: Bearer CK71HIRTN216RINOSIS1
 ###
 POST https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents
 Content-Type: application/json
-Authorization: Bearer CK71HIRTN216RINOSIS1
+Authorization: Bearer CKM8UE0C8CBDH0TI3N9X
 
 {"type":"trades"}
   

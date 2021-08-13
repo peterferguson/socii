@@ -26,6 +26,8 @@ export async function handleEvents(req: Request, res: Response) {
   logger.log(`Authorization: ${authorization}`)
   logger.log(`Body: ${JSON.stringify(body)}`)
 
+  logger.log(`Config: ${JSON.stringify(functions.config())}`)
+
   if (method !== "POST") {
     res.setHeader("Allow", ["POST"])
     res.status(405).end(`Method ${method} Not Allowed`)
