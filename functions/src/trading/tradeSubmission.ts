@@ -1,7 +1,6 @@
 import { logger } from "firebase-functions"
-import { firestore, serverTimestamp, HttpsError } from "../index.js"
+import { firestore, serverTimestamp, HttpsError, streamClient } from "../index.js"
 import { allKeysContainedIn } from "../utils/allKeysContainedIn"
-import { streamClient } from "../utils/streamClient"
 import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 import { verifyUser } from "../utils/verifyUser"
 
@@ -43,11 +42,14 @@ export const tradeSubmission = async (
       username: verifiedData.username,
       side: verifiedData.side,
       symbol: verifiedData.symbol,
-      cost: verifiedData.price,
-      qty: verifiedData.qty,
+      stockPrice: verifiedData.stockPrice,
+      notional: verifiedData.notional,
+      //qty: verifiedData.qty,
       parent_id: messageId,
       show_in_channel: false,
     })
+    logger.log(verifiedData)
+
     const channel = streamClient.channel(
       "messaging",
       data.groupName.split(" ").join("-")
@@ -62,8 +64,9 @@ export const tradeSubmission = async (
       groupName: "",
       assetRef: null,
       type: "",
-      price: 0,
-      qty: 0,
+      stockPrice: 0,
+      //qty: 0,
+      notional: 0,
       side: "",
       messageId: "",
       timeInForce: "",
@@ -76,7 +79,7 @@ export const tradeSubmission = async (
     const optionalArgs = {
       assetType: "",
       shortName: "",
-      tickerSymbol: "",
+      //tickerSymbol: "",
       executionCurrency: "GBP",
       assetCurrency: "USD",
       executorRef: `users/${context.auth.uid}`,
@@ -97,9 +100,10 @@ export const tradeSubmission = async (
     const assetData = await assetRef.get()
   
     requiredArgs.assetRef = assetRef
+    requiredArgs.symbol = assetData.get("tickerSymbol")
     optionalArgs.assetType = assetData.get("assetType")
     optionalArgs.shortName = assetData.get("shortName")
-    optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
+   
     
   
     // * Inject data into requiredArgs

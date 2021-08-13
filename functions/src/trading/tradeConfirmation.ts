@@ -1,11 +1,8 @@
 import { logger } from "firebase-functions"
 import { error } from "firebase-functions/lib/logger"
-import { config, CreateOrder, TradingApi } from "../alpaca/broker/client/ts/index"
-import { firestore, iexClient } from "../index.js"
-import { determineAlpacaStatus } from "../utils/determineAlpacaStatus"
+import { CreateOrder } from "../alpaca/broker/client/ts/index"
+import { firestore, iexClient, streamClient , tradeClient  } from "../index.js"
 import { isSell } from "../utils/isSell"
-import { streamClient } from "../utils/streamClient"
-import { journalShares } from "./journalShares.js"
 import { investmentFailedMML } from "./mml/investmentFailedMML"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
 import { investmentReceiptMML } from "./mml/investmentReceiptMML"
@@ -21,32 +18,29 @@ import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 
 export const tradeConfirmation = async (change, context) => {
       // - document at groups/{groupName}/trades/{messageId} 
-      const { groupName, messageId } = context.params
+      const { groupName, tradeId } = context.params
       const tradeData = await change.after.data()
 
       // TODO add executed = pending to all orders as they are sent..
       // can be: success, pending, failed
       if (tradeData.executionStatus!=="pending") return  // - do nothing
-    
-    
-      const tradeClient = new TradingApi(config)
+      
       const ALPACA_FIRM_ACCOUNT = process.env.ALPACA_FIRM_ACCOUNT
-    
+      
       const groupRef = await firestore.collection("groups").doc(groupName)
       let { cashBalance, investorCount } = (await groupRef.get()).data()
     
       const ISIN = tradeData.assetRef.split("/").pop()
       tradeData.assetRef = firestore.doc(tradeData.assetRef)
-     
-      ////// TODO reinstate this when testing in hours
+
       const { latestPrice, isUSMarketOpen } = await iexClient.quote(
-        tradeData.tickerSymbol,
+        tradeData.symbol,
         {
           filter: "latestPrice,isUSMarketOpen",
         }
       )
 
-    logger.log("latest", latestPrice, "and price: ",tradeData.price)
+    logger.log("latest", latestPrice, "and stockprice: ",tradeData.stockPrice)
   ///////// TODO reinstate this
     //   // // // - do nothing if market is closed
     //   // if (!isUSMarketOpen) {
@@ -65,14 +59,14 @@ export const tradeConfirmation = async (change, context) => {
       // ! Now asset price & currency is available along with cost & execution currency this should be simple
       // ! As stated below I think this should be a client-side check though
     
-      if (tradeData.qty * latestPrice > cashBalance && !isSell(tradeData.type)) {
+      if (tradeData.notional > cashBalance && !isSell(tradeData.type)) {
         // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
         // - A small variation should be somewhat enforced on the client-side.
         // - Assuming no massive jump in stock price.
         // TODO: Implement a client-side check on the cost vs cashBalance.
         // TODO: Need to distinguish shares bought by cost & those by share amount
     
-        tradeData.qty = (cashBalance / latestPrice) * 0.975
+        tradeData.notional = cashBalance  * 0.95
     
         // - drop share amount to within 2.5% of total cashBalance.
         // ! This is arbitrary & maybe be another threshold decided upon by the group.
@@ -80,7 +74,7 @@ export const tradeConfirmation = async (change, context) => {
       }
     
       if (
-        (latestPrice - tradeData.price) / tradeData.price > 0.025 &&
+        (latestPrice - tradeData.stockPrice) / tradeData.stockPrice > 0.025 &&
         !isSell(tradeData.type)
       ) {
         logger.log(`The price has risen more than 2.5% since the price was agreed`)
@@ -95,22 +89,11 @@ export const tradeConfirmation = async (change, context) => {
          2. Allowing a user an option to set a new threshold on each purchase if it is high beta
          */
       } else {
-        tradeData.price = latestPrice
+        tradeData.stockPrice = latestPrice
       }
     
       if (investorCount == 1 || tradeData.agreesToTrade.length === investorCount - 1) {
         // ! Execute Trade
-    
-        logger.log(    
-            ALPACA_FIRM_ACCOUNT,           
-            tradeData.symbol,
-             tradeData.side,
-             tradeData.timeInForce,
-             tradeData.qty,
-             tradeData.type,
-             tradeData.price,
-             tradeData.messageId,
-             tradeData.executionStatus,)
 
         try{
           //breakdown message into alpaca form and send to broker
@@ -119,11 +102,12 @@ export const tradeConfirmation = async (change, context) => {
             CreateOrder.from({
               symbol: tradeData.symbol,
               side: tradeData.side,
-              timeInForce: tradeData.timeInForce,
-              qty: tradeData.qty, // remove and replace with notional 
+              time_in_force: tradeData.timeInForce,
               type: tradeData.type,
-              limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
-              client_order_id: `${groupName}|${tradeData.messageId}`
+              notional: String(tradeData.notional),
+              //qty: tradeData.qty, // remove and replace with notional 
+              //limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
+              client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
             })
           )
           const determineStatus =(responseStatus) => {
@@ -139,7 +123,7 @@ export const tradeConfirmation = async (change, context) => {
             executionStatus = "failed"
         }  
         
-        const channel = streamClient.channel("messaging", groupName)
+        const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
 
           // TODO
           // - maybe the below is heavy on wirtes?
@@ -147,25 +131,18 @@ export const tradeConfirmation = async (change, context) => {
           // could be reduced by just writing when success, but may lose info
 
           switch (executionStatus) {
-            case "success":
-              // 1. Batch update holdings.
-              // if profit was set for a sell, update the document with the returned value
-              const updateInformation = await updateHolding({groupName, messageId , tradeData, executionStatus})
-              const tradeUpdateInfo = updateInformation.pnlPercentage? updateInformation: {executionStatus: "failed"}
+            case "success": 
               
-              // 2. Send a message with the finalised price
+              // 1. Send a message with the finalised price
               await channel.sendMessage(investmentReceiptMML(tradeData))
-              
-              // 3. Journal funds to individual alpaca accounts for holding
-              journalShares(tradeData.agreesToTrade, tradeData.qty)
 
-              return change.after.ref.update(tradeUpdateInfo)
+              return change.after.ref.update({executionStatus: "success"})
               break
     
             case "pending":
               // 1. Withold balance or shares until pending order is resolved 
               if(tradeData.side=="buy"){
-              groupRef.update({ cashBalance: cashBalance - tradeData.qty * latestPrice })}
+              groupRef.update({ cashBalance: cashBalance - tradeData.notional })}
               // 3. send a message to inform about pending order
               // TODO display more useful message  
               await channel.sendMessage(investmentPendingMML(tradeData))

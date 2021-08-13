@@ -61,7 +61,7 @@ const TradeCommandAttachment = ({ attachment }) => {
           />
           <Suspense fallback={<LoadingIndicator />}>
             <MML
-              converters={converters(price)}
+              converters={converters(currentPrice)}
               source={attachment.mml}
               onSubmit={(data) => {
                 const tradeArgs = {
@@ -71,14 +71,16 @@ const TradeCommandAttachment = ({ attachment }) => {
                   messageId: message.id,
                   executionCurrency: "USD",
                   assetCurrency: "USD",
+                  stockPrice: currentPrice,
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                  price: currentPrice,
+                  notional: parseFloat(data.amount),
                   //cost: parseFloat(data.cost || data.amount),
-                  qty: parseFloat(data.shares),
-                  symbol: tickerSymbol,
-                  timeInForce: "gtc",
+                  //qty: parseFloat(data.shares),
+                  symbol: tickerSymbol.current,
+                  timeInForce: "day",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
                 }
+                console.log(tradeArgs)
                 //TODO: Review redundancy with orderType (may not be with limit orders)
                 // - Write to firestore & send confirmation message in thread
                 if ("buy" in data) {

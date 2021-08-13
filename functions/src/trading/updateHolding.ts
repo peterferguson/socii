@@ -19,6 +19,7 @@ export const updateHolding = async (
     messageId?: string
     tradeData?: any
     executionStatus?: string
+    qty?: string
   },
   context?: any
 ) => {
@@ -29,7 +30,8 @@ export const updateHolding = async (
   // - can be set to success, pending, failed
   let tradeUpdateData = { executionStatus: executionStatus, pnlPercentage: {} }
 
-  const latestPrice = tradeData.latestPrice
+  const qty = parseFloat(data.qty)
+  const latestPrice = tradeData.stockPrice
   const ISIN = tradeData.assetRef.split("/").pop()
   tradeData.assetRef = firestore.doc(tradeData.assetRef)
 
@@ -42,6 +44,7 @@ export const updateHolding = async (
     holdingDocRef,
     tradeData,
     messageId,
+    qty
   })
   logger.log("type of change: ", type)
   logger.log("holding data: ", holdingData)
@@ -49,13 +52,13 @@ export const updateHolding = async (
   switch (type) {
     case "update":
       holdingDocRef.update(holdingData)
-      groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
+      groupRef.update({ cashBalance: cashBalance - qty * latestPrice })
       if (pnlPercentage) tradeUpdateData.pnlPercentage = pnlPercentage
       return tradeUpdateData
       break
     case "set":
       holdingDocRef.set(holdingData)
-      groupRef.update({ cashBalance: cashBalance - tradeData.shares * latestPrice })
+      groupRef.update({ cashBalance: cashBalance - qty * latestPrice })
       break
     default:
       // - Secondary execution check (this time on the holding doc) ... do nothing
@@ -63,16 +66,16 @@ export const updateHolding = async (
   }
 }
 
-const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
-  const { orderType, shares, price, assetRef, tickerSymbol, shortName } = tradeData
-  const negativeEquityMultiplier = orderType.toLowerCase().includes("buy") ? 1 : -1
+const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
+  const { type, notional, assetRef, symbol, shortName, stockPrice } = tradeData
+  const negativeEquityMultiplier = type.toLowerCase().includes("buy") ? 1 : -1
 
   // - Assumptions:
   // 1. We keep zero share holdings to easily identify all previous holdings.
   // ? Could this be imposed in the firestore rules.
   // 2: On selling shares the cost basis is not affected & so only the shares is changed
 
-  const sharesIncrement = negativeEquityMultiplier * shares
+  const sharesIncrement = negativeEquityMultiplier * qty
 
   // * Check if the holding already exists
   const holding = await holdingDocRef.get()
@@ -84,14 +87,14 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
 
     const currentShares = holding.get("shares")
     const currentAvgPrice = holding.get("avgPrice")
-    const newAvgPrice =
+    var newAvgPrice =
       negativeEquityMultiplier + 1
-        ? (currentAvgPrice * currentShares + price * shares) / (currentShares + shares)
+        ? (currentAvgPrice * currentShares + stockPrice * qty) / (currentShares + qty)
         : currentAvgPrice
 
     // * Add profit to a sell trade on a current holding
     if (!(negativeEquityMultiplier + 1)) {
-      outputData.pnlPercentage = (100 * (price - currentAvgPrice)) / currentAvgPrice
+      outputData.pnlPercentage = (100 * (stockPrice - currentAvgPrice)) / currentAvgPrice
     }
 
     outputData.type = "update"
@@ -106,10 +109,10 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId }) => {
 
     outputData.holdingData = {
       assetRef,
-      tickerSymbol,
+      symbol,
       shortName,
       trades: [messageId],
-      avgPrice: price,
+      avgPrice: newAvgPrice,
       shares: increment(sharesIncrement),
       lastUpdated: serverTimestamp(),
     }

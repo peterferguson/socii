@@ -75,3 +75,6 @@ export const config = createConfiguration({
     },
   },
 })
+
+export const configTmp = (username: string, password: string) =>
+  createConfiguration({ authMethods: { BasicAuth: { username, password } } })

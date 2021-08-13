@@ -1,4 +1,6 @@
 const functions = require("firebase-functions")
+const StreamChat = require("stream-chat").StreamChat
+import { configTmp, TradingApi } from "./alpaca/broker/client/ts/index"
 import admin from "firebase-admin"
 import * as algoliaSearch from "./algoliaSearch.js"
 import * as commands from "./commands/index.js"
@@ -26,7 +28,16 @@ process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
 process.env.IEX_TOKEN = functions.config().iex.api_key
 
+
+// INITIALISE CLIENTS
 export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
+
+export const streamClient = new StreamChat(
+  process.env.STREAM_API_KEY,
+  process.env.STREAM_API_SECRET
+)
+
+export const tradeClient = new TradingApi(configTmp(process.env.ALPACA_KEY, process.env.ALPACA_SECRET))
 
 const london = "europe-west2"
 

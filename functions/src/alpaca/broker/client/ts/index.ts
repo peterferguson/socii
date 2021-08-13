@@ -1,6 +1,6 @@
 export * from "./apis/exception"
 export * from "./auth/auth"
-export { config, createConfiguration } from "./configuration"
+export { config, configTmp, createConfiguration } from "./configuration"
 export type { Configuration } from "./configuration"
 export * from "./http/http"
 export type { PromiseMiddleware as Middleware } from "./middleware"

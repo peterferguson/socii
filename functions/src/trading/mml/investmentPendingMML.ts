@@ -7,14 +7,14 @@ export const investmentPendingMML = (tradeData) => {
   const mmlmessage = {
     user_id: "socii",
     text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${isSell(tradeData.orderType) ? "sale" : "purchase"} for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.cost} IS PENDING
+        $${tradeData.notional} of ${tradeData.symbol} ${isSell(tradeData.type) ? "sale" : "purchase"} for ${currencySymbols[tradeData.assetCurrency]}${tradeData.stockPrice} per share.
+         IS PENDING
         `,
     attachments: [
       {
         type: "receipt",
         mml: mmlstring,
-        tickerSymbol: tradeData.tickerSymbol,
+        tickerSymbol: tradeData.symbol,
       },
     ],
   };
