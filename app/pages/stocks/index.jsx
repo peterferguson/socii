@@ -1,9 +1,12 @@
 import CardSlider from "@components/CardSlider"
 import ChartCard from "@components/ChartCard"
+import HorizontalAssetCard, {
+  HorizontalAssetCardSkeleton,
+} from "@components/HorizontalAssetCard"
 import { useAuth } from "@hooks"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import { getMainPageStocks } from "@lib/firebase/client/db/getMainPageStocks"
+import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { iexQuote } from "@utils/iexQuote"
@@ -11,9 +14,6 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
-import HorizontalAssetCard, {
-  HorizontalAssetCardSkeleton,
-} from "@components/HorizontalAssetCard"
 
 const beginLoadingMoreTickersNFromLast = 3
 
@@ -77,13 +77,13 @@ export default function StockDisplay({ tickers }) {
     // TODO: Create our own version of this Ticker Tape banner
     <>
       <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
-        <Link href="/stocks/popular">
-          <div className="flex px-4 pt-8 mb-4 text-3xl font-bold uppercase cursor-pointer font-secondary text-brand-dark">
-            Popular Stocks
-            <div className="flex-grow" />
-            <FiChevronRight className="h-8 cursor-pointer mt-0.5" />
-          </div>
-        </Link>
+        {/* <Link href="/stocks/popular"> */}
+        <div className="flex pt-4 pl-12 mb-1 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
+          Popular Stocks
+          {/* <div className="flex-grow" />
+            <FiChevronRight className="h-8 cursor-pointer mt-0.5" /> */}
+        </div>
+        {/* </Link> */}
         <CardSlider tickers={tickers} />
         {/* TODO: Charts are not resizing on container change */}
         <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
@@ -115,7 +115,7 @@ export default function StockDisplay({ tickers }) {
                 />
               )
             })}
-            <HorizontalAssetCardSkeleton cardRef={lastTickerRef} />
+          <HorizontalAssetCardSkeleton cardRef={lastTickerRef} />
           {/* REFACTOR */}
           {/* Compensate for the footer */}
           {is1Col && <div className="h-36"></div>}
