@@ -1,4 +1,5 @@
-import functions, { logger } from "firebase-functions"
+const functions = require("firebase-functions")
+import { logger } from "firebase-functions"
 import { config } from "../alpaca/broker/client/ts/index"
 import { getLatestEventId, storeEvents } from "../lib/firestore"
 import { IncomingMessage } from "http"
