@@ -11,7 +11,8 @@
  * @returns tradeUpdateData if needed
  */
 import { logger } from "firebase-functions"
-import { firestore, serverTimestamp, increment, arrayUnion } from "../index.js"
+import { firestore } from "../index.js"
+import { serverTimestamp, increment, arrayUnion } from "../lib/firestore/index.js"
 
 export const updateHolding = async (
   data: {

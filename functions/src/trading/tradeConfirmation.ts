@@ -1,16 +1,14 @@
 import { logger } from "firebase-functions"
-import { error } from "firebase-functions/lib/logger"
 import { config, CreateOrder, TradingApi } from "../alpaca/broker/client/ts/index"
 import { firestore, iexClient } from "../index.js"
-import { determineAlpacaStatus } from "../utils/determineAlpacaStatus"
 import { isSell } from "../utils/isSell"
+import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 import { streamClient } from "../utils/streamClient"
 import { journalShares } from "./journalShares.js"
 import { investmentFailedMML } from "./mml/investmentFailedMML"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
 import { investmentReceiptMML } from "./mml/investmentReceiptMML"
 import { updateHolding } from "./updateHolding.js"
-import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 
 /*
 - tradeConfirmation
@@ -153,7 +151,7 @@ export const tradeConfirmation = async (change, context) => {
       }
       var executionStatus = determineStatus(postOrder.status)
     } catch (err) {
-      logger.log(error(err))
+      logger.error(err)
       executionStatus = "failed"
     }
 

@@ -1,4 +1,5 @@
-import { firestore, serverTimestamp } from "../firebase-admin"
+import { firestore } from "../../../index"
+import { serverTimestamp } from "../index"
 
 export async function storeEvents(
   eventType: string,

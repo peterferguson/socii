@@ -1,9 +1,9 @@
-import { logger } from "firebase-functions"
-import { firestore, serverTimestamp, HttpsError } from "../index.js"
+import { firestore, HttpsError } from "../index.js"
+import { serverTimestamp } from "../lib/firestore/index.js"
 import { allKeysContainedIn } from "../utils/allKeysContainedIn"
 import { streamClient } from "../utils/streamClient"
-import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 import { verifyUser } from "../utils/verifyUser"
+import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 
 /*
 - tradeSubmission

@@ -1,12 +1,9 @@
-import { config } from "@alpaca/index"
-import { storeEvents } from "@lib/firebase/server/db/storeEvents"
-import { getLatestEventId } from "@lib/firebase/server/db/getLatestEventId"
-import { withCORS } from "@utils/middleware"
+import functions, { logger } from "firebase-functions"
+import { config } from "../alpaca/broker/client/ts/index"
+import { getLatestEventId, storeEvents } from "../lib/firestore"
 import { IncomingMessage } from "http"
-import { BaseServer, sseGetRequest } from "@utils/sseGetRequest"
-import { NextApiRequest, NextApiResponse } from "next"
-
-export default withCORS(handleEvents)
+import { BaseServer, sseGetRequest } from "../utils/sseGetRequest"
+import { Request, Response } from "express"
 
 const alpacaEventEndpoints = {
   accounts: "accounts/status",
@@ -16,7 +13,7 @@ const alpacaEventEndpoints = {
   nonTradingActivity: "nta",
 }
 
-export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
+export async function handleEvents(req: Request, res: Response) {
   const {
     headers: { authorization },
     body,
@@ -24,12 +21,16 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   } = req
   let { type, since, until, since_id, until_id } = body
 
+  logger.debug(`Received ${method} request for ${type}`)
+  logger.log(`Authorization: ${authorization}`)
+  logger.log(`Body: ${JSON.stringify(body)}`)
+
   if (method !== "POST") {
     res.setHeader("Allow", ["POST"])
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  if (authorization !== `Bearer ${process.env.NEXT_PUBLIC_FIREBASE_KEY}`) {
+  if (authorization !== `Bearer ${functions.config().alpaca.key}`) {
     res.status(401).end("The request is not authorized")
     return
   }
@@ -48,7 +49,8 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
   const baseServer: BaseServer = {
     url: "",
     variableConfiguration: undefined,
-    ...config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET).baseServer,
+    ...config(functions.config().alpaca.key, functions.config().alpaca.secret)
+      .baseServer,
   }
 
   if (type in alpacaEventEndpoints) {
@@ -74,8 +76,7 @@ export async function handleEvents(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export const responseCallback =
-  (res: NextApiResponse, type: string, since_id: number) =>
-  (response: IncomingMessage) => {
+  (res: Response, type: string, since_id: number) => (response: IncomingMessage) => {
     let data = []
     const headerDate =
       response.headers && response.headers.date

@@ -1,5 +1,6 @@
 import { error } from "firebase-functions/lib/logger"
-import { firestore, increment, serverTimestamp } from "./index.js"
+import { firestore } from "./index.js"
+import { increment, serverTimestamp } from "./lib/firestore/index.js"
 import { streamClient } from "./utils/streamClient"
 import { config, FundingApi, TransferData } from "./alpaca/broker/client/ts/index"
 

@@ -1,12 +1,6 @@
 import { logger } from "firebase-functions"
-import {
-  firestore,
-  serverTimestamp,
-  increment,
-  arrayUnion,
-  HttpsError,
-  iexClient,
-} from "./index.js"
+import { firestore, HttpsError, iexClient } from "./index.js"
+import { serverTimestamp, increment, arrayUnion } from "./lib/firestore/index"
 import { singleLineTemplateString } from "./utils/singleLineTemplateString"
 import { currencySymbols } from "./utils/currencySymbols"
 import { streamClient } from "./utils/streamClient"

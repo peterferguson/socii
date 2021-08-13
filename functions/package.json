@@ -29,6 +29,7 @@
     "stream-chat": "^3.1.4"
   },
   "devDependencies": {
+    "@types/express": "^4.17.3",
     "css-loader": "^5.2.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.6.0",

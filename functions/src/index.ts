@@ -1,24 +1,19 @@
 const functions = require("firebase-functions")
+const { Client } = require("iexjs")
 import admin from "firebase-admin"
+
+// * Import function modules
+import * as accounts from "./accounts/index.js"
 import * as algoliaSearch from "./algoliaSearch.js"
 import * as commands from "./commands/index.js"
 import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
-import * as accounts from "./accounts/index.js"
-// * Import function modules
+import * as events from "./events/index.js"
 import * as streamChat from "./streamChat.js"
 import * as trading from "./trading/index.js"
-const serviceAccount = require("../serviceAccountKey.json")
 
-const { Client } = require("iexjs")
 
 // * Constant initialisation
-
-// const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
-// adminConfig.credential = admin.credential.cert(serviceAccount)
-// admin.initializeApp(adminConfig)
-admin.initializeApp()
-
 process.env.ALPACA_KEY = functions.config().alpaca.key
 process.env.ALPACA_SECRET = functions.config().alpaca.secret
 process.env.ALPACA_FIRM_ACCOUNT = functions.config().alpaca.firm_account
@@ -27,18 +22,11 @@ process.env.STREAM_API_KEY = functions.config().stream.api_key
 process.env.IEX_API_VERSION = functions.config().iex.api_version
 process.env.IEX_TOKEN = functions.config().iex.api_key
 
+export const firestoreClient = admin.initializeApp()
+export const firestore = admin.firestore()
 export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
 
 const london = "europe-west2"
-
-// * Exportable utils
-export const firestore = admin.firestore()
-export const increment = admin.firestore.FieldValue.increment
-export const serverTimestamp = admin.firestore.FieldValue.serverTimestamp
-export type Timestamp = admin.firestore.Timestamp
-export const Timestamp = admin.firestore.Timestamp
-export const arrayUnion = admin.firestore.FieldValue.arrayUnion
-export type UserInfo = admin.auth.UserInfo
 export const HttpsError = functions.https.HttpsError
 
 module.exports = {
@@ -78,6 +66,7 @@ module.exports = {
     .https.onRequest(algoliaSearch.loadTickersToAlgolia),
   commands: functions.region(london).https.onRequest(commands.handleCommand),
   storeTimeseries: functions.region(london).https.onRequest(data.storeTimeseries),
+  alpacaEvents: functions.region(london).https.onRequest(events.alpacaEvents),
   // 2.2 onCall
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),

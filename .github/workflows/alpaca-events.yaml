@@ -10,10 +10,10 @@ jobs:
       - name: Call events API route with type param = `trades`
         run: |
           curl --fail --show-error --request POST \
-          --url 'https://socii.app/api/alpaca/events' \
+          --url 'https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents' \
           -H "Content-Type: application/json" \
           --data '{"type":"trades"}' \
-          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
   journals:
     runs-on: ubuntu-latest
@@ -21,10 +21,10 @@ jobs:
       - name: Call events API route with type param = `journals`
         run: |
           curl --fail --show-error --request POST \
-          --url 'https://socii.app/api/alpaca/events' \
+          --url 'https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents' \
           -H "Content-Type: application/json" \
           --data '{"type":"journals"}' \
-          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
   accounts:
     runs-on: ubuntu-latest
@@ -32,10 +32,10 @@ jobs:
       - name: Call events API route with type param = `accounts`
         run: |
           curl --fail --show-error --request POST \
-          --url 'https://socii.app/api/alpaca/events' \
+          --url 'https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents' \
           -H "Content-Type: application/json" \
           --data '{"type":"accounts"}' \
-          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
   transfers:
     runs-on: ubuntu-latest
@@ -43,10 +43,10 @@ jobs:
       - name: Call events API route with type param = `transfers`
         run: |
           curl --fail --show-error --request POST \
-          --url 'https://socii.app/api/alpaca/events' \
+          --url 'https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents' \
           -H "Content-Type: application/json" \
           --data '{"type":"transfers"}' \
-          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
   nonTradingActivity:
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
       - name: Call events API route with type param = `nonTradingActivity`
         run: |
           curl --fail --show-error --request POST \
-          --url 'https://socii.app/api/alpaca/events' \
+          --url 'https://europe-west2-sociiinvest.cloudfunctions.net/alpacaEvents' \
           -H "Content-Type: application/json" \
           --data '{"type":"nonTradingActivity"}' \
-          --header 'Authorization: Bearer ${{ secrets.FIREBASE_KEY }}'
+          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'

@@ -1,6 +1,7 @@
 import bent from "bent"
 import * as cors from "cors"
-import { firestore, serverTimestamp, Timestamp } from "./index.js"
+import { firestore } from "./index.js"
+import { serverTimestamp, Timestamp } from "./lib/firestore/index.js"
 import { cleanJsonResponse } from "./utils/cleanJsonResponse"
 import { filterKeys } from "./utils/filterKeys"
 // - whitelist cannot be accessed by the firestore client outside the yahoo folder
