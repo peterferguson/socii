@@ -11,7 +11,11 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
-import HorizontalAssetCard from "@components/HorizontalAssetCard"
+import HorizontalAssetCard, {
+  HorizontalAssetCardSkeleton,
+} from "@components/HorizontalAssetCard"
+
+const beginLoadingMoreTickersNFromLast = 3
 
 export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -32,12 +36,22 @@ export default function StockDisplay({ tickers }) {
   const is2Cols = !useMediaQuery({ minWidth: 1024 })
 
   useEffect(() => {
+    console.log("isVisible: ", isVisible)
+    console.log("loading: ", loadingMoreTickers)
+
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
       const numTickers = is1Col ? 5 : is2Cols ? 10 : 15
       const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, numTickers)
 
-      lastTickerLoaded.current = tickerDocs.docs?.slice(-1).pop()
+      lastTickerLoaded.current = tickerDocs.docs
+        ?.slice(
+          -beginLoadingMoreTickersNFromLast,
+          -beginLoadingMoreTickersNFromLast + 1
+        )
+        .pop()
+
+      console.log(lastTickerLoaded.current.data())
 
       const tickers = await Promise.all(
         tickerDocs.docs?.map(async (tickerDoc) => {
@@ -77,11 +91,13 @@ export default function StockDisplay({ tickers }) {
             .concat(moreTickers.current)
             .map(({ ticker, timeseries, price }, i) => {
               const loadNewTickers =
-                i === tickers.concat(moreTickers.current).length - 3
+                i ===
+                tickers.concat(moreTickers.current).length -
+                  beginLoadingMoreTickersNFromLast
               return !timeseries?.length ? (
                 <HorizontalAssetCard
                   key={`${ticker?.tickerSymbol}-${i}`}
-                  cardRef={loadNewTickers ? lastTickerRef : null}
+                  cardRef={null}
                   isin={ticker?.ISIN}
                   tickerSymbol={ticker?.tickerSymbol}
                   shortName={ticker?.shortName}
@@ -99,6 +115,7 @@ export default function StockDisplay({ tickers }) {
                 />
               )
             })}
+            <HorizontalAssetCardSkeleton cardRef={lastTickerRef} />
           {/* REFACTOR */}
           {/* Compensate for the footer */}
           {is1Col && <div className="h-36"></div>}
