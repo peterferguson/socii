@@ -12,10 +12,10 @@ We can use this data in the frontend to query the assets, display fractionable s
 
 ### TODOs
 
-- [ ] Add the ISINs which have been scraped from AJBell to Firestore
-- [ ] Find the rest of the ISINs & update Firestore
-- [ ] The new stocks may need run through some of the scripts from `ticker_symbol.py` to: 
+- [X] Add the ISINs which have been scraped from AJBell to Firestore
+- [X] Find the rest of the ISINs & update Firestore
+- [X] The new stocks may need run through some of the scripts from `ticker_symbol.py` to: 
   - [ ] find the yahoo & alpha vantage suffixes
-  - [ ] get the logo & logo colours
+  - [X] get the logo & logo colours
   - [ ] etc
 - [ ] ~
