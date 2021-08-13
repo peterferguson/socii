@@ -55,7 +55,7 @@ export default function StockDisplay({ tickers }) {
       getMoreTickers()
       lastTickerRef.current = null
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, user?.token])
 
   return (

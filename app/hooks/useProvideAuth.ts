@@ -16,6 +16,7 @@ import Router from "next/router"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { UrlObject } from "url"
+import { loginRedirect } from "@utils/loginRedirect"
 
 //Ref https://docs.react2025.com/firebase/use-auth
 
@@ -55,13 +56,13 @@ export const useProvideAuth = () => {
 
   const signinWithProvider = async (
     provider: AuthProvider,
-    redirect: string | UrlObject = "/"
+    redirect: string | UrlObject = ""
   ) => {
     setLoading(true)
-    const result = await signInWithPopup(auth, provider)
-    handleUser(result.user)
+    const { user: rawUser } = await signInWithPopup(auth, provider)
+    handleUser(rawUser)
 
-    redirect && Router.push(redirect)
+    redirect !== "" && Router.push(redirect)
   }
 
   const signinWithFacebook = (redirect: string | UrlObject) =>
@@ -72,7 +73,7 @@ export const useProvideAuth = () => {
 
   const signout = async (redirect: string | UrlObject = "/") => {
     await signOut(auth)
-    const firstname = userFirstName(user)
+    const firstname = userFirstName(user?.displayName)
     toast.dismiss()
     toast(`Bye for now ${firstname}!`, { icon: "👋" })
     handleUser(null)

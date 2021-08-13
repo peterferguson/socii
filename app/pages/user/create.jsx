@@ -9,8 +9,9 @@ import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 
 export default function Username(props) {
-  const { user } = useAuth()
+  const { user, username: existingUsername } = useAuth()
   const router = useRouter()
+  const [disabled, setDisabled] = useState(false)
   const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -27,6 +28,12 @@ export default function Username(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => checkUsername(username), [username])
 
+  useEffect(
+    () => existingUsername && router.push(`/user/${existingUsername}`),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [existingUsername]
+  )
+
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,10 +49,9 @@ export default function Username(props) {
     []
   )
 
-  const runAccountCreation = async (e, user, username) => {
-    e.preventDefault()
+  const runAccountCreation = async (user, username) => {
     console.log(user, username)
-    const { body } = await createAccount(user, username)
+    const { body } = await createAccount({ user, username })
     if (body?.status === "success") {
       toast.success(body?.message)
       router.push(`/user/${username}`)
@@ -81,9 +87,13 @@ export default function Username(props) {
           </div>
           <button
             className="w-11/12 my-4 btn"
-            onClick={(e) => isValidUsername && runAccountCreation(e, user, username)}
+            onClick={async (e) => {
+              e.preventDefault()
+              isValidUsername && (await runAccountCreation(user, username))
+            }}
+            disabled={disabled}
           >
-            Choose!
+            {!disabled ? "Choose!" : "Creating..."}
           </button>
         </div>
       </form>

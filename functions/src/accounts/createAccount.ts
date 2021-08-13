@@ -2,8 +2,10 @@ import { logger } from "firebase-functions"
 import { firestore, UserInfo } from "../index.js"
 import {
   AccountCreationObject,
+  Account,
   AccountsApi,
   ACHRelationshipData,
+  ACHRelationshipResource,
   config,
 } from "../alpaca/broker/client/ts/index"
 
@@ -16,14 +18,18 @@ interface FirebaseUser extends UserInfo {
   alpacaAccountId: string
 }
 
-export const createAccount = async (user: FirebaseUser, username: string) => {
+export const createAccount = async (data, context) => {
+  const { user, username } = data
   logger.log("started creating account")
+
+  let alpacaAccountId: string, alpacaACH: string
+
+  // - create an alpaca account
   try {
     const accountsClient = new AccountsApi(
       config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
     )
 
-    // - create an alpaca account
     const alpacaAccount = await accountsClient.accountsPost(
       AccountCreationObject.from(mockAlpacaAccountDetails(user))
     )
@@ -35,19 +41,27 @@ export const createAccount = async (user: FirebaseUser, username: string) => {
     )
     logger.log("ach created: ", achRelationship.id)
 
-    // - create user in firebase
+    alpacaAccountId = alpacaAccount.id
+    alpacaACH = achRelationship.id
+  } catch (e) {
+    logger.error("Failed to create Alpaca account")
+    logger.error(e)
+  }
+
+  // - create user in firebase
+  try {
     const userRef = firestore.collection(`users`).doc(user.uid)
     const usernameRef = firestore.collection(`usernames`).doc(username)
 
-    logger.log("creating fb docs ")
+    logger.log("creating user & username docs ")
     const batch = firestore.batch()
     batch.set(
       userRef,
       {
         ...user,
-        username: username,
-        alpacaAccountID: alpacaAccount.id,
-        alpacaACH: achRelationship.id,
+        username,
+        alpacaAccountId: alpacaAccountId || "",
+        alpacaACH: alpacaACH || "",
       },
       { merge: true }
     )

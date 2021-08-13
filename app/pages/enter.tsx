@@ -1,4 +1,5 @@
 import Logo from "@components/Logo"
+import { loginRedirect } from "@utils/loginRedirect"
 import { userFirstName } from "@utils/userFirstName"
 import { useAuth } from "hooks/useAuth"
 import router from "next/router"
@@ -16,18 +17,13 @@ import { useMediaQuery } from "react-responsive"
 // TODO: Implement Apple login on iOS devices
 
 export default function Enter() {
-  const { user, username, signinWithFacebook, signinWithGoogle } = useAuth()
+  const { user, username, userGroups, signinWithFacebook, signinWithGoogle } = useAuth()
 
-  useEffect(() => {
-    if (user) {
-      toast.dismiss()
-      // TODO: If a user already belongs to a group redirect there first
-      // TODO: Check the group first since if they are in a group they will already have a username
-      router.push(`/user/${username ? username : "create"}`)
-      toast.success(`Welcome ${userFirstName(user)}`)
-    }
+  useEffect(
+    () => user && loginRedirect(user.displayName, username, userGroups),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username])
+    [user]
+  )
 
   // const [verified, setVerified] = useState(null)
 
@@ -51,13 +47,13 @@ export default function Enter() {
             <div className="flex flex-row items-center justify-center space-x-6">
               <span
                 className="inline-flex items-center justify-center font-bold text-white bg-white border border-gray-300 rounded-full cursor-pointer w-11 h-11 hover:shadow-lg transition ease-in duration-300"
-                onClick={() => signinWithGoogle("/stocks")}
+                onClick={() => signinWithGoogle("")}
               >
                 <FcGoogle className="w-8 h-8" />
               </span>
               <span
                 className="inline-flex items-center justify-center font-bold bg-white rounded-full cursor-pointer text-facebook w-11 h-11 hover:shadow-lg transition ease-in duration-300"
-                onClick={() => signinWithFacebook("/stocks")}
+                onClick={() => signinWithFacebook("")}
               >
                 <FaFacebook className="w-11 h-11" />
               </span>
@@ -66,7 +62,7 @@ export default function Enter() {
             <div className="flex flex-col items-center justify-center mx-auto space-y-6">
               <span
                 className="relative flex items-center justify-center w-full mx-auto bg-white rounded-full cursor-pointer h-11 "
-                onClick={() => signinWithGoogle("/stocks")}
+                onClick={() => signinWithGoogle("")}
               >
                 <FcGoogle className="absolute w-8 h-8 text-white left-[4.25rem]" />
                 <span className="flex items-center justify-center w-8/12 mx-auto text-sm font-thin text-black bg-white border border-gray-200 rounded-full h-11 hover:shadow-lg transition ease-in duration-300">
@@ -75,7 +71,7 @@ export default function Enter() {
               </span>
               <span
                 className="relative flex items-center justify-center w-full mx-auto bg-white rounded-full cursor-pointer h-11"
-                onClick={() => signinWithFacebook("/stocks")}
+                onClick={() => signinWithFacebook("")}
               >
                 <FaFacebook className="absolute w-8 h-8 text-white left-[4.25rem]" />
                 <span className="flex items-center justify-center w-8/12 mx-auto text-sm text-white rounded-full h-11 bg-facebook hover:shadow-lg transition ease-in duration-300">

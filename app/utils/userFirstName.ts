@@ -1,8 +1,6 @@
-import FirebaseUser from "@models/FirebaseUser";
-
 /**
  * Get first name from firebase user
- * @param  {string} ticker
+ * @param  {string} displayName
  */
 
-export const userFirstName = (user: FirebaseUser) => user?.displayName?.split(" ")?.[0] ?? "";
+export const userFirstName = (displayName: string) => displayName.split(" ")?.[0] ?? ""
