@@ -11,6 +11,7 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
+import HorizontalAssetCard from "@components/HorizontalAssetCard"
 
 export default function StockDisplay({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -72,19 +73,32 @@ export default function StockDisplay({ tickers }) {
         <CardSlider tickers={tickers} />
         {/* TODO: Charts are not resizing on container change */}
         <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-          {tickers.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
-            const loadNewTickers = i === tickers.concat(moreTickers.current).length - 3
-            return (
-              <ChartCard
-                key={`${ticker?.tickerSymbol}-${i}`}
-                cardRef={loadNewTickers ? lastTickerRef : null}
-                ISIN={ticker?.ISIN}
-                tickerSymbol={ticker?.tickerSymbol}
-                shortName={ticker?.shortName}
-                data={timeseries}
-              />
-            )
-          })}
+          {tickers
+            .concat(moreTickers.current)
+            .map(({ ticker, timeseries, price }, i) => {
+              const loadNewTickers =
+                i === tickers.concat(moreTickers.current).length - 3
+              return !timeseries?.length ? (
+                <HorizontalAssetCard
+                  key={`${ticker?.tickerSymbol}-${i}`}
+                  cardRef={loadNewTickers ? lastTickerRef : null}
+                  isin={ticker?.ISIN}
+                  tickerSymbol={ticker?.tickerSymbol}
+                  shortName={ticker?.shortName}
+                  logoColor={ticker?.logoColor}
+                  price={price}
+                />
+              ) : (
+                <ChartCard
+                  key={`${ticker?.tickerSymbol}-${i}`}
+                  cardRef={loadNewTickers ? lastTickerRef : null}
+                  ISIN={ticker?.ISIN}
+                  tickerSymbol={ticker?.tickerSymbol}
+                  shortName={ticker?.shortName}
+                  data={timeseries}
+                />
+              )
+            })}
           {/* REFACTOR */}
           {/* Compensate for the footer */}
           {is1Col && <div className="h-36"></div>}

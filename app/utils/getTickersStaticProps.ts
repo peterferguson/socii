@@ -55,8 +55,8 @@ export const getTickersStaticProps = async ({
 
             return {
               ticker: JSON.parse(JSON.stringify(ticker)) || {}, // - serialize nested dates
-              timeseries,
-              dataQuery,
+              timeseries: (timeseries || []) as OHLCTimeseries,
+              dataQuery: dataQuery || {},
               price: (price || {}) as Price,
             }
           } catch (e) {

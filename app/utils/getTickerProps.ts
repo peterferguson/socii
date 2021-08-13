@@ -10,14 +10,15 @@ export const getTickerProps = async (
 ): Promise<{ ticker: any; timeseries: OHLCTimeseries; dataQuery: any }> => {
   // * Get ticker company data
   const ticker = tickerDoc.data()
-  let dataQuery = null
+  let dataQuery, timeseries
 
-  const timeseries = ((await tickerTimeseries(
-    ticker.tickerSymbol,
-    timeseriesLimit,
-    ticker.ISIN
-  )) || {}) as OHLCTimeseries
-
+  if (timeseriesLimit) {
+    timeseries = ((await tickerTimeseries(
+      ticker.tickerSymbol,
+      timeseriesLimit,
+      ticker.ISIN
+    )) || {}) as OHLCTimeseries
+  }
   // * serialize the dates broke due to nesting of the ticker data
   // * therefore just going to stringify the ticker data then parse it
   if (subQueryField)
