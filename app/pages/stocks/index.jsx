@@ -55,7 +55,7 @@ export default function StockDisplay({ tickers }) {
       getMoreTickers()
       lastTickerRef.current = null
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, user?.token])
 
   return (
@@ -73,11 +73,11 @@ export default function StockDisplay({ tickers }) {
         {/* TODO: Charts are not resizing on container change */}
         <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
           {tickers.concat(moreTickers.current).map(({ ticker, timeseries }, i) => {
-            const isLastTicker = i === tickers.concat(moreTickers.current).length - 1
+            const loadNewTickers = i === tickers.concat(moreTickers.current).length - 3
             return (
               <ChartCard
                 key={`${ticker?.tickerSymbol}-${i}`}
-                cardRef={isLastTicker ? lastTickerRef : null}
+                cardRef={loadNewTickers ? lastTickerRef : null}
                 ISIN={ticker?.ISIN}
                 tickerSymbol={ticker?.tickerSymbol}
                 shortName={ticker?.shortName}
@@ -97,6 +97,7 @@ export default function StockDisplay({ tickers }) {
 export async function getStaticProps() {
   return await getTickersStaticProps({
     tickerDocs: await getPopularTickersDocs(),
+    timeseriesLimit: 0,
     subQueryField: "industry",
   })
 }
