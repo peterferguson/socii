@@ -16,10 +16,15 @@ export const setUserState = (
 ) => {
   const userRef = doc(firestore, `users/${uid}`)
   const unsubscribe = onSnapshot(userRef, (doc) => {
-    const { username, groups, alpacaAccountId, alpacaACH } = doc.data()
-    setUsername(username)
-    setUserGroups(groups)
-    setUser((prevUser) => ({ ...prevUser, alpacaAccountId, alpacaACH }))
+    const data = doc.data()
+
+    setUsername(data?.username || "")
+    setUserGroups(data?.groups || [])
+    setUser((prevUser) => ({
+      ...prevUser,
+      alpacaAccountId: data?.alpacaAccountId || "",
+      alpacaACH: data?.alpacaACH || "",
+    }))
   })
 
   return unsubscribe

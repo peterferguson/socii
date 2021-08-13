@@ -114,9 +114,9 @@ export const useProvideAuth = () => {
   }
 
   return {
+    username: username || "",
+    userGroups: userGroups || [],
     user,
-    username,
-    userGroups,
     loading,
     // signinWithEmail,
     // signinWithGitHub,
