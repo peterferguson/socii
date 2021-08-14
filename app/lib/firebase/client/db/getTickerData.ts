@@ -1,5 +1,5 @@
 import { collectionGroup, getDocs, limit, query, where } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Gets the data from ticker/{isin} document by querying the `tickerSymbol`

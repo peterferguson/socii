@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Gets a users/{uid} document with username

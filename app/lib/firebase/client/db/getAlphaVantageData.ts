@@ -6,7 +6,7 @@ import {
   query,
   where,
 } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Get the alpha vantage data of a ticker allowing for a particular field to be queried

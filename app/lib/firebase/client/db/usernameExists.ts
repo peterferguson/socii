@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where, limit } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 export const usernameExists = async (name: string) =>
   (

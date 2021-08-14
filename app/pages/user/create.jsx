@@ -1,6 +1,6 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { useAuth } from "@hooks/useAuth"
-import { usernameExists } from "@lib/firebase/client/db/usernameExits"
+import { usernameExists } from "@lib/firebase/client/db/usernameExists"
 import { createAccount } from "@lib/firebase/client/functions"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/router"

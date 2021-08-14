@@ -8,17 +8,17 @@ export const TradeMMLConverter = ({ tagKey, costPerShare, tradeType }) => {
 
   return (
     <div className="flex flex-col">
-      <MMLNumberInput
+      {/* <MMLNumberInput
         name={"Shares"}
         key={`${tagKey}-shares`}
         value={shares}
         onChange={handleChange}
         decimals={8}
-      />
+      /> */}
       <MMLNumberInput
-        name={tradeType.toLowerCase() === "buy" ? "Cost" : "Amount"}
-        key={`${tagKey}-cost`}
-        value={toCost(shares)}
+        name={"Amount"}
+        key={`${tagKey}-amount`}
+        //value={toCost(shares)}
         onChange={handleChange}
       />
       <div className="flex flex-row mt-1">

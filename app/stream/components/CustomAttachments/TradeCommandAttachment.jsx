@@ -22,23 +22,15 @@ const MML = React.lazy(async () => {
 
 const TradeCommandAttachment = ({ attachment }) => {
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
-  const [currentPrice, setCurrentPrice] = useState(undefined)
   const [isin, setIsin] = useState("")
 
   const { username } = useAuth()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 
-  const {
-    price: { price, iexRealtimePrice, changePercent },
-  } = useTickerPrice(tickerSymbol.current)
+  const { price } = useTickerPrice(tickerSymbol.current)
 
   useEffect(() => tickerToISIN(tickerSymbol.current).then((data) => setIsin(data)), [])
-
-  useEffect(
-    () => setCurrentPrice(iexRealtimePrice ? iexRealtimePrice : price),
-    [iexRealtimePrice, price]
-  )
 
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
   // latestUpdate, // TODO: Display this in the attachment
@@ -53,15 +45,15 @@ const TradeCommandAttachment = ({ attachment }) => {
         <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
           <LogoPriceCardHeader
             {...{
-              price: currentPrice,
-              priceChange: changePercent,
+              price: (price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2),
+              priceChange: price?.changePercent,
               ISIN: isin,
               tickerSymbol: tickerSymbol.current,
             }}
           />
           <Suspense fallback={<LoadingIndicator />}>
             <MML
-              converters={converters(price)}
+              converters={converters(price?.iexRealtimePrice || price?.latestPrice)}
               source={attachment.mml}
               onSubmit={(data) => {
                 const tradeArgs = {
@@ -71,14 +63,16 @@ const TradeCommandAttachment = ({ attachment }) => {
                   messageId: message.id,
                   executionCurrency: "USD",
                   assetCurrency: "USD",
+                  stockPrice: price?.iexRealtimePrice || price?.latestPrice,
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                  price: currentPrice,
+                  notional: parseFloat(data.amount),
                   //cost: parseFloat(data.cost || data.amount),
-                  qty: parseFloat(data.shares),
-                  symbol: tickerSymbol,
-                  timeInForce: "gtc",
+                  //qty: parseFloat(data.shares),
+                  symbol: tickerSymbol.current,
+                  timeInForce: "day",
                   // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
                 }
+                console.log(tradeArgs)
                 //TODO: Review redundancy with orderType (may not be with limit orders)
                 // - Write to firestore & send confirmation message in thread
                 if ("buy" in data) {

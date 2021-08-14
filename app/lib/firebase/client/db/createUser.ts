@@ -1,5 +1,5 @@
 import { doc, setDoc } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Create user document at users/{uid} with data. If user document exists overwrites old

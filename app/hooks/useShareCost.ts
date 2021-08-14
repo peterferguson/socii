@@ -1,28 +1,27 @@
-import { round } from "@utils/round";
-import { useState } from "react";
-
+import { round } from "@utils/round"
+import { useState } from "react"
 
 export const useShareCost = (costPerShare: number) => {
-  const [shares, setShares] = useState(1);
+  const [shares, setShares] = useState(1)
 
-  const toShares = (cost: number) => cost / costPerShare;
-  const toCost = (shares: number) => costPerShare * shares;
+  const toShares = (cost: number) => cost / costPerShare
+  const toCost = (shares: number) => costPerShare * shares
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
-    const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target
 
-    const input = parseFloat(value);
+    const input = parseFloat(value)
     if (isNaN(input)) {
-      setShares(1);
-      return;
+      setShares(1)
+      return
     }
 
     if (name.toLowerCase() === "shares") {
-      setShares(input);
-      return;
+      setShares(input)
+      return
     } else {
-      setShares(toShares(round(input, 2)));
+      setShares(toShares(round(input, 2)))
     }
-  };
-  return [shares, handleChange, toCost];
-};
+  }
+  return [shares, handleChange, toCost]
+}

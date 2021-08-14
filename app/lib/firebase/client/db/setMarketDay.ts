@@ -1,6 +1,6 @@
 import { MarketDay } from "@alpaca/models"
 import { doc, setDoc } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 export const setMarketDay = async (marketDay: MarketDay) => {
   const date = marketDay.date.replace(/-/g, "")

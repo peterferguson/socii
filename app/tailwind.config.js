@@ -18,6 +18,7 @@ module.exports = {
         logo: {
           blue: "#29b7c3",
           teal: "#42b59d",
+          darkBg: "#37373d",
         },
         brand: {
           // - brand colors based on DEFAULT using mycolors.space

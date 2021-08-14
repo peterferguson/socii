@@ -6,13 +6,13 @@ export const investmentFailedMML = (tradeData) => {
   const mmlmessage = {
     user_id: "socii",
     text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${isSell(tradeData.orderType) ? "sale" : "purchase"} has failed and will not be executed
+        $${tradeData.notional} of ${tradeData.symbol} ${isSell(tradeData.type) ? "sale" : "purchase"} has failed and will not be executed
         `,
     attachments: [
       {
         type: "receipt",
         mml: mmlstring,
-        tickerSymbol: tradeData.tickerSymbol,
+        tickerSymbol: tradeData.symbol,
       },
     ],
   };

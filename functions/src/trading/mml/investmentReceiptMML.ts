@@ -10,14 +10,14 @@ export const investmentReceiptMML = (tradeData) => {
   const mmlmessage = {
     user_id: "socii",
     text: singleLineTemplateString`
-        ${tradeData.shares} shares of $${tradeData.tickerSymbol} ${isSell(tradeData.orderType) ? "sold" : "purchased"} for ${currencySymbols[tradeData.assetCurrency]}${tradeData.price} per share.
-        For a cost of ${currencySymbols[tradeData.executionCurrency]}${tradeData.cost}
+        $${tradeData.notional} of ${tradeData.symbol} ${isSell(tradeData.type) ? "sold" : "purchased"} for ${currencySymbols[tradeData.assetCurrency]}${tradeData.stockPrice} per share.
+        
         `,
     attachments: [
       {
         type: "receipt",
         mml: mmlstring,
-        tickerSymbol: tradeData.tickerSymbol,
+        tickerSymbol: tradeData.symbol,
       },
     ],
   };

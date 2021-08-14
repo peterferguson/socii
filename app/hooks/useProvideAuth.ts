@@ -1,22 +1,20 @@
-import { createUser } from "@lib/firebase/client/db/createUser"
+import { auth } from "@lib/firebase/client/auth"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
+import { formatUser } from "@utils/formatUser"
+import { userFirstName } from "@utils/userFirstName"
 import {
   AuthProvider,
   FacebookAuthProvider,
-  onIdTokenChanged,
   GoogleAuthProvider,
+  onIdTokenChanged,
   signInWithPopup,
   signOut,
   User,
 } from "firebase/auth"
-import { auth } from "@lib/firebase/client/firebase"
-import { formatUser } from "@utils/formatUser"
-import { userFirstName } from "@utils/userFirstName"
 import Router from "next/router"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { UrlObject } from "url"
-import { loginRedirect } from "@utils/loginRedirect"
 
 //Ref https://docs.react2025.com/firebase/use-auth
 

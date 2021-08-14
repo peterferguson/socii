@@ -1,7 +1,7 @@
-import { firestore, HttpsError } from "../index.js"
+import { logger } from "firebase-functions"
+import { firestore, HttpsError, streamClient } from "../index.js"
 import { serverTimestamp } from "../lib/firestore/index.js"
 import { allKeysContainedIn } from "../utils/allKeysContainedIn"
-import { streamClient } from "../utils/streamClient"
 import { verifyUser } from "../utils/verifyUser"
 import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 
@@ -37,17 +37,22 @@ export const tradeSubmission = async (
     executionStatus: "pending",
   })
 
-  if (investorCount > 1) {
+  if (investorCount == 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
       username: verifiedData.username,
       side: verifiedData.side,
       symbol: verifiedData.symbol,
-      cost: verifiedData.price,
-      qty: verifiedData.qty,
-      parent_id: messageId,
-      show_in_channel: false,
+      notional: verifiedData.notional,
+      //qty: verifiedData.qty,
+      ...(messageId
+        .replace(/[0-9]*/g, "")
+        .includes(`${verifiedData.username}-${verifiedData.groupName}`)
+        ? { messageId, showInChannel: true }
+        : { parentId: messageId, showInChannel: false }),
     })
+    logger.log(verifiedData)
+
     const channel = streamClient.channel(
       "messaging",
       data.groupName.split(" ").join("-")
@@ -62,8 +67,9 @@ const verifyContent = async (data, context) => {
     groupName: "",
     assetRef: null,
     type: "",
-    price: 0,
-    qty: 0,
+    stockPrice: 0,
+    //qty: 0,
+    notional: 0,
     side: "",
     messageId: "",
     timeInForce: "",
@@ -76,7 +82,7 @@ const verifyContent = async (data, context) => {
   const optionalArgs = {
     assetType: "",
     shortName: "",
-    tickerSymbol: "",
+    //tickerSymbol: "",
     executionCurrency: "GBP",
     assetCurrency: "USD",
     executorRef: `users/${context.auth.uid}`,
@@ -97,9 +103,9 @@ const verifyContent = async (data, context) => {
   const assetData = await assetRef.get()
 
   requiredArgs.assetRef = assetRef
+  requiredArgs.symbol = assetData.get("tickerSymbol")
   optionalArgs.assetType = assetData.get("assetType")
   optionalArgs.shortName = assetData.get("shortName")
-  optionalArgs.tickerSymbol = assetData.get("tickerSymbol")
 
   // * Inject data into requiredArgs
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))

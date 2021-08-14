@@ -1,7 +1,10 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { useStream } from "@hooks"
+import { useTickerPrice } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
+import { tradeSubmission } from "@lib/firebase/client/functions"
+import { dateAsNumeric } from "@utils/dateAsNumeric"
 import { singleLineTemplateString } from "@utils/singleLineTemplateString"
+import router from "next/router"
 import React, { Fragment, useState } from "react"
 import PriceHeading from "./PriceHeading"
 import { TickerLogo } from "./TickerLogo"
@@ -11,11 +14,9 @@ const orderScreenState = (state) =>
   state.matches("active.cashOrder") ||
   state.matches("active.shareOrder")
 
-// const send
-
 const OrderModal = ({ ticker, state, send }) => {
   const { username } = useAuth()
-  const { client: streamClient } = useStream()
+  const { price } = useTickerPrice(ticker.tickerSymbol)
   const [amount, setAmount] = useState(0)
 
   const inputTextSize =
@@ -86,6 +87,7 @@ const OrderModal = ({ ticker, state, send }) => {
                     <PriceHeading
                       tickerSymbol={ticker.tickerSymbol}
                       className="mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white"
+                      initialPrice={price}
                     />
                   </div>
                 </div>
@@ -104,8 +106,8 @@ const OrderModal = ({ ticker, state, send }) => {
                     className={`w-full pointer-cursor text-center border-none h-72 ${inputTextSize} placeholder-brand text-brand font-primary leading-6 ${
                       !amount ? "focus:animate-pulse" : ""
                     } focus:appearance-none focus:border-none focus:ring-0`}
-                    placeholder={0}
-                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0"
+                    onChange={(e) => setAmount(parseFloat(e.target.value))}
                     autoComplete="off"
                     autoFocus
                     required
@@ -130,19 +132,23 @@ const OrderModal = ({ ticker, state, send }) => {
                   type="button"
                   className="inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2 font-bold tracking-wider uppercase border border-transparent text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md hover:bg-green-200 hover:text-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
                   onClick={async () => {
-                    const message = confirmCashInvestmentMML({
+                    const tradeArgs = {
                       username,
-                      amount,
-                      side: state.context.side,
+                      groupName: state.context.group,
+                      assetRef: `tickers/${ticker.ISIN}`,
+                      messageId: `${username}-${state.context.group}-${dateAsNumeric(
+                        new Date()
+                      )}`,
+                      executionCurrency: "USD",
+                      assetCurrency: "USD",
+                      stockPrice: price.iexRealtimePrice || price.latestPrice,
+                      notional: amount,
                       symbol: ticker.tickerSymbol,
-                      parentId: null,
-                      showInChannel: true,
-                    })
-                    const channel = streamClient.channel(
-                      "messaging",
-                      state.context.group.split(" ").join("-")
+                      timeInForce: "day",
+                    }
+                    tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }).then(
+                      () => router.push(`/groups/${state.context.group}`)
                     )
-                    return await channel.sendMessage(message)
                   }}
                 >
                   {state.context.side} {ticker.tickerSymbol}

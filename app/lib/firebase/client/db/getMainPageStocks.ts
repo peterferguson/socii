@@ -8,7 +8,7 @@ import {
   startAfter,
   where,
 } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 export const getMainPageStocks = async (
   lastLoaded: DocumentReference,

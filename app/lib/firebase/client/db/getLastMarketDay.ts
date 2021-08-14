@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 export const getLastMarketDay = async () => {
   const marketDayQuery = query(

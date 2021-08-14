@@ -1,7 +1,22 @@
-import { app, londonRegion } from "../firebase"
-import { getFunctions, httpsCallable } from "firebase/functions"
+import { getApp } from "firebase/app"
+import {
+  connectFunctionsEmulator,
+  getFunctions,
+  httpsCallable,
+} from "firebase/functions"
+import { initialize, londonRegion } from "../firebase"
 
-const functions = getFunctions(app, londonRegion)
+let app
+try {
+  app = getApp()
+} catch (e) {
+  app = initialize()
+}
+
+export const functions = getFunctions(app, londonRegion)
+
+process.env.NODE_ENV === "development" &&
+  connectFunctionsEmulator(functions, "localhost", 5001)
 
 // - Callable Functions
 export const alphaVantageQuery = httpsCallable(functions, "alphaVantageQuery")

@@ -1,6 +1,6 @@
 import FirebaseUser from "@models/FirebaseUser"
 import { arrayUnion, doc, serverTimestamp, writeBatch } from "firebase/firestore"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Create a group document at groups/{groupId} with data.

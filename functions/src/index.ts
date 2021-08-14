@@ -1,7 +1,8 @@
 const functions = require("firebase-functions")
-const { Client } = require("iexjs")
+const Client = require("iexjs").Client
+const StreamChat = require("stream-chat").StreamChat
 import admin from "firebase-admin"
-
+import { config, TradingApi } from "./alpaca/broker/client/ts/index"
 // * Import function modules
 import * as accounts from "./accounts/index.js"
 import * as algoliaSearch from "./algoliaSearch.js"
@@ -12,19 +13,27 @@ import * as events from "./events/index.js"
 import * as streamChat from "./streamChat.js"
 import * as trading from "./trading/index.js"
 
-
 // * Constant initialisation
-process.env.ALPACA_KEY = functions.config().alpaca.key
-process.env.ALPACA_SECRET = functions.config().alpaca.secret
-process.env.ALPACA_FIRM_ACCOUNT = functions.config().alpaca.firm_account
-process.env.STREAM_API_SECRET = functions.config().stream.secret
-process.env.STREAM_API_KEY = functions.config().stream.api_key
-process.env.IEX_API_VERSION = functions.config().iex.api_version
-process.env.IEX_TOKEN = functions.config().iex.api_key
+export const functionConfig = functions.config()
+process.env.ALPACA_KEY = functionConfig.alpaca.key
+process.env.ALPACA_SECRET = functionConfig.alpaca.secret
+process.env.ALPACA_FIRM_ACCOUNT = functionConfig.alpaca.firm_account
+process.env.STREAM_API_SECRET = functionConfig.stream.secret
+process.env.STREAM_API_KEY = functionConfig.stream.api_key
+process.env.IEX_API_VERSION = functionConfig.iex.api_version
+process.env.IEX_TOKEN = functionConfig.iex.api_key
 
+// INITIALISE CLIENTS
+export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
+export const streamClient = new StreamChat(
+  process.env.STREAM_API_KEY,
+  process.env.STREAM_API_SECRET
+)
+export const tradeClient = new TradingApi(
+  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
+)
 export const firestoreClient = admin.initializeApp()
 export const firestore = admin.firestore()
-export const iexClient = new Client({ version: process.env.IEX_API_VERSION })
 
 const london = "europe-west2"
 export const HttpsError = functions.https.HttpsError

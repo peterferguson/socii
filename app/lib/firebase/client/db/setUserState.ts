@@ -1,7 +1,7 @@
 import User from "@models/User"
 import { doc, onSnapshot } from "firebase/firestore"
 import React from "react"
-import { firestore } from "../firebase"
+import { firestore } from "."
 
 /*
  * Gets all data for `auth` object from users/{uid}

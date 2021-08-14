@@ -1,5 +1,5 @@
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebase";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore"
+import { firestore } from "."
 
 /*
  * Check if user with `uid` has agreed to trade with `messageId` in group with `groupName`
@@ -13,6 +13,6 @@ export const agreesToTrade = async (
   messageId: string,
   uid: string
 ) => {
-  const tradesRef = doc(firestore, `groups/${groupName}/trades/${messageId}`);
-  await updateDoc(tradesRef, { agreesToTrade: arrayUnion(`users/${uid}`) });
-};
+  const tradesRef = doc(firestore, `groups/${groupName}/trades/${messageId}`)
+  await updateDoc(tradesRef, { agreesToTrade: arrayUnion(`users/${uid}`) })
+}

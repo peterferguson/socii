@@ -10,10 +10,11 @@ export const checkTradeStatus = async (change, context) => {
   const ClientOrderId = eventDetails.order.client_order_id
   const groupName = ClientOrderId.split("|")[0]
   const messageId = ClientOrderId.split("|")[1]
+  const qty = eventDetails.order.filled_qty
 
   const tradeRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
   const tradeData = (await tradeRef.get()).data()
-  // TODO add sell function
+  // TODO add sell functi
   if (event == "fill") {
     // update holding
     const updateInformation = await updateHolding({
@@ -21,6 +22,7 @@ export const checkTradeStatus = async (change, context) => {
       messageId,
       tradeData,
       executionStatus: "success",
+      qty,
     })
     const tradeUpdateInfo = updateInformation.pnlPercentage
       ? updateInformation
@@ -29,13 +31,13 @@ export const checkTradeStatus = async (change, context) => {
     //
 
     // journal shares and update trade doc
-    journalShares(tradeData.agreesToTrade, tradeData.qty)
+    journalShares(tradeData.agreesToTrade, qty)
     tradeRef.update({ executionStatus: "success" })
   } else if (["cancelled", "expired", "rejected", "suspended"].includes(event)) {
     // return money to group
     const groupRef = firestore.collection("groups").doc(groupName)
     let cashBalance = (await groupRef.get()).data()
-    groupRef.update({ cashBalance: cashBalance + tradeData.cost })
+    groupRef.update({ cashBalance: cashBalance + tradeData.notional })
     tradeRef.update({ executionStatus: "failed" })
     // TODO Push notification to group
   }
