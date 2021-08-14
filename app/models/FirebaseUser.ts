@@ -5,4 +5,5 @@ export default interface FirebaseUser extends UserInfo {
   expirationTime: string
   alpacaACH: string
   alpacaAccountId: string
+  streamToken: string
 }

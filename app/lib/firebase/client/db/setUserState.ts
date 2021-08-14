@@ -1,7 +1,7 @@
 import User from "@models/User"
 import { doc, onSnapshot } from "firebase/firestore"
 import React from "react"
-import { firestore } from "."
+import { firestore, getUserStreamToken } from "."
 
 /*
  * Gets all data for `auth` object from users/{uid}
@@ -15,13 +15,15 @@ export const setUserState = (
   setUser: React.Dispatch<React.SetStateAction<User>>
 ) => {
   const userRef = doc(firestore, `users/${uid}`)
-  const unsubscribe = onSnapshot(userRef, (doc) => {
-    const data = doc.data()
 
+  const unsubscribe = onSnapshot(userRef, async (doc) => {
+    const data = doc.data()
+    const streamToken = await getUserStreamToken(uid)
     setUsername(data?.username || "")
     setUserGroups(data?.groups || [])
     setUser((prevUser) => ({
       ...prevUser,
+      streamToken,
       alpacaAccountId: data?.alpacaAccountId || "",
       alpacaACH: data?.alpacaACH || "",
     }))
