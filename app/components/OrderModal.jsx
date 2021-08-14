@@ -1,4 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react"
+import { useStream } from "@hooks"
+import { useAuth } from "@hooks/useAuth"
+import { singleLineTemplateString } from "@utils/singleLineTemplateString"
 import React, { Fragment, useState } from "react"
 import PriceHeading from "./PriceHeading"
 import { TickerLogo } from "./TickerLogo"
@@ -8,7 +11,11 @@ const orderScreenState = (state) =>
   state.matches("active.cashOrder") ||
   state.matches("active.shareOrder")
 
+// const send
+
 const OrderModal = ({ ticker, state, send }) => {
+  const { username } = useAuth()
+  const { client: streamClient } = useStream()
   const [amount, setAmount] = useState(0)
 
   const inputTextSize =
@@ -102,7 +109,7 @@ const OrderModal = ({ ticker, state, send }) => {
                     autoComplete="off"
                     autoFocus
                     required
-                    style={{ "caret-color": "transparent" }}
+                    style={{ caretColor: "transparent" }}
                   />
                   {state.context.orderType === "limit" && (
                     <div className="absolute text-sm text-gray-400 bottom-1 front-primary">
@@ -122,7 +129,21 @@ const OrderModal = ({ ticker, state, send }) => {
                 <button
                   type="button"
                   className="inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2 font-bold tracking-wider uppercase border border-transparent text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md hover:bg-green-200 hover:text-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
-                  onClick={() => send("AGREE")}
+                  onClick={async () => {
+                    const message = confirmCashInvestmentMML({
+                      username,
+                      amount,
+                      side: state.context.side,
+                      symbol: ticker.tickerSymbol,
+                      parentId: null,
+                      showInChannel: true,
+                    })
+                    const channel = streamClient.channel(
+                      "messaging",
+                      state.context.group.split(" ").join("-")
+                    )
+                    return await channel.sendMessage(message)
+                  }}
                 >
                   {state.context.side} {ticker.tickerSymbol}
                 </button>
@@ -135,3 +156,46 @@ const OrderModal = ({ ticker, state, send }) => {
   )
 }
 export default OrderModal
+
+const confirmCashInvestmentMML = ({
+  username,
+  side,
+  symbol,
+  amount,
+  parentId,
+  showInChannel,
+}) => {
+  const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`
+  const mmlmessage = {
+    user_id: username,
+    text: singleLineTemplateString`
+      Hey, ${username} wants the group to ${side} $${amount} of ${symbol.toUpperCase()}.
+      Do you agree that the group should execute this trade?
+      `,
+    command: side,
+    parent_id: parentId || null,
+    show_in_channel: showInChannel || null,
+    attachments: [
+      {
+        tickerSymbol: symbol,
+        type: "investmentConfirmation",
+        mml: mmlstring,
+        actions: [
+          {
+            name: "action",
+            text: "Yes",
+            type: "button",
+            value: "yes",
+          },
+          {
+            name: "action",
+            text: "No",
+            type: "button",
+            value: "no",
+          },
+        ],
+      },
+    ],
+  }
+  return mmlmessage
+}

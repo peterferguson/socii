@@ -27,7 +27,6 @@ export default function LogoPriceCardHeader({
     .replace("bg", "text")
     .replace("200", "500")}`
 
-  console.log(tickerSymbol, priceChange, price, shares, action, ISIN)
   return (
     <>
       <TickerLogo tickerSymbol={tickerSymbol} isin={ISIN} />

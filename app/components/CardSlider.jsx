@@ -8,7 +8,7 @@ export default function CardSlider({ tickers }) {
         return (
           <article
             key={`slider-card-${i}`}
-            className="border-l-2 slide-card"
+            className="border-l-4 slide-card"
             style={{ borderColor: ticker?.logoColor }}
           >
             <AssetCard

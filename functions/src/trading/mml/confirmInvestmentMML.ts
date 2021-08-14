@@ -1,9 +1,15 @@
-import { singleLineTemplateString } from "../../utils/singleLineTemplateString";
+import { singleLineTemplateString } from "../../utils/singleLineTemplateString"
 
 export const confirmInvestmentMML = ({
-  username, side, symbol, cost, qty, parent_id, show_in_channel,
+  username,
+  side,
+  symbol,
+  cost,
+  qty,
+  parent_id,
+  show_in_channel,
 }) => {
-  const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`;
+  const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`
   const mmlmessage = {
     user_id: username,
     text: singleLineTemplateString`
@@ -34,6 +40,6 @@ export const confirmInvestmentMML = ({
         ],
       },
     ],
-  };
-  return mmlmessage;
-};
+  }
+  return mmlmessage
+}
