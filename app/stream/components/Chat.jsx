@@ -22,7 +22,7 @@ const MessagingInput = dynamic(
   () => import("@stream/components").then((mod) => mod.MessagingInput),
   { ssr: false }
 )
-import { useStreamClient } from "@hooks/useStream"
+import { useStreamClient } from "@hooks/useStreamClient"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext, useState } from "react"

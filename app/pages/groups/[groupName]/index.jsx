@@ -33,7 +33,7 @@
 
 import { AuthCheck, ClientOnly, GroupColumnCard, LoadingIndicator } from "@components"
 import { useAuth } from "@hooks/useAuth"
-import { useStreamClient } from "@hooks/useStream"
+import { useStreamClient } from "@hooks/useStreamClient"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
