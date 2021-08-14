@@ -3,6 +3,7 @@ import { useTickerPrice } from "@hooks/useTickerPrice"
 import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { useAuth } from "hooks/useAuth"
+import dynamic from "next/dynamic"
 import React, { Suspense, useEffect, useRef, useState } from "react"
 import {
   LoadingIndicator,
@@ -15,9 +16,8 @@ import { TradeMMLConverter } from "./converters/TradeMMLConverter"
 // WARN: Should think about some how collecting the tickers referenced on the message list
 // WARN: And passing these so we then call the api less
 
-const MML = React.lazy(async () => {
-  const mml = await import("mml-react")
-  return { default: mml.MML }
+const MML = dynamic(() => import("mml-react").then((mod) => mod.MML), {
+  loading: LoadingIndicator,
 })
 
 const TradeCommandAttachment = ({ attachment }) => {
@@ -51,40 +51,38 @@ const TradeCommandAttachment = ({ attachment }) => {
               tickerSymbol: tickerSymbol.current,
             }}
           />
-          <Suspense fallback={<LoadingIndicator />}>
-            <MML
-              converters={converters(price?.iexRealtimePrice || price?.latestPrice)}
-              source={attachment.mml}
-              onSubmit={(data) => {
-                const tradeArgs = {
-                  username,
-                  groupName,
-                  assetRef: `tickers/${isin}`,
-                  messageId: message.id,
-                  executionCurrency: "USD",
-                  assetCurrency: "USD",
-                  stockPrice: price?.iexRealtimePrice || price?.latestPrice,
-                  // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                  notional: parseFloat(data.amount),
-                  //cost: parseFloat(data.cost || data.amount),
-                  //qty: parseFloat(data.shares),
-                  symbol: tickerSymbol.current,
-                  timeInForce: "day",
-                  // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
-                }
-                console.log(tradeArgs)
-                //TODO: Review redundancy with orderType (may not be with limit orders)
-                // - Write to firestore & send confirmation message in thread
-                if ("buy" in data) {
-                  tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
-                }
-                if ("sell" in data) {
-                  tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
-                }
-              }}
-              Loading={LoadingIndicator}
-            />
-          </Suspense>
+          <MML
+            converters={converters(price?.iexRealtimePrice || price?.latestPrice)}
+            source={attachment.mml}
+            onSubmit={(data) => {
+              const tradeArgs = {
+                username,
+                groupName,
+                assetRef: `tickers/${isin}`,
+                messageId: message.id,
+                executionCurrency: "USD",
+                assetCurrency: "USD",
+                stockPrice: price?.iexRealtimePrice || price?.latestPrice,
+                // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
+                notional: parseFloat(data.amount),
+                //cost: parseFloat(data.cost || data.amount),
+                //qty: parseFloat(data.shares),
+                symbol: tickerSymbol.current,
+                timeInForce: "day",
+                // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
+              }
+              console.log(tradeArgs)
+              //TODO: Review redundancy with orderType (may not be with limit orders)
+              // - Write to firestore & send confirmation message in thread
+              if ("buy" in data) {
+                tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
+              }
+              if ("sell" in data) {
+                tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
+              }
+            }}
+            Loading={LoadingIndicator}
+          />
         </div>
       ) : null}
     </>

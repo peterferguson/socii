@@ -26,7 +26,7 @@ function GroupPortfolios({ pagename }): JSX.Element {
   const { userGroups } = useAuth()
   return (
     <div className="flex flex-col items-center justify-center w-full my-14 sm:my-0">
-      <div className="mx-auto text-3xl mb-4 font-primary text-brand-shade-darkest">
+      <div className="mx-auto mb-4 text-3xl font-primary text-brand-shade-darkest">
         Group Portfolios
       </div>
       <div className="w-full grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto">

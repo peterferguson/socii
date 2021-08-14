@@ -14,7 +14,7 @@ export const AssetCard = ({ tickerSymbol, isin, shortName, price }) => (
         <h1 className="py-1 text-xl font-bold tracking-wider">{tickerSymbol}</h1>
         <div>
           <div className={`font-bold text-3xl ${pnlTextColor(price?.changePercent)}`}>
-            ${price?.iexRealtimePrice?.toFixed(2)}
+            ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </div>
         </div>
       </a>

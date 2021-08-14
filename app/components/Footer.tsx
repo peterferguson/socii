@@ -2,7 +2,7 @@ import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
-import React from "react"
+import React, { useMemo } from "react"
 import {
   HiOutlineAnnotation,
   HiOutlineCog,
@@ -18,15 +18,18 @@ const Footer = () => {
   const router = useRouter()
   const { user, username } = useAuth()
 
+  const navLinks = useMemo(
+    () => links(user, username, router),
+    [user, username, router]
+  )
+
   return (
     <>
       <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white space-x-2">
-        {links(user, username, router).map(
-          ({ text, Icon, onClick, isActive, Component }, i) => {
-            const props = { text, Icon, onClick, isActive }
-            return <Component key={`nav-item-${i}`} props={props} />
-          }
-        )}
+        {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
+          const props = { text, Icon, onClick, isActive }
+          return <Component key={`nav-item-${i}`} props={props} />
+        })}
       </nav>
     </>
   )

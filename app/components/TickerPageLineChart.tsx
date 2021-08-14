@@ -35,7 +35,7 @@ export const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   )
 
   const lineSeriesProps = {
-    animation: true,
+    animation: false,
     color: color ?? "#0fa9e6",
     opacityType: "literal",
     strokeWidth: 2,

@@ -1,38 +1,47 @@
-import GainPctBar from "@components/GainPctBar"
-import LastPurchaseSummaryCard from "@components/LastPurchaseSummaryCard"
-import PortfolioValueSummaryCard from "@components/PortfolioValueSummaryCard"
-import TopPerformerSummaryCard from "@components/TopPerformerSummaryCard"
-import VsMarketSummaryCard from "@components/VsMarketSummaryCard"
 import { logoUrl } from "@utils/logoUrl"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 const StockTable = dynamic(() => import("@components/StockTable"), { ssr: false })
 const PortfolioHistoryCard = dynamic(() => import("@components/PortfolioHistoryCard"))
-
-const Dashboard = () => (
-  <>
-    <div className="flex flex-col w-full bg-blueGray-100">
-      <div className="w-full px-2 mx-auto">
-        {/* Card stats */}
-        {/* TODO: Convert these into carousel cards organised by top percentage */}
-        <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map((card, i) => card(`card-${i}`))}
-        </div>
-      </div>
-      <div className="w-full px-2 mx-auto">
-        {/* Tables */}
-        <PortfolioHistoryCard />
-        <div className="flex flex-wrap w-full mt-4">
-          <StockTable stockTableMeta={stockTableMeta} />
-        </div>
-      </div>
-    </div>
-  </>
+const GainPctBar = dynamic(() => import("@components/GainPctBar"))
+const LastPurchaseSummaryCard = dynamic(
+  () => import("@components/LastPurchaseSummaryCard")
 )
+const PortfolioValueSummaryCard = dynamic(
+  () => import("@components/PortfolioValueSummaryCard")
+)
+const TopPerformerSummaryCard = dynamic(
+  () => import("@components/TopPerformerSummaryCard")
+)
+const VsMarketSummaryCard = dynamic(() => import("@components/VsMarketSummaryCard"))
+
+const Dashboard = () => {
+  const tableMeta = useMemo(() => stockTableMeta, [])
+  return (
+    <>
+      <div className="flex flex-col w-full bg-blueGray-100">
+        <div className="w-full px-2 mx-auto">
+          {/* Card stats */}
+          {/* TODO: Convert these into carousel cards organised by top percentage */}
+          <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {cards.map((card, i) => card(`card-${i}`))}
+          </div>
+        </div>
+        <div className="w-full px-2 mx-auto">
+          {/* Tables */}
+          <PortfolioHistoryCard />
+          <div className="flex flex-wrap w-full mt-4">
+            <StockTable stockTableMeta={tableMeta} />
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
 
 export default Dashboard
 
@@ -46,20 +55,20 @@ export const stockTableMeta = {
       else url.then((url) => setLogoURL(url))
       return (
         <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
-          <Link href={`/stocks/${position?.[attr] || ""}`}>
-            {logoURL ? (
-              <Image
-                src={logoURL}
-                width="32px"
-                height="32px"
-                className="object-cover mx-auto rounded-full"
-              />
-            ) : (
+          {logoURL ? (
+            <Image
+              src={logoURL}
+              width="32px"
+              height="32px"
+              className="object-cover mx-auto rounded-full"
+            />
+          ) : (
+            <Link href={`/stocks/${position?.[attr] || ""}`}>
               <div className="flex items-center justify-center w-6 h-6 mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg text-tiny">
                 {position[attr]}
               </div>
-            )}
-          </Link>
+            </Link>
+          )}
           <span className="ml-3">{position[attr]}</span>
         </th>
       )

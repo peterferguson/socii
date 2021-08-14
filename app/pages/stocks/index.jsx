@@ -10,9 +10,7 @@ import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickers
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { iexQuote } from "@utils/iexQuote"
-import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
-import { FiChevronRight } from "react-icons/fi"
 import { useMediaQuery } from "react-responsive"
 
 const beginLoadingMoreTickersNFromLast = 3
@@ -36,9 +34,6 @@ export default function StockDisplay({ tickers }) {
   const is2Cols = !useMediaQuery({ minWidth: 1024 })
 
   useEffect(() => {
-    console.log("isVisible: ", isVisible)
-    console.log("loading: ", loadingMoreTickers)
-
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
       const numTickers = is1Col ? 5 : is2Cols ? 10 : 15
@@ -50,8 +45,6 @@ export default function StockDisplay({ tickers }) {
           -beginLoadingMoreTickersNFromLast + 1
         )
         .pop()
-
-      console.log(lastTickerLoaded.current.data())
 
       const tickers = await Promise.all(
         tickerDocs.docs?.map(async (tickerDoc) => {

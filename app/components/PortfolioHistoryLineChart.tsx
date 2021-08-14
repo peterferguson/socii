@@ -22,8 +22,8 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
   const { timeseries } = usePortfolioHistory()
 
   const lineSeriesProps = {
-    animation: true,
-    color: "#0fa9e6",
+    animation: false,
+    color: "#0fa9e6"  ,
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries?.equity,
