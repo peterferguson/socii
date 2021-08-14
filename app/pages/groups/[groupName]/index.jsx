@@ -32,8 +32,8 @@
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
 import { AuthCheck, ClientOnly, GroupColumnCard, LoadingIndicator } from "@components"
-import { useStream } from "@hooks/useStream"
 import { useAuth } from "@hooks/useAuth"
+import { useStreamClient } from "@hooks/useStream"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
@@ -51,32 +51,27 @@ export default function Group() {
   const { userGroups } = useAuth()
 
   if (Array.isArray(groupName)) groupName = groupName[0]
-
-  const { client } = useStream()
   // TODO: Use skeleton loaders for chat
 
   return (
     <>
       {groupName && userGroups && !userGroups.includes(groupName) && <Custom404 />}
-      {!client ? (
-        <LoadingIndicator />
-      ) : (
-        <div className="flex">
-          <div className="flex-auto p-8">
-            <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
-              holdings
-            </div>
-            <GroupColumnCard groupName={groupName} />
+
+      <div className="flex">
+        <div className="flex-auto p-8">
+          <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
+            holdings
           </div>
-          {is1Col && (
-            <AuthCheck>
-              <ClientOnly>
-                <StreamChatWithNoSSR client={client} />
-              </ClientOnly>
-            </AuthCheck>
-          )}
+          <GroupColumnCard groupName={groupName} />
         </div>
-      )}
+        {is1Col && (
+          <AuthCheck>
+            <ClientOnly>
+              <StreamChatWithNoSSR />
+            </ClientOnly>
+          </AuthCheck>
+        )}
+      </div>
     </>
   )
 }

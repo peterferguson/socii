@@ -7,11 +7,12 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 
-export default function Chat() {
-  const { client } = useContext(ChatContext)
-  return (
-    <AuthCheck>
-      <ClientOnly>{client && <StreamChatWithNoSSR client={client} />}</ClientOnly>
-    </AuthCheck>
-  )
-}
+const ChatPage = () => (
+  <AuthCheck>
+    <ClientOnly>
+      <StreamChatWithNoSSR />
+    </ClientOnly>
+  </AuthCheck>
+)
+
+export default ChatPage

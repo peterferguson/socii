@@ -15,9 +15,7 @@ export interface IGroupColumnCard {
 }
 
 export default function GroupColumnCard({ groupName, className }: IGroupColumnCard) {
-  const {
-    user: { token },
-  } = useAuth()
+  const { user } = useAuth()
 
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
@@ -38,14 +36,14 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   useEffect(() => {
     holdingInfo?.map(async ({ tickerSymbol }) => {
-      const price = await iexQuote(tickerSymbol, token)
+      const price = await iexQuote(tickerSymbol, user?.token)
 
       setCurrentPrices((previousState) => ({
         ...previousState,
         [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
       }))
     })
-  }, [holdingInfo, token])
+  }, [holdingInfo, user?.token])
 
   return (
     <div

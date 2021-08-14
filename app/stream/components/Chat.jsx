@@ -1,23 +1,58 @@
-import {
-  CreateChatModal,
-  CustomTriggerProvider,
-  MessagingChannelHeader,
-  MessagingChannelList,
-  MessagingChannelPreview,
-  MessagingInput,
-} from "@stream/components"
+const CreateChatModal = dynamic(
+  () => import("@stream/components").then((mod) => mod.CreateChatModal),
+  { ssr: false }
+)
+const CustomTriggerProvider = dynamic(
+  () => import("@stream/components").then((mod) => mod.CustomTriggerProvider),
+  { ssr: false }
+)
+const MessagingChannelHeader = dynamic(
+  () => import("@stream/components").then((mod) => mod.MessagingChannelHeader),
+  { ssr: false }
+)
+const MessagingChannelList = dynamic(
+  () => import("@stream/components").then((mod) => mod.MessagingChannelList),
+  { ssr: false }
+)
+const MessagingChannelPreview = dynamic(
+  () => import("@stream/components").then((mod) => mod.MessagingChannelPreview),
+  { ssr: false }
+)
+const MessagingInput = dynamic(
+  () => import("@stream/components").then((mod) => mod.MessagingInput),
+  { ssr: false }
+)
+import { useStreamClient } from "@hooks/useStream"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useContext, useState } from "react"
 import { useMediaQuery } from "react-responsive"
-import {
-  Channel,
-  ChannelList,
-  ChatContext,
-  MessageInput,
-  MessageList,
-  Window,
-} from "stream-chat-react"
+const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
+  ssr: false,
+})
+const ChannelList = dynamic(
+  () => import("stream-chat-react").then((mod) => mod.ChannelList),
+  { ssr: false }
+)
+const ChatContext = dynamic(
+  () => import("stream-chat-react").then((mod) => mod.ChatContext),
+  { ssr: false }
+)
+const MessageInput = dynamic(
+  () => import("stream-chat-react").then((mod) => mod.MessageInput),
+  { ssr: false }
+)
+const MessageList = dynamic(
+  () => import("stream-chat-react").then((mod) => mod.MessageList),
+  { ssr: false }
+)
+const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
+  ssr: false,
+})
+
+const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), {
+  ssr: false,
+})
 
 const MessagingThread = dynamic(() => import("@stream/components/MessagingThread"), {
   loading: () => <p>...</p>,
@@ -39,11 +74,11 @@ const TypingIndicator = dynamic(() => import("@stream/components/TypingIndicator
 // }
 
 export default function StreamChat({
-  client,
   setShowActiveChannel,
   isSidebar = false,
   // }: IStreamChat) {
 }) {
+  const { client } = useStreamClient()
   let is1Col = !useMediaQuery({ minWidth: 640 })
   is1Col = isSidebar ? true : is1Col
 
@@ -74,24 +109,26 @@ export default function StreamChat({
     isSidebar,
   }
 
+  // TODO: Replace light with theme when dark theme is implemented
   return (
-    <>
-      <StreamChannelList
-        {...streamProps}
-        onCreateChannel={onCreateChannel}
-        setShowActiveChannel={setShowActiveChannel}
-        is1Col={is1Col}
-      />
-      {onlyShowChat && <StreamChannel {...streamProps} />}
-      {isCreating && (
-        <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
-      )}
-    </>
+    client && (
+      <Chat client={client} theme={`messaging light`}>
+        <StreamChannelList
+          {...streamProps}
+          onCreateChannel={onCreateChannel}
+          setShowActiveChannel={setShowActiveChannel}
+          is1Col={is1Col}
+        />
+        {onlyShowChat && <StreamChannel {...streamProps} />}
+        {isCreating && (
+          <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
+        )}
+      </Chat>
+    )
   )
 }
 
-export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
-  const { client } = useContext(ChatContext)
+export function StreamChannel({ client, groupName, isSidebar, toggleHideChannelList }) {
   const router = useRouter()
   const isChatOrGroupRoute =
     router.pathname.includes("/chat") || router.pathname.includes("/groups")
@@ -130,6 +167,7 @@ export function StreamChannel({ groupName, isSidebar, toggleHideChannelList }) {
 }
 
 export function StreamChannelList({
+  client,
   hideChannelList,
   onCreateChannel,
   groupName,
@@ -138,7 +176,6 @@ export function StreamChannelList({
   is1Col,
   isSidebar,
 }) {
-  const { client } = useContext(ChatContext)
   const filter = { type: "messaging", members: { $in: [client?.userID] } }
   const options = { state: true, watch: true, presence: true, limit: 8 }
   const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
