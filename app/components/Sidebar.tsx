@@ -3,7 +3,7 @@ import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
-import React from "react"
+import React, { useMemo } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
   HiOutlineAtSymbol,
@@ -16,12 +16,14 @@ import {
 import { useMediaQuery } from "react-responsive"
 
 // - https://www.tailwind-kit.com/components/sidebar
-export default function Sidebar() {
+const Sidebar = () => {
   // TODO: Stateful selection of the nav item based on the route
   // - For now this is mocked with a simple enumeration of the list
   const router = useRouter()
   const { username } = useAuth()
   const is2Col = !useMediaQuery({ minWidth: 1024 })
+
+  const items = useMemo(() => navItems(router, username), [router, username])
 
   return (
     <div className="sticky hidden w-20 h-screen pt-3 mx-1 shadow-lg top-2 left-2 sm:block lg:w-52">
@@ -30,7 +32,7 @@ export default function Sidebar() {
           {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
         </div>
         <nav className="mt-6">
-          {navItems(router, username).map((item) => (
+          {items.map((item) => (
             <Link href={item.href} key={`${item.name}-selector`}>
               <a className={`${item.isActive ? "nav-btn-active" : "nav-btn"}`}>
                 <item.icon className="mx-auto text-xl lg:mx-0" />
@@ -45,6 +47,8 @@ export default function Sidebar() {
     </div>
   )
 }
+
+export default React.memo(Sidebar)
 
 const navItems = (router: NextRouter, username: string) => [
   {

@@ -30,14 +30,7 @@ const HorizontalAssetCard = ({
     >
       <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
         <div className="items-center justify-center flex-none w-20 m-auto rounded-full">
-          <Link href={`stocks/${tickerSymbol}`}>
-            <TickerLogo
-              isin={isin}
-              tickerSymbol={tickerSymbol}
-              height="48"
-              width="48"
-            />
-          </Link>
+          <TickerLogo isin={isin} tickerSymbol={tickerSymbol} height="48" width="48" />
         </div>
         <div className="flex-col flex-grow my-auto">
           <Link href={`stocks/${tickerSymbol}`}>
@@ -70,7 +63,10 @@ const HorizontalAssetCard = ({
 }
 
 export const HorizontalAssetCardSkeleton = ({ cardRef }) => (
-  <div className="w-11/12 h-auto max-w-sm mx-auto my-2 animate-fade-in-up" ref={cardRef}>
+  <div
+    className="w-11/12 h-auto max-w-sm mx-auto my-2 animate-fade-in-up"
+    ref={cardRef}
+  >
     <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
       <div className="items-center justify-center flex-none w-20 m-auto rounded-full">
         <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />

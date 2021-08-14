@@ -84,4 +84,4 @@ const NavHeader: React.FC<INavHeader> = ({ showChat, setShowChat }) => {
   )
 }
 
-export default NavHeader
+export default React.memo(NavHeader)
