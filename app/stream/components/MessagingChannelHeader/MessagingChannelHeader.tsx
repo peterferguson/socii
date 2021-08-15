@@ -1,4 +1,3 @@
-import styles from "@styles/MessagingChannelHeader.module.css"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
@@ -7,23 +6,10 @@ import { useMediaQuery } from "react-responsive"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import TypingIndicator from "../TypingIndicator"
 
-const FaChevronLeft = dynamic(() =>
-  import("react-icons/fa").then((mod) => mod.FaChevronLeft)
-) as any
-const FaList = dynamic(() => import("react-icons/fa").then((mod) => mod.FaList)) as any
-const HiOutlineCog = dynamic(() =>
-  import("react-icons/hi").then((mod) => mod.HiOutlineCog)
-) as any
-const ImBin = dynamic(() => import("react-icons/im").then((mod) => mod.ImBin)) as any
-const ImCross = dynamic(() =>
-  import("react-icons/im").then((mod) => mod.ImCross)
-) as any
-const ImPencil = dynamic(() =>
-  import("react-icons/im").then((mod) => mod.ImPencil)
-) as any
-const ImUserPlus = dynamic(() =>
-  import("react-icons/im").then((mod) => mod.ImUserPlus)
-) as any
+import { FaChevronLeft, FaList } from "react-icons/fa"
+import { HiOutlineCog } from "react-icons/hi"
+import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
+
 const DeleteChannelModal = dynamic(() => import("@components/DeleteChatModal"))
 const AvatarGroup = dynamic(
   () => import("@stream/components/AvatarGroup") as any
