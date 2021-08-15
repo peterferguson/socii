@@ -6,14 +6,10 @@ import useMediaQuery from "react-responsive"
 import { Channel } from "stream-chat"
 import { ChatContext } from "stream-chat-react"
 
-const getChannelName = (members: string | any[], defaultName: string) => {
-  if (!members.length || members.length === 1)
-    return members?.[0]?.user.name || defaultName
-
-  return `${members?.[0]?.user.name || defaultName}, ${
-    members[1]?.user.name || defaultName
-  }`
-}
+const getChannelName = (members: string | any[], defaultName: string) =>
+  !members.length || members.length === 1
+    ? members?.[0] || defaultName
+    : `${members?.[0] || defaultName}, ${members[1] || defaultName}`
 
 interface IMessagingChannelPreview {
   channel: Channel
@@ -29,19 +25,17 @@ const MessagingChannelPreview = ({
   toggleChannelList,
 }: IMessagingChannelPreview) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
-  const channelName = channel.cid.split("-").join(" ")
+  const channelName = channel.cid.slice(10).replace(/-/g, " ")
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const channelNameAsMember = [{ user: { name: channelName } }]
 
-  let members =
-    Object.values(channel.state.members).length - 1 > 0
-      ? Object.values(channel.state.members).filter(
-          ({ user }) => user.id !== client.userID // - show all memebers except yourself
-        )
-      : channelNameAsMember
-
-  // - edge case: use first initial for chat picture for group chats
-  if (!channelName.includes("members")) members = [{ user: { name: channelName } }]
+  const members =
+    channel?.data?.name?.includes("Chat") || !channelName.includes("members")
+      ? // - show all memebers except yourself
+        [channelName]
+      : // - edge case: use first initial for chat picture for group chats
+        Object.values(channel.state.members)
+          .filter(({ user }) => user.id !== client.userID)
+          .map((member) => member.user.name)
 
   return (
     <div
@@ -57,7 +51,7 @@ const MessagingChannelPreview = ({
         is1Col && toggleChannelList()
       }}
     >
-      {AvatarGroup(members, styles)}
+      <AvatarGroup memberNames={members} />
       <div className="flex flex-col items-center w-full mx-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
           <span className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">

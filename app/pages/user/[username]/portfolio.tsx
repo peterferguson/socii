@@ -24,14 +24,14 @@ const Dashboard = () => {
   return (
     <>
       <div className="flex flex-col w-full bg-blueGray-100">
-        <div className="w-full px-2 mx-auto">
+        <div className="w-full mx-auto">
           {/* Card stats */}
           {/* TODO: Convert these into carousel cards organised by top percentage */}
           <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {cards.map((card, i) => card(`card-${i}`))}
           </div>
         </div>
-        <div className="w-full px-2 mx-auto">
+        <div className="w-full mx-auto">
           {/* Tables */}
           <PortfolioHistoryCard />
           <div className="flex flex-wrap w-full mt-4">

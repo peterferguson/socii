@@ -25,7 +25,9 @@ const ImUserPlus = dynamic(() =>
   import("react-icons/im").then((mod) => mod.ImUserPlus)
 ) as any
 const DeleteChannelModal = dynamic(() => import("@components/DeleteChatModal"))
-const AvatarGroup = dynamic(() => import("@stream/components/AvatarGroup")) as any
+const AvatarGroup = dynamic(
+  () => import("@stream/components/AvatarGroup") as any
+) as any
 
 // TODO: Add tooltips to settings icons
 const MessagingChannelHeader = ({ toggleChannelList }) => {
@@ -35,6 +37,12 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
+  const [members, setMembers] = useState(
+    Object.values(channel.state?.members || {}).filter(
+      (member) => member.user?.id !== client?.user?.id
+    ) || []
+  )
+  const [memberNames, setMemberNames] = useState([])
   const [isEditing, setIsEditing] = useState(false)
   const [usingSettings, setUsingSettings] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -43,9 +51,19 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const inputRef = useRef(null)
   const router = useRouter()
 
-  const members = Object.values(channel.state?.members || {}).filter(
-    (member) => member.user?.id !== client?.user?.id
+  useEffect(
+    () =>
+      setMemberNames(
+        channel?.data?.name?.includes("Chat")
+          ? // - show all memebers except yourself
+            [channel.cid.slice(10).replace(/-/g, " ")]
+          : // - edge case: use first initial for chat picture for group chats
+            members.map((member) => member.user.name)
+      ),
+    [channel.cid, channel?.data?.name, channelName, members]
   )
+
+  console.log(memberNames)
 
   const updateChannel = async (e) => {
     e && e.preventDefault()
@@ -109,16 +127,16 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
       >
         {!is1Col ? (
           <FaList
-            className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+            className="w-5 h-5 pr-2 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
             onClick={toggleChannelList}
           />
         ) : (
           <FaChevronLeft
-            className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+            className="w-5 h-5 pr-2 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
             onClick={() => router.back()}
           />
         )}
-        {AvatarGroup(members, styles)}
+        {<AvatarGroup memberNames={memberNames} />}
         {!isEditing ? (
           <div className="flex-1 pl-4 font-bold font-primary">
             {channelName || title}

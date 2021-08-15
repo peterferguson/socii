@@ -8,7 +8,7 @@ const SummaryCard = ({
   Heading,
   headingSubText,
 }) => (
-  <div className="h-32 px-4 mt-4 sm:h-40">
+  <div className="h-32 mt-4 sm:h-40">
     <div
       className={`relative flex flex-col h-full mb-6 break-words border-l-2 border-${iconColor} bg-white shadow-lg max-w-[640px] sm:max-w-sm md:max-w-md rounded-2xl xl:mb-0`}
     >

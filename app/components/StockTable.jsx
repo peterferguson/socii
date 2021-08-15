@@ -4,7 +4,7 @@ import { usePositions } from "@hooks/usePositions"
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
   const { positions } = usePositions()
   return (
-    <div className="w-full px-4 mb-12 xl:mb-0">
+    <div className="w-full mb-12 xl:mb-0 no-scrollbar">
       <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white shadow-lg rounded-2xl">
         <div className="px-4 py-3 mb-0 border-0 rounded-t">
           <div className="flex flex-wrap items-center">

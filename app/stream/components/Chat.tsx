@@ -63,7 +63,7 @@ const StreamChat = ({ client }) => {
         <div className="flex flex-col sm:flex-row">
           <Channel
             channel={
-              groupName && client.channel("messaging", groupName?.replace(" ", "-"))
+              groupName && client.channel("messaging", groupName?.replace(/\s/g, "-"))
             }
             maxNumberOfFiles={3}
             multipleUploads={true}
@@ -126,7 +126,7 @@ export function StreamChannelList({
         sort={sort}
         options={options}
         showChannelSearch={true}
-        customActiveChannel={groupName?.replace(" ", "-") || ""}
+        customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
         List={(props) => (
           <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
         )}

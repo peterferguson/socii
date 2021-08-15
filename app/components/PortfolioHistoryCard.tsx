@@ -2,7 +2,7 @@ import React from "react"
 import PortfolioHistoryLineChart from "./PortfolioHistoryLineChart"
 
 const PortfolioHistoryCard = () => (
-  <div className="w-full px-4 mt-4">
+  <div className="w-full mt-4">
     <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white shadow-lg rounded-2xl">
       <div className="px-4 py-3 mb-0 bg-transparent">
         <div className="flex flex-col items-center">
