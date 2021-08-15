@@ -1,15 +1,31 @@
-import DeleteChannelModal from "@components/DeleteChatModal"
-import AvatarGroup from "@stream/components/AvatarGroup"
 import styles from "@styles/MessagingChannelHeader.module.css"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
-import { FaChevronDown, FaList } from "react-icons/fa"
-import { HiOutlineCog } from "react-icons/hi"
-import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 import { MdSave } from "react-icons/md"
 import { useMediaQuery } from "react-responsive"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import TypingIndicator from "../TypingIndicator"
+
+const FaChevronLeft = dynamic(() =>
+  import("react-icons/fa").then((mod) => mod.FaChevronLeft)
+) as any
+const FaList = dynamic(() => import("react-icons/fa").then((mod) => mod.FaList)) as any
+const HiOutlineCog = dynamic(() =>
+  import("react-icons/hi").then((mod) => mod.HiOutlineCog)
+) as any
+const ImBin = dynamic(() => import("react-icons/im").then((mod) => mod.ImBin)) as any
+const ImCross = dynamic(() =>
+  import("react-icons/im").then((mod) => mod.ImCross)
+) as any
+const ImPencil = dynamic(() =>
+  import("react-icons/im").then((mod) => mod.ImPencil)
+) as any
+const ImUserPlus = dynamic(() =>
+  import("react-icons/im").then((mod) => mod.ImUserPlus)
+) as any
+const DeleteChannelModal = dynamic(() => import("@components/DeleteChatModal"))
+const AvatarGroup = dynamic(() => import("@stream/components/AvatarGroup")) as any
 
 // TODO: Add tooltips to settings icons
 const MessagingChannelHeader = ({ toggleChannelList }) => {
@@ -44,21 +60,21 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     setIsEditing(false)
   }
 
-  useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus()
-    }
-  }, [isEditing])
+  useEffect(
+    () => isEditing && inputRef.current && inputRef.current.focus(),
+    [isEditing]
+  )
 
-  useEffect(() => {
-    if (!channelName) {
+  useEffect(
+    () =>
+      !channelName &&
       setTitle(
         members
           .map((member) => member.user?.name || member.user?.id || "Unnamed User")
           .join(", ")
-      )
-    }
-  }, [channelName, members])
+      ),
+    [channelName, members]
+  )
 
   const EditHeader = () => (
     <form
@@ -97,7 +113,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
             onClick={toggleChannelList}
           />
         ) : (
-          <FaChevronDown
+          <FaChevronLeft
             className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
             onClick={() => router.back()}
           />
