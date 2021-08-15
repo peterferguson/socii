@@ -246,7 +246,10 @@ const MessagingInput = (props) => {
   const buttons = useMemo(() => emojiButtons, [])
 
   return (
-    <div className="flex items-center justify-center w-full p-2 bg-white shadow-none sm:shadow-md">
+    <div
+      className="flex items-center justify-center w-full p-2 bg-white shadow-none sm:shadow-md"
+      style={{ borderBottomLeftRadius: "1rem", borderBottomRightRadius: "1rem" }}
+    >
       <EmojiButton
         emojiButton={buttons.emoji}
         onClick={messageInput.openEmojiPicker}

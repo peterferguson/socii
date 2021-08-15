@@ -26,7 +26,7 @@ const Sidebar = () => {
   const items = useMemo(() => navItems(router, username), [router, username])
 
   return (
-    <div className="sticky hidden w-20 h-screen pt-3 mx-1 shadow-lg top-2 left-2 sm:block lg:w-52">
+    <div className="sticky hidden w-20 h-screen py-3 mx-1 top-2 left-2 sm:block lg:w-52">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700">
         <div className="flex items-center justify-center pt-6 mx-auto">
           {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}

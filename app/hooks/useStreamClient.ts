@@ -15,7 +15,7 @@ export const useStreamClient = () => {
 
     // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
     const connectStreamUser = async () => {
-      if (user && isBrowser) {
+      if (user?.streamToken && isBrowser) {
         await streamClient.current?.connectUser(
           { id: username, name: user.displayName },
           user.streamToken
@@ -25,7 +25,7 @@ export const useStreamClient = () => {
     }
 
     if (user?.uid && username && !streamClient.current?.user) connectStreamUser()
-  }, [user, username])
+  }, [user?.displayName, user?.streamToken, user?.uid, username])
 
   return { client: streamClient.current }
 }

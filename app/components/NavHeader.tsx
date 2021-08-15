@@ -1,11 +1,11 @@
 import { HeaderButton, HeaderDropdownButton, Searchbar } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
-import React from "react"
-import { HiOutlineChevronDown, HiOutlineMail } from "react-icons/hi"
+import { NextRouter, useRouter } from "next/router"
+import React, { useMemo } from "react"
+import { HiOutlineChevronDown, HiOutlineCog, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
-import { useMediaQuery } from "react-responsive"
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
@@ -40,12 +40,13 @@ const searchProps = {
   },
 }
 
-interface INavHeader {
-  showChat: boolean
-  setShowChat: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const dropdownItems = (signout: () => void) => [
+const dropdownItems = (router: NextRouter, signout: () => void) => [
+  {
+    name: "Settings",
+    onClick: () => router.push("/settings"),
+    notificationCount: 0,
+    leftIcon: () => <HiOutlineCog className="w-6 h-6" />,
+  },
   {
     name: "Log Out",
     onClick: () => signout(),
@@ -54,8 +55,11 @@ const dropdownItems = (signout: () => void) => [
   },
 ]
 
-const NavHeader: React.FC<INavHeader> = ({ showChat, setShowChat }) => {
+const NavHeader: React.FC = () => {
   const { signout } = useAuth()
+  const router = useRouter()
+  const items = useMemo(() => dropdownItems(router, signout), [router, signout])
+
   return (
     <InstantSearch {...searchProps}>
       <Configure hitsPerPage={3} />
@@ -68,13 +72,13 @@ const NavHeader: React.FC<INavHeader> = ({ showChat, setShowChat }) => {
               <HeaderButton
                 name="Messages"
                 icon={() => <HiOutlineMail className="w-6 h-6" />}
-                onClick={() => setShowChat(!showChat)}
+                onClick={() => router.push("/chat")}
                 hasNotifications={true}
               />
               <HeaderDropdownButton
                 name="Settings Dropdown"
                 icon={() => <HiOutlineChevronDown className="w-6 h-6" />}
-                items={dropdownItems(signout)}
+                items={items}
               />
             </div>
           </div>

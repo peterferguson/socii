@@ -1,8 +1,9 @@
 import DeleteChannelModal from "@components/DeleteChatModal"
 import AvatarGroup from "@stream/components/AvatarGroup"
 import styles from "@styles/MessagingChannelHeader.module.css"
+import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
-import { FaList } from "react-icons/fa"
+import { FaChevronDown, FaList } from "react-icons/fa"
 import { HiOutlineCog } from "react-icons/hi"
 import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 import { MdSave } from "react-icons/md"
@@ -11,11 +12,11 @@ import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import TypingIndicator from "../TypingIndicator"
 
 // TODO: Add tooltips to settings icons
-const MessagingChannelHeader = ({ toggleHideChannelList }) => {
+const MessagingChannelHeader = ({ toggleChannelList }) => {
   const { client } = useContext(ChatContext)
   const { channel } = useContext(ChannelStateContext)
 
-  let is2Col = !useMediaQuery({ minWidth: 1024 })
+  const is1Col = !useMediaQuery({ minWidth: 640 })
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
   const [isEditing, setIsEditing] = useState(false)
@@ -23,14 +24,15 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
   const [showDelete, setShowDelete] = useState(false)
   const [title, setTitle] = useState("")
 
-  const inputRef = useRef()
+  const inputRef = useRef(null)
+  const router = useRouter()
 
   const members = Object.values(channel.state?.members || {}).filter(
     (member) => member.user?.id !== client?.user?.id
   )
 
   const updateChannel = async (e) => {
-    if (e) e.preventDefault()
+    e && e.preventDefault()
 
     if (channelName && channelName !== channel.data.name) {
       await channel.update(
@@ -80,17 +82,24 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
 
   const deleteChannel = async () => {
     await channel.delete()
-    // tODO: SetShowActiveChannel
-    toggleHideChannelList()
+    toggleChannelList()
   }
 
   return (
     <Fragment>
-      <div className="flex items-center justify-between h-12 bg-white !rounded-t-xl md:h-16 border-opacity-25">
-        {toggleHideChannelList && is2Col && (
+      <div
+        className="flex items-center justify-between h-12 bg-white md:h-16 border-opacity-25"
+        style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
+      >
+        {!is1Col ? (
           <FaList
             className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-            onClick={toggleHideChannelList}
+            onClick={toggleChannelList}
+          />
+        ) : (
+          <FaChevronDown
+            className="w-5 h-5 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+            onClick={() => router.back()}
           />
         )}
         {AvatarGroup(members, styles)}
@@ -101,7 +110,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
         ) : (
           <EditHeader />
         )}
-        <>
+        <Fragment>
           <TypingIndicator />
           {usingSettings ? (
             !isEditing ? (
@@ -146,7 +155,7 @@ const MessagingChannelHeader = ({ toggleHideChannelList }) => {
               />
             </a>
           )}
-        </>
+        </Fragment>
       </div>
       {showDelete && (
         <DeleteChannelModal

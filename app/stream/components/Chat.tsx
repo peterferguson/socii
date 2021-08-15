@@ -1,9 +1,8 @@
-import { useStreamClient } from "@hooks/useStreamClient"
+import { toggleChannelListMachine } from "@lib/machines/toggleChannelListMachine"
+import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
-import { useMediaQuery } from "react-responsive"
-import { ChannelFilters, ChannelOptions, ChannelSort } from "stream-chat"
+import React, { useEffect, useState } from "react"
 import {
   CreateChatModalDynamic,
   CustomTriggerProviderDynamic,
@@ -39,59 +38,56 @@ const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), 
   ssr: false,
 }) as any
 
-// interface IStreamChat {
-//   client: Client
-//   setShowActiveChannel?: () => void
-//   isSidebar?: boolean
-// }
-
-function StreamChat({
-  setShowActiveChannel,
-  isSidebar = false,
-  // }: IStreamChat) {
-}) {
-  const { client } = useStreamClient()
-  let is1Col = !useMediaQuery({ minWidth: 640 })
-  is1Col = isSidebar ? true : is1Col
-
+const StreamChat = ({ client }) => {
   const router = useRouter()
-  const { groupName } = router.query
+  let { groupName } = router.query
+
+  groupName = Array.isArray(groupName) ? groupName[0] : groupName
 
   const [isCreating, setIsCreating] = useState(false)
-  const [hideChannelList, setHideChannelList] = useState(!isSidebar)
+  const [state, send] = useMachine(toggleChannelListMachine)
+
+  const toggleChannelList = () => send("TOGGLE")
+
+  // - Do not show channel list on group page
+  useEffect(() => {
+    if (groupName && state.value === "active") send("TOGGLE")
+  }, [groupName, send, state.value])
 
   const onCreateChannel = () => setIsCreating(!isCreating)
-  const toggleHideChannelList = () => setHideChannelList(!hideChannelList)
-
-  const onlyShowChat = !is1Col || hideChannelList || (hideChannelList && !is1Col)
-
-  // TODO: Convert to XState Machine
-  // - Truth table
-  // ! is1Col | hideChannelList | ¬is1Col ∨ hideChannelList ∨ (¬is1Col ∧ hideChannelList)
-  // !    T   |       T         |                       T
-  // !    T   |       F         |                       F
-  // !    F   |       T         |                       T
-  // !    F   |       F         |                       T
-
-  const streamProps = {
-    client,
-    groupName,
-    hideChannelList,
-    toggleHideChannelList,
-    isSidebar,
-  }
 
   // TODO: Replace light with theme when dark theme is implemented
   return (
     client && (
       <Chat client={client} theme={`messaging light`}>
-        <StreamChannelList
-          {...streamProps}
-          onCreateChannel={onCreateChannel}
-          setShowActiveChannel={setShowActiveChannel}
-          is1Col={is1Col}
-        />
-        {onlyShowChat && <StreamChannel {...streamProps} />}
+        <div className="flex flex-col sm:flex-row">
+          <Channel
+            channel={
+              groupName && client.channel("messaging", groupName?.replace(" ", "-"))
+            }
+            maxNumberOfFiles={3}
+            multipleUploads={true}
+            Attachment={CustomAttachmentDynamic}
+            TriggerProvider={CustomTriggerProviderDynamic}
+          >
+            <Window hideOnThread={true}>
+              <MessagingChannelHeaderDynamic toggleChannelList={toggleChannelList} />
+              <MessageList
+                messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
+                messageLimit={5}
+              />
+              <MessageInput Input={MessagingInputDynamic} />
+            </Window>
+            <MessagingThreadDynamic />
+          </Channel>
+          <StreamChannelList
+            userID={client?.userID}
+            groupName={groupName}
+            state={state}
+            toggleChannelList={toggleChannelList}
+            onCreateChannel={onCreateChannel}
+          />
+        </div>
         {isCreating && (
           <CreateChatModalDynamic
             isCreating={isCreating}
@@ -103,78 +99,25 @@ function StreamChat({
   )
 }
 
-export function StreamChannel({ client, groupName, isSidebar, toggleHideChannelList }) {
-  const router = useRouter()
-  const isChatOrGroupRoute =
-    router.pathname.includes("/chat") || router.pathname.includes("/groups")
-  // ! Streams ChannelList requires that the Channel is a child so we hidden
-  return (
-    <div
-      className={`w-full ${isChatOrGroupRoute ? "" : "sm:w-1/2 xl:w-1/3"} ${
-        isSidebar ? "hidden" : ""
-      }`}
-    >
-      <Channel
-        channel={
-          groupName
-            ? client.channel("messaging", groupName?.split(" ").join("-"))
-            : null
-        }
-        maxNumberOfFiles={3}
-        multipleUploads={true}
-        Attachment={CustomAttachmentDynamic}
-        TriggerProvider={CustomTriggerProviderDynamic}
-      >
-        <Window hideOnThread={true}>
-          <MessagingChannelHeaderDynamic
-            toggleHideChannelList={!groupName ? toggleHideChannelList : null}
-          />
-          <MessageList
-            messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-            messageLimit={5}
-          />
-          <MessageInput Input={MessagingInputDynamic} />
-        </Window>
-        <MessagingThreadDynamic />
-      </Channel>
-    </div>
-  )
-}
-
 export function StreamChannelList({
-  client,
-  hideChannelList,
+  userID,
   onCreateChannel,
   groupName,
-  setShowActiveChannel,
-  toggleHideChannelList,
-  is1Col,
-  isSidebar,
+  state,
+  toggleChannelList,
 }) {
-  const filter: ChannelFilters = {
-    type: "messaging",
-    members: { $in: [client?.userID] },
-  }
-  const options: ChannelOptions = {
-    state: true,
-    watch: true,
-    presence: true,
-    limit: 5,
-  }
-  const sort: ChannelSort = { last_message_at: -1, updated_at: -1, cid: 1 }
+  const filter = { type: "messaging", members: { $in: [userID] } }
+  const options = { state: true, watch: true, presence: true, limit: 5 }
+  const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
 
   return (
     <div
       className={`
         ${
-          !is1Col
-            ? "absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out" &&
-              hideChannelList
-              ? "-translate-x-full hidden"
-              : "translate-x-0 z-40"
-            : hideChannelList
-            ? "hidden"
-            : `${isSidebar ? "" : "absolute inset-0 z-40 -translate-x-full"}`
+          "absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out" &&
+          state.value === "closed"
+            ? "-translate-x-full hidden"
+            : "translate-x-0 z-50 mx-4"
         }
         `}
     >
@@ -183,16 +126,14 @@ export function StreamChannelList({
         sort={sort}
         options={options}
         showChannelSearch={true}
-        customActiveChannel={groupName?.split(" ").join("-") || ""}
+        customActiveChannel={groupName?.replace(" ", "-") || ""}
         List={(props) => (
           <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
         )}
         Preview={(props) => (
           <MessagingChannelPreviewDynamic
             {...props}
-            setShowActiveChannel={setShowActiveChannel}
-            toggleHideChannelList={toggleHideChannelList}
-            isSidebar={isSidebar}
+            toggleChannelList={toggleChannelList}
           />
         )}
       />

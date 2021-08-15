@@ -25,7 +25,6 @@ const Navigation = dynamic(() => import("@components/Navigation"))
 
 export default function MyApp({ Component, pageProps }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const [showActiveChannel, setShowActiveChannel] = useState(false)
 
   // const scrollRef = useRef(null)
   // const { up, down } = useScrollDirection(scrollRef)
@@ -38,18 +37,10 @@ export default function MyApp({ Component, pageProps }) {
 
   const props = {
     ...pageProps,
-    showActiveChannel,
-    setShowActiveChannel,
     theme,
   }
 
   const router = useRouter()
-
-  useEffect(
-    () => showActiveChannel && setShowActiveChannel(!showActiveChannel),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.asPath]
-  )
 
   const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
 

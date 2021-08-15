@@ -19,22 +19,18 @@ interface IMessagingChannelPreview {
   channel: Channel
   latestMessage?: string | JSX.Element
   setActiveChannel?: (channel: Channel) => void
-  setShowActiveChannel: (bool: boolean) => void
-  toggleHideChannelList: () => void
-  isSidebar: boolean
+  toggleChannelList: () => void
 }
 
 const MessagingChannelPreview = ({
   channel,
   latestMessage,
   setActiveChannel,
-  setShowActiveChannel,
-  toggleHideChannelList,
-  isSidebar,
+  toggleChannelList,
 }: IMessagingChannelPreview) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
   const channelName = channel.cid.split("-").join(" ")
-  const is2Col = !useMediaQuery({ minWidth: 1024 })
+  const is1Col = !useMediaQuery({ minWidth: 640 })
   const channelNameAsMember = [{ user: { name: channelName } }]
 
   let members =
@@ -58,8 +54,7 @@ const MessagingChannelPreview = ({
       `}
       onClick={() => {
         setActiveChannel(channel)
-        if (isSidebar) setShowActiveChannel(true)
-        if (is2Col && !isSidebar) toggleHideChannelList()
+        is1Col && toggleChannelList()
       }}
     >
       {AvatarGroup(members, styles)}

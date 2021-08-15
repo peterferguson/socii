@@ -8,7 +8,6 @@ import {
   HiOutlineCog,
   HiOutlineGlobe,
   HiOutlineHome,
-  HiOutlineSearch,
   HiOutlineUserGroup,
 } from "react-icons/hi"
 import { FooterNavItem } from "./FooterNavItem"
@@ -24,32 +23,25 @@ const Footer = () => {
   )
 
   return (
-    <>
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white space-x-2">
-        {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
-          const props = { text, Icon, onClick, isActive }
-          return <Component key={`nav-item-${i}`} props={props} />
-        })}
-      </nav>
-    </>
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white space-x-2">
+      {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
+        const props = { text, Icon, onClick, isActive }
+        return <Component key={`nav-item-${i}`} props={props} />
+      })}
+    </nav>
   )
 }
 
-export default Footer
+export default React.memo(Footer)
 
 const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   {
     text: !user ? "Home" : "Groups",
     Icon: !user ? HiOutlineHome : HiOutlineUserGroup,
     onClick: () => router.push(!user ? "/" : `/user/${username}`),
-    isActive: !router.asPath.slice(1) || router.asPath.includes("user"),
-    Component: ({ props }) => <FooterNavItem {...props} />,
-  },
-  {
-    text: "Stocks",
-    Icon: HiOutlineGlobe,
-    onClick: () => router.push("/stocks"),
-    isActive: router.asPath.includes("stocks"),
+    isActive:
+      !router.asPath.slice(1) ||
+      (router.asPath.includes("user") && !router.asPath.includes("portfolio")),
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
   {
@@ -58,25 +50,43 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
     Component: ({ props }) => <FooterSearchButton {...props} username={username} />,
   },
   {
-    text: "Chat",
-    Icon: HiOutlineAnnotation,
-    onClick: () => router.push("/chat"),
-    isActive: router.asPath.includes("chat"),
+    text: "Stocks",
+    Icon: HiOutlineGlobe,
+    onClick: () => router.push("/stocks"),
+    isActive: router.asPath.includes("stocks"),
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
-  {
-    text: "Settings",
-    Icon: HiOutlineCog,
-    onClick: () => router.push("/settings"),
-    isActive: router.asPath.includes("settings"),
-    Component: ({ props }) => <FooterNavItem {...props} />,
-  },
+  // {
+  //   text: "Chat",
+  //   Icon: HiOutlineAnnotation,
+  //   onClick: () => router.push("/chat"),
+  //   isActive: router.asPath.includes("chat"),
+  //   Component: ({ props }) => <FooterNavItem {...props} />,
+  // },
+  // {
+  //   text: "Settings",
+  //   Icon: HiOutlineCog,
+  //   onClick: () => router.push("/settings"),
+  //   isActive: router.asPath.includes("settings"),
+  //   Component: ({ props }) => <FooterNavItem {...props} />,
+  // },
 ]
 
 const FooterSearchButton = ({ username, onClick, isActive }) => (
   <Link href={`/user/${username}/portfolio`}>
-    <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}>
-      <SociiIMG height="40" width="40" />
+    <a
+      className={`block w-full py-2 font-primary text-tiny text-brand-dark text-center ${
+        isActive &&
+        "border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
+      } transition duration-300`}
+      onClick={onClick}
+    >
+      <SociiIMG height="32" width="32" />
+
+      <p className="-mt-1">Portfolio</p>
+
+      {/* </a> */}
+      {/* <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}> */}
     </a>
   </Link>
 )

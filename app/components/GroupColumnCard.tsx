@@ -23,31 +23,40 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   useEffect(() => groupName && setHoldingData(groupName, setHoldings), [groupName])
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    let unmounted = false
+    !unmounted &&
       setHoldingInfo(
         holdings?.map((doc) => {
           const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
           return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
         })
-      ),
-    [holdings]
-  )
+      )
+    return () => {
+      unmounted = true
+    }
+  }, [holdings])
 
   useEffect(() => {
-    holdingInfo?.map(async ({ tickerSymbol }) => {
-      const price = await iexQuote(tickerSymbol, user?.token)
-
-      setCurrentPrices((previousState) => ({
-        ...previousState,
-        [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
-      }))
-    })
+    let unmounted = false
+    !unmounted &&
+      holdingInfo?.map(async ({ tickerSymbol }) => {
+        const price = await iexQuote(tickerSymbol, user?.token)
+        setCurrentPrices((previousState) => ({
+          ...previousState,
+          [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
+        }))
+      })
+    return () => {
+      unmounted = true
+    }
   }, [holdingInfo, user?.token])
 
   return (
     <div
-      className={`flex flex-col items-center mx-auto p-4 mb-4 bg-white rounded shadow-lg sm:rounded-xl ${className}`}
+      className={`flex flex-col items-center mx-auto p-4 mb-4 bg-white shadow-lg rounded-2xl ${
+        className || ""
+      }`}
     >
       {holdingInfo?.length !== 0 ? (
         <GroupPieChart

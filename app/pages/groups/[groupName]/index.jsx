@@ -31,7 +31,7 @@
 // ! would not need to call an api to get this data for historical pricing in simulations
 // - Sunburst charts for allocation, diversifaction & over allocation.
 
-import { AuthCheck, ClientOnly, GroupColumnCard, LoadingIndicator } from "@components"
+import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import { useStreamClient } from "@hooks/useStreamClient"
 import dynamic from "next/dynamic"
@@ -45,32 +45,31 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
 })
 
 export default function Group() {
-  const is1Col = useMediaQuery({ minWidth: 800 })
   const router = useRouter()
+
+  const is1Col = !useMediaQuery({ minWidth: 640 })
+  const { client } = useStreamClient()
   let { groupName } = router.query
   const { userGroups } = useAuth()
 
   if (Array.isArray(groupName)) groupName = groupName[0]
-  // TODO: Use skeleton loaders for chat
-
   return (
     <>
       {groupName && userGroups && !userGroups.includes(groupName) && <Custom404 />}
-
       <div className="flex">
-        <div className="flex-auto p-8">
-          <div className="text-3xl font-extrabold tracking-wider text-center text-gray-600 uppercase font-primary">
+        <div className="flex-auto pt-8">
+          <div className="pb-2 text-3xl tracking-wider text-center text-gray-600 uppercase font-primary">
             holdings
           </div>
           <GroupColumnCard groupName={groupName} />
+          {client && !is1Col && (
+            <AuthCheck>
+              <ClientOnly>
+                <StreamChatWithNoSSR client={client} />
+              </ClientOnly>
+            </AuthCheck>
+          )}
         </div>
-        {is1Col && (
-          <AuthCheck>
-            <ClientOnly>
-              <StreamChatWithNoSSR />
-            </ClientOnly>
-          </AuthCheck>
-        )}
       </div>
     </>
   )
