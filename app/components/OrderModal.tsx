@@ -7,7 +7,7 @@ import { singleLineTemplateString } from "@utils/singleLineTemplateString"
 import router from "next/router"
 import React, { Fragment, useState } from "react"
 import PriceHeading from "./PriceHeading"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 const orderScreenState = (state) =>
   state.matches("active.limitOrder") ||

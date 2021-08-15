@@ -96,28 +96,3 @@ export default Multiselect
 
 // TODO: Implement a better verison of the multiselect
 
-
-// import "@styles/Multiselect.module.css"
-// import Select from "react-select"
-// import Tippy from '@tippyjs/react';
-// import { components } from "react-select"
-
-// const MultiValueContainer = (props) => {
-//   console.log(props)
-//   return (
-//     <Tippy content={<span>Tooltip</span>}>
-//       <components.MultiValueContainer {...props} />
-//     </Tippy>
-//   )
-// }
-
-// export default ({ items, selectedItems, setSelectedItems }) => (
-//   <Select
-//     defaultValue={items[0]}
-//     label="Select Data Point"
-//     isMulti={true}
-//     components={{ MultiValueContainer }}
-//     options={items}
-//     classNamePrefix="react-select"
-//   />
-// )

@@ -1,7 +1,7 @@
 import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
 import React from "react"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 export const AssetCard = ({ tickerSymbol, isin, shortName, price }) => (
   <>

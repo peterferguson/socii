@@ -1,3 +1,5 @@
+export { default as CustomAttachment } from "./CustomAttachment"
+export { CustomAttachmentDynamic } from "./CustomAttachment.dynamic"
 export { default as InvestCommandAttachment } from "./InvestCommandAttachment/InvestCommandAttachment"
 export { InvestCommandAttachmentDynamic } from "./InvestCommandAttachment/InvestCommandAttachment.dynamic"
 export { default as InvestmentConfirmationAttachment } from "./InvestmentConfirmationAttachment/InvestmentConfirmationAttachment"

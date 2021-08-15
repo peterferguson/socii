@@ -1,7 +1,7 @@
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 interface ILogoHeader {
   tickerSymbol: string

@@ -4,67 +4,40 @@ import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { ChannelFilters, ChannelOptions, ChannelSort } from "stream-chat"
+import {
+  CreateChatModalDynamic,
+  CustomTriggerProviderDynamic,
+  MessagingChannelHeaderDynamic,
+  MessagingChannelListDynamic,
+  MessagingChannelPreviewDynamic,
+  MessagingInputDynamic,
+  MessagingThreadDynamic,
+} from "."
+import { CustomAttachmentDynamic } from "./CustomAttachments"
 
-
-const CustomTriggerProvider = dynamic(
-  () => import("@stream/components").then((mod) => mod.CustomTriggerProvider),
-  { ssr: false }
-)
-const MessagingChannelHeader = dynamic(
-  () => import("@stream/components").then((mod) => mod.MessagingChannelHeader),
-  { ssr: false }
-)
-const MessagingChannelList = dynamic(
-  () => import("@stream/components").then((mod) => mod.MessagingChannelList),
-  { ssr: false }
-)
-const MessagingChannelPreview = dynamic(
-  () => import("@stream/components").then((mod) => mod.MessagingChannelPreview),
-  { ssr: false }
-)
-const MessagingInput = dynamic(
-  () => import("@stream/components").then((mod) => mod.MessagingInput),
-  { ssr: false }
-)
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
   ssr: false,
-})
+}) as any
 const ChannelList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
   { ssr: false }
-)
-const ChatContext = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.ChatContext) as any,
-  { ssr: false }
-)
+) as any
 const MessageInput = dynamic(
   () => import("stream-chat-react").then((mod) => mod.MessageInput) as any,
   { ssr: false }
-)
+) as any
 const MessageList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.MessageList) as any,
   { ssr: false }
-)
+) as any
+
 const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
   ssr: false,
-})
+}) as any
 
 const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), {
   ssr: false,
-})
-
-const MessagingThread = dynamic(() => import("@stream/components/MessagingThread/MessagingThread"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-})
-const CustomAttachment = dynamic(() => import("@stream/components/CustomAttachment"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-})
-const TypingIndicator = dynamic(() => import("@stream/components/TypingIndicator"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-})
+}) as any
 
 // interface IStreamChat {
 //   client: Client
@@ -120,7 +93,10 @@ function StreamChat({
         />
         {onlyShowChat && <StreamChannel {...streamProps} />}
         {isCreating && (
-          <CreateChatModal isCreating={isCreating} setIsCreating={setIsCreating} />
+          <CreateChatModalDynamic
+            isCreating={isCreating}
+            setIsCreating={setIsCreating}
+          />
         )}
       </Chat>
     )
@@ -146,20 +122,20 @@ export function StreamChannel({ client, groupName, isSidebar, toggleHideChannelL
         }
         maxNumberOfFiles={3}
         multipleUploads={true}
-        Attachment={CustomAttachment}
-        TriggerProvider={CustomTriggerProvider}
+        Attachment={CustomAttachmentDynamic}
+        TriggerProvider={CustomTriggerProviderDynamic}
       >
         <Window hideOnThread={true}>
-          <MessagingChannelHeader
+          <MessagingChannelHeaderDynamic
             toggleHideChannelList={!groupName ? toggleHideChannelList : null}
           />
           <MessageList
             messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
             messageLimit={5}
           />
-          <MessageInput Input={MessagingInput} />
+          <MessageInput Input={MessagingInputDynamic} />
         </Window>
-        <MessagingThread />
+        <MessagingThreadDynamic />
       </Channel>
     </div>
   )
@@ -184,7 +160,6 @@ export function StreamChannelList({
     watch: true,
     presence: true,
     limit: 5,
-    message_limit: 5,
   }
   const sort: ChannelSort = { last_message_at: -1, updated_at: -1, cid: 1 }
 
@@ -210,10 +185,10 @@ export function StreamChannelList({
         showChannelSearch={true}
         customActiveChannel={groupName?.split(" ").join("-") || ""}
         List={(props) => (
-          <MessagingChannelList {...props} onCreateChannel={onCreateChannel} />
+          <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
         )}
         Preview={(props) => (
-          <MessagingChannelPreview
+          <MessagingChannelPreviewDynamic
             {...props}
             setShowActiveChannel={setShowActiveChannel}
             toggleHideChannelList={toggleHideChannelList}

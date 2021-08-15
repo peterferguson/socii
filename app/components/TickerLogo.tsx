@@ -14,7 +14,7 @@ interface ITickerLogoProps {
 
 const DEFAULT_HEIGHT_AND_WIDTH = "56px"
 
-export const TickerLogo: React.FC<ITickerLogoProps> = ({
+const TickerLogo: React.FC<ITickerLogoProps> = ({
   height,
   width,
   className,
@@ -54,3 +54,5 @@ export const TickerLogo: React.FC<ITickerLogoProps> = ({
     </Link>
   )
 }
+
+export default React.memo(TickerLogo)

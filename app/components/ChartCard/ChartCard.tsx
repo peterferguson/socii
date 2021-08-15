@@ -2,7 +2,7 @@ import { pctChange } from "@utils/pctChange"
 import Link from "next/link"
 import React from "react"
 import { ChartCardChartDynamic } from "./ChartCardChart.dynamic"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "../TickerLogo"
 
 export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data }) {
   const closeDelta = pctChange(data?.[data?.length - 1]?.close, data?.[0]?.close)

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import React from "react"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 interface IStockCard {
   holding: any

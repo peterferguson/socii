@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { Hint, RadialChart } from "react-vis"
 import "react-vis/dist/style.css"
 
-export default function DonutChart({
+function DonutChart({
   data,
   scaling,
   radius,
@@ -59,3 +59,5 @@ export default function DonutChart({
     </>
   )
 }
+
+export default React.memo(DonutChart)

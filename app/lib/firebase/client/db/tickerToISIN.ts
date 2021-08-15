@@ -14,5 +14,5 @@ export async function tickerToISIN(ticker: string): Promise<string> {
     limit(1)
   )
   const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
-  return tickerDoc.id
+  return tickerDoc?.id || ""
 }

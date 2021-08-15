@@ -16,7 +16,7 @@ interface ITickerPageLineChart {
   heightScale?: number
 }
 
-export const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
+const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   timeseries,
   color,
   crosshairIndexValue,
@@ -90,3 +90,5 @@ export const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
     </div>
   )
 }
+
+export default React.memo(TickerPageLineChart)

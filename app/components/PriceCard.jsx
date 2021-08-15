@@ -1,7 +1,7 @@
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React from "react"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 export default function PriceCard({
   isin,

@@ -1,5 +1,5 @@
 import CardSlider from "@components/CardSlider"
-import ChartCard from "@components/ChartCard"
+import ChartCard from "@components/ChartCard/ChartCard"
 import HorizontalAssetCard, {
   HorizontalAssetCardSkeleton,
 } from "@components/HorizontalAssetCard"

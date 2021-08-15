@@ -2,7 +2,7 @@ import { useTickerPrice } from "@hooks"
 import Link from "next/link"
 import React, { useState } from "react"
 import { Loading } from "./SearchResultsModal"
-import { TickerLogo } from "./TickerLogo"
+import TickerLogo from "./TickerLogo"
 
 export const SearchHit = ({ hit }) => {
   const [loadingTicker, setLoadingTicker] = useState(false)

@@ -6,7 +6,7 @@ import {
   InvestmentReceiptAttachmentDynamic,
   StockDisplayAttachmentDynamic,
   TradeCommandAttachmentDynamic,
-} from "./CustomAttachments"
+} from "."
 
 export default function CustomAttachment(props) {
   const { attachments } = props
