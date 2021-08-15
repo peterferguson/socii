@@ -5,6 +5,7 @@ import React, { Suspense } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
+  useChatContext,
   useMessageContext,
 } from "stream-chat-react"
 import InvestConfirmationMMLConverter from "../converters/InvestConfirmationMMLConverter"
@@ -16,6 +17,7 @@ const MML = React.lazy(async () => {
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
   const { user } = useAuth()
+  const { client } = useChatContext()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 
@@ -45,10 +47,13 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
         <MML
           converters={converters}
           source={attachment.mml}
-          onSubmit={(data) => {
+          onSubmit={async (data) => {
             // ! Trade is based on the groups selection process.
             // ! Defaults to uanimous decision.
             if ("yes" in data) agreesToTrade(groupName, message.parent_id, user.uid)
+            const updated = await client.partialUpdateMessage(message.id, {
+              set: { status: "submitted" },
+            })
           }}
           Loading={LoadingIndicator}
         />

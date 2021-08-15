@@ -7,12 +7,9 @@ import React, { useEffect, useRef, useState } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
+  useChatContext,
   useMessageContext,
 } from "stream-chat-react"
-
-// WARN: IEX called for each instance of a buy command message
-// WARN: Should think about some how collecting the tickers referenced on the message list
-// WARN: And passing these so we then call the api less
 
 const MML = dynamic(() => import("mml-react").then((mod) => mod.MML), {
   loading: LoadingIndicator,
@@ -25,6 +22,7 @@ const TradeCommandAttachment = ({ attachment }) => {
   const [isin, setIsin] = useState("")
 
   const { username } = useAuth()
+  const { client } = useChatContext()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 
@@ -39,18 +37,11 @@ const TradeCommandAttachment = ({ attachment }) => {
     return () => (unmounted = true)
   }, [isin])
 
-  // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
-  // latestUpdate, // TODO: Display this in the attachment
   const groupName = channel.cid.split(":").pop()
-
-  // TODO: add some logic to make the message ephemeral
-  // ? If the user is not the one who sent the message, then we should not show the message
-  // ? query the message command & the user who sent the message render if username === senders
-  const ephemeralMessage = true
 
   return (
     <>
-      {isin && ephemeralMessage ? (
+      {isin && (
         <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
           <LogoPriceCardHeader
             {...{
@@ -63,7 +54,7 @@ const TradeCommandAttachment = ({ attachment }) => {
           <MML
             converters={converters(price?.iexRealtimePrice || price?.latestPrice)}
             source={attachment.mml}
-            onSubmit={(data) => {
+            onSubmit={async (data) => {
               const tradeArgs = {
                 username,
                 groupName,
@@ -80,7 +71,10 @@ const TradeCommandAttachment = ({ attachment }) => {
                 timeInForce: "day",
                 // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
               }
-              console.log(tradeArgs)
+              const updated = await client.partialUpdateMessage(message.id, {
+                set: { status: "submitted" },
+              })
+              console.log(updated)
               //TODO: Review redundancy with orderType (may not be with limit orders)
               // - Write to firestore & send confirmation message in thread
               if ("buy" in data) {
@@ -93,7 +87,7 @@ const TradeCommandAttachment = ({ attachment }) => {
             Loading={LoadingIndicator}
           />
         </div>
-      ) : null}
+      )}
     </>
   )
 }

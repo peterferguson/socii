@@ -6,12 +6,10 @@ import React, { useEffect, useState } from "react"
 import {
   CreateChatModalDynamic,
   CustomTriggerProviderDynamic,
-  MessagingChannelHeaderDynamic,
   MessagingChannelListDynamic,
   MessagingChannelPreviewDynamic,
-  MessagingInputDynamic,
-  MessagingThreadDynamic,
 } from "."
+import ChannelInner from "./ChannelInner"
 import { CustomAttachmentDynamic } from "./CustomAttachments"
 
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
@@ -56,6 +54,8 @@ const StreamChat = ({ client }) => {
 
   const onCreateChannel = () => setIsCreating(!isCreating)
 
+  // const messages =
+
   // TODO: Replace light with theme when dark theme is implemented
   return (
     client && (
@@ -70,15 +70,7 @@ const StreamChat = ({ client }) => {
             Attachment={CustomAttachmentDynamic}
             TriggerProvider={CustomTriggerProviderDynamic}
           >
-            <Window hideOnThread={true}>
-              <MessagingChannelHeaderDynamic toggleChannelList={toggleChannelList} />
-              <MessageList
-                messageActions={["edit", "delete", "flag", "mute", "react", "reply"]}
-                messageLimit={5}
-              />
-              <MessageInput Input={MessagingInputDynamic} />
-            </Window>
-            <MessagingThreadDynamic />
+            <ChannelInner />
           </Channel>
           <StreamChannelList
             userID={client?.userID}
