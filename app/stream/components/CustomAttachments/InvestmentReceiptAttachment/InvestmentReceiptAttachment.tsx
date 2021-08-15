@@ -9,8 +9,6 @@ import { useMessageContext } from "stream-chat-react"
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
 
-  console.log(attachment)
-
   const tickerSymbol = useRef<string>("")
   const shares = parseFloat(message.text.split(" shares")[0])
   const localPrice = message.text.split("cost of ").pop().trim()

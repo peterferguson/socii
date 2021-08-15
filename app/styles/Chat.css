@@ -2571,11 +2571,13 @@
   .str-chat-channel-list.messaging {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    left: 100vw;
-    width: 100vw;
-    top: 0;
-    left: 0;
+    height: 100vw;
+    width: 80vw;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
     z-index: 1001;
     overflow-y: auto;
     box-shadow: 7px 0 9px 0 rgba(0, 0, 0, 0.03), 1px 0 0 0 rgba(0, 0, 0, 0.03);

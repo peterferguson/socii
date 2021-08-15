@@ -63,8 +63,6 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     [channel.cid, channel?.data?.name, channelName, members]
   )
 
-  console.log(memberNames)
-
   const updateChannel = async (e) => {
     e && e.preventDefault()
 
@@ -125,22 +123,21 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
         className="flex items-center justify-between h-12 bg-white md:h-16 border-opacity-25"
         style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
       >
-        {!is1Col ? (
-          <FaList
-            className="w-5 h-5 pr-2 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-            onClick={toggleChannelList}
-          />
-        ) : (
+        {is1Col && (
           <FaChevronLeft
-            className="w-5 h-5 pr-2 ml-6 cursor-pointer text-brand hover:text-brand-dark btn-transition"
+            className="w-5 h-5 ml-4 mr-2 cursor-pointer text-brand hover:text-brand-dark btn-transition"
             onClick={() => router.back()}
           />
         )}
+        <FaList
+          className={`w-5 h-5 ${
+            is1Col ? "ml-0" : "ml-6"
+          } mr-4 cursor-pointer  text-brand hover:text-brand-dark btn-transition`}
+          onClick={toggleChannelList}
+        />
         {<AvatarGroup memberNames={memberNames} />}
         {!isEditing ? (
-          <div className="flex-1 pl-4 font-bold font-primary">
-            {channelName || title}
-          </div>
+          <div className="flex-1 font-bold font-primary">{channelName || title}</div>
         ) : (
           <EditHeader />
         )}
