@@ -35,4 +35,4 @@ const MMLButton: FC<ButtonProps> = ({ className, text, name, value, icon }) => (
   </button>
 )
 
-export default MMLButton
+export default React.memo(MMLButton)
