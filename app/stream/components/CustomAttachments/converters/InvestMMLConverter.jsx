@@ -1,6 +1,6 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader";
 import React from "react";
-import MMLButton from "../MML/Button";
+import MMLButton from "../../../MML/Button";
 
 export const InvestMMLConverter = ({ tickerSymbol, tickerState, canSell = true }) => (
   <>

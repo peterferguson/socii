@@ -16,9 +16,9 @@ export type ButtonProps = {
 /**
  * Button can be used to open a URL, submit the form or trigger a select when clicked
  */
-const MMLButton: FC<ButtonProps> = ({ className = "", text, name, value, icon }) => (
+const MMLButton: FC<ButtonProps> = ({ className, text, name, value, icon }) => (
   <button
-    className={`${className}`}
+    className={className || ""}
     type="submit"
     name={name}
     value={value}

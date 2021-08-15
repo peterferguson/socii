@@ -1,7 +1,7 @@
 import React from "react"
 import { FiX } from "react-icons/fi"
 import { Thread } from "stream-chat-react"
-import { MessagingInput } from "./index"
+import { MessagingInput } from "../index"
 
 const ThreadHeader = ({ closeThread, thread }) => {
   const getReplyCount = () => {

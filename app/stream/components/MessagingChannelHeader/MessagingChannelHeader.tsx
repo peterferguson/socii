@@ -8,7 +8,7 @@ import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 import { MdSave } from "react-icons/md"
 import { useMediaQuery } from "react-responsive"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
-import TypingIndicator from "./TypingIndicator"
+import TypingIndicator from "../TypingIndicator"
 
 // TODO: Add tooltips to settings icons
 const MessagingChannelHeader = ({ toggleHideChannelList }) => {

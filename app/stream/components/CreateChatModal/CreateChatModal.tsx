@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment, memo, useContext, useState } from "react"
 import { ChatContext } from "stream-chat-react"
-import ChatUserSearch, { StreamUser } from "./ChatUserSearch"
+import ChatUserSearch, { StreamUser } from "../ChatUserSearch"
 
 interface CreateChatModalProps {
   isCreating: boolean

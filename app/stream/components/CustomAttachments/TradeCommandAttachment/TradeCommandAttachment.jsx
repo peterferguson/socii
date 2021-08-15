@@ -1,16 +1,14 @@
-import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
 import { useTickerPrice } from "@hooks/useTickerPrice"
 import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { useAuth } from "hooks/useAuth"
 import dynamic from "next/dynamic"
-import React, { Suspense, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   LoadingIndicator,
   useChannelStateContext,
   useMessageContext,
 } from "stream-chat-react"
-import { TradeMMLConverter } from "./converters/TradeMMLConverter"
 
 // WARN: IEX called for each instance of a buy command message
 // WARN: Should think about some how collecting the tickers referenced on the message list
@@ -19,6 +17,8 @@ import { TradeMMLConverter } from "./converters/TradeMMLConverter"
 const MML = dynamic(() => import("mml-react").then((mod) => mod.MML), {
   loading: LoadingIndicator,
 })
+const TradeMMLConverter = dynamic(() => import("../converters/TradeMMLConverter"))
+const LogoPriceCardHeader = dynamic(() => import("@components/LogoPriceCardHeader"))
 
 const TradeCommandAttachment = ({ attachment }) => {
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
@@ -30,18 +30,27 @@ const TradeCommandAttachment = ({ attachment }) => {
 
   const { price } = useTickerPrice(tickerSymbol.current)
 
-  useEffect(() => tickerToISIN(tickerSymbol.current).then((data) => setIsin(data)), [])
+  useEffect(() => {
+    let unmounted = false
+    const getISIN = async () => setIsin(await tickerToISIN(tickerSymbol.current))
+
+    !isin && !unmounted && getISIN()
+
+    return () => (unmounted = true)
+  }, [isin])
 
   // TODO: Update messages so that the price becomes stale intentionally (until ephemeral msgs work)
   // latestUpdate, // TODO: Display this in the attachment
   const groupName = channel.cid.split(":").pop()
 
   // TODO: add some logic to make the message ephemeral
+  // ? If the user is not the one who sent the message, then we should not show the message
+  // ? query the message command & the user who sent the message render if username === senders
   const ephemeralMessage = true
 
   return (
     <>
-      {ephemeralMessage ? (
+      {isin && ephemeralMessage ? (
         <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
           <LogoPriceCardHeader
             {...{
@@ -107,4 +116,4 @@ const converters = (cost) =>
     }))
   )
 
-export default TradeCommandAttachment
+export default React.memo(TradeCommandAttachment)

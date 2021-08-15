@@ -1,25 +1,18 @@
-import { useShareCost } from "@hooks/useShareCost"
-import React from "react"
-import MMLButton from "../MML/Button"
-import { MMLNumberInput } from "../MML/NumberInput"
+import React, { useState } from "react"
+import MMLButton from "../../../MML/Button"
+import { MMLNumberInput } from "../../../MML/NumberInput"
 
-export const TradeMMLConverter = ({ tagKey, costPerShare, tradeType }) => {
-  const [shares, handleChange, toCost] = useShareCost(costPerShare)
+const TradeMMLConverter = ({ tagKey, costPerShare, tradeType }) => {
+  const [amount, setAmount] = useState(costPerShare)
+  const handleChange = (e) => setAmount(e.target.value)
 
   return (
     <div className="flex flex-col">
-      {/* <MMLNumberInput
-        name={"Shares"}
-        key={`${tagKey}-shares`}
-        value={shares}
-        onChange={handleChange}
-        decimals={8}
-      /> */}
       <MMLNumberInput
         name={"Amount"}
         key={`${tagKey}-amount`}
-        //value={toCost(shares)}
         onChange={handleChange}
+        value={amount}
       />
       <div className="flex flex-row mt-1">
         <MMLButton
@@ -38,3 +31,5 @@ export const TradeMMLConverter = ({ tagKey, costPerShare, tradeType }) => {
     </div>
   )
 }
+
+export default React.memo(TradeMMLConverter)

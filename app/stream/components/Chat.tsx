@@ -1,7 +1,11 @@
-const CreateChatModal = dynamic(
-  () => import("@stream/components").then((mod) => mod.CreateChatModal),
-  { ssr: false }
-)
+import { useStreamClient } from "@hooks/useStreamClient"
+import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
+import React, { useState } from "react"
+import { useMediaQuery } from "react-responsive"
+import { ChannelFilters, ChannelOptions, ChannelSort } from "stream-chat"
+
+
 const CustomTriggerProvider = dynamic(
   () => import("@stream/components").then((mod) => mod.CustomTriggerProvider),
   { ssr: false }
@@ -22,28 +26,23 @@ const MessagingInput = dynamic(
   () => import("@stream/components").then((mod) => mod.MessagingInput),
   { ssr: false }
 )
-import { useStreamClient } from "@hooks/useStreamClient"
-import dynamic from "next/dynamic"
-import { useRouter } from "next/router"
-import React, { useContext, useState } from "react"
-import { useMediaQuery } from "react-responsive"
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
   ssr: false,
 })
 const ChannelList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.ChannelList),
+  () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
   { ssr: false }
 )
 const ChatContext = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.ChatContext),
+  () => import("stream-chat-react").then((mod) => mod.ChatContext) as any,
   { ssr: false }
 )
 const MessageInput = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageInput),
+  () => import("stream-chat-react").then((mod) => mod.MessageInput) as any,
   { ssr: false }
 )
 const MessageList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageList),
+  () => import("stream-chat-react").then((mod) => mod.MessageList) as any,
   { ssr: false }
 )
 const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
@@ -54,7 +53,7 @@ const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), 
   ssr: false,
 })
 
-const MessagingThread = dynamic(() => import("@stream/components/MessagingThread"), {
+const MessagingThread = dynamic(() => import("@stream/components/MessagingThread/MessagingThread"), {
   loading: () => <p>...</p>,
   ssr: false,
 })
@@ -73,7 +72,7 @@ const TypingIndicator = dynamic(() => import("@stream/components/TypingIndicator
 //   isSidebar?: boolean
 // }
 
-export default function StreamChat({
+function StreamChat({
   setShowActiveChannel,
   isSidebar = false,
   // }: IStreamChat) {
@@ -176,9 +175,18 @@ export function StreamChannelList({
   is1Col,
   isSidebar,
 }) {
-  const filter = { type: "messaging", members: { $in: [client?.userID] } }
-  const options = { state: true, watch: true, presence: true, limit: 8 }
-  const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
+  const filter: ChannelFilters = {
+    type: "messaging",
+    members: { $in: [client?.userID] },
+  }
+  const options: ChannelOptions = {
+    state: true,
+    watch: true,
+    presence: true,
+    limit: 5,
+    message_limit: 5,
+  }
+  const sort: ChannelSort = { last_message_at: -1, updated_at: -1, cid: 1 }
 
   return (
     <div
@@ -216,3 +224,5 @@ export function StreamChannelList({
     </div>
   )
 }
+
+export default React.memo(StreamChat)

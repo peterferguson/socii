@@ -7,7 +7,7 @@ import {
   useChannelStateContext,
   useMessageContext,
 } from "stream-chat-react"
-import { InvestConfirmationMMLConverter } from "./converters/InvestConfirmationMMLConverter"
+import InvestConfirmationMMLConverter from "../converters/InvestConfirmationMMLConverter"
 
 const MML = React.lazy(async () => {
   const mml = await import("mml-react")
@@ -27,7 +27,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   // TODO: Add different views of the buy card for users who did not submit it
   const converters = {
     investmentConfirmation: (tag) => (
-      <InvestConfirmationMMLConverter {...tag.node.attributes} tagKey={tag.key} />
+      <InvestConfirmationMMLConverter {...tag.node.attributes} key={tag.key} />
     ),
   }
 

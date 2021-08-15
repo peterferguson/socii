@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useContext, useReducer } from "react"
+import React, { memo, useCallback, useContext, useMemo, useReducer } from "react"
 import { ImageDropzone } from "react-file-utils"
 import { BsLightning, BsLightningFill } from "react-icons/bs"
 import { FaDollarSign } from "react-icons/fa"
@@ -242,15 +242,18 @@ const MessagingInput = (props) => {
       preventDefault: () => null,
     })
   }
+
+  const buttons = useMemo(() => emojiButtons, [])
+
   return (
     <div className="flex items-center justify-center w-full p-2 bg-white shadow-none sm:shadow-md">
       <EmojiButton
-        emojiButton={emojiButtons.emoji}
+        emojiButton={buttons.emoji}
         onClick={messageInput.openEmojiPicker}
         ref={messageInput.emojiPickerRef}
       />
-      <EmojiButton emojiButton={emojiButtons.command} onClick={onClickCommand} />
-      <EmojiButton emojiButton={emojiButtons.ticker} onClick={onClickTicker} />
+      <EmojiButton emojiButton={buttons.command} onClick={onClickCommand} />
+      <EmojiButton emojiButton={buttons.ticker} onClick={onClickTicker} />
       <ImageDropzone
         accept={acceptedFiles}
         handleFiles={messageInput.uploadNewFiles}
@@ -277,10 +280,7 @@ const MessagingInput = (props) => {
           />
         </div>
       </ImageDropzone>
-      <EmojiButton
-        emojiButton={emojiButtons.submit}
-        onClick={messageInput.handleSubmit}
-      />
+      <EmojiButton emojiButton={buttons.submit} onClick={messageInput.handleSubmit} />
       <EmojiPicker {...messageInput} />
     </div>
   )

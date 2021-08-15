@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import { LoadingIndicator } from "stream-chat-react"
-import { InvestMMLConverter } from "./converters/InvestMMLConverter"
+import { InvestMMLConverter } from "../converters/InvestMMLConverter"
 
 
 const MML = React.lazy(async () => {
