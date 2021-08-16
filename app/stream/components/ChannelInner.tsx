@@ -1,9 +1,7 @@
 import { useAuth } from "@hooks"
-import { toggleChannelListMachine } from "@lib/machines/toggleChannelListMachine"
-import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import React, { useEffect, useState } from "react"
-import { useChannelActionContext, useChannelStateContext } from "stream-chat-react"
+import { useChannelStateContext } from "stream-chat-react"
 import {
   MessagingChannelHeaderDynamic,
   MessagingInputDynamic,
@@ -23,29 +21,25 @@ const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Windo
   ssr: false,
 }) as any
 
-const ChannelInner = () => {
+const ChannelInner = ({ toggleChannelList }) => {
   const { username } = useAuth()
-//   const { addNotification } = useChannelActionContext()
+  //   const { addNotification } = useChannelActionContext()
   const { channel, messages } = useChannelStateContext()
 
   const [filteredMessages, setFilteredMessages] = useState(messages)
 
-  const [_state, send] = useMachine(toggleChannelListMachine)
-
-  const toggleChannelList = () => send("TOGGLE")
-
   // - notifies the channel if a message has been updated
-//   useEffect(() => {
-//     const clickToAddNotification = () => {
-//       addNotification("A message has been edited!", "success")
-//     }
+  //   useEffect(() => {
+  //     const clickToAddNotification = () => {
+  //       addNotification("A message has been edited!", "success")
+  //     }
 
-//     channel.on("message.updated", clickToAddNotification)
+  //     channel.on("message.updated", clickToAddNotification)
 
-//     return () => {
-//       channel.off("message.updated", clickToAddNotification)
-//     }
-//   }, [addNotification, channel])
+  //     return () => {
+  //       channel.off("message.updated", clickToAddNotification)
+  //     }
+  //   }, [addNotification, channel])
 
   useEffect(() => {
     setFilteredMessages(
@@ -53,13 +47,16 @@ const ChannelInner = () => {
       messages.filter(
         (msg) =>
           !(
-            (msg.attachments.some(({ type }) => type === "buy") &&
+            (msg.attachments.some(({ type }) => type === "buy" || type === "sell") &&
               msg.user.id !== username) ||
-            msg?.status === "submitted"
+            ["complete", "cancelled"].includes(msg?.status)
           )
       )
     )
   }, [messages, username])
+
+  // - print last message
+  console.log(messages.slice().pop())
 
   return (
     <>

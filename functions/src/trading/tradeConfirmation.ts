@@ -21,18 +21,16 @@ import { investmentReceiptMML } from "./mml/investmentReceiptMML"
 */
 
 export const tradeConfirmation = async (change, context) => {
-  // - document at groups/{groupName}/trades/{messageId}
+  // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
-
-  // TODO add executed = pending to all orders as they are sent..
+  
   // can be: success, pending, failed
   if (tradeData.executionStatus !== "pending") return // - do nothing
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  const ISIN = tradeData.assetRef.split("/").pop()
   tradeData.assetRef = firestore.doc(tradeData.assetRef)
 
   const { latestPrice, isUSMarketOpen } = await iexClient.quote(tradeData.symbol, {
@@ -40,7 +38,8 @@ export const tradeConfirmation = async (change, context) => {
   })
 
   logger.log("latest", latestPrice, "and stockprice: ", tradeData.stockPrice)
-  ///////// TODO reinstate this
+
+  // TODO reinstate this
   //   // // // - do nothing if market is closed
   //   // if (!isUSMarketOpen) {
   //   //   // 2. send a message with the finalised price
@@ -48,11 +47,7 @@ export const tradeConfirmation = async (change, context) => {
   //   //   await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
   //   //   return
   //   // }
-  ///////// TODO reinstate this
-
-  // TODO add executed = pending to all orders as they are sent..
-  // can be: success, pending, failed
-  if (tradeData.executionStatus !== "pending") return // - do nothing
+  // TODO reinstate this
 
   // TODO: Fix price checking
   // ! Now asset price & currency is available along with cost & execution currency this should be simple
@@ -91,12 +86,12 @@ export const tradeConfirmation = async (change, context) => {
     tradeData.stockPrice = latestPrice
   }
 
-  if (investorCount == 1 || tradeData.agreesToTrade.length === investorCount) {
+  if (tradeData.agreesToTrade.length === investorCount) {
     // ! Execute Trade
+    logger.log(`Sending order: ${JSON.stringify(tradeData)}`)
     let postOrder: OrderObject, executionStatus: string
     try {
       //breakdown message into alpaca form and send to broker
-      console.log(`Sending order: ${JSON.stringify(tradeData)}`)
 
       postOrder = await tradeClient.postOrders(
         functionConfig.alpaca.firm_account,

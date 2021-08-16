@@ -37,27 +37,18 @@ export const tradeSubmission = async (
     executionStatus: "pending",
   })
 
-  if (investorCount == 1) {
+  if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
       username: verifiedData.username,
       side: verifiedData.side,
       symbol: verifiedData.symbol,
       notional: verifiedData.notional,
-      //qty: verifiedData.qty,
-      ...(messageId
-        .replace(/[0-9]*/g, "")
-        .includes(`${verifiedData.username}-${verifiedData.groupName}`)
-        ? { messageId, showInChannel: true }
-        : { parentId: messageId, showInChannel: false }),
+      messageId,
     })
     logger.log(verifiedData)
 
-    const channel = streamClient.channel(
-      "messaging",
-      data.groupName.split(" ").join("-")
-    )
-    return await channel.sendMessage(message)
+    return await streamClient.updateMessage(message)
   }
 }
 

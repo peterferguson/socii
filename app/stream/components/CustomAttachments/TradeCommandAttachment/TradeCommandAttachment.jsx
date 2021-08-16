@@ -10,6 +10,8 @@ import {
   useChatContext,
   useMessageContext,
 } from "stream-chat-react"
+import { useUnmountPromise } from "react-use"
+import { ephemeralStatuses } from "@lib/constants"
 
 const MML = dynamic(() => import("mml-react").then((mod) => mod.MML), {
   loading: LoadingIndicator,
@@ -18,6 +20,7 @@ const TradeMMLConverter = dynamic(() => import("../converters/TradeMMLConverter"
 const LogoPriceCardHeader = dynamic(() => import("@components/LogoPriceCardHeader"))
 
 const TradeCommandAttachment = ({ attachment }) => {
+  const mounted = useUnmountPromise()
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const [isin, setIsin] = useState("")
 
@@ -29,13 +32,11 @@ const TradeCommandAttachment = ({ attachment }) => {
   const { price } = useTickerPrice(tickerSymbol.current)
 
   useEffect(() => {
-    let unmounted = false
     const getISIN = async () => setIsin(await tickerToISIN(tickerSymbol.current))
+    !isin && mounted(getISIN())
+  }, [isin, mounted])
 
-    !isin && !unmounted && getISIN()
-
-    return () => (unmounted = true)
-  }, [isin])
+  // if (ephemeralStatuses.includes(message.status)) return null
 
   const groupName = channel.cid.split(":").pop()
 
@@ -71,18 +72,35 @@ const TradeCommandAttachment = ({ attachment }) => {
                 timeInForce: "day",
                 // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
               }
-              const updated = await client.partialUpdateMessage(message.id, {
-                set: { status: "submitted" },
-              })
-              console.log(updated)
               //TODO: Review redundancy with orderType (may not be with limit orders)
               // - Write to firestore & send confirmation message in thread
               if ("buy" in data) {
-                tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
+                await mounted(
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
+                )
+                await mounted(
+                  client.partialUpdateMessage(message.id, {
+                    set: { status: "waitingForConsensus" },
+                  })
+                )
               }
               if ("sell" in data) {
-                tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
+                await mounted(
+                  tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
+                )
+                await mounted(
+                  client.partialUpdateMessage(message.id, {
+                    set: { status: "waitingForConsensus" },
+                  })
+                )
               }
+              // if ("cancel" in data) {
+              //   await mounted(
+              //     client.partialUpdateMessage(message.id, {
+              //       set: { status: "cancelled" },
+              //     })
+              //   )
+              // }
             }}
             Loading={LoadingIndicator}
           />
@@ -102,7 +120,7 @@ const converters = (cost) =>
       [type]: (tag) => (
         <TradeMMLConverter
           {...tag.node.attributes}
-          tagKey={tag.key}
+          key={tag.key}
           costPerShare={cost}
           tradeType={type}
         />

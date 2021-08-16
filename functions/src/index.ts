@@ -42,7 +42,7 @@ module.exports = {
   // 1 Document Listeners
   tradeConfirmation: functions
     .region(london)
-    .firestore.document("groups/{groupName}/trades/{messageId}")
+    .firestore.document("groups/{groupName}/trades/{tradeId}")
     .onWrite(trading.tradeConfirmation),
   generateToken: functions
     .region(london)

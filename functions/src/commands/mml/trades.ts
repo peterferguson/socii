@@ -39,6 +39,9 @@ export const tradeMML = ({ username, tickerSymbol, tradeType }) => {
 const trade = (tradeType) => async (client: StreamChat, body) => {
   logger.log(`Executing a ${tradeType} trade with body: ${JSON.stringify(body)}`)
 
+  const channelID = body.cid?.split(":").pop() || body.message.cid?.split(":").pop()
+
+  const channel = client.channel("messaging", channelID)
   const username = body.user.id
 
   // * the body of the message will be modified based on user interactions
@@ -75,7 +78,7 @@ const trade = (tradeType) => async (client: StreamChat, body) => {
       }
       // ! This is apparently an old api & we no longer have access to ephemeral command types
       message = updateMessage(message, tradeMML({ username, tickerSymbol, tradeType }))
-      return await client.updateMessage(message)
+      return await channel.sendMessage(message)
   }
 }
 

@@ -23,7 +23,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
   const [channelName, setChannelName] = useState(channel?.data.name || "")
-  const [members, setMembers] = useState(
+  const [members, _setMembers] = useState(
     Object.values(channel.state?.members || {}).filter(
       (member) => member.user?.id !== client?.user?.id
     ) || []

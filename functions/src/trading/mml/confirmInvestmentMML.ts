@@ -21,6 +21,7 @@ export const confirmInvestmentMML = ({
 }: IConfirmInvestmentMMLOptions) => {
   const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`
   const mmlmessage = {
+    id: messageId || null,
     message_id: messageId || null,
     user_id: username,
     text: singleLineTemplateString`

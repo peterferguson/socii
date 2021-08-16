@@ -50,10 +50,12 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
           onSubmit={async (data) => {
             // ! Trade is based on the groups selection process.
             // ! Defaults to uanimous decision.
-            if ("yes" in data) agreesToTrade(groupName, message.parent_id, user.uid)
-            const updated = await client.partialUpdateMessage(message.id, {
-              set: { status: "submitted" },
-            })
+            if ("yes" in data) {
+              agreesToTrade(groupName, message.id, user.uid)
+              // const updated = await client.partialUpdateMessage(message.id, {
+              //   set: {  },
+              // })
+            }
           }}
           Loading={LoadingIndicator}
         />
