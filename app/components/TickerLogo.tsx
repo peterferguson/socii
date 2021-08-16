@@ -1,8 +1,10 @@
+import { tickerToISIN } from "@lib/firebase/client/db"
 import { logoUrl } from "@utils/logoUrl"
 import Image from "next/image"
 import Link from "next/link"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
+import { useUnmountPromise } from "react-use"
 
 interface ITickerLogoProps {
   tickerSymbol: string
@@ -21,21 +23,26 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   isin,
   tickerSymbol,
 }) => {
-  const [logoURL, setLogoURL] = useState(null)
+  const mounted = useUnmountPromise()
+  const [logoSrc, setLogoSrc] = useState(null)
+  const [ISIN, setISIN] = useState(isin)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const url = logoUrl(isin ? isin : tickerSymbol)
-    if (typeof url === "string") setLogoURL(url)
-    else url.then((url) => setLogoURL(url))
-  }, [isin, tickerSymbol])
+    const getISIN = async () => await mounted(tickerToISIN(tickerSymbol))
+    !ISIN && getISIN().then((ISIN) => setISIN(ISIN))
+  }, [ISIN, mounted, tickerSymbol])
+
+  useEffect(() => {
+    ISIN && setLogoSrc(logoUrl(ISIN))
+  }, [ISIN, mounted])
 
   return (
     <Link href={`/stocks/${tickerSymbol}`}>
       <a className={`flex items-center justify-center rounded-full ${className}`}>
-        {logoURL && !isError ? (
+        {logoSrc && !isError ? (
           <Image
-            src={logoURL}
+            src={logoSrc}
             className="rounded-full"
             height={height || DEFAULT_HEIGHT_AND_WIDTH}
             width={width || DEFAULT_HEIGHT_AND_WIDTH}
