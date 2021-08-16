@@ -31,6 +31,7 @@ export const updateHolding = async (
   // - can be set to success, pending, failed
   let tradeUpdateData = { executionStatus: executionStatus, pnlPercentage: {} }
 
+  const balanceChange = tradeData.side=="sell"? 1: -1
   const qty = parseFloat(data.qty)
   const latestPrice = tradeData.stockPrice
   const ISIN = tradeData.assetRef.split("/").pop()
@@ -53,13 +54,14 @@ export const updateHolding = async (
   switch (type) {
     case "update":
       holdingDocRef.update(holdingData)
-      groupRef.update({ cashBalance: cashBalance - qty * latestPrice })
+      if (tradeData.side=="sell") groupRef.update({ cashBalance: cashBalance + balanceChange * qty * latestPrice })
       if (pnlPercentage) tradeUpdateData.pnlPercentage = pnlPercentage
       return tradeUpdateData
       break
     case "set":
       holdingDocRef.set(holdingData)
-      groupRef.update({ cashBalance: cashBalance - qty * latestPrice })
+      groupRef.update({ cashBalance: cashBalance + balanceChange * qty * latestPrice })
+      return tradeUpdateData
       break
     default:
       // - Secondary execution check (this time on the holding doc) ... do nothing
@@ -68,8 +70,8 @@ export const updateHolding = async (
 }
 
 const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
-  const { type, notional, assetRef, symbol, shortName, stockPrice } = tradeData
-  const negativeEquityMultiplier = type.toLowerCase().includes("buy") ? 1 : -1
+  const { side, notional, assetRef, symbol, shortName, stockPrice } = tradeData
+  const negativeEquityMultiplier = side.toLowerCase().includes("buy") ? 1 : -1
 
   // - Assumptions:
   // 1. We keep zero share holdings to easily identify all previous holdings.
