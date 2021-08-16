@@ -3,16 +3,13 @@ import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
 import {
   firestore,
   iexClient,
-  streamClient,
   tradeClient,
   functionConfig,
 } from "../index.js"
 import { isSell } from "../utils/isSell"
 import { singleLineTemplateString } from "../utils/singleLineTemplateString"
-import { investmentFailedMML } from "./mml/investmentFailedMML"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
-import { investmentReceiptMML } from "./mml/investmentReceiptMML"
-
+import {StreamChat} from "stream-chat"
 /*
 - tradeConfirmation
 1. Add the uid/username/alpacaID of the agreesToTrade array
@@ -20,13 +17,18 @@ import { investmentReceiptMML } from "./mml/investmentReceiptMML"
 2. holdings and send confirmation message with the price at which the asset was purchased 
 */
 
+export const streamClient = new StreamChat(
+  functionConfig.stream.api_key,
+  functionConfig.stream.secret
+)
+
 export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
-  
+logger.log(groupName, tradeId)
   // can be: success, pending, failed
-  if (tradeData.executionStatus !== "pending") return // - do nothing
+  if (tradeData.executionStatus) return  // - do nothing
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
@@ -136,33 +138,31 @@ export const tradeConfirmation = async (change, context) => {
     }
 
     const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
-
+    await streamClient.partialUpdateMessage(tradeData.messageId, {
+        set: { status: "complete" },
+      })
+    
     // TODO
     // - maybe the below is heavy on wirtes?
     // writing to the holding ref when pending then updating a field when executed
     // could be reduced by just writing when success, but may lose info
 
     switch (executionStatus) {
-      case "success":
-        // 1. Send a message with the finalised price
-        await channel.sendMessage(investmentReceiptMML(tradeData))
-        return change.after.ref.update({ executionStatus: "success" })
+      case "success": 
+        logger.log("order successful. Id:", postOrder?.id)
+        return
 
       case "pending":
-        // 1. Withold balance or shares until pending order is resolved
-        if (tradeData.side == "buy") {
-          groupRef.update({ cashBalance: cashBalance - tradeData.notional })
-        }
-        // 3. send a message to inform about pending order
-        // TODO display more useful message
+        // 1. Withold balance until pending order is resolved 
+        if(tradeData.side=="buy") groupRef.update({ cashBalance: cashBalance - tradeData.notional })
+        // 3. send a message to inform about pending order 
         await channel.sendMessage(investmentPendingMML(tradeData))
-        break
+        return
 
       case "failed":
-        await channel.sendMessage(investmentFailedMML(tradeData))
-        return change.after.ref.update({ executionStatus: "failed" })
-      default:
-        return
+        logger.log("order failed. Id:", postOrder?.id)
+        change.after.ref.update({executionStatus: "failed"})
+        return      
     }
   }
 }

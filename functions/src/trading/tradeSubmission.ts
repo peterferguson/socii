@@ -34,9 +34,10 @@ export const tradeSubmission = async (
     ...verifiedData,
     agreesToTrade: [verifiedData.executorRef],
     timestamp: serverTimestamp(),
-    executionStatus: "pending",
   })
 
+  logger.log(verifiedData)
+  
   if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
@@ -46,7 +47,7 @@ export const tradeSubmission = async (
       notional: verifiedData.notional,
       messageId,
     })
-    logger.log(verifiedData)
+    
 
     return await streamClient.updateMessage(message)
   }
@@ -55,6 +56,7 @@ export const tradeSubmission = async (
 const verifyContent = async (data, context) => {
   const requiredArgs = {
     username: "",
+    alpacaAccountId: "",
     groupName: "",
     assetRef: null,
     type: "",
@@ -76,7 +78,7 @@ const verifyContent = async (data, context) => {
     //tickerSymbol: "",
     executionCurrency: "GBP",
     assetCurrency: "USD",
-    executorRef: `users/${context.auth.uid}`,
+    executorRef: "",
     limitPrice: "",
   }
 
@@ -97,6 +99,7 @@ const verifyContent = async (data, context) => {
   requiredArgs.symbol = assetData.get("tickerSymbol")
   optionalArgs.assetType = assetData.get("assetType")
   optionalArgs.shortName = assetData.get("shortName")
+  optionalArgs.executorRef = `users/${context.auth.uid}/${data.alpacaAccountId}`
 
   // * Inject data into requiredArgs
   Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))

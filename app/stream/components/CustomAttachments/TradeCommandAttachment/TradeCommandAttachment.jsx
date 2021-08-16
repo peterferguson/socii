@@ -24,12 +24,13 @@ const TradeCommandAttachment = ({ attachment }) => {
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const [isin, setIsin] = useState("")
 
-  const { username } = useAuth()
+  const { username , user } = useAuth()
   const { client } = useChatContext()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 
   const { price } = useTickerPrice(tickerSymbol.current)
+  const alpacaAccountId =  user.alpacaAccountId
 
   useEffect(() => {
     const getISIN = async () => setIsin(await tickerToISIN(tickerSymbol.current))
@@ -58,6 +59,7 @@ const TradeCommandAttachment = ({ attachment }) => {
             onSubmit={async (data) => {
               const tradeArgs = {
                 username,
+                alpacaAccountId,
                 groupName,
                 assetRef: `tickers/${isin}`,
                 messageId: message.id,
@@ -80,7 +82,7 @@ const TradeCommandAttachment = ({ attachment }) => {
                 )
                 await mounted(
                   client.partialUpdateMessage(message.id, {
-                    set: { status: "waitingForConsensus" },
+                    set: { status: "complete" },
                   })
                 )
               }
@@ -90,7 +92,7 @@ const TradeCommandAttachment = ({ attachment }) => {
                 )
                 await mounted(
                   client.partialUpdateMessage(message.id, {
-                    set: { status: "waitingForConsensus" },
+                    set: { status: "complete" },
                   })
                 )
               }
