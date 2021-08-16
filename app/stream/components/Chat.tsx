@@ -3,22 +3,16 @@ import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import {
-  CreateChatModalDynamic,
-  CustomTriggerProviderDynamic,
-  MessagingChannelListDynamic,
-  MessagingChannelPreviewDynamic,
-} from "."
+import { CreateChatModalDynamic, CustomTriggerProviderDynamic } from "."
 import ChannelInner from "./ChannelInner"
+import ChannelList from "./ChannelList"
 import { CustomAttachmentDynamic } from "./CustomAttachments"
+import { Transition } from "@headlessui/react"
 
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
   ssr: false,
 }) as any
-const ChannelList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
-  { ssr: false }
-) as any
+
 const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), {
   ssr: false,
 }) as any
@@ -56,61 +50,33 @@ const StreamChat = ({ client }) => {
         >
           <ChannelInner toggleChannelList={toggleChannelList} />
         </Channel>
-        <StreamChannelList
-          userID={client?.userID}
-          groupName={groupName}
-          state={state}
-          toggleChannelList={toggleChannelList}
-          onCreateChannel={onCreateChannel}
-        />
+
+        <Transition show={["open", "idle"].includes(String(state.value))} appear={true}>
+          {/* Sliding sidebar */}
+          <Transition.Child
+            enter="transition ease-in-out duration-300 transform"
+            enterFrom="-translate-x-full"
+            enterTo="translate-x-0"
+            leave="transition ease-in-out duration-300 transform"
+            leaveFrom="translate-x-0"
+            leaveTo="-translate-x-full"
+          >
+            {/* ... */}
+            <ChannelList
+              userID={client?.userID}
+              groupName={groupName}
+              state={state}
+              toggleChannelList={toggleChannelList}
+              onCreateChannel={onCreateChannel}
+            />
+          </Transition.Child>
+        </Transition>
       </div>
       {isCreating && (
         <CreateChatModalDynamic isCreating={isCreating} setIsCreating={setIsCreating} />
       )}
     </Chat>
   ) : null
-}
-
-export function StreamChannelList({
-  userID,
-  onCreateChannel,
-  groupName,
-  state,
-  toggleChannelList,
-}) {
-  const filter = { type: "messaging", members: { $in: [userID] } }
-  const options = { state: true, watch: true, presence: true, limit: 5 }
-  const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
-
-  return (
-    <div
-      className={`
-        ${
-          "absolute inset-y-0 left-0  mx-4 transform md:relative transition duration-300 ease-in-out z-50" &&
-          state.value === "closed"
-            ? "-translate-x-full hidden"
-            : "translate-x-0"
-        }
-        `}
-    >
-      <ChannelList
-        filters={filter}
-        sort={sort}
-        options={options}
-        showChannelSearch={true}
-        customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
-        List={(props) => (
-          <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
-        )}
-        Preview={(props) => (
-          <MessagingChannelPreviewDynamic
-            {...props}
-            toggleChannelList={toggleChannelList}
-          />
-        )}
-      />
-    </div>
-  )
 }
 
 export default React.memo(StreamChat)
