@@ -1,4 +1,5 @@
 import { logger } from "firebase-functions"
+import { StreamChat } from "stream-chat"
 
 export const tradeMML = ({ username, tickerSymbol, tradeType }) => {
   const mmlstring = `<mml type="card"><${tradeType}></${tradeType}></mml>`
@@ -35,11 +36,9 @@ export const tradeMML = ({ username, tickerSymbol, tradeType }) => {
  * COMMANDS
  */
 
-const trade = (tradeType) => async (client, body) => {
+const trade = (tradeType) => async (client: StreamChat, body) => {
   logger.log(`Executing a ${tradeType} trade with body: ${JSON.stringify(body)}`)
 
-  const channelID = body.cid?.split(":").pop() || body.message.cid?.split(":").pop()
-  const channel = client.channel("messaging", channelID)
   const username = body.user.id
 
   // * the body of the message will be modified based on user interactions
@@ -55,18 +54,10 @@ const trade = (tradeType) => async (client, body) => {
   // TODO: Need to create commands with description of input order in Stream
   const tickerSymbol = args?.[0].toUpperCase()
 
-  // ? Do we want to use a bot user, the user themselves or socii?
-  // const botUser = { id: "investbot", name: "Invest Bot" };
-
   switch (action) {
-    // TODO: tradeSubmission does not use ephemeral type ... we still need to figure this out
     case "buy":
-      // ! Moved to tradeSubmission function
-      // message.type = 'ephemeral'
       break
     case "sell":
-      // ! Moved to tradeSubmission function
-      // message.type = 'ephemeral'
       break
     case "cancel":
       // 2 Simply cancel the buy action.
@@ -82,11 +73,9 @@ const trade = (tradeType) => async (client, body) => {
         message.mml = null
         break
       }
-      // - Present MML for user to make a choice on cost & share amount
-      // message.type = 'ephemeral'
       // ! This is apparently an old api & we no longer have access to ephemeral command types
       message = updateMessage(message, tradeMML({ username, tickerSymbol, tradeType }))
-      return await channel.sendMessage(message)
+      return await client.updateMessage(message)
   }
 }
 
