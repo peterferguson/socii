@@ -6,11 +6,9 @@ import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-  HiOutlineAtSymbol,
   HiOutlineChartPie,
   HiOutlineChat,
   HiOutlineChevronRight,
-  HiOutlineCog,
   HiOutlineUserGroup,
 } from "react-icons/hi"
 import { useMediaQuery } from "react-responsive"
@@ -69,7 +67,7 @@ const navItems = (router: NextRouter, username: string) => [
   {
     name: "Portfolio",
     description: "Keep track of your growth",
-    href: `/user/${username ? `${username}/portfolio` : ""}`,
+    href: username && `/user/${username}/portfolio`,
     icon: HiOutlineChartPie,
     isActive: router.asPath.includes("portfolio"),
   },
@@ -97,13 +95,13 @@ const navItems = (router: NextRouter, username: string) => [
   //   icon: HiOutlineAtSymbol,
   //   isActive: router.asPath.includes("invites"),
   // },
-  {
-    name: "Settings",
-    description: "Adjust your settings",
-    href: "/settings",
-    icon: HiOutlineCog,
-    rightIcon: HiOutlineChevronRight,
-    disabled: true,
-    isActive: router.asPath.includes("settings"),
-  },
+  // {
+  //   name: "Settings",
+  //   description: "Adjust your settings",
+  //   href: "/settings",
+  //   icon: HiOutlineCog,
+  //   rightIcon: HiOutlineChevronRight,
+  //   disabled: true,
+  //   isActive: router.asPath.includes("settings"),
+  // },
 ]

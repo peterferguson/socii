@@ -124,7 +124,7 @@ export const stockTableMeta = {
 
 const cards = [
   (key: React.Key) => <PortfolioValueSummaryCard key={key} />,
-  (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
+  // (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
   (key: React.Key) => <VsMarketSummaryCard key={key} />,
-  (key: React.Key) => <TopPerformerSummaryCard key={key} />,
+  // (key: React.Key) => <TopPerformerSummaryCard key={key} />,
 ]

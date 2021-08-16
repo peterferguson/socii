@@ -6,7 +6,7 @@ import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import "react-file-utils/dist/index.css"
 import { useMediaQuery } from "react-responsive"
 
@@ -25,14 +25,6 @@ const Navigation = dynamic(() => import("@components/Navigation"))
 
 export default function MyApp({ Component, pageProps }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
-
-  // const scrollRef = useRef(null)
-  // const { up, down } = useScrollDirection(scrollRef)
-  // console.log("scroll: ", up)
-  // console.log("scroll: ", down)
-
-  // TODO: Scroll ref is not working! So cannot animate the nav Footer on scroll down
-
   const theme = "light" // TODO: Set up localStorage cache of this and allow for change in settings
 
   const props = {
@@ -41,9 +33,7 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   const router = useRouter()
-
   const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
-
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
 
   return (
@@ -73,12 +63,3 @@ export default function MyApp({ Component, pageProps }) {
     </AuthProvider>
   )
 }
-
-// const ComponentContainer = (props) => {
-//   const { client } = useStreamClient()
-//   return (
-//     <Chat client={client} theme={`messaging ${props.theme}`}>
-//       <MainLayout {...props} />
-//     </Chat>
-//   )
-// }

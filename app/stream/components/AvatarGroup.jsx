@@ -93,4 +93,4 @@ const AvatarGroup = ({ memberNames }) => {
   }
 }
 
-export default React.memo(AvatarGroup)
+export default AvatarGroup

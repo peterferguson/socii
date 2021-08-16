@@ -13,7 +13,7 @@ export default function AuthCheck({ children, fallback }: AuthCheckProps) {
   return username
     ? children
     : fallback || (
-        <div className="flex items-center justify-center w-screen h-screen mx-auto">
+        <div className="flex items-center justify-center w-full h-full mx-auto">
           <Link href="/enter">
             <a className="text-3xl text-center underline text-brand font-primary align-center">
               Please sign in to view this content

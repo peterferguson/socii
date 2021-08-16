@@ -19,19 +19,6 @@ const ChannelList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
   { ssr: false }
 ) as any
-const MessageInput = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageInput) as any,
-  { ssr: false }
-) as any
-const MessageList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageList) as any,
-  { ssr: false }
-) as any
-
-const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
-  ssr: false,
-}) as any
-
 const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), {
   ssr: false,
 }) as any
@@ -49,46 +36,39 @@ const StreamChat = ({ client }) => {
 
   // - Do not show channel list on group page
   useEffect(() => {
-    if (groupName && state.value === "active") send("TOGGLE")
+    if (groupName && state.value === "open") send("TOGGLE")
   }, [groupName, send, state.value])
 
   const onCreateChannel = () => setIsCreating(!isCreating)
 
-  // const messages =
-
   // TODO: Replace light with theme when dark theme is implemented
-  return (
-    client && (
-      <Chat client={client} theme={`messaging light`}>
-        <div className="flex flex-col sm:flex-row">
-          <Channel
-            channel={
-              groupName && client.channel("messaging", groupName?.replace(/\s/g, "-"))
-            }
-            maxNumberOfFiles={3}
-            multipleUploads={true}
-            Attachment={CustomAttachmentDynamic}
-            TriggerProvider={CustomTriggerProviderDynamic}
-          >
-            <ChannelInner />
-          </Channel>
-          <StreamChannelList
-            userID={client?.userID}
-            groupName={groupName}
-            state={state}
-            toggleChannelList={toggleChannelList}
-            onCreateChannel={onCreateChannel}
-          />
-        </div>
-        {isCreating && (
-          <CreateChatModalDynamic
-            isCreating={isCreating}
-            setIsCreating={setIsCreating}
-          />
-        )}
-      </Chat>
-    )
-  )
+  return client ? (
+    <Chat client={client} theme={`messaging light`}>
+      <div className="flex flex-col sm:flex-row">
+        <Channel
+          channel={
+            groupName && client.channel("messaging", groupName?.replace(/\s/g, "-"))
+          }
+          maxNumberOfFiles={3}
+          multipleUploads={true}
+          Attachment={CustomAttachmentDynamic}
+          TriggerProvider={CustomTriggerProviderDynamic}
+        >
+          <ChannelInner toggleChannelList={toggleChannelList} />
+        </Channel>
+        <StreamChannelList
+          userID={client?.userID}
+          groupName={groupName}
+          state={state}
+          toggleChannelList={toggleChannelList}
+          onCreateChannel={onCreateChannel}
+        />
+      </div>
+      {isCreating && (
+        <CreateChatModalDynamic isCreating={isCreating} setIsCreating={setIsCreating} />
+      )}
+    </Chat>
+  ) : null
 }
 
 export function StreamChannelList({
@@ -106,10 +86,10 @@ export function StreamChannelList({
     <div
       className={`
         ${
-          "absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out" &&
+          "absolute inset-y-0 left-0  mx-4 transform md:relative transition duration-300 ease-in-out z-50" &&
           state.value === "closed"
             ? "-translate-x-full hidden"
-            : "translate-x-0 z-50 mx-4"
+            : "translate-x-0"
         }
         `}
     >

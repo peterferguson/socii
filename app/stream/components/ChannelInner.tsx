@@ -74,4 +74,4 @@ const ChannelInner = ({ toggleChannelList }) => {
   )
 }
 
-export default React.memo(ChannelInner)
+export default ChannelInner
