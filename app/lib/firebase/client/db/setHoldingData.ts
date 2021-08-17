@@ -19,7 +19,7 @@ export const setHoldingData = (
 ) => {
   const holdingsRef = query(
     collection(firestore, `groups/${groupName}/holdings`),
-    where("shares", "!=", 0)
+    where("qty", "!=", 0)
   )
   const unsubscribe = onSnapshot(holdingsRef, (snap) => setHoldings(snap.docs))
 

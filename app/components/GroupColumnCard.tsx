@@ -28,8 +28,8 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     !unmounted &&
       setHoldingInfo(
         holdings?.map((doc) => {
-          const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
-          return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
+          const { tickerSymbol, assetRef, shortName, avgPrice, qty } = doc.data()
+          return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, qty }
         })
       )
     return () => {
