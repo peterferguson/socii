@@ -33,7 +33,7 @@ export async function createGroup(
   batch.set(groupRef, {
     groupDescription,
     groupName,
-    privacyOption,
+    privacyOption: privacyOption.name.toLowerCase(),
     groupType: "",
     cashBalance: depositOption.amount + lumpSumOption.amount,
     initialDeposit: lumpSumOption.amount,
