@@ -59,8 +59,8 @@ const AvatarGroup = ({ memberNames }) => {
       )
 
     case null || undefined:
-      return getRandomImage()
-
+      return null
+      
     default:
       return (
         <div className="messaging__channel-header__avatars four">
