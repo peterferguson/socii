@@ -1,6 +1,5 @@
-import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
 import React from "react"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import PctChangeTag from "./PctChangeTag"
 import TickerLogo from "./TickerLogo"
 
 interface ILogoHeader {
@@ -22,11 +21,6 @@ export default function LogoPriceCardHeader({
   ISIN,
   className = "",
 }: ILogoHeader) {
-  const pnlBgColor = pnlBackgroundColor((100 * priceChange).toFixed(2))
-  const pnlColors = `${pnlBgColor} ${pnlBgColor
-    .replace("bg", "text")
-    .replace("200", "500")}`
-
   return (
     <>
       <TickerLogo tickerSymbol={tickerSymbol} isin={ISIN} />
@@ -57,32 +51,9 @@ export default function LogoPriceCardHeader({
               </>
             )}
           </div>
-          {priceChange && (
-            <PriceChangeTag
-              price={price}
-              pnlColors={pnlColors}
-              priceChange={priceChange}
-            />
-          )}
+          {priceChange && <PctChangeTag pctChange={priceChange} />}
         </div>
       </a>
-    </>
-  )
-}
-
-function PriceChangeTag({ priceChange, pnlColors, price }) {
-  return (
-    <>
-      {(priceChange !== null || !priceChange !== undefined) && (
-        <div
-          className={`ml-1 ${pnlColors} text-xs font-semibold inline-block py-1 px-2 rounded-full uppercase mt-1`}
-        >
-          <div className="flex flex-row items-center justify-between">
-            {priceChange > 0 ? <FaArrowUp /> : price < 0 ? <FaArrowDown /> : null}
-            <span className="ml-0.5">{(100 * priceChange).toFixed(2)}%</span>
-          </div>
-        </div>
-      )}
     </>
   )
 }
