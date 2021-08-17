@@ -46,10 +46,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
         timestamp:
           typeof price?.latestUpdate !== "string" && price?.latestUpdate?.unix() * 1000,
         close: price?.iexRealtimePrice || price?.latestPrice,
-        open: undefined,
-        high: undefined,
-        low: undefined,
-        volume: undefined,
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price])

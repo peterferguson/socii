@@ -20,4 +20,6 @@ const fromDate = admin.firestore.Timestamp.fromDate
 
 const DocumentReference = typeof admin.firestore.DocumentReference
 
+export type Firestore = typeof admin.firestore.Firestore
+
 export { firestore, auth, arrayUnion, fromDate, serverTimestamp, DocumentReference }
