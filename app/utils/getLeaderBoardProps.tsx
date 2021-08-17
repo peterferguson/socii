@@ -9,7 +9,9 @@ export const getLeaderBoardProps = async () => {
   const functionUrl =
     "https://europe-west2-sociiinvest.cloudfunctions.net/get_historical_prices"
 
-  const query = firestore.collectionGroup("holdings")
+  const query = firestore
+    .collectionGroup("holdings")
+    .where("privacyOption", "==", "public")
 
   const snapshot = await query.get()
 
@@ -54,7 +56,7 @@ export const getLeaderBoardProps = async () => {
     })
   ).json()
 
-  const priceData = yahooData.reduce((data, tick) => {
+  const priceData = yahooData?.reduce((data, tick) => {
     const { symbol, close, timestamp } = tick
     if (symbol in data) data[symbol].push({ close, timestamp: new Date(timestamp) })
     else Object.assign(data, { [symbol]: [{ close, timestamp: new Date(timestamp) }] })
@@ -66,7 +68,7 @@ export const getLeaderBoardProps = async () => {
   // ! so if the market is closed the currentPrice will not the last close price but the prev day close price
   const tickerPriceChanges: { [tickerSymbol: string]: number } = tickers.reduce(
     (data, ticker) => {
-      const prices = priceData[ticker]
+      const prices = priceData?.[ticker]
 
       const pctChange =
         (100 * (prices[prices.length - 1].close - prices[0].close)) / prices[0].close

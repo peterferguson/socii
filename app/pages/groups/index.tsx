@@ -18,7 +18,7 @@ export default function GroupsHome({ leaders }) {
             <br />
             <br />
           </span>
-          {leaders.map((leader, rank) => (
+          {leaders?.map((leader, rank) => (
             <LeaderBoardCard
               key={`leader-${rank}-${leader.groupName}`}
               rank={rank}
