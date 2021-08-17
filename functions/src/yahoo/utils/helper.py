@@ -87,11 +87,9 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
         return None
 
     buffer = io.StringIO()
-    history = (
-        ticker.history(period=period, interval=interval, start=start, end=end)
-        .reset_index()
-        .set_index("symbol")
-    )
+    history = ticker.history(
+        period=period, interval=interval, start=start, end=end
+    ).reset_index()
     history.info(buf=buffer)
     logging.info(f"history dataframe info: {buffer.getvalue()}")
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
