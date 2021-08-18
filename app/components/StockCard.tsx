@@ -21,14 +21,7 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
       <div className="flex p-2 bg-white">
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="flex items-center justify-center flex-none flex-grow-0 mr-3 rounded-full cursor-pointer">
-            {holding?.ISIN && (
-              <TickerLogo
-                isin={holding.ISIN}
-                tickerSymbol={tickerSymbol}
-                height="40"
-                width="40"
-              />
-            )}
+            <TickerLogo tickerSymbol={tickerSymbol} height="40" width="40" />
           </div>
         </Link>
         <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
