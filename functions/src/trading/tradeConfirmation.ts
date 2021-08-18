@@ -17,11 +17,6 @@ import {StreamChat} from "stream-chat"
 2. holdings and send confirmation message with the price at which the asset was purchased 
 */
 
-export const streamClient = new StreamChat(
-  functionConfig.stream.api_key,
-  functionConfig.stream.secret
-)
-
 export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
@@ -32,8 +27,6 @@ logger.log(groupName, tradeId)
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
-
-  tradeData.assetRef = firestore.doc(tradeData.assetRef)
 
   const { latestPrice, isUSMarketOpen } = await iexClient.quote(tradeData.symbol, {
     filter: "latestPrice,isUSMarketOpen",
@@ -137,10 +130,19 @@ logger.log(groupName, tradeId)
       executionStatus = "failed"
     }
 
+    const streamClient = new StreamChat(
+      functionConfig.stream.api_key,
+      functionConfig.stream.secret
+    )
+
     const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
-    await streamClient.partialUpdateMessage(tradeData.messageId, {
+    await streamClient.partialUpdateMessage(
+      tradeData.messageId,
+      {
         set: { status: "complete" },
-      })
+      } ,
+      tradeData.username 
+      )
     
     // TODO
     // - maybe the below is heavy on wirtes?
@@ -172,7 +174,8 @@ logger.log(groupName, tradeId)
  */
 
 const marketClosedMessage = async (assetRef) => {
-  const assetData = await (await assetRef.get()).data()
+  const assetRefDoc = firestore.doc(assetRef)
+  const assetData = (await assetRefDoc.get()).data()
   return {
     user_id: "socii",
     text: singleLineTemplateString`

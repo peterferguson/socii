@@ -35,7 +35,6 @@ export const updateHolding = async (
   const qty = parseFloat(data.qty)
   const latestPrice = tradeData.stockPrice
   const ISIN = tradeData.assetRef.split("/").pop()
-  tradeData.assetRef = firestore.doc(tradeData.assetRef)
 
   const groupRef = await firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
@@ -48,8 +47,7 @@ export const updateHolding = async (
     messageId,
     qty
   })
-  logger.log("type of change: ", type)
-  logger.log("holding data: ", holdingData)
+
   // TODO - potentially await and check response here?
   switch (type) {
     case "update":
@@ -88,7 +86,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
     // - Trade already exists in holding ... do nothing
     if (holding.trades?.includes(messageId)) return outputData
 
-    const currentShares = holding.get("shares")
+    const currentShares = holding.get("qty")
     const currentAvgPrice = holding.get("avgPrice")
     var newAvgPrice =
       negativeEquityMultiplier + 1
@@ -103,7 +101,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
     outputData.type = "update"
     outputData.holdingData = {
       avgPrice: newAvgPrice,
-      shares: increment(sharesIncrement),
+      qty: increment(sharesIncrement),
       lastUpdated: serverTimestamp(),
       trades: arrayUnion(messageId),
     }
@@ -115,8 +113,8 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
       symbol,
       shortName,
       trades: [messageId],
-      avgPrice: newAvgPrice,
-      shares: increment(sharesIncrement),
+      avgPrice: String(stockPrice),
+      qty: increment(sharesIncrement),
       lastUpdated: serverTimestamp(),
     }
   }

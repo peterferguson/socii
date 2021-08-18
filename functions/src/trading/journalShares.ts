@@ -9,21 +9,24 @@
  * @returns
  */
 
+import { logger } from "firebase-functions"
 import { config, JournalData, JournalsApi } from "../alpaca/broker/client/ts/index"
-import { firestore } from "../index.js"
+import { functionConfig } from "../index.js"
 
-const journals = new JournalsApi(
-  config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
-)
 
 export const journalShares = async (
   data: { agreesToTrade?: []; qty?: any; direction?: string; symbol?: string},
   context?: any
 ) => {
-  const { agreesToTrade, qty , direction, symbol} = data
 
+  const journals = new JournalsApi(
+    config(functionConfig.alpaca.key, functionConfig.alpaca.secret)
+  )
+
+  logger.log("journal data" , data)
+  const { agreesToTrade, qty , direction, symbol} = data
   const journalQty = qty / agreesToTrade.length
-  const ALPACA_FIRM_ACCOUNT = process.env.ALPACA_FIRM_ACCOUNT
+  const ALPACA_FIRM_ACCOUNT = functionConfig.alpaca.firm_account
 
   // default values to journal from firm to accounts (in case of BUY)
   let alpacaId = ""
@@ -36,29 +39,20 @@ export const journalShares = async (
     toAccount = ALPACA_FIRM_ACCOUNT
   }
 
-  for (let item in agreesToTrade) {
-    ////////////
-    // TODO replace this section by directly including the alpadaID of each user who agrees to trade
-    // this should be done in tradeSubmission and InvestmentConfirmatioAttachement files
-    let tmpUid = item.split("/")[1]
+  for (let item of agreesToTrade) {
 
-    await firestore
-      .collection(`users`)
-      .doc(tmpUid)
-      .get()
-      .then((doc) => {
-        alpacaId = doc.data().alpacaID
-      })
-    ////////////
+    let alpacaId = String(item).split("/")[2]
 
     const journal = await JournalData.from({
       entry_type: "JNLS",
       from_account: fromAccount,
-      to_account: toAccount,
+      to_account: alpacaId,
       qty: journalQty,
       symbol: symbol
     })
 
-    journals.postJournals(journal).then(console.log).catch(console.error)
+    journals.postJournals(journal).then(console.log)
+    
   }
+  return
 }
