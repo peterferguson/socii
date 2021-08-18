@@ -14,7 +14,7 @@ const ChannelList = ({
   state,
   toggleChannelList,
 }) => {
-  const filter = { type: "messaging", members: { $in: [userID] } }
+  const filter = { members: { $in: [userID] } }
   const options = { state: true, watch: true, presence: true, limit: 5 }
   const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
 

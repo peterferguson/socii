@@ -1,5 +1,4 @@
 import AvatarGroup from "@stream/components/AvatarGroup"
-import styles from "@styles/MessagingChannelPreview.module.css"
 import { getTimeStamp } from "@utils/getTimeStamp"
 import React, { useContext } from "react"
 import useMediaQuery from "react-responsive"
@@ -25,7 +24,7 @@ const MessagingChannelPreview = ({
   toggleChannelList,
 }: IMessagingChannelPreview) => {
   const { channel: activeChannel, client } = useContext(ChatContext)
-  const channelName = channel.cid.slice(10).replace(/-/g, " ")
+  const channelName = channel.cid.split(":").pop().replace(/-/g, " ")
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
   const members =
@@ -39,7 +38,7 @@ const MessagingChannelPreview = ({
 
   return (
     <div
-      className={`flex-grow h-16 mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
+      className={`flex-grow mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
         ${
           channel?.id === activeChannel?.id
             ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"

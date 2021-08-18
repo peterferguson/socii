@@ -45,7 +45,7 @@ export const createGroup = async (change, context) => {
       await firestore.collection(`groups/${groupName}/investors`).get()
     ).docs[0].id
 
-    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"), {
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"), {
       name: `${groupName} Group Chat`,
       created_by: { id: founderUsername },
     })
@@ -58,7 +58,7 @@ export const createGroup = async (change, context) => {
     }
   } else if (!change.after.exists) {
     // Deleting document: delete the group chat
-    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
     try {
       await channel.delete()
     } catch (err) {

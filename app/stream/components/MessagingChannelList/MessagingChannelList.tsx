@@ -18,7 +18,7 @@ const MessagingChannelList = ({
   loading,
   onCreateChannel,
 }: IMessagingChannelList) => {
-  const { client,  } = useContext(ChatContext)
+  const { client } = useContext(ChatContext)
   const { id, name } = client?.user || {}
   const image = getRandomImage(getInitials(name))
 

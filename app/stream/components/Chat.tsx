@@ -41,7 +41,7 @@ const StreamChat = ({ client }) => {
       <div className="flex flex-col sm:flex-row">
         <Channel
           channel={
-            groupName && client.channel("messaging", groupName?.replace(/\s/g, "-"))
+            groupName && client.channel("group", groupName?.replace(/\s/g, "-"))
           }
           maxNumberOfFiles={3}
           multipleUploads={true}
@@ -61,7 +61,6 @@ const StreamChat = ({ client }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            {/* ... */}
             <ChannelList
               userID={client?.userID}
               groupName={groupName}
