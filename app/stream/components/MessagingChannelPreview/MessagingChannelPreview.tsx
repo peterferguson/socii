@@ -1,5 +1,6 @@
 import AvatarGroup from "@stream/components/AvatarGroup"
 import { getTimeStamp } from "@utils/getTimeStamp"
+import Image from "next/image"
 import React, { useContext } from "react"
 import useMediaQuery from "react-responsive"
 import { Channel } from "stream-chat"
@@ -50,8 +51,17 @@ const MessagingChannelPreview = ({
         is1Col && toggleChannelList()
       }}
     >
-      <AvatarGroup memberNames={members} />
-      <div className="flex flex-col items-center w-full mx-2">
+      {channel.data.image ? (
+        <Image
+          src={channel.data.image}
+          height={40}
+          width={40}
+          className="rounded-full"
+        />
+      ) : (
+        <AvatarGroup memberNames={members} />
+      )}
+      <div className="flex flex-col items-center w-full m-2">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
           <span className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">
             {channel.data.name || getChannelName(members, channelName)}

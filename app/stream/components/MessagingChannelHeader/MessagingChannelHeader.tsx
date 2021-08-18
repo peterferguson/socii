@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { MdSave } from "react-icons/md"
@@ -39,7 +40,6 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const router = useRouter()
 
   const onGroupPage = router.asPath.includes("groups")
-
   useEffect(
     () =>
       setMemberNames(
@@ -135,7 +135,16 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
             onClick={toggleChannelList}
           />
         </button>
-        {<AvatarGroup memberNames={memberNames} />}
+        {channel.data.image ? (
+          <Image
+            src={channel.data.image}
+            height={40}
+            width={40}
+            className="rounded-full"
+          />
+        ) : (
+          <AvatarGroup memberNames={memberNames} />
+        )}
         {!isEditing ? (
           <div className="flex-1 font-bold font-primary">{channelName || title}</div>
         ) : (

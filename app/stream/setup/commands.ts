@@ -1,3 +1,4 @@
+// ! To run use: `npx ts-node -O '{"module":"commonjs"}' stream/setup/commands.ts`
 import * as Stream from "stream-chat"
 import * as dotenv from "dotenv"
 
@@ -53,7 +54,7 @@ const createTradeCommands = async () => {
 
 // createGroupChannelType()
 // createTradeCommands()
-client.getChannelType("group").then((r) => console.log(r))
+// client.getChannelType("group").then((r) => console.log(r))
 
 // - delete old messaging group chats -> group channel type
 
@@ -68,4 +69,12 @@ client.getChannelType("group").then((r) => console.log(r))
 //     created_by: { id: "peterferguson" },
 //   })
 //   .create()
+//   .then((r) => console.log(r))
+
+// const sociians = client.getChannelById("team", "sociians", {})
+// sociians
+//   .updatePartial({
+//     set: { image: "/favicons/favicon-196x196.png" },
+//     // unset: ["data"],
+//   })
 //   .then((r) => console.log(r))
