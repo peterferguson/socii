@@ -10,7 +10,7 @@ import * as commands from "./commands/index.js"
 import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
 import * as events from "./events/index.js"
-import * as streamChat from "./streamChat.js"
+import * as stream from "./stream/index.js"
 import * as trading from "./trading/index.js"
 
 // * Constant initialisation
@@ -47,11 +47,15 @@ module.exports = {
   generateToken: functions
     .region(london)
     .firestore.document("users/{userId}")
-    .onCreate(streamChat.generateToken),
+    .onCreate(stream.generateToken),
   createGroup: functions
     .region(london)
     .firestore.document("groups/{groupName}")
-    .onWrite(streamChat.createGroup),
+    .onWrite(stream.createGroup),
+  addToSociiansChat: functions
+    .region(london)
+    .firestore.document("usernames/{username}")
+    .onWrite(stream.addToSociiansChat),
   incrementInvestors: functions
     .region(london)
     .firestore.document("groups/{groupName}/investors/{investorUsername}")

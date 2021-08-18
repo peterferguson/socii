@@ -1,8 +1,8 @@
 import * as Stream from "stream-chat"
 import * as dotenv from "dotenv"
 
-// dotenv.config({ path: "./.env.local" })
-dotenv.config({ path: "./.env.prod" })
+dotenv.config({ path: "./.env.local" })
+// dotenv.config({ path: "./.env.prod" })
 
 const client = new Stream.StreamChat(
   process.env.NEXT_PUBLIC_STREAM_API_KEY,

@@ -1,4 +1,6 @@
-export const StreamChat = require("stream-chat").StreamChat
+import * as stream from "stream-chat"
+
+export const StreamChat = stream.StreamChat
 
 export const streamClient = new StreamChat(
   process.env.STREAM_API_KEY,
