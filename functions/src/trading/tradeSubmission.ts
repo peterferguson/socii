@@ -95,7 +95,7 @@ const verifyContent = async (data, context) => {
   const assetRef = firestore.doc(data.assetRef)
   const assetData = await assetRef.get()
 
-  requiredArgs.assetRef = assetRef
+  //requiredArgs.assetRef = assetRef
   requiredArgs.symbol = assetData.get("tickerSymbol")
   optionalArgs.assetType = assetData.get("assetType")
   optionalArgs.shortName = assetData.get("shortName")
