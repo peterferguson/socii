@@ -11,21 +11,22 @@ export const handleCommand = async (req, res) => {
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  // ! Removing for testing & possible deletion if we move to a in-house command setup
-  //   // Important: validate that the request came from Stream
-  //   const valid = streamClient.verifyWebhook(req.body, req.headers["x-signature"])
-  //   if (!valid) {
-  //     // ! Unauthorized
-  //     res.status(401).json({
-  //       body: { error: "Invalid request, signature is invalid" },
-  //     })
-  //     return
-  //   }
-
+  // TODO: Update firebase keys for new stream environments
   const streamClient = new StreamChat(
     process.env.STREAM_API_KEY,
     process.env.STREAM_API_SECRET
   )
+
+  // Important: validate that the request came from Stream
+  const valid = streamClient.verifyWebhook(req.body, req.headers["x-signature"])
+  if (!valid) {
+    // ! Unauthorized
+    res.status(401).json({
+      body: { error: "Invalid request, signature is invalid" },
+    })
+    return
+  }
+
   const payload = typeof body === "string" ? JSON.parse(body) : body
 
   switch (type) {
