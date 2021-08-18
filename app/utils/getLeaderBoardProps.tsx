@@ -1,4 +1,6 @@
 import { Leader } from "@components/LeaderBoardCard"
+import { getYahooTimeseries } from "./getYahooTimeseries"
+import { toDateStr } from "./toDateStr"
 
 // TODO: Separate into multiple sub functions
 export const getLeaderBoardProps = async () => {
@@ -41,27 +43,10 @@ export const getLeaderBoardProps = async () => {
   // - get the first day of this month
   const today = new Date()
 
-  const todayString = today.toISOString().slice(0, 10)
-  const firstDayString = todayString.slice(0, 8) + "01"
+  const todayString = toDateStr(today.toISOString().slice(0, 10))
+  const firstDayString = toDateStr(today.toISOString().slice(0, 8) + "01")
 
-  const yahooData = await (
-    await fetch(functionUrl, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        tickerSymbol: tickers.join(" "),
-        start: firstDayString,
-        end: todayString,
-      }),
-    })
-  ).json()
-
-  const priceData = yahooData?.reduce((data, tick) => {
-    const { symbol, close, timestamp } = tick
-    if (symbol in data) data[symbol].push({ close, timestamp: new Date(timestamp) })
-    else Object.assign(data, { [symbol]: [{ close, timestamp: new Date(timestamp) }] })
-    return data
-  }, {})
+  const priceData = getYahooTimeseries(tickers, firstDayString, todayString)
 
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day
