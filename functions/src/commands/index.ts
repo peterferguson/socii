@@ -1,10 +1,14 @@
 import { buy, sell } from "./mml/trades"
 import { StreamChat } from "stream-chat"
+import { logger } from "firebase-functions"
 
 // * Function to route the commands to the correct function based on the type query param
 export const handleCommand = async (req, res) => {
   const { query, method, body } = req
   const type = query?.type
+
+  logger.log(`Recieved ${method} request, with query params ${JSON.stringify(query)}`)
+  logger.log(`Body: ${JSON.stringify(body)}`)
 
   // * show a nice error if you send a GET request
   if (method !== "POST") {
@@ -17,8 +21,11 @@ export const handleCommand = async (req, res) => {
     process.env.STREAM_API_SECRET
   )
 
-  // Important: validate that the request came from Stream
-  const valid = streamClient.verifyWebhook(req.body, req.headers["x-signature"])
+  logger.log(`Validating request came from Stream`)
+  const valid = streamClient.verifyWebhook(
+    JSON.stringify(body),
+    req.headers["x-signature"]
+  )
   if (!valid) {
     // ! Unauthorized
     res.status(401).json({
