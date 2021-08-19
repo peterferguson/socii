@@ -44,9 +44,13 @@ export const getLeaderBoardProps = async () => {
   const today = new Date()
 
   const todayString = toDateStr(today.toISOString().slice(0, 10))
-  const firstDayString = toDateStr(today.toISOString().slice(0, 8) + "01")
+  const firstDayOfMonthString = toDateStr(today.toISOString().slice(0, 8) + "01")
 
-  const priceData = getYahooTimeseries(tickers, firstDayString, todayString)
+  const priceData = getYahooTimeseries({
+    tickers,
+    startDateStr: firstDayOfMonthString,
+    endDateStr: todayString,
+  })
 
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day
