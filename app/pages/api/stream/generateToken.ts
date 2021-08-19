@@ -6,6 +6,8 @@ const dayjs = require("dayjs")
 
 const key = process.env.NEXT_PUBLIC_STREAM_API_KEY
 const secret = process.env.STREAM_API_SECRET
+console.log(key)
+console.log(secret)
 
 const generateToken = (req: NextApiRequest, res: NextApiResponse) => {
   const { body } = req
