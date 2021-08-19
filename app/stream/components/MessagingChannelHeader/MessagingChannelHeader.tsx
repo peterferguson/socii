@@ -72,7 +72,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
 
   useEffect(
     () =>
-      !channelName &&
+      (!channelName || channelName.slice(0, 8) === "!members") &&
       setTitle(
         members
           .map((member) => member.user?.name || member.user?.id || "Unnamed User")
@@ -146,7 +146,9 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
           <AvatarGroup memberNames={memberNames} />
         )}
         {!isEditing ? (
-          <div className="flex-1 font-bold font-primary">{channelName || title}</div>
+          <div className="flex-1 font-bold font-primary">
+            {channelName.slice(0, 8) === "!members" ? title : channelName}
+          </div>
         ) : (
           <EditHeader />
         )}
