@@ -2,7 +2,7 @@ const functions = require("firebase-functions")
 const Client = require("iexjs").Client
 const StreamChat = require("stream-chat").StreamChat
 import admin from "firebase-admin"
-import { config, TradingApi } from "./alpaca/broker/client/ts/index"
+import { config, TradingApi } from "./alpaca/broker/client/ts/index.js"
 // * Import function modules
 import * as accounts from "./accounts/index.js"
 import * as algoliaSearch from "./algoliaSearch.js"
@@ -18,8 +18,14 @@ export const functionConfig = functions.config()
 process.env.ALPACA_KEY = functionConfig.alpaca.key
 process.env.ALPACA_SECRET = functionConfig.alpaca.secret
 process.env.ALPACA_FIRM_ACCOUNT = functionConfig.alpaca.firm_account
-process.env.STREAM_API_SECRET = functionConfig.stream.secret
-process.env.STREAM_API_KEY = functionConfig.stream.api_key
+process.env.STREAM_API_KEY =
+  process.env.NODE_ENV === "development"
+    ? functionConfig.stream.api_key
+    : functionConfig.stream.prod.api_key
+process.env.STREAM_API_SECRET =
+  process.env.NODE_ENV === "development"
+    ? functionConfig.stream.secret
+    : functionConfig.stream.prod.secret
 process.env.IEX_API_VERSION = functionConfig.iex.api_version
 process.env.IEX_TOKEN = functionConfig.iex.api_key
 

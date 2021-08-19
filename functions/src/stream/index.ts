@@ -1,3 +1,3 @@
-export { addToSociiansChat } from "./addToSociiansChat"
-export { generateToken } from "./generateToken"
-export { createGroup } from "./createGroup"
+export { addToSociiansChat } from "./addToSociiansChat.js"
+export { generateToken } from "./generateToken.js"
+export { createGroup } from "./createGroup.js"

@@ -1,5 +1,5 @@
 import { logger } from "firebase-functions"
-import { streamClient } from "../utils/streamClient"
+import { streamClient } from "../utils/streamClient.js"
 
 /*
  * Add/remove new users to the sociians team chat when a new username is created/deleted
@@ -22,6 +22,7 @@ export const addToSociiansChat = async (change, context) => {
     // - New user Created
     try {
       await channel.addMembers([username], {
+        user_id: "socii",
         text: `Welcome the latest sociian, ${username} 🥳`,
       })
     } catch (err) {
@@ -31,6 +32,7 @@ export const addToSociiansChat = async (change, context) => {
     // - Deleting document: remove the user from the chat
     try {
       await channel.removeMembers([username], {
+        user_id: "socii",
         text: `👋 ${username} has left the chat`,
       })
     } catch (err) {
