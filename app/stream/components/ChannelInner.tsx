@@ -55,9 +55,6 @@ const ChannelInner = ({ toggleChannelList }) => {
     )
   }, [messages, username])
 
-  // - print last message
-  console.log(messages.slice().pop())
-
   return (
     <>
       <Window>
