@@ -39,7 +39,7 @@ const MessagingChannelPreview = ({
 
   return (
     <div
-      className={`flex-grow mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2
+      className={`mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2
         ${
           channel?.id === activeChannel?.id
             ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"

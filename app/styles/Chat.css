@@ -2583,10 +2583,6 @@
   .str-chat-channel-list.messaging {
     @apply shadow-2xl
   }
-
-  .str-chat-channel-list--open.messaging {
-    left: 0px;
-  }
 }
 
 .str-chat-channel-list .str-chat__channel-list-messenger {

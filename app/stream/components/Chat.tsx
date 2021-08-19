@@ -62,7 +62,7 @@ const StreamChat = ({ client }) => {
           <ChannelList
             userID={client?.userID}
             groupName={groupName}
-            state={state}
+            send={send}
             toggleChannelList={toggleChannelList}
             onCreateChannel={onCreateChannel}
           />
