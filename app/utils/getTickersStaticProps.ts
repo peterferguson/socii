@@ -1,9 +1,7 @@
 import { QuerySnapshot } from "@firebase/firestore"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
-
 import { Price } from "@models/Price"
 import { getTickerProps } from "./getTickerProps"
-import { YahooTimeseries } from "./getYahooTimeseries"
 const { Client } = require("iexjs")
 
 interface ITickersStaticProps {
@@ -14,7 +12,7 @@ interface ITickersStaticProps {
 
 interface TickerPropsData {
   ticker: any
-  timeseries: OHLCTimeseries | YahooTimeseries
+  timeseries: OHLCTimeseries
   dataQuery: any
   price: Price
 }

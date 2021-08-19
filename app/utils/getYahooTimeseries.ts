@@ -1,4 +1,5 @@
 import { DateStr } from "@models/DateStr"
+import { OHLC } from "@models/OHLC"
 
 export enum PeriodEnum {
   "1d",
@@ -32,19 +33,8 @@ export enum IntervalEnum {
   "3mo",
 }
 
-interface YahooTimeseriesTick {
-  timestamp: Date
-  high: number
-  volume: number
-  close: number
-  low: number
-  open: number
-  adjclose: number
-  dividends: number
-}
-
 export interface YahooTimeseries {
-  [tickerSymbol: string]: YahooTimeseriesTick[]
+  [tickerSymbol: string]: OHLC[]
 }
 
 interface getYahooTimeseriesProps {
