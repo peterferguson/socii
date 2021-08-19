@@ -51,7 +51,9 @@ export default function Username(props) {
 
   const runAccountCreation = async (user, username) => {
     console.log(user, username)
-    const { body } = await createAccount({ user, username })
+    const { status, body } = await createAccount({ user, username })
+    console.log(status)
+    console.log(body)
     if (body?.status === "success") {
       toast.success(body?.message)
       router.push(`/user/${username}`)
