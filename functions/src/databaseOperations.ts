@@ -24,7 +24,7 @@ export const incrementInvestors = async (change, context) => {
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(1) })
   } else if (change.before.exists && change.after.exists) {
     // Updating existing document : Update chat members
-    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 
     try {
       await channel.addMembers([investorUsername])

@@ -41,7 +41,7 @@ const trade = (tradeType) => async (client: StreamChat, body) => {
 
   const channelID = body.cid?.split(":").pop() || body.message.cid?.split(":").pop()
 
-  const channel = client.channel("messaging", channelID)
+  const channel = client.channel("group", channelID)
   const username = body.user.id
 
   // * the body of the message will be modified based on user interactions

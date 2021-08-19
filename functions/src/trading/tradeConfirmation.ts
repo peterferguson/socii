@@ -1,15 +1,11 @@
 import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
-import {
-  firestore,
-  iexClient,
-  tradeClient,
-  functionConfig,
-} from "../index.js"
+import { firestore, iexClient, tradeClient, functionConfig } from "../index.js"
 import { isSell } from "../utils/isSell"
 import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
-import {StreamChat} from "stream-chat"
+import { streamClient } from "../utils/streamClient"
+
 /*
 - tradeConfirmation
 1. Add the uid/username/alpacaID of the agreesToTrade array
@@ -21,9 +17,9 @@ export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
-logger.log(groupName, tradeId)
   // can be: success, pending, failed
-  if (tradeData.executionStatus) return  // - do nothing
+
+  if (tradeData.executionStatus) return // - do nothing
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
@@ -34,15 +30,13 @@ logger.log(groupName, tradeId)
 
   logger.log("latest", latestPrice, "and stockprice: ", tradeData.stockPrice)
 
-  // TODO reinstate this
-  //   // // // - do nothing if market is closed
-  //   // if (!isUSMarketOpen) {
-  //   //   // 2. send a message with the finalised price
-  //   //   const channel = streamClient.channel("messaging", groupName)
-  //   //   await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
-  //   //   return
-  //   // }
-  // TODO reinstate this
+  // - do nothing if market is closed
+  if (!isUSMarketOpen) {
+    // 2. send a message with the finalised price
+    const channel = streamClient.channel("group", groupName)
+    await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
+    return
+  }
 
   // TODO: Fix price checking
   // ! Now asset price & currency is available along with cost & execution currency this should be simple
@@ -130,41 +124,37 @@ logger.log(groupName, tradeId)
       executionStatus = "failed"
     }
 
-    const streamClient = new StreamChat(
-      functionConfig.stream.api_key,
-      functionConfig.stream.secret
-    )
-
-    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
     await streamClient.partialUpdateMessage(
       tradeData.messageId,
       {
         set: { status: "complete" },
-      } ,
-      tradeData.username 
-      )
-    
+      },
+      tradeData.username
+    )
+
     // TODO
     // - maybe the below is heavy on wirtes?
     // writing to the holding ref when pending then updating a field when executed
     // could be reduced by just writing when success, but may lose info
 
     switch (executionStatus) {
-      case "success": 
+      case "success":
         logger.log("order successful. Id:", postOrder?.id)
         return
 
       case "pending":
-        // 1. Withold balance until pending order is resolved 
-        if(tradeData.side=="buy") groupRef.update({ cashBalance: cashBalance - tradeData.notional })
-        // 3. send a message to inform about pending order 
+        // 1. Withold balance until pending order is resolved
+        if (tradeData.side == "buy")
+          groupRef.update({ cashBalance: cashBalance - tradeData.notional })
+        // 3. send a message to inform about pending order
         await channel.sendMessage(investmentPendingMML(tradeData))
         return
 
       case "failed":
         logger.log("order failed. Id:", postOrder?.id)
-        change.after.ref.update({executionStatus: "failed"})
-        return      
+        change.after.ref.update({ executionStatus: "failed" })
+        return
     }
   }
 }
