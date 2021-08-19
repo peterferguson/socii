@@ -39,7 +39,7 @@ const MessagingChannelPreview = ({
 
   return (
     <div
-      className={`flex-grow mb-2 mx-5 rounded-lg cursor-pointer flex justify-between items-center pl-2
+      className={`flex-grow mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2
         ${
           channel?.id === activeChannel?.id
             ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
@@ -54,23 +54,23 @@ const MessagingChannelPreview = ({
       {channel.data.image ? (
         <Image
           src={channel.data.image}
-          height={40}
-          width={40}
-          className="rounded-full"
+          height={48}
+          width={48}
+          className="rounded-full pl-2"
         />
       ) : (
         <AvatarGroup memberNames={members} />
       )}
-      <div className="flex flex-col items-center w-full m-2">
+      <div className="flex flex-col items-center w-full m-2 overflow-ellipsis">
         <div className="flex items-center justify-between h-4 m-0 mb-1">
-          <span className="m-0 overflow-hidden text-base font-medium text-black font-secondary max-w-[158px] overflow-ellipsis whitespace-nowrap">
+          <span className="m-0  text-base font-medium text-black font-secondary  overflow-ellipsis whitespace-nowrap">
             {channel.data.name || getChannelName(members, channelName)}
           </span>
-          <span className="pl-1 m-0 text-tiny font-secondary text-trueGray-600">
+          <span className="pl-1 m-0 overflow-hidden text-tiny font-secondary text-trueGray-600 whitespace-nowrap">
             {getTimeStamp(channel)}
           </span>
         </div>
-        <span className="h-4 m-0 overflow-hidden text-xs text-trueGray-600 font-secondary overflow-ellipsis whitespace-nowrap max-w-[200px]">
+        <span className="h-4 m-0 text-center text-tiny text-trueGray-600 font-secondary overflow-ellipsis">
           {latestMessage || "Send a message"}
         </span>
       </div>

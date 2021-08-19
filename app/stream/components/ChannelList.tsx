@@ -19,15 +19,7 @@ const ChannelList = ({
   const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
 
   return (
-    <div
-      className={`mx-4 transition duration-600 ease-in-out z-50
-        ${
-          state.value === "closed"
-            ? "transform translate-x-full"
-            : "transform translate-x-0"
-        }
-        `}
-    >
+    <div className={`mx-4 transition duration-600 ease-in-out z-50 no-scrollbar`}>
       <StreamChannelList
         filters={filter}
         sort={sort}

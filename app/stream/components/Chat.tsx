@@ -40,9 +40,7 @@ const StreamChat = ({ client }) => {
     <Chat client={client} theme={`messaging light`}>
       <div className="flex flex-col sm:flex-row">
         <Channel
-          channel={
-            groupName && client.channel("group", groupName?.replace(/\s/g, "-"))
-          }
+          channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
           maxNumberOfFiles={3}
           multipleUploads={true}
           Attachment={CustomAttachmentDynamic}
@@ -51,24 +49,23 @@ const StreamChat = ({ client }) => {
           <ChannelInner toggleChannelList={toggleChannelList} />
         </Channel>
 
-        <Transition show={["open", "idle"].includes(String(state.value))} appear={true}>
-          {/* Sliding sidebar */}
-          <Transition.Child
-            enter="transition ease-in-out duration-300 transform"
-            enterFrom="-translate-x-full"
-            enterTo="translate-x-0"
-            leave="transition ease-in-out duration-300 transform"
-            leaveFrom="translate-x-0"
-            leaveTo="-translate-x-full"
-          >
-            <ChannelList
-              userID={client?.userID}
-              groupName={groupName}
-              state={state}
-              toggleChannelList={toggleChannelList}
-              onCreateChannel={onCreateChannel}
-            />
-          </Transition.Child>
+        <Transition
+          show={["open", "idle"].includes(String(state.value))}
+          appear={true}
+          enter="transition-opacity duration-75"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <ChannelList
+            userID={client?.userID}
+            groupName={groupName}
+            state={state}
+            toggleChannelList={toggleChannelList}
+            onCreateChannel={onCreateChannel}
+          />
         </Transition>
       </div>
       {isCreating && (
