@@ -14,16 +14,19 @@ export const useStreamClient = () => {
 
     // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
     const connectStreamUser = async () => {
-      console.log(`Connecting to stream for user ${user.uid}`)
-
       if (user?.streamToken && process.env.NODE_ENV === "development") {
+        console.log(`Connecting to 'development' stream for user ${user.uid}`)
         await streamClient.current?.connectUser(
           { id: username, name: user.displayName },
           user.streamToken
         )
+        console.log(
+          `Connected user ${streamClient.current?.userID} to 'development' Stream!`
+        )
       }
 
       if (process.env.NODE_ENV === "production") {
+        console.log(`Connecting to stream for user ${user.uid}`)
         await streamClient.current?.connectUser(
           { id: username, name: user.displayName },
           async () => {
@@ -40,9 +43,8 @@ export const useStreamClient = () => {
             return (await response.json())?.token
           }
         )
+        console.log(`Connected user ${streamClient.current?.userID} to Stream!`)
       }
-
-      console.log(`Connected user ${streamClient.current?.userID} to Stream!`)
     }
 
     if (user?.uid && username && !streamClient.current?.user) connectStreamUser()
