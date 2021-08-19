@@ -23,9 +23,7 @@ export const useStreamClient = () => {
         console.log(
           `Connected user ${streamClient.current?.userID} to 'development' Stream!`
         )
-      }
-
-      if (process.env.NODE_ENV === "production") {
+      } else {
         console.log(`Connecting to stream for user ${user.uid}`)
         await streamClient.current?.connectUser(
           { id: username, name: user.displayName },
