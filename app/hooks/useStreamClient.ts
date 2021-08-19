@@ -47,7 +47,7 @@ export const useStreamClient = () => {
 
     if (user?.uid && username && !streamClient.current?.user) connectStreamUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.streamToken])
+  }, [username])
 
   return { client: streamClient.current }
 }
