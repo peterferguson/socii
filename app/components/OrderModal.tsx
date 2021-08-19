@@ -3,7 +3,6 @@ import { useTickerPrice } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { dateAsNumeric } from "@utils/dateAsNumeric"
-import { singleLineTemplateString } from "@utils/singleLineTemplateString"
 import router from "next/router"
 import React, { Fragment, useState } from "react"
 import PriceHeading from "./PriceHeading"
@@ -15,7 +14,7 @@ const orderScreenState = (state) =>
   state.matches("active.shareOrder")
 
 const OrderModal = ({ ticker, state, send }) => {
-  const { username } = useAuth()
+  const { user, username } = useAuth()
   const { price } = useTickerPrice(ticker.tickerSymbol)
   const [amount, setAmount] = useState(0)
 
@@ -134,6 +133,7 @@ const OrderModal = ({ ticker, state, send }) => {
                   onClick={async () => {
                     const tradeArgs = {
                       username,
+                      alpacaAccountId: user.alpacaAccountId,
                       groupName: state.context.group,
                       assetRef: `tickers/${ticker.ISIN}`,
                       messageId: `${username}-${state.context.group}-${dateAsNumeric(
