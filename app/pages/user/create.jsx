@@ -50,15 +50,12 @@ export default function Username(props) {
   )
 
   const runAccountCreation = async (user, username) => {
-    console.log(user, username)
-    const { status, body } = await createAccount({ user, username })
-    console.log(status)
-    console.log(body)
-    if (body?.status === "success") {
-      toast.success(body?.message)
+    const { status, message } = (await createAccount({ user, username })).getData()
+    if (status === "success") {
+      toast.success(message)
       router.push(`/user/${username}`)
     } else {
-      toast.error(`Sorry there was a problem! ${body?.message}`)
+      toast.error(`Sorry there was a problem! ${message}`)
     }
   }
 
