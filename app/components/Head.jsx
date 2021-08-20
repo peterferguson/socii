@@ -38,6 +38,15 @@ export default function Head(props) {
         rel="stylesheet"
         key="react-vis"
       />
+
+      {process.env.NODE_ENV === "production" && (
+        <script
+          async
+          defer
+          data-website-id="c59a2266-173b-482e-95cd-e15432f036a5"
+          src="https://socii.up.railway.app/umami.js"
+        />
+      )}
     </NextHead>
   )
 }
