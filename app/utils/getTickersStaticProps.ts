@@ -1,6 +1,5 @@
 import { QuerySnapshot } from "@firebase/firestore"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
-
 import { Price } from "@models/Price"
 import { getTickerProps } from "./getTickerProps"
 const { Client } = require("iexjs")

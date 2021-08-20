@@ -12,6 +12,7 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect } from "react"
 import Custom404 from "../404"
+import { getYahooTimeseries, PeriodEnum } from "@utils/getYahooTimeseries"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -46,10 +47,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
         timestamp:
           typeof price?.latestUpdate !== "string" && price?.latestUpdate?.unix() * 1000,
         close: price?.iexRealtimePrice || price?.latestPrice,
-        open: undefined,
-        high: undefined,
-        low: undefined,
-        volume: undefined,
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price])
@@ -91,12 +88,29 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
 
 // TODO: Remove tooltip and color price in the graph display of values
 export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
+  // - For this page, we only retrieve one ticker so pop it off the array if passed in
+
+  const symbol = typeof tickerSymbol === "string" ? tickerSymbol : tickerSymbol.pop()
+
   try {
+    // - These functions take arrays of tickers
     const props = await getTickersStaticProps({
-      tickerDocs: await getTickerDocs(
-        typeof tickerSymbol === "string" ? [tickerSymbol] : tickerSymbol
-      ),
+      tickerDocs: await getTickerDocs([symbol]),
+      timeseriesLimit: 0, // TODO: Remove this once we have a real timeseries api calls working
     })
+
+    const timeseries = (
+      await getYahooTimeseries({ tickers: [symbol], period: PeriodEnum["1d"] })
+    )[symbol].map((tick) => ({
+      ...tick,
+      timestamp: tick.timestamp.valueOf(),
+    }))
+
+    props.props.tickers = props.props.tickers.map((ticker) => ({
+      ...ticker,
+      timeseries,
+    }))
+
     return { ...props, revalidate: 8000 }
   } catch (e) {
     return { redirect: { destination: "/404", permanent: false } }

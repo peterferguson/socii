@@ -9,6 +9,7 @@ import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
+import { useMountedState, useUnmountPromise } from "react-use"
 export interface IGroupColumnCard {
   groupName: string
   className?: string
@@ -16,41 +17,42 @@ export interface IGroupColumnCard {
 
 export default function GroupColumnCard({ groupName, className }: IGroupColumnCard) {
   const { user } = useAuth()
+  const mounted = useUnmountPromise()
 
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
   const [currentPrices, setCurrentPrices] = useState([])
 
-  useEffect(() => groupName && setHoldingData(groupName, setHoldings), [groupName])
+  useEffect(() => {
+    let unsubscribe
+    if (groupName) unsubscribe = setHoldingData(groupName, setHoldings)
+    return () => unsubscribe
+  }, [groupName])
 
   useEffect(() => {
-    let unmounted = false
-    !unmounted &&
-      setHoldingInfo(
-        holdings?.map((doc) => {
-          const { tickerSymbol, assetRef, shortName, avgPrice, shares } = doc.data()
-          return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, shares }
-        })
-      )
-    return () => {
-      unmounted = true
-    }
+    setHoldingInfo(
+      holdings?.map((doc) => {
+        const { tickerSymbol, assetRef, shortName, avgPrice, qty } = doc.data()
+        return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, qty }
+      })
+    )
   }, [holdings])
 
   useEffect(() => {
-    let unmounted = false
-    !unmounted &&
-      holdingInfo?.map(async ({ tickerSymbol }) => {
-        const price = await iexQuote(tickerSymbol, user?.token)
-        setCurrentPrices((previousState) => ({
-          ...previousState,
-          [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
-        }))
-      })
-    return () => {
-      unmounted = true
+    const updatePriceState = async () => {
+      Promise.all(
+        holdingInfo.map(async ({ tickerSymbol }) => {
+          const price = await iexQuote(tickerSymbol, user?.token)
+          setCurrentPrices((previousState) => ({
+            ...previousState,
+            [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
+          }))
+        })
+      )
     }
-  }, [holdingInfo, user?.token])
+
+    mounted(updatePriceState())
+  }, [holdingInfo, mounted, user?.token])
 
   return (
     <div

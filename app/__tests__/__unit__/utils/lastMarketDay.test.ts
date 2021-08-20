@@ -1,7 +1,7 @@
 import { MarketDay } from "@alpaca/models"
 import { lastMarketDay } from "@utils/lastMarketDay"
 
-describe("utils/lastMarketDay", () => {
+describe.skip("utils/lastMarketDay", () => {
   it("checks that a `MarketDay` is returned", async () => {
     expect(
       Object.keys(await lastMarketDay()).every((key) =>

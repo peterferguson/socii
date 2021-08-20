@@ -1,6 +1,11 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/accounts.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
-import { config, AccountsApi, AccountCreationObject } from "../../../alpaca/index"
+import {
+  config,
+  AccountsApi,
+  AccountCreationObject,
+  AccountUpdate,
+} from "../../../alpaca/index"
 const accountClient = new AccountsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
@@ -11,9 +16,17 @@ try {
   // - create account
   // accountClient.accountsPost(testAccount).then((r) => console.log(r))
   // - delete account
+  // accountClient
+  //   .deleteAccount("70a2501b-b31b-4904-80d9-f5c4a2fc66ed")
+  // .then((r) => console.log(r))
+  // - update account
   accountClient
-  .deleteAccount("70a2501b-b31b-4904-80d9-f5c4a2fc66ed")
-  .then((r) => console.log(r))
+    .patchAccount(
+      "70a2501b-b31b-4904-80d9-f5c4a2fc66ed",
+      AccountUpdate.from({ contact: { email_address: "DELETED_peter@socii.app" } })
+    )
+    .then((r) => console.log(r))
+
   // - get all accounts
   // accountClient.accountsGet().then((r) => console.log(r))
   // - get accounts activities
@@ -21,7 +34,6 @@ try {
 } catch (e) {
   console.log(e)
 }
-
 
 const testAccount = AccountCreationObject.from({
   contact: {

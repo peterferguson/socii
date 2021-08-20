@@ -44,7 +44,7 @@ const StockTableHeader = ({ headings }) => (
 
 const StockTableBody = ({ positions, meta }) => (
   <tbody>
-    {positions.map((position, i) => (
+    {positions?.map((position, i) => (
       <tr key={`position-${i}`}>
         {Object.values(meta).map((row, j) => (
           <row.Component

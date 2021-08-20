@@ -2,7 +2,7 @@ const functions = require("firebase-functions")
 const Client = require("iexjs").Client
 const StreamChat = require("stream-chat").StreamChat
 import admin from "firebase-admin"
-import { config, TradingApi } from "./alpaca/broker/client/ts/index"
+import { config, TradingApi } from "./alpaca/broker/client/ts/index.js"
 // * Import function modules
 import * as accounts from "./accounts/index.js"
 import * as algoliaSearch from "./algoliaSearch.js"
@@ -10,7 +10,7 @@ import * as commands from "./commands/index.js"
 import * as data from "./data.js"
 import * as databaseOperations from "./databaseOperations.js"
 import * as events from "./events/index.js"
-import * as streamChat from "./streamChat.js"
+import * as stream from "./stream/index.js"
 import * as trading from "./trading/index.js"
 
 // * Constant initialisation
@@ -18,8 +18,14 @@ export const functionConfig = functions.config()
 process.env.ALPACA_KEY = functionConfig.alpaca.key
 process.env.ALPACA_SECRET = functionConfig.alpaca.secret
 process.env.ALPACA_FIRM_ACCOUNT = functionConfig.alpaca.firm_account
-process.env.STREAM_API_SECRET = functionConfig.stream.secret
-process.env.STREAM_API_KEY = functionConfig.stream.api_key
+process.env.STREAM_API_KEY =
+  process.env.NODE_ENV === "development"
+    ? functionConfig.stream.prod.api_key
+    : functionConfig.stream.prod.api_key
+process.env.STREAM_API_SECRET =
+  process.env.NODE_ENV === "development"
+    ? functionConfig.stream.prod.secret
+    : functionConfig.stream.prod.secret
 process.env.IEX_API_VERSION = functionConfig.iex.api_version
 process.env.IEX_TOKEN = functionConfig.iex.api_key
 
@@ -47,11 +53,15 @@ module.exports = {
   generateToken: functions
     .region(london)
     .firestore.document("users/{userId}")
-    .onCreate(streamChat.generateToken),
+    .onCreate(stream.generateToken),
   createGroup: functions
     .region(london)
     .firestore.document("groups/{groupName}")
-    .onWrite(streamChat.createGroup),
+    .onWrite(stream.createGroup),
+  addToSociiansChat: functions
+    .region(london)
+    .firestore.document("usernames/{username}")
+    .onWrite(stream.addToSociiansChat),
   incrementInvestors: functions
     .region(london)
     .firestore.document("groups/{groupName}/investors/{investorUsername}")

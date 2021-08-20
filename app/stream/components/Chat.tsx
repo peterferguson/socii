@@ -3,32 +3,13 @@ import { useMachine } from "@xstate/react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import {
-  CreateChatModalDynamic,
-  CustomTriggerProviderDynamic,
-  MessagingChannelListDynamic,
-  MessagingChannelPreviewDynamic,
-} from "."
+import { CreateChatModalDynamic, CustomTriggerProviderDynamic } from "."
 import ChannelInner from "./ChannelInner"
+import ChannelList from "./ChannelList"
 import { CustomAttachmentDynamic } from "./CustomAttachments"
+import { Transition } from "@headlessui/react"
 
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
-  ssr: false,
-}) as any
-const ChannelList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
-  { ssr: false }
-) as any
-const MessageInput = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageInput) as any,
-  { ssr: false }
-) as any
-const MessageList = dynamic(
-  () => import("stream-chat-react").then((mod) => mod.MessageList) as any,
-  { ssr: false }
-) as any
-
-const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
   ssr: false,
 }) as any
 
@@ -49,88 +30,49 @@ const StreamChat = ({ client }) => {
 
   // - Do not show channel list on group page
   useEffect(() => {
-    if (groupName && state.value === "active") send("TOGGLE")
+    if (groupName && state.value === "open") send("TOGGLE")
   }, [groupName, send, state.value])
 
   const onCreateChannel = () => setIsCreating(!isCreating)
 
-  // const messages =
-
   // TODO: Replace light with theme when dark theme is implemented
-  return (
-    client && (
-      <Chat client={client} theme={`messaging light`}>
-        <div className="flex flex-col sm:flex-row">
-          <Channel
-            channel={
-              groupName && client.channel("messaging", groupName?.replace(/\s/g, "-"))
-            }
-            maxNumberOfFiles={3}
-            multipleUploads={true}
-            Attachment={CustomAttachmentDynamic}
-            TriggerProvider={CustomTriggerProviderDynamic}
-          >
-            <ChannelInner />
-          </Channel>
-          <StreamChannelList
+  return client ? (
+    <Chat client={client} theme={`messaging light`}>
+      <div className="flex flex-col sm:flex-row">
+        <Channel
+          channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
+          maxNumberOfFiles={3}
+          multipleUploads={true}
+          Attachment={CustomAttachmentDynamic}
+          TriggerProvider={CustomTriggerProviderDynamic}
+        >
+          <ChannelInner toggleChannelList={toggleChannelList} />
+        </Channel>
+
+        <Transition
+          show={["open", "idle"].includes(String(state.value))}
+          appear={true}
+          enter="transition-opacity duration-75"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <ChannelList
             userID={client?.userID}
             groupName={groupName}
-            state={state}
+            send={send}
             toggleChannelList={toggleChannelList}
             onCreateChannel={onCreateChannel}
           />
-        </div>
-        {isCreating && (
-          <CreateChatModalDynamic
-            isCreating={isCreating}
-            setIsCreating={setIsCreating}
-          />
-        )}
-      </Chat>
-    )
-  )
-}
-
-export function StreamChannelList({
-  userID,
-  onCreateChannel,
-  groupName,
-  state,
-  toggleChannelList,
-}) {
-  const filter = { type: "messaging", members: { $in: [userID] } }
-  const options = { state: true, watch: true, presence: true, limit: 5 }
-  const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
-
-  return (
-    <div
-      className={`
-        ${
-          "absolute inset-y-0 left-0 transform md:relative transition duration-300 ease-in-out" &&
-          state.value === "closed"
-            ? "-translate-x-full hidden"
-            : "translate-x-0 z-50 mx-4"
-        }
-        `}
-    >
-      <ChannelList
-        filters={filter}
-        sort={sort}
-        options={options}
-        showChannelSearch={true}
-        customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
-        List={(props) => (
-          <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
-        )}
-        Preview={(props) => (
-          <MessagingChannelPreviewDynamic
-            {...props}
-            toggleChannelList={toggleChannelList}
-          />
-        )}
-      />
-    </div>
-  )
+        </Transition>
+      </div>
+      {isCreating && (
+        <CreateChatModalDynamic isCreating={isCreating} setIsCreating={setIsCreating} />
+      )}
+    </Chat>
+  ) : null
 }
 
 export default React.memo(StreamChat)

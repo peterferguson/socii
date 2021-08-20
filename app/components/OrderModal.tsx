@@ -3,7 +3,6 @@ import { useTickerPrice } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { dateAsNumeric } from "@utils/dateAsNumeric"
-import { singleLineTemplateString } from "@utils/singleLineTemplateString"
 import router from "next/router"
 import React, { Fragment, useState } from "react"
 import PriceHeading from "./PriceHeading"
@@ -15,7 +14,7 @@ const orderScreenState = (state) =>
   state.matches("active.shareOrder")
 
 const OrderModal = ({ ticker, state, send }) => {
-  const { username } = useAuth()
+  const { user, username } = useAuth()
   const { price } = useTickerPrice(ticker.tickerSymbol)
   const [amount, setAmount] = useState(0)
 
@@ -134,6 +133,7 @@ const OrderModal = ({ ticker, state, send }) => {
                   onClick={async () => {
                     const tradeArgs = {
                       username,
+                      alpacaAccountId: user.alpacaAccountId,
                       groupName: state.context.group,
                       assetRef: `tickers/${ticker.ISIN}`,
                       messageId: `${username}-${state.context.group}-${dateAsNumeric(
@@ -162,46 +162,3 @@ const OrderModal = ({ ticker, state, send }) => {
   )
 }
 export default OrderModal
-
-const confirmCashInvestmentMML = ({
-  username,
-  side,
-  symbol,
-  amount,
-  parentId,
-  showInChannel,
-}) => {
-  const mmlstring = `<mml><investmentConfirmation></investmentConfirmation></mml>`
-  const mmlmessage = {
-    user_id: username,
-    text: singleLineTemplateString`
-      Hey, ${username} wants the group to ${side} $${amount} of ${symbol.toUpperCase()}.
-      Do you agree that the group should execute this trade?
-      `,
-    command: side,
-    parent_id: parentId || null,
-    show_in_channel: showInChannel || null,
-    attachments: [
-      {
-        tickerSymbol: symbol,
-        type: "investmentConfirmation",
-        mml: mmlstring,
-        actions: [
-          {
-            name: "action",
-            text: "Yes",
-            type: "button",
-            value: "yes",
-          },
-          {
-            name: "action",
-            text: "No",
-            type: "button",
-            value: "no",
-          },
-        ],
-      },
-    ],
-  }
-  return mmlmessage
-}

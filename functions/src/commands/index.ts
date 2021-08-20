@@ -1,31 +1,39 @@
 import { buy, sell } from "./mml/trades"
 import { StreamChat } from "stream-chat"
+import { logger } from "firebase-functions"
 
 // * Function to route the commands to the correct function based on the type query param
 export const handleCommand = async (req, res) => {
   const { query, method, body } = req
   const type = query?.type
 
+  logger.log(`Recieved ${method} request, with query params ${JSON.stringify(query)}`)
+  logger.log(`Body: ${JSON.stringify(body)}`)
+
   // * show a nice error if you send a GET request
   if (method !== "POST") {
     res.status(405).end(`Method ${method} Not Allowed`)
   }
 
-  // ! Removing for testing & possible deletion if we move to a in-house command setup
-  //   // Important: validate that the request came from Stream
-  //   const valid = streamClient.verifyWebhook(req.body, req.headers["x-signature"])
-  //   if (!valid) {
-  //     // ! Unauthorized
-  //     res.status(401).json({
-  //       body: { error: "Invalid request, signature is invalid" },
-  //     })
-  //     return
-  //   }
-
+  // TODO: Update firebase keys for new stream environments
   const streamClient = new StreamChat(
     process.env.STREAM_API_KEY,
     process.env.STREAM_API_SECRET
   )
+
+  logger.log(`Validating request came from Stream`)
+  const valid = streamClient.verifyWebhook(
+    JSON.stringify(body),
+    req.headers["x-signature"]
+  )
+  if (!valid) {
+    // ! Unauthorized
+    res.status(401).json({
+      body: { error: "Invalid request, signature is invalid" },
+    })
+    return
+  }
+
   const payload = typeof body === "string" ? JSON.parse(body) : body
 
   switch (type) {

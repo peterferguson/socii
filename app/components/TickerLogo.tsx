@@ -27,15 +27,38 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   const [logoSrc, setLogoSrc] = useState(null)
   const [ISIN, setISIN] = useState(isin)
   const [isError, setIsError] = useState(false)
+  // const [logoNotFound, setLogoNotFound] = useState(false)
 
   useEffect(() => {
     const getISIN = async () => await mounted(tickerToISIN(tickerSymbol))
     !ISIN && getISIN().then((ISIN) => setISIN(ISIN))
   }, [ISIN, mounted, tickerSymbol])
 
-  useEffect(() => {
-    ISIN && setLogoSrc(logoUrl(ISIN))
-  }, [ISIN, mounted])
+  useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN, mounted])
+
+  // TODO: Add a backup logo search 
+  // useEffect(() => {
+  //   const fetchStyvioLogo = async () =>
+  //     (
+  //       await (
+  //         await fetch(`https://www.styvio.com/api/${tickerSymbol}`, {
+  //           mode: "cors",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             "Access-Control-Allow-Origin": "*",
+  //           },
+  //         })
+  //       ).json()
+  //     )?.logoURL
+
+  //   if (!logoSrc && isError) {
+  //     try {
+  //     setLogoSrc(mounted(fetchStyvioLogo()))} catch (e) {
+  //      setIsError(true)
+  //     }
+  //     console.log(logoSrc)
+  //   }
+  // }, [isError, logoSrc, mounted, tickerSymbol])
 
   return (
     <Link href={`/stocks/${tickerSymbol}`}>

@@ -30,14 +30,9 @@ const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   const [pctChangeValue, setPctChangeValue] = useState<number>(0.0)
 
   useEffect(() => {
-    let unmounted = false
-    !unmounted &&
-      timeseries?.length &&
+    timeseries?.length &&
       crosshairValue?.y &&
-      setPctChangeValue(pctChange(timeseries?.[0].y, crosshairValue?.y))
-    return () => {
-      unmounted = true
-    }
+      setPctChangeValue(pctChange(crosshairValue?.y, timeseries?.[0].y))
   }, [crosshairValue, timeseries])
 
   const lineSeriesProps = {

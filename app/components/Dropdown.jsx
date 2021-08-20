@@ -48,7 +48,7 @@ const dropdownItems = (username) => [
   {
     name: "Porfolio",
     description: "Keep track of your growth",
-    href: `/user/${username}/portfolio`,
+    href: username && `/user/${username}/portfolio`,
     icon: HiOutlineChartPie,
   },
   {

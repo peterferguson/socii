@@ -55,9 +55,6 @@ const ChannelInner = ({ toggleChannelList }) => {
     )
   }, [messages, username])
 
-  // - print last message
-  console.log(messages.slice().pop())
-
   return (
     <>
       <Window>
@@ -74,4 +71,4 @@ const ChannelInner = ({ toggleChannelList }) => {
   )
 }
 
-export default React.memo(ChannelInner)
+export default ChannelInner

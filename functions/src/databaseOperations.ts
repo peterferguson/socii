@@ -1,4 +1,4 @@
-import { error } from "firebase-functions/lib/logger"
+import { logger } from "firebase-functions"
 import { firestore } from "./index.js"
 import { increment, serverTimestamp } from "./lib/firestore/index.js"
 import { streamClient } from "./utils/streamClient"
@@ -24,12 +24,12 @@ export const incrementInvestors = async (change, context) => {
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(1) })
   } else if (change.before.exists && change.after.exists) {
     // Updating existing document : Update chat members
-    const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 
     try {
       await channel.addMembers([investorUsername])
     } catch (err) {
-      error(err)
+      logger.error(err)
     }
   } else if (!change.after.exists) {
     // Deleting document : subtract one from count
@@ -100,10 +100,10 @@ export const initialDeposit = async (snapshot, context) => {
         ],
       })
     } catch (error) {
-      console.error(error)
+      logger.error(error)
     }
   } else {
-    console.error(`User with id ${uid} was missing alpacaID or alpacaACH`)
+    logger.error(`User with id ${uid} was missing alpacaID or alpacaACH`)
   }
 
   return

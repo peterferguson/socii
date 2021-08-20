@@ -21,14 +21,7 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
       <div className="flex p-2 bg-white">
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="flex items-center justify-center flex-none flex-grow-0 mr-3 rounded-full cursor-pointer">
-            {holding?.ISIN && (
-              <TickerLogo
-                isin={holding.ISIN}
-                tickerSymbol={tickerSymbol}
-                height="40"
-                width="40"
-              />
-            )}
+            <TickerLogo tickerSymbol={tickerSymbol} height="40" width="40" />
           </div>
         </Link>
         <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
@@ -43,14 +36,14 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
         <div className="flex flex-col items-center justify-center flex-grow-0 w-20 mr-4">
           {/* <div className="overflow-hidden font-semibold text-gray-600 text-tiny overflow-ellipsis">
             {latestPrice ? (
-              `${round(holding.shares, 4)} Shares`
+              `${round(holding.qty, 4)} Shares`
             ) : (
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div> */}
           <div className="overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis">
             {latestPrice ? (
-              `$${(latestPrice * holding.shares).toFixed(2)}`
+              `$${(latestPrice * holding.qty).toFixed(2)}`
             ) : (
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}

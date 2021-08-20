@@ -1,5 +1,6 @@
 import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
+<<<<<<< HEAD
 import {
   firestore,
   iexClient,
@@ -10,6 +11,14 @@ import { isSell } from "../utils/isSell"
 import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
 import {StreamChat} from "stream-chat"
+=======
+import { firestore, iexClient, tradeClient, functionConfig } from "../index.js"
+import { isSell } from "../utils/isSell"
+import { singleLineTemplateString } from "../utils/singleLineTemplateString"
+import { investmentPendingMML } from "./mml/investmentPendingMML"
+import { streamClient } from "../utils/streamClient"
+
+>>>>>>> development
 /*
 - tradeConfirmation
 1. Add the uid/username/alpacaID of the agreesToTrade array
@@ -21,9 +30,15 @@ export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
+<<<<<<< HEAD
 logger.log(groupName, tradeId)
   // can be: success, pending, failed
   if (tradeData.executionStatus) return  // - do nothing
+=======
+  // can be: success, pending, failed
+
+  if (tradeData.executionStatus) return // - do nothing
+>>>>>>> development
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
@@ -34,15 +49,13 @@ logger.log(groupName, tradeId)
 
   logger.log("latest", latestPrice, "and stockprice: ", tradeData.stockPrice)
 
-  // TODO reinstate this
-  //   // // // - do nothing if market is closed
-  //   // if (!isUSMarketOpen) {
-  //   //   // 2. send a message with the finalised price
-  //   //   const channel = streamClient.channel("messaging", groupName)
-  //   //   await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
-  //   //   return
-  //   // }
-  // TODO reinstate this
+  // - do nothing if market is closed
+  if (!isUSMarketOpen) {
+    // 2. send a message with the finalised price
+    const channel = streamClient.channel("group", groupName)
+    await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
+    return
+  }
 
   // TODO: Fix price checking
   // ! Now asset price & currency is available along with cost & execution currency this should be simple
@@ -130,9 +143,19 @@ logger.log(groupName, tradeId)
       executionStatus = "failed"
     }
 
+<<<<<<< HEAD
     const streamClient = new StreamChat(
       functionConfig.stream.api_key,
       functionConfig.stream.secret
+=======
+    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
+    await streamClient.partialUpdateMessage(
+      tradeData.messageId,
+      {
+        set: { status: "complete" },
+      },
+      tradeData.username
+>>>>>>> development
     )
 
     const channel = streamClient.channel("messaging", groupName.split(" ").join("-"))
@@ -150,21 +173,37 @@ logger.log(groupName, tradeId)
     // could be reduced by just writing when success, but may lose info
 
     switch (executionStatus) {
+<<<<<<< HEAD
       case "success": 
+=======
+      case "success":
+>>>>>>> development
         logger.log("order successful. Id:", postOrder?.id)
         return
 
       case "pending":
+<<<<<<< HEAD
         // 1. Withold balance until pending order is resolved 
         if(tradeData.side=="buy") groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         // 3. send a message to inform about pending order 
+=======
+        // 1. Withold balance until pending order is resolved
+        if (tradeData.side == "buy")
+          groupRef.update({ cashBalance: cashBalance - tradeData.notional })
+        // 3. send a message to inform about pending order
+>>>>>>> development
         await channel.sendMessage(investmentPendingMML(tradeData))
         return
 
       case "failed":
         logger.log("order failed. Id:", postOrder?.id)
+<<<<<<< HEAD
         change.after.ref.update({executionStatus: "failed"})
         return      
+=======
+        change.after.ref.update({ executionStatus: "failed" })
+        return
+>>>>>>> development
     }
   }
 }

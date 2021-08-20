@@ -20,7 +20,7 @@ const CreateChatModal = ({ isCreating, setIsCreating }: CreateChatModalProps) =>
 
     if (!selectedUsersIds.length) return
 
-    const conversation = await client.channel("messaging", {
+    const conversation = await client.channel("group", {
       members: [...selectedUsersIds, client.userID],
     })
 

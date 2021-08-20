@@ -1,27 +1,30 @@
 import { MultiSelect, PriceInput } from "@components"
 import { Dialog, Transition } from "@headlessui/react"
-import { useStreamClient } from "@hooks/useStreamClient"
+import { useStream } from "@hooks/useStream"
 import { alphaVantageQueryOptions } from "@lib/constants"
-import { alphaVantageQuery } from "@lib/firebase/client/firebase"
+import { alphaVantageQuery } from "@lib/firebase/client/functions/index"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
-  const { client } = useStreamClient()
+  const { client } = useStream()
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
+  const [sendClicked, setSendClicked] = useState(false)
   const { group: selectedGroup } = state.context
   const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
   const sendMessageClickHandler = async () => {
     const requiredQueryFields = ["name", "industry", "exchange"]
 
+    setSendClicked(true)
+
     if (client && client.user) {
       const channel = client?.getChannelById(
-        "messaging",
-        selectedGroup?.split(" ").join("-"),
+        "group",
+        selectedGroup?.replace(/\s/g, "-"),
         {}
       )
 
@@ -138,7 +141,11 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
                 <div className="flex-grow" />
                 <button
                   type="button"
-                  className="justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
+                  className={`
+                  justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 
+                  bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
+                  focus-visible:ring-teal-500 ${sendClicked && "animate-pulse"}`}
                   onClick={sendMessageClickHandler}
                 >
                   To the moon 🌕

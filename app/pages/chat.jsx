@@ -1,4 +1,4 @@
-import { useStreamClient } from "@hooks/useStreamClient"
+import { useStream } from "@hooks/useStream"
 import { AuthCheck, ClientOnly } from "@components"
 import Link from "next/link"
 import dynamic from "next/dynamic"
@@ -9,21 +9,18 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
 })
 
 const ChatPage = () => {
-  const { client } = useStreamClient()
+  const { client } = useStream()
   return (
     <AuthCheck>
       <ClientOnly>
         {client?.userID ? (
           <StreamChatWithNoSSR client={client} />
         ) : (
-          <div className="flex flex-col items-center justify-center w-screen h-screen mx-auto">
+          <div className="flex flex-col items-center justify-center w-full h-full mx-auto">
             <Link href="/chat">
-              
-              <div className="text-3xl cursor-pointer text-center underline text-brand font-primary align-center">
-                Something went wrong.
-                Click here to try again.
+              <div className="text-3xl text-center underline cursor-pointer text-brand font-primary align-center">
+                Something went wrong. Click here to try again.
               </div>
-              
             </Link>
           </div>
         )}

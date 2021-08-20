@@ -1,5 +1,4 @@
 import { useAuth } from "@hooks"
-import { isBrowser } from "@utils/isBrowser"
 import { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
 
@@ -15,17 +14,40 @@ export const useStreamClient = () => {
 
     // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
     const connectStreamUser = async () => {
-      if (user?.streamToken && isBrowser) {
+      if (user?.streamToken && process.env.NODE_ENV === "development") {
+        console.log(`Connecting to 'development' stream for user ${user.uid}`)
         await streamClient.current?.connectUser(
           { id: username, name: user.displayName },
           user.streamToken
+        )
+        console.log(
+          `Connected user ${streamClient.current?.userID} to 'development' Stream!`
+        )
+      } else {
+        console.log(`Connecting to stream for user ${user.uid}`)
+        await streamClient.current?.connectUser(
+          { id: username, name: user.displayName },
+          async () => {
+            const response = await fetch("/api/stream/generateToken", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + user.token,
+              },
+              body: JSON.stringify({
+                userId: username,
+              }),
+            })
+            return (await response.json())?.token
+          }
         )
         console.log(`Connected user ${streamClient.current?.userID} to Stream!`)
       }
     }
 
     if (user?.uid && username && !streamClient.current?.user) connectStreamUser()
-  }, [user?.displayName, user?.streamToken, user?.uid, username])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username])
 
   return { client: streamClient.current }
 }

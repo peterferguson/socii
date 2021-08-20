@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { MdSave } from "react-icons/md"
@@ -22,13 +23,14 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
-  const [channelName, setChannelName] = useState(channel?.data.name || "")
+  const [channelType, channelName] = channel.cid.split(":")
   const [members, _setMembers] = useState(
     Object.values(channel.state?.members || {}).filter(
       (member) => member.user?.id !== client?.user?.id
     ) || []
   )
   const [memberNames, setMemberNames] = useState([])
+  const [newChannelName, setNewChannelName] = useState("")
   const [isEditing, setIsEditing] = useState(false)
   const [usingSettings, setUsingSettings] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -37,27 +39,28 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const inputRef = useRef(null)
   const router = useRouter()
 
+  const onGroupPage = router.asPath.includes("groups")
   useEffect(
     () =>
       setMemberNames(
-        channel?.data?.name?.includes("Chat")
+        channelType === "group"
           ? // - show all memebers except yourself
-            [channel.cid.slice(10).replace(/-/g, " ")]
+            [channelName.replace(/-/g, " ")]
           : // - edge case: use first initial for chat picture for group chats
             members.map((member) => member.user.name)
       ),
-    [channel.cid, channel?.data?.name, channelName, members]
+    [channelName, channelType, members]
   )
 
   const updateChannel = async (e) => {
     e && e.preventDefault()
 
-    if (channelName && channelName !== channel.data.name) {
-      await channel.update(
-        { name: channelName },
-        { text: `Channel name changed to ${channelName}` }
-      )
-    }
+    newChannelName &&
+      newChannelName !== channel.data.name &&
+      (await channel.update(
+        { name: newChannelName },
+        { text: `Channel name changed to ${newChannelName}` }
+      ))
 
     setIsEditing(false)
   }
@@ -69,7 +72,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
 
   useEffect(
     () =>
-      !channelName &&
+      (!channelName || channelName.slice(0, 8) === "!members") &&
       setTitle(
         members
           .map((member) => member.user?.name || member.user?.id || "Unnamed User")
@@ -90,7 +93,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
         autoFocus
         className="w-full ml-6 font-bold outline-none font-primary"
         onBlur={updateChannel}
-        onChange={(e) => setChannelName(e.target.value)}
+        onChange={(e) => setNewChannelName(e.target.value)}
         placeholder="Type a new name for the chat"
         ref={inputRef}
         value={channelName}
@@ -100,6 +103,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
 
   const deleteChannel = async () => {
     await channel.delete()
+    // ? this should proably be a open channel list
     toggleChannelList()
   }
 
@@ -115,18 +119,40 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
             onClick={() => router.back()}
           />
         )}
-        <FaList
-          className={`w-5 h-5 ${
-            is1Col ? "ml-0" : "ml-6"
-          } mr-4 cursor-pointer  text-brand hover:text-brand-dark btn-transition`}
-          onClick={toggleChannelList}
-        />
-        {<AvatarGroup memberNames={memberNames} />}
+        <button
+          disabled={onGroupPage}
+          className="pointer-events-auto"
+          title={
+            !onGroupPage ? "Channel List" : "Channel Lists are disabled on group pages"
+          }
+        >
+          <FaList
+            className={`w-5 h-5 ${
+              is1Col ? "ml-0" : "ml-6"
+            } mr-4 text-brand hover:text-brand-dark ${
+              !onGroupPage && "btn-transition"
+            }`}
+            onClick={toggleChannelList}
+          />
+        </button>
+        {channel.data.image ? (
+          <Image
+            src={channel.data.image}
+            height={40}
+            width={40}
+            className="rounded-full"
+          />
+        ) : (
+          <AvatarGroup memberNames={memberNames} />
+        )}
         {!isEditing ? (
-          <div className="flex-1 font-bold font-primary">{channelName || title}</div>
+          <div className="flex-1 font-bold font-primary">
+            {channelName.slice(0, 8) === "!members" ? title : channelName}
+          </div>
         ) : (
           <EditHeader />
         )}
+        {/* TODO: Convert to its own component */}
         <Fragment>
           <TypingIndicator />
           {usingSettings ? (

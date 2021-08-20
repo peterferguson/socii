@@ -43,8 +43,10 @@ export const withCORS = (handler) => async (req, res) => {
 export const withAuth = (handler) => async (req, res) => {
   const authHeader = req.headers.authorization
   if (!authHeader) res.status(401).end("Not authenticated. No Auth header")
+  const token = authHeader?.split(" ")?.pop()
+  if (!token) res.status(401).end("Not authenticated. No token passed")
 
-  const token = authHeader.split(" ").pop()
+
   let decodedToken
   try {
     decodedToken = await auth.verifyIdToken(token)

@@ -41,7 +41,7 @@ const trade = (tradeType) => async (client: StreamChat, body) => {
 
   const channelID = body.cid?.split(":").pop() || body.message.cid?.split(":").pop()
 
-  const channel = client.channel("messaging", channelID)
+  const channel = client.channel("group", channelID)
   const username = body.user.id
 
   // * the body of the message will be modified based on user interactions
@@ -69,14 +69,13 @@ const trade = (tradeType) => async (client: StreamChat, body) => {
     // - Catch all commands sent by user not by action
     default:
       // - Error on missing command args
+      // TODO: Add a check to make sure the user has entered a valid ticker symbol
       if (message.args.trim() === "") {
         message.type = "error"
-        message.text =
-          "Please provide the ticker symbol & amount of shares you want to purchase"
+        message.text = "Please provide an appropriate ticker symbol after `/buy`"
         message.mml = null
         break
       }
-      // ! This is apparently an old api & we no longer have access to ephemeral command types
       message = updateMessage(message, tradeMML({ username, tickerSymbol, tradeType }))
       return await channel.sendMessage(message)
   }

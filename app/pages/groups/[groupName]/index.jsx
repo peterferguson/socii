@@ -33,7 +33,7 @@
 
 import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
 import { useAuth } from "@hooks/useAuth"
-import { useStreamClient } from "@hooks/useStreamClient"
+import { useStream} from "@hooks/useStream"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
@@ -48,7 +48,7 @@ export default function Group() {
   const router = useRouter()
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const { client } = useStreamClient()
+  const { client } = useStream()
   let { groupName } = router.query
   const { userGroups } = useAuth()
 

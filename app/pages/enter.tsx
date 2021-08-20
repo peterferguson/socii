@@ -1,10 +1,7 @@
 import Logo from "@components/Logo"
 import { loginRedirect } from "@utils/loginRedirect"
-import { userFirstName } from "@utils/userFirstName"
 import { useAuth } from "hooks/useAuth"
-import router from "next/router"
 import React, { useEffect } from "react"
-import toast from "react-hot-toast"
 import { FaFacebook } from "react-icons/fa"
 import { FcGoogle } from "react-icons/fc"
 import { useMediaQuery } from "react-responsive"
@@ -30,8 +27,8 @@ export default function Enter() {
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
   return (
-    <main className="h-screen bg-brand-light">
-      <div className="relative flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+    <main className="h-full bg-brand-light">
+      <div className="relative flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0 bg-black/10" />
         <div className="relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-r from-green-400/60 to-brand/60 transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl" />
         <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">

@@ -14,15 +14,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from utils.helper import get_history, yahoo_ticker_from_request
 from utils.middleware import cors
 
-# Instantiates a client
-client = google.cloud.logging.Client()
+if __name__ != "__main__":
+    # Instantiates a client
+    client = google.cloud.logging.Client()
 
-# Retrieves a Cloud Logging handler based on the environment
-# you're running in and integrates the handler with the
-# Python logging module. By default this captures all logs
-# at INFO level and higher
-client.get_default_handler()
-client.setup_logging()
+    # Retrieves a Cloud Logging handler based on the environment
+    # you're running in and integrates the handler with the
+    # Python logging module. By default this captures all logs
+    # at INFO level and higher
+    client.get_default_handler()
+    client.setup_logging()
 
 """ The following are a colleciton of HTTP Cloud Functions to be deployed on gcp.
     They are all HTTP functions and will use the yahooquery python library.
@@ -60,6 +61,6 @@ def get_historical_prices(request: Request) -> str:
 if __name__ == "__main__":
     from rich import print
 
-    # tsla = yq.Ticker("TSLA")
-    aapl = yq.Ticker("AAPL")
-    print(aapl.history().reset_index().set_index("symbol").to_dict("records"))
+    ticker = yq.Ticker("AAPL TSLA NFLX")
+    print(ticker.history().reset_index().to_dict(orient="records"))
+    # print(ticker.history().reset_index().set_index("symbol").to_dict("records"))
