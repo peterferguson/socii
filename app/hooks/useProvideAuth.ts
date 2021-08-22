@@ -67,13 +67,16 @@ export const useProvideAuth = () => {
       console.log("signinWithProvider error", errorCode, errorMessage)
 
       // The email of the user's account used.
-      // TODO: Store this somewhere
       const email = error.email
       // The AuthCredential type that was used.
-      // TODO: Store this somewhere
-      const credential = GoogleAuthProvider.credentialFromError(error)
+      const credential =
+        provider.providerId === "google.com"
+          ? GoogleAuthProvider.credentialFromError(error)
+          : FacebookAuthProvider.credentialFromError(error)
 
-      storeFailedLogin(email, credential)
+      console.log(credential)
+
+      email && storeFailedLogin(email, credential)
 
       toast.error(errorMessage)
     }
