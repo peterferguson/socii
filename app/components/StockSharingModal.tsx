@@ -1,14 +1,16 @@
 import { MultiSelect, PriceInput } from "@components"
 import { Dialog, Transition } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
+import { StreamClientContext } from "@hooks/useStreamClient"
 import { alphaVantageQueryOptions } from "@lib/constants"
 import { alphaVantageQuery } from "@lib/firebase/client/functions/index"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
+import toast from "react-hot-toast"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
-  const { client } = useStream()
+  const { client } = useStream() as StreamClientContext
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState([])
@@ -16,9 +18,9 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
   const { group: selectedGroup } = state.context
   const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
-  const sendMessageClickHandler = async () => {
-    const requiredQueryFields = ["name", "industry", "exchange"]
+  const requiredQueryFields = ["name", "industry", "exchange"]
 
+  const sendStockInfo = async () => {
     setSendClicked(true)
 
     if (client && client.user) {
@@ -60,9 +62,17 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
         show_in_channel: false,
         skip_push: true,
       })
-      router.push(`/groups/${selectedGroup}`)
     }
   }
+
+  const sendMessageClickHandler = toast.promise(sendStockInfo(), {
+    loading: "sending...",
+    success: () => {
+      router.push(`/groups/${selectedGroup}`)
+      return <b>Stock Info Sent!</b>
+    },
+    error: <b>Could not send info.</b>,
+  })
 
   return (
     <Transition appear show={state.matches("active.shareInformation")} as={Fragment}>
