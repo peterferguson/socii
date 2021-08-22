@@ -1,5 +1,4 @@
 /// <reference path="./stream.d.ts" />
-import { useAuth } from "@hooks/useAuth"
 import { useStreamClient } from "@hooks/useStreamClient"
 import React, { createContext } from "react"
 
