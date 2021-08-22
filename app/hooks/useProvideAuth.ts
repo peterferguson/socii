@@ -1,5 +1,6 @@
 import { auth } from "@lib/firebase/client/auth"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
+import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import {
@@ -57,17 +58,34 @@ export const useProvideAuth = () => {
     redirect: string | UrlObject = ""
   ) => {
     setLoading(true)
-    const { user: rawUser } = await signInWithPopup(auth, provider)
-    handleUser(rawUser)
+    try {
+      const { user: rawUser } = await signInWithPopup(auth, provider)
+      handleUser(rawUser)
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log("signinWithProvider error", errorCode, errorMessage)
+
+      // The email of the user's account used.
+      // TODO: Store this somewhere
+      const email = error.email
+      // The AuthCredential type that was used.
+      // TODO: Store this somewhere
+      const credential = GoogleAuthProvider.credentialFromError(error)
+
+      storeFailedLogin(email, credential)
+
+      toast.error(errorMessage)
+    }
 
     redirect !== "" && Router.push(redirect)
   }
 
   const signinWithFacebook = (redirect: string | UrlObject) =>
-    signinWithProvider(new FacebookAuthProvider(), redirect)
+    signinWithProvider(new FacebookAuthProvider())
 
   const signinWithGoogle = (redirect: string | UrlObject) =>
-    signinWithProvider(new GoogleAuthProvider(), redirect)
+    signinWithProvider(new GoogleAuthProvider())
 
   const signout = async (redirect: string | UrlObject = "/") => {
     await signOut(auth)
@@ -85,9 +103,8 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    if (user?.uid) {
+    if (user?.uid)
       unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
-    }
     return () => unsubscribe?.()
   }, [user?.uid])
 
@@ -107,12 +124,7 @@ export const useProvideAuth = () => {
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
     const currentUser = auth.currentUser
-    if (currentUser) {
-      const token = await currentUser.getIdToken(false)
-      return `${token}`
-    } else {
-      return ""
-    }
+    return currentUser ? `${await currentUser.getIdToken(false)}` : ""
   }
 
   return {
