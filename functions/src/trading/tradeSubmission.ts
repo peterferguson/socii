@@ -1,5 +1,6 @@
 import { logger } from "firebase-functions"
-import { firestore, HttpsError, streamClient } from "../index.js"
+import { firestore, HttpsError } from "../index.js"
+import { streamClient } from "../utils/streamClient.js"
 import { serverTimestamp } from "../lib/firestore/index.js"
 import { allKeysContainedIn } from "../utils/allKeysContainedIn"
 import { verifyUser } from "../utils/verifyUser"
@@ -13,12 +14,12 @@ import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 */
 
 export const tradeSubmission = async (
-  data: { groupName?: string; messageId?: string },
+  data: { groupName?: string, messageId?: string, submittedFromCallable?: boolean },
   context: any
 ) => {
   verifyUser(context)
   const verifiedData = await verifyContent(data, context)
-  const { messageId } = data
+  const { messageId, submittedFromCallable } = data
 
   // * Create trade document
   const groupRef = firestore.collection("groups").doc(verifiedData.groupName)
@@ -37,7 +38,7 @@ export const tradeSubmission = async (
   })
 
   logger.log(verifiedData)
-  
+
   if (investorCount > 1) {
     // * Send confirmation message into chat
     const message = confirmInvestmentMML({
@@ -47,9 +48,10 @@ export const tradeSubmission = async (
       notional: verifiedData.notional,
       messageId,
     })
-    
 
-    return await streamClient.updateMessage(message)
+    return submittedFromCallable
+      ? await streamClient.channel("group", verifiedData.groupName).sendMessage(message)
+      : await streamClient.updateMessage(message)
   }
 }
 

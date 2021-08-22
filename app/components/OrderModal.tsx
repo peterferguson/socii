@@ -5,6 +5,7 @@ import { tradeSubmission } from "@lib/firebase/client/functions"
 import { dateAsNumeric } from "@utils/dateAsNumeric"
 import router from "next/router"
 import React, { Fragment, useState } from "react"
+import toast from "react-hot-toast"
 import PriceHeading from "./PriceHeading"
 import TickerLogo from "./TickerLogo"
 
@@ -145,9 +146,18 @@ const OrderModal = ({ ticker, state, send }) => {
                       notional: amount,
                       symbol: ticker.tickerSymbol,
                       timeInForce: "day",
+                      submittedFromCallable: true,
                     }
-                    tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }).then(
-                      () => router.push(`/groups/${state.context.group}`)
+                    await toast.promise(
+                      tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }),
+                      {
+                        loading: "submitting...",
+                        success: () => {
+                          router.push(`/groups/${state.context.group}`)
+                          return <b>Trade Submitted!</b>
+                        },
+                        error: <b>Could not submit trade.</b>,
+                      }
                     )
                   }}
                 >
