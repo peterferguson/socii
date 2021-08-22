@@ -1,6 +1,7 @@
 import { buy, sell } from "./mml/trades"
 import { StreamChat } from "stream-chat"
 import { logger } from "firebase-functions"
+import { functionConfig } from "../index"
 
 // * Function to route the commands to the correct function based on the type query param
 export const handleCommand = async (req, res) => {
@@ -11,22 +12,24 @@ export const handleCommand = async (req, res) => {
   logger.log(`Body: ${JSON.stringify(body)}`)
 
   // * show a nice error if you send a GET request
-  if (method !== "POST") {
-    res.status(405).end(`Method ${method} Not Allowed`)
-  }
+  method !== "POST" && res.status(405).end(`Method ${method} Not Allowed`)
 
   // TODO: Update firebase keys for new stream environments
   const streamClient = new StreamChat(
-    process.env.STREAM_API_KEY,
-    process.env.STREAM_API_SECRET
+    functionConfig.stream.api_key,
+    functionConfig.stream.secret
   )
 
   logger.log(`Validating request came from Stream`)
+  logger.log("api-key", functionConfig.stream.api_key)
   const valid = streamClient.verifyWebhook(
     JSON.stringify(body),
     req.headers["x-signature"]
   )
   if (!valid) {
+    logger.log("Request came from invalid source")
+    logger.log("x-signature", req.headers["x-signature"])
+
     // ! Unauthorized
     res.status(401).json({
       body: { error: "Invalid request, signature is invalid" },

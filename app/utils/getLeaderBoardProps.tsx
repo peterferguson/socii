@@ -8,8 +8,7 @@ export const getLeaderBoardProps = async () => {
   // * The timescale will be since the  beginning of the month.
   // * On the first of the month, the leaderboard is reset.
   const firestore = require("@lib/firebase/server/firebase-admin").firestore
-  const functionUrl =
-    "https://europe-west2-sociiinvest.cloudfunctions.net/get_historical_prices"
+  const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
 
   const query = firestore
     .collectionGroup("holdings")

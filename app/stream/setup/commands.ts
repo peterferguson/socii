@@ -2,8 +2,8 @@
 import * as Stream from "stream-chat"
 import * as dotenv from "dotenv"
 
-// dotenv.config({ path: "./.env.local" })
-dotenv.config({ path: "./.env.prod" })
+dotenv.config({ path: "./.env.local" })
+// dotenv.config({ path: "./.env.prod" })
 
 const client = new Stream.StreamChat(
   process.env.NEXT_PUBLIC_STREAM_API_KEY,
@@ -82,6 +82,6 @@ const createTradeCommands = async () => {
 client
   .updateAppSettings({
     custom_action_handler_url:
-      "https://europe-west2-sociiinvest.cloudfunctions.net/commands?type={type}",
+      "https://europe-west2-socii-development.cloudfunctions.net/commands?type={type}",
   })
   .then((r) => console.log(r))

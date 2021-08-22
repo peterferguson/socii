@@ -147,7 +147,6 @@ export const toastProps: ToastProps = {
   },
 }
 
-export const logoBaseUrl: string =
-  "https://storage.googleapis.com/sociiinvest.appspot.com/logos"
+export const logoBaseUrl: string = `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/logos`
 
 export const ephemeralStatuses = ["complete", "cancelled"]
