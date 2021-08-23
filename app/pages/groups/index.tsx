@@ -3,6 +3,8 @@ import LeaderBoardCard from "@components/LeaderBoardCard"
 import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
 
 export default function GroupsHome({ leaders }) {
+  console.log(leaders)
+
   return (
     <main className="w-full h-screen">
       <section className="flex flex-col justify-between ">

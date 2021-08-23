@@ -1,0 +1,13 @@
+POST https://fcm.googleapis.com/fcm/send
+Content-Type: application/json
+Authorization: key=AAAA7-MbouI:APA91bEMObru0vTqD-OOn2hSFMhN0fFQ_ZTewzJlktoru53DCNORUigRJV55CH_BEXjLwvX-7b2Hy84F1oJI7bchkkgbgdPDDGcd8mt3SW64Fvq0kSCZ-H2rnLoJTYRKL5Ri2c4Kw-JR
+
+{
+    "to" : "dgeHzjS_lDjlbDjcE7E9AY:APA91bGqIlHz8KSzp2iU8OZz6aZYIzj4jCkOFdjXpzVCPcxlycUjvl0V6IVBCpr_ApKeLRMl0J4fpzX-S9v-zgbs1G8-bgsEeU_6eK_l1vD2GMtlJkZCYhdwysWmjy6PqfF5clnJ9yRL", 
+   "data": {
+        "notification": {
+        "title": "Hello",
+        "body": "world"
+    }  
+}
+}

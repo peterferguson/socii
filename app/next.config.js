@@ -23,7 +23,8 @@ module.exports = withPWA(
       pwa: {
         dest: "public",
         disable: process.env.NODE_ENV === "development",
-        register: true,
+        register: false,
+        skipWaiting: false,
         sw: "sw.js",
         buildExcludes: [/chunks\/images\/.*$/, /static\/image\/node_modules\/.*$/],
       },
