@@ -4,6 +4,7 @@ import { useStream } from "@hooks/useStream"
 import { StreamClientContext } from "@hooks/useStreamClient"
 import { alphaVantageQueryOptions } from "@lib/constants"
 import { alphaVantageQuery } from "@lib/firebase/client/functions/index"
+import { redirectWithToast } from "@utils/redirectWithToast"
 import { useRouter } from "next/router"
 import React, { Fragment, useState } from "react"
 import toast from "react-hot-toast"
@@ -65,14 +66,16 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
     }
   }
 
-  const sendMessageClickHandler = toast.promise(sendStockInfo(), {
-    loading: "sending...",
-    success: () => {
-      router.push(`/groups/${selectedGroup}`)
-      return <b>Stock Info Sent!</b>
-    },
-    error: <b>Could not send info.</b>,
-  })
+  const sendMessageClickHandler = (_e) => {
+    toast.promise(sendStockInfo(), {
+      loading: "sending...",
+      success: () => {
+        redirectWithToast(router, `/groups/${selectedGroup}`)
+        return <b>Stock Info Sent!</b>
+      },
+      error: <b>Could not send info.</b>,
+    })
+  }
 
   return (
     <Transition appear show={state.matches("active.shareInformation")} as={Fragment}>
