@@ -39,6 +39,11 @@ export default function Head(props) {
         key="react-vis"
       />
 
+      {/* No zoom and flow into notch */}
+      <meta
+        name="viewport"
+        content="initial-scale=1, viewport-fit=cover, width=device-width, maximum-scale=1, user-scalable=no"
+      />
       {process.env.NODE_ENV === "production" && (
         <script
           async

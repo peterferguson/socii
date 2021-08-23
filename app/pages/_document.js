@@ -40,11 +40,7 @@ class MyDocument extends Document {
             name="apple-mobile-web-app-status-bar-style"
             content="black-translucent"
           ></meta>
-          {/* No zoom and flow into notch */}
-          <meta
-            name="viewport"
-            content="initial-scale=1, viewport-fit=cover, width=device-width, maximum-scale=1, user-scalable=no"
-          ></meta>
+
           {/* Fullscreen on iOS */}
           <meta name="apple-mobile-web-app-capable" content="yes"></meta>
         </Head>
