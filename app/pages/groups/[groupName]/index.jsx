@@ -14,22 +14,6 @@
 // - Option of comparision against leading markets (and leading groups in segment)
 // - Portfolio Analysis (partnership with the likes of atom or simply wall st?)
 // - Investor section with description of joining date (etc... this should not be the focus!)
-// -
-
-// TODOs (Backend Features):
-// - Firestore collection for groups with subcollections for investors, holdings, ...
-// - Real-time db / api calls to update the graph & price card:
-// ? Maybe this should be cached & then use the realtime db to store previous pricing data
-// ? This would get expensive over time so maybe forget about realtime db and use api calls
-// ? to update firestore price & create a collection to store this for each ticker.
-// ? Historical data can be valuable when exposed via an api. Plus this could allow us to create
-// ? an interface with our users for historical modelling etc for the more tech savvy users.
-// ? Simple modelling could be made available for all users, in the sense of simulations of
-// ? removing certain trades & replacing them with alternatives. This could allow users to
-// ? easily reevaluate their investment thesis in a retrospective manner.
-// ! Implementing storage of this data would also save us money in the future since we
-// ! would not need to call an api to get this data for historical pricing in simulations
-// - Sunburst charts for allocation, diversifaction & over allocation.
 
 import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
 import { useAuth } from "@hooks/useAuth"
