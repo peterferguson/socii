@@ -1,3 +1,5 @@
+// - Source: https://betterprogramming.pub/let-users-know-when-you-have-updated-your-service-worker-in-create-react-app-b0c2701995b3
+
 interface Config {
   onUpdate?: (registration: ServiceWorkerRegistration) => void
   onSuccess?: (registration: ServiceWorkerRegistration) => void
