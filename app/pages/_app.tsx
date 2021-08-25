@@ -45,12 +45,9 @@ export default function MyApp({ Component, pageProps }) {
       unsub = onMessage(messaging, (payload) => {
         console.log(payload)
 
-        const { notification } = payload
-
-        const { title, body } =
-          typeof notification === "string"
-            ? JSON.parse(notification.replace(/\\/g, ""))
-            : notification
+        const {
+          notification: { title, body },
+        } = payload
 
         toast(`${title}, ${body}`)
       })
