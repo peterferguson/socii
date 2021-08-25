@@ -1,4 +1,6 @@
+import { logger } from "firebase-functions"
 import { messaging } from ".."
+import { getInvestorFcmTokens } from "../lib/firestore/db/getInvestorFcmTokens"
 
 interface User {
   id: string
@@ -66,11 +68,19 @@ interface Payload {
 export const handlePush = async (payload: Payload) => {
   const { user, message, cid, channel_id } = payload
 
-  const topicName = cid.replace(":", "-")
+  const groupName = channel_id.replace(/-/g, " ")
+  // const topicName = cid.replace(":", "-")
   const title = `${user.name} has sent a message in ${channel_id}`
   const body = `${user.name} says: ${
     message.text.length >= 15 ? message.text.slice(0, 15) : message.text
   }`
+
+  // const fcmTokens = await getInvestorFcmTokens(groupName)
+  // console.log(fcmTokens)
+  const fcmTokens = [
+    "esQThUBdpsZ7wx9eLOMjdQ:APA91bFuJAj3TxK7Nb6U5tw4eauhtQy7DCowz7mCNbHBxvpjMwluyuUvABLC0N8x9IcA_2X2N_7AieAW2fkaWZV78AcP_ZKsrL4E30annaERryXJ_UIrYj11feBgVDug5HhWPZpDJXTL",
+    "eNGlnBb-Wkz3tUseaku3uB:APA91bHunAHmdjFa_zvOKaHz2H0h-ma0LqsA9a-HTKpWnJ0NdPz4ej0YRTsK1clst_k0JWC3ye5Qaq0BgqtF7NRMGauhvuHCPPryT7MP91NlGfpPrqXmm1yNyL6FYppZHJSroubRkOtH",
+  ]
 
   const pushMessage = {
     notification: {
@@ -103,12 +113,13 @@ export const handlePush = async (payload: Payload) => {
         badge: "https://socii.app/favicons/favicon.ico",
       },
     },
-    topic: topicName,
+    // topic: topicName,
+    tokens: fcmTokens,
   }
 
   try {
-    const response = await messaging.send(pushMessage)
-    return `Successfully sent message: ${response}`
+    const response = await messaging.sendMulticast(pushMessage)
+    return `Successfully sent message: ${JSON.stringify(response)}`
   } catch (error) {
     return `Error sending message: ${error}`
   }

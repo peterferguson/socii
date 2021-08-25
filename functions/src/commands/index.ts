@@ -41,24 +41,32 @@ export const handleCommand = async (req, res) => {
   switch (type) {
     case "buy":
       const buyResponse = await buy(streamClient, payload)
-      res.status(200).end(`${type} command executed: ${JSON.stringify(buyResponse)}`)
-      break
+      return res
+        .status(200)
+        .end(`${type} command executed: ${JSON.stringify(buyResponse)}`)
+
     case "sell":
       const sellResponse = await sell(streamClient, payload)
-      res.status(200).end(`${type} command executed: ${JSON.stringify(sellResponse)}`)
-      break
+      return res
+        .status(200)
+        .end(`${type} command executed: ${JSON.stringify(sellResponse)}`)
+
     default:
+      const messageType = body?.type
+      if (!messageType) return res.status(400).end(`Please send a correct command type`)
+
       // * Handle push notifications from stream
       // TODO: Replace with stream notification handler when we move to react native!
-      const messageType = body?.type
       switch (messageType) {
         case "message.new":
           const newResponse = await handlePush(payload)
-          res.status(200).end(`${messageType} pushed with response ${newResponse}`)
-          break
+          return res
+            .status(200)
+            .end(`${messageType} pushed with response ${newResponse}`)
         default:
-          res.status(200).end(`${messageType} does not receive a push notification`)
+          return res
+            .status(200)
+            .end(`${messageType} does not receive a push notification`)
       }
-      res.status(400).end(`Please send a correct command type`)
   }
 }
