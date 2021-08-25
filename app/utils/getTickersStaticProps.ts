@@ -48,6 +48,13 @@ export const getTickersStaticProps = async ({
             )
 
             // TODO: Create a wrapper arround the price data to store it in firestore
+            // !
+            // !
+            // !
+            // TODO: Get the price through an API call no need for library here
+            // !
+            // !
+            // !
             const price: Price = await iexClient.quote(ticker.tickerSymbol, {
               filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
             })

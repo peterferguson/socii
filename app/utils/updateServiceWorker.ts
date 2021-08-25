@@ -1,3 +1,9 @@
+declare global {
+  interface EventTarget {
+    state: any
+  }
+}
+
 export const updateServiceWorker = (
   serviceWorkerRegistration: ServiceWorkerRegistration
 ) => {

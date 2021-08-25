@@ -1,5 +1,11 @@
 import { isBrowser } from "."
 
+declare global {
+  interface Window {
+    workbox: any
+  }
+}
+
 export const serviceWorkerInitialisation = () => {
   if (isBrowser && "serviceWorker" in navigator && window.workbox !== undefined) {
     const wb = window?.workbox
