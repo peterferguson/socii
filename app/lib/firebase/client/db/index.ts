@@ -11,8 +11,8 @@ try {
 
 export const firestore = getFirestore(app)
 
-// process.env.NODE_ENV === "development" &&
-//   connectFirestoreEmulator(firestore, "localhost", 8080)
+process.env.NODE_ENV === "development" &&
+  connectFirestoreEmulator(firestore, "localhost", 8080)
 
 export { agreesToTrade } from "./agreesToTrade"
 export { createGroup } from "./createGroup"

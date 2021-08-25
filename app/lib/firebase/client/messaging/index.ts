@@ -1,7 +1,10 @@
 import { isBrowser } from "@utils/isBrowser"
+import { registerValidSW } from "@utils/registerValidSW"
+import { updateServiceWorker } from "@utils/updateServiceWorker"
 import { getApp } from "firebase/app"
 import { getMessaging, getToken, onMessage } from "firebase/messaging"
-import localforage from "localforage"
+import { getFcmTokenFromFirebase } from "../db/getFcmTokenFromFirebase"
+import { storeFcmToken } from "../db/storeFcmToken"
 import { initialize } from "../firebase"
 
 let app
@@ -13,9 +16,15 @@ try {
 
 export const messaging = isBrowser && getMessaging(app)
 
-export const getFCMToken = async () => {
-  const tokenInLocalForage = await localforage.getItem("fcm_token")
-  if (tokenInLocalForage !== null) return tokenInLocalForage
+export const getFCMToken = async (uid: string) => {
+  "serviceWorker" in navigator &&
+    registerValidSW("./firebase-messaging-sw.js", {
+      onUpdate: updateServiceWorker,
+    })
+  const fcmTokenInFirebase = await getFcmTokenFromFirebase(uid)
+  console.log("fcmTokenInFirebase", fcmTokenInFirebase)
+
+  if (fcmTokenInFirebase) return fcmTokenInFirebase
 
   try {
     const status = await Notification.requestPermission()
@@ -23,11 +32,11 @@ export const getFCMToken = async () => {
       const fcmToken = await getToken(messaging, {
         vapidKey:
           "BC8OI3ERe5qTNrtrOWIV9Q0GZV1nU2mG-OBOMezipuTh46CyOacNWSwMhZFS2cdy9t25p4iimTufumpOVHeOF4I",
+        // TODO: add this to env
       })
-      console.log("FCM Token:", fcmToken)
 
       if (fcmToken) {
-        localforage.setItem("fcm_token", fcmToken)
+        await storeFcmToken(uid, fcmToken)
         return fcmToken
       }
     }

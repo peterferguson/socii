@@ -9,9 +9,6 @@ import { User } from "firebase/auth"
 export const formatUser = async (user: User) => {
   const decodedToken = await user.getIdTokenResult()
   const { token, expirationTime } = decodedToken
-
-  if (process.env.NODE_ENV !== "production") console.log(token)
-
   return {
     uid: user.uid,
     email: user.email,

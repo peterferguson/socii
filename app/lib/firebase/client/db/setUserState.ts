@@ -24,6 +24,7 @@ export const setUserState = (
     setUser((prevUser) => ({
       ...prevUser,
       streamToken,
+      fcmToken: data?.fcmToken || "",
       alpacaAccountId: data?.alpacaAccountId || "",
       alpacaACH: data?.alpacaACH || "",
     }))

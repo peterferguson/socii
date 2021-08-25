@@ -1,7 +1,7 @@
 import { auth } from "@lib/firebase/client/auth"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
 import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
-import { fcmToken } from "@lib/firebase/client/messaging"
+import { getFCMToken } from "@lib/firebase/client/messaging"
 import { formatUser } from "@utils/formatUser"
 import { isBrowser } from "@utils/isBrowser"
 import { userFirstName } from "@utils/userFirstName"
@@ -31,10 +31,6 @@ export const useProvideAuth = () => {
     console.log("handleUser called", new Date())
     if (rawUser) {
       const user = await formatUser(rawUser)
-      // ! This user refresh causes intermitent permissions errors
-      // const { token, expirationTime, ...userWithoutToken } = user
-
-      // createUser(user.uid, userWithoutToken)
       setUser(user)
       setLoading(false)
       console.log("handleUser Succeeded", new Date())
@@ -45,15 +41,6 @@ export const useProvideAuth = () => {
       return false
     }
   }
-
-  // const signinWithEmail = async (email: string, password: string, redirect: string | UrlObject) => {
-  //   setLoading(true)
-  //   const response = await signInWithEmailAndPassword(auth, email, password)
-  //   handleUser(response.user)
-  //   if (redirect) {
-  //     Router.push(redirect)
-  //   }
-  // }
 
   const signinWithProvider = async (
     provider: AuthProvider,
@@ -75,9 +62,6 @@ export const useProvideAuth = () => {
         provider.providerId === "google.com"
           ? GoogleAuthProvider.credentialFromError(error)
           : FacebookAuthProvider.credentialFromError(error)
-
-      console.log(credential)
-
       email && storeFailedLogin(email, credential)
 
       toast.error(errorMessage)
@@ -87,10 +71,10 @@ export const useProvideAuth = () => {
   }
 
   const signinWithFacebook = (redirect: string | UrlObject) =>
-    signinWithProvider(new FacebookAuthProvider())
+    signinWithProvider(new FacebookAuthProvider(), redirect)
 
   const signinWithGoogle = (redirect: string | UrlObject) =>
-    signinWithProvider(new GoogleAuthProvider())
+    signinWithProvider(new GoogleAuthProvider(), redirect)
 
   const signout = async (redirect: string | UrlObject = "/") => {
     await signOut(auth)
@@ -112,19 +96,6 @@ export const useProvideAuth = () => {
       unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
     return () => unsubscribe?.()
   }, [user?.uid])
-
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     if (user) {
-  //       const token = await firebase
-  //         .auth()
-  //         .currentUser.getIdToken(/* forceRefresh */ true);
-  //       setUser(user);
-  //       console.log('refreshed token');
-  //     }
-  //   }, 30 * 60 * 1000 /*every 30min, assuming token expires every 1hr*/);
-  //   return () => clearInterval(interval);
-  // }, [user]); // needs to depend on user to have closure on a valid user object in callback fun
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
