@@ -16,6 +16,8 @@ export const getLeaderBoardProps = async () => {
 
   const snapshot = await query.get()
 
+  console.log(`${snapshot.size} holdings found`)
+
   const groupHoldings: {
     [groupName: string]: { holdings: [{ tickerSymbol: string; qty: number }] }
   } = snapshot.docs
