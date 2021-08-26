@@ -6,13 +6,15 @@ import { firestore } from "."
  * @param  {string} groupName
  * @param  {string} messgeId
  * @param  {string} uid
+ * @param  {string} alpacaAccountId
  */
 
 export const agreesToTrade = async (
   groupName: string,
   messageId: string,
-  uid: string
+  uid: string,
+  alpacaAccountId: string,
 ) => {
   const tradesRef = doc(firestore, `groups/${groupName}/trades/${messageId}`)
-  await updateDoc(tradesRef, { agreesToTrade: arrayUnion(`users/${uid}`) })
+  await updateDoc(tradesRef, { agreesToTrade: arrayUnion(`users/${uid}/${alpacaAccountId}`) })
 }

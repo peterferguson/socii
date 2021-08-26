@@ -22,6 +22,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
 
   const groupName = channel.cid.split(":").pop()
+  const alpacaAccountId =  user.alpacaAccountId
 
   const [action, shares] = message.text.split("to ").pop().split("shares")[0].split(" ")
   const cost = message.text.split("for ").pop().split(". Do")[0]
@@ -51,7 +52,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
             // ! Trade is based on the groups selection process.
             // ! Defaults to uanimous decision.
             if ("yes" in data) {
-              agreesToTrade(groupName, message.id, user.uid)
+              agreesToTrade(groupName, message.id, user.uid, alpacaAccountId)
               // const updated = await client.partialUpdateMessage(message.id, {
               //   set: {  },
               // })
