@@ -24,9 +24,10 @@ export const tradeConfirmation = async (change, context) => {
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  const { latestPrice, isUSMarketOpen } = await iexClient.quote(tradeData.symbol, {
-    filter: "latestPrice,isUSMarketOpen",
-  })
+  const { latestPrice, isUSMarketOpen, primaryExchange } = await iexClient.quote(
+    tradeData.symbol,
+    { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
+  )
 
   logger.log(
     "Latest IEX price",
@@ -39,7 +40,9 @@ export const tradeConfirmation = async (change, context) => {
   !isUSMarketOpen &&
     (await streamClient
       .channel("group", groupName)
-      .sendMessage(await marketClosedMessage(tradeData.assetRef)))
+      .sendMessage(
+        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol)
+      ))
 
   if (tradeData.notional > cashBalance && !isSell(tradeData.type)) {
     // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
@@ -160,13 +163,9 @@ export const tradeConfirmation = async (change, context) => {
  * Helper Functions
  */
 
-const marketClosedMessage = async (assetRef) => {
-  const assetRefDoc = firestore.doc(assetRef)
-  const assetData = (await assetRefDoc.get()).data()
-  return {
-    user_id: "socii",
-    text: singleLineTemplateString`
-    The ${assetData.exchange} is not currently open, so the execution price ($${assetData.latestPrice}) of ${assetData.symbol} may change.
+const marketClosedMessage = async (exchange, latestPrice, symbol) => ({
+  user_id: "socii",
+  text: singleLineTemplateString`
+    The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
     `,
-  }
-}
+})
