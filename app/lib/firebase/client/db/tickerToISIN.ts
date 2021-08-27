@@ -6,13 +6,15 @@ import { firestore } from "."
  * @param  {string} ticker
  */
 
-export async function tickerToISIN(ticker: string): Promise<string> {
-  const tickerRef = collection(firestore, "tickers")
-  const tickerQuery = query(
-    tickerRef,
-    where("tickerSymbol", "==", ticker?.toUpperCase()),
-    limit(1)
-  )
-  const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
-  return tickerDoc?.id || ""
-}
+export const tickerToISIN = async (ticker: string): Promise<string> =>
+  (ticker &&
+    (
+      await getDocs(
+        query(
+          collection(firestore, "tickers"),
+          where("tickerSymbol", "==", ticker?.toUpperCase()),
+          limit(1)
+        )
+      )
+    )?.docs?.pop()?.id) ||
+  ""
