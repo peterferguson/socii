@@ -79,7 +79,9 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             </div>
           </div>
           <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
-          <InvestButtonModal ticker={ticker} state={state} send={send} />
+          {InvestButtonModal && (
+            <InvestButtonModal ticker={ticker} state={state} send={send} />
+          )}
         </>
       )}
     </>

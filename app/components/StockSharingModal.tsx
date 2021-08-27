@@ -1,13 +1,14 @@
 import { MultiSelect, PriceInput } from "@components"
-import { Dialog, Transition } from "@headlessui/react"
+import { Dialog } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
 import { StreamClientContext } from "@hooks/useStreamClient"
 import { alphaVantageQueryOptions } from "@lib/constants"
 import { alphaVantageQuery } from "@lib/firebase/client/functions/index"
 import { redirectWithToast } from "@utils/redirectWithToast"
 import { useRouter } from "next/router"
-import React, { Fragment, useState } from "react"
+import React, { useState } from "react"
 import toast from "react-hot-toast"
+import { InvestButtonModalContainer } from "./InvestButtonModalContainer"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
@@ -78,97 +79,65 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
   }
 
   return (
-    <Transition appear show={state.matches("active.shareInformation")} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-10 overflow-y-auto backdrop-filter backdrop-blur-lg"
-        open={state.matches("active.shareInformation")}
-        onClose={() => send("CLOSE")}
-      >
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0" />
-          </Transition.Child>
-
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span className="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
-              <Dialog.Title
-                as="h3"
-                className="text-lg font-medium text-gray-900 font-primary leading-6"
-              >
-                Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
-                <span className="font-bold text-teal-300">{tickerSymbol}</span>!
-              </Dialog.Title>
-              <div className="mt-2">
-                <div className="text-sm font-primary text-blueGray-500">
-                  Select some data to tell your friends about!
-                </div>
-                <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
-                  items={alphaVantageQueryOptions}
-                  selectedItems={selectedItems}
-                  setSelectedItems={setSelectedItems}
-                />
-                <div className="text-sm font-primary text-blueGray-500">
-                  Got a price in mind?
-                </div>
-                <div className="pt-1 pb-2">
-                  <PriceInput
-                    setPrice={setTargetPrice}
-                    showPrice={false}
-                    pricePlaceholder={pricePlaceholder}
-                  />
-                </div>
-                <div className="text-sm font-primary text-blueGray-500">
-                  Tell them your thoughts!
-                </div>
-                <div className="pt-2 mb-3">
-                  <textarea
-                    className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
-                    rows={4}
-                    placeholder="Bruh the wallstreetbets bros love it!"
-                    onChange={(e) => setMessage(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex mt-4">
-                <div className="flex-grow" />
-                <button
-                  type="button"
-                  className={`
+    <InvestButtonModalContainer
+      open={state.matches("active.shareInformation")}
+      onClose={() => send("CLOSE")}
+    >
+      <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
+        <Dialog.Title
+          as="h3"
+          className="text-lg font-medium text-gray-900 font-primary leading-6"
+        >
+          Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
+          <span className="font-bold text-teal-300">{tickerSymbol}</span>!
+        </Dialog.Title>
+        <div className="mt-2">
+          <div className="text-sm font-primary text-blueGray-500">
+            Select some data to tell your friends about!
+          </div>
+          <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
+            items={alphaVantageQueryOptions}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+          />
+          <div className="text-sm font-primary text-blueGray-500">
+            Got a price in mind?
+          </div>
+          <div className="pt-1 pb-2">
+            <PriceInput
+              setPrice={setTargetPrice}
+              showPrice={false}
+              pricePlaceholder={pricePlaceholder}
+            />
+          </div>
+          <div className="text-sm font-primary text-blueGray-500">
+            Tell them your thoughts!
+          </div>
+          <div className="pt-2 mb-3">
+            <textarea
+              className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              rows={4}
+              placeholder="Bruh the wallstreetbets bros love it!"
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="flex mt-4">
+          <div className="flex-grow" />
+          <button
+            type="button"
+            className={`
                   justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 
                   bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 
                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
                   focus-visible:ring-teal-500 ${sendClicked && "animate-pulse"}`}
-                  onClick={sendMessageClickHandler}
-                >
-                  To the moon 🌕
-                </button>
-              </div>
-            </div>
-          </Transition.Child>
+            onClick={sendMessageClickHandler}
+          >
+            To the moon 🌕
+          </button>
         </div>
-      </Dialog>
-    </Transition>
+      </div>
+    </InvestButtonModalContainer>
   )
 }
 
