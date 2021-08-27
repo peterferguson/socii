@@ -15,8 +15,8 @@ try {
 
 export const functions = getFunctions(app, londonRegion)
 
-process.env.NODE_ENV === "development" &&
-  connectFunctionsEmulator(functions, "localhost", 5001)
+// process.env.NODE_ENV === "development" &&
+//   connectFunctionsEmulator(functions, "localhost", 5001)
 
 // - Callable Functions
 export const alphaVantageQuery = httpsCallable(functions, "alphaVantageQuery")
