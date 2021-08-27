@@ -27,12 +27,6 @@ const dropdownItems = (username) => [
     // onClick: () => setOpenSettings(!openSettings),
   },
   {
-    name: "Invites",
-    description: "Invite your friends to the alpha",
-    href: "/user/invites",
-    icon: HiOutlineAtSymbol,
-  },
-  {
     name: "Stocks",
     description: "Search our stock universe",
     href: "/stocks",
