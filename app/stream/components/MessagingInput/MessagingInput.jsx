@@ -46,8 +46,8 @@ import { UploadsPreview } from "./UploadsPreview"
 // TODO
 
 const CommandIcon = ({ text }) => (
-  <div className="flex items-center w-16 h-6 ml-2 rounded-xl justify-evenly bg-brand">
-    <BsLightningFill className="w-4 h-4 text-white -mr-1.5" />
+  <div className="flex items-center w-16 h-6 p-2 rounded-xl  bg-brand">
+    <BsLightningFill className="w-4 h-4 text-white mr-0.5" />
     <p className="text-xs font-bold text-white font-secondary">{text}</p>
   </div>
 )
@@ -80,7 +80,7 @@ const emojiButtons = {
   emoji: { icon: HiOutlineEmojiHappy },
   ticker: { icon: FaDollarSign },
   command: { icon: BsLightning },
-  submit: { icon: HiOutlinePaperAirplane, className: "rotate-90" },
+  submit: { icon: HiOutlinePaperAirplane, className: "transform rotate-90" },
 }
 
 const useCommand = () => {
@@ -159,9 +159,7 @@ const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
     ref={ref || null}
   >
     <emojiButton.icon
-      className={`h-5 w-5 md:h-6 md:w-6 ${
-        emojiButton?.className ? emojiButton?.className : ""
-      }`}
+      className={`h-5 w-5 md:h-6 md:w-6 ${emojiButton?.className ?? ""}`}
     />
   </div>
 ))
@@ -268,7 +266,7 @@ const MessagingInput = (props) => {
         }
       >
         <div className="message-input-wrapper min-h-[40px] max-w-96">
-          {command.mode && !messageInput.numberOfUploads ? command.icon : null}
+          {command.mode && !messageInput.numberOfUploads && command.icon}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
             commands={commands}
