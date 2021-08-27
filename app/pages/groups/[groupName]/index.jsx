@@ -17,12 +17,12 @@
 
 import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
 import { useAuth } from "@hooks/useAuth"
-import { useStream} from "@hooks/useStream"
+import { useStream } from "@hooks/useStream"
+import { IsUsersGroup } from "@utils/IsUsersGroup"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
-import Custom404 from "../../404"
 
 const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
@@ -34,12 +34,10 @@ export default function Group() {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const { client } = useStream()
   let { groupName } = router.query
-  const { userGroups } = useAuth()
 
   if (Array.isArray(groupName)) groupName = groupName[0]
   return (
-    <>
-      {groupName && userGroups && !userGroups.includes(groupName) && <Custom404 />}
+    <AuthCheck>
       <div className="flex">
         <div className="flex-auto pt-8">
           <div className="pb-2 text-3xl tracking-wider text-center text-gray-600 uppercase font-primary">
@@ -47,14 +45,14 @@ export default function Group() {
           </div>
           <GroupColumnCard groupName={groupName} />
           {client && !is1Col && (
-            <AuthCheck>
+            <IsUsersGroup>
               <ClientOnly>
                 <StreamChatWithNoSSR client={client} />
               </ClientOnly>
-            </AuthCheck>
+            </IsUsersGroup>
           )}
         </div>
       </div>
-    </>
+    </AuthCheck>
   )
 }
