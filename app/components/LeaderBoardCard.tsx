@@ -1,4 +1,5 @@
 import { pnlTextColor } from "@utils/pnlTextColor"
+import Link from "next/link"
 import React from "react"
 import PctChangeTag from "./PctChangeTag"
 import PnlArrow from "./PnlArrow"
@@ -10,27 +11,38 @@ export interface Leader {
     [tickerSymbol: string]: { ["portfolio%"]: number; ["mtd%"]: number }
   }[]
   "%pnl": number
+  inGroup?: boolean
 }
 
 const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => {
-  const topPerformer = Object.keys(leader.portfolioBreakdown).reduce((a, b) =>
-    leader.portfolioBreakdown[b]["mtd%"] > leader.portfolioBreakdown[a]["mtd%"] ? b : a
+  const { groupName, portfolioValue, portfolioBreakdown, inGroup } = leader
+
+  const topPerformer = Object.keys(portfolioBreakdown).reduce((a, b) =>
+    portfolioBreakdown[b]["mtd%"] > portfolioBreakdown[a]["mtd%"] ? b : a
   )
-  const topPerformerPct = leader.portfolioBreakdown[topPerformer]["mtd%"]
+  const topPerformerPct = portfolioBreakdown[topPerformer]["mtd%"]
   const pnlColor = pnlTextColor(topPerformerPct / 100)
 
   return (
     <article className="flex items-center justify-between p-6 uppercase bg-white shadow-md rounded-2xl">
       <div className="flex ">
-        <button className="flex flex-col items-center justify-center px-4 py-2 font-bold bg-gray-100 border border-gray-300 rounded sm:px-8 sm:py-4">
+        <button
+          className={`flex flex-col items-center justify-center px-4 py-2 font-bold
+         ${
+           inGroup ? "bg-brand-light" : "bg-gray-100"
+         } border border-gray-100 rounded sm:px-8 sm:py-4
+         `}
+        >
           <span role="img" aria-label="up arrow">
-            🔝
+            {inGroup ? "⭐️" : "🔝"}
           </span>
           <span>{rank + 1}</span>
         </button>
         <div className="flex flex-col justify-between ml-4">
           <div className="items-center justify-between text-tiny sm:text-sm space-y-1 sm:space-y-4">
-            <h1 className="font-bold">{leader.groupName}</h1>
+            <Link href={`groups/${groupName}`}>
+              <a className="font-bold">{groupName}</a>
+            </Link>
             <h2>
               Top Performer:
               <p
