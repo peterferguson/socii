@@ -20,24 +20,18 @@ import { UrlObject } from "url"
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
-  const [user, setUser] = useState(undefined)
+  const [user, setUser] = useState(null)
   const [username, setUsername] = useState(null)
   const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const handleUser = async (rawUser: User | null) => {
     console.log("handleUser called", new Date())
-    if (rawUser) {
-      const user = await formatUser(rawUser)
-      setUser(user)
-      setLoading(false)
-      console.log("handleUser Succeeded", new Date())
-      return user
-    } else {
-      setUser(false)
-      setLoading(false)
-      return false
-    }
+    const formattedUser = rawUser ? await formatUser(rawUser) : null
+    setUser(formattedUser)
+    setLoading(false)
+    formattedUser && console.log("handleUser Succeeded", new Date())
+    return formattedUser
   }
 
   const signinWithProvider = async (
