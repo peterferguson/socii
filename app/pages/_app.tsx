@@ -20,7 +20,6 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 
 const Footer = dynamic(() => import("@components/Footer"))
 const MainLayout = dynamic(() => import("@components/MainLayout"))
-const Navigation = dynamic(() => import("@components/Navigation"))
 
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
@@ -62,18 +61,16 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
       <main
-        className={`min-h-screen no-scrollbar
-          relative overflow-x-hidden overflow-y-scroll bg-gray-100 dark:bg-gray-800 
-          ${notMainLayout ? "" : "h-screen max-h-screen"}
-          rounded-2xl selection:bg-brand-lightTeal/80 selection:text-teal-900`}
+        className={`min-h-screen no-scrollbar relative overflow-x-hidden 
+          overflow-y-scroll bg-gray-100 dark:bg-gray-800 
+          ${notMainLayout && "h-screen max-h-screen"}
+          selection:bg-brand-lightTeal/80 selection:text-teal-900`}
       >
         <Head />
         <>
+          {/* TODO: Remove this notion when moved to monorepo */}
           {notMainLayout ? (
-            <>
-              <Navigation {...props} />
-              <Component {...props} />
-            </>
+            <Component {...props} />
           ) : (
             <MainLayout {...props}>
               {isBrowser && <Component {...props} />}

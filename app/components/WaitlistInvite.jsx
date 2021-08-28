@@ -1,7 +1,7 @@
 import { tw } from "@utils/tw"
 import { useState } from "react"
 
-function Invite({ invited, setInvited }) {
+function WaitlistInvite({ invited, setInvited }) {
   const [email, setEmail] = useState("")
   const [clicked, setClicked] = useState(false)
 
@@ -11,23 +11,21 @@ function Invite({ invited, setInvited }) {
   // 2
   // TODO: If the user has already been invited direct them to the enter page
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setClicked(true)
-    await fetch("api/notion/requestInvite", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    })
-    setInvited(true)
-  }
-
   return (
     <form
-      className="flex justify-center w-full max-w-lg px-2 mx-auto font-secondary group"
-      onSubmit={handleSubmit}
+      className="flex justify-center w-full max-w-lg font-secondary group"
+      onSubmit={async (e) => {
+        e.preventDefault()
+        setClicked(true)
+        await fetch("api/notion/requestInvite", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        })
+        setInvited(true)
+      }}
     >
       {invited ? (
         <h1 className="mt-8 text-2xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-snug">
@@ -61,4 +59,4 @@ function Invite({ invited, setInvited }) {
   )
 }
 
-export default Invite
+export default WaitlistInvite
