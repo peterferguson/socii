@@ -22,7 +22,7 @@ const showPromtion = () =>
         </p>
       </div>
     ),
-    { duration: 7500 }
+    { duration: 7500, position: "bottom-center" }
   )
 export const Hero = ({ invited, setInvited }) => {
   const { user } = useAuth()
@@ -30,6 +30,7 @@ export const Hero = ({ invited, setInvited }) => {
   const [showBlackOverlay, setShowBlackOverlay] = useState(true)
   const [, , hideBlackOverlay] = useTimeoutFn(() => setShowBlackOverlay(false), 1500)
   const [, , unhideOptions] = useTimeoutFn(() => setShowOptions(true), 3000)
+
   return (
     <div className="relative h-screen">
       <Navigation showOptions={showOptions} />
@@ -45,18 +46,17 @@ export const Hero = ({ invited, setInvited }) => {
             leave="transition transform ease-out delay-700 duration-1000"
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
+            // beforeLeave={() => setBlackText(true)}
             afterLeave={() => !user && showPromtion()}
             className="absolute z-50 w-screen bg-black inset-y-1/2 h-1/2"
           />
         </div>
       </Transition.Root>
-      <div className="h-screen grid grid-cols-2 bg-gradient-to-tl via-brand-light-est to-brand-light from-brand-shade-blue">
+      <div className="h-screen grid grid-cols-2 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
+      {/* <div className="h-screen bg-white grid grid-cols-2"> */}
         <div className="flex flex-col justify-center mx-auto">
-          <div
-            className={"z-40 px-4 pt-4 text-6xl thin:text-7xl sm:text-8xl font-primary"}
-          >
+          <div className="z-40 px-4 pt-4 text-6xl text-white thin:text-7xl sm:text-8xl font-primary mix-blend-difference">
             <Transition
-              className={!showBlackOverlay ? "text-black" : "mix-blend-difference text-white"}
               show={true}
               appear={true}
               as="h1"
@@ -70,12 +70,12 @@ export const Hero = ({ invited, setInvited }) => {
             >
               Invest Together.
             </Transition>
-            <div className="pt-8 pl-2 text-lg text-black sm:text-xl font-secondary">
-              Follow, chat, and invest with friends.
-            </div>
-            <div className="mx-auto my-12 sm:mt-16">
-              <WaitlistInvite invited={invited} setInvited={setInvited} />
-            </div>
+          </div>
+          <div className="pt-8 pl-4 text-lg text-black sm:text-xl font-secondary">
+            Follow, chat, and invest with friends.
+          </div>
+          <div className="p-8">
+            <WaitlistInvite invited={invited} setInvited={setInvited} />
           </div>
         </div>
       </div>

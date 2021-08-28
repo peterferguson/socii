@@ -65,6 +65,7 @@ module.exports = {
         secondary: ['"Work Sans"', "sans-serif"],
       },
       fontSize: {
+        tiniest: "0.5rem",
         tiny: "0.625rem",
       },
       keyframes: {
