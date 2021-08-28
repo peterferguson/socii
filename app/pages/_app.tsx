@@ -13,6 +13,8 @@ import React, { useEffect } from "react"
 import "react-file-utils/dist/index.css"
 import toast from "react-hot-toast"
 import { useMediaQuery } from "react-responsive"
+import { innerVh } from "inner-vh"
+import { deviceType } from "detect-it"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
@@ -30,12 +32,18 @@ export default function MyApp({ Component, pageProps }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const theme = "light" // TODO: Set up localStorage cache of this and allow for change in settings
 
-  const props = {
-    ...pageProps,
-    theme,
-  }
-
   useEffect(() => serviceWorkerInitialisation(), [])
+
+  // - adjust viewport units
+  if (typeof window !== "undefined") {
+    innerVh({
+      customPropertyName: "inner-vh",
+      // Update --inner-vh on desktop alike always.
+      ignoreCollapsibleUi: deviceType === "touchOnly",
+      // Seems to be 114px on iOS safari.
+      maximumCollapsibleUiHeight: 120,
+    })
+  }
 
   // - receive push notifications
   useEffect(() => {
@@ -57,6 +65,7 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
   const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
+  const props = { ...pageProps, theme }
 
   return (
     <AuthProvider>
