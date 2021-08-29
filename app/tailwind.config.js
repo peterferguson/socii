@@ -132,7 +132,7 @@ module.exports = {
         "fade-in-left": "fade-in-up 0.5s ease-out",
       },
       boxShadow: {
-        left: "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
+        left: "-0.5rem 0 0.5rem rgba(0, 0, 0, 0.3)",
       },
       scale: {
         "-1": "-1",
