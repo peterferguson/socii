@@ -1,6 +1,8 @@
 import { AssetCard } from "@components/AssetCard"
 import React from "react"
 
+// TODO: Add a isActive state and only navigate on click of the active card
+
 export default function CardSlider({ tickers }) {
   return (
     <section className="flex p-12 overflow-x-scroll no-scrollbar">
