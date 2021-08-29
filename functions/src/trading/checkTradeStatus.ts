@@ -24,8 +24,8 @@ export const checkTradeStatus = async (change , context) => {
   logger.log("traddedata", tradeData)
 
   const streamClient = new StreamChat(
-    functionConfig.stream.prod.api_key,
-    functionConfig.stream.prod.secret
+    functionConfig.stream.api_key,
+    functionConfig.stream.secret
   )
   const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 

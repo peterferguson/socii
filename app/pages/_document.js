@@ -34,8 +34,15 @@ class MyDocument extends Document {
           <meta name="application-name" content="socii" />
           <meta name="msapplication-TileColor" content="#010101" />
           {/* <!-- this sets the color of url bar  --> */}
-          <meta name="theme-color" content="#010101" />
-          {/* <meta name="theme-color" content="#010101" /> */}
+          <meta name="theme-color" content="#F9FAFB" />
+          {/* <!-- this sets the color of url bar on iOS --> */}
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+          ></meta>
+
+          {/* Fullscreen on iOS */}
+          <meta name="apple-mobile-web-app-capable" content="yes"></meta>
         </Head>
         <body>
           <Main />

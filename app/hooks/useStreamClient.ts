@@ -1,8 +1,12 @@
 import { useAuth } from "@hooks"
-import { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
 
-export const useStreamClient = () => {
+export interface StreamClientContext {
+  client: StreamChat
+}
+
+export const useStreamClient = (): StreamClientContext => {
   const { user, username } = useAuth()
   const streamClient = useRef<StreamChat | null>(null)
 
@@ -34,14 +38,14 @@ export const useStreamClient = () => {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + user.token,
               },
-              body: JSON.stringify({
-                userId: username,
-              }),
+              body: JSON.stringify({ userId: username }),
             })
             return (await response.json())?.token
           }
         )
-        console.log(`Connected user ${streamClient.current?.userID} to Stream!`)
+        console.log(`Connected user ${streamClient.current?.userID} to Stream`)
+        // streamClient.current.user.
+        // console.log(`Adding user ${streamClient.current?.userID} to sociians`)
       }
     }
 

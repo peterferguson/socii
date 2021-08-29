@@ -33,6 +33,8 @@ export const getTickersStaticProps = async ({
   timeseriesLimit = 30,
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
+  console.log(process.env.IEX_TOKEN)
+
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
   console.log(`Loading ${tickerDocs.size} tickers`)
 
@@ -40,27 +42,41 @@ export const getTickersStaticProps = async ({
     props: {
       tickers: await Promise.all(
         tickerDocs.docs.map(async (tickerDoc) => {
+          let ticker, timeseries: OHLCTimeseries  , dataQuery, price: Price
           try {
-            const { ticker, timeseries, dataQuery } = await getTickerProps(
+            const tickerProps = await getTickerProps(
               tickerDoc,
               timeseriesLimit,
               subQueryField
             )
-
-            // TODO: Create a wrapper arround the price data to store it in firestore
-            const price: Price = await iexClient.quote(ticker.tickerSymbol, {
-              filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
-            })
-
-            return {
-              ticker: JSON.parse(JSON.stringify(ticker)) || {}, // - serialize nested dates
-              timeseries: (timeseries || []) as OHLCTimeseries,
-              dataQuery: dataQuery || {},
-              price: (price || {}) as Price,
-            }
+            ticker = tickerProps.ticker
+            timeseries = tickerProps.timeseries
+            dataQuery = tickerProps.dataQuery
           } catch (e) {
             console.error(e)
-            return {} as TickerPropsData
+          }
+
+          // TODO: Create a wrapper arround the price data to store it in firestore
+          // !
+          // !
+          // !
+          // TODO: Get the price through an API call no need for library here
+          // !
+          // !
+          // !
+          try {
+            price = await iexClient.quote(ticker.tickerSymbol, {
+              filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
+            })
+          } catch (error) {
+            console.log(error)
+          }
+
+          return {
+            ticker: JSON.parse(JSON.stringify(ticker)) || {}, // - serialize nested dates
+            timeseries: (timeseries || []) as OHLCTimeseries,
+            dataQuery: dataQuery || {},
+            price: (price || {}) as Price,
           }
         })
       ),

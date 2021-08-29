@@ -1,6 +1,8 @@
-import { buy, sell } from "./mml/trades"
+import { buy, sell } from "./trades"
 import { StreamChat } from "stream-chat"
 import { logger } from "firebase-functions"
+import { functionConfig } from "../index"
+import { handlePush } from "./pushNotifications"
 
 // * Function to route the commands to the correct function based on the type query param
 export const handleCommand = async (req, res) => {
@@ -11,22 +13,22 @@ export const handleCommand = async (req, res) => {
   logger.log(`Body: ${JSON.stringify(body)}`)
 
   // * show a nice error if you send a GET request
-  if (method !== "POST") {
-    res.status(405).end(`Method ${method} Not Allowed`)
-  }
+  method !== "POST" && res.status(405).end(`Method ${method} Not Allowed`)
 
   // TODO: Update firebase keys for new stream environments
   const streamClient = new StreamChat(
-    process.env.STREAM_API_KEY,
-    process.env.STREAM_API_SECRET
+    functionConfig.stream.api_key,
+    functionConfig.stream.secret
   )
 
   logger.log(`Validating request came from Stream`)
-  const valid = streamClient.verifyWebhook(
-    JSON.stringify(body),
-    req.headers["x-signature"]
-  )
+  logger.log("api-key", functionConfig.stream.api_key)
+  const valid = functionConfig.stream.api_key === req.headers["x-api-key"]
   if (!valid) {
+    logger.log("Request came from invalid source")
+    logger.log("x-api-key", req.headers["x-api-key"])
+    logger.log("x-signature", req.headers["x-signature"])
+
     // ! Unauthorized
     res.status(401).json({
       body: { error: "Invalid request, signature is invalid" },
@@ -38,14 +40,33 @@ export const handleCommand = async (req, res) => {
 
   switch (type) {
     case "buy":
-      const buy_response = await buy(streamClient, payload)
-      res.status(200).end(`${type} command executed: ${JSON.stringify(buy_response)}`)
-      break
+      const buyResponse = await buy(streamClient, payload)
+      return res
+        .status(200)
+        .end(`${type} command executed: ${JSON.stringify(buyResponse)}`)
+
     case "sell":
-      const sell_response = await sell(streamClient, payload)
-      res.status(200).end(`${type} command executed: ${JSON.stringify(sell_response)}`)
-      break
+      const sellResponse = await sell(streamClient, payload)
+      return res
+        .status(200)
+        .end(`${type} command executed: ${JSON.stringify(sellResponse)}`)
+
     default:
-      res.status(400).end(`Please send a correct command type`)
+      const messageType = body?.type
+      if (!messageType) return res.status(400).end(`Please send a correct command type`)
+
+      // * Handle push notifications from stream
+      // TODO: Replace with stream notification handler when we move to react native!
+      switch (messageType) {
+        case "message.new":
+          const newResponse = await handlePush(payload)
+          return res
+            .status(200)
+            .end(`${messageType} pushed with response ${newResponse}`)
+        default:
+          return res
+            .status(200)
+            .end(`${messageType} does not receive a push notification`)
+      }
   }
 }

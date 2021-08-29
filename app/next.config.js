@@ -22,8 +22,9 @@ module.exports = withPWA(
       purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds
       pwa: {
         dest: "public",
-        disable: process.env.NODE_ENV === "development",
-        register: true,
+        // disable: process.env.NODE_ENV === "development",
+        register: false,
+        skipWaiting: false,
         sw: "sw.js",
         buildExcludes: [/chunks\/images\/.*$/, /static\/image\/node_modules\/.*$/],
       },

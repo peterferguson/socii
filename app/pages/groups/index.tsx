@@ -1,12 +1,15 @@
 import React from "react"
 import LeaderBoardCard from "@components/LeaderBoardCard"
 import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
+import { useAuth } from "@hooks"
 
-export default function GroupsHome({ leaders }) {
+const GroupsHome = ({ leaders }) => {
+  const { userGroups } = useAuth()
+
   return (
     <main className="w-full h-screen">
       <section className="flex flex-col justify-between ">
-        <div className="max-w-4xl mx-4 mt-12 sm:mt-20 lg:mx-auto  space-y-4">
+        <div className="max-w-4xl mx-4 mt-12 sm:mt-20 md:mx-auto space-y-4">
           <h1 className="mb-8 text-3xl font-bold tracking-wide uppercase font-primary">
             Leaderboard
           </h1>
@@ -22,7 +25,11 @@ export default function GroupsHome({ leaders }) {
             <LeaderBoardCard
               key={`leader-${rank}-${leader.groupName}`}
               rank={rank}
-              leader={leader}
+              leader={
+                userGroups.includes(leader.groupName)
+                  ? { inGroup: true, ...leader }
+                  : leader
+              }
             />
           ))}
           <p className="mt-8 font-primary text-tiny">
@@ -34,5 +41,6 @@ export default function GroupsHome({ leaders }) {
     </main>
   )
 }
+export default GroupsHome
 
 export const getStaticProps = async () => await getLeaderBoardProps()

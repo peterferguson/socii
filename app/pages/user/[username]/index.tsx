@@ -1,11 +1,6 @@
 // TODOs (Page Features):
-// - Display the pie charts of each of the groups the user is part of but solely for their share
-// // - Create pie charts & skeleton loaders for those charts
-// - Create conversion function for the group holdings data into pie format
-// - Create conversion function for the group trade data into long form cards
 // ? - Create conversion function for the group trade data into an activity feed
 // - Get doc in one go - remove for each - see IMPROVE
-// -
 
 import AuthCheck from "@components/AuthCheck"
 import GroupColumn from "@components/GroupColumnCard"
@@ -24,6 +19,7 @@ const PortfolioSkeletons = () => (
 
 function GroupPortfolios({ pagename }): JSX.Element {
   const { userGroups } = useAuth()
+
   return (
     <div className="flex flex-col items-center justify-center w-full my-14 sm:my-0">
       <div className="mx-auto mb-4 text-3xl font-primary text-brand-shade-darkest">

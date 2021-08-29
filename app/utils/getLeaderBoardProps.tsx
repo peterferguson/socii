@@ -8,8 +8,7 @@ export const getLeaderBoardProps = async () => {
   // * The timescale will be since the  beginning of the month.
   // * On the first of the month, the leaderboard is reset.
   const firestore = require("@lib/firebase/server/firebase-admin").firestore
-  const functionUrl =
-    "https://europe-west2-sociiinvest.cloudfunctions.net/get_historical_prices"
+  const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
 
   const query = firestore
     .collectionGroup("holdings")
@@ -17,8 +16,10 @@ export const getLeaderBoardProps = async () => {
 
   const snapshot = await query.get()
 
+  console.log(`${snapshot.size} holdings found`)
+
   const groupHoldings: {
-    [groupName: string]: { holdings: [{ tickerSymbol: string; qty: number }] }
+    [groupName: string]: { holdings: [{ symbol: string; qty: number }] }
   } = snapshot.docs
     .map((doc) => ({
       groupName: doc.ref.path.split("/")[1],
@@ -31,10 +32,12 @@ export const getLeaderBoardProps = async () => {
       return initial
     }, {})
 
+  console.log(`${Object.keys(groupHoldings).length} groups found`)
+
   const tickers: string[] = [
     ...new Set(
       Object.values(groupHoldings)
-        .map(({ holdings }) => [...holdings.map((holding) => holding.tickerSymbol)])
+        .map(({ holdings }) => [...holdings.map((holding) => holding.symbol)])
         .flat(1)
     ),
   ]
@@ -46,16 +49,18 @@ export const getLeaderBoardProps = async () => {
   const todayString = toDateStr(today.toISOString().slice(0, 10))
   const firstDayOfMonthString = toDateStr(today.toISOString().slice(0, 8) + "01")
 
-  const priceData = getYahooTimeseries({
+  const priceData = await getYahooTimeseries({
     tickers,
     startDateStr: firstDayOfMonthString,
     endDateStr: todayString,
   })
 
+  console.log(`${priceData.length} prices found`)
+
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day
   // ! so if the market is closed the currentPrice will not the last close price but the prev day close price
-  const tickerPriceChanges: { [tickerSymbol: string]: number } = tickers.reduce(
+  const tickerPriceChanges: { [symbol: string]: number } = tickers.reduce(
     (data, ticker) => {
       const prices = priceData?.[ticker]
 
@@ -67,31 +72,30 @@ export const getLeaderBoardProps = async () => {
     {}
   )
 
+  console.log("stock price changes: ", tickerPriceChanges)
+
   // TODO: Get best performer from this data for each group!
   // - get the holding breakdown for each group
   const portfolioSplits: {
     [groupName: string]: {
       portfolioValue: number
       portfolioBreakdown: {
-        [tickerSymbol: string]: { ["portfolio%"]: number; ["mtd%"]: number }
+        [symbol: string]: { ["portfolio%"]: number; ["mtd%"]: number }
       }[]
       "%pnl": number
     }
   } = Object.entries(groupHoldings).reduce((initial, [groupName, { holdings }]) => {
     const portfolioValue = holdings
-      ?.map(
-        ({ tickerSymbol, qty }) => priceData?.[tickerSymbol].slice().pop().close * qty
-      )
+      ?.map(({ symbol, qty }) => priceData?.[symbol].slice().pop().close * qty)
       .reduce((a, b) => a + b, 0)
 
     const portfolioBreakdown = holdings.reduce(
-      (initial, { tickerSymbol, qty }) =>
+      (initial, { symbol, qty }) =>
         Object.assign(initial, {
-          [tickerSymbol]: {
+          [symbol]: {
             "portfolio%":
-              (100 * (priceData?.[tickerSymbol].slice().pop().close * qty)) /
-              portfolioValue,
-            "mtd%": tickerPriceChanges?.[tickerSymbol],
+              (100 * (priceData?.[symbol].slice().pop().close * qty)) / portfolioValue,
+            "mtd%": tickerPriceChanges?.[symbol],
           },
         }),
       {}

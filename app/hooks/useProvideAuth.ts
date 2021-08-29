@@ -1,5 +1,6 @@
 import { auth } from "@lib/firebase/client/auth"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
+import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import {
@@ -19,46 +20,44 @@ import { UrlObject } from "url"
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
-  const [user, setUser] = useState(undefined)
+  const [user, setUser] = useState(null)
   const [username, setUsername] = useState(null)
   const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const handleUser = async (rawUser: User | null) => {
     console.log("handleUser called", new Date())
-    if (rawUser) {
-      const user = await formatUser(rawUser)
-      // ! This user refresh causes intermitent permissions errors
-      // const { token, expirationTime, ...userWithoutToken } = user
-
-      // createUser(user.uid, userWithoutToken)
-      setUser(user)
-      setLoading(false)
-      console.log("handleUser Succeeded", new Date())
-      return user
-    } else {
-      setUser(false)
-      setLoading(false)
-      return false
-    }
+    const formattedUser = rawUser ? await formatUser(rawUser) : null
+    setUser(formattedUser)
+    setLoading(false)
+    formattedUser && console.log("handleUser Succeeded", new Date())
+    return formattedUser
   }
-
-  // const signinWithEmail = async (email: string, password: string, redirect: string | UrlObject) => {
-  //   setLoading(true)
-  //   const response = await signInWithEmailAndPassword(auth, email, password)
-  //   handleUser(response.user)
-  //   if (redirect) {
-  //     Router.push(redirect)
-  //   }
-  // }
 
   const signinWithProvider = async (
     provider: AuthProvider,
     redirect: string | UrlObject = ""
   ) => {
     setLoading(true)
-    const { user: rawUser } = await signInWithPopup(auth, provider)
-    handleUser(rawUser)
+    try {
+      const { user: rawUser } = await signInWithPopup(auth, provider)
+      handleUser(rawUser)
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log("signinWithProvider error", errorCode, errorMessage)
+
+      // The email of the user's account used.
+      const email = error.email
+      // The AuthCredential type that was used.
+      const credential =
+        provider.providerId === "google.com"
+          ? GoogleAuthProvider.credentialFromError(error)
+          : FacebookAuthProvider.credentialFromError(error)
+      email && storeFailedLogin(email, credential)
+
+      toast.error(errorMessage)
+    }
 
     redirect !== "" && Router.push(redirect)
   }
@@ -85,34 +84,15 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    if (user?.uid) {
+    if (user?.uid)
       unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
-    }
     return () => unsubscribe?.()
   }, [user?.uid])
-
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     if (user) {
-  //       const token = await firebase
-  //         .auth()
-  //         .currentUser.getIdToken(/* forceRefresh */ true);
-  //       setUser(user);
-  //       console.log('refreshed token');
-  //     }
-  //   }, 30 * 60 * 1000 /*every 30min, assuming token expires every 1hr*/);
-  //   return () => clearInterval(interval);
-  // }, [user]); // needs to depend on user to have closure on a valid user object in callback fun
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
     const currentUser = auth.currentUser
-    if (currentUser) {
-      const token = await currentUser.getIdToken(false)
-      return `${token}`
-    } else {
-      return ""
-    }
+    return currentUser ? `${await currentUser.getIdToken(false)}` : ""
   }
 
   return {

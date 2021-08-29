@@ -53,7 +53,7 @@ export const getYahooTimeseries = async ({
   interval,
 }: getYahooTimeseriesProps): Promise<YahooTimeseries> => {
   const functionUrl =
-    "https://europe-west2-sociiinvest.cloudfunctions.net/get_historical_prices"
+    `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
 
   const yahooData = await (
     await fetch(functionUrl, {

@@ -1,3 +1,4 @@
+import { tickerToISIN } from "@lib/firebase/client/db"
 import { logoUrl } from "@utils/logoUrl"
 import dynamic from "next/dynamic"
 import Image from "next/image"
@@ -50,9 +51,7 @@ export const stockTableMeta = {
     alpacaAttr: "symbol",
     Component: ({ position, attr }) => {
       const [logoURL, setLogoURL] = useState(null)
-      const url = logoUrl(position[attr])
-      if (typeof url === "string") setLogoURL(url)
-      else url.then((url) => setLogoURL(url))
+      tickerToISIN(position[attr]).then((isin) => setLogoURL(logoUrl(isin)))
       return (
         <th className="flex items-center p-4 px-6 text-xs text-left align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
           {logoURL ? (

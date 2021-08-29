@@ -7,16 +7,16 @@ set -e
 delete_previous_version_if_exists() {
   # We either delete local folder and bucket object or just a bucket
   rm -r ./socii-firestore-backup &&
-  gsutil -m rm -r gs://sociiinvest.appspot.com/socii-firestore-backup ||
-  gsutil -m rm -r gs://sociiinvest.appspot.com/socii-firestore-backup
+  gsutil -m rm -r gs://socii-development.appspot.com/socii-firestore-backup ||
+  gsutil -m rm -r gs://socii-development.appspot.com/socii-firestore-backup
 }
 
 export_production_firebase_to_emulator() {
   # Export production firebase to emulator bucket
-  gcloud firestore export gs://sociiinvest.appspot.com/socii-firestore-backup
+  gcloud firestore export gs://socii-development.appspot.com/socii-firestore-backup
   
   # Copy to local folder
-  gsutil -m cp -r gs://sociiinvest.appspot.com/socii-firestore-backup .
+  gsutil -m cp -r gs://socii-development.appspot.com/socii-firestore-backup .
 }
 
 # Run bash functions, either delete previous bucket and local folder if exists 

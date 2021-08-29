@@ -38,6 +38,20 @@ export default function Head(props) {
         rel="stylesheet"
         key="react-vis"
       />
+
+      {/* No zoom and flow into notch */}
+      <meta
+        name="viewport"
+        content="initial-scale=1, viewport-fit=cover, width=device-width, maximum-scale=1, user-scalable=no"
+      />
+      {process.env.NODE_ENV === "production" && (
+        <script
+          async
+          defer
+          data-website-id="c59a2266-173b-482e-95cd-e15432f036a5"
+          src="https://socii.up.railway.app/umami.js"
+        />
+      )}
     </NextHead>
   )
 }

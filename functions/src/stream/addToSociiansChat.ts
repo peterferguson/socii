@@ -21,6 +21,8 @@ export const addToSociiansChat = async (change, context) => {
   if (!change.before.exists) {
     // - New user Created
     try {
+      // ! Ensure user already exists in stream
+      await streamClient.upsertUser({id: username})
       await channel.addMembers([username], {
         user_id: "socii",
         text: `Welcome the latest sociian, ${username} 🥳`,

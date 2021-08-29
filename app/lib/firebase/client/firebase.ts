@@ -5,12 +5,11 @@ export const londonRegion = "europe-west2"
 export function initialize() {
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_KEY,
-    authDomain: "sociiinvest.firebaseapp.com",
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_DOMAIN,
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: "sociiinvest.appspot.com",
-    messagingSenderId: "584929113403",
-    appId: "1:584929113403:web:73fa9920cb14c1cc19b31e",
-    measurementId: "G-F7JH023N5Q",
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   }
 
   return initializeApp(firebaseConfig)

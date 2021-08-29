@@ -23,23 +23,25 @@ export const tradeConfirmation = async (change, context) => {
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  const { latestPrice, isUSMarketOpen } = await iexClient.quote(tradeData.symbol, {
-    filter: "latestPrice,isUSMarketOpen",
-  })
+  const { latestPrice, isUSMarketOpen, primaryExchange } = await iexClient.quote(
+    tradeData.symbol,
+    { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
+  )
 
-  logger.log("latest", latestPrice, "and stockprice: ", tradeData.stockPrice)
+  logger.log(
+    "Latest IEX price",
+    latestPrice,
+    "and execution price: ",
+    tradeData.stockPrice
+  )
 
-  // - do nothing if market is closed
-  if (!isUSMarketOpen) {
-    // 2. send a message with the finalised price
-    const channel = streamClient.channel("group", groupName)
-    await channel.sendMessage(await marketClosedMessage(tradeData.assetRef))
-    return
-  }
-
-  // TODO: Fix price checking
-  // ! Now asset price & currency is available along with cost & execution currency this should be simple
-  // ! As stated below I think this should be a client-side check though
+  // - send warning of differing execution price if market is closed
+  !isUSMarketOpen &&
+    (await streamClient
+      .channel("group", groupName)
+      .sendMessage(
+        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol)
+      ))
 
   if (tradeData.notional > cashBalance && !isSell(tradeData.type)) {
     // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
@@ -55,24 +57,22 @@ export const tradeConfirmation = async (change, context) => {
     // TODO: Create a group settings page which lists the thresholds that can be tinkered
   }
 
+  /* 
+   ! Add user setting to allow for an acceptable price variation between latestPrice and 
+   ! agreed price (tradeData.price).
+   *
+   *
+   * Possible failure mechanisms/things to think aboout if this fails
+   1. If this fails we may need to send a new message warning the group of the new price.
+   ?. This may be too slow for a highly beta stock. Imagine GME or any squeeze
+   2. Allowing a user an option to set a new threshold on each purchase if it is high beta
+   */
   if (
     (latestPrice - tradeData.stockPrice) / tradeData.stockPrice > 0.025 &&
     !isSell(tradeData.type)
-  ) {
+  )
     logger.log(`The price has risen more than 2.5% since the price was agreed`)
-    /* 
-     ! Add user setting to allow for an acceptable price variation between latestPrice and 
-     ! agreed price (tradeData.price).
-     *
-     *
-     * Possible failure mechanisms/things to think aboout if this fails
-     1. If this fails we may need to send a new message warning the group of the new price.
-     ?. This may be too slow for a highly beta stock. Imagine GME or any squeeze
-     2. Allowing a user an option to set a new threshold on each purchase if it is high beta
-     */
-  } else {
-    tradeData.stockPrice = latestPrice
-  }
+  else tradeData.stockPrice = latestPrice
 
   if (tradeData.agreesToTrade.length === investorCount) {
     // ! Execute Trade
@@ -162,13 +162,9 @@ export const tradeConfirmation = async (change, context) => {
  * Helper Functions
  */
 
-const marketClosedMessage = async (assetRef) => {
-  const assetRefDoc = firestore.doc(assetRef)
-  const assetData = (await assetRefDoc.get()).data()
-  return {
-    user_id: "socii",
-    text: singleLineTemplateString`
-    Sorry the ${assetData.exchange} is not currently open!
+const marketClosedMessage = async (exchange, latestPrice, symbol) => ({
+  user_id: "socii",
+  text: singleLineTemplateString`
+    The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
     `,
-  }
-}
+})

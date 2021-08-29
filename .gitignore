@@ -19,6 +19,7 @@ firebase-debug.*.log*
 
 # Google Service Account Json
 serviceAccountKey.json
+socii-development-serviceAccountKey.json
 
 # OS Specific
 *.DS_Store
@@ -110,6 +111,8 @@ yarn-error.log*
 
 # GCP Functions
 .runtimeconfig.json
+.runtimeconfig.dev.json
+.runtimeconfig.prod.json
 
 # env in next.config
 next.config.js
@@ -135,3 +138,6 @@ __pycache__
 .pytest_cache
 .mypy_cache
 *.egg-info/
+
+# firestore backups
+**/socii-firestore-backup/

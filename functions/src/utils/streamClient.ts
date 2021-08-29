@@ -5,6 +5,6 @@ export const functionConfig = functions.config()
 export const StreamChat = stream.StreamChat
 
 export const streamClient = new StreamChat(
-  functionConfig.stream.prod.api_key,
-  functionConfig.stream.prod.secret
+  functionConfig.stream.api_key,
+  functionConfig.stream.secret
 )

@@ -1,8 +1,9 @@
 import { logger } from "firebase-functions"
-import { firestore } from "./index.js"
+import { firestore, messaging } from "./index.js"
 import { increment, serverTimestamp } from "./lib/firestore/index.js"
 import { streamClient } from "./utils/streamClient"
 import { config, FundingApi, TransferData } from "./alpaca/broker/client/ts/index"
+import { getInvestorFcmTokens } from "./lib/firestore/db/getInvestorFcmTokens.js"
 
 /*
  * Increment the investorCount value on a group when a new investor is added to the investors collection
@@ -39,6 +40,47 @@ export const incrementInvestors = async (change, context) => {
 }
 
 /*
+ * When a new investor is added to the investors collection
+ * subscribe them to the group stream chat push notification topic
+ * Usage as follows:
+ *
+ * functions.firestore.document('groups/{groupName}/investors/{investorUsername}')
+ * .onWrite(subscribeToGroupTopic)
+ *
+ * @param change
+ * @param context
+ * @returns
+ */
+export const subscribeToGroupTopic = async (change, context) => {
+  const { groupName } = context.params
+
+  const fcmTokens = await getInvestorFcmTokens(groupName)
+
+  if (!change.after.exists) {
+    // Deleting investors: make sure they are unsubscribed from the group topic
+    messaging
+      .unsubscribeFromTopic(fcmTokens, `group-${groupName}`)
+      .then((response) => {
+        console.log("Successfully unsubscribed from topic:", response)
+      })
+      .catch((error) => {
+        console.log("Error unsubscribing from topic:", error)
+      })
+  } else {
+    // Adding investors: make sure all investors are subscribed to the group topic
+    messaging
+      .subscribeToTopic(fcmTokens, `group-${groupName}`)
+      .then((response) => {
+        console.log("Successfully subscribed from topic:", response)
+      })
+      .catch((error) => {
+        console.log("Error subscribing from topic:", error)
+      })
+  }
+  return
+}
+
+/*
  * On a new investor joining a group, deposit the initial amount to the users balance
  * Usage as follows:
  *
@@ -69,15 +111,15 @@ export const initialDeposit = async (snapshot, context) => {
 
   const totalAmount = initialDeposit + subscriptionAmount
 
-  const { alpacaID, alpacaACH } = (await userRef.get()).data()
+  const { alpacaAccountId, alpacaACH } = (await userRef.get()).data()
 
   if (totalAmount === 0) return
 
   // - Execute the funding transaction
-  if (totalAmount > 0 && alpacaACH && alpacaID) {
+  if (totalAmount > 0 && alpacaACH && alpacaAccountId) {
     try {
       const postTransfer = await fundClient.postTransfers(
-        alpacaID,
+        alpacaAccountId,
         TransferData.from({
           amount: totalAmount,
           transferType: "ach",
@@ -103,7 +145,7 @@ export const initialDeposit = async (snapshot, context) => {
       logger.error(error)
     }
   } else {
-    logger.error(`User with id ${uid} was missing alpacaID or alpacaACH`)
+    logger.error(`User with id ${uid} was missing alpacaAccountId or alpacaACH`)
   }
 
   return

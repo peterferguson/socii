@@ -14,7 +14,7 @@ def get_ticker(ticker_symbol: str) -> yq.Ticker:
 
     for symbol in tickers.split(" "):
         assert (
-            1 < len(symbol) <= 6
+            1 <= len(symbol) <= 6
         ), f"The provided `ticker_symbol` ({ticker_symbol}) must be between 1 & 5 Characters long"
 
     # TODO: Add yahoo ticker conversion i.e. London stocks should have .L suffix

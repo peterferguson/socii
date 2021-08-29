@@ -54,3 +54,35 @@ export function PieCardSkeleton({ scaling, radius }) {
     </div>
   )
 }
+
+export function NoHoldingsPieCardSkeleton({ groupName, scaling, radius }) {
+  const text = {
+    main: (
+      <div className="w-16 h-4 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />
+    ),
+    sub: <div className="w-12 h-4 mx-auto mb-4 bg-gray-200 rounded-sm animate-pulse" />,
+  }
+  return (
+    <div className="m-0 rounded-none shadow-md bg-gray-50 sm:rounded-xl sm:m-4 sm:mb-4">
+      <Link href={`/groups/${groupName}`}>
+        <a>
+          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
+            {groupName}
+            <div className="text-xl">(No Holdings Yet!)</div>
+          </div>
+        </a>
+      </Link>
+      <DonutChart
+        className="z-0 animate-pulse"
+        data={[
+          { theta: 1, color: "#E5E7EB" },
+          { theta: 2, color: "#E5E7EB" },
+        ]}
+        scaling={scaling}
+        radius={radius}
+        skeleton={true}
+        text={text}
+      />
+    </div>
+  )
+}

@@ -38,8 +38,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   })
 
   // TODO: Add the function to store the dat
-  const firestoreStoreTimeseriesUrl =
-    "https://europe-west2-sociiinvest.cloudfunctions.net/storeTimeseries"
+  const firestoreStoreTimeseriesUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/storeTimeseries`
 
   await fetcher(firestoreStoreTimeseriesUrl, {
     method: "POST",
