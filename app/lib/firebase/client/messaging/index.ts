@@ -22,7 +22,7 @@ const initialiseMessaging = async () => {
   return messaging
 }
 
-export default initialiseMessaging()
+export const messaging = initialiseMessaging()
 
 export const getFCMToken = async (uid: string) => {
   "serviceWorker" in navigator &&
@@ -53,6 +53,3 @@ export const getFCMToken = async (uid: string) => {
     return null
   }
 }
-
-export const onMessageListener = () =>
-  new Promise((resolve) => onMessage(messaging, (payload) => resolve(payload)))
