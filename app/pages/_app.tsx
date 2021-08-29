@@ -2,7 +2,7 @@ import Head from "@components/Head"
 import { AuthProvider } from "@contexts/AuthProvider"
 import { onMessage } from "@firebase/messaging"
 import { toastProps } from "@lib/constants"
-import { messaging } from "@lib/firebase/client/messaging"
+import messaging from "@lib/firebase/client/messaging"
 import "@styles/Chat.css"
 import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
@@ -34,16 +34,20 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => serviceWorkerInitialisation(), [])
 
-  // - adjust viewport units
-  if (typeof window !== "undefined") {
-    innerVh({
-      customPropertyName: "inner-vh",
-      // Update --inner-vh on desktop alike always.
-      ignoreCollapsibleUi: deviceType === "touchOnly",
-      // Seems to be 114px on iOS safari.
-      maximumCollapsibleUiHeight: 120,
-    })
-  }
+  // - receive push notifications
+
+  useEffect(() => {
+    // - adjust viewport units
+    if (isBrowser) {
+      innerVh({
+        customPropertyName: "inner-vh",
+        // Update --inner-vh on desktop alike always.
+        ignoreCollapsibleUi: deviceType === "touchOnly",
+        // Seems to be 114px on iOS safari.
+        maximumCollapsibleUiHeight: 120,
+      })
+    }
+  }, [])
 
   // - receive push notifications
   useEffect(() => {
@@ -71,7 +75,7 @@ export default function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <main
         className={`min-h-screen no-scrollbar relative overflow-x-hidden 
-          overflow-y-scroll bg-gray-100 dark:bg-gray-800 
+          overflow-y-scroll bg-gra-100 dark:bg-gray-800 
           ${notMainLayout && "h-screen max-h-screen"}
           selection:bg-brand-lightTeal/80 selection:text-teal-900`}
       >

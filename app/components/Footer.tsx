@@ -75,7 +75,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
 const FooterSearchButton = ({ username, onClick, isActive }) => (
   <Link href={username && `/user/${username}/portfolio`}>
     <a
-      className={`block w-full py-2 font-primary text-tiny text-brand-dark text-center ${
+      className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
         isActive &&
         "border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
       } transition duration-300`}
