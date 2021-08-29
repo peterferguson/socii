@@ -2,7 +2,7 @@ import { isBrowser } from "@utils/isBrowser"
 import { registerValidSW } from "@utils/registerValidSW"
 import { updateServiceWorker } from "@utils/updateServiceWorker"
 import { getApp } from "firebase/app"
-import { getMessaging, getToken, onMessage } from "firebase/messaging"
+import { isSupported, getMessaging, getToken, onMessage } from "firebase/messaging"
 import { getFcmTokenFromFirebase } from "../db/getFcmTokenFromFirebase"
 import { storeFcmToken } from "../db/storeFcmToken"
 import { initialize } from "../firebase"
@@ -14,7 +14,15 @@ try {
   app = initialize()
 }
 
-export const messaging = isBrowser && getMessaging(app)
+const initialiseMessaging = async () => {
+  let messaging
+  if (isBrowser && (await isSupported())) {
+    messaging = getMessaging(app)
+  }
+  return messaging
+}
+
+export default initialiseMessaging()
 
 export const getFCMToken = async (uid: string) => {
   "serviceWorker" in navigator &&
