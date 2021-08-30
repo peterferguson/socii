@@ -2,7 +2,7 @@ import Head from "@components/Head"
 import { AuthProvider } from "@contexts/AuthProvider"
 import { onMessage } from "@firebase/messaging"
 import { toastProps } from "@lib/constants"
-import { messaging } from "@lib/firebase/client/messaging"
+import { messaging as messagingPromise } from "@lib/firebase/client/messaging"
 import "@styles/Chat.css"
 import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
@@ -70,15 +70,18 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     let unsub
     if (isBrowser) {
-      unsub = onMessage(messaging, (payload) => {
-        console.log(payload)
+      messagingPromise.then(
+        (messaging) =>
+          (unsub = onMessage(messaging, (payload) => {
+            console.log(payload)
 
-        const {
-          notification: { title, body },
-        } = payload
+            const {
+              notification: { title, body },
+            } = payload
 
-        toast(`${title}, ${body}`)
-      })
+            toast(`${title}, ${body}`)
+          }))
+      )
     }
     return () => unsub()
   }, [])
