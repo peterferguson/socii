@@ -46,7 +46,7 @@ export const tradeConfirmation = async (change, context) => {
         await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol, latestAgreesId)
       ))
 
-  if (tradeData.notional > cashBalance && !isSell(tradeData.type)) {
+  if (tradeData.notional >= cashBalance && !isSell(tradeData.type)) {
     // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
     // - A small variation should be somewhat enforced on the client-side.
     // - Assuming no massive jump in stock price.
@@ -142,6 +142,9 @@ export const tradeConfirmation = async (change, context) => {
 
     switch (executionStatus) {
       case "success":
+        // 1. Deduct balance immediately
+        if (tradeData.side == "buy")
+          groupRef.update({ cashBalance: cashBalance - tradeData.notional })        
         logger.log("order successful. Id:", postOrder?.id)
         return
 
