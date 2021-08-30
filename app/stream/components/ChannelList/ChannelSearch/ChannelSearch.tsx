@@ -176,9 +176,8 @@ const UnMemoizedChannelSearch = <
     if (!text || searching) return
     setSearching(true)
 
-    try {
+    try { 
       const userResponse = await client.queryUsers(
-        // @ts-expect-error
         {
           $or: [{ id: { $autocomplete: text } }, { name: { $autocomplete: text } }],
           id: { $ne: client.userID },
@@ -189,8 +188,7 @@ const UnMemoizedChannelSearch = <
       )
 
       if (searchForChannels) {
-        const channelResponse = client.queryChannels(
-          // @ts-expect-error
+        const channelResponse = client.queryChannels(          
           {
             name: { $autocomplete: text },
             ...searchQueryParams?.channelFilters?.filters,
