@@ -42,6 +42,7 @@
   max-width: 40px;
   border-radius: 20px;
   overflow: hidden;
+  @apply p-2;
 }
 
 .messaging__channel-header__avatars.two div:first-child {

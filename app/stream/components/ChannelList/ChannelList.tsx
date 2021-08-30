@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic"
 import React, { useRef } from "react"
-import { MessagingChannelListDynamic, MessagingChannelPreviewDynamic } from "."
 import { useClickAway } from "react-use"
-import { send } from "xstate/lib/actionTypes"
+import { MessagingChannelListDynamic, MessagingChannelPreviewDynamic } from ".."
+import { ChannelSearch } from "./ChannelSearch/ChannelSearch"
 
 const StreamChannelList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
@@ -33,6 +33,7 @@ const ChannelList = ({
         sort={sort}
         options={options}
         showChannelSearch={true}
+        ChannelSearch={ChannelSearch}
         customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
         List={(props) => (
           <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />

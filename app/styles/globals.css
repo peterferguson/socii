@@ -6,17 +6,20 @@
 
 :root {
   --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
 }
 
 body {
-  min-height: calc(100% + env(safe-area-inset-top));
+  min-height: calc(100% - env(safe-area-inset-top));
 
   /* Adjusting for status bars */
   padding: 20 0 0 2; /* fallback for older browsers */
   padding: constant(safe-area-inset-top) constant(safe-area-inset-right)
     constant(safe-area-inset-bottom) constant(safe-area-inset-left);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: var(--sat) var(--sar) var(--sab) var(--sal);
 
   /* Disable iOS Callouts & highlighting */
   -webkit-tap-highlight-color: transparent;

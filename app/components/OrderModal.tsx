@@ -101,6 +101,7 @@ const OrderModal = ({ ticker, state, send }) => {
                   )}
                   <input
                     type="number"
+                    inputMode="decimal" 
                     id="price"
                     name="price"
                     className={`w-full pointer-cursor text-center border-none h-72 ${inputTextSize} placeholder-brand text-brand font-primary leading-6 ${
