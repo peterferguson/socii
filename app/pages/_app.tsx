@@ -9,12 +9,13 @@ import { isBrowser } from "@utils/isBrowser"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import "react-file-utils/dist/index.css"
 import toast from "react-hot-toast"
 import { useMediaQuery } from "react-responsive"
 import { innerVh } from "inner-vh"
 import { deviceType } from "detect-it"
+import raiseNotOptimisedForLandscapeToast from "@components/raiseNotOptimisedForLandscapeToast"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
@@ -31,13 +32,14 @@ const MainLayout = dynamic(() => import("@components/MainLayout"))
 export default function MyApp({ Component, pageProps }) {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const theme = "light" // TODO: Set up localStorage cache of this and allow for change in settings
+  const [screenAspectRatio, setScreenAspectRatio] = useState(
+    isBrowser ? window.innerHeight / window.innerWidth : 1
+  )
 
   useEffect(() => serviceWorkerInitialisation(), [])
 
-  // - receive push notifications
-
+  // - adjust viewport units for mobiles with notches & mobile browsers
   useEffect(() => {
-    // - adjust viewport units
     if (isBrowser) {
       innerVh({
         customPropertyName: "inner-vh",
@@ -48,6 +50,21 @@ export default function MyApp({ Component, pageProps }) {
       })
     }
   }, [])
+
+  const updateAspectRatio = () =>
+    setScreenAspectRatio(window.innerHeight / window.innerWidth)
+
+  // - listen for orientation changes & warn mobile users about landscape orientation
+  useEffect(() => {
+    if (isBrowser) {
+      // * Attach event on window which will track window size changes
+      // * and store the aspect ratio in state
+      window.addEventListener("resize", updateAspectRatio)
+      raiseNotOptimisedForLandscapeToast()
+      // * remove event listener on unmount
+      return () => window.removeEventListener("resize", updateAspectRatio)
+    }
+  }, [screenAspectRatio])
 
   // - receive push notifications
   useEffect(() => {

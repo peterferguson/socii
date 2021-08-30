@@ -55,7 +55,7 @@ export const Hero = ({ invited, setInvited }) => {
       <div className="h-screen grid grid-cols-2 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
         {/* <div className="h-screen bg-white grid grid-cols-2"> */}
         <div className="flex flex-col justify-center mx-auto">
-          <div className="z-40 px-4 pt-4 text-6xl text-white thin:text-7xl sm:text-8xl font-primary mix-blend-difference">
+          <div className="z-40 pt-4 pl-6 text-6xl text-white sm:pl-12 thin:text-7xl sm:text-8xl font-primary mix-blend-difference">
             <Transition
               show={true}
               appear={true}
@@ -71,9 +71,9 @@ export const Hero = ({ invited, setInvited }) => {
               Invest with Friends.
             </Transition>
           </div>
-          <div className="pt-8 pl-4 text-lg text-black sm:text-xl font-secondary">
-            Create portfolios with friends directly from your group chat.
-            <br/>
+          <div className="pt-8 pl-6 text-sm text-black sm:pl-12 sm:text-xl font-secondary">
+            Build portfolios with friends directly from your group chat.
+            <br />
             Follow their activity and see what else they are investing in.
           </div>
           <div className="p-8">
