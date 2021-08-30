@@ -16,9 +16,7 @@ try {
 
 const initialiseMessaging = async () => {
   let messaging: Messaging | undefined
-  if (isBrowser && (await isSupported())) {
-    messaging = getMessaging(app)
-  }
+  if (isBrowser && (await isSupported())) messaging = getMessaging(app)
   return messaging
 }
 
@@ -33,6 +31,8 @@ export const getFCMToken = async (uid: string) => {
   console.log("fcmTokenInFirebase", fcmTokenInFirebase)
 
   if (fcmTokenInFirebase) return fcmTokenInFirebase
+
+  const messaging = await initialiseMessaging()
 
   try {
     const status = await Notification.requestPermission()
