@@ -23,7 +23,7 @@ const MainLayout = ({ children }) => {
         <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4">
           {!(is1Col && isChatRoute) && <NavHeader />}
           {/* Main Components */}
-          <div className="w-full h-full overflow-auto no-scrollbar">
+          <div className="w-full h-full overflow-auto overscroll-none no-scrollbar">
             <div className="flex flex-col flex-wrap mx-4 sm:flex-row">{children}</div>
           </div>
         </div>

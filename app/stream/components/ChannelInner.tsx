@@ -55,6 +55,10 @@ const ChannelInner = ({ toggleChannelList }) => {
     )
   }, [messages, username])
 
+
+  // TODO scroll input into view: using utils/scrollToRef (source: https://www.codegrepper.com/code-examples/javascript/react+scroll+to+focused+input)
+  
+
   return (
     <>
       <Window>

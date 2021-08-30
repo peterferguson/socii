@@ -1,7 +1,26 @@
+@tailwind utilities;
 @tailwind components;
+
+@layer utilities {
+  @variants responsive {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+}
 
 :root {
   --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
 }
 
 .messenger-chat.str-chat {
@@ -47,18 +66,15 @@
 .str-chat *::before {
   box-sizing: inherit;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  @apply font-primary;
 }
 
-/* .str-chat {
-  height: 100vh;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-} */
 .str-chat.messaging {
   /* background-color: #f1f1f3; */
   background-color: white;
 }
 .str-chat.messaging.dark {
-  background-color: #212326;
+  @apply bg-logo-darkBg;
 }
 
 @-moz-document url-prefix() {
@@ -73,17 +89,18 @@
 }
 
 .str-chat-channel-list {
-  @apply bg-white rounded-2xl min-h-[375px];
+  @apply bg-white rounded-2xl shadow-xl border min-h-[375px];
 }
 
 .str-chat-channel {
-  max-height: 100vh;
+  max-height: calc(100vh - 96px);
+  @apply rounded-2xl;
 }
 
 .str-chat-channel .str-chat__container {
   height: calc(100vh - 96px);
   display: -webkit-flex;
-  display: flex;
+  @apply flex rounded-none sm:rounded-2xl border-0 sm:border;
 }
 
 .str-chat-channel .str-chat__container .str-chat__main-panel {
@@ -97,18 +114,18 @@
   flex: 1;
 }
 .str-chat-channel.messaging .str-chat__main-panel {
-  background-color: rgb(243, 244, 246);
-  padding: 0px;
+  @apply p-0 rounded-none sm:rounded-2xl shadow-xl;
 }
-/* .str-chat-channel.messaging .str-chat__main-panel {
-  padding: 20px 10px 0 0px;
-} */
+
 @media screen and (max-width: 640px) {
-  .str-chat-channel.messaging .str-chat__main-panel {
-    padding: 4px 4px 4px 4px;
-  }
   .str-chat-channel .str-chat__container {
-    height: 100vh;
+    height: calc(var(--innerHeight));
+    height: calc(
+      100% - const(safe-area-inset-top) - const(safe-area-inset-bottom)
+    );
+    height: calc(
+      100% - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
     width: 100vw;
     z-index: 50;
     display: flex;
@@ -2571,21 +2588,12 @@
 
 @media screen and (max-width: 640px) {
   .str-chat-channel-list.messaging {
-    display: flex;
-    flex-direction: column;
-    height: calc(100 * var(--innerHeight));
-    width: 80vw;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
-    z-index: 1001;
-    overflow-y: auto;
-    transition: left 200ms ease-in-out;
+    @apply flex flex-col h-[120vw] w-[80%] fixed top-1/2 left-1/2 z-50 overflow-y-auto shadow-2xl;
   }
   .str-chat-channel-list.messaging {
-    @apply shadow-2xl;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+    transition: left 200ms ease-in-out;
   }
 }
 
@@ -2833,7 +2841,6 @@
 .str-chat__channel-search input {
   -webkit-flex: 1;
   flex: 1;
-  background: rgba(0, 0, 0, 0.05);
   border: 1px solid transparent;
   outline: none;
   height: 30px;
@@ -5101,6 +5108,7 @@
   padding: 0 0 0 0;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  @apply no-scrollbar;
 }
 /* Chrome, Safari and Opera */
 .str_chat__list::-webkit-scrollbar {
@@ -5191,7 +5199,7 @@
 
 @media screen and (max-width: 960px) {
   .messaging.str-chat .str-chat__list {
-    padding: 0 10px 0;
+    @apply px-[10px] no-scrollbar;
   }
   .messaging.str-chat .str-chat__list .str-chat__reverse-infinite-scroll {
     padding-top: 55px;

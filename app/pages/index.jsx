@@ -15,9 +15,9 @@ export default function Home() {
     <>
       {/* TODO Add a wave transition animation to this gradient */}
       <Hero invited={invited} setInvited={setInvited} />
-      {/* <OneTwoThree />
-      <SociiFeatureSlider />
-    <Footer invited={invited} setInvited={setInvited} /> */}
+      <OneTwoThree />
+      {/* <SociiFeatureSlider /> */}
+      <Footer invited={invited} setInvited={setInvited} />
     </>
   )
 }

@@ -19,6 +19,7 @@ const PriceInput = ({
       <input
         type="text"
         name="price"
+        inputMode="decimal"
         id="price"
         className="block w-full pr-12 border-gray-300 appearance-none focus:ring-teal-500 focus:border-teal-500 pl-7 sm:text-sm rounded-md"
         placeholder={pricePlaceholder}
