@@ -58,7 +58,6 @@ export const updateHolding = async (
       break
     case "set":
       holdingDocRef.set(holdingData)
-      groupRef.update({ cashBalance: cashBalance + balanceChange * qty * latestPrice })
       return tradeUpdateData
       break
     default:
