@@ -40,7 +40,7 @@ export const Hero = ({ invited, setInvited }) => {
             leave="transition transform ease-out delay-700 duration-1000"
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
-            className="absolute inset-y-0 z-30 w-screen bg-black h-[51%]"
+            className="absolute inset-y-0 z-30 w-screen bg-black h-[60%]"
           />
           <Transition.Child
             leave="transition transform ease-out delay-700 duration-1000"
@@ -48,19 +48,19 @@ export const Hero = ({ invited, setInvited }) => {
             leaveTo="-translate-x-full"
             // beforeLeave={() => setBlackText(true)}
             afterLeave={() => !user && showPromtion()}
-            className="absolute z-50 w-screen bg-black inset-y-1/2 h-1/2"
+            className="absolute z-50 w-screen bg-black top-[60%] h-[40%]"
           />
         </div>
       </Transition.Root>
       <div className="h-screen grid grid-cols-2 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
-      {/* <div className="h-screen bg-white grid grid-cols-2"> */}
+        {/* <div className="h-screen bg-white grid grid-cols-2"> */}
         <div className="flex flex-col justify-center mx-auto">
           <div className="z-40 px-4 pt-4 text-6xl text-white thin:text-7xl sm:text-8xl font-primary mix-blend-difference">
             <Transition
               show={true}
               appear={true}
               as="h1"
-              enter="transition transform delay-300 duration-1000 ease-in"
+              enter="transition transform delay-300 duration-700 ease-in"
               enterFrom="skew-y-8 translate-y-24 opacity-0"
               enterTo="translate-y-0 opacity-100"
               afterEnter={() => {
@@ -68,11 +68,13 @@ export const Hero = ({ invited, setInvited }) => {
                 unhideOptions()
               }}
             >
-              Invest Together.
+              Invest with Friends.
             </Transition>
           </div>
           <div className="pt-8 pl-4 text-lg text-black sm:text-xl font-secondary">
-            Follow, chat, and invest with friends.
+            Create portfolios with friends directly from your group chat.
+            <br/>
+            Follow their activity and see what else they are investing in.
           </div>
           <div className="p-8">
             <WaitlistInvite invited={invited} setInvited={setInvited} />

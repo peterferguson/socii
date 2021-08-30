@@ -20,8 +20,8 @@ export default function SociiSVG(props: React.SVGProps<SVGSVGElement>) {
           y1="0"
           x1="0"
         >
-          <stop offset="0" stopColor="#29b7c3" />
-          <stop offset="1" stopColor="#42b59d" />
+          <stop offset="0" stopColor="#3fbaeb" />
+          <stop offset="1" stopColor="#3fba" />
         </linearGradient>
         <linearGradient
           id="b"
@@ -33,8 +33,8 @@ export default function SociiSVG(props: React.SVGProps<SVGSVGElement>) {
           y1="0"
           x1="0"
         >
-          <stop offset="0" stopColor="#29b7c3" />
-          <stop offset="1" stopColor="#42b59d" />
+          <stop offset="0" stopColor="#3fbaeb" />
+          <stop offset="1" stopColor="#3fba" />
         </linearGradient>
         <linearGradient
           id="c"
@@ -46,8 +46,8 @@ export default function SociiSVG(props: React.SVGProps<SVGSVGElement>) {
           y1="0"
           x1="0"
         >
-          <stop offset="0" stopColor="#29b7c3" />
-          <stop offset="1" stopColor="#42b59d" />
+          <stop offset="0" stopColor="#3fbaeb" />
+          <stop offset="1" stopColor="#3fba" />
         </linearGradient>
       </defs>
       <path

@@ -1,7 +1,11 @@
 @tailwind components;
 
+:root {
+  --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */
+}
+
 .messenger-chat.str-chat {
-  height: calc(100vh - 96px);
+  height: calc(100 * var(--innerHeight));
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: -webkit-flex;
   display: flex;
@@ -16,7 +20,7 @@
 .messenger-chat.str-chat .str-chat__container {
   -webkit-flex: 1;
   flex: 1;
-  height: calc(100vh - 96px);
+  height: calc(100 * var(--innerHeight));
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: row;
@@ -26,7 +30,7 @@
   width: 100%;
   -webkit-flex: 1;
   flex: 1;
-  height: calc(100vh - 96px);
+  height: calc(100 * var(--innerHeight));
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
@@ -36,7 +40,7 @@
 
 .str-chat {
   box-sizing: border-box;
-  max-height: calc(100vh - 96px);
+  max-height: calc(100 * var(--innerHeight));
 }
 .str-chat *,
 .str-chat *::after,
@@ -77,7 +81,7 @@
 }
 
 .str-chat-channel .str-chat__container {
-  height: calc(100vh - 96px);
+  height: calc(100 * var(--innerHeight));
   display: -webkit-flex;
   display: flex;
 }
@@ -2581,7 +2585,7 @@
     transition: left 200ms ease-in-out;
   }
   .str-chat-channel-list.messaging {
-    @apply shadow-2xl
+    @apply shadow-2xl;
   }
 }
 

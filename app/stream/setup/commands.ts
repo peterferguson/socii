@@ -79,9 +79,19 @@ const createTradeCommands = async () => {
 //   })
 //   .then((r) => console.log(r))
 
+// client
+//   .updateAppSettings({
+//     custom_action_handler_url:
+//       "https://europe-west2-socii-development.cloudfunctions.net/commands?type={type}",
+//   })
+//   .then((r) => console.log(r))
+
+// - Set socii avatar image
 client
-  .updateAppSettings({
-    custom_action_handler_url:
-      "https://europe-west2-socii-development.cloudfunctions.net/commands?type={type}",
+  .partialUpdateUser({
+    id: "socii",
+    set: {
+      image: "https://socii.app/favicons/favicon.ico",
+    },
   })
   .then((r) => console.log(r))
