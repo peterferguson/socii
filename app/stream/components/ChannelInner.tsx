@@ -22,7 +22,7 @@ const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Windo
 }) as any
 
 const ChannelInner = ({ toggleChannelList }) => {
-  const { username } = useAuth()
+  const { username, user } = useAuth()
   //   const { addNotification } = useChannelActionContext()
   const { channel, messages } = useChannelStateContext()
 
@@ -47,9 +47,10 @@ const ChannelInner = ({ toggleChannelList }) => {
       messages.filter(
         (msg) =>
           !(
-            (msg.attachments.some(({ type }) => type === "buy" || type === "sell") &&
+            ((msg.attachments.some(({ type }) => type === "buy" || type === "sell") &&
               msg.user.id !== username) ||
-            ["complete", "cancelled"].includes(msg?.status)
+            ["complete", "cancelled"].includes(msg?.status)) &&
+              ![user.uid].includes(String(msg?.onlyForMe))
           )
       )
     )

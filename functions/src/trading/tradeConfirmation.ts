@@ -17,6 +17,8 @@ export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
+  const latestAgreesId = (tradeData.agreesToTrade.slice(-1)[0]).split("/")[1]
+
   // can be: success, pending, failed
 
   if (tradeData.executionStatus) return // - do nothing
@@ -41,7 +43,7 @@ export const tradeConfirmation = async (change, context) => {
     (await streamClient
       .channel("group", groupName)
       .sendMessage(
-        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol)
+        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol, latestAgreesId)
       ))
 
   if (tradeData.notional > cashBalance && !isSell(tradeData.type)) {
@@ -163,9 +165,10 @@ export const tradeConfirmation = async (change, context) => {
  * Helper Functions
  */
 
-const marketClosedMessage = async (exchange, latestPrice, symbol) => ({
+const marketClosedMessage = async (exchange, latestPrice, symbol, latestAgreesId) => ({
   user_id: "socii",
   text: singleLineTemplateString`
     The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
     `,
+  onlyForMe: latestAgreesId,
 })
