@@ -11,10 +11,10 @@ export const getAlpacaBuyPower = async (accountId: string) => {
     await client.getTradingAccount(accountId)
 
   return {
-    buyingPower,
-    cash,
-    cashWithdrawable,
+    buyingPower: parseFloat(buyingPower),
+    cash: parseFloat(cash),
+    cashWithdrawable: parseFloat(cashWithdrawable),
     daytradeCount,
-    daytradingBuyingPower,
+    daytradingBuyingPower: parseFloat(daytradingBuyingPower),
   }
 }
