@@ -1,5 +1,10 @@
 // TODO Check alpaca docs when moving to production - account updates require a bcc email to alpaca
-import { BankData, ObjectSerializer, AccountsApi, config } from "@alpaca/index"
+import {
+  BankData,
+  ObjectSerializer,
+  AccountsApi,
+  config,
+} from "@socii/shared/alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

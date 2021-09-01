@@ -1,5 +1,5 @@
-import { config, PortfolioApi, Position } from "@alpaca/index"
-import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
+import { config, PortfolioApi, Position } from "@socii/shared/alpaca/index"
+import { ObjectSerializer } from "@socii/shared/alpaca/models/ObjectSerializer"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

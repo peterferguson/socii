@@ -1,5 +1,5 @@
 import { logger } from "firebase-functions"
-import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
+import { CreateOrder, OrderObject } from "../../shared/alpaca/index.js"
 import { firestore, iexClient, tradeClient } from "../index.js"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
 import { isSell } from "../utils/isSell"

@@ -1,4 +1,4 @@
-import { config, CalendarApi } from "@alpaca/index"
+import { config, CalendarApi } from "@socii/shared/alpaca/index"
 
 export const isMarketDay = async (date: Date | string | number) => {
   const calendarClient = new CalendarApi(

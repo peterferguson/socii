@@ -2,13 +2,13 @@ const functions = require("firebase-functions")
 const Client = require("iexjs").Client
 const StreamChat = require("stream-chat").StreamChat
 import admin from "firebase-admin"
-import { config, TradingApi } from "./alpaca/broker/client/ts/index.js"
+import { config, TradingApi } from "../shared/alpaca/index.js"
 // * Import function modules
 import * as accounts from "./accounts/index.js"
-import * as algoliaSearch from "./algoliaSearch.js"
+import * as algoliaSearch from "./algoliaSearch"
 import * as commands from "./commands/index.js"
-import * as data from "./data.js"
-import * as databaseOperations from "./databaseOperations.js"
+import * as data from "./data"
+import * as databaseOperations from "./databaseOperations"
 import * as events from "./events/index.js"
 import * as stream from "./stream/index.js"
 import * as trading from "./trading/index.js"

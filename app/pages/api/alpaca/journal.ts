@@ -1,4 +1,9 @@
-import { ObjectSerializer, JournalsApi, config, JournalData } from "@alpaca/index"
+import {
+  ObjectSerializer,
+  JournalsApi,
+  config,
+  JournalData,
+} from "@socii/shared/alpaca/index"
 import { NextApiResponse, NextApiRequest } from "next"
 
 const journalApi = new JournalsApi(

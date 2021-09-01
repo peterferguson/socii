@@ -1,6 +1,6 @@
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { handleAssets } from "@api/alpaca/assets"
-import { AssetResource } from "@alpaca/models"
+import { AssetResource } from "@socii/shared/alpaca/models"
 import { performance } from "perf_hooks"
 
 /*

@@ -1,5 +1,5 @@
-import { config, PortfolioApi, PortfolioHistory } from "@alpaca/index"
-import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
+import { config, PortfolioApi, PortfolioHistory } from "@socii/shared/alpaca/index"
+import { ObjectSerializer } from "@socii/shared/alpaca/models/ObjectSerializer"
 import { DateStr } from "@models/DateStr"
 import { Period } from "@models/Period"
 import { Timeframe } from "@models/Timeframe"

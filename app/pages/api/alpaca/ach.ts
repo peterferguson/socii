@@ -4,7 +4,7 @@ import {
   ObjectSerializer,
   AccountsApi,
   config,
-} from "@alpaca/index"
+} from "@socii/shared/alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

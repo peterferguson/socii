@@ -4,9 +4,9 @@ import {
   AccountsApi,
   ACHRelationshipData,
   config,
-} from "../alpaca/broker/client/ts/index"
+} from "../../shared/alpaca/index.js"
 import { firestore } from "../index.js"
-import { UserInfo } from "../lib/firestore/index.js"
+import { UserInfo } from "../firestore/index.js"
 interface FirebaseUser extends UserInfo {
   provider: string
   emailVerified: boolean

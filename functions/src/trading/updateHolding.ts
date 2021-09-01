@@ -12,7 +12,7 @@
  */
 import { logger } from "firebase-functions"
 import { firestore } from "../index.js"
-import { serverTimestamp, increment, arrayUnion } from "../lib/firestore/index.js"
+import { serverTimestamp, increment, arrayUnion } from "../firestore/index.js"
 
 export const updateHolding = async (
   data: {

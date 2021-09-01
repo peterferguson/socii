@@ -5,7 +5,7 @@ import {
   AccountsApi,
   AccountCreationObject,
   AccountUpdate,
-} from "../../../alpaca/index"
+} from "@socii/shared/alpaca/index"
 const accountClient = new AccountsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )

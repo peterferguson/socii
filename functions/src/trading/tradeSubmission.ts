@@ -1,6 +1,6 @@
 import { logger } from "firebase-functions"
 import { firestore, functionConfig } from "../index.js"
-import { serverTimestamp } from "../lib/firestore/index.js"
+import { serverTimestamp } from "../firestore/index.js"
 import { getAlpacaBuyPower } from "../utils/getAlpacaBuyPower.js"
 import { notEnoughBuyingPowerMessage } from "../utils/notEnoughBuyingPowerMessage.js"
 import { streamClient } from "../utils/streamClient.js"

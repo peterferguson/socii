@@ -1,5 +1,5 @@
 import { auth as serverAuth } from "@lib/firebase/server/firebase-admin"
-import { auth as clientAuth } from "@lib/firebase/client/firebase"
+import { auth as clientAuth } from "@lib/firebase/client/auth"
 import { signInWithCustomToken } from "firebase/auth"
 
 const sociiUid = "LkYfEBGDGTZqvZavPVZnoss2V4M2"

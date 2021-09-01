@@ -1,4 +1,4 @@
-import { config, FundingApi, TransferData } from "@alpaca/index"
+import { config, FundingApi, TransferData } from "@socii/shared/alpaca/index"
 import { arrayUnion, firestore } from "@lib/firebase/server/firebase-admin"
 import dayjs from "dayjs"
 import { NextApiRequest, NextApiResponse } from "next"
@@ -116,7 +116,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const failedCount =
             accountsWithMissingDetails.length + erroredTransfers.length
           const successCount = Object.keys(accountsToFund).length - failedCount
-          
+
           if (successCount > 0)
             res.status(200).json({
               message: `Completed ${successCount} transfers with ${failedCount} failed. `,

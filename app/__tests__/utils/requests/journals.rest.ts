@@ -1,7 +1,7 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/assets.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
 
-import { config, JournalData, JournalsApi } from "../../../alpaca/index"
+import { config, JournalData, JournalsApi } from "@socii/shared/alpaca/index"
 const journals = new JournalsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )

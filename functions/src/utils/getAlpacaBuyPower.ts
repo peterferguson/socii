@@ -1,5 +1,4 @@
-// import { TradingApi, config } from "../alpaca/broker/client/ts/index"
-import { config, AccountsApi } from "../../../app/alpaca"
+import { config, AccountsApi } from "../../shared/alpaca/index.js"
 
 export const getAlpacaBuyPower = async (accountId: string) => {
   // * Ensure all investors have can afford the trade in their alpaca account

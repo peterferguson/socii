@@ -14,6 +14,6 @@
     "isolatedModules": false,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "src/trading/.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src", "shared"],
+  "exclude": ["node_modules", "lib"]
 }
