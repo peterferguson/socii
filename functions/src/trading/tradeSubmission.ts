@@ -41,6 +41,9 @@ export const tradeSubmission = async (
     )
   )
 
+  logger.log(`investors: ${investors.map((investor) => investor.data().uid)}`)
+  logger.log(`canAffordTrade: ${canAffordTrade}`)
+
   if (!canAffordTrade.every((canAfford) => canAfford))
     return submittedFromCallable
       ? { error: "Not enough cash" }
