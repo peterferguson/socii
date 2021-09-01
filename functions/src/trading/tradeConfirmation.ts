@@ -1,11 +1,11 @@
 import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
-import { firestore, iexClient, tradeClient, functionConfig } from "../index.js"
-import { isSell } from "../utils/isSell"
-import { investmentPendingMML } from "./mml/investmentPendingMML"
-import { streamClient } from "../utils/streamClient"
+import { firestore, iexClient, tradeClient } from "../index.js"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
+import { isSell } from "../utils/isSell"
+import { streamClient } from "../utils/streamClient"
 import { warnPriceVariationOnMarketClose } from "../utils/warnPriceVariationOnMarketClose"
+import { investmentPendingMML } from "./mml/investmentPendingMML"
 
 /*
 - tradeConfirmation
@@ -14,13 +14,12 @@ import { warnPriceVariationOnMarketClose } from "../utils/warnPriceVariationOnMa
 2. holdings and send confirmation message with the price at which the asset was purchased 
 */
 
+// - Doc listener for documents:
+// - groups/{groupName}/trades/{tradeId}
 export const tradeConfirmation = async (change, context) => {
-  // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
   const latestAgreesId = tradeData.agreesToTrade.slice(-1)[0].split("/")[1]
-
-  // can be: success, pending, failed
 
   if (tradeData.executionStatus) return // - do nothing
 
@@ -43,19 +42,18 @@ export const tradeConfirmation = async (change, context) => {
     latestAgreesId
   )
 
-  if (tradeData.notional >= cashBalance && !isSell(tradeData.type)) {
-    // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
-    // - A small variation should be somewhat enforced on the client-side.
-    // - Assuming no massive jump in stock price.
-    // TODO: Implement a client-side check on the cost vs cashBalance.
-    // TODO: Need to distinguish shares bought by cost & those by share amount
+  // - Adjust notional amount based on the latest price & account buying power
+  // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
+  // TODO: Implement a client-side check on the cost vs cashBalance.
+  // - A small variation should be somewhat enforced on the client-side.
+  // - Assuming no massive jump in stock price.
+  // TODO: Need to distinguish shares bought by cost & those by share amount
+  // - drop share amount to within 2.5% of total cashBalance.
+  // ! This is arbitrary & maybe be another threshold decided upon by the group.
+  // TODO: Create a group settings page which lists the thresholds that can be tinkered
 
+  if (tradeData.notional >= cashBalance && !isSell(tradeData.type))
     tradeData.notional = cashBalance * 0.95
-
-    // - drop share amount to within 2.5% of total cashBalance.
-    // ! This is arbitrary & maybe be another threshold decided upon by the group.
-    // TODO: Create a group settings page which lists the thresholds that can be tinkered
-  }
 
   /* 
    ! Add user setting to allow for an acceptable price variation between latestPrice and 
@@ -75,40 +73,49 @@ export const tradeConfirmation = async (change, context) => {
   else tradeData.stockPrice = latestPrice
 
   if (tradeData.agreesToTrade.length === investorCount) {
-    // ! Execute Trade
-    logger.log(`Sending order: ${JSON.stringify(tradeData)}`)
     let postOrder: OrderObject
+    logger.log(`Sending order: ${JSON.stringify(tradeData)}`)
+    const investorRef = firestore.collection(`groups/${groupName}/investors`)
+    const investors = (await investorRef.get()).docs
+
     try {
-      // - breakdown message into alpaca form and send to broker
-      postOrder = await tradeClient.postOrders(
-        functionConfig.alpaca.firm_account,
-        CreateOrder.from({
-          symbol: tradeData.symbol,
-          side: tradeData.side,
-          time_in_force: tradeData.timeInForce,
-          type: tradeData.type,
-          notional: String(tradeData.notional),
-          //qty: tradeData.qty, // remove and replace with notional
-          //limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
-          client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
-        })
-      )
+      for (const investor of investors) {
+        const username = investor.id
+        const { alpacaAccountId } = investor.data()
+        logger.log(
+          `Sending ${tradeData.side} order for $${
+            tradeData.notional / investorCount
+          } of ${
+            tradeData.symbol
+          } for user ${username} with alpaca id ${alpacaAccountId}`
+        )
+        postOrder = await tradeClient.postOrders(
+          alpacaAccountId,
+          CreateOrder.from({
+            symbol: tradeData.symbol,
+            side: tradeData.side,
+            time_in_force: tradeData.timeInForce,
+            type: tradeData.type,
+            notional: String(tradeData.notional / investorCount),
+            //qty: tradeData.qty, // remove and replace with notional
+            //limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
+            client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
+          })
+        )
+        logger.log(`Order sent for user ${username} with status ${postOrder.status}`)
+        logger.log("Order: ", postOrder)
+      }
     } catch (err) {
       logger.error(err)
     }
 
+    // - Complete ephemeral message
     const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
-
     await streamClient.partialUpdateMessage(
       tradeData.messageId,
       { set: { status: "complete" } },
       tradeData.username
     )
-
-    // TODO
-    // - maybe the below is heavy on wirtes?
-    // writing to the holding ref when pending then updating a field when executed
-    // could be reduced by just writing when success, but may lose info
 
     switch (determineTradeStatus(postOrder.status) ?? "failed") {
       case "success":
