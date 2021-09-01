@@ -28,8 +28,8 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   useEffect(() => {
     setHoldingInfo(
       holdings?.map((doc) => {
-        const { tickerSymbol, assetRef, shortName, avgPrice, qty } = doc.data()
-        return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, qty }
+        const { symbol, assetRef, shortName, avgPrice, qty } = doc.data()
+        return { ISIN: assetRef.id, symbol, shortName, avgPrice, qty }
       })
     )
   }, [holdings])
@@ -38,11 +38,11 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     const updatePriceState = async () => {
       holdingInfo &&
         Promise.all(
-          holdingInfo?.map(async ({ tickerSymbol }) => {
-            const price = await iexQuote(tickerSymbol, user?.token)
+          holdingInfo?.map(async ({ symbol }) => {
+            const price = await iexQuote(symbol, user?.token)
             setCurrentPrices((previousState) => ({
               ...previousState,
-              [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
+              [symbol]: price?.iexRealtimePrice || price?.latestPrice,
             }))
           })
         )
@@ -74,7 +74,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
                 <StockCard
                   key={`holding-${index}`}
                   holding={holding}
-                  latestPrice={currentPrices[holding?.tickerSymbol]}
+                  latestPrice={currentPrices[holding?.symbol]}
                   index={index}
                 />
               ) : (
