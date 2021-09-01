@@ -1,11 +1,12 @@
 import { singleLineTemplateString } from "./singleLineTemplateString";
 
-const marketClosedMessage = async (assetRef) => {
-  const assetData = await (await assetRef.get()).data();
-  return {
-    user_id: "socii",
-    text: singleLineTemplateString`
-        Sorry the ${assetData.exchange} is not currently open!
-        `,
-  };
-};
+/*
+ * Helper Functions
+ */
+export const marketClosedMessage = async (exchange, latestPrice, symbol, latestAgreesId) => ({
+  user_id: "socii",
+  text: singleLineTemplateString`
+    The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
+    `,
+  onlyForMe: latestAgreesId,
+});

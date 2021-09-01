@@ -2,10 +2,7 @@
  * Called after trade is filled and holding is updated:
  *  Transfers the shares to the individual alpaca accounts
  *
- *
- *
  * @param data
- * @param context
  * @returns
  */
 
@@ -16,7 +13,6 @@ import { functionConfig } from "../index.js"
 
 export const journalShares = async (
   data: { agreesToTrade?: []; qty?: any; direction?: string; symbol?: string},
-  context?: any
 ) => {
 
   const journals = new JournalsApi(

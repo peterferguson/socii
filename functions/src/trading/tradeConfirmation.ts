@@ -2,9 +2,10 @@ import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
 import { firestore, iexClient, tradeClient, functionConfig } from "../index.js"
 import { isSell } from "../utils/isSell"
-import { singleLineTemplateString } from "../utils/singleLineTemplateString"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
 import { streamClient } from "../utils/streamClient"
+import { determineTradeStatus } from "../utils/determineTradeStatus"
+import { marketClosedMessage } from "../utils/marketClosedMessage"
 
 /*
 - tradeConfirmation
@@ -17,7 +18,7 @@ export const tradeConfirmation = async (change, context) => {
   // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
-  const latestAgreesId = (tradeData.agreesToTrade.slice(-1)[0]).split("/")[1]
+  const latestAgreesId = tradeData.agreesToTrade.slice(-1)[0].split("/")[1]
 
   // can be: success, pending, failed
 
@@ -31,19 +32,19 @@ export const tradeConfirmation = async (change, context) => {
     { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
   )
 
-  logger.log(
-    "Latest IEX price",
-    latestPrice,
-    "and execution price: ",
-    tradeData.stockPrice
-  )
+  logger.log("IEX latestPrice", latestPrice, "& execution price:", tradeData.stockPrice)
 
   // - send warning of differing execution price if market is closed
   !isUSMarketOpen &&
     (await streamClient
       .channel("group", groupName)
       .sendMessage(
-        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol, latestAgreesId)
+        await marketClosedMessage(
+          primaryExchange,
+          latestPrice,
+          tradeData.symbol,
+          latestAgreesId
+        )
       ))
 
   if (tradeData.notional >= cashBalance && !isSell(tradeData.type)) {
@@ -80,10 +81,9 @@ export const tradeConfirmation = async (change, context) => {
   if (tradeData.agreesToTrade.length === investorCount) {
     // ! Execute Trade
     logger.log(`Sending order: ${JSON.stringify(tradeData)}`)
-    let postOrder: OrderObject, executionStatus: string
+    let postOrder: OrderObject
     try {
-      //breakdown message into alpaca form and send to broker
-
+      // - breakdown message into alpaca form and send to broker
       postOrder = await tradeClient.postOrders(
         functionConfig.alpaca.firm_account,
         CreateOrder.from({
@@ -97,41 +97,15 @@ export const tradeConfirmation = async (change, context) => {
           client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
         })
       )
-      const determineStatus = (responseStatus: string) => {
-        const status = ["cancelled", "expired", "rejected", "suspended"].includes(
-          responseStatus
-        )
-          ? "failed"
-          : [
-              "new",
-              "done_for_day",
-              "pending_cancel",
-              "pending_replace",
-              "pending_new",
-              "accepted_for_bidding",
-              "stopped",
-              "calculated",
-              "accepted",
-              "replaced",
-            ].includes(responseStatus)
-          ? "pending"
-          : ["filled"].includes(responseStatus)
-          ? "success"
-          : null
-        return status
-      }
-      executionStatus = determineStatus(postOrder.status)
     } catch (err) {
       logger.error(err)
-      executionStatus = "failed"
     }
 
     const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
+
     await streamClient.partialUpdateMessage(
       tradeData.messageId,
-      {
-        set: { status: "complete" },
-      },
+      { set: { status: "complete" } },
       tradeData.username
     )
 
@@ -140,11 +114,11 @@ export const tradeConfirmation = async (change, context) => {
     // writing to the holding ref when pending then updating a field when executed
     // could be reduced by just writing when success, but may lose info
 
-    switch (executionStatus) {
+    switch (determineTradeStatus(postOrder.status) ?? "failed") {
       case "success":
         // 1. Deduct balance immediately
         if (tradeData.side == "buy")
-          groupRef.update({ cashBalance: cashBalance - tradeData.notional })        
+          groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         logger.log("order successful. Id:", postOrder?.id)
         return
 
@@ -163,15 +137,3 @@ export const tradeConfirmation = async (change, context) => {
     }
   }
 }
-
-/*
- * Helper Functions
- */
-
-const marketClosedMessage = async (exchange, latestPrice, symbol, latestAgreesId) => ({
-  user_id: "socii",
-  text: singleLineTemplateString`
-    The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
-    `,
-  onlyForMe: latestAgreesId,
-})

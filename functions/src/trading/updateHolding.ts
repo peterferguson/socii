@@ -31,12 +31,12 @@ export const updateHolding = async (
   // - can be set to success, pending, failed
   let tradeUpdateData = { executionStatus: executionStatus, pnlPercentage: {} }
 
-  const balanceChange = tradeData.side=="sell"? 1: -1
+  const balanceChange = tradeData.side == "sell" ? 1 : -1
   const qty = parseFloat(data.qty)
   const latestPrice = tradeData.stockPrice
   const ISIN = tradeData.assetRef.split("/").pop()
 
-  const groupRef = await firestore.collection("groups").doc(groupName)
+  const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
   // 1. Batch update holdings
@@ -45,14 +45,17 @@ export const updateHolding = async (
     holdingDocRef,
     tradeData,
     messageId,
-    qty
+    qty,
   })
 
   // TODO - potentially await and check response here?
   switch (type) {
     case "update":
       holdingDocRef.update(holdingData)
-      if (tradeData.side=="sell") groupRef.update({ cashBalance: cashBalance + balanceChange * qty * latestPrice })
+      if (tradeData.side == "sell")
+        groupRef.update({
+          cashBalance: cashBalance + balanceChange * qty * latestPrice,
+        })
       if (pnlPercentage) tradeUpdateData.pnlPercentage = pnlPercentage
       return tradeUpdateData
       break
@@ -94,7 +97,8 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
 
     // * Add profit to a sell trade on a current holding
     if (!(negativeEquityMultiplier + 1)) {
-      outputData.pnlPercentage = (100 * (stockPrice - currentAvgPrice)) / currentAvgPrice
+      outputData.pnlPercentage =
+        (100 * (stockPrice - currentAvgPrice)) / currentAvgPrice
     }
 
     outputData.type = "update"
