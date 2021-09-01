@@ -5,7 +5,7 @@ import { isSell } from "../utils/isSell"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
 import { streamClient } from "../utils/streamClient"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
-import { marketClosedMessage } from "../utils/marketClosedMessage"
+import { warnPriceVariationOnMarketClose } from "../utils/warnPriceVariationOnMarketClose"
 
 /*
 - tradeConfirmation
@@ -34,18 +34,14 @@ export const tradeConfirmation = async (change, context) => {
 
   logger.log("IEX latestPrice", latestPrice, "& execution price:", tradeData.stockPrice)
 
-  // - send warning of differing execution price if market is closed
-  !isUSMarketOpen &&
-    (await streamClient
-      .channel("group", groupName)
-      .sendMessage(
-        await marketClosedMessage(
-          primaryExchange,
-          latestPrice,
-          tradeData.symbol,
-          latestAgreesId
-        )
-      ))
+  await warnPriceVariationOnMarketClose(
+    isUSMarketOpen,
+    primaryExchange,
+    latestPrice,
+    tradeData.symbol,
+    groupName,
+    latestAgreesId
+  )
 
   if (tradeData.notional >= cashBalance && !isSell(tradeData.type)) {
     // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
