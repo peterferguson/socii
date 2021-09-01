@@ -40,11 +40,13 @@ export async function createGroup(
     subscriptionAmount: depositOption.amount,
     startDate: serverTimestamp(),
     investorCount: 1, // TODO: Increment this on addition of new investors
+    investors: [username],
   })
   batch.set(investorsRef, {
     isFounder: true,
     joinDate: serverTimestamp(),
     uid: user.uid,
+    alpacaAccountId: user.alpacaAccountId,
   })
 
   await batch.commit()
