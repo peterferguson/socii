@@ -70,9 +70,9 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     let unsub
     if (isBrowser) {
-      messagingPromise.then(
-        (messaging) =>
-          (unsub = onMessage(messaging, (payload) => {
+      messagingPromise.then((messaging) => {
+        if (messaging) {
+          unsub = onMessage(messaging, (payload) => {
             console.log(payload)
 
             const {
@@ -80,10 +80,11 @@ export default function MyApp({ Component, pageProps }) {
             } = payload
 
             toast(`${title}, ${body}`)
-          }))
-      )
+          })
+        }
+      })
     }
-    return () => unsub()
+    return () => unsub?.()
   }, [])
 
   const router = useRouter()
