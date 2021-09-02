@@ -25,7 +25,7 @@ function GroupPortfolios({ pagename }): JSX.Element {
       <div className="mx-auto mb-4 text-3xl font-primary text-brand-shade-darkest">
         Group Portfolios
       </div>
-      <div className="w-full grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto">
+      <div className="place-items-center grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto max-w-screen-thin">
         {userGroups?.length !== 0 ? (
           userGroups?.map((groupName, index) => (
             <GroupColumn
@@ -48,9 +48,7 @@ export default function UserPage() {
 
   return (
     <AuthCheck>
-      <div className="flex flex-wrap justify-center">
-        {!pagename ? <PortfolioSkeletons /> : <GroupPortfolios pagename={pagename} />}
-      </div>
+      {!pagename ? <PortfolioSkeletons /> : <GroupPortfolios pagename={pagename} />}
     </AuthCheck>
   )
 }

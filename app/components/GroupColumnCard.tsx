@@ -54,7 +54,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     <>
       {holdingInfo?.length !== 0 ? (
         <div
-          className={`flex flex-col items-center mx-auto p-4 mb-4 bg-white shadow-lg rounded-2xl ${
+          className={`flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl ${
             className || ""
           }`}
         >
