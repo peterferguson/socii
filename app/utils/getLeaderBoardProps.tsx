@@ -32,7 +32,7 @@ export const getLeaderBoardProps = async () => {
       return initial
     }, {})
 
-  console.log(`${Object.keys(groupHoldings).length} groups found`)
+  console.log(`${Object.keys(groupHoldings)?.length} groups found`)
 
   const tickers: string[] = [
     ...new Set(
@@ -55,7 +55,7 @@ export const getLeaderBoardProps = async () => {
     endDateStr: todayString,
   })
 
-  console.log(`${priceData.length} prices found`)
+  console.log(`${priceData?.length} prices found`)
 
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day
@@ -65,7 +65,7 @@ export const getLeaderBoardProps = async () => {
       const prices = priceData?.[ticker]
 
       const pctChange =
-        (100 * (prices[prices.length - 1].close - prices[0].close)) / prices[0].close
+        (100 * (prices[prices?.length - 1].close - prices[0].close)) / prices[0].close
 
       return Object.assign(data, { [ticker]: pctChange })
     },

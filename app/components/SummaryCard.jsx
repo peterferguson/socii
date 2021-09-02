@@ -18,7 +18,7 @@ const SummaryCard = ({
             <h5 className="text-xs font-bold uppercase text-blueGray-400">
               <Title />
             </h5>
-            <span className="text-xl font-semibold text-blueGray-700">{subTitle}</span>
+            <span className="text-2xl font-semibold text-blueGray-700 font-primary">{subTitle}</span>
           </div>
           <div className="absolute top-0 right-0">
             <div

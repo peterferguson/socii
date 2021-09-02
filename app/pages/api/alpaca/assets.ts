@@ -1,4 +1,4 @@
-import { config, AssetsApi, AssetResource } from "@alpaca/index"
+import { config, AssetsApi, AssetResource } from "@socii/shared/alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

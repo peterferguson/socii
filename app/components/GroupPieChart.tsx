@@ -15,7 +15,7 @@ export default function GroupPieChart({
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
-    ?.map(({ tickerSymbol, qty }) => currentPrices?.[tickerSymbol] * qty)
+    ?.map(({ symbol, qty }) => currentPrices?.[symbol] * qty)
     .reduce((a, b) => a + b, 0)
 
   const gain =
@@ -26,10 +26,10 @@ export default function GroupPieChart({
       100) /
     portfolioValue
 
-  const pieData = holdingData?.map(({ tickerSymbol, shortName, qty }) => ({
-    theta: (currentPrices?.[tickerSymbol] * qty) / portfolioValue,
+  const pieData = holdingData?.map(({ symbol, shortName, qty }) => ({
+    theta: (currentPrices?.[symbol] * qty) / portfolioValue,
     label: shortName,
-    subLabel: tickerSymbol,
+    subLabel: symbol,
   }))
 
   return (
@@ -67,7 +67,7 @@ export function GroupPieCard({
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
-    ?.map(({ tickerSymbol, qty }) => currentPrices?.[tickerSymbol] * qty)
+    ?.map(({ symbol, qty }) => currentPrices?.[symbol] * qty)
     .reduce((a, b) => a + b, 0)
 
   const gain =
@@ -78,10 +78,10 @@ export function GroupPieCard({
       100) /
     portfolioValue
 
-  const pieData = holdingData?.map(({ tickerSymbol, shortName, qty }) => ({
-    theta: (currentPrices?.[tickerSymbol] * qty) / portfolioValue,
+  const pieData = holdingData?.map(({ symbol, shortName, qty }) => ({
+    theta: (currentPrices?.[symbol] * qty) / portfolioValue,
     label: shortName,
-    subLabel: tickerSymbol,
+    subLabel: symbol,
   }))
 
   return (

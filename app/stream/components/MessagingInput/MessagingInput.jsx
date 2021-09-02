@@ -1,4 +1,11 @@
-import React, { memo, useCallback, useContext, useMemo, useReducer } from "react"
+import React, {
+  memo,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} from "react"
 import { ImageDropzone } from "react-file-utils"
 import { BsLightning, BsLightningFill } from "react-icons/bs"
 import { FaDollarSign } from "react-icons/fa"
@@ -165,6 +172,7 @@ const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
 ))
 
 const MessagingInput = (props) => {
+  const [hasNotch, setHasNotch] = useState(false)
   const { acceptedFiles, maxNumberOfFiles, multipleUploads, channel } =
     useContext(ChannelStateContext)
   const { sendMessage } = useContext(ChannelActionContext)
@@ -243,9 +251,13 @@ const MessagingInput = (props) => {
 
   const buttons = useMemo(() => emojiButtons, [])
 
+  // TODO: This padding is mainly to correct for lack of inset values 
+  // TODO: on iPhones when the app has been added to homescreen.
+  // TODO: This is a worse UX for other platforms!
+
   return (
     <div
-      className="flex items-center justify-center w-full p-2 bg-white shadow-none sm:shadow-md"
+      className="flex items-center justify-center px-2 py-8 bg-white sm:py-2 w-[80%] sm:w-full"
       style={{ borderBottomLeftRadius: "1rem", borderBottomRightRadius: "1rem" }}
     >
       <EmojiButton

@@ -1,5 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from "next/document"
 import React from "react"
+import { SplashScreens } from "../components/SplashScreens"
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx)
@@ -36,15 +37,20 @@ class MyDocument extends Document {
           {/* <!-- this sets the color of url bar  --> */}
           <meta name="theme-color" content="#F9FAFB" />
           {/* <!-- this sets the color of url bar on iOS --> */}
-          <meta
+          {/* <!-- TODO: Need to add this for dark theme --> */}
+          {/* <meta
             name="apple-mobile-web-app-status-bar-style"
             content="black-translucent"
-          ></meta>
+          ></meta> */}
+          <meta name="apple-mobile-web-app-status-bar-style" content="black"></meta>
 
           {/* Fullscreen on iOS */}
           <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+          {/* iOS splash screens */}
+          <SplashScreens />
         </Head>
-        <body>
+        {/* onTouchStart="" enables native hover and active properties for PWA */}
+        <body onTouchStart="">
           <Main />
           <NextScript />
         </body>

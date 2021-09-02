@@ -7,8 +7,7 @@ set -e
 delete_previous_version_if_exists() {
   # We either delete local folder and bucket object or just a bucket
   rm -r ./socii-firestore-backup &&
-  gsutil -m rm -r gs://socii-development.appspot.com/socii-firestore-backup ||
-  gsutil -m rm -r gs://socii-development.appspot.com/socii-firestore-backup
+  gsutil -m rm -r gs://socii-development.appspot.com/socii-firestore-backup 
 }
 
 export_production_firebase_to_emulator() {

@@ -1,18 +1,18 @@
+import { usePortfolioHistory } from "@hooks/usePortfolioHistory"
 import { useWindowSize } from "@hooks/useWindowSize"
-import { getQuartiles } from "@utils/quartiles"
+import { TimeseriesTick } from "@models/TimeseriesTick"
+import { getEvenSpacedByOrderOfMagnitude } from "@utils/getEvenSpacedByOrderOfMagnitude"
 import dayjs from "dayjs"
 import React, { useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import {
-  Crosshair,
   ChartLabel,
+  Crosshair,
   FlexibleXYPlot,
   LineSeries,
   XAxis,
   YAxis,
 } from "react-vis"
-import { usePortfolioHistory } from "@hooks/usePortfolioHistory"
-import { TimeseriesTick } from "@models/TimeseriesTick"
 
 const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => {
   const [width, height] = useWindowSize()
@@ -23,7 +23,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
 
   const lineSeriesProps = {
     animation: false,
-    color: "#0fa9e6"  ,
+    color: "#0fa9e6",
     opacityType: "literal",
     strokeWidth: 2,
     data: timeseries?.equity,
@@ -31,19 +31,19 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
     onNearestX: (data: TimeseriesTick) => setCrosshairValue(data),
   }
 
-  const quartiles = getQuartiles(timeseries?.equity?.map((tick) => tick.y))
+  const yDomain = getEvenSpacedByOrderOfMagnitude(timeseries?.equity.map(({ y }) => y))
 
   // TODO: add dashed line for the starting equity
 
   return timeseries ? (
-    <div className="flex items-center justify-center mx-auto">
+    <div className="flex items-center justify-center mx-auto overscroll-x-contain">
       <FlexibleXYPlot
         onMouseLeave={() => setCrosshairValue(undefined)}
         height={height * heightScale}
         width={width * widthScale}
         xType="time"
-        yDomain={[Math.min(...quartiles) * 0.9, Math.max(...quartiles) * 1.1]}
-        margin={{ left: 50, bottom: 75, top: 10 }}
+        yDomain={[yDomain[0], yDomain[yDomain.length - 1]]}
+        margin={{ left: 60, bottom: 75, top: 50 }}
       >
         {!is1Col && (
           <XAxis
@@ -51,7 +51,7 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
             tickFormat={(d) => dayjs(d).format("DD/MM/YYYY")}
           />
         )}
-        <YAxis hideLine tickValues={quartiles} />
+        <YAxis hideLine tickValues={yDomain} />
         <ChartLabel
           text="Equity"
           includeMargin={false}
@@ -67,12 +67,12 @@ const PortfolioHistoryLineChart = ({ widthScale = 0.65, heightScale = 0.6 }) => 
               title: "Date",
               value: new Date(d?.[0].x).toLocaleString(),
             })}
-            itemsFormat={(d) => [{ title: "Equity", value: d?.[0].y }]}
+            itemsFormat={(d) => [{ title: "Equity", value: (d?.[0].y).toFixed(2) }]}
           />
         )}
       </FlexibleXYPlot>
     </div>
-  ) : null
+  ) : null // TODO: add loading state
 }
 
 export default PortfolioHistoryLineChart

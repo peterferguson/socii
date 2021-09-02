@@ -1,7 +1,7 @@
 const functions = require("firebase-functions")
 import { logger } from "firebase-functions"
-import { config } from "../alpaca/broker/client/ts/index"
-import { getLatestEventId, storeEvents } from "../lib/firestore"
+import { config } from "../../shared/alpaca/index.js"
+import { getLatestEventId, storeEvents } from "../firestore"
 import { IncomingMessage } from "http"
 import { BaseServer, sseGetRequest } from "../utils/sseGetRequest"
 import { Request, Response } from "express"

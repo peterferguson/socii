@@ -1,7 +1,7 @@
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { handlePortfolioHistory } from "@api/alpaca/portfolio"
 import { performance } from "perf_hooks"
-import { PortfolioHistory } from "@alpaca/index"
+import { PortfolioHistory } from "@socii/shared/alpaca/index"
 
 const portfolioTest = nextApiHandlerTest(
   handlePortfolioHistory,

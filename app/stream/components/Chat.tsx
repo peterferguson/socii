@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { CreateChatModalDynamic, CustomTriggerProviderDynamic } from "."
 import ChannelInner from "./ChannelInner"
-import ChannelList from "./ChannelList"
+import ChannelList from "./ChannelList/ChannelList"
 import { CustomAttachmentDynamic } from "./CustomAttachments"
 import { Transition } from "@headlessui/react"
 
@@ -38,7 +38,7 @@ const StreamChat = ({ client }) => {
   // TODO: Replace light with theme when dark theme is implemented
   return client ? (
     <Chat client={client} theme={`messaging light`}>
-      <div className="flex flex-col sm:flex-row">
+      <div className="flex flex-col sm:flex-row overscroll-contain">
         <Channel
           channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
           maxNumberOfFiles={3}

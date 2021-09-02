@@ -1,7 +1,7 @@
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { handlePositions } from "@api/alpaca/positions"
 import { performance } from "perf_hooks"
-import { Position } from "@alpaca/index"
+import { Position } from "@socii/shared/alpaca/index"
 
 const positionsTest = nextApiHandlerTest(handlePositions, "/api/alpaca/positions")
 

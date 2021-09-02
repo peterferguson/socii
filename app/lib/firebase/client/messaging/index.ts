@@ -2,7 +2,7 @@ import { isBrowser } from "@utils/isBrowser"
 import { registerValidSW } from "@utils/registerValidSW"
 import { updateServiceWorker } from "@utils/updateServiceWorker"
 import { getApp } from "firebase/app"
-import { getMessaging, getToken, onMessage } from "firebase/messaging"
+import { getMessaging, getToken, isSupported, Messaging } from "firebase/messaging"
 import { getFcmTokenFromFirebase } from "../db/getFcmTokenFromFirebase"
 import { storeFcmToken } from "../db/storeFcmToken"
 import { initialize } from "../firebase"
@@ -14,7 +14,13 @@ try {
   app = initialize()
 }
 
-export const messaging = isBrowser && getMessaging(app)
+const initialiseMessaging = async () => {
+  let messaging: Messaging | undefined
+  if (isBrowser && (await isSupported())) messaging = getMessaging(app)
+  return messaging
+}
+
+export const messaging = initialiseMessaging()
 
 export const getFCMToken = async (uid: string) => {
   "serviceWorker" in navigator &&
@@ -25,6 +31,8 @@ export const getFCMToken = async (uid: string) => {
   console.log("fcmTokenInFirebase", fcmTokenInFirebase)
 
   if (fcmTokenInFirebase) return fcmTokenInFirebase
+
+  const messaging = await initialiseMessaging()
 
   try {
     const status = await Notification.requestPermission()
@@ -45,6 +53,3 @@ export const getFCMToken = async (uid: string) => {
     return null
   }
 }
-
-export const onMessageListener = () =>
-  new Promise((resolve) => onMessage(messaging, (payload) => resolve(payload)))

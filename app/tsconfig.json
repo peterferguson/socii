@@ -21,8 +21,6 @@
       "@tests/*": ["__tests__/*"],
       "@hooks": ["hooks/index"],
       "@hooks/*": ["hooks/*"],
-      "@alpaca/*": ["alpaca/*"],
-      "@alpaca": ["alpaca/index"],
       "@stream": ["stream/index"],
       "@stream/*": ["stream/*"],
       "@contexts/*": ["contexts/*"],
@@ -39,6 +37,7 @@
     },
     "esModuleInterop": true
   },
+  "references": [{ "path": "../functions/shared/" }],
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"

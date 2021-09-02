@@ -65,6 +65,7 @@ module.exports = {
         secondary: ['"Work Sans"', "sans-serif"],
       },
       fontSize: {
+        tiniest: "0.5rem",
         tiny: "0.625rem",
       },
       keyframes: {
@@ -117,6 +118,12 @@ module.exports = {
           },
         },
       },
+      height: {
+        screen: "calc(var(--innerVh, 1vh) * 100)",
+      },
+      maxHeight: {
+        screen: "calc(var(--innerVh, 1vh) * 100)",
+      },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
         "fade-in-down": "fade-in-down 0.5s ease-out",
@@ -125,7 +132,7 @@ module.exports = {
         "fade-in-left": "fade-in-up 0.5s ease-out",
       },
       boxShadow: {
-        left: "-1rem 0 3rem rgba(0, 0, 0, 0.3)",
+        left: "-0.5rem 0 0.5rem rgba(0, 0, 0, 0.3)",
       },
       scale: {
         "-1": "-1",

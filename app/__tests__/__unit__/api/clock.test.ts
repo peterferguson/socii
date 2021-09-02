@@ -1,4 +1,4 @@
-import { ClockResponse } from "@alpaca/models"
+import { ClockResponse } from "@socii/shared/alpaca/models"
 import { performance } from "perf_hooks"
 import { handleClock } from "@api/alpaca/clock"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"

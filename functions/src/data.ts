@@ -1,12 +1,12 @@
 import bent from "bent"
 import * as cors from "cors"
 import { firestore } from "./index.js"
-import { serverTimestamp, Timestamp } from "./lib/firestore/index.js"
+import { serverTimestamp, Timestamp } from "./firestore/index.js"
 import { cleanJsonResponse } from "./utils/cleanJsonResponse"
 import { filterKeys } from "./utils/filterKeys"
 // - whitelist cannot be accessed by the firestore client outside the yahoo folder
 // - but can be read by vercel here so adding the whitelist to the yahoo folder
-const whitelist = require("../src/yahoo/whitelist.json")
+import { whitelist } from "../shared/whitelist.js"
 const cors = require("cors")({ origin: whitelist })
 
 // TODO: convert to using `alphavantage` library

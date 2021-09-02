@@ -12,7 +12,7 @@ module.exports = {
     "^.+\\.module\\.(css|sass|scss)$",
   ],
   moduleNameMapper: {
-    "^@alpaca(.*)$": "<rootDir>/alpaca$1",
+    "^@socii/shared/alpaca(.*)$": "<rootDir>/alpaca$1",
     "^@stream(.*)$": "<rootDir>/stream$1",
     "^@tests(.*)$": "<rootDir>/__tests__$1",
     "^@contexts(.*)$": "<rootDir>/contexts$1",

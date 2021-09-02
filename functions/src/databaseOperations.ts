@@ -1,9 +1,9 @@
 import { logger } from "firebase-functions"
 import { firestore, messaging } from "./index.js"
-import { increment, serverTimestamp } from "./lib/firestore/index.js"
+import { increment, serverTimestamp } from "./firestore/index.js"
 import { streamClient } from "./utils/streamClient"
-import { config, FundingApi, TransferData } from "./alpaca/broker/client/ts/index"
-import { getInvestorFcmTokens } from "./lib/firestore/db/getInvestorFcmTokens.js"
+import { config, FundingApi, TransferData } from "../shared/alpaca/index.js"
+import { getInvestorFcmTokens } from "./firestore/db/getInvestorFcmTokens.js"
 
 /*
  * Increment the investorCount value on a group when a new investor is added to the investors collection

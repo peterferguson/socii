@@ -1,5 +1,5 @@
 import { handleBanking } from "@api/alpaca/banking"
-import { BankResource } from "@alpaca"
+import { BankResource } from "@socii/shared/alpaca"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
 import { bankData } from "@tests/utils/mockBankData"

@@ -6,7 +6,7 @@
 */
 
 import { handleFunding } from "@pages/api/alpaca/funding"
-import { TransferResource } from "@alpaca"
+import { TransferResource } from "@socii/shared/alpaca"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
 
@@ -41,7 +41,7 @@ describe.skip("/api/alpaca/funding", () => {
         }),
       })
       const finishTime = performance.now()
-      
+
       const fundingResponse: TransferResource = TransferResource.from(await res.json())
       fundingId = fundingResponse.id
 
