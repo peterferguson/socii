@@ -174,12 +174,14 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
                     }}
                   />
                 </a>
-                <a className="mx-1">
-                  <ImBin
-                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                    onClick={() => setShowDelete(true)}
-                  />
-                </a>
+                {channelName !== "sociians" && (
+                  <a className="mx-1">
+                    <ImBin
+                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                      onClick={() => setShowDelete(true)}
+                    />
+                  </a>
+                )}
                 <a className="mx-1">
                   <ImCross
                     className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
