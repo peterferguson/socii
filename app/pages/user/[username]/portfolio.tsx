@@ -12,8 +12,8 @@ const GainPctBar = dynamic(() => import("@components/GainPctBar"))
 const LastPurchaseSummaryCard = dynamic(
   () => import("@components/LastPurchaseSummaryCard")
 )
-const PortfolioValueSummaryCard = dynamic(
-  () => import("@components/PortfolioValueSummaryCard")
+const PortfolioEquitySummaryCard = dynamic(
+  () => import("@components/PortfolioEquitySummaryCard")
 )
 const TopPerformerSummaryCard = dynamic(
   () => import("@components/TopPerformerSummaryCard")
@@ -32,7 +32,7 @@ const Dashboard = () => {
             {cards.map((card, i) => card(`card-${i}`))}
           </div>
         </div>
-        <div className="w-full mx-auto">
+        <div className="w-full mx-auto overscroll-x-none">
           {/* Tables */}
           <PortfolioHistoryCard />
           <div className="flex flex-wrap w-full mt-4">
@@ -122,7 +122,7 @@ export const stockTableMeta = {
 }
 
 const cards = [
-  (key: React.Key) => <PortfolioValueSummaryCard key={key} />,
+  (key: React.Key) => <PortfolioEquitySummaryCard key={key} />,
   // (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
   (key: React.Key) => <VsMarketSummaryCard key={key} />,
   // (key: React.Key) => <TopPerformerSummaryCard key={key} />,
