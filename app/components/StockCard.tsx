@@ -9,7 +9,7 @@ interface IStockCard {
 }
 
 export default function StockCard({ holding, latestPrice, index }: IStockCard) {
-  const tickerSymbol = holding.tickerSymbol
+  const tickerSymbol = holding.symbol
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   return (
