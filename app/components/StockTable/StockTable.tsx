@@ -1,7 +1,7 @@
 import React from "react"
 import { usePositions } from "@hooks/usePositions"
-import { StockTableHeader } from "./StockTableHeader"
-import { StockTableBody } from "./StockTableBody"
+import StockTableHeader from "./StockTableHeader"
+import StockTableBody from "./StockTableBody"
 
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
   const { positions } = usePositions()
