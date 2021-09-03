@@ -1,4 +1,5 @@
 import { MultiSelect, PriceInput } from "@components"
+import { InvestButtonModalContainer } from "@components/InvestButtonModal/InvestButtonModalContainer"
 import { Dialog } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
 import { StreamClientContext } from "@hooks/useStreamClient"
@@ -8,7 +9,6 @@ import { redirectWithToast } from "@utils/redirectWithToast"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
-import { InvestButtonModalContainer } from "./InvestButtonModalContainer"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
@@ -81,7 +81,7 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
   return (
     <InvestButtonModalContainer
       open={state.matches("active.shareInformation")}
-      onClose={() => send("CLOSE")}
+      send={send}
     >
       <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
         <Dialog.Title
@@ -141,4 +141,4 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
   )
 }
 
-export default StockSharingModal
+export default React.memo(StockSharingModal)

@@ -1,3 +1,4 @@
+import "../scripts/wdyr"
 import Head from "@components/Head"
 import { AuthProvider } from "@contexts/AuthProvider"
 import { onMessage } from "@firebase/messaging"
@@ -15,7 +16,7 @@ import toast from "react-hot-toast"
 import { useMediaQuery } from "react-responsive"
 import { innerVh } from "inner-vh"
 import { deviceType } from "detect-it"
-import raiseNotOptimisedForLandscapeToast from "@components/raiseNotOptimisedForLandscapeToast"
+import raiseNotOptimisedForLandscapeToast from "@utils/raiseNotOptimisedForLandscapeToast"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,

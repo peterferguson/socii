@@ -1,4 +1,4 @@
-import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart.dynamic"
+import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart/TickerPageLineChart.dynamic"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { pctChange } from "@utils/pctChange"
 import { pnlTextColor } from "@utils/pnlTextColor"

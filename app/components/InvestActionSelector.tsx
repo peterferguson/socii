@@ -17,7 +17,7 @@ export default function OrderTypeSelector({ actions, send, className = "" }) {
         <div className="flex-col flex-grow space-x-0 space-y-2 sm:space-y-4 sm:flex">
           {actions.map((action, i: number) => (
             <RadioGroup.Option
-              key={`${action}-${i}`}
+              key={`${action.name}-${i}`}
               value={action}
               className={({ active }) =>
                 `${

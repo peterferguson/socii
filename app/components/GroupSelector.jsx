@@ -44,9 +44,8 @@ export default function GroupSelectorRadioGroup({ groupNames, send, className = 
               className={({ active }) => `bg-white relative rounded-lg shadow-md px-4 
                 py-2 cursor-pointer focus:outline-none flex-1
                 ${
-                  active
-                    ? "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
-                    : ""
+                  active &&
+                  "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
                 }
                 `}
             >
