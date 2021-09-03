@@ -2,7 +2,7 @@ import { usePortfolioHistory } from "@hooks"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React, { useMemo } from "react"
 import { FaArrowDown, FaArrowUp, FaChartBar } from "react-icons/fa"
-import SummaryCard from "./SummaryCard"
+import SummaryCard from "../SummaryCard"
 
 const PortfolioEquitySummaryCard = () => {
   const { history } = usePortfolioHistory()

@@ -1,5 +1,5 @@
 import React from "react"
-import PortfolioHistoryLineChart from "./PortfolioHistoryLineChart"
+import PortfolioHistoryLineChart from "../PortfolioHistoryLineChart"
 
 const PortfolioHistoryCard = () => (
   <div className="w-full mt-4">

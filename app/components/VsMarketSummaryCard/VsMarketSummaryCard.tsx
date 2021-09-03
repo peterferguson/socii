@@ -2,7 +2,7 @@ import { useMarketData, usePortfolioHistory } from "@hooks"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import React, { useMemo } from "react"
 import { FaArrowDown, FaArrowUp, FaPercent } from "react-icons/fa"
-import SummaryCard from "./SummaryCard"
+import SummaryCard from "../SummaryCard"
 
 const VsMarketSummaryCard = () => {
   const { history } = usePortfolioHistory()
