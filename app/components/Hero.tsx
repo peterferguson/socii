@@ -37,13 +37,13 @@ export const Hero = ({ invited, setInvited }) => {
       <Transition.Root show={showBlackOverlay}>
         <div className="flex items-center justify-center">
           <Transition.Child
-            leave="transition transform ease-out delay-700 duration-1000"
+            leave="transition transform ease-out delay-700 duration-700"
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
             className="absolute inset-y-0 z-30 w-screen bg-black h-[60%]"
           />
           <Transition.Child
-            leave="transition transform ease-out delay-700 duration-1000"
+            leave="transition transform ease-out delay-700 duration-700"
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
             // beforeLeave={() => setBlackText(true)}
