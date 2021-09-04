@@ -69,46 +69,46 @@ jobs:
           --data '{"type":"trades"}' \
           --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
-  dev-journals:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call events API route with type param = `journals` on development
-        run: |
-          curl --fail --show-error --request POST \
-          --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
-          -H "Content-Type: application/json" \
-          --data '{"type":"journals"}' \
-          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
+  # dev-journals:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Call events API route with type param = `journals` on development
+  #       run: |
+  #         curl --fail --show-error --request POST \
+  #         --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
+  #         -H "Content-Type: application/json" \
+  #         --data '{"type":"journals"}' \
+  #         --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
-  dev-accounts:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call events API route with type param = `accounts` on development
-        run: |
-          curl --fail --show-error --request POST \
-          --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
-          -H "Content-Type: application/json" \
-          --data '{"type":"accounts"}' \
-          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
+  # dev-accounts:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Call events API route with type param = `accounts` on development
+  #       run: |
+  #         curl --fail --show-error --request POST \
+  #         --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
+  #         -H "Content-Type: application/json" \
+  #         --data '{"type":"accounts"}' \
+  #         --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
-  dev-transfers:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call events API route with type param = `transfers` on development
-        run: |
-          curl --fail --show-error --request POST \
-          --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
-          -H "Content-Type: application/json" \
-          --data '{"type":"transfers"}' \
-          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
+  # dev-transfers:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Call events API route with type param = `transfers` on development
+  #       run: |
+  #         curl --fail --show-error --request POST \
+  #         --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
+  #         -H "Content-Type: application/json" \
+  #         --data '{"type":"transfers"}' \
+  #         --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
 
-  dev-nonTradingActivity:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call events API route with type param = `nonTradingActivity` on development
-        run: |
-          curl --fail --show-error --request POST \
-          --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
-          -H "Content-Type: application/json" \
-          --data '{"type":"nonTradingActivity"}' \
-          --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
+  # dev-nonTradingActivity:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Call events API route with type param = `nonTradingActivity` on development
+  #       run: |
+  #         curl --fail --show-error --request POST \
+  #         --url 'https://europe-west2-socii-development.cloudfunctions.net/alpacaEvents' \
+  #         -H "Content-Type: application/json" \
+  #         --data '{"type":"nonTradingActivity"}' \
+  #         --header 'Authorization: Bearer ${{ secrets.ALPACA_KEY }}'
