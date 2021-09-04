@@ -73,7 +73,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
 ]
 
 const FooterSearchButton = ({ username, onClick, isActive }) => (
-  <Link href={username && `/user/${username}/portfolio`}>
+  <Link href={username && "/user/portfolio"}>
     <a
       className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
         isActive &&

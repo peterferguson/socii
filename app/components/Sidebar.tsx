@@ -67,7 +67,7 @@ const navItems = (router: NextRouter, username: string) => [
   {
     name: "Portfolio",
     description: "Keep track of your growth",
-    href: username && `/user/${username}/portfolio`,
+    href: username && "/user/portfolio",
     icon: HiOutlineChartPie,
     isActive: router.asPath.includes("portfolio"),
   },

@@ -3,12 +3,13 @@ import { PortfolioHistoryCard } from "@components/PortfolioHistoryCard"
 import { StockTableDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
+import { TradeHistory } from "../../components/TradeHistory/TradeHistory"
 
 const Dashboard = () => {
   const tableMeta = useMemo(() => StockTableMeta, [])
   return (
     <>
-      <div className="flex flex-col w-full bg-blueGray-100">
+      <div className="flex flex-col w-full max-w-full pb-5 bg-blueGray-100">
         <div className="w-full mx-auto">
           {/* Card stats */}
           {/* TODO: Convert these into carousel cards organised by top percentage */}
@@ -22,6 +23,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap w-full mt-4">
             <StockTableDynamic stockTableMeta={tableMeta} />
           </div>
+          <TradeHistory />
         </div>
       </div>
     </>
