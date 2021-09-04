@@ -140,6 +140,7 @@ module.exports = {
       screens: {
         thin: "375px",
         lgr: "1152px",
+        standalone: { raw: "(display-mode: standalone)" },
       },
       spacing: {
         0.5: "0.125rem",
