@@ -3,6 +3,7 @@ import { useWindowSize } from "@hooks"
 import React, { useEffect, useState } from "react"
 import { Hint, RadialChart } from "react-vis"
 import "react-vis/dist/style.css"
+import Tooltip from "./Tooltip"
 
 // - unlikely to have more than 15 colors needed for the chart
 const colors = [
@@ -63,7 +64,6 @@ function DonutChart({
     const cashValue = parseFloat(text.cash?.slice(1))
 
     if (cashInPortfolio) {
-      console.log("cash in portfolio")
       setChartData((prevData) =>
         prevData
           ?.map((d) => ({
@@ -79,21 +79,15 @@ function DonutChart({
             },
           ])
       )
-      console.log(chartData)
     }
     if (!cashInPortfolio && chartData?.slice().pop()?.isCash) {
       // - remove cash from data & update return pct values to equity
-      console.log("remove cash from data")
-      console.log(
-        chartData.map((d) => (d.theta * (portfolioValue + cashValue)) / portfolioValue)
-      )
       setChartData((prevData) =>
         prevData?.slice(0, -1)?.map((d) => ({
           ...d,
           theta: (d.theta * (portfolioValue + cashValue)) / portfolioValue,
         }))
       )
-      console.log(chartData)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cashInPortfolio])
@@ -124,21 +118,27 @@ function DonutChart({
     <>
       {data && (
         <RadialChart {...chartProps} data={chartData}>
-          <div className="w-full mx-auto text-xl text-center text-gray-600 font-primary mt-[-13.5rem] z-1">
+          <div className="relative w-full mx-auto text-xl text-center text-gray-600 font-primary mt-[-13.5rem] z-1">
             <div className="uppercase text-tiniest leading-4 ">portfolio</div>
             {text.portfolio}
-            <div className={`text-tiny leading-4 ${gainColor} -mb-2`}>
+            <div
+              className={`absolute text-tiny leading-4 ${gainColor} inset-0 inset-y-11`}
+            >
               {positiveGain ? "+" : "-"}
               {text.gain}
             </div>
             <div
               className="mx-auto text-lg cursor-pointer font-primary"
               onClick={toggleCashInPortfolio}
-              // tooltip={cashInPortfolio ? "Remove Cash" : "Add Cash"}
             >
-              <div className="w-5/12 h-1 my-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
-              <div className="uppercase text-tiny leading-4">Cash</div>
-              {text.cash}
+              <div className="w-5/12 h-1 my-5 mb-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
+              <Tooltip
+                text={cashInPortfolio ? "Remove Cash From Chart" : "Add Cash To Chart"}
+                className="absolute w-2/5 -bottom-14 inset-x-[6.5rem]"
+              >
+                <div className="uppercase text-tiny leading-4">Cash</div>
+                {text.cash}
+              </Tooltip>
             </div>
           </div>
           {value !== undefined && skeleton === false && <Hint value={value} />}

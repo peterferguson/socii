@@ -207,3 +207,15 @@ input[type="number"]::-webkit-outer-spin-button {
     }
   }
 }
+
+/* Add tooltips */
+@layer components {
+  .tooltip {
+    @apply invisible absolute;
+  }
+
+  .has-tooltip:hover .tooltip,
+  .has-tooltip:hover ~ .tooltip {
+    @apply visible z-50;
+  }
+}
