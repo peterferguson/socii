@@ -32,10 +32,11 @@ export default function Enter() {
         <div className="absolute inset-0 z-0 bg-black/10" />
         <div className="relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-r from-green-400/60 to-brand/60 transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl" />
         <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
-          <div className="text-center">
+          <div className="flex flex-col items-center justify-center text-center">
             <h2 className="mt-6 text-4xl font-bold text-gray-900 font-primary">
-              Welcome to <Logo />
+              Welcome to
             </h2>
+            <Logo className="text-5xl" />
             <p className="mt-2 text-base text-gray-600">
               Please link your account with one of the following providers:
             </p>
