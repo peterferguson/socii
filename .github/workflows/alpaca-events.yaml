@@ -1,8 +1,9 @@
 name: Event Stream Polling
 on:
   schedule:
-    # Run job every 30 minutes (starting with 6 minutes past the hour avoiding traffic on the hour)
-    - cron: "6,36 * * * *"
+    # Run job every 30 minutes during market hours mon-friday
+    # (starting with 6 minutes past the hour avoiding traffic on the hour)
+    - cron: "6,36 14-21 * * 1-5"
 jobs:
   trades:
     runs-on: ubuntu-latest
