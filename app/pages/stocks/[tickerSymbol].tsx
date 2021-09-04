@@ -40,8 +40,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
       setReturnToLastScreen(null)
   }, [returnToLastScreen, send])
 
-  useEffect(() => console.log(state), [state])
-
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
   // TODO: Add back buttons to modals

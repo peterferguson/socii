@@ -83,7 +83,7 @@ const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
               value: new Date(t?.[0].x).toLocaleDateString(),
             })}
             itemsFormat={(t: TimeseriesTick[]) => [
-              { title: "Close price", value: t?.[0].y },
+              { title: "Close price", value: (t?.[0].y).toFixed(2) },
             ]}
           />
         )}
