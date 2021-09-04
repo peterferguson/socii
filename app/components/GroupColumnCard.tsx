@@ -6,6 +6,7 @@ import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
 import { useMountedState, useUnmountPromise } from "react-use"
 import { NoHoldingsPieCardSkeleton } from "./PieCard"
+import { getGroupCashBalanceListener } from "@lib/firebase/client/db/getGroupCashBalance"
 export interface IGroupColumnCard {
   groupName: string
   className?: string
@@ -15,9 +16,16 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   const { user } = useAuth()
   const mounted = useUnmountPromise()
 
+  const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
   const [currentPrices, setCurrentPrices] = useState([])
+
+  useEffect(() => {
+    let unsubscribe
+    if (groupName) unsubscribe = getGroupCashBalanceListener(groupName, setCashBalance)
+    return () => unsubscribe
+  }, [groupName])
 
   useEffect(() => {
     let unsubscribe
@@ -62,6 +70,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
             groupName={groupName}
             holdingData={holdingInfo}
             currentPrices={currentPrices}
+            cashBalance={cashBalance}
           />
           <div className="w-full py-3 mb-8 -mt-8 text-center border-b border-gray-400 h-3.5">
             <span className="py-0 text-gray-400 bg-white px-2.5">

@@ -6,12 +6,14 @@ export interface IGroupPieChart {
   groupName: string
   holdingData: any
   currentPrices: any
+  cashBalance: number
   className?: string
 }
 export default function GroupPieChart({
   groupName,
   holdingData,
   currentPrices,
+  cashBalance,
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
@@ -52,8 +54,9 @@ export default function GroupPieChart({
         scaling={0.35}
         radius={250}
         text={{
-          main: `$${portfolioValue?.toFixed(2)}`,
-          sub: `${gain.toFixed(2)}%`,
+          portfolio: `$${portfolioValue?.toFixed(2)}`,
+          gain: `${gain.toFixed(2)}%`,
+          cash: `$${cashBalance?.toFixed(2)}`,
         }}
       />
     </div>

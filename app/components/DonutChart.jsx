@@ -65,22 +65,25 @@ function DonutChart({
     colorType: "literal",
   }
 
+  const positiveGain = parseFloat(text.gain) > 0 ? true : false
+  const gainColor = pnlTextColor(parseFloat(text.gain))
+
   // TODO: Add skeleton ternary for the portfolio header
   return (
     <>
       {data && (
         <RadialChart {...chartProps}>
-          <div className="w-full mx-auto text-xl text-center text-gray-600 font-primary -mt-52 z-1">
-            <div className="uppercase text-tiny leading-4 ">portfolio</div>
-            {text.main}
-            <div
-              className={`font-primary text-lg mx-auto ${pnlTextColor(
-                parseFloat(text.sub)
-              )}`}
-            >
+          <div className="w-full mx-auto text-xl text-center text-gray-600 font-primary mt-[-13.5rem] z-1">
+            <div className="uppercase text-tiniest leading-4 ">portfolio</div>
+            {text.portfolio}
+            <div className={`text-tiny leading-4 ${gainColor} -mb-2`}>
+              {positiveGain ? "+" : "-"}
+              {text.gain}
+            </div>
+            <div className="mx-auto text-lg font-primary">
               <div className="w-5/12 h-1 my-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
-              <div className="uppercase text-tiny leading-4 ">gain</div>
-              {text.sub}
+              <div className="uppercase text-tiny leading-4 ">Cash</div>
+              {text.cash}
             </div>
           </div>
           {value !== false && skeleton === false && <Hint value={value} />}
