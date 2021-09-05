@@ -61,6 +61,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
           <TickerPageLineChartDynamic
             timeseries={deserialisedTimeseries}
             color={color}
+            highlightedChange={highlightedChange}
             crosshairIndexValue={crosshairIndexValue}
             setCrosshairIndexValue={setCrosshairIndexValue}
             heightScale={is1Col ? 0.35 : 0.6}

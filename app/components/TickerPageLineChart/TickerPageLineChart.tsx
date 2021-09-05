@@ -1,9 +1,8 @@
 import { useWindowSize } from "@hooks/useWindowSize"
 import { tailwindColorMap } from "@lib/constants"
 import { TimeseriesTick } from "@models/TimeseriesTick"
-import { pctChange } from "@utils/pctChange"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useMediaQuery } from "react-responsive"
 import { AreaSeries, Crosshair, FlexibleXYPlot, LineSeries, XAxis } from "react-vis"
 
@@ -11,6 +10,7 @@ interface ITickerPageLineChart {
   timeseries: TimeseriesTick[]
   crosshairIndexValue: number
   color: string
+  highlightedChange: number
   setCrosshairIndexValue: React.Dispatch<React.SetStateAction<number>>
   widthScale?: number
   heightScale?: number
@@ -19,6 +19,7 @@ interface ITickerPageLineChart {
 const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   timeseries,
   color,
+  highlightedChange,
   crosshairIndexValue,
   setCrosshairIndexValue,
   widthScale = 0.65,
@@ -27,13 +28,6 @@ const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   const [width, height] = useWindowSize()
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const [crosshairValue, setCrosshairValue] = useState<TimeseriesTick>()
-  const [pctChangeValue, setPctChangeValue] = useState<number>(0.0)
-
-  useEffect(() => {
-    timeseries?.length &&
-      crosshairValue?.y &&
-      setPctChangeValue(pctChange(crosshairValue?.y, timeseries?.[0].y))
-  }, [crosshairValue, timeseries])
 
   const lineSeriesProps = {
     animation: false,
@@ -50,9 +44,9 @@ const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
   // TODO: Add reactive area sizing based on the index of the crosshair and update color based on pnl
   const areaSeriesProps = {
     animation: true,
-    color: tailwindColorMap[pnlBackgroundColor(pctChangeValue)],
+    color: tailwindColorMap[pnlBackgroundColor(highlightedChange)],
     opacity: 0.75,
-    data: timeseries.slice(0, 1 + crosshairIndexValue),
+    data: timeseries.slice(crosshairIndexValue),
   }
 
   return (
