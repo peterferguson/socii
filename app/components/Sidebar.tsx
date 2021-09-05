@@ -24,15 +24,15 @@ const Sidebar = () => {
   const items = useMemo(() => navItems(router, username), [router, username])
 
   return (
-    <div className="sticky hidden w-20 h-screen py-3 shadow-md rounded-t-2xl mx-1 top-2 left-2 sm:block lg:w-52">
-      <div className="h-full bg-white pt-4 dark:bg-gray-700">
+    <div className="sticky hidden w-20 h-screen py-3 mx-1 shadow-md rounded-t-2xl top-2 left-2 sm:block lg:w-52">
+      <div className="h-full pt-4 bg-white dark:bg-gray-700">
         <div className="flex items-center justify-center mx-auto">
           {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
         </div>
         <nav className="mt-6">
           {items.map((item) => (
             <Link href={item.href} key={`${item.name}-selector`}>
-              <a className={`${item.isActive ? "nav-btn-active" : "nav-btn"}`}>
+              <a className={`${item.isActive ? "nav-btn-active-r" : "nav-btn"}`}>
                 <item.icon className="mx-auto text-xl lg:mx-0" />
                 <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
                   {item.name}
