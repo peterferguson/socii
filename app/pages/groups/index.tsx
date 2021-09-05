@@ -1,13 +1,10 @@
-// TODO: A lot. Basic skeleton for tabed group page complete 
-//              but including some very temp placeholders
-//      
+// TODO:
+//  - replace tmp code for leaderboard with real connection
+//  - make a seperate component for creating the tab headers / panels
+//    to reduce repeted code and make more flexible to changes
+//  - correct routing: Decide what page will be shown for groups / user portfolio
+//  - Fix centering? Is it just me or does the portfolio card not look centered
 //
-// - In process of making code less awful:
-//     - make a seperate component for creating the tab headers / panels
-//       to reduce repeted code and make more flexible to changes
-//     - actually link to correct groups/leaderboards components
-//     - link to real route
-
 // - Potential:
 //   - add "followed groups" page to check status of other open groups
 
@@ -18,13 +15,11 @@ import LeaderBoardCard from "@components/LeaderBoardCard"
 import { useAuth } from "@hooks"
 import { Tab } from '@headlessui/react'
 import { setUserState } from "@lib/firebase/client/db"
-import Group from "./[groupName]/index"
-
+import { GroupPortfolios } from "@components/GroupPortfolios"
 
 const GroupsHome = ({ leaders }) => {
   const { userGroups } = useAuth()
-
-const [selectedTab , setSelectedTab] = useState("")
+  const [selectedTab , setSelectedTab] = useState("My Groups")
 
   return (
     
@@ -50,8 +45,8 @@ const [selectedTab , setSelectedTab] = useState("")
         </div>
         <Tab.Panels>
           <div className="flex justify-center">
-            <div className= " flex-col justify-center w-10/12 bg-gray-300 rounded-lg shadow-lg">
-              <Tab.Panel><Group/></Tab.Panel>
+            <div className= "flex-col justify-center w-10/12 py-4 bg-gray-300 rounded-lg shadow-lg">
+              <Tab.Panel><GroupPortfolios userGroupsList= {userGroups} /></Tab.Panel>
 
               <Tab.Panel>
                 <section className="flex flex-col justify-between ">

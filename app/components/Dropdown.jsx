@@ -19,7 +19,7 @@ const dropdownItems = (username) => [
   {
     name: "Groups",
     description: "View all of your Groups",
-    href: `/user/${username}`,
+    href: "/groups",
     icon: HiOutlineUserGroup,
     rightIcon: HiOutlineChevronRight,
     disabled: true,
