@@ -8,11 +8,11 @@ const GainPctBar = ({ gainPct }) => {
   return (
     <td className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap">
       <div className="flex items-center space-x-1">
-        <span className="">{(gainPct * 100).toFixed(2)}%</span>
+        <span className="">{gainPct}%</span>
         <div className="w-full">
           <div className="flex h-2 overflow-hidden bg-red-200 rounded text-tiny">
             <div
-              style={{ width: `${gainPct * 100}%` }}
+              style={{ width: `${gainPct}%` }}
               className={`flex flex-col justify-center text-center text-white ${gainColor}`}
             />
           </div>

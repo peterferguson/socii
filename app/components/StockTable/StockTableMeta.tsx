@@ -6,24 +6,25 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 export const StockTableMeta = {
   Asset: {
     alpacaAttr: "symbol",
-    Component: ({ position, attr, is1Col }) =>
-      !is1Col ? (
-        <TickerLogo tickerSymbol={position[attr]} width="20" height="20" />
-      ) : (
-        <td
-          key={`position-${attr}`}
-          className="p-4 px-6 text-center align-middle border-t-0 border-l-0 border-r-0 text-tiny font-primary whitespace-nowrap"
-        >
-          {position[attr]}
-        </td>
-      ),
+    Component: ({ position, attr }) => (
+      <td
+        key={`position-${attr}`}
+        className="flex items-center justify-center p-2 text-tiny"
+      >
+        <TickerLogo
+          tickerSymbol={position[attr]}
+          className="absolute w-5 h-5 left-2 top-1.5 sm:left-4 standalone:hidden" // TODO: standalone positioning
+        />
+        <div className="ml-4 standalone:ml-0">{position[attr]}</div>
+      </td>
+    ),
   },
   Equity: {
     alpacaAttr: "marketValue",
     Component: ({ position, attr }) => (
       <td
         key={`position-${attr}`}
-        className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap"
+        className="p-4 px-6 align-middle border-t-0 border-l-0 border-r-0 text-tiny whitespace-nowrap"
       >
         ${parseFloat(position[attr])?.toFixed(2)}
       </td>
@@ -34,7 +35,7 @@ export const StockTableMeta = {
     Component: ({ position, attr }) => (
       <td
         key={`position-${attr}`}
-        className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap"
+        className="p-4 px-6 align-middle border-t-0 border-l-0 border-r-0 text-tiny whitespace-nowrap"
       >
         {parseFloat(position[attr])?.toFixed(2)}
       </td>
@@ -45,7 +46,7 @@ export const StockTableMeta = {
     Component: ({ position, attr }) => (
       <td
         key={`position-${attr}`}
-        className="p-4 px-6 text-xs align-middle border-t-0 border-l-0 border-r-0 whitespace-nowrap"
+        className="p-4 px-6 align-middle border-t-0 border-l-0 border-r-0 text-tiny whitespace-nowrap"
       >
         <div className="flex items-center">
           ${parseFloat(position[attr])?.toFixed(2)}
@@ -59,7 +60,7 @@ export const StockTableMeta = {
     ),
   },
   "Gain %": {
-    alpacaAttr: "unrealizedPlpc",
+    alpacaAttr: "gainPct",
     Component: ({ position, attr, is1Col }) =>
       !is1Col ? (
         <GainPctBar

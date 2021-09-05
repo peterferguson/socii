@@ -6,7 +6,7 @@ const StockTableBody = ({ positions, meta }) => {
   return (
     <tbody>
       {positions?.map((position, i) => (
-        <tr key={`position-${i}`}>
+        <tr key={`position-${i}`} className="relative">
           {Object.values(meta).map((row, j) => (
             <row.Component
               key={`position-${j}`}
