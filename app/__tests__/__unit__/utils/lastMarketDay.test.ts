@@ -1,4 +1,4 @@
-import { MarketDay } from "@alpaca/models"
+import { MarketDay } from "@socii/shared/alpaca/models"
 import { lastMarketDay } from "@utils/lastMarketDay"
 
 describe("utils/lastMarketDay", () => {

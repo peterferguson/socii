@@ -12,7 +12,7 @@ module.exports = {
     "^.+\\.module\\.(css|sass|scss)$",
   ],
   moduleNameMapper: {
-    "^@alpaca(.*)$": "<rootDir>/alpaca$1",
+    "^@socii/shared/alpaca(.*)$": "<rootDir>../functions/shared/alpaca$1",
     "^@stream(.*)$": "<rootDir>/stream$1",
     "^@tests(.*)$": "<rootDir>/__tests__$1",
     "^@contexts(.*)$": "<rootDir>/contexts$1",
@@ -34,6 +34,7 @@ module.exports = {
   verbose: false,
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+    "<rootDir>../functions/shared/alpaca\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
   },
   collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
 }

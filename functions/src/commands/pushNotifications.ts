@@ -1,6 +1,6 @@
 import { logger } from "firebase-functions"
 import { messaging } from ".."
-import { getInvestorFcmTokens } from "../lib/firestore/db/getInvestorFcmTokens"
+import { getInvestorFcmTokens } from "../firestore/db/getInvestorFcmTokens"
 
 interface User {
   id: string

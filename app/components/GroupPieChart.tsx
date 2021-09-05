@@ -1,4 +1,4 @@
-import { DonutChart, PieCard } from "@components"
+import { DonutChart } from "@components"
 import Link from "next/link"
 import React from "react"
 
@@ -6,16 +6,18 @@ export interface IGroupPieChart {
   groupName: string
   holdingData: any
   currentPrices: any
+  cashBalance: number
   className?: string
 }
 export default function GroupPieChart({
   groupName,
   holdingData,
   currentPrices,
+  cashBalance,
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
-    ?.map(({ tickerSymbol, qty }) => currentPrices?.[tickerSymbol] * qty)
+    ?.map(({ symbol, qty }) => currentPrices?.[symbol] * qty)
     .reduce((a, b) => a + b, 0)
 
   const gain =
@@ -26,10 +28,10 @@ export default function GroupPieChart({
       100) /
     portfolioValue
 
-  const pieData = holdingData?.map(({ tickerSymbol, shortName, qty }) => ({
-    theta: (currentPrices?.[tickerSymbol] * qty) / portfolioValue,
+  const pieData = holdingData?.map(({ symbol, shortName, qty }) => ({
+    theta: (currentPrices?.[symbol] * qty) / portfolioValue,
     label: shortName,
-    subLabel: tickerSymbol,
+    subLabel: symbol,
   }))
 
   return (
@@ -46,55 +48,19 @@ export default function GroupPieChart({
           </div>
         </a>
       </Link>
-      <DonutChart
-        className="z-0 -mt-6"
-        data={pieData}
-        scaling={0.35}
-        radius={250}
-        text={{
-          main: `$${portfolioValue?.toFixed(2)}`,
-          sub: `${gain.toFixed(2)}%`,
-        }}
-      />
+      {pieData?.length && portfolioValue && (
+        <DonutChart
+          className="z-0 -mt-6"
+          data={pieData}
+          scaling={0.35}
+          radius={250}
+          text={{
+            portfolio: `$${portfolioValue?.toFixed(2)}`,
+            gain: `${gain.toFixed(2)}%`,
+            cash: `$${cashBalance?.toFixed(2)}`,
+          }}
+        />
+      )}
     </div>
-  )
-}
-
-export function GroupPieCard({
-  groupName,
-  holdingData,
-  currentPrices,
-  className = "",
-}: IGroupPieChart) {
-  const portfolioValue = holdingData
-    ?.map(({ tickerSymbol, qty }) => currentPrices?.[tickerSymbol] * qty)
-    .reduce((a, b) => a + b, 0)
-
-  const gain =
-    ((portfolioValue -
-      holdingData
-        ?.map(({ avgPrice, qty }) => avgPrice * qty)
-        .reduce((a, b) => a + b, 0)) *
-      100) /
-    portfolioValue
-
-  const pieData = holdingData?.map(({ tickerSymbol, shortName, qty }) => ({
-    theta: (currentPrices?.[tickerSymbol] * qty) / portfolioValue,
-    label: shortName,
-    subLabel: tickerSymbol,
-  }))
-
-  return (
-    <PieCard
-      className={className}
-      groupName={groupName}
-      data={pieData}
-      scaling={0.35}
-      radius={250}
-      text={{
-        main: `$${portfolioValue?.toFixed(2)}`,
-        sub: `${gain.toFixed(2)}%`,
-      }}
-    />
   )
 }

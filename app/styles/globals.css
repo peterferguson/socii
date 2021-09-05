@@ -100,7 +100,7 @@ body {
   @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
   text-brand-shade-darkest hover:text-brand-cyan;
 }
-.nav-btn-active {
+.nav-btn-active-r {
   @apply flex items-center justify-start w-full p-4 my-2 font-thin uppercase transition-colors duration-200 
   text-brand-cyan-vivid border-r-4 border-brand bg-gradient-to-r from-white to-brand-light;
 }
@@ -205,5 +205,17 @@ input[type="number"]::-webkit-outer-spin-button {
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
     }
+  }
+}
+
+/* Add tooltips */
+@layer components {
+  .tooltip {
+    @apply invisible absolute;
+  }
+
+  .has-tooltip:hover .tooltip,
+  .has-tooltip:hover ~ .tooltip {
+    @apply visible z-50;
   }
 }

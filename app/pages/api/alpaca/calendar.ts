@@ -1,5 +1,5 @@
 import { withAuth, withCORS } from "@utils/middleware"
-import { config, CalendarApi, MarketDay } from "@alpaca/index"
+import { config, CalendarApi, MarketDay } from "@socii/shared/alpaca/index"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const calendarClient = new CalendarApi(

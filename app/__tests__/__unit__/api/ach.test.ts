@@ -1,5 +1,5 @@
 import { handleAch } from "@api/alpaca/ach"
-import { ACHRelationshipResource } from "@alpaca"
+import { ACHRelationshipResource } from "@socii/shared/alpaca"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"
 import { achRelationship as achData } from "@tests/utils/mockAchRelationship"

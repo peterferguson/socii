@@ -5,27 +5,30 @@ import { investmentFailedMML } from "./mml/investmentFailedMML"
 import { investmentReceiptMML } from "./mml/investmentReceiptMML"
 import { logger } from "firebase-functions"
 import { StreamChat } from "stream-chat"
+import { failedStatuses } from "../utils/determineTradeStatus.js"
 
 export const checkTradeStatus = async (change, context) => {
-  // get document info
+  // - get document info
   const eventDetails = await change.data()
-  logger.log("details", eventDetails)
-  const event = eventDetails.event
-  const qty = eventDetails.order.filled_qty
+  logger.log("Event Details: ", eventDetails)
 
-  // find trade corrosponding to message id
-  const ClientOrderId = eventDetails.order.client_order_id
-  const groupName = ClientOrderId.split("|")[0]
-  const messageId = ClientOrderId.split("|")[1]
+  const {
+    stream: { api_key, secret },
+  } = functionConfig
+
+  const {
+    event,
+    order: { filled_qty: qty, client_order_id: clientOrderId },
+  } = eventDetails
+
+  const [groupName, messageId] = clientOrderId.split("|")
 
   const tradeRef = firestore.collection(`groups/${groupName}/trades`).doc(messageId)
   const tradeData = (await tradeRef.get()).data()
-  logger.log("traddedata", tradeData)
 
-  const streamClient = new StreamChat(
-    functionConfig.stream.api_key,
-    functionConfig.stream.secret
-  )
+  logger.log("trade data", tradeData)
+
+  const streamClient = new StreamChat(api_key, secret)
   const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 
   if (event == "fill") {
@@ -49,13 +52,15 @@ export const checkTradeStatus = async (change, context) => {
     }
     // TODO Create a journal for the cash from a sale. Currently it will be held in firm account
     tradeRef.update(updateInformation)
-  } else if (["cancelled", "expired", "rejected", "suspended"].includes(event)) {
-    logger.log("not fill")
+  } else if (failedStatuses.includes(event)) {
+
+    logger.log("not filled")
+    
     if (tradeData.side == "buy") {
-      // return money to group
+      // - return money to group
       const groupRef = firestore.collection("groups").doc(groupName)
       let { cashBalance } = (await groupRef.get()).data()
-      logger.log("cash bal", cashBalance)
+      logger.log("cash balance: ", cashBalance)
       groupRef.update({ cashBalance: cashBalance + tradeData.notional })
     }
     tradeRef.update({ executionStatus: "failed" })

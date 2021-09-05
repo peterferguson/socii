@@ -2,7 +2,12 @@
  TODO - see creating a transfer entity in alpaca docs. Bank resource should be created for prod 
 */
 
-import { ObjectSerializer, TransferData, FundingApi, config } from "@alpaca/index"
+import {
+  ObjectSerializer,
+  TransferData,
+  FundingApi,
+  config,
+} from "@socii/shared/alpaca/index"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

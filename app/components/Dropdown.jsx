@@ -2,11 +2,10 @@
 import { Popover, Transition } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
 import Link from "next/link"
-import React, { Fragment, useEffect } from "react"
+import React, { Fragment } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
   HiMenu,
-  HiOutlineAtSymbol,
   HiOutlineChartPie,
   HiOutlineChat,
   HiOutlineChevronRight,
@@ -42,7 +41,7 @@ const dropdownItems = (username) => [
   {
     name: "Porfolio",
     description: "Keep track of your growth",
-    href: username && `/user/${username}/portfolio`,
+    href: username && "/user/portfolio",
     icon: HiOutlineChartPie,
   },
   {

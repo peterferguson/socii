@@ -38,7 +38,7 @@ export default function Group() {
   if (Array.isArray(groupName)) groupName = groupName[0]
   return (
     <AuthCheck>
-      <div className="flex">
+      <div className="flex items-center justify-center">
         <div className="flex-auto pt-8">
           <div className="pb-2 text-3xl tracking-wider text-center text-gray-600 uppercase font-primary">
             holdings

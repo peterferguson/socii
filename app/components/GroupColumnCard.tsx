@@ -6,6 +6,7 @@ import { iexQuote } from "@utils/iexQuote"
 import React, { useEffect, useState } from "react"
 import { useMountedState, useUnmountPromise } from "react-use"
 import { NoHoldingsPieCardSkeleton } from "./PieCard"
+import { getGroupCashBalanceListener } from "@lib/firebase/client/db/getGroupCashBalance"
 export interface IGroupColumnCard {
   groupName: string
   className?: string
@@ -15,9 +16,16 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   const { user } = useAuth()
   const mounted = useUnmountPromise()
 
+  const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
   const [currentPrices, setCurrentPrices] = useState([])
+
+  useEffect(() => {
+    let unsubscribe
+    if (groupName) unsubscribe = getGroupCashBalanceListener(groupName, setCashBalance)
+    return () => unsubscribe
+  }, [groupName])
 
   useEffect(() => {
     let unsubscribe
@@ -28,8 +36,8 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   useEffect(() => {
     setHoldingInfo(
       holdings?.map((doc) => {
-        const { tickerSymbol, assetRef, shortName, avgPrice, qty } = doc.data()
-        return { ISIN: assetRef.id, tickerSymbol, shortName, avgPrice, qty }
+        const { symbol, assetRef, shortName, avgPrice, qty } = doc.data()
+        return { ISIN: assetRef.id, symbol, shortName, avgPrice, qty }
       })
     )
   }, [holdings])
@@ -38,11 +46,11 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     const updatePriceState = async () => {
       holdingInfo &&
         Promise.all(
-          holdingInfo?.map(async ({ tickerSymbol }) => {
-            const price = await iexQuote(tickerSymbol, user?.token)
+          holdingInfo?.map(async ({ symbol }) => {
+            const price = await iexQuote(symbol, user?.token)
             setCurrentPrices((previousState) => ({
               ...previousState,
-              [tickerSymbol]: price?.iexRealtimePrice || price?.latestPrice,
+              [symbol]: price?.iexRealtimePrice || price?.latestPrice,
             }))
           })
         )
@@ -54,7 +62,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     <>
       {holdingInfo?.length !== 0 ? (
         <div
-          className={`flex flex-col items-center mx-auto p-4 mb-4 bg-white shadow-lg rounded-2xl ${
+          className={`flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl ${
             className || ""
           }`}
         >
@@ -62,6 +70,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
             groupName={groupName}
             holdingData={holdingInfo}
             currentPrices={currentPrices}
+            cashBalance={cashBalance}
           />
           <div className="w-full py-3 mb-8 -mt-8 text-center border-b border-gray-400 h-3.5">
             <span className="py-0 text-gray-400 bg-white px-2.5">
@@ -74,7 +83,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
                 <StockCard
                   key={`holding-${index}`}
                   holding={holding}
-                  latestPrice={currentPrices[holding?.tickerSymbol]}
+                  latestPrice={currentPrices[holding?.symbol]}
                   index={index}
                 />
               ) : (

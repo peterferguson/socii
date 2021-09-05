@@ -1,8 +1,10 @@
 import { logger } from "firebase-functions"
-import { firestore, HttpsError } from "../index.js"
+import { firestore, functionConfig } from "../index.js"
+import { serverTimestamp } from "../firestore/index.js"
+import { getAlpacaBuyPower } from "../utils/getAlpacaBuyPower.js"
+import { notEnoughBuyingPowerMessage } from "../utils/notEnoughBuyingPowerMessage.js"
 import { streamClient } from "../utils/streamClient.js"
-import { serverTimestamp } from "../lib/firestore/index.js"
-import { allKeysContainedIn } from "../utils/allKeysContainedIn"
+import { verifyTradeSubmissionContent } from "../utils/verifyTradeSubmissionContent"
 import { verifyUser } from "../utils/verifyUser"
 import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 
@@ -14,23 +16,47 @@ import { confirmInvestmentMML } from "./mml/confirmInvestmentMML"
 */
 
 export const tradeSubmission = async (
-  data: { groupName?: string, messageId?: string, submittedFromCallable?: boolean },
+  data: { groupName?: string; messageId?: string; submittedFromCallable?: boolean },
   context: any
 ) => {
   verifyUser(context)
-  const verifiedData = await verifyContent(data, context)
+  const verifiedData = await verifyTradeSubmissionContent(data, context)
   const { messageId, submittedFromCallable } = data
 
-  // * Create trade document
-  const groupRef = firestore.collection("groups").doc(verifiedData.groupName)
+  // - Create trade document
+  const investorsRef = firestore.collection(
+    `groups/${verifiedData.groupName}/investors`
+  )
+  const investors = (await investorsRef.get()).docs
+  const investorCount = investors.length
 
-  const { investorCount } = (await groupRef.get()).data()
+  const alpacaIds = investors.map((investor) => investor.data().alpacaAccountId)
 
+  // - Ensure each investor has enough cash to make the trade
+  const canAffordTrade = await Promise.all(
+    alpacaIds.map(
+      async (id) =>
+        (await getAlpacaBuyPower(id)).buyingPower >=
+        (verifiedData.notional / investorCount) * 1.05 // - Add 5% buffer
+    )
+  )
+
+  logger.log(`investors: ${investors.map((investor) => investor.data().uid)}`)
+  logger.log(`canAffordTrade: ${canAffordTrade}`)
+
+  if (!canAffordTrade.every((canAfford) => canAfford))
+    return submittedFromCallable
+      ? { error: "Not enough cash" }
+      : await streamClient
+          .channel("group", verifiedData.groupName)
+          .sendMessage(notEnoughBuyingPowerMessage(verifiedData.username))
+
+  // - Create trade document
   const tradeRef = firestore
     .collection(`groups/${verifiedData.groupName}/trades`)
     .doc(messageId)
 
-  // * Store initial trade data
+  // - Store initial trade data
   tradeRef.set({
     ...verifiedData,
     agreesToTrade: [verifiedData.executorRef],
@@ -40,7 +66,7 @@ export const tradeSubmission = async (
   logger.log(verifiedData)
 
   if (investorCount > 1) {
-    // * Send confirmation message into chat
+    // - Send confirmation message into chat
     const message = confirmInvestmentMML({
       username: verifiedData.username,
       side: verifiedData.side,
@@ -53,58 +79,4 @@ export const tradeSubmission = async (
       ? await streamClient.channel("group", verifiedData.groupName).sendMessage(message)
       : await streamClient.updateMessage(message)
   }
-}
-
-const verifyContent = async (data, context) => {
-  const requiredArgs = {
-    username: "",
-    alpacaAccountId: "",
-    groupName: "",
-    assetRef: null,
-    type: "",
-    stockPrice: 0,
-    //qty: 0,
-    notional: 0,
-    side: "",
-    messageId: "",
-    timeInForce: "",
-    symbol: "",
-    // - messageId will allow us to track whether the trade has already been submitted
-    // - (until epheremal messages work). Also we can use a collectionGroup query
-    // - to find the particular trade in question for each message.
-  }
-
-  const optionalArgs = {
-    assetType: "",
-    shortName: "",
-    //tickerSymbol: "",
-    executionCurrency: "GBP",
-    assetCurrency: "USD",
-    executorRef: "",
-    limitPrice: "",
-  }
-
-  // * Check for default args and assign them if they exist
-  if (!allKeysContainedIn(requiredArgs, data)) {
-    throw new HttpsError(
-      "invalid-argument",
-      `Please ensure request has all of the following keys: ${JSON.stringify(
-        Object.keys(requiredArgs)
-      )}`
-    )
-  }
-
-  const assetRef = firestore.doc(data.assetRef)
-  const assetData = await assetRef.get()
-
-  //requiredArgs.assetRef = assetRef
-  requiredArgs.symbol = assetData.get("tickerSymbol")
-  optionalArgs.assetType = assetData.get("assetType")
-  optionalArgs.shortName = assetData.get("shortName")
-  optionalArgs.executorRef = `users/${context.auth.uid}/${data.alpacaAccountId}`
-
-  // * Inject data into requiredArgs
-  Object.keys(requiredArgs).map((key) => (requiredArgs[key] = data[key]))
-
-  return { ...requiredArgs, ...optionalArgs }
 }

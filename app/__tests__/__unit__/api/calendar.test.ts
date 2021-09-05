@@ -1,4 +1,4 @@
-import { MarketDay } from "@alpaca/models"
+import { MarketDay } from "@socii/shared/alpaca/models"
 import { performance } from "perf_hooks"
 import { handleCalendar } from "@api/alpaca/calendar"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"

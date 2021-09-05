@@ -1,7 +1,7 @@
 //  ! Run with `npx ts-node -O '{"module":"commonjs"}' pages/api/alpaca/requests/assets.rest.ts`
 require("dotenv").config({ path: "./.env.local" })
-import { config } from "../../../alpaca/index"
-import { EventsApiRequestFactory } from "../../../alpaca/apis/EventsApi"
+import { config } from "@socii/shared/alpaca/index"
+import { EventsApiRequestFactory } from "@socii/shared/alpaca/apis/EventsApi"
 // import fetch from "isomorphic-unfetch"
 import https from "https"
 

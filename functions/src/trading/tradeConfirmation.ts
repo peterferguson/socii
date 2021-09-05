@@ -1,10 +1,11 @@
 import { logger } from "firebase-functions"
-import { CreateOrder, OrderObject } from "../alpaca/broker/client/ts/index"
-import { firestore, iexClient, tradeClient, functionConfig } from "../index.js"
+import { CreateOrder, OrderObject } from "../../shared/alpaca/index.js"
+import { firestore, iexClient, tradeClient } from "../index.js"
+import { determineTradeStatus } from "../utils/determineTradeStatus"
 import { isSell } from "../utils/isSell"
-import { singleLineTemplateString } from "../utils/singleLineTemplateString"
-import { investmentPendingMML } from "./mml/investmentPendingMML"
 import { streamClient } from "../utils/streamClient"
+import { warnPriceVariationOnMarketClose } from "../utils/warnPriceVariationOnMarketClose"
+import { investmentPendingMML } from "./mml/investmentPendingMML"
 
 /*
 - tradeConfirmation
@@ -13,13 +14,12 @@ import { streamClient } from "../utils/streamClient"
 2. holdings and send confirmation message with the price at which the asset was purchased 
 */
 
+// - Doc listener for documents:
+// - groups/{groupName}/trades/{tradeId}
 export const tradeConfirmation = async (change, context) => {
-  // - document at groups/{groupName}/trades/{tradeId}
   const { groupName, tradeId } = context.params
   const tradeData = await change.after.data()
-  const latestAgreesId = (tradeData.agreesToTrade.slice(-1)[0]).split("/")[1]
-
-  // can be: success, pending, failed
+  const latestAgreesId = tradeData.agreesToTrade.slice(-1)[0].split("/")[1]
 
   if (tradeData.executionStatus) return // - do nothing
 
@@ -31,34 +31,29 @@ export const tradeConfirmation = async (change, context) => {
     { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
   )
 
-  logger.log(
-    "Latest IEX price",
+  logger.log("IEX latestPrice", latestPrice, "& execution price:", tradeData.stockPrice)
+
+  await warnPriceVariationOnMarketClose(
+    isUSMarketOpen,
+    primaryExchange,
     latestPrice,
-    "and execution price: ",
-    tradeData.stockPrice
+    tradeData.symbol,
+    groupName,
+    latestAgreesId
   )
 
-  // - send warning of differing execution price if market is closed
-  !isUSMarketOpen &&
-    (await streamClient
-      .channel("group", groupName)
-      .sendMessage(
-        await marketClosedMessage(primaryExchange, latestPrice, tradeData.symbol, latestAgreesId)
-      ))
+  // - Adjust notional amount based on the latest price & account buying power
+  // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
+  // TODO: Implement a client-side check on the cost vs cashBalance.
+  // - A small variation should be somewhat enforced on the client-side.
+  // - Assuming no massive jump in stock price.
+  // TODO: Need to distinguish shares bought by cost & those by share amount
+  // - drop share amount to within 2.5% of total cashBalance.
+  // ! This is arbitrary & maybe be another threshold decided upon by the group.
+  // TODO: Create a group settings page which lists the thresholds that can be tinkered
 
-  if (tradeData.notional >= cashBalance && !isSell(tradeData.type)) {
-    // - Accept a smaller share amount if the cashBalance gets us close to the original share amount
-    // - A small variation should be somewhat enforced on the client-side.
-    // - Assuming no massive jump in stock price.
-    // TODO: Implement a client-side check on the cost vs cashBalance.
-    // TODO: Need to distinguish shares bought by cost & those by share amount
-
+  if (tradeData.notional >= cashBalance && !isSell(tradeData.type))
     tradeData.notional = cashBalance * 0.95
-
-    // - drop share amount to within 2.5% of total cashBalance.
-    // ! This is arbitrary & maybe be another threshold decided upon by the group.
-    // TODO: Create a group settings page which lists the thresholds that can be tinkered
-  }
 
   /* 
    ! Add user setting to allow for an acceptable price variation between latestPrice and 
@@ -78,73 +73,55 @@ export const tradeConfirmation = async (change, context) => {
   else tradeData.stockPrice = latestPrice
 
   if (tradeData.agreesToTrade.length === investorCount) {
-    // ! Execute Trade
+    let postOrder: OrderObject
     logger.log(`Sending order: ${JSON.stringify(tradeData)}`)
-    let postOrder: OrderObject, executionStatus: string
-    try {
-      //breakdown message into alpaca form and send to broker
+    const investorRef = firestore.collection(`groups/${groupName}/investors`)
+    const investors = (await investorRef.get()).docs
 
-      postOrder = await tradeClient.postOrders(
-        functionConfig.alpaca.firm_account,
-        CreateOrder.from({
-          symbol: tradeData.symbol,
-          side: tradeData.side,
-          time_in_force: tradeData.timeInForce,
-          type: tradeData.type,
-          notional: String(tradeData.notional),
-          //qty: tradeData.qty, // remove and replace with notional
-          //limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
-          client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
-        })
-      )
-      const determineStatus = (responseStatus: string) => {
-        const status = ["cancelled", "expired", "rejected", "suspended"].includes(
-          responseStatus
+    try {
+      for (const investor of investors) {
+        const username = investor.id
+        const { alpacaAccountId } = investor.data()
+        logger.log(
+          `Sending ${tradeData.side} order for $${
+            tradeData.notional / investorCount
+          } of ${
+            tradeData.symbol
+          } for user ${username} with alpaca id ${alpacaAccountId}`
         )
-          ? "failed"
-          : [
-              "new",
-              "done_for_day",
-              "pending_cancel",
-              "pending_replace",
-              "pending_new",
-              "accepted_for_bidding",
-              "stopped",
-              "calculated",
-              "accepted",
-              "replaced",
-            ].includes(responseStatus)
-          ? "pending"
-          : ["filled"].includes(responseStatus)
-          ? "success"
-          : null
-        return status
+        postOrder = await tradeClient.postOrders(
+          alpacaAccountId,
+          CreateOrder.from({
+            symbol: tradeData.symbol,
+            side: tradeData.side,
+            time_in_force: tradeData.timeInForce,
+            type: tradeData.type,
+            notional: String(tradeData.notional / investorCount),
+            //qty: tradeData.qty, // remove and replace with notional
+            //limitPrice: tradeData.limitPrice ? tradeData.limitPrice : null , // remove
+            client_order_id: `${tradeData.groupName}|${tradeData.messageId}`,
+          })
+        )
+        logger.log(`Order sent for user ${username} with status ${postOrder.status}`)
+        logger.log("Order: ", postOrder)
       }
-      executionStatus = determineStatus(postOrder.status)
     } catch (err) {
       logger.error(err)
-      executionStatus = "failed"
     }
 
+    // - Complete ephemeral message
     const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
     await streamClient.partialUpdateMessage(
       tradeData.messageId,
-      {
-        set: { status: "complete" },
-      },
+      { set: { status: "complete" } },
       tradeData.username
     )
 
-    // TODO
-    // - maybe the below is heavy on wirtes?
-    // writing to the holding ref when pending then updating a field when executed
-    // could be reduced by just writing when success, but may lose info
-
-    switch (executionStatus) {
+    switch (determineTradeStatus(postOrder.status) ?? "failed") {
       case "success":
         // 1. Deduct balance immediately
         if (tradeData.side == "buy")
-          groupRef.update({ cashBalance: cashBalance - tradeData.notional })        
+          groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         logger.log("order successful. Id:", postOrder?.id)
         return
 
@@ -163,15 +140,3 @@ export const tradeConfirmation = async (change, context) => {
     }
   }
 }
-
-/*
- * Helper Functions
- */
-
-const marketClosedMessage = async (exchange, latestPrice, symbol, latestAgreesId) => ({
-  user_id: "socii",
-  text: singleLineTemplateString`
-    The ${exchange} is not currently open, so the execution price ($${latestPrice}) of ${symbol} may change.
-    `,
-  onlyForMe: latestAgreesId,
-})

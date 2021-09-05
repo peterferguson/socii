@@ -1,5 +1,5 @@
 import { withAuth, withCORS } from "@utils/middleware"
-import { config, ClockApi, ClockResponse } from "@alpaca/index"
+import { config, ClockApi, ClockResponse } from "@socii/shared/alpaca/index"
 import { NextApiRequest, NextApiResponse } from "next"
 
 const clockClient = new ClockApi(

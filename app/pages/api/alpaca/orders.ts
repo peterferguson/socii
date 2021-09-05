@@ -5,8 +5,8 @@ import {
   OrderObject,
   TradingApi,
   InlineResponse207,
-} from "@alpaca/index"
-import { ObjectSerializer } from "@alpaca/models/ObjectSerializer"
+} from "@socii/shared/alpaca/index"
+import { ObjectSerializer } from "@socii/shared/alpaca/models/ObjectSerializer"
 import { withAuth, withCORS } from "@utils/middleware"
 import { NextApiRequest, NextApiResponse } from "next"
 

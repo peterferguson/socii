@@ -17,6 +17,7 @@ const dirtyActiveStates = (ctx) => {
 const wasOnState = (ctx, stateName) => lastActiveState(ctx) === stateName
 
 // - updates to state context
+const selectShare = assign({ wantsToShare: true })
 const selectGroup = assign({ group: (_ctx, e) => e.groupName })
 const resetChoices = assign({ group: "", side: "", orderType: "" })
 const updateHolding = assign({ hasHolding: (_ctx, e) => !!e.holding })
@@ -39,6 +40,7 @@ export const stockInvestButtonMachine = createMachine(
     initial: "idle",
     context: {
       hasHolding: false,
+      wantsToShare: false,
       group: "",
       side: "",
       orderType: "",
@@ -137,11 +139,11 @@ export const stockInvestButtonMachine = createMachine(
                 {
                   target: "chooseGroup",
                   cond: "previouslyIdleOrInactive",
-                  actions: updateHistoryStack("chooseGroup"),
+                  actions: [updateHistoryStack("chooseGroup"), selectShare],
                 },
                 {
                   target: "shareInformation",
-                  actions: updateHistoryStack("shareInformation"),
+                  actions: [updateHistoryStack("shareInformation"), selectShare],
                 },
               ],
               CHOOSE_BUY: [
@@ -208,8 +210,8 @@ export const stockInvestButtonMachine = createMachine(
       onlyEnteredFirstPage: (ctx) => new Set(dirtyActiveStates(ctx)).size === 1,
       previouslyChooseGroup: (ctx) => !!ctx.group,
       hasHolding: (ctx) => ctx.hasHolding,
-      wantsToShare: (ctx) => wasOnState(ctx, "investAction") && !ctx.side,
-      previouslyOnInvestAction: (ctx) => wasOnState(ctx, "investAction"),
+      wantsToShare: (ctx) => wasOnState(ctx, "investAction") && ctx.wantsToShare,
+      previouslyOnInvestAction: (ctx) => wasOnState(ctx, "investAction") && ctx.side,
       previouslyIdleOrInactive: (ctx) => {
         return ["idle", "inactive", "returnToLastScreen"].includes(
           ctx.historyStack[ctx.historyStack.length - 1]

@@ -1,5 +1,5 @@
-import { ClockApi, config } from "@alpaca/index"
-import { OrderObject } from "@alpaca/models"
+import { ClockApi, config } from "@socii/shared/alpaca/index"
+import { OrderObject } from "@socii/shared/alpaca/models"
 import { handleOrders } from "@api/alpaca/orders"
 import { nextApiHandlerTest } from "@tests/utils/nextApiHandlerTest"
 import { performance } from "perf_hooks"

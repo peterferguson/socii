@@ -1,18 +1,18 @@
 import { InvestButton } from "@components/InvestButton"
 import { InvestButtonModal } from "@components/InvestButtonModal"
 import PriceCard from "@components/PriceCard"
+import { ReturnToLastScreenModalDynamic } from "@components/ReturnToLastScreenModal"
 import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions, useTickerPrice } from "@hooks"
-import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
 import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
+import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
+import { getYahooTimeseries, PeriodEnum } from "@utils/getYahooTimeseries"
 import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
-import React, { useEffect } from "react"
-import Custom404 from "../404"
-import { getYahooTimeseries, PeriodEnum } from "@utils/getYahooTimeseries"
+import React, { useEffect, useState } from "react"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -29,6 +29,16 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
 
   // - State machine for the invest button
   const [state, send] = useMachine(stockInvestButtonMachine)
+
+  // - Decoupling the state machine from the return to last screen modal avoids a bug
+  // - where the next modal is closed regardless of the option selected
+  const [returnToLastScreen, setReturnToLastScreen] = useState(null)
+
+  useEffect(() => {
+    returnToLastScreen !== null &&
+      send(returnToLastScreen ? "AGREE" : "DISAGREE") &&
+      setReturnToLastScreen(null)
+  }, [returnToLastScreen, send])
 
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
@@ -52,9 +62,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   }, [price])
 
   // TODO: Replace with skeleton loaders
-  if (!tickers) return <Custom404 />
-
-  if (router.isFallback)
+  if (!tickers || router.isFallback)
     return (
       <div className="items-center justify-center mx-auto text-4xl font-primary text-brand-lightTeal">
         Loading...
@@ -75,11 +83,17 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             />
             <div className="flex-grow hidden sm:block" />
             <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-              <InvestButton state={state} send={send} logoColor={logoColor} />
+              <InvestButton send={send} logoColor={logoColor} />
             </div>
           </div>
           <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
-          <InvestButtonModal ticker={ticker} state={state} send={send} />
+          {InvestButtonModal && !state.matches("returnToLastScreen") && (
+            <InvestButtonModal ticker={ticker} state={state} send={send} />
+          )}
+          <ReturnToLastScreenModalDynamic
+            open={state?.matches("returnToLastScreen")}
+            setReturnToLastScreen={setReturnToLastScreen}
+          />
         </>
       )}
     </>
