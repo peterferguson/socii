@@ -1,10 +1,14 @@
-import React from "react"
+import React  from "react"
 import LeaderBoardCard from "@components/LeaderBoardCard"
 import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
 import { useAuth } from "@hooks"
+import { Tab } from '@headlessui/react'
+import { setUserState } from "@lib/firebase/client/db"
+import { GroupPortfolios } from "@components/GroupPortfolios"
 
 const GroupsHome = ({ leaders }) => {
   const { userGroups } = useAuth()
+  const [selectedTab , setSelectedTab] = useState("My Groups")
 
   return (
     <main className="w-full h-screen">

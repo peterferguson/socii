@@ -1,3 +1,9 @@
+// - Repurposed this into component for displaying all groups - GroupPortfolios
+// - Maybe convert this page into a public/private page if we want the ability to search
+//    for specific users
+//
+// did not delete since i think userCreation may still route to here
+//
 // TODOs (Page Features):
 // ? - Create conversion function for the group trade data into an activity feed
 // - Get doc in one go - remove for each - see IMPROVE
