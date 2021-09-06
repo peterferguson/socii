@@ -94,7 +94,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
                       borderColor: selected ? color : "transparent",
                       backgroundImage:
                         selected && is.not.safari()
-                          ? `linear-gradient(to bottom, #fff, ${color}10)`
+                          ? `linear-gradient(to bottom, #fff, ${color}20)`
                           : "",
                       KhtmlOpacity: 0.5,
                     }}
