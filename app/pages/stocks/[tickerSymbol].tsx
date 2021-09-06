@@ -8,7 +8,7 @@ import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickers
 import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
-import { getYahooTimeseries, PeriodEnum } from "@utils/getYahooTimeseries"
+import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
@@ -115,8 +115,14 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
       timeseriesLimit: 0, // TODO: Remove this once we have a real timeseries api calls working
     })
 
+    console.log({ tickers: [symbol], period: PeriodEnum["1D"] })
+
     const timeseries = (
-      await getYahooTimeseries({ tickers: [symbol], period: PeriodEnum["1d"] })
+      await getYahooTimeseries({
+        tickers: [symbol],
+        period: PeriodEnum["1D"],
+        interval: IntervalEnum["5m"],
+      })
     )[symbol].map((tick) => ({
       ...tick,
       timestamp: tick.timestamp.valueOf(),

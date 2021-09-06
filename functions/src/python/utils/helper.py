@@ -77,6 +77,7 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
         - `start`
         - `end`
     """
+    logging.info(f"Request: {request.json}")
     ticker = yahoo_ticker_from_request(request)
     period = parse_symbol_from_request("period", request) or "ytd"
     interval = parse_symbol_from_request("interval", request) or "1d"
