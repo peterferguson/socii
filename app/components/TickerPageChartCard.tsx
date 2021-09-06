@@ -18,16 +18,15 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
   color,
 }) => {
   const tabs = {
-    "1D": "1d",
-    "7D": "7d",
-    "1M": "1mo",
-    "6M": "6mo",
-    "1Y": "1y",
-    MAX: "max",
+    "1D": { alias: "1d", timeseries: [] },
+    "7D": { alias: "7d", timeseries: [] },
+    "1M": { alias: "1mo", timeseries: [] },
+    "6M": { alias: "6mo", timeseries: [] },
+    "1Y": { alias: "1y", timeseries: [] },
+    MAX: { alias: "max", timeseries: [] },
   }
-
+  
   const is1Col = !useMediaQuery({ minWidth: 640 })
-
   const [crosshairIndexValue, setCrosshairIndexValue] = useState(timeseries?.length - 1)
 
   const deserialisedTimeseries = timeseries?.map((d) => ({

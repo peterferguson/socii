@@ -31,7 +31,6 @@ const InvestButtonModal = ({ ticker, state, send }) => {
 
   const Modal = activeStateModalName ? modals[activeStateModalName]?.component : null
 
-  // setReturnToLastScreen={setReturnToLastScreen}
   return Modal ? <Modal ticker={ticker} state={state} send={send} /> : null
 }
 

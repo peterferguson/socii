@@ -90,10 +90,12 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
           {InvestButtonModal && !state.matches("returnToLastScreen") && (
             <InvestButtonModal ticker={ticker} state={state} send={send} />
           )}
-          <ReturnToLastScreenModalDynamic
-            open={state?.matches("returnToLastScreen")}
-            setReturnToLastScreen={setReturnToLastScreen}
-          />
+          {state.matches("returnToLastScreen") && (
+            <ReturnToLastScreenModalDynamic
+              open={state?.matches("returnToLastScreen")}
+              setReturnToLastScreen={setReturnToLastScreen}
+            />
+          )}
         </>
       )}
     </>
