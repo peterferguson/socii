@@ -2,6 +2,8 @@ import Navigation from "@components/Navigation"
 import WaitlistInvite from "@components/WaitlistInvite"
 import { Transition } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
+import { useDisableScroll } from "@hooks/useDisableScroll"
+import { tw } from "@utils/tw"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { useTimeoutFn } from "react-use"
@@ -31,8 +33,10 @@ export const Hero = ({ invited, setInvited }) => {
   const [, , hideBlackOverlay] = useTimeoutFn(() => setShowBlackOverlay(false), 1500)
   const [, , unhideOptions] = useTimeoutFn(() => setShowOptions(true), 3000)
 
+  useDisableScroll(!showOptions)
+
   return (
-    <div className="relative h-screen">
+    <div className={tw("relative h-screen", !showOptions && "overflow-y-hidden")}>
       <Navigation showOptions={showOptions} />
       <Transition.Root show={showBlackOverlay}>
         <div className="flex items-center justify-center">
