@@ -9,7 +9,7 @@ const journals = new JournalsApi(
 const journal = JournalData.from({
   entry_type: "JNLC",
   from_account: process.env.ALPACA_FIRM_ACCOUNT,
-  to_account: "114e918e-2caf-4fa0-aabf-3fb1d53564d8",
+  to_account: "70a2501b-b31b-4904-80d9-f5c4a2fc66ed",
   amount: 1000,
 })
 

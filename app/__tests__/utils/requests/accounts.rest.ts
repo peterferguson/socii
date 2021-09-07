@@ -26,7 +26,7 @@ const accountClient = new AccountsApi(
 
 // - get trading account
 accountClient
-  .getTradingAccount("114e918e-2caf-4fa0-aabf-3fb1d53564d8")
+  .getTradingAccount("039e64b6-a4eb-409e-b9dc-17cc7a2dd6ce")
   .then(console.log)
   .catch(console.error)
 
