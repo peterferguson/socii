@@ -1,5 +1,10 @@
 import { DateStr } from "@models/DateStr"
 import { OHLC } from "@models/OHLC"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
+dayjs.extend(timezone)
+dayjs.extend(utc)
 
 export enum PeriodEnum {
   "1D" = "1d",
@@ -70,9 +75,31 @@ export const getYahooTimeseries = async ({
 
   return yahooData?.reduce((data, tick) => {
     const { symbol, timestamp, ...ohlcv } = tick
-    if (symbol in data) data[symbol].push({ ...ohlcv, timestamp: new Date(timestamp) })
+    // - timestamp is in milliseconds & yahoo send nix timestamp wrt to US timezone
+    // - we need to convert it to UTC since we are using UTC timezone with IEX data
+    const timezoneDifference = dayjs().tz("America/New_York").utcOffset()
+    // console.log(dayjs(timestamp).subtract(timezoneDifference, "minute").local().format())
+
+    if (symbol in data)
+      data[symbol].push({
+        ...ohlcv,
+        timestamp: dayjs(timestamp)
+          .subtract(timezoneDifference, "minute")
+          .local()
+          .format(),
+      })
     else
-      Object.assign(data, { [symbol]: [{ ...ohlcv, timestamp: new Date(timestamp) }] })
+      Object.assign(data, {
+        [symbol]: [
+          {
+            ...ohlcv,
+            timestamp: dayjs(timestamp)
+              .subtract(timezoneDifference, "minute")
+              .local()
+              .format(),
+          },
+        ],
+      })
     return data
   }, {})
 }
