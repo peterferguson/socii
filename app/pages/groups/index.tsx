@@ -1,50 +1,68 @@
-import React  from "react"
-import LeaderBoardCard from "@components/LeaderBoardCard"
-import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
+// TODO:
+// - speed up render. attempted usememo but still takes time
+// - Potential:
+//   - add "followed groups" page to check status of other open groups
+
+
+import React , { Fragment , useState , useMemo , useEffect} from "react"
+import { LeaderboardPanel } from "@components/LeaderboardPanel"
 import { useAuth } from "@hooks"
 import { Tab } from '@headlessui/react'
-import { setUserState } from "@lib/firebase/client/db"
+import { TabHeading } from "@components/TabHeading"
+import { TabPanels } from "@components/TabPanels"
 import { GroupPortfolios } from "@components/GroupPortfolios"
+import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
+import ComingSoon from "@components/ComingSoon"
+import { FaUserInjured } from "react-icons/fa"
 
 const GroupsHome = ({ leaders }) => {
   const { userGroups } = useAuth()
-  const [selectedTab , setSelectedTab] = useState("My Groups")
+  const [selected , setSelected] = useState("My Groups")
+  let [categories, setCategories] = useState({
+    "My Groups": [],
+    Leaderboards: [],
+    "Other Groups": [],
+  })
 
+  const groupsCards:JSX.Element = useMemo(() => 
+    MyComp(userGroups)
+  ,[userGroups])
+  
   return (
-    <main className="w-full h-screen">
-      <section className="flex flex-col justify-between ">
-        <div className="max-w-4xl mx-4 mt-12 sm:mt-20 md:mx-auto space-y-4">
-          <h1 className="mb-8 text-3xl font-bold tracking-wide uppercase font-primary">
-            Leaderboard
-          </h1>
-          <span className="text-sm font-primary">
-            The leaderboard is a list of the top performing groups on socii.
-            <br />
-            <br />
-            <p>How does your group compare against other sociians?</p>
-            <br />
-            <br />
-          </span>
-          {leaders?.map((leader, rank) => (
-            <LeaderBoardCard
-              key={`leader-${rank}-${leader.groupName}`}
-              rank={rank}
-              leader={
-                userGroups.includes(leader.groupName)
-                  ? { inGroup: true, ...leader }
-                  : leader
-              }
-            />
-          ))}
-          <p className="mt-8 font-primary text-tiny">
-            All gains shown reflect the month to date performance of each group. Only
-            public groups are displayed
-          </p>
+    
+    <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
+      <div className = "container flex flex-col center" > 
+        <div className="flex flex-row justify-center bg-white rounded-lg shadow-lg font-primary text-l">
+        <TabHeading categories={categories} />
         </div>
-      </section>
-    </main>
+        <TabPanels categories={categories}>
+      
+          <div className = { (selected ==="My Groups") ? "" : "hidden" }>
+            {groupsCards}
+          </div>
+          <div className = { (selected ==="Leaderboards") ? "" : "hidden" }>
+            <LeaderboardPanel leaders = {leaders}/>
+          </div>
+          <div className = { (selected ==="Other Groups") ? "" : "hidden" }>
+            <ComingSoon color="brand-pink" description="">
+              <FaUserInjured className={`w-24 h-24 text-brand-pink`} />
+            </ComingSoon>
+          </div>
+
+        </TabPanels>
+      </div>
+    </Tab.Group>
+
+
   )
 }
 export default GroupsHome
 
 export const getStaticProps = async () => await getLeaderBoardProps()
+
+export const MyComp = (userGroups: string[]) => (
+  <GroupPortfolios userGroupsList= {userGroups}/>
+)
+
+
+

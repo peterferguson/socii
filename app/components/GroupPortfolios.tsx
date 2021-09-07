@@ -4,14 +4,6 @@ import GroupColumn from "@components/GroupColumnCard"
 import { PieCardSkeleton } from "@components/PieCard"
 import React from "react"
 
-const PortfolioSkeletons = () => (
-  <>
-    {[1, 2, 3].map((i) => (
-      <PieCardSkeleton key={`skeleton-${i}`} scaling={0.3} radius={250} />
-    ))}
-  </>
-)
-
 export function GroupPortfolios({ userGroupsList }): JSX.Element {
 
   return (
@@ -26,7 +18,7 @@ export function GroupPortfolios({ userGroupsList }): JSX.Element {
             />
           ))
         ) : (
-          <PortfolioSkeletons />
+          <PieCardSkeleton scaling={0.3} radius={250} />
         )}
       </div>
     </div>

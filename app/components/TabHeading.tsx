@@ -8,7 +8,7 @@ export const TabHeading = ({ categories }) => (
       <Tab
         key={category}
         className={({ selected }) => tw(
-          "w-full py-2.5 text-sm leading-5 font-medium text-brand rounded-xl",
+          "w-full py-2.5 px-1 text-sm leading-5 font-medium text-brand rounded-xl",
           "focus:outline-none",
           selected
             ? "bg-white shadow"
