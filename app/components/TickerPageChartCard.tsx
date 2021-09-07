@@ -58,9 +58,9 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
     }
 
     if (!tabs[activeTab]?.length)
-      getTimeseries().then((ts) => {
+      getTimeseries().then((ts) =>
         setTabs((prevTabs) => ({ ...prevTabs, [activeTab]: ts }))
-      })
+      )
   }, [activeTab, tabs, tickerSymbol])
 
   const deserialisedTimeseries = tabs[activeTab]?.map((d) => ({

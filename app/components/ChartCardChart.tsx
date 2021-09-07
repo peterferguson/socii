@@ -38,7 +38,7 @@ const ChartCardChart: React.FC<IChartCardChart> = ({ data, pnlColor }) => {
     onNearestX: (d) => setCrosshairValue(d),
     data: data?.map((d) => {
       return {
-        x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
+        x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp.valueOf()),
         y: d.close,
       }
     }),
