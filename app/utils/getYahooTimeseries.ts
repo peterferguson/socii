@@ -62,6 +62,7 @@ export const getYahooTimeseries = async ({
   const yahooData = await (
     await fetch(functionUrl, {
       method: "POST",
+      mode: "cors",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         period,

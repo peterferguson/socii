@@ -86,7 +86,11 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               <InvestButton send={send} logoColor={logoColor} />
             </div>
           </div>
-          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
+          <TickerPageChartCard
+            tickerSymbol={ticker.tickerSymbol}
+            color={ticker?.logoColor}
+            timeseries={timeseries}
+          />
           {InvestButtonModal && !state.matches("returnToLastScreen") && (
             <InvestButtonModal ticker={ticker} state={state} send={send} />
           )}
@@ -115,13 +119,11 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
       timeseriesLimit: 0, // TODO: Remove this once we have a real timeseries api calls working
     })
 
-    console.log({ tickers: [symbol], period: PeriodEnum["1D"] })
-
     const timeseries = (
       await getYahooTimeseries({
         tickers: [symbol],
         period: PeriodEnum["1D"],
-        interval: IntervalEnum["5m"],
+        interval: IntervalEnum["1m"],
       })
     )[symbol].map((tick) => ({
       ...tick,
