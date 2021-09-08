@@ -1,0 +1,11 @@
+name = "stream"
+type = "javascript"
+zone_id = ""
+account_id = "698a8e362072714aa001c96068fa6abf"
+route = ""
+workers_dev = true
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"
