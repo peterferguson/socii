@@ -23,36 +23,40 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
+import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
+import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
 
 const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 
+// create member view
+
+// // cretate non member view
+// const NonMemberGroupView = dynamic((groupName) => import("@components/NonMemberGroupView/index"), {
+//   ssr: false,
+// })
+
 export default function Group() {
   const router = useRouter()
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  const { client } = useStream()
+  //const { client } = useStream()
   let { groupName } = router.query
+  let isMember = IsUsersGroup()
 
   if (Array.isArray(groupName)) groupName = groupName[0]
   return (
-    <AuthCheck>
-      <div className="flex items-center justify-center">
-        <div className="flex-auto pt-8">
-          <div className="pb-2 text-3xl tracking-wider text-center text-gray-600 uppercase font-primary">
-            holdings
-          </div>
-          <GroupColumnCard groupName={groupName} />
-          {client && !is1Col && (
-            <IsUsersGroup>
-              <ClientOnly>
-                <StreamChatWithNoSSR client={client} />
-              </ClientOnly>
-            </IsUsersGroup>
-          )}
-        </div>
+    <div>
+    {isMember ? (
+        <IsMemberGroupViewDynamic/>
+      ):(
+        <NonMemberGroupViewDynamic groupName= {groupName}/>
+      )
+      }
       </div>
-    </AuthCheck>
-  )
+
+          )
+
+  
 }
