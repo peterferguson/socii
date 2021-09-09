@@ -6,7 +6,6 @@ import { config, TradingApi } from "../shared/alpaca/index.js"
 // * Import function modules
 import * as accounts from "./accounts/index.js"
 import * as algoliaSearch from "./algoliaSearch"
-import * as commands from "./commands/index.js"
 import * as data from "./data"
 import * as databaseOperations from "./databaseOperations"
 import * as events from "./events/index.js"
@@ -94,7 +93,6 @@ module.exports = {
     .region(london)
     .https.onRequest(algoliaSearch.loadTickersToAlgolia),
 
-  commands: functions.region(london).https.onRequest(commands.handleCommand),
   storeTimeseries: functions.region(london).https.onRequest(data.storeTimeseries),
   alpacaEvents: functions.region(london).https.onRequest(events.alpacaEvents),
 
