@@ -2,14 +2,14 @@ import { collection, getDocs, limit, query, where } from "firebase/firestore"
 import { firestore } from "."
 
 /*
- * Gets a users/{uid} document with username
- * @param  {string} username
+ * Gets a users/{uid} username field with email
+ * @param  {string} email
  */
 
-export async function getUserWithUsername(username: string) {
+export async function getUsernameWithEmail(email: string): Promise<string> {
   const usersRef = collection(firestore, "users")
-  const userQuery = query(usersRef, where("username", "==", username), limit(1))
+  const userQuery = query(usersRef, where("email", "==", email), limit(1))
   const querySnapshot = await getDocs(userQuery)
   const userDoc = querySnapshot.docs?.pop()
-  return userDoc
+  return userDoc?.data().username
 }

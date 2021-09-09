@@ -68,13 +68,16 @@ export const useProvideAuth = () => {
   const signinWithGoogle = (redirect: string | UrlObject) =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
-  const signout = async (redirect: string | UrlObject = "/") => {
+  const signout = async (
+    redirect: string | UrlObject = "/",
+    showToast: boolean = true
+  ) => {
     await signOut(auth)
     const firstname = userFirstName(user?.displayName)
     toast.dismiss()
-    toast(`Bye for now ${firstname}!`, { icon: "👋" })
+    showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
     handleUser(null)
-    Router.push(redirect)
+    redirect !== "" && Router.push(redirect)
   }
 
   useEffect(() => {

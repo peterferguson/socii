@@ -3,4 +3,4 @@
  * @param  {string} displayName
  */
 
-export const userFirstName = (displayName: string) => displayName.split(" ")?.[0] ?? ""
+export const userFirstName = (displayName: string) => displayName?.split(" ")?.[0] ?? ""

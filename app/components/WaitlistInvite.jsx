@@ -1,5 +1,6 @@
 import { tw } from "@utils/tw"
 import { useState } from "react"
+import { joinWaitlist } from "../utils/joinWaitlist"
 
 function WaitlistInvite({ invited, setInvited }) {
   const [email, setEmail] = useState("")
@@ -17,13 +18,7 @@ function WaitlistInvite({ invited, setInvited }) {
       onSubmit={async (e) => {
         e.preventDefault()
         setClicked(true)
-        await fetch("api/notion/requestInvite", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        })
+        joinWaitlist(email)
         setInvited(true)
       }}
     >
