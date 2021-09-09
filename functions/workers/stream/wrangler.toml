@@ -1,8 +1,14 @@
-name = "stream"
+name = "stream-local"
 type = "javascript"
-zone_id = ""
 account_id = "698a8e362072714aa001c96068fa6abf"
-route = ""
+webpack_config = "webpack.config.js"
+
+[env.dev]
+name = "stream-dev"
+workers_dev = true
+
+[env.prod]
+name = "stream"
 workers_dev = true
 
 [build]

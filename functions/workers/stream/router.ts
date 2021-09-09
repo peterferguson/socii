@@ -18,7 +18,7 @@ const Path = (regExp: string) => (req: Request) => {
 type Condition = (req: Request) => boolean | null
 
 interface Route {
-  conditions: Condition | Condition[]
+  conditions: Condition[]
   handler: (req: Request) => Promise<Response>
 }
 
@@ -31,9 +31,9 @@ class Router {
   }
 
   handle(
-    conditions: Condition | Condition[],
+    conditions: Condition[],
     handler: (req: Request) => Promise<Response>,
-  ) {
+  ): Router {
     this.routes.push({
       conditions,
       handler,
@@ -41,31 +41,31 @@ class Router {
     return this
   }
 
-  get(url: string, handler: (req: Request) => Promise<Response>) {
+  get(url: string, handler: (req: Request) => Promise<Response>): Router {
     return this.handle([Get, Path(url)], handler)
   }
 
-  post(url: string, handler: (req: Request) => Promise<Response>) {
+  post(url: string, handler: (req: Request) => Promise<Response>): Router {
     return this.handle([Post, Path(url)], handler)
   }
 
-  patch(url: string, handler: (req: Request) => Promise<Response>) {
+  patch(url: string, handler: (req: Request) => Promise<Response>): Router {
     return this.handle([Patch, Path(url)], handler)
   }
 
-  delete(url: string, handler: (req: Request) => Promise<Response>) {
+  delete(url: string, handler: (req: Request) => Promise<Response>): Router {
     return this.handle([Delete, Path(url)], handler)
   }
 
-  all(handler: (req: Request) => Promise<Response>) {
+  all(handler: (req: Request) => Promise<Response>): Router {
     return this.handle([], handler)
   }
 
-  route(req: Request) {
+  async route(req: Request): Promise<Response> {
     const route = this.resolve(req)
 
     if (route) {
-      return route.handler(req)
+      return await route.handler(req)
     }
 
     return new Response("resource not found", {
@@ -78,14 +78,10 @@ class Router {
   }
 
   // resolve returns the matching route, if any
-  resolve(req: Request) {
+  resolve(req: Request): Route | null | undefined {
     return this.routes.find((r) => {
       if (!r.conditions || (Array.isArray(r) && !r.conditions.length)) {
         return true
-      }
-
-      if (typeof r.conditions === "function") {
-        return r.conditions(req)
       }
 
       return r.conditions.every((c) => c(req))

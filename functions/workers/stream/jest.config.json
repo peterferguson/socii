@@ -1,7 +1,8 @@
 {
-    "transform": {
-      "^.+\\.(t|j)sx?$": "ts-jest"
-    },
-    "testRegex": "/test/.*\\.test\\.ts$",
-    "collectCoverageFrom": ["src/**/*.{ts,js}"]
-  }
+  "transform": {
+    "^.+\\.(t|j)sx?$": "ts-jest"
+  },
+  "testRegex": "/test/.*\\.test\\.ts$",
+  "collectCoverageFrom": ["src/**/*.{ts,js}"],
+  "setupFiles": ["<rootDir>/jest.env.js"]
+}

@@ -1,17 +1,11 @@
-import { StreamChat } from "stream-chat"
 import { StreamCommandRequestBody } from "../types"
 import { removeRestrictedAttrs } from "./removeRestrictedAttrs"
 import { tradeMML } from "./tradeMML"
 
-const streamClient = new StreamChat(
-  "kwnqrt7s36z2",
-  "rwu9hv78y8bj2p6wh8twh45q9v9jmgbm7y4j2x75jumk8s27xreagxuxbfdn7b6d",
-)
-
-const trade =
+export const trade =
   (tradeType: string) =>
   async (request: Request): Promise<Response> => {
-    const body: StreamCommandRequestBody = await request.json()
+    const body: StreamCommandRequestBody = JSON.parse(await request.text())
 
     // * the body of the message will be modified based on user interactions
     let { message } = body
@@ -19,10 +13,11 @@ const trade =
 
     console.log(`Executing a ${tradeType} trade with body: ${JSON.stringify(body)}`)
 
-    const channelID =
+    const channelId =
       cid?.split(":").pop() || (message && message.cid?.split(":").pop())
 
-    const channel = streamClient.channel("group", channelID)
+    console.log(`Channel Id: ${channelId}`)
+
     const username = user?.id
 
     if (!message) return new Response("No message in body", { status: 400 })
@@ -46,7 +41,7 @@ const trade =
         message = undefined
         break
       // - Catch all commands sent by user not by action
-      default:
+      default: {
         // - Error on missing command args
         // TODO: Add a check to make sure the user has entered a valid ticker symbol
         if (message && message.args?.trim() === "") {
@@ -59,12 +54,26 @@ const trade =
           message,
           tradeMML({ username, tickerSymbol, tradeType }),
         )
-        // eslint-disable-next-line no-case-declarations
-        const streamResponse = await channel.sendMessage(message as never)
+
+        console.log(`Message: ${JSON.stringify({ message })}`)
+
+        const streamResponse = await fetch(
+          `${STREAM_API_BASE_URL}channels/group/${channelId}/message?api_key=${STREAM_API_KEY}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "STREAM-AUTH-TYPE": "jwt",
+              Authorization: `${STREAM_JWT}`,
+            },
+            body: JSON.stringify({ message }),
+          },
+        )
+
+        console.log(`Stream Response: ${JSON.stringify(streamResponse)}`)
+
         return new Response(JSON.stringify(streamResponse, null, 2), { status: 200 })
+      }
     }
     return new Response("Completed", { status: 200 })
   }
-
-export const buy = trade("buy")
-export const sell = trade("sell")

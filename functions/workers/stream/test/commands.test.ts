@@ -44,7 +44,7 @@ const mockBuyMessage = {
 }
 
 describe("handle", () => {
-  beforeEach(() => {
+  beforeEach(() => {  
     Object.assign(global, makeServiceWorkerEnv())
     jest.resetModules()
   })
@@ -57,7 +57,7 @@ describe("handle", () => {
   })
   test("handle POST /buy", async () => {
     const result = await handleCommands(
-      new Request("/buy", { method: "POST", body: JSON.stringify(mockBuyMessage) }),
+      new Request("/commands?type=buy", { method: "POST", body: JSON.stringify(mockBuyMessage) }),
     )
     expect(result.status).toEqual(200)
     const text = await result.text()
