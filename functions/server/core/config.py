@@ -40,10 +40,15 @@ class Settings(BaseSettings):
     ALPACA_BASE_URL: str
     FIREBASE_PROJECT_ID: str
     GOOGLE_APPLICATION_CREDENTIALS: str
-    # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
-    # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
-    # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    CORS_ORIGINS: List[AnyHttpUrl] = [
+        "http://localhost",
+        "http://localhost:3000",
+        "https://socii.app",
+        "https://development.socii.app",
+        "https://investsocial.app",
+        "https://investsocial.co.uk",
+        "https://socii.vercel.app",
+    ]
 
     class Config:
         case_sensitive = True

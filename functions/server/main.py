@@ -14,10 +14,10 @@ logger = logging.getLogger("main")
 app = FastAPI(title=settings.PROJECT_NAME)
 
 # Set all CORS enabled origins
-if settings.BACKEND_CORS_ORIGINS:
+if settings.CORS_ORIGINS:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origins=[str(origin) for origin in settings.CORS_ORIGINS],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
