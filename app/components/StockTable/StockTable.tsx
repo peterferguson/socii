@@ -1,5 +1,5 @@
-import { usePositions } from "@hooks/usePositions"
-import React from "react"
+import { getGroupPositions } from "@utils/getGroupPositions"
+import React , {useEffect, useState} from "react"
 import StockTableBody from "./StockTableBody"
 import StockTableHeader from "./StockTableHeader"
 
@@ -12,8 +12,15 @@ const addPctOfTotalGain = (position, _idx, positions) => ({
 })
 
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
-  const { positions } = usePositions()
+  const [positions , setPositions]= useState([])
 
+  useEffect(()=> {
+    getGroupPositions("Founders").then((res)=>setPositions(res.positions))
+  },[])
+
+  ///////
+  // TODO
+  // - ADD individual portfolio check based on router path
   console.log(positions?.map(addPctOfTotalGain))
 
   return (
