@@ -6,7 +6,7 @@ import { firestore } from "."
  * @param  {string} username
  */
 
-export async function getUserWithUsername(username) {
+export async function getUserWithUsername(username: string) {
   const usersRef = collection(firestore, "users")
   const userQuery = query(usersRef, where("username", "==", username), limit(1))
   const querySnapshot = await getDocs(userQuery)

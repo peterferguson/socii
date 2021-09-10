@@ -1,13 +1,11 @@
 import json
 import os
 import sys
-from typing import Any, Dict
-
-import yahooquery as yq
-from flask.wrappers import Request
 
 # Imports the Cloud Logging client library
 import google.cloud.logging
+import yahooquery as yq
+from flask.wrappers import Request
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 

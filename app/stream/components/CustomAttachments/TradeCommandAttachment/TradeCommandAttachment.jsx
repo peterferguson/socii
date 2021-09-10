@@ -96,13 +96,13 @@ const TradeCommandAttachment = ({ attachment }) => {
                   })
                 )
               }
-              // if ("cancel" in data) {
-              //   await mounted(
-              //     client.partialUpdateMessage(message.id, {
-              //       set: { status: "cancelled" },
-              //     })
-              //   )
-              // }
+              if ("cancel" in data) {
+                await mounted(
+                  client.partialUpdateMessage(message.id, {
+                    set: { status: "cancelled" },
+                  })
+                )
+              }
             }}
             Loading={LoadingIndicator}
           />

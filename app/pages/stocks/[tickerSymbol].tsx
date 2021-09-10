@@ -8,7 +8,7 @@ import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickers
 import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
 import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
-import { getYahooTimeseries, PeriodEnum } from "@utils/getYahooTimeseries"
+import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
@@ -86,14 +86,20 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               <InvestButton send={send} logoColor={logoColor} />
             </div>
           </div>
-          <TickerPageChartCard color={ticker?.logoColor} timeseries={timeseries} />
+          <TickerPageChartCard
+            tickerSymbol={ticker.tickerSymbol}
+            color={ticker?.logoColor}
+            timeseries={timeseries}
+          />
           {InvestButtonModal && !state.matches("returnToLastScreen") && (
             <InvestButtonModal ticker={ticker} state={state} send={send} />
           )}
-          <ReturnToLastScreenModalDynamic
-            open={state?.matches("returnToLastScreen")}
-            setReturnToLastScreen={setReturnToLastScreen}
-          />
+          {state.matches("returnToLastScreen") && (
+            <ReturnToLastScreenModalDynamic
+              open={state?.matches("returnToLastScreen")}
+              setReturnToLastScreen={setReturnToLastScreen}
+            />
+          )}
         </>
       )}
     </>
@@ -114,7 +120,11 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
     })
 
     const timeseries = (
-      await getYahooTimeseries({ tickers: [symbol], period: PeriodEnum["1d"] })
+      await getYahooTimeseries({
+        tickers: [symbol],
+        period: PeriodEnum["1D"],
+        interval: IntervalEnum["1m"],
+      })
     )[symbol].map((tick) => ({
       ...tick,
       timestamp: tick.timestamp.valueOf(),

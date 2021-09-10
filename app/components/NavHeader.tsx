@@ -6,6 +6,7 @@ import React, { useMemo } from "react"
 import { HiOutlineChevronDown, HiOutlineCog, HiOutlineMail } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
+import { UrlObject } from "url"
 
 const algoliaClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_ID,
@@ -40,7 +41,10 @@ const searchProps = {
   },
 }
 
-const dropdownItems = (router: NextRouter, signout: () => void) => [
+const dropdownItems = (
+  router: NextRouter,
+  signout: (redirect: string | UrlObject, showToast: boolean) => void
+) => [
   {
     name: "Settings",
     onClick: () => router.push("/settings"),
@@ -49,7 +53,7 @@ const dropdownItems = (router: NextRouter, signout: () => void) => [
   },
   {
     name: "Log Out",
-    onClick: () => signout(),
+    onClick: () => signout("/", true),
     notificationCount: 0,
     leftIcon: () => <VscSignOut className="w-6 h-6" />,
   },

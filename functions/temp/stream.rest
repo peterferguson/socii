@@ -1,0 +1,50 @@
+POST https://chat-us-east-1.stream-io-api.com/channels/group/Founders/message?api_key=kwnqrt7s36z2
+Content-Type: application/json
+STREAM-AUTH-TYPE: jwt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Cd0Gn8u4Fn7VcllcFn-1_o9q63o14shXKPwh5WHXEaU
+
+{
+    "message": {
+        "id": "peter-buy-O-1631180347779",
+        "text": "How much you would like to buy?",
+        "command": "buy",
+        "html": "",
+        "user": null,
+        "attachments": [
+            {
+                "type": "buy",
+                "mml": "<mml type='card'><buy></buy></mml>",
+                "tickerSymbol": "O",
+                "actions": [
+                    {
+                        "name": "action",
+                        "text": "Buy",
+                        "type": "button",
+                        "value": "buy"
+                    },
+                    {
+                        "name": "action",
+                        "text": "Cancel",
+                        "type": "button",
+                        "value": "cancel"
+                    }
+                ]
+            }
+        ],
+        "reaction_counts": null,
+        "reaction_scores": null,
+        "cid": "group:Founders",
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "0001-01-01T00:00:00Z",
+        "shadowed": false,
+        "mentioned_users": [],
+        "silent": false,
+        "pinned": false,
+        "pinned_at": null,
+        "pinned_by": null,
+        "pin_expires": null,
+        "command_info": { "name": "buy" },
+        "args": " O",
+        "user_id": "peter"
+    }
+}

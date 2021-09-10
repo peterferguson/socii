@@ -8,6 +8,6 @@ export default interface User {
   loading: boolean
   signinWithFacebook: (redirect: string | UrlObject) => {}
   signinWithGoogle: (redirect: string | UrlObject) => {}
-  signout: () => {}
+  signout: (redirect: string | UrlObject, showToast: boolean) => {}
   getFreshToken: () => {}
 }

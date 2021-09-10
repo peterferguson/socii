@@ -2,6 +2,8 @@ import Navigation from "@components/Navigation"
 import WaitlistInvite from "@components/WaitlistInvite"
 import { Transition } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
+import { useDisableScroll } from "@hooks/useDisableScroll"
+import { tw } from "@utils/tw"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { useTimeoutFn } from "react-use"
@@ -31,6 +33,8 @@ export const Hero = ({ invited, setInvited }) => {
   const [, , hideBlackOverlay] = useTimeoutFn(() => setShowBlackOverlay(false), 1500)
   const [, , unhideOptions] = useTimeoutFn(() => setShowOptions(true), 3000)
 
+  useDisableScroll(!showOptions)
+
   return (
     <div className="relative h-screen">
       <Navigation showOptions={showOptions} />
@@ -52,10 +56,9 @@ export const Hero = ({ invited, setInvited }) => {
           />
         </div>
       </Transition.Root>
-      <div className="h-screen grid grid-cols-2 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
-        {/* <div className="h-screen bg-white grid grid-cols-2"> */}
-        <div className="flex flex-col justify-center mx-auto">
-          <div className="z-40 pt-4 pl-6 text-6xl text-white sm:pl-12 thin:text-7xl sm:text-8xl font-primary mix-blend-difference">
+      <div className="h-screen grid grid-cols-3 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
+        <div className="flex flex-col justify-center mx-auto col-span-2">
+          <div className="z-40 pt-4 pl-6 text-5xl text-white sm:pl-12 sm:text-7xl font-primary mix-blend-difference">
             <Transition
               show={true}
               appear={true}
@@ -71,13 +74,13 @@ export const Hero = ({ invited, setInvited }) => {
               Invest with Friends.
             </Transition>
           </div>
-          <div className="pt-8 pl-6 text-sm text-black sm:pl-12 sm:text-xl font-secondary">
+          <div className="relative pt-8 pl-6 text-black text-tiny sm:pl-12 sm:text-lg md:text-xl font-secondary">
             Build portfolios with friends directly from your group chat.
             <br />
             Follow their activity and see what else they are investing in.
-          </div>
-          <div className="p-8">
-            <WaitlistInvite invited={invited} setInvited={setInvited} />
+            <div className="absolute left-0 p-8 w-96 sm:w-4/5 -bottom-28">
+              <WaitlistInvite invited={invited} setInvited={setInvited} />
+            </div>
           </div>
         </div>
       </div>

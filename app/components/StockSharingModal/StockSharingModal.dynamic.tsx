@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic"
-import StockSharingModal from "./StockSharingModal"
+import { default as StockSharingModal } from "./StockSharingModal"
 
 export const StockSharingModalDynamic = dynamic(
   () => import("./StockSharingModal" /* webpackChunkName: "StockSharingModal" */),

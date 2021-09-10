@@ -37,8 +37,8 @@ const Footer = ({ invited, setInvited }) => (
           <h1 className="text-3xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-tight">
             Get your
             <span className="text-palette-primary"> Invite!</span>
-            <p className="text-base font-thin font-primary">
-              Use the email linked to your google or facebook account to get invited.
+            <p className="mt-4 text-base font-thin font-primary">
+              Use the email linked to your google account to get invited.
             </p>
           </h1>
           <WaitlistInvite setInvited={setInvited} />
