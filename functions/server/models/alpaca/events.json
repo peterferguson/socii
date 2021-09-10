@@ -1,0 +1,174 @@
+{
+  "accounts": [
+    {
+      "account_id": "4db36989-6565-4011-9126-39fe6b3d9bf6",
+      "account_number": "",
+      "at": "2021-06-14T09:59:15.232782Z",
+      "event_id": 122039,
+      "kyc_results": null,
+      "status_from": "",
+      "status_to": "APPROVED"
+    },
+
+    {
+      "account_id": "4db36989-6565-4011-9126-39fe6b3d9bf6",
+      "account_number": "937975699",
+      "at": "2021-06-14T09:59:15.558338Z",
+      "event_id": 122040,
+      "kyc_results": null,
+      "status_from": "APPROVED",
+      "status_to": "ACTIVE"
+    },
+    {
+      "account_id": "081781bb-a9a0-4bde-bd65-e14b703e092b",
+      "account_number": "932473536",
+      "at": "2021-04-22T10:43:24.622749Z",
+      "event_id": 3641,
+      "kyc_results": {
+        "reject": null,
+        "accept": null,
+        "indeterminate": {
+          "TAX_IDENTIFICATION": {}
+        }
+      },
+      "status_from": "ACTION_REQUIRED",
+      "status_to": "ACTION_REQUIRED"
+    }
+  ],
+  "trades": [
+    {
+      "account_id": "c8f1ef5d-edc0-4f23-9ee4-378f19cb92a4",
+      "at": "2021-06-14T10:04:05.172241Z",
+      "event": "new",
+      "event_id": 3014423,
+      "execution_id": "a829b698-da07-479f-91e6-f204c77573fc",
+      "order": {
+        "asset_class": "us_equity",
+        "asset_id": "b0b6dd9d-8b9b-48a9-ba46-b9d54906e415",
+        "canceled_at": null,
+        "client_order_id": "d6499947-dacd-4f85-a728-81734dc39c27",
+        "commission": "1.1",
+        "created_at": "2021-06-14T10:04:05.150255Z",
+        "expired_at": null,
+        "extended_hours": false,
+        "failed_at": null,
+        "filled_at": null,
+        "filled_avg_price": null,
+        "filled_qty": "0",
+        "hwm": null,
+        "id": "d507255a-b072-4fb7-96f3-9ad5a9c02b2a",
+        "legs": null,
+        "limit_price": null,
+        "notional": "10",
+        "order_class": "",
+        "order_type": "market",
+        "qty": null,
+        "replaced_at": null,
+        "replaced_by": null,
+        "replaces": null,
+        "side": "buy",
+        "status": "new",
+        "stop_price": null,
+        "submitted_at": "2021-06-14T10:04:05.0937Z",
+        "symbol": "AAPL",
+        "time_in_force": "day",
+        "trail_percent": null,
+        "trail_price": null,
+        "type": "market",
+        "updated_at": "2021-06-14T10:04:05.165088Z"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2021-05-07T10:28:23.163857Z",
+      "entry_type": "JNLC",
+      "event_id": 1406,
+      "journal_id": "2f144d2a-91e6-46ff-8e37-959a701cc58d",
+      "status_from": "",
+      "status_to": "queued"
+    },
+
+    {
+      "at": "2021-05-07T10:28:23.468461Z",
+      "entry_type": "JNLC",
+      "event_id": 1407,
+      "journal_id": "2f144d2a-91e6-46ff-8e37-959a701cc58d",
+      "status_from": "queued",
+      "status_to": "pending"
+    },
+
+    {
+      "at": "2021-05-07T10:28:23.522047Z",
+      "entry_type": "JNLC",
+      "event_id": 1408,
+      "journal_id": "2f144d2a-91e6-46ff-8e37-959a701cc58d",
+      "status_from": "pending",
+      "status_to": "executed"
+    }
+  ],
+  "transfers": [
+    {
+      "account_id": "8e00606a-c9ac-409a-ba45-f55e8f77984a",
+      "at": "2021-06-10T19:49:12.579109Z",
+      "event_id": 15960,
+      "status_from": "",
+      "status_to": "QUEUED",
+      "transfer_id": "c4ed4206-697b-4859-ab71-b9de6649859d"
+    },
+
+    {
+      "account_id": "8e00606a-c9ac-409a-ba45-f55e8f77984a",
+      "at": "2021-06-10T19:52:24.066998Z",
+      "event_id": 15961,
+      "status_from": "QUEUED",
+      "status_to": "SENT_TO_CLEARING",
+      "transfer_id": "c4ed4206-697b-4859-ab71-b9de6649859d"
+    },
+
+    {
+      "account_id": "8e00606a-c9ac-409a-ba45-f55e8f77984a",
+      "at": "2021-06-10T20:02:24.280178Z",
+      "event_id": 15962,
+      "status_from": "SENT_TO_CLEARING",
+      "status_to": "COMPLETE",
+      "transfer_id": "c4ed4206-697b-4859-ab71-b9de6649859d"
+    }
+  ],
+
+  "nta": [
+    {
+      "account_id": "8e00606a-c9ac-409a-ba45-f55e8f77984a",
+      "at": "2021-06-11T10:46:59.265594Z",
+      "description": "",
+      "entry_type": "CSD",
+      "event_id": 12437,
+      "id": "f427a6da-248b-4dfb-ae8e-c9a844e39375",
+      "net_amount": 49999,
+      "per_share_amount": null,
+      "price": "0",
+      "qty": 0,
+      "settle_date": "2021-06-10",
+      "status": "executed",
+      "symbol": "",
+      "system_date": "2021-06-10"
+    },
+
+    {
+      "account_id": "c96a5e16-7fca-425a-b67b-0814d064bfc0",
+      "at": "2021-06-09T10:45:43.636694Z",
+      "description": "ID: 347a459b-71f0-40bb-b451-31f32120b2cc - hi",
+      "entry_type": "JNLC",
+      "event_id": 5019,
+      "id": "d0aad3d1-710d-4461-a78f-7860a088ed4e",
+      "net_amount": 200,
+      "per_share_amount": null,
+      "price": "0",
+      "qty": 0,
+      "settle_date": "2021-06-08",
+      "status": "correct",
+      "symbol": "",
+      "system_date": "2021-06-08"
+    }
+  ]
+}

@@ -1,14 +1,17 @@
-from utils.store_events import store_events
-import os
 import json
+import logging
+import os
 from typing import Optional
 
 import requests
-from fastapi.logger import logger
+
+from utils.store_events import store_events
+
+logger = logging.getLogger("main")
+
 from fastapi import BackgroundTasks
 
 from utils.get_last_event_id import get_last_event_id
-
 
 # - alpaca events endpoints
 event_endpoint_mapping = {
@@ -44,7 +47,9 @@ async def get_events(
             [f"{param}={value}" for param, value in params.items() if value]
         )
     else:
-        query_params = f"?since_id={await get_last_event_id(type)}"
+        last_event_id = await get_last_event_id(type)
+        if last_event_id:
+            query_params = f"?since_id={last_event_id}"
 
     s = requests.Session()
 
@@ -59,10 +64,18 @@ async def get_events(
             stream=True,
             timeout=5,
         ) as response:
+            logger.info(f"Request Url {response.request.url}")
+
+            if not response.ok:
+                logger.error(f"{response.status_code} {response.reason}")
+                return {"code": response.status_code, "message": response.reason}
+
             events = []
             for line in response.iter_lines():
                 if line and "data: " in line.decode("utf-8"):
-                    events.append(json.loads(line.decode("utf-8").split("data: ")[1]))
+                    event = json.loads(line.decode("utf-8").replace("data: ", ""))
+                    logger.info(event)
+                    events.append(event)
     except requests.exceptions.ConnectionError as e:
         if "Read timed out." in str(e):
             logger.info("Timed out")

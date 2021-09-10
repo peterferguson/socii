@@ -1,12 +1,16 @@
+import logging
 import os
+from logging.config import dictConfig
 
 import uvicorn
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 
 from api.v1 import api_router
-from core.config import settings
+from core.config import LogConfig, settings
 
+dictConfig(LogConfig().dict())
+logger = logging.getLogger("main")
 app = FastAPI(title=settings.PROJECT_NAME)
 
 # Set all CORS enabled origins
@@ -35,6 +39,7 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=int(os.getenv("PORT", default=5000)),
+        debug=True,
         log_level="info",
         reload=True,
     )

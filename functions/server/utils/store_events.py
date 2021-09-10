@@ -1,8 +1,10 @@
+from models.alpaca.events import Event
 from typing import List
 
 from google.cloud import firestore
 
 from .initialise_firestore import initialise_firestore
+
 
 async def store_events(type: str, data: List[Event]):
     """Store events in the database.
@@ -13,22 +15,21 @@ async def store_events(type: str, data: List[Event]):
     # Get the database.
     db = initialise_firestore(use_async=True)
 
-    event_data = json.loads(data)
-
-    events_ref = db.collection("{eventType}Events")
+    events_ref = db.collection(f"{type}Events")
 
     batch = db.batch()
-    for index, event in enumerate(event_data):
-        if index % 500 == 0:
-            batch.commit()
+    for index, event in enumerate(data):
+        if index + 1 % 500 == 0:
+            await batch.commit()
             batch = db.batch()
 
-        doc_ref = events_ref.document(str(event.event_id))
+        print(f"Storing event {event['event_id']}")
+        doc_ref = events_ref.document(str(event["event_id"]))
 
         batch.set(
             doc_ref,
             {
-                **event_data,
+                **event,
                 "type": type,
                 "insertTimestamp": firestore.SERVER_TIMESTAMP,
             },
