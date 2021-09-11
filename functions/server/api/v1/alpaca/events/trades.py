@@ -20,7 +20,11 @@ async def get_trades(
     background_tasks: BackgroundTasks,
     query_params: EventQueryParams = Depends(),
 ):
-    return await get_events("trades", background_tasks, query_params)
+    return await get_events(
+        event_type="trades",
+        background_tasks=background_tasks,
+        event_params=query_params,
+    )
 
 
 # @router.websocket("/stream/{alpaca_id}")

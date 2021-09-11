@@ -1,13 +1,8 @@
-import json
 import logging
 import os
 from functools import wraps
 
 import requests
-from fastapi import BackgroundTasks, Depends
-from models.alpaca.events import EventQueryParams
-
-from utils.store_events import store_events
 
 logger = logging.getLogger("main")
 
@@ -20,25 +15,28 @@ event_endpoint_mapping = {
     "nta": "nta",  # non-trading activity
 }
 
-
 api_key = os.environ.get("ALPACA_KEY", "")
 api_secret = os.environ.get("ALPACA_SECRET", "")
 
+# TODO: this should decorate both the get & stream endpoint functions
+#       However, the decorator throws a error for iterating over a coroutine?!
 
 def alpaca_events(timeout=5):
     def decorator(f):
         @wraps(f)
         async def wrapped(*args, **kwargs):
+
+            event_type = kwargs.get("event_type")
             event_params = kwargs.get("event_params")
 
-            query_string = await event_params.get_query_string(type)
+            query_string = await event_params.get_query_string(event_type)
             s = requests.Session()
 
             try:
                 with s.get(
                     os.getenv("ALPACA_BASE_URL", "")
                     + f"events/"
-                    + event_endpoint_mapping[type]
+                    + event_endpoint_mapping[event_type]
                     + query_string,
                     auth=(api_key, api_secret),
                     headers={"content-type": "text/event-stream"},
@@ -53,26 +51,15 @@ def alpaca_events(timeout=5):
                             "code": response.status_code,
                             "message": response.reason,
                         }
-
-                    r = f(*args, **kwargs)
-
-                events = []
-                for index, line in enumerate(response.iter_lines()):
-                    line_str = line.decode("utf-8")
-                    if index == 0:
-                        logger.info(line_str.replace(": ", ""))
-                    if line and "data: " in line_str:
-                        event = json.loads(line_str.replace("data: ", ""))
-                        logger.info(event)
-                        events.append(event)
+                    r = f(*args, **kwargs, response=response)
             except requests.exceptions.ConnectionError as e:
                 if "Read timed out." in str(e):
                     logger.info("Timed out")
                 else:
                     logger.info("ConnectionError")
                     logger.error(e)
+            return r
 
-                return r
-            return wrapped
+        return wrapped
 
-        return decorator
+    return decorator
