@@ -1,9 +1,8 @@
 import os
-import json
 from typing import Optional, Union
 from functools import lru_cache
 
-from google.cloud import firestore
+from firebase_admin import firestore
 from dotenv import load_dotenv
 
 from core.config import settings
