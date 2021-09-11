@@ -7,6 +7,9 @@ from core.connection_manager import ConnectionManager
 from models.alpaca.events import EventQueryParams
 from utils.get_events import get_events
 from utils.verify_token import verify_token
+from utils.handle_event_stream import handle_event_stream
+from crud.get_last_event_id import get_last_event_id
+from crud.get_alpaca_id import get_alpaca_id
 
 router = APIRouter()
 
@@ -20,36 +23,28 @@ async def get_trades(
     background_tasks: BackgroundTasks,
     query_params: EventQueryParams = Depends(),
 ):
-    return await get_events(
-        event_type="trades",
-        background_tasks=background_tasks,
-        event_params=query_params,
-    )
+    return await get_events(event_type="trades", background_tasks=background_tasks)
 
 
-# @router.websocket("/stream/{alpaca_id}")
-# async def stream_trades(
-#     websocket: WebSocket,
-#     background_tasks: BackgroundTasks,
-#     alpaca_id: str,
-#     since_id: Optional[str] = "",
-#     q: Optional[int] = None,
-#     id_token: str = Depends(verify_token),
-# ):
-#     await manager.connect(websocket)
-#     try:
-#         while True:
-#             data = await websocket.receive_text()
-#             await manager.send_personal_message(
-#                 f"query token value is: {id_token}", websocket
-#             )
-#             if q is not None:
-#                 await manager.send_personal_message(
-#                     f"Query parameter q is: {q}", websocket
-#                 )
-#             await manager.send_personal_message(
-#                 f"Message text was: {data}, for item ID: {alpaca_id}", websocket
-#             )
-#     except WebSocketDisconnect:
-#         manager.disconnect(websocket)
-#         await manager.broadcast(f"Client #{alpaca_id} left the chat")
+@router.websocket("/stream/")
+async def stream_trades(
+    websocket: WebSocket,
+    background_tasks: BackgroundTasks,
+    q: Optional[int] = None,
+    token: dict = Depends(verify_token),
+):
+    await manager.connect(websocket)
+    event_type = "trades"
+    last_event_id = await get_last_event_id(event_type)
+    alpaca_id = await get_alpaca_id(token.get("uid"))
+    try:
+        await handle_event_stream(
+            websocket=websocket,
+            connection_manager=manager,
+            event_type=event_type,
+            since_id=last_event_id,
+            alpaca_id=alpaca_id,
+        )
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.broadcast(f"Client #{alpaca_id} left the chat")

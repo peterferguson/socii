@@ -25,19 +25,20 @@ api_secret = os.environ.get("ALPACA_SECRET", "")
 
 
 async def stream_events(
-    type: str,
+    event_type: str,
     background_tasks: BackgroundTasks,
     event_params: EventQueryParams = Depends(EventQueryParams),
 ):
 
-    query_string = await event_params.get_query_string(type)
+
+    query_string = await event_params.get_query_string(event_type)
     s = requests.Session()
 
     try:
         with s.get(
             os.getenv("ALPACA_BASE_URL", "")
             + f"events/"
-            + event_endpoint_mapping[type]
+            + event_endpoint_mapping[event_type]
             + query_string,
             auth=(api_key, api_secret),
             headers={"content-type": "text/event-stream"},
@@ -63,5 +64,5 @@ async def stream_events(
             logger.info("ConnectionError")
             logger.error(e)
 
-    background_tasks.add_task(store_events, type, events)
+    background_tasks.add_task(store_events, event_type, events)
     return {"events": json.dumps(events)}

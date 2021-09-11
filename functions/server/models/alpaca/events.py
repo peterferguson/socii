@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
-from utils.get_last_event_id import get_last_event_id
+from crud.get_last_event_id import get_last_event_id
 
 logger = logging.getLogger("main")
 
@@ -142,7 +142,7 @@ class EventQueryParams(BaseModel):
     def get_params(self):
         return {k: v for k, v in self.dict().items()}
 
-    async def get_query_string(self, type):
+    async def get_query_string(self, event_type):
         params = self.get_params()
 
         if any(value != "" for value in params.values()):
@@ -150,7 +150,7 @@ class EventQueryParams(BaseModel):
                 [f"{param}={value}" for param, value in params.items() if value]
             )
         else:
-            last_event_id = await get_last_event_id(type)
+            last_event_id = await get_last_event_id(event_type)
             logger.info(f"last_event_id: {last_event_id}")
             if last_event_id:
                 return f"?since_id={last_event_id}"
