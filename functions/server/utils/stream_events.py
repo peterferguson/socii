@@ -10,6 +10,7 @@ from utils.store_events import store_events
 
 logger = logging.getLogger("main")
 
+
 # - alpaca events endpoints
 event_endpoint_mapping = {
     "accounts": "accounts/status",
@@ -19,12 +20,11 @@ event_endpoint_mapping = {
     "nta": "nta",  # non-trading activity
 }
 
-
 api_key = os.environ.get("ALPACA_KEY", "")
 api_secret = os.environ.get("ALPACA_SECRET", "")
 
 
-async def get_events(
+async def stream_events(
     type: str,
     background_tasks: BackgroundTasks,
     event_params: EventQueryParams = Depends(EventQueryParams),
@@ -51,12 +51,9 @@ async def get_events(
                 return {"code": response.status_code, "message": response.reason}
 
             events = []
-            for index, line in enumerate(response.iter_lines()):
-                line_str = line.decode("utf-8")
-                if index == 0:
-                    logger.info(line_str.replace(": ", ""))
-                if line and "data: " in line_str:
-                    event = json.loads(line_str.replace("data: ", ""))
+            for line in response.iter_lines():
+                if line and "data: " in line.decode("utf-8"):
+                    event = json.loads(line.decode("utf-8").replace("data: ", ""))
                     logger.info(event)
                     events.append(event)
     except requests.exceptions.ConnectionError as e:
