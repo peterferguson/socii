@@ -4,9 +4,14 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
+
+from utils.get_last_event_id import get_last_event_id
+
+logger = logging.getLogger("main")
 
 
 class Indeterminate(BaseModel):
@@ -125,3 +130,28 @@ class Event(
     NtaItem,
 ):
     pass
+
+
+# - Model: Represents the data model for the events endpoint with some utiliity methods
+class EventQueryParams(BaseModel):
+    since: Optional[str] = ""
+    until: Optional[str] = ""
+    since_id: Optional[str] = ""
+    until_id: Optional[str] = ""
+
+    def get_params(self):
+        return {k: v for k, v in self.dict().items()}
+
+    async def get_query_string(self, type):
+        params = self.get_params()
+
+        if any(value != "" for value in params.values()):
+            return "?" + "&".join(
+                [f"{param}={value}" for param, value in params.items() if value]
+            )
+        else:
+            last_event_id = await get_last_event_id(type)
+            logger.info(f"last_event_id: {last_event_id}")
+            if last_event_id:
+                return f"?since_id={last_event_id}"
+        return ""
