@@ -38,10 +38,10 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   {
     text: !user ? "Home" : "Groups",
     Icon: !user ? HiOutlineHome : HiOutlineUserGroup,
-    onClick: () => router.push(!user ? "/" : `/user/${username}`),
+    onClick: () => router.push(!user ? "/" : `/groups`),
     isActive:
       !router.asPath.slice(1) ||
-      (router.asPath.includes("user") && !router.asPath.includes("portfolio")),
+      (router.asPath.includes("groups") && !router.asPath.includes("/groups/")),
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
   {
