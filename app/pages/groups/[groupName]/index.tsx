@@ -15,44 +15,26 @@
 // - Portfolio Analysis (partnership with the likes of atom or simply wall st?)
 // - Investor section with description of joining date (etc... this should not be the focus!)
 
-import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
-import { useAuth } from "@hooks/useAuth"
-import { useStream } from "@hooks/useStream"
+import { AuthCheck } from "@components"
 import { IsUsersGroup } from "@utils/IsUsersGroup"
-import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
-import { useMediaQuery } from "react-responsive"
-
-const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
-  ssr: false,
-})
+import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
+import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
 
 export default function Group() {
   const router = useRouter()
-
-  const is1Col = !useMediaQuery({ minWidth: 640 })
-  const { client } = useStream()
   let { groupName } = router.query
+  let isMember = IsUsersGroup()
 
   if (Array.isArray(groupName)) groupName = groupName[0]
   return (
     <AuthCheck>
-      <div className="flex items-center justify-center">
-        <div className="flex-auto pt-8">
-          <div className="pb-2 text-3xl tracking-wider text-center text-gray-600 uppercase font-primary">
-            holdings
-          </div>
-          <GroupColumnCard groupName={groupName} />
-          {client && !is1Col && (
-            <IsUsersGroup>
-              <ClientOnly>
-                <StreamChatWithNoSSR client={client} />
-              </ClientOnly>
-            </IsUsersGroup>
-          )}
-        </div>
-      </div>
+      {isMember ? (
+        <IsMemberGroupViewDynamic groupName= {groupName}/>
+        ):(
+        <NonMemberGroupViewDynamic groupName= {groupName}/>
+      )}
     </AuthCheck>
   )
 }

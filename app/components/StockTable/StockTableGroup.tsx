@@ -1,7 +1,9 @@
-import { usePositions } from "@hooks/usePositions"
-import React from "react"
+import { getGroupPositions } from "@utils/getGroupPositions"
+import React , { useState , useEffect } from "react"
 import StockTableBody from "./StockTableBody"
 import StockTableHeader from "./StockTableHeader"
+import { useRouter } from "next/router"
+import { setUserState } from "@lib/firebase/client/db"
 
 // - callback to be used in positions array map
 const addPctOfTotalGain = (position, _idx, positions) => ({
@@ -11,8 +13,19 @@ const addPctOfTotalGain = (position, _idx, positions) => ({
     positions.map((p) => parseFloat(p.unrealizedPl)).reduce((a, b) => a + b, 0),
 })
 
-const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
-  const { positions } = usePositions()
+const StockTableGroup = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
+  const [positions , setPositions]= useState([])
+  const router = useRouter()
+
+  useEffect(()=>{
+    let { groupName }= router.query
+    getGroupPositions(String(groupName)).then((res)=>setPositions(res.positions))
+    return() =>{
+      setPositions([])
+    }
+  },[])
+
+  console.log("res positions ", positions)
   console.log(positions?.map(addPctOfTotalGain))
 
   return (
@@ -45,4 +58,4 @@ const StockTableTitle = ({ title, children }) => (
     </div>
   </div>
 )
-export default StockTable
+export default StockTableGroup
