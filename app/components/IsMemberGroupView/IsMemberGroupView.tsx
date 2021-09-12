@@ -3,13 +3,11 @@
 // - enable stream
 
 import { ClientOnly, GroupColumnCard } from "@components"
-import { useStream } from "@hooks/useStream"
 import dynamic from "next/dynamic"
-import { useRouter } from "next/router"
 import { useMediaQuery } from "react-responsive"
 import { PortfolioEquitySummaryCard } from "@components/PortfolioEquitySummaryCard"
 import { PortfolioHistoryCard } from "@components/PortfolioHistoryCard"
-import { StockTableDynamic, StockTableMeta } from "@components/StockTable"
+import { StockTableGroupDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
 import { TradeHistory } from "../../components/TradeHistory/TradeHistory"
@@ -18,12 +16,9 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 
-const IsMemberGroupView = () => {
+const IsMemberGroupView = ({groupName}) => {
 
-  const router = useRouter()
   const is1Col = !useMediaQuery({ minWidth: 640 })
-  //const { client } = useStream()
-  let { groupName } = router.query
   const tableMeta = useMemo(() => StockTableMeta, [])
   
   if (Array.isArray(groupName)) groupName = groupName[0]
@@ -43,7 +38,7 @@ const IsMemberGroupView = () => {
         {/* Tables */}
         {/* <PortfolioHistoryCard /> */}
         <div className="flex flex-wrap w-full mt-4">
-          <StockTableDynamic stockTableMeta={tableMeta} />
+          <StockTableGroupDynamic stockTableMeta={tableMeta} />
         </div>
         <TradeHistory />
         <ClientOnly>

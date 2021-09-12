@@ -10,7 +10,7 @@ import { useRouter } from "next/router"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
 
-const NonMemberGroupView = (groupName) => {
+const NonMemberGroupView = ({groupName}) => {
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
@@ -18,7 +18,7 @@ const NonMemberGroupView = (groupName) => {
 
   return(
 <div>
-     NON MEMBER TEST
+     NON MEMBER TEST - {groupName}
 </div>
   )
 }

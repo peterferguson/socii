@@ -15,25 +15,15 @@
 // - Portfolio Analysis (partnership with the likes of atom or simply wall st?)
 // - Investor section with description of joining date (etc... this should not be the focus!)
 
-// TODO 
-// -Add auth
-// - deal with scaling
-import { AuthCheck, ClientOnly, GroupColumnCard } from "@components"
-import { useAuth } from "@hooks/useAuth"
+import { AuthCheck } from "@components"
 import { IsUsersGroup } from "@utils/IsUsersGroup"
-import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
 import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
 import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
 
-const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
-  ssr: false,
-})
-
 export default function Group() {
   const router = useRouter()
-
   let { groupName } = router.query
   let isMember = IsUsersGroup()
 
@@ -41,7 +31,7 @@ export default function Group() {
   return (
     <AuthCheck>
       {isMember ? (
-        <IsMemberGroupViewDynamic/>
+        <IsMemberGroupViewDynamic groupName= {groupName}/>
         ):(
         <NonMemberGroupViewDynamic groupName= {groupName}/>
       )}

@@ -8,18 +8,17 @@ import {
   getDocs
 } from "firebase/firestore"
 const { Client } = require("iexjs")
-const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
+const iexClient = new Client({ api_token: process.env.NEXT_PUBLIC_IEX_TOKEN, version: "stable" })
 
 interface Position {
   symbol: string
   qty: string
   marketValue: string
   unrealizedPl: string
-  gainPct: string
+  //gainPct: string
 }
 
 export const getGroupPositions = async (groupName: string) => {
-  
   let tmpPos = <Position>{}
   let tmpPosArr = []
   let price:Price
@@ -30,12 +29,12 @@ export const getGroupPositions = async (groupName: string) => {
   )
   const positions = await getDocs(holdingsRef)
 
-  const marketCalculations = ( symbol , qty , avgPrice, marketPrice ) =>{
+  const marketCalculations = ( qty , avgPrice, marketPrice ) =>{
     const marketValue = qty*marketPrice
     const boughtFor = qty * avgPrice
     const unrealizedPl =  marketValue - boughtFor
-    const gainPct =  (unrealizedPl * 100)/boughtFor // TODO correct this
-    return {marketValue , unrealizedPl , gainPct}
+    //const gainPct =  unrealizedPl/boughtFor // TODO correct this
+    return {marketValue , unrealizedPl }
   }
 
   // TODO check ordering and end await
@@ -45,20 +44,18 @@ export const getGroupPositions = async (groupName: string) => {
 
     await iexClient.quote(symbol, {
       filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
-      }).then((res)=> marketPrice=res.latestPrice)
+      }).then((res)=> {marketPrice=(res.iexRealtimePrice || res.latestPrice)})
 
-      //marketPrice = price.latestPrice // TODO or current price
-      let { marketValue , unrealizedPl , gainPct} = marketCalculations(symbol , qty , avgPrice, marketPrice)
+      let { marketValue , unrealizedPl } = marketCalculations( qty , avgPrice, marketPrice)
       //console.log("after calccc",  marketValue , unrealizedPl , gainPct)
       tmpPos = {
         symbol,
         qty,
         marketValue: String(marketValue),
         unrealizedPl: String(unrealizedPl),
-        gainPct: String(gainPct)
+        //gainPct: String(gainPct)
       }
       tmpPosArr.push(tmpPos)
   }))
-  //console.log("yyyyyyyy", tmpPosArr)
   return {positions: tmpPosArr}
 }

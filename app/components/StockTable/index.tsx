@@ -1,5 +1,7 @@
 export { default as StockTable } from "./StockTable"
+export { default as StockTableGroup } from "./StockTableGroup"
 export { default as StockTableBody } from "./StockTableBody"
 export { default as StockTableHeader } from "./StockTableHeader"
 export { StockTableDynamic } from "./StockTable.dynamic"
+export { StockTableGroupDynamic } from "./StockTableGroup.dynamic"
 export { StockTableMeta } from "./StockTableMeta"
