@@ -46,8 +46,8 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               : activeTab.includes("D")
               ? "30m"
               : activeTab.includes("MAX")
-              ? "1wk"
-              : "1d"
+              ? "1W"
+              : "1D"
           ],
       })
 

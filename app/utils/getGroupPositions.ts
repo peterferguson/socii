@@ -1,14 +1,6 @@
-import { iexQuote } from "@utils/iexQuote"
-import { Price } from "@models/Price"
 import { firestore } from "@lib/firebase/client/db/index"
-import {
-  collection,
-  query,
-  where,
-  getDocs
-} from "firebase/firestore"
-const { Client } = require("iexjs")
-const iexClient = new Client({ api_token: process.env.NEXT_PUBLIC_IEX_TOKEN, version: "stable" })
+import { collection, query, where, getDocs } from "firebase/firestore"
+import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 
 interface Position {
   symbol: string
@@ -19,43 +11,41 @@ interface Position {
 }
 
 export const getGroupPositions = async (groupName: string) => {
-  let tmpPos = <Position>{}
-  let tmpPosArr = []
-  let price:Price
- 
   const holdingsRef = query(
     collection(firestore, `groups/${groupName}/holdings`),
     where("qty", "!=", 0)
   )
-  const positions = await getDocs(holdingsRef)
+  const holdings = await getDocs(holdingsRef)
 
-  const marketCalculations = ( qty , avgPrice, marketPrice ) =>{
-    const marketValue = qty*marketPrice
+  const marketCalculations = (qty, avgPrice, marketPrice) => {
+    const marketValue = qty * marketPrice
     const boughtFor = qty * avgPrice
-    const unrealizedPl =  marketValue - boughtFor
+    const unrealizedPl = marketValue - boughtFor
     //const gainPct =  unrealizedPl/boughtFor // TODO correct this
-    return {marketValue , unrealizedPl }
+    return { marketValue, unrealizedPl }
   }
 
-  // TODO check ordering and end await
-  await Promise.all(positions.docs.map(async (pos)=>{
-    let marketPrice:number
-    let { symbol , qty , avgPrice } = pos.data()
+  const positions = holdings.docs.map((doc) => {
+    const { symbol, qty, avgPrice } = doc.data()
+    return { symbol, qty, avgPrice }
+  })
 
-    await iexClient.quote(symbol, {
-      filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
-      }).then((res)=> {marketPrice=(res.iexRealtimePrice || res.latestPrice)})
+  const priceData = await getYahooTimeseries({
+    tickers: positions.map((pos) => pos.symbol),
+    period: PeriodEnum["1D"],
+    interval: IntervalEnum["1D"],
+  })
 
-      let { marketValue , unrealizedPl } = marketCalculations( qty , avgPrice, marketPrice)
-      //console.log("after calccc",  marketValue , unrealizedPl , gainPct)
-      tmpPos = {
-        symbol,
-        qty,
-        marketValue: String(marketValue),
-        unrealizedPl: String(unrealizedPl),
-        //gainPct: String(gainPct)
-      }
-      tmpPosArr.push(tmpPos)
-  }))
-  return {positions: tmpPosArr}
+  return {
+    positions: positions.map((pos) => {
+      const marketPrice = priceData[pos.symbol]?.pop().close
+
+      const { marketValue, unrealizedPl } = marketCalculations(
+        pos.qty,
+        pos.avgPrice,
+        marketPrice
+      )
+      return { ...pos, marketValue, unrealizedPl }
+    }),
+  }
 }
