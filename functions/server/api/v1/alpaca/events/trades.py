@@ -26,7 +26,7 @@ async def get_trades(
     return await get_events(event_type="trades", background_tasks=background_tasks)
 
 
-@router.websocket("/stream/")
+@router.websocket("/stream")
 async def stream_trades(
     websocket: WebSocket,
     background_tasks: BackgroundTasks,
@@ -37,6 +37,7 @@ async def stream_trades(
     event_type = "trades"
     last_event_id = await get_last_event_id(event_type)
     alpaca_id = await get_alpaca_id(token.get("uid"))
+    await manager.send_personal_message("Connected to trades stream", websocket)
     try:
         await handle_event_stream(
             websocket=websocket,
@@ -47,4 +48,3 @@ async def stream_trades(
         )
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{alpaca_id} left the chat")

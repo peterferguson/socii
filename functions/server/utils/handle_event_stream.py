@@ -25,6 +25,13 @@ event_endpoint_mapping = {
 api_key = os.environ.get("ALPACA_KEY", "")
 api_secret = os.environ.get("ALPACA_SECRET", "")
 
+# TODO: This doesnt really handle multiple connections correctly
+# -
+# -     On connection of a new client the server should send all the events related
+# -     to that client from the list already gathered by the query from the other
+# -     connected clients.
+# -
+
 
 async def handle_event_stream(
     websocket: WebSocket,
@@ -46,6 +53,7 @@ async def handle_event_stream(
             auth=(api_key, api_secret),
             headers={"content-type": "text/event-stream"},
             stream=True,
+            timeout=10,
         ) as response:
             logger.info(f"Request Url {response.request.url}")
 
@@ -57,20 +65,20 @@ async def handle_event_stream(
                 f"alpaca_id: {alpaca_id}", websocket
             )
 
+            lines = response.iter_lines()
+            first_line = next(lines)
+            logger.info(first_line.decode("utf-8").replace(": ", ""))
+
             events = []
-            for index, line in enumerate(response.iter_lines()):
+            for line in lines:
                 line_str = line.decode("utf-8")
-                if index == 0:
-                    logger.info(line_str.replace(": ", ""))
                 if line and "data: " in line_str:
                     event = json.loads(line_str.replace("data: ", ""))
                     logger.info(event)
                     events.append(event)
-                    # if alpaca_id == event["account_id"]:
-                    if "039e64b6-a4eb-409e-b9dc-17cc7a2dd6ce" == event["account_id"]:
-                        await connection_manager.send_personal_message(
-                            line_str.replace("data: ", ""), websocket
-                        )
+                    if alpaca_id == event["account_id"]:
+                        await websocket.send_text(json.dumps(event))
+                        await connection_manager.send_personal_json(event, websocket)
 
     except requests.exceptions.ConnectionError as e:
         if "Read timed out." in str(e):
