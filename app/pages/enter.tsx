@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc"
 import { isInvited } from "../lib/firebase/client/db/isInvited"
 import { NotInvitedDynamic } from "../components/NotInvited"
 import { useRouter } from "next/router"
+import { WelcomeSplash } from "@components/WelcomeSplash"
 
 // ? Should we REQUIRE that the user login with email
 // TODO: Implement account linking
@@ -50,11 +51,15 @@ export default function Enter() {
       <div className="relative flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0 bg-black/10" />
         <div className="relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-tr from-brand to-[#3fba] transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl" />
-        {verified === null ? (
-          <EnterCard signinWith={signinWithGoogle} />
-        ) : (
-          <NotInvitedDynamic email={email.current} />
-        )}
+        {verified === !null ? (
+          verified === true ? (
+            <WelcomeSplash/>
+            ):(
+            <NotInvitedDynamic email={email.current} />)
+          ):(
+            <EnterCard signinWith={signinWithGoogle} />
+          )
+        }
       </div>
     </main>
   )
