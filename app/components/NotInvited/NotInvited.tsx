@@ -13,9 +13,9 @@ const NotInvited = ({ email }: { email: string }) => {
       duration: 15000,
       position: "top-center",
     })
-
-    return () => toasts.map((t) => toast.dismiss(t.id))
-  }, [email, toasts])
+    console.log("in toast not invited")
+    return () => {toasts.map((t) => toast.dismiss(t.id))}
+  }, [email])
 
   return (
     <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
