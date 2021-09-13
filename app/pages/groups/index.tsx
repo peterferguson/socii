@@ -3,10 +3,10 @@
 // - Potential:
 //   - add "followed groups" page to check status of other open groups
 
-
 import React , { Fragment , useState , useMemo , useEffect} from "react"
 import { LeaderboardPanel } from "@components/LeaderboardPanel"
 import { useAuth } from "@hooks"
+import { AuthCheck } from "@components"
 import { Tab } from '@headlessui/react'
 import { TabHeading } from "@components/TabHeading"
 import { TabPanels } from "@components/TabPanels"
@@ -29,7 +29,7 @@ const GroupsHome = ({ leaders }) => {
   ,[userGroups])
   
   return (
-    
+  <AuthCheck>
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
       <div className = "container flex flex-col center" > 
         <div className="flex flex-row justify-center bg-white rounded-lg shadow-lg font-primary text-l">
@@ -52,8 +52,7 @@ const GroupsHome = ({ leaders }) => {
         </TabPanels>
       </div>
     </Tab.Group>
-
-
+  </AuthCheck>
   )
 }
 export default GroupsHome
