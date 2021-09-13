@@ -19,24 +19,19 @@ const CryptoHome = ({ color = "bitcoin" }) => {
       ws.current.onopen = () => console.log("ws opened")
       ws.current.onclose = () => console.log("ws closed")
 
+      ws.current.onmessage = (e) => {
+        console.log("ws.current.onmessage", e)
+        try {
+          const data = JSON.parse(e.data)
+          console.log(data)
+        } catch (error) {
+          const message = e.data
+          console.log("e", message)
+        }
+      }
       return () => ws.current.close()
     }
   }, [user?.token])
-
-  React.useEffect(() => {
-    if (!ws.current) return
-
-    ws.current.onmessage = (e) => {
-      console.log("ws.current.onmessage", e)
-      try {
-        const data = JSON.parse(e.data)
-        console.log(data)
-      } catch (error) {
-        const message = e.data
-        console.log("e", message)
-      }
-    }
-  }, [])
 
   return (
     <ComingSoon

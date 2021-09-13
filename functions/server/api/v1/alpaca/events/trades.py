@@ -1,6 +1,6 @@
-from typing import Optional
+import logging
 
-from fastapi import APIRouter, BackgroundTasks, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, BackgroundTasks, WebSocket
 from fastapi.param_functions import Depends
 
 from core.connection_manager import ConnectionManager
@@ -8,8 +8,9 @@ from models.alpaca.events import EventQueryParams
 from utils.get_events import get_events
 from utils.verify_token import verify_token
 from utils.handle_event_stream import handle_event_stream
-from crud.get_last_event_id import get_last_event_id
-from crud.get_alpaca_id import get_alpaca_id
+
+
+logger = logging.getLogger("main")
 
 router = APIRouter()
 
@@ -30,21 +31,15 @@ async def get_trades(
 async def stream_trades(
     websocket: WebSocket,
     background_tasks: BackgroundTasks,
-    q: Optional[int] = None,
     token: dict = Depends(verify_token),
 ):
-    await manager.connect(websocket)
-    event_type = "trades"
-    last_event_id = await get_last_event_id(event_type)
-    alpaca_id = await get_alpaca_id(token.get("uid"))
-    await manager.send_personal_message("Connected to trades stream", websocket)
-    try:
-        await handle_event_stream(
-            websocket=websocket,
-            connection_manager=manager,
-            event_type=event_type,
-            since_id=last_event_id,
-            alpaca_id=alpaca_id,
-        )
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
+    """
+    Streams trade events from the Alpaca API to appropiate clients.
+    """
+    logger.info("Websocket connection opened")
+    await handle_event_stream(
+        event_type="trades",
+        websocket=websocket,
+        connection_manager=manager,
+        token=token.get("uid", ""),
+    )
