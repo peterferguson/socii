@@ -42,4 +42,5 @@ async def stream_trades(
         websocket=websocket,
         connection_manager=manager,
         token=token.get("uid", ""),
+        background_tasks=background_tasks,
     )

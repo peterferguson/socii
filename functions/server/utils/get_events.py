@@ -2,11 +2,11 @@ import json
 import logging
 import os
 
-import requests
 from fastapi import BackgroundTasks, Depends
 
 from models.alpaca.events import EventQueryParams
 from utils.store_events import store_events
+from utils.stream_alpaca_events import stream_alpaca_events
 
 logger = logging.getLogger("main")
 
@@ -29,42 +29,12 @@ async def get_events(
     background_tasks: BackgroundTasks,
     event_params: EventQueryParams = Depends(EventQueryParams),
 ):
-
-    query_string = await event_params.get_query_string(event_type)
-    s = requests.Session()
-
-    try:
-        with s.get(
-            os.getenv("ALPACA_BASE_URL", "")
-            + f"events/"
-            + event_endpoint_mapping[event_type]
-            + query_string,
-            auth=(api_key, api_secret),
-            headers={"content-type": "text/event-stream"},
-            stream=True,
-            timeout=5,
-        ) as response:
-            logger.info(f"Request Url {response.request.url}")
-
-            if not response.ok:
-                logger.error(f"{response.status_code} {response.reason}")
-                return {"code": response.status_code, "message": response.reason}
-
-            events = []
-            for index, line in enumerate(response.iter_lines()):
-                line_str = line.decode("utf-8")
-                if index == 0:
-                    logger.info(line_str.replace(": ", ""))
-                if line and "data: " in line_str:
-                    event = json.loads(line_str.replace("data: ", ""))
-                    logger.info(event)
-                    events.append(event)
-    except requests.exceptions.ConnectionError as e:
-        if "Read timed out." in str(e):
-            logger.info("Timed out")
-        else:
-            logger.info("ConnectionError")
-            logger.error(e)
-
-    background_tasks.add_task(store_events, event_type, events)
+    events=[]
+    async with stream_alpaca_events(event_type, event_params) as stream:
+        for line in stream:
+            if line:
+                event = json.loads(line[6:].decode("utf-8"))
+                logger.info(event)
+                background_tasks.add_task(store_events, event_type, event)
+                events.append(event)
     return {"events": json.dumps(events)}

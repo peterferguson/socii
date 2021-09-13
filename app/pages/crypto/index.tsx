@@ -4,7 +4,7 @@ import { FaBitcoin } from "react-icons/fa"
 
 import { useAuth } from "@hooks/useAuth"
 
-const url = "ws://localhost:5000/api/v1/alpaca/events/trades/stream"
+const url = "ws://server.socii.app/api/v1/alpaca/events/trades/stream"
 
 // ! In tailwind jit compile the code is scanned and the color must be explicit
 // ! so we need the following text-bitcoin bg-bitcoin border-bitcoin

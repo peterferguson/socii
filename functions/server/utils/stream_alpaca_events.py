@@ -1,12 +1,12 @@
 import json
 import logging
 import os
+from contextlib import asynccontextmanager
 
 import requests
-from fastapi import BackgroundTasks, Depends
+from fastapi import Depends
 
 from models.alpaca.events import EventQueryParams
-from utils.store_events import store_events
 
 logger = logging.getLogger("main")
 
@@ -24,13 +24,12 @@ api_key = os.environ.get("ALPACA_KEY", "")
 api_secret = os.environ.get("ALPACA_SECRET", "")
 
 
-async def stream_events(
+@asynccontextmanager
+async def stream_alpaca_events(
     event_type: str,
-    background_tasks: BackgroundTasks,
     event_params: EventQueryParams = Depends(EventQueryParams),
+    timeout: int = 10,
 ):
-
-
     query_string = await event_params.get_query_string(event_type)
     s = requests.Session()
 
@@ -43,26 +42,27 @@ async def stream_events(
             auth=(api_key, api_secret),
             headers={"content-type": "text/event-stream"},
             stream=True,
-            timeout=5,
+            timeout=timeout,
         ) as response:
             logger.info(f"Request Url {response.request.url}")
 
             if not response.ok:
                 logger.error(f"{response.status_code} {response.reason}")
-                return {"code": response.status_code, "message": response.reason}
+                raise Exception(
+                    {"code": response.status_code, "message": response.reason}
+                )
 
-            events = []
-            for line in response.iter_lines():
-                if line and "data: " in line.decode("utf-8"):
-                    event = json.loads(line.decode("utf-8").replace("data: ", ""))
-                    logger.info(event)
-                    events.append(event)
+            lines = response.iter_lines()
+            first_line = next(lines)
+            logger.info(first_line.decode("utf-8").replace(": ", ""))
+
+            yield lines
+
     except requests.exceptions.ConnectionError as e:
         if "Read timed out." in str(e):
             logger.info("Timed out")
         else:
             logger.info("ConnectionError")
             logger.error(e)
-
-    background_tasks.add_task(store_events, event_type, events)
-    return {"events": json.dumps(events)}
+    finally:
+        s.close()

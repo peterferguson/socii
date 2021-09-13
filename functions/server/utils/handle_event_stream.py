@@ -3,13 +3,15 @@ import json
 import logging
 import os
 
-import requests
 from broadcaster import Broadcast
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect, BackgroundTasks
 
 from core.connection_manager import ConnectionManager
 from crud.get_last_event_id import get_last_event_id
 from crud.get_alpaca_id import get_alpaca_id
+from models.alpaca.events import EventQueryParams
+from utils.store_events import store_events
+from utils.stream_alpaca_events import stream_alpaca_events
 
 logger = logging.getLogger("main")
 
@@ -36,53 +38,25 @@ broadcast = Broadcast(os.environ.get("REDIS_URL", "redis://localhost:6379"))
 # -
 
 
-async def queue_event(alpaca_id: str, event: str):
-    if alpaca_id == json.loads(event)["account_id"]:
-        await broadcast.publish(channel=alpaca_id, message=event)
+async def queue_event(alpaca_id: str, event: dict):
+    if alpaca_id == event["account_id"]:
+        await broadcast.publish(channel=alpaca_id, message=json.dumps(event))
 
 
 async def queue_alpaca_events(
     event_type: str,
     since_id: str,
     alpaca_id: str,
+    background_tasks: BackgroundTasks,
 ):
-
-    s = requests.Session()
-
-    try:
-        with s.get(
-            os.getenv("ALPACA_BASE_URL", "")
-            + f"events/"
-            + event_endpoint_mapping[event_type]
-            + "?since=2021-09-01",
-            # + f"?since_id={since_id}",
-            auth=(api_key, api_secret),
-            headers={"content-type": "text/event-stream"},
-            stream=True,
-            timeout=10,
-        ) as response:
-            logger.info(f"Request Url {response.request.url}")
-
-            if not response.ok:
-                logger.error(f"{response.status_code} {response.reason}")
-                return {"code": response.status_code, "message": response.reason}
-
-            lines = response.iter_lines()
-            first_line = next(lines)
-            logger.info(first_line.decode("utf-8").replace(": ", ""))
-
-            for line in lines:
-                if line:
-                    event = line[6:].decode("utf-8")
-                    logger.info(json.loads(event))
-                    await queue_event(alpaca_id, event)
-
-    except requests.exceptions.ConnectionError as e:
-        if "Read timed out." in str(e):
-            logger.info("Timed out")
-        else:
-            logger.info("ConnectionError")
-            logger.error(e)
+    async with stream_alpaca_events(
+        event_type, EventQueryParams(since_id=since_id)
+    ) as stream:
+        for line in stream:
+            if line:
+                event = json.loads(line[6:].decode("utf-8"))
+                await queue_event(alpaca_id, event)
+                background_tasks.add_task(store_events, event_type, event)
 
 
 async def send_events(
@@ -99,6 +73,7 @@ async def handle_event_stream(
     websocket: WebSocket,
     connection_manager: ConnectionManager,
     token: str,
+    background_tasks: BackgroundTasks,
 ):
     await broadcast.connect()
     await connection_manager.connect(websocket)
@@ -115,7 +90,12 @@ async def handle_event_stream(
             # Kick off both coroutines in parallel, and then block
             # until both are completed.
             await asyncio.gather(
-                queue_alpaca_events(event_type, last_event_id, alpaca_id),
+                queue_alpaca_events(
+                    event_type,
+                    last_event_id,
+                    alpaca_id,
+                    background_tasks=background_tasks,
+                ),
                 send_events(
                     websocket=websocket,
                     connection_manager=connection_manager,
