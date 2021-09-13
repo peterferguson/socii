@@ -13,7 +13,7 @@ import {
   User,
 } from "firebase/auth"
 import Router from "next/router"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { UrlObject } from "url"
 
@@ -68,17 +68,17 @@ export const useProvideAuth = () => {
   const signinWithGoogle = (redirect: string | UrlObject) =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
-  const signout = async (
-    redirect: string | UrlObject = "/",
-    showToast: boolean = true
-  ) => {
-    await signOut(auth)
-    const firstname = userFirstName(user?.displayName)
-    toast.dismiss()
-    showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
-    handleUser(null)
-    redirect !== "" && Router.push(redirect)
-  }
+  const signout = useCallback(
+    async (redirect: string | UrlObject = "/", showToast: boolean = true) => {
+      await signOut(auth)
+      const firstname = userFirstName(user?.displayName)
+      toast.dismiss()
+      showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
+      handleUser(null)
+      redirect !== "" && Router.push(redirect)
+    },
+    [user?.displayName]
+  )
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, handleUser)

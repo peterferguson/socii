@@ -43,7 +43,7 @@ export default function Enter() {
     router.events.on("routeChangeComplete", () => {
       !verified && signout("", false)
     })
-  }, [verified, signout, router])
+  }, [verified, router, username, signout])
 
   return (
     <main className="h-full bg-brand-light">

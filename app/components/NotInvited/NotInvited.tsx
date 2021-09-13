@@ -1,15 +1,21 @@
+import { JoinWaitlistToastDynamic } from "@components/JoinWaitlistToast"
 import { default as Socii } from "@components/SociiSVG"
 import { tw } from "@utils/tw"
 import Link from "next/link"
 import React, { useEffect } from "react"
-import { useToasterStore } from "react-hot-toast"
-import { joinWaitlistToast } from "../../utils/joinWaitlistToast"
+import toast, { useToasterStore } from "react-hot-toast"
 
 const NotInvited = ({ email }: { email: string }) => {
   const { toasts } = useToasterStore()
+
   useEffect(() => {
-    joinWaitlistToast(email)
-  }, [email])
+    toast.custom((t) => <JoinWaitlistToastDynamic t={t} email={email} />, {
+      duration: 15000,
+      position: "top-center",
+    })
+
+    return () => toasts.map((t) => toast.dismiss(t.id))
+  }, [email, toasts])
 
   return (
     <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
