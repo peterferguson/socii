@@ -9,6 +9,7 @@ interface AuthCheckProps {
 
 export default function AuthCheck({ children, fallback }: AuthCheckProps) {
   const { username } = useAuth()
+  console.log(username)
 
   return username
     ? children

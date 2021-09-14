@@ -9,7 +9,7 @@ export const loginRedirect = (
 ) => {
   toast.dismiss()
   router.push(
-    !username ? "/user/create" : userGroups.length ? `/user/${username}` : "/stocks"
+    !username ? "/user/create" : userGroups.length ? `/groups` : "/stocks"
   )
   toast.success(`Welcome ${userFirstName(displayName)}`)
 }

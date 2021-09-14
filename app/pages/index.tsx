@@ -1,16 +1,16 @@
-import WaitlistInvite from "@components/WaitlistInvite"
 import Logo from "@components/Logo"
-import SociiFeatureSlider from "@components/SociiFeatureSlider"
 import OneTwoThree from "@components/OneTwoThree"
+import WaitlistInvite from "@components/WaitlistInvite"
+import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { FaFacebook, FaMedium, FaTwitter } from "react-icons/fa"
-
 import { Hero } from "../components/Hero"
 
 // TODO: Add is visible ref to each component to load the animations properly
 export default function Home() {
-  const [invited, setInvited] = useState(false)
+  const { user } = useAuth()
+  const [invited, setInvited] = useState(user?.invited || false)
   return (
     <>
       {/* TODO Add a wave transition animation to this gradient */}
@@ -41,7 +41,7 @@ const Footer = ({ invited, setInvited }) => (
               Use the email linked to your google account to get invited.
             </p>
           </h1>
-          <WaitlistInvite setInvited={setInvited} />
+          <WaitlistInvite setInvited={setInvited} invited={invited} />
         </div>
       )}
       <div className="h-80">

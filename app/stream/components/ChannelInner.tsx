@@ -50,12 +50,12 @@ const ChannelInner = ({ toggleChannelList }) => {
             (((msg.attachments.some(({ type }) => type === "buy" || type === "sell") &&
               msg.user.id !== username) ||
               ["complete", "cancelled"].includes(msg?.status)) &&
-              ![user.uid].includes(String(msg?.onlyForMe))) ||
+              ![user?.uid].includes(String(msg?.onlyForMe))) ||
             (msg.command_info?.name && !msg.attachments.length)
           )
       )
     )
-  }, [messages, user.uid, username])
+  }, [messages, user?.uid, username])
 
   // TODO scroll input into view: using utils/scrollToRef (source: https://www.codegrepper.com/code-examples/javascript/react+scroll+to+focused+input)
 

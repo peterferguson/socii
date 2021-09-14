@@ -10,6 +10,9 @@ interface IInvestButtonProps {
 export const InvestButton: React.FC<IInvestButtonProps> = ({ send, logoColor }) => {
   const router = useRouter()
   const { username } = useAuth()
+  console.log(username)
+
+  // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
     <div
       style={{ backgroundColor: logoColor }}
