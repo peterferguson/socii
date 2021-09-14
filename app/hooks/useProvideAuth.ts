@@ -108,7 +108,6 @@ export const useProvideAuth = () => {
             setLoading(false)
           })
         else {
-          console.log("got here")
           unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
           setLoading(false)
           return () => unsubscribe?.()

@@ -38,7 +38,7 @@ const OrderModal = ({ ticker, state, send }) => {
       submittedFromCallable: true,
     }
     await toast.promise(
-      tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }),
+      tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side }),
       {
         loading: "submitting...",
         success: () => {
