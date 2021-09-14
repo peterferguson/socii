@@ -13,22 +13,30 @@ import {
   User,
 } from "firebase/auth"
 import Router from "next/router"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useRef } from "react"
 import toast from "react-hot-toast"
 import { UrlObject } from "url"
+import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
+import { isInvited } from "@lib/firebase/client/db/isInvited"
+import FirebaseUser from "@models/FirebaseUser"
 
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
-  const [user, setUser] = useState(null)
-  const [username, setUsername] = useState(null)
-  const [userGroups, setUserGroups] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<FirebaseUser>(null)
+  const [username, setUsername] = useState<string>(null)
+  const [userGroups, setUserGroups] = useState<string[]>(null)
+  const invited = useRef<boolean>(null)
 
   const handleUser = async (rawUser: User | null) => {
     console.log("handleUser called", new Date())
+    console.log("rawUser", rawUser)
     const formattedUser = rawUser ? await formatUser(rawUser) : null
-    setUser(formattedUser)
+    formattedUser === null
+      ? setUser(null)
+      : setUser((prevUser) => ({ ...prevUser, ...formattedUser }))
+
     setLoading(false)
     formattedUser && console.log("handleUser Succeeded", new Date())
     return formattedUser
@@ -68,17 +76,18 @@ export const useProvideAuth = () => {
   const signinWithGoogle = (redirect: string | UrlObject) =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
-  const signout = useCallback(
-    async (redirect: string | UrlObject = "/", showToast: boolean = true) => {
-      await signOut(auth)
-      const firstname = userFirstName(user?.displayName)
-      toast.dismiss()
-      showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
-      handleUser(null)
-      redirect !== "" && Router.push(redirect)
-    },
-    [user?.displayName]
-  )
+  const signout = async (
+    redirect: string | UrlObject = "/",
+    showToast: boolean = true
+  ) => {
+    await signOut(auth)
+    console.log("signed out")
+    const firstname = userFirstName(user?.displayName)
+    toast.dismiss()
+    showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
+    setUser(null)
+    redirect !== "" && Router.push(redirect)
+  }
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, handleUser)
@@ -87,10 +96,26 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    if (user?.uid)
-      unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
-    return () => unsubscribe?.()
-  }, [user?.uid])
+    if (user?.email && !invited.current) {
+      setLoading(true)
+      getUsernameWithEmail(user.email).then((username) => {
+        setUsername(username)
+        invited.current = !!username
+        if (!invited.current)
+          isInvited(user.email).then((r) => {
+            invited.current = r
+            setUser((prevUser) => ({ ...prevUser, invited: invited.current }))
+            setLoading(false)
+          })
+        else {
+          console.log("got here")
+          unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
+          setLoading(false)
+          return () => unsubscribe?.()
+        }
+      })
+    }
+  }, [user?.email, user?.uid])
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())

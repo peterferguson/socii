@@ -1,4 +1,4 @@
-import AuthCheck from "@components/AuthCheck"
+import AuthCheck from "@components/AuthCheck/AuthCheck"
 import ClientOnly from "@components/ClientOnly"
 import dynamic from "next/dynamic"
 import React from "react"

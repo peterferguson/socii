@@ -13,7 +13,10 @@ const NotInvited = ({ email }: { email: string }) => {
       duration: 15000,
       position: "top-center",
     })
-    return () => {toasts.map((t) => toast.dismiss(t.id))}
+    return () => {
+      setTimeout(() => toasts.map((t) => toast.dismiss(t.id)), 3000)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email])
 
   return (
