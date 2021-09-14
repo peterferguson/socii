@@ -1,6 +1,6 @@
 export { default as AddGroupMemberModal } from "./AddGroupMemberModal"
 export { default as AssetCards } from "./AssetCards"
-export { default as AuthCheck } from "./AuthCheck"
+export { default as AuthCheck } from "./AuthCheck/AuthCheck"
 export { default as BackgroundCheck } from "./BackgroundCheck"
 export { default as Card } from "./Card"
 export { default as CardSlider } from "./CardSlider"

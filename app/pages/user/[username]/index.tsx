@@ -8,7 +8,7 @@
 // ? - Create conversion function for the group trade data into an activity feed
 // - Get doc in one go - remove for each - see IMPROVE
 
-import AuthCheck from "@components/AuthCheck"
+import AuthCheck from "@components/AuthCheck/AuthCheck"
 import GroupColumn from "@components/GroupColumnCard"
 import { PieCardSkeleton } from "@components/PieCard"
 import { useAuth } from "@hooks/useAuth"

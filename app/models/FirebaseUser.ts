@@ -1,10 +1,12 @@
 import { UserInfo } from "firebase/auth"
-export default interface FirebaseUser extends UserInfo {
-  emailVerified: boolean
-  token: string
-  expirationTime: string
-  alpacaACH: string
-  alpacaAccountId: string
-  streamToken: string
-  fcmToken: string
+export default interface FirebaseUser extends Omit<UserInfo, "photoURL"> {
+  photoUrl?: string
+  emailVerified?: boolean
+  token?: string
+  expirationTime?: string
+  alpacaACH?: string
+  alpacaAccountId?: string
+  streamToken?: string
+  fcmToken?: string
+  invited?: boolean
 }

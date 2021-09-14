@@ -30,12 +30,12 @@ export enum IntervalEnum {
   "30m" = "30m",
   "60m" = "60m",
   "90m" = "90m",
-  "1h" = "1h",
-  "1d" = "1d",
-  "5d" = "5d",
-  "1wk" = "1wk",
-  "1mo" = "1mo",
-  "3mo" = "3mo",
+  "1H" = "1h",
+  "1D" = "1d",
+  "5D" = "5d",
+  "1W" = "1wk",
+  "1M" = "1mo",
+  "3M" = "3mo",
 }
 
 export interface YahooTimeseries {
