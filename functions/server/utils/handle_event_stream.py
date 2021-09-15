@@ -37,6 +37,8 @@ broadcast = Broadcast(os.environ.get("REDIS_URL", "redis://localhost:6379"))
 # -     connected clients.
 # -
 
+# TODO: Queue events on redis for late connectors & send them their own events on connection
+
 
 async def queue_event(alpaca_id: str, event: dict):
     if alpaca_id == event["account_id"]:
