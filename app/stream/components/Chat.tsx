@@ -8,6 +8,7 @@ import ChannelInner from "./ChannelInner"
 import ChannelList from "./ChannelList/ChannelList"
 import { CustomAttachmentDynamic } from "./CustomAttachments"
 import { Transition } from "@headlessui/react"
+import { useDarkMode } from "@hooks/useDarkMode"
 
 const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Channel), {
   ssr: false,
@@ -19,6 +20,7 @@ const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), 
 
 const StreamChat = ({ client }) => {
   const router = useRouter()
+  const [theme, ] = useDarkMode()
   let { groupName } = router.query
 
   groupName = Array.isArray(groupName) ? groupName[0] : groupName
@@ -37,7 +39,7 @@ const StreamChat = ({ client }) => {
 
   // TODO: Replace light with theme when dark theme is implemented
   return client ? (
-    <Chat client={client} theme={`messaging light`}>
+    <Chat client={client} theme={`messaging ${theme}`}>
       <div className="flex flex-col sm:flex-row overscroll-contain">
         <Channel
           channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
