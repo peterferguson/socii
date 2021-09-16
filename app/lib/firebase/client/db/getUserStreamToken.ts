@@ -7,12 +7,7 @@ import { firestore } from "."
  */
 
 export const getUserStreamToken = async (uid: string) => {
-  const tokenRef = doc(
-    firestore,
-    `users/${uid}/stream/${
-      process.env.NODE_ENV === "production" ? "production" : "development"
-    }`
-  )
+  const tokenRef = doc(firestore, `users/${uid}/stream/production`)
   const snapshot = await getDoc(tokenRef)
   return snapshot.data()?.token
 }

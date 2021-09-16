@@ -5,7 +5,8 @@ import { useAuth } from "@hooks/useAuth"
 
 export default function ProfilePhoto() {
   // TODO: Add a transition to the logo -> logout
-  const { user, username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   return (
     <div className="relative flex items-center justify-end w-1/4 ml-5 mr-1 sm:mr-0 sm:right-auto">
       {user?.photoURL ? (

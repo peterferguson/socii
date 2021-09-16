@@ -28,12 +28,8 @@ export const useProvideAuth = () => {
 
   const handleUser = async (rawUser: User | null) => {
     setLoading(true)
-    console.log("handleUser called", new Date())
     const formattedUser = rawUser ? await formatUser(rawUser) : null
-
-    setUser(formattedUser ? formattedUser : null)
-
-    formattedUser && console.log("handleUser Succeeded", new Date())
+    setUser(formattedUser)
     return formattedUser
   }
 
@@ -91,26 +87,22 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    console.log("user after each change:", user)
-
-    if (user?.uid) {
+    if (user?.uid && !user?.username && !user?.invited) {
       getUsernameWithEmail(user?.email).then((usersUsername) => {
-        console.log(`userUsername: ${usersUsername}`)
         setUser((prevUser) => ({ ...prevUser, username: usersUsername }))
         // - Dont check for invite if user has username
         if (usersUsername) return
-        isInvited(user?.email).then((userInvited) => {
-          console.log(`invited user? ${userInvited}`)
+        isInvited(user?.email).then((userInvited) =>
           setUser((prevUser) => ({ ...prevUser, invited: userInvited }))
-        })
+        )
       })
       setLoading(false)
     }
 
-    unsubscribe = user?.username && setUserState(user.uid, setUser)
+    unsubscribe = user?.uid && setUserState(user.uid, setUser)
 
     return () => unsubscribe?.()
-  }, [user?.uid])
+  }, [user?.email, user?.invited, user?.uid, user?.username])
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())

@@ -17,6 +17,7 @@ export const setUserState = (
     const data = doc.data()
 
     const streamToken = await getUserStreamToken(uid)
+    if (process.env.NODE_ENV !== "production") console.log("stream token", streamToken)
     setUser((prevUser) => ({
       ...prevUser,
       streamToken,

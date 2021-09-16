@@ -25,7 +25,7 @@ const TradeCommandAttachment = ({ attachment }) => {
   const [isin, setIsin] = useState("")
 
   const { user } = useAuth()
-  const username = user && user?.username
+  const username = user ? user.username : ""
   const { client } = useChatContext()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()

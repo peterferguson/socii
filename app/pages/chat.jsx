@@ -10,9 +10,7 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
 })
 
 const ChatPage = () => {
-  const { user } = useAuth()
   const { client } = useStream()
-  console.log(user)
   return (
     <AuthCheck>
       <ClientOnly>

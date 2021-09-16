@@ -20,7 +20,8 @@ const Chat = dynamic(() => import("stream-chat-react").then((mod) => mod.Chat), 
 
 const StreamChat = ({ client }) => {
   const router = useRouter()
-  const [theme, ] = useDarkMode()
+  // const [theme, ] = useDarkMode()
+  const theme = "light"
   let { groupName } = router.query
 
   groupName = Array.isArray(groupName) ? groupName[0] : groupName

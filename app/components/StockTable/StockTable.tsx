@@ -13,7 +13,6 @@ const addPctOfTotalGain = (position, _idx, positions) => ({
 
 const StockTable = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
   const { positions } = usePositions()
-  console.log(positions?.map(addPctOfTotalGain))
 
   return (
     <StockTableTitle title={title}>

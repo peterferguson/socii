@@ -18,11 +18,11 @@ import { useMediaQuery } from "react-responsive"
 const Sidebar = () => {
   // TODO: Stateful selection of the nav item based on the route
   // - For now this is mocked with a simple enumeration of the list
-  const router = useRouter()
   const { user } = useAuth()
   const username = user ? user.username : ""
+  const router = useRouter()
   const is2Col = !useMediaQuery({ minWidth: 1024 })
-  const [, toggleTheme] = useDarkMode()
+  // const [, toggleTheme] = useDarkMode()
 
   const items = useMemo(() => navItems(router, username), [router, username])
 
@@ -76,7 +76,7 @@ const navItems = (router: NextRouter, username: string) => [
   {
     name: "Portfolio",
     description: "Keep track of your growth",
-    href: username && "/user/portfolio",
+    href: username ? "/user/portfolio" : "",
     icon: HiOutlineChartPie,
     isActive: router.asPath.includes("portfolio"),
   },
