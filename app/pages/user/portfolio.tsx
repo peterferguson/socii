@@ -9,7 +9,7 @@ const Dashboard = () => {
   const tableMeta = useMemo(() => StockTableMeta, [])
   return (
     <>
-      <div className="flex flex-col w-full max-w-full pb-5 bg-blueGray-100">
+      <div className="flex flex-col w-full max-w-full pb-5 bg-gray-50">
         <div className="w-full mx-auto">
           {/* Card stats */}
           {/* TODO: Convert these into carousel cards organised by top percentage */}

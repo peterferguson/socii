@@ -93,7 +93,7 @@ body {
 }
 
 .header-btn {
-  @apply p-2 text-brand-cyan-vivid bg-gray-100 align-middle rounded-full hover:text-white hover:bg-brand-cyan-vivid focus:outline-none;
+  @apply p-2 text-brand-cyan-vivid bg-gray-50 align-middle rounded-full hover:text-white hover:bg-brand-cyan-vivid focus:outline-none;
 }
 
 .nav-btn {
@@ -120,7 +120,7 @@ body {
 /* Algolia Instant Search */
 /* TODO: Responsive search card */
 .ais-Hits {
-  @apply absolute top-12 sm:top-2 left-3 sm:left-6 w-full p-8 sm:p-8 sm:my-8 bg-gray-100/50
+  @apply absolute top-12 sm:top-2 left-3 sm:left-6 w-full p-8 sm:p-8 sm:my-8 bg-gray-50 opacity-50
   rounded-lg shadow-xl backdrop-filter backdrop-blur-lg bg-clip-padding z-50;
 }
 .ais-Hits-list {

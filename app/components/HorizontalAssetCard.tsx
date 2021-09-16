@@ -69,7 +69,7 @@ export const HorizontalAssetCardSkeleton = ({ cardRef }) => (
   >
     <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
       <div className="items-center justify-center flex-none w-20 m-auto rounded-full">
-        <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />
+        <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />
       </div>
       <div className="flex-col flex-grow my-auto">
         <div className="text-xs font-extrabold tracking-wider text-gray-400 uppercase font-primary animate-pulse">

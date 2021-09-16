@@ -10,7 +10,7 @@ interface IComingSoon {
 
 export default function ComingSoon({ children, color, description = "" }: IComingSoon) {
   return (
-    <div className="flex flex-col w-full h-full mt-0 bg-gray-100 sm:mt-8">
+    <div className="flex flex-col w-full h-full mt-0 bg-gray-50 sm:mt-8">
       <div
         className={tw(
           "w-4/5 p-10 mx-auto my-20 text-center border-4 shadow-2xl cursor-pointer grid place-items-center sm:my-auto",

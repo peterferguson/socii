@@ -85,7 +85,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="relative bg-blueGray-100">
+      <div className="relative bg-gray-50">
         {/* Header */}
         <div className="relative pt-12 pb-32 bg-gradient-to-r from-green-300 to-brand md:pt-32">
           <div className="w-full px-4 mx-auto md:px-10">
@@ -131,16 +131,16 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead>
                       <tr>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Page name
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Visitors
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Unique users
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Bounce rate
                         </th>
                       </tr>
@@ -251,14 +251,14 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead className="thead-light">
                       <tr>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Referral
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
                           Visitors
                         </th>
                         <th
-                          className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-blueGray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap"
+                          className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap"
                           style={{ minWidth: "140px" }}
                         ></th>
                       </tr>

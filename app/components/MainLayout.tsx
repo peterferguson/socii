@@ -17,11 +17,11 @@ const MainLayout = ({ children }) => {
   // - Something like a <FourColumnComponent>{props.children}</FourColumnComponent>
 
   return (
-    <div className="flex items-start">
-      {!is1Col && <Sidebar />}
+    <div className="grid grid-cols-8">
+      <div className=" col-span-1">{!is1Col && <Sidebar />}</div>
       <StreamProvider>
-        <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4">
-          {!(is1Col && isChatRoute) && <NavHeader />}
+        <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4 col-span-7">
+          {/* {!(is1Col && isChatRoute) && <NavHeader />} */}
           {/* Main Components */}
           <div className="w-full h-full overflow-auto overscroll-none no-scrollbar">
             <div className="flex flex-col flex-wrap mx-4 sm:flex-row">{children}</div>

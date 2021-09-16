@@ -38,7 +38,7 @@ export const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
       <FaHome className="w-5 h-5" />
     </div>
 
-    <div className="ml-4 hover:bg-gray-100">
+    <div className="ml-4 hover:bg-gray-50">
       <h4 className="font-medium text-gray-500 capitalize text-tiniest leading-5">
         {activity.status}
       </h4>

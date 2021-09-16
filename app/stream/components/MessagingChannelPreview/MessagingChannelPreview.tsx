@@ -43,7 +43,7 @@ const MessagingChannelPreview = ({
         ${
           channel?.id === activeChannel?.id
             ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
-            : "hover:bg-blueGray-100 hover:shadow-xl hover:btn-transition"
+            : "hover:bg-gray-50 hover:shadow-xl hover:btn-transition"
         }
       `}
       onClick={() => {

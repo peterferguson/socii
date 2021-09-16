@@ -16,38 +16,37 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 
-const IsMemberGroupView = ({groupName}) => {
-
+const IsMemberGroupView = ({ groupName }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const tableMeta = useMemo(() => StockTableMeta, [])
-  
+
   if (Array.isArray(groupName)) groupName = groupName[0]
 
-  return(
+  return (
     <>
-    <div className="flex flex-col w-full max-w-full pb-5 bg-blueGray-100">
-      <GroupColumnCard groupName={groupName} />
-      <div className="w-full mx-auto">
-        {/* Card stats */}
-        {/* TODO: Convert these into carousel cards organised by top percentage */}
-        <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map((card, i) => card(`card-${i}`))}
+      <div className="flex flex-col w-full max-w-full pb-5 bg-gray-50">
+        <GroupColumnCard groupName={groupName} />
+        <div className="w-full mx-auto">
+          {/* Card stats */}
+          {/* TODO: Convert these into carousel cards organised by top percentage */}
+          <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {cards.map((card, i) => card(`card-${i}`))}
+          </div>
+        </div>
+        <div className="w-full mx-auto overscroll-x-none">
+          {/* Tables */}
+          {/* <PortfolioHistoryCard /> */}
+          <div className="flex flex-wrap w-full mt-4">
+            <StockTableGroupDynamic stockTableMeta={tableMeta} />
+          </div>
+          <TradeHistory />
+          <ClientOnly>
+            {/* <StreamChatWithNoSSR client={client} /> */}
+            <div>test</div>
+          </ClientOnly>
         </div>
       </div>
-      <div className="w-full mx-auto overscroll-x-none">
-        {/* Tables */}
-        {/* <PortfolioHistoryCard /> */}
-        <div className="flex flex-wrap w-full mt-4">
-          <StockTableGroupDynamic stockTableMeta={tableMeta} />
-        </div>
-        <TradeHistory />
-        <ClientOnly>
-          {/* <StreamChatWithNoSSR client={client} /> */}
-          <div>test</div>
-        </ClientOnly>
-      </div>
-    </div>
-  </>
+    </>
   )
 }
 

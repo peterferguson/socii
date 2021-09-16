@@ -54,6 +54,10 @@ module.exports = {
         bitcoin: "#f2a900",
         facebook: "#1778f2",
         twitter: "#1DA1F2",
+        gray: {
+          ...colors.gray,
+          50: "#f3f5f7",
+        },
         blueGray: colors.blueGray,
         trueGray: colors.trueGray,
         teal: colors.teal,

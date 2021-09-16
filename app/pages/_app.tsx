@@ -52,7 +52,7 @@ export default function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <main
         className={`min-h-screen no-scrollbar relative overflow-x-hidden 
-          overflow-y-scroll bg-gray-100 dark:bg-gray-800 
+          overflow-y-scroll bg-gray-50 dark:bg-gray-800 
           ${notMainLayout && "h-screen max-h-screen"}
           selection:bg-brand-lightTeal/80 selection:text-teal-900`}
       >

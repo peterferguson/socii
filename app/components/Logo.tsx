@@ -56,12 +56,12 @@ export function LogoATop({ className }: ILogo) {
 // ! Attempt at creating the logo in tailwind
 {
   /* <div className="relative flex items-center justify-center border-white border-8 rounded-full w-32 h-32">
-<div className="absolute bg-gray-100 -bottom-3 left-3 rounded-full h-8 w-8">
+<div className="absolute bg-gray-50 -bottom-3 left-3 rounded-full h-8 w-8">
   <div className="border-4 border-white rounded-full h-6 w-6"></div>
 </div>
 
 <div className="border-8 border-white rounded-full w-16 h-16"></div>
-<div className="absolute -top-1 right-1 bg-gray-100 rounded-full h-8 w-8">
+<div className="absolute -top-1 right-1 bg-gray-50 rounded-full h-8 w-8">
   <div className="relative border-4 border-white rounded-full h-6 w-6 top-2 left-2"></div>
 </div>
 </div> */

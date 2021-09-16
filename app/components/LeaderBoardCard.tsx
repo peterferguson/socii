@@ -29,7 +29,7 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
         <button
           className={`flex flex-col items-center justify-center px-4 py-2 font-bold
          ${
-           inGroup ? "bg-brand-light" : "bg-gray-100"
+           inGroup ? "bg-brand-light" : "bg-gray-50"
          } border border-gray-100 rounded sm:px-8 sm:py-4
          `}
         >
@@ -86,7 +86,6 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
               />
             </div>
           </div> */}
-        
         </div>
       </div>
       <div className="flex flex-col items-center justify-between ml-4">

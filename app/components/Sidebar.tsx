@@ -2,6 +2,7 @@ import Logo from "@components/Logo"
 import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
 import { useDarkMode } from "@hooks/useDarkMode"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
@@ -25,25 +26,57 @@ const Sidebar = () => {
   // const [, toggleTheme] = useDarkMode()
 
   const items = useMemo(() => navItems(router, username), [router, username])
+  const siblingActive = items.map((_, index) => {
+    console.log("index", index % items.length)
+    if ((items.at(index - 1) || {})?.isActive) return "before"
+    if ((items.at(index + 1) || {})?.isActive) return "after"
+    return false
+  })
 
   return (
-    <div className="sticky hidden w-20 h-screen py-3 mx-1 shadow-md rounded-t-2xl top-2 left-2 sm:block lg:w-52">
+    <div className="hidden h-full rounded-t-2xl sm:block ">
       <div className="flex flex-col items-center justify-between h-full pt-4 bg-white dark:bg-gray-700">
-        <div className="">
-          <div className="flex items-center justify-center mx-auto">
-            {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
+        <div className="w-full">
+          <div className="flex items-center justify-center font-secondary">
+            {!is2Col ? <Logo className="text-4xl" /> : <Socii className="text-4xl" />}
           </div>
-          <nav className="mt-6">
-            {items.map((item) => (
-              <Link href={item.href} key={`${item.name}-selector`}>
-                <a className={`${item.isActive ? "nav-btn-active-r" : "nav-btn"}`}>
-                  <item.icon className="mx-auto text-xl lg:mx-0" />
-                  <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
-                    {item.name}
-                  </span>
-                </a>
-              </Link>
-            ))}
+          <nav className="w-full pl-0 mt-6 lg:pl-2 lgr:pl-6">
+            {items.map((item, index) =>
+              index === 0 || index === items.length ? null : (
+                <Link href={item?.href || ""} key={`${item.name}-selector`}>
+                  <div
+                    className={tw(
+                      !item.isActive
+                        ? "bg-gray-50 w-full h-full cursor-pointer last:cursor-default"
+                        : ""
+                    )}
+                  >
+                    <div
+                      className={tw(
+                        "flex h-12 lg:h-16 w-full",
+                        "items-center pl-0 lg:pl-4 py-4 transition-colors duration-200",
+                        item.isActive
+                          ? "bg-gray-50 rounded-l-2xl text-brand-cyan"
+                          : "bg-white text-brand-shade-darkest hover:text-brand-cyan"
+                      )}
+                      style={
+                        siblingActive[index] == "before"
+                          ? { borderTopRightRadius: "1.5rem" }
+                          : siblingActive[index] == "after"
+                          ? { borderBottomRightRadius: "1.5rem" }
+                          : {}
+                      }
+                    >
+                      {/* <a className={`${item.isActive ? "nav-btn-active-r" : "nav-btn"}`}> */}
+                      {item?.icon && <item.icon className="w-5 h-5 lg:mx-0" />}
+                      <span className="hidden mx-4 text-sm font-primary lg:inline-flex">
+                        {item.name}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )
+            )}
           </nav>
         </div>
         {/* Toggle theme */}
@@ -58,6 +91,7 @@ const Sidebar = () => {
 export default React.memo(Sidebar)
 
 const navItems = (router: NextRouter, username: string) => [
+  {},
   {
     name: "Stocks",
     description: "Search our stock universe",
@@ -97,6 +131,7 @@ const navItems = (router: NextRouter, username: string) => [
     isActive: router.asPath === "/groups",
     // onClick: () => setOpenSettings(!openSettings),
   },
+  {},
   // {
   //   name: "Invites",
   //   description: "Invite your friends to the alpha",

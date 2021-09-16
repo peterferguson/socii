@@ -59,7 +59,7 @@ export default function Create() {
   )
 
   return (
-    <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-100">
+    <main className="flex flex-col items-center w-screen h-screen max-h-screen overflow-y-scroll bg-gray-50">
       <form className="w-full my-16 sm:w-2/3">
         <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
           <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand border-[3px]">
