@@ -1,6 +1,7 @@
 import Logo from "@components/Logo"
 import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
+import { useDarkMode } from "@hooks/useDarkMode"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
@@ -20,27 +21,35 @@ const Sidebar = () => {
   const router = useRouter()
   const { username } = useAuth()
   const is2Col = !useMediaQuery({ minWidth: 1024 })
+  const [theme,toggleTheme,] = useDarkMode()
+
+  console.log(theme);
+  
+
 
   const items = useMemo(() => navItems(router, username), [router, username])
 
   return (
     <div className="sticky hidden w-20 h-screen py-3 mx-1 shadow-md rounded-t-2xl top-2 left-2 sm:block lg:w-52">
-      <div className="h-full pt-4 bg-white dark:bg-gray-700">
-        <div className="flex items-center justify-center mx-auto">
-          {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
+      <div className="flex flex-col items-center justify-between h-full pt-4 bg-white dark:bg-gray-700">
+        <div className="">
+          <div className="flex items-center justify-center mx-auto">
+            {!is2Col ? <Logo className="text-2xl" /> : <Socii className="text-4xl" />}
+          </div>
+          <nav className="mt-6">
+            {items.map((item) => (
+              <Link href={item.href} key={`${item.name}-selector`}>
+                <a className={`${item.isActive ? "nav-btn-active-r" : "nav-btn"}`}>
+                  <item.icon className="mx-auto text-xl lg:mx-0" />
+                  <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
+                    {item.name}
+                  </span>
+                </a>
+              </Link>
+            ))}
+          </nav>
         </div>
-        <nav className="mt-6">
-          {items.map((item) => (
-            <Link href={item.href} key={`${item.name}-selector`}>
-              <a className={`${item.isActive ? "nav-btn-active-r" : "nav-btn"}`}>
-                <item.icon className="mx-auto text-xl lg:mx-0" />
-                <span className="hidden mx-4 text-sm font-normal lg:inline-flex">
-                  {item.name}
-                </span>
-              </a>
-            </Link>
-          ))}
-        </nav>
+        <button className="p-4" onClick={toggleTheme}>toggle mode</button>
       </div>
     </div>
   )
