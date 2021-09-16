@@ -38,13 +38,7 @@ export default function MyApp({ Component, pageProps }) {
   useReceivePushNotifications()
   useInnerViewport()
 
-  const [theme, , componentMounted] = useDarkMode()
-
-  if (componentMounted) {
-    theme !== "light"
-      ? document.documentElement.classList.add("dark")
-      : document.documentElement.classList.remove("dark")
-  }
+  const [theme, ,] = useDarkMode()
 
   const router = useRouter()
   const isChatRoute = router.asPath?.includes("/chat")

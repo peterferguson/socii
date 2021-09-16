@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 
-export const useDarkMode = () => {
+// TODO: add a setting to choose match the users system theme
+
+export const useDarkMode = (): [string, () => void] => {
   const [theme, setTheme] = useState("light")
-  const [componentMounted, setComponentMounted] = useState(false)
 
   const setMode = (mode) => {
     window.localStorage.setItem("theme", mode)
@@ -20,8 +21,11 @@ export const useDarkMode = () => {
       : localTheme
       ? setTheme(localTheme)
       : setMode("light")
-    setComponentMounted(true)
-  }, [])
 
-  return [theme, toggleTheme, componentMounted]
+    const root = document.documentElement
+
+    theme !== "light" ? root.classList.add("dark") : root.classList.remove("dark")
+  }, [theme])
+
+  return [theme, toggleTheme]
 }

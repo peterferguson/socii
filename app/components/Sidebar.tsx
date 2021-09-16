@@ -21,11 +21,7 @@ const Sidebar = () => {
   const router = useRouter()
   const { username } = useAuth()
   const is2Col = !useMediaQuery({ minWidth: 1024 })
-  const [theme,toggleTheme,] = useDarkMode()
-
-  console.log(theme);
-  
-
+  const [, toggleTheme] = useDarkMode()
 
   const items = useMemo(() => navItems(router, username), [router, username])
 
@@ -49,7 +45,9 @@ const Sidebar = () => {
             ))}
           </nav>
         </div>
-        <button className="p-4" onClick={toggleTheme}>toggle mode</button>
+        <button className="p-4" onClick={toggleTheme}>
+          toggle mode
+        </button>
       </div>
     </div>
   )
