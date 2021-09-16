@@ -5,13 +5,13 @@ import React from "react"
 export default function UserPhoto({ className = "w-12 h-12 m-4 rounded-full" }) {
   const { user } = useAuth()
 
-  return !user.photoURL ? (
+  return !user.photoUrl ? (
     <div
       className={`${className} flex items-center justify-center bg-${getRandomTailwindColor()} m-auto font-primary`}
     >
       {user.displayName?.[0]}
     </div>
   ) : (
-    <img src={user.photoURL} className={`${className}`} />
+    <img src={user.photoUrl} className={`${className}`} />
   )
 }
