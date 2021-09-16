@@ -45,9 +45,10 @@ const Sidebar = () => {
             ))}
           </nav>
         </div>
-        <button className="p-4" onClick={toggleTheme}>
+        {/* Toggle theme */}
+        {/* <button className="p-4" onClick={toggleTheme}>
           toggle mode
-        </button>
+        </button> */}
       </div>
     </div>
   )
