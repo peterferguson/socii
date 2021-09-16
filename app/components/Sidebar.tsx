@@ -53,7 +53,7 @@ const Sidebar = () => {
                   >
                     <div
                       className={tw(
-                        "flex h-12 lg:h-16 w-full",
+                        "flex h-12 lg:h-16 w-full justify-center lgr:justify-start",
                         "items-center pl-0 lg:pl-4 py-4 transition-colors duration-200",
                         item.isActive
                           ? "bg-gray-50 rounded-l-2xl text-brand-cyan"
