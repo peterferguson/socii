@@ -109,8 +109,8 @@ const OneTwoThree = () => {
         </div>
       </section>
 
-      <BottomWaveSeparator className="aspect-w-10 aspect-h-1 sm:h-12 text-palette-lightest" />
-      {/* <WavesSeparator className="absolute bottom-0 left-0 aspect-w-3 aspect-h-2" /> */}
+      <BottomWaveSeparator className="sm:h-12 text-palette-lightest" />
+      {/* <WavesSeparator className="absolute bottom-0 left-0" /> */}
     </div>
   )
 }

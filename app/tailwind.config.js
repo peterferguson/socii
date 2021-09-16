@@ -152,5 +152,5 @@ module.exports = {
     scale: ["responsive", "hover", "focus", "focus-within"],
     extend: { backgroundColor: ["active"] },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/aspect-ratio")],
+  plugins: [require("@tailwindcss/forms")],
 }
