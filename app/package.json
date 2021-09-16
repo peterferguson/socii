@@ -73,6 +73,7 @@
     "react-use": "^17.2.4",
     "react-vis": "^1.11.7",
     "request": "^2.88.2",
+    "socket.io": "^4.2.0",
     "stream-chat": "^3.13.1",
     "stream-chat-react": "^6.5.1",
     "swr": "^0.5.6",
