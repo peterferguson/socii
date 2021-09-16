@@ -14,10 +14,15 @@ import { GroupPortfolios } from "@components/GroupPortfolios"
 import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
 import ComingSoon from "@components/ComingSoon"
 import { FaUserInjured } from "react-icons/fa"
+import { useRouter } from "next/router"
+import Link from "next/dist/client/link"
+import dynamic from "next/dynamic"
 
 const GroupsHome = ({ leaders }) => {
   const { userGroups } = useAuth()
-  const [selected , setSelected] = useState("My Groups")
+  const router = useRouter()
+  const [selected , setSelected] = useState<string>("My Groups")
+
   let [categories, setCategories] = useState({
     "My Groups": [],
     Leaderboards: [],
@@ -29,30 +34,26 @@ const GroupsHome = ({ leaders }) => {
   ,[userGroups])
   
   return (
-  <AuthCheck>
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
       <div className = "container flex flex-col center" > 
         <div className="flex flex-row justify-center bg-white rounded-lg shadow-lg font-primary text-l">
         <TabHeading categories={categories} />
-        </div>
-        <TabPanels categories={categories}>
-      
-          <div className = { (selected ==="My Groups") ? "" : "hidden" }>
-            {groupsCards}
-          </div>
-          <div className = { (selected ==="Leaderboards") ? "" : "hidden" }>
-            <LeaderboardPanel leaders = {leaders}/>
-          </div>
-          <div className = { (selected ==="Other Groups") ? "" : "hidden" }>
-            <ComingSoon color="brand-pink" description="">
-              <FaUserInjured className={`w-24 h-24 text-brand-pink`} />
-            </ComingSoon>
-          </div>
-
-        </TabPanels>
+        </div>    
+        <TabPanels categories={categories}> 
+            <div className = { (selected ==="My Groups") ? "" : "hidden" }>
+              {groupsCards}
+            </div> 
+            <div className = { (selected ==="Leaderboards") ? "" : "hidden" }>
+              <LeaderboardPanel leaders = {leaders}/>
+            </div>
+            <div className = { (selected ==="Other Groups") ? "" : "hidden" }>
+              <ComingSoon color="brand-pink" description="">
+                <FaUserInjured className={`w-24 h-24 text-brand-pink`} />
+              </ComingSoon>
+            </div>
+        </TabPanels>     
       </div>
     </Tab.Group>
-  </AuthCheck>
   )
 }
 export default GroupsHome

@@ -1,6 +1,10 @@
+// TODO 
+// Check if working in other pages!!!!
+// correct route to be general
 import { Tab } from "@headlessui/react";
 import React from "react";
 import { tw } from "@utils/tw";
+import Link from "next/link"
 
 export const TabHeading = ({ categories }) => (
   <Tab.List className="flex p-1 space-x-1 bg-gray-300/20 rounded-2xl">
@@ -15,7 +19,9 @@ export const TabHeading = ({ categories }) => (
             : "text-brand/60 hover:bg-white/20 hover:text-black"
         )}
       >
+        <Link href={`/groups?${category}`} as={`/groups/home/${category}`}>
         {category}
+        </Link>
       </Tab>
     ))}
   </Tab.List>
