@@ -5,7 +5,8 @@ import { useAuth } from "@hooks/useAuth"
 import React from "react"
 
 const SelectGroupModal = ({ state, send }) => {
-  const { userGroups } = useAuth()
+  const { user } = useAuth()
+  const userGroups = user && user.groups ? user.groups : []
   return (
     <InvestButtonModalContainer open={state.matches("active.chooseGroup")} send={send}>
       <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">

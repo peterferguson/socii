@@ -17,7 +17,8 @@ import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
 
 export default function Create() {
-  const { user, username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   const router = useRouter()
 
   const [groupName, setGroupName] = useState("")
@@ -29,7 +30,7 @@ export default function Create() {
   const [loading, setLoading] = useState(false)
 
   // TODO: Extract this and the username check into a single hook
-  // TODO: Users not getting the correct feedback on group name creation 
+  // TODO: Users not getting the correct feedback on group name creation
   const onChange = (e) => {
     // Force form value typed in form to match correct format
     const val = e.target.value

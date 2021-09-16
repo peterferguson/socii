@@ -22,6 +22,7 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 })
 
 const Footer = dynamic(() => import("@components/Footer"))
+const CuttoutFooter = dynamic(() => import("@components/CuttoutFooter"))
 const MainLayout = dynamic(() => import("@components/MainLayout"))
 
 // - Uncomment to console log web vitals
@@ -62,6 +63,7 @@ export default function MyApp({ Component, pageProps }) {
           ) : (
             <MainLayout {...props}>
               {isBrowser && <Component {...props} />}
+              {/* {is1Col && !isChatRoute && <CuttoutFooter {...props} />} */}
               {is1Col && !isChatRoute && <Footer {...props} />}
             </MainLayout>
           )}

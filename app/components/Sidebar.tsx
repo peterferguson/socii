@@ -19,7 +19,8 @@ const Sidebar = () => {
   // TODO: Stateful selection of the nav item based on the route
   // - For now this is mocked with a simple enumeration of the list
   const router = useRouter()
-  const { username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   const is2Col = !useMediaQuery({ minWidth: 1024 })
   const [, toggleTheme] = useDarkMode()
 

@@ -18,7 +18,8 @@ const orderScreenState = (state) =>
   state.matches("active.shareOrder")
 
 const OrderModal = ({ ticker, state, send }) => {
-  const { user, username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   const { price } = useTickerPrice(ticker.tickerSymbol)
   const [amount, setAmount] = useState(0)
 

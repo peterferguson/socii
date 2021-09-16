@@ -10,8 +10,6 @@ import { firestore, getUserStreamToken } from "."
 
 export const setUserState = (
   uid: string,
-  setUsername: React.Dispatch<React.SetStateAction<string>>,
-  setUserGroups: React.Dispatch<React.SetStateAction<string[]>>,
   setUser: React.Dispatch<React.SetStateAction<FirebaseUser>>
 ) => {
   const userRef = doc(firestore, `users/${uid}`)
@@ -19,11 +17,11 @@ export const setUserState = (
     const data = doc.data()
 
     const streamToken = await getUserStreamToken(uid)
-    setUsername(data?.username || "")
-    setUserGroups(data?.groups || [])
     setUser((prevUser) => ({
       ...prevUser,
       streamToken,
+      username: data?.username || "",
+      groups: data?.groups || [],
       fcmToken: data?.fcmToken || "",
       alpacaAccountId: data?.alpacaAccountId || "",
       alpacaACH: data?.alpacaACH || "",

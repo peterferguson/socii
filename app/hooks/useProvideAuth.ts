@@ -1,6 +1,9 @@
 import { auth } from "@lib/firebase/client/auth"
+import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
+import { isInvited } from "@lib/firebase/client/db/isInvited"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
 import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
+import FirebaseUser from "@models/FirebaseUser"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import {
@@ -13,31 +16,23 @@ import {
   User,
 } from "firebase/auth"
 import Router from "next/router"
-import { useCallback, useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { UrlObject } from "url"
-import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
-import { isInvited } from "@lib/firebase/client/db/isInvited"
-import FirebaseUser from "@models/FirebaseUser"
 
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<FirebaseUser>(null)
-  const [username, setUsername] = useState<string>(null)
-  const [userGroups, setUserGroups] = useState<string[]>(null)
-  const invited = useRef<boolean>(null)
 
   const handleUser = async (rawUser: User | null) => {
+    setLoading(true)
     console.log("handleUser called", new Date())
-    console.log("rawUser", rawUser)
     const formattedUser = rawUser ? await formatUser(rawUser) : null
-    formattedUser === null
-      ? setUser(null)
-      : setUser((prevUser) => ({ ...prevUser, ...formattedUser }))
 
-    setLoading(false)
+    setUser(formattedUser ? formattedUser : null)
+
     formattedUser && console.log("handleUser Succeeded", new Date())
     return formattedUser
   }
@@ -96,25 +91,26 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    if (user?.email && !invited.current) {
-      setLoading(true)
-      getUsernameWithEmail(user.email).then((username) => {
-        setUsername(username)
-        invited.current = !!username
-        if (!invited.current)
-          isInvited(user.email).then((r) => {
-            invited.current = r
-            setUser((prevUser) => ({ ...prevUser, invited: invited.current }))
-            setLoading(false)
-          })
-        else {
-          unsubscribe = setUserState(user.uid, setUsername, setUserGroups, setUser)
-          setLoading(false)
-          return () => unsubscribe?.()
-        }
+    console.log("user after each change:", user)
+
+    if (user?.uid) {
+      getUsernameWithEmail(user?.email).then((usersUsername) => {
+        console.log(`userUsername: ${usersUsername}`)
+        setUser((prevUser) => ({ ...prevUser, username: usersUsername }))
+        // - Dont check for invite if user has username
+        if (usersUsername) return
+        isInvited(user?.email).then((userInvited) => {
+          console.log(`invited user? ${userInvited}`)
+          setUser((prevUser) => ({ ...prevUser, invited: userInvited }))
+        })
       })
+      setLoading(false)
     }
-  }, [user?.email, user?.uid])
+
+    unsubscribe = user?.username && setUserState(user.uid, setUser)
+
+    return () => unsubscribe?.()
+  }, [user?.uid])
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
@@ -123,8 +119,6 @@ export const useProvideAuth = () => {
   }
 
   return {
-    username: username || "",
-    userGroups: userGroups || [],
     user,
     loading,
     // signinWithEmail,

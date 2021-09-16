@@ -71,7 +71,8 @@ const grayedDropdownItems = (signout) => [
 ]
 
 export default function Dropdown() {
-  const { username, signout } = useAuth()
+  const { user, signout } = useAuth()
+  const username = user ? user.username : ""
 
   return (
     <Popover className="relative z-50 inline-block p-4 text-left">

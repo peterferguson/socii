@@ -15,7 +15,8 @@ import SociiIMG from "./SociiIMG"
 
 const Footer = () => {
   const router = useRouter()
-  const { user, username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
 
   const navLinks = useMemo(
     () => links(user, username, router),
@@ -73,7 +74,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
 ]
 
 const FooterSearchButton = ({ username, onClick, isActive }) => (
-  <Link href={username && "/user/portfolio"}>
+  // <Link href={username && "/user/portfolio"}>
     <a
       className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
         isActive &&
@@ -88,7 +89,7 @@ const FooterSearchButton = ({ username, onClick, isActive }) => (
       {/* </a> */}
       {/* <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}> */}
     </a>
-  </Link>
+  // </Link>
 )
 // <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}>
 //   <div className="flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-brand">
