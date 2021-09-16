@@ -3,7 +3,6 @@ import WaitlistInvite from "@components/WaitlistInvite"
 import { Transition } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
 import { useDisableScroll } from "@hooks/useDisableScroll"
-import { tw } from "@utils/tw"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { useTimeoutFn } from "react-use"
@@ -27,11 +26,10 @@ const showPromtion = () =>
     { duration: 7500, position: "bottom-center" }
   )
 export const Hero = ({ invited, setInvited }) => {
-  const { user } = useAuth()
   const [showOptions, setShowOptions] = useState(false)
   const [showBlackOverlay, setShowBlackOverlay] = useState(true)
-  const [, , hideBlackOverlay] = useTimeoutFn(() => setShowBlackOverlay(false), 1500)
-  const [, , unhideOptions] = useTimeoutFn(() => setShowOptions(true), 3000)
+  const [, , hideBlackOverlay] = useTimeoutFn(() => setShowBlackOverlay(false), 1000)
+  const [, , unhideOptions] = useTimeoutFn(() => setShowOptions(true), 1500)
 
   useDisableScroll(!showOptions)
 
@@ -41,22 +39,14 @@ export const Hero = ({ invited, setInvited }) => {
       <Transition.Root show={showBlackOverlay}>
         <div className="flex items-center justify-center">
           <Transition.Child
-            leave="transition transform ease-out delay-700 duration-700"
-            leaveFrom="translate-x-0"
-            leaveTo="translate-x-full"
-            className="absolute inset-y-0 z-30 w-screen bg-black h-[60%]"
-          />
-          <Transition.Child
-            leave="transition transform ease-out delay-700 duration-700"
-            leaveFrom="translate-x-0"
-            leaveTo="-translate-x-full"
-            // beforeLeave={() => setBlackText(true)}
-            afterLeave={() => !user && showPromtion()}
-            className="absolute z-50 w-screen bg-black top-[60%] h-[40%]"
+            leave="transition ease-out delay-500 duration-1000"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+            className="absolute inset-y-0 z-30 w-screen h-full bg-black"
           />
         </div>
       </Transition.Root>
-      <div className="h-screen grid grid-cols-3 bg-gradient-to-tl via-white to-white from-brand-shade-blue">
+      <div className="h-screen grid grid-cols-3 bg-gradient-to-tl via-white to-white from-palette-lightest">
         <div className="flex flex-col justify-center mx-auto col-span-2">
           <div className="z-40 pt-4 pl-6 text-5xl text-white sm:pl-12 sm:text-7xl font-primary mix-blend-difference">
             <Transition
@@ -74,11 +64,10 @@ export const Hero = ({ invited, setInvited }) => {
               Invest with Friends.
             </Transition>
           </div>
-          <div className="relative pt-8 pl-6 text-black text-tiny sm:pl-12 sm:text-lg md:text-xl font-secondary">
-            Build portfolios with friends directly from your group chat.
-            <br />
-            Follow their activity and see what else they are investing in.
-            <div className="absolute left-0 p-8 w-96 sm:w-4/5 -bottom-28">
+          {/* <Circles className="absolute inset-0 z-50" /> */}
+          <div className="relative pt-2 pl-8 text-black text-tiny sm:pl-16 sm:text-lg md:text-xl font-secondary">
+            Buy stocks & crypto directly from your group chat.
+            <div className="absolute left-0 p-8 pt-12 w-96 sm:w-4/5 -bottom-28">
               <WaitlistInvite invited={invited} setInvited={setInvited} />
             </div>
           </div>
@@ -87,3 +76,27 @@ export const Hero = ({ invited, setInvited }) => {
     </div>
   )
 }
+
+const Circles = ({ className }) => (
+  <div className={`${className}`}>
+    <svg
+      id="visual"
+      viewBox="0 0 900 600"
+      width="900"
+      height="600"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      version="1.1"
+    >
+      <g fill="none" stroke="#3fb" opacity="0.4" strokeWidth="5">
+        <circle r="102" cx="1" cy="316" />
+        <circle r="11" cx="666" cy="116" />
+        <circle r="11" cx="546" cy="441" />
+        <circle r="78" cx="124" cy="93" />
+        <circle r="38" cx="205" cy="399" />
+        <circle r="28" cx="840" cy="435" />
+        <circle r="92" cx="380" cy="141" />
+      </g>
+    </svg>
+  </div>
+)

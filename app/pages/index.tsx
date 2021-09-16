@@ -23,7 +23,7 @@ export default function Home() {
 }
 
 const Footer = ({ invited, setInvited }) => (
-  <div className="overflow-hidden bg-gray-100 max-h-lg">
+  <div className="overflow-hidden bg-palette-lightest/5 max-h-lg">
     <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
       {invited ? (
         <h1 className="mt-8 text-2xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-snug">
@@ -35,11 +35,8 @@ const Footer = ({ invited, setInvited }) => (
       ) : (
         <div className="mt-8 space-y-8">
           <h1 className="text-3xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-tight">
-            Get your
-            <span className="text-palette-primary"> Invite!</span>
-            <p className="mt-4 text-base font-thin font-primary">
-              Use the email linked to your google account to get invited.
-            </p>
+            Get your invite!
+            {/* <span className="text-palette-primary"> Invite!</span> */}
           </h1>
           <WaitlistInvite setInvited={setInvited} invited={invited} />
         </div>

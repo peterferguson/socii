@@ -43,6 +43,7 @@ module.exports = {
           green: "#77B44E",
           lightGreen: "#79ffe1",
           lightPink: "#dca3c8",
+          teal: "#3fba",
           lightTeal: "#a6fff8",
           cyan: {
             DEFAULT: "#00D2EA",
@@ -151,5 +152,5 @@ module.exports = {
     scale: ["responsive", "hover", "focus", "focus-within"],
     extend: { backgroundColor: ["active"] },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/aspect-ratio")],
 }

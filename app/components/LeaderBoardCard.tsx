@@ -85,8 +85,8 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
                 alt=""
               />
             </div>
-          </div>
-         */}
+          </div> */}
+        
         </div>
       </div>
       <div className="flex flex-col items-center justify-between ml-4">
