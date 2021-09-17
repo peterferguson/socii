@@ -20,10 +20,9 @@ export default function PriceCard({
           width="64px"
         />
         <div className="flex flex-col">
-          <span className="ml-2 text-base font-bold tracking-wider text-gray-700 uppercase dark:text-white">
+          <span className="mb-2 ml-2 text-base font-bold tracking-wider text-gray-700 uppercase dark:text-white">
             {tickerSymbol}
           </span>
-          <br />
           <span className="ml-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-white">
             {shortName}
           </span>
