@@ -75,6 +75,14 @@ module.exports = {
         tiniest: "0.5rem",
         tiny: "0.625rem",
       },
+      fontWeight: {
+        thin: 100,
+        extralight: 200,
+        light: 300,
+        normal: 400,
+        semibold: 600,
+        bold: 800,
+      },
       keyframes: {
         wiggle: {
           "0%, 100%": {

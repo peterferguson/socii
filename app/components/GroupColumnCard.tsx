@@ -14,6 +14,14 @@ export interface IGroupColumnCard {
   className?: string
 }
 
+export interface Holding {
+  ISIN: string
+  symbol: string
+  shortName: string
+  avgPrice: number
+  qty: number
+}
+
 export default function GroupColumnCard({ groupName, className }: IGroupColumnCard) {
   const { user } = useAuth()
   const mounted = useUnmountPromise()
@@ -37,9 +45,15 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
 
   useEffect(() => {
     setHoldingInfo(
-      holdings?.map((doc) => {
+      holdings?.map((doc): Holding => {
         const { symbol, assetRef, shortName, avgPrice, qty } = doc.data()
-        return { ISIN: assetRef.id, symbol, shortName, avgPrice, qty }
+        return {
+          ISIN: assetRef?.id || assetRef.split("/").pop(),
+          symbol,
+          shortName,
+          avgPrice,
+          qty,
+        }
       })
     )
   }, [holdings])

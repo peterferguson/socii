@@ -26,7 +26,7 @@ const Footer = ({ invited, setInvited }) => (
   <div className="overflow-hidden bg-palette-lightest/5 max-h-lg">
     <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
       {invited ? (
-        <h1 className="mt-8 text-2xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-snug">
+        <h1 className="mt-8 text-2xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-snug">
           Thanks for signing up!
           <p className="text-xl font-thin font-secondary">
             Keep an eye on your inbox for your invite.
@@ -34,7 +34,7 @@ const Footer = ({ invited, setInvited }) => (
         </h1>
       ) : (
         <div className="mt-8 space-y-8">
-          <h1 className="text-3xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-tight">
+          <h1 className="text-3xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-tight">
             Get your invite!
             {/* <span className="text-palette-primary"> Invite!</span> */}
           </h1>

@@ -23,7 +23,7 @@ function WaitlistInvite({ invited, setInvited }) {
       }}
     >
       {invited ? (
-        <h1 className="mt-8 text-2xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-snug">
+        <h1 className="mt-8 text-2xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-snug">
           Thanks for signing up!
           <p className="text-xl font-thin font-secondary">
             Keep an eye on your inbox for your invite.

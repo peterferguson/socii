@@ -53,7 +53,7 @@ const Pricing = () => {
           </h2>
           <ul className=" text-sm font-bold">
             {[
-              <p key="all-of-basic" className="font-extrabold">
+              <p key="all-of-basic" className="font-bold">
                 Everything in basic
               </p>,
               <span key="unlimited-groups">

@@ -1,16 +1,23 @@
+import { getLogoColor } from "@lib/firebase/client/db/getLogoColor"
 import Link from "next/link"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { Holding } from "./GroupColumnCard"
 import TickerLogo from "./TickerLogo"
 
 interface IStockCard {
-  holding: any
+  holding: Holding
   latestPrice: number
   index: number
 }
 
 export default function StockCard({ holding, latestPrice, index }: IStockCard) {
   const tickerSymbol = holding.symbol
+  const [logoColor, setLogoColor] = useState(null)
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
+
+  useEffect(() => {
+    getLogoColor(holding?.ISIN).then((color) => setLogoColor(color))
+  }, [holding?.ISIN])
 
   return (
     <li
@@ -25,7 +32,10 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
           </div>
         </Link>
         <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
-          <div className="text-base font-extrabold tracking-wider uppercase text-brand-shade-darkest font-primary">
+          <div
+            className="text-base tracking-wider uppercase text-brand-shade-darkest font-primary"
+            style={{ color: logoColor }}
+          >
             {tickerSymbol}
           </div>
           <div className="overflow-hidden font-thin tracking-wider uppercase text-brand-shade-darkest text-tiny">

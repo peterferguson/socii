@@ -79,7 +79,7 @@ Array [
               Investing with friends
             </h2>
             <h2
-              className="mb-4 text-4xl font-extrabold text-transparent bg-gradient-to-r bg-clip-text to-brand-lightGreen from-brand via-brand-cyan-vivid lg:text-4xl font-heading dark:text-white"
+              className="mb-4 text-4xl font-bold text-transparent bg-gradient-to-r bg-clip-text to-brand-lightGreen from-brand via-brand-cyan-vivid lg:text-4xl font-heading dark:text-white"
             >
               has never been easier!
             </h2>
@@ -203,7 +203,7 @@ Array [
           Social Investing
         </p>
         <p
-          className="mb-2 text-3xl font-extrabold leading-normal md:text-4xl md:leading-relaxed font-primary"
+          className="mb-2 text-3xl font-bold leading-normal md:text-4xl md:leading-relaxed font-primary"
         >
           What is 
           <a
@@ -453,7 +453,7 @@ Array [
         className="mt-8 space-y-8"
       >
         <h1
-          className="text-3xl font-extrabold font-primary sm:text-4xl md:text-5xl md:leading-tight"
+          className="text-3xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-tight"
         >
           Get your
           <span
