@@ -28,8 +28,8 @@ const Sidebar = () => {
   const items = useMemo(() => navItems(router, username), [router, username])
 
   const siblingActive = items.map((_, index) => {
-    if ((items.at(index - 1) || {})?.isActive) return "before"
-    if ((items.at(index + 1) || {})?.isActive) return "after"
+    if ((items.slice(index - 1, index).pop() || {})?.isActive) return "before"
+    if ((items.slice(index, index + 1).pop() || {})?.isActive) return "after"
     return false
   })
 

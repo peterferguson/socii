@@ -1,15 +1,8 @@
 import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
-import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
-import {
-  HiOutlineAnnotation,
-  HiOutlineCog,
-  HiOutlineGlobe,
-  HiOutlineHome,
-  HiOutlineUserGroup,
-} from "react-icons/hi"
+import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
 import { FooterNavItem } from "./FooterNavItem"
 import SociiIMG from "./SociiIMG"
 
@@ -75,20 +68,20 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
 
 const FooterSearchButton = ({ username, onClick, isActive }) => (
   // <Link href={username && "/user/portfolio"}>
-    <a
-      className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
-        isActive &&
-        "border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
-      } transition duration-300`}
-      onClick={onClick}
-    >
-      <SociiIMG height="32" width="32" />
+  <a
+    className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
+      isActive &&
+      "border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
+    } transition duration-300`}
+    onClick={onClick}
+  >
+    <SociiIMG height="32" width="32" />
 
-      <p className="-mt-1">Portfolio</p>
+    <p className="-mt-1">Portfolio</p>
 
-      {/* </a> */}
-      {/* <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}> */}
-    </a>
+    {/* </a> */}
+    {/* <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}> */}
+  </a>
   // </Link>
 )
 // <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}>
