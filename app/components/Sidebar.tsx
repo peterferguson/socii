@@ -28,8 +28,8 @@ const Sidebar = () => {
   const items = useMemo(() => navItems(router, username), [router, username])
 
   const siblingActive = items.map((_, index) => {
-    if ((items.slice(index - 1, index).pop() || {})?.isActive) return "before"
-    if ((items.slice(index, index + 1).pop() || {})?.isActive) return "after"
+    if ((items[index - 1] || {})?.isActive) return "before"
+    if ((items[index + 1] || {})?.isActive) return "after"
     return false
   })
 
@@ -42,6 +42,11 @@ const Sidebar = () => {
           </div>
           <nav className="w-full pl-2 mt-6 lgr:pl-6">
             {items.map((item, index) => {
+              if (item.isActive) {
+                console.log("index", index)
+                console.log("index", index - 1)
+                console.log("index", index + 1)
+              }
               return index === 0 || index + 1 === items.length ? (
                 <div
                   className={tw(
