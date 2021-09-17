@@ -1,10 +1,10 @@
 import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
+import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
 import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
-import { FooterNavItem } from "./FooterNavItem"
-import SociiIMG from "./SociiIMG"
+import SociiSVG from "./SociiSVG"
 
 const Footer = () => {
   const router = useRouter()
@@ -17,9 +17,9 @@ const Footer = () => {
   )
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-between bg-white space-x-2">
+    <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-white standalone:pb-4 rounded-t-3xl grid grid-cols-3">
       {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
-        const props = { text, Icon, onClick, isActive }
+        const props = { text, Icon, onClick, isActive, index: i }
         return <Component key={`nav-item-${i}`} props={props} />
       })}
     </nav>
@@ -27,6 +27,24 @@ const Footer = () => {
 }
 
 export default React.memo(Footer)
+
+export const FooterNavItem = ({ text, Icon, onClick, isActive, index }) => {
+  return (
+    <a
+      className={tw(
+        "flex flex-col items-center justify-center w-full py-2 font-primary text-tiny text-brand-dark text-center",
+        index === 0 ? "ml-4" : "mr-4",
+        // isActive &&
+        //   "font-bold border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800",
+        "transition duration-300"
+      )}
+      onClick={onClick}
+    >
+      <Icon className="w-5 h-5 mx-auto mb-1" />
+      {text}
+    </a>
+  )
+}
 
 const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   {
@@ -39,7 +57,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
   {
-    // onClick: () => setShowSearchCard(!showSearchCard),
+    onClick: () => {},
     isActive: router.asPath.includes("portfolio"),
     Component: ({ props }) => <FooterSearchButton {...props} username={username} />,
   },
@@ -50,42 +68,18 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
     isActive: router.asPath.includes("stocks"),
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
-  // {
-  //   text: "Chat",
-  //   Icon: HiOutlineAnnotation,
-  //   onClick: () => router.push("/chat"),
-  //   isActive: router.asPath.includes("chat"),
-  //   Component: ({ props }) => <FooterNavItem {...props} />,
-  // },
-  // {
-  //   text: "Settings",
-  //   Icon: HiOutlineCog,
-  //   onClick: () => router.push("/settings"),
-  //   isActive: router.asPath.includes("settings"),
-  //   Component: ({ props }) => <FooterNavItem {...props} />,
-  // },
 ]
 
-const FooterSearchButton = ({ username, onClick, isActive }) => (
-  // <Link href={username && "/user/portfolio"}>
-  <a
-    className={`block w-full py-2 mb-2 font-primary text-tiny text-brand-dark text-center ${
-      isActive &&
-      "border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800"
-    } transition duration-300`}
-    onClick={onClick}
-  >
-    <SociiIMG height="32" width="32" />
-
-    <p className="-mt-1">Portfolio</p>
-
-    {/* </a> */}
-    {/* <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}> */}
-  </a>
-  // </Link>
+const FooterSearchButton = ({ onClick }) => (
+  <div className="relative w-full">
+    <div
+      className={tw(
+        "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
+        "transition duration-300 shadow-md rounded-full flex items-center justify-center",
+        ""
+      )}
+    >
+      <SociiSVG className="text-5xl p-0.5" onClick={onClick} />
+    </div>
+  </div>
 )
-// <a className="flex items-center justify-center w-full pt-1 pb-2" onClick={onClick}>
-//   <div className="flex items-center justify-center w-12 h-12 rounded-full shadow-lg bg-brand">
-//     <Icon className="w-6 h-6 text-brand-light" />
-//   </div>
-// </a>
