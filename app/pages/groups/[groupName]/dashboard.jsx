@@ -111,7 +111,7 @@ export default function Dashboard() {
                 <div className="px-4 py-3 mb-0 border-0 rounded-t">
                   <div className="flex flex-wrap items-center">
                     <div className="relative flex-1 flex-grow w-full max-w-full px-4">
-                      <h3 className="text-base font-semibold text-blueGray-700">
+                      <h3 className="text-base font-semibold text-gray-700">
                         Page visits
                       </h3>
                     </div>
@@ -131,16 +131,16 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead>
                       <tr>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Page name
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Visitors
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Unique users
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Bounce rate
                         </th>
                       </tr>
@@ -231,7 +231,7 @@ export default function Dashboard() {
                 <div className="px-4 py-3 mb-0 border-0 rounded-t">
                   <div className="flex flex-wrap items-center">
                     <div className="relative flex-1 flex-grow w-full max-w-full px-4">
-                      <h3 className="text-base font-semibold text-blueGray-700">
+                      <h3 className="text-base font-semibold text-gray-700">
                         Social traffic
                       </h3>
                     </div>
@@ -251,14 +251,14 @@ export default function Dashboard() {
                   <table className="items-center w-full bg-transparent border-collapse">
                     <thead className="thead-light">
                       <tr>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Referral
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap">
+                        <th className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap">
                           Visitors
                         </th>
                         <th
-                          className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-blueGray-500 border-blueGray-100 whitespace-nowrap"
+                          className="px-6 py-3 text-xs font-semibold text-left uppercase align-middle border border-l-0 border-r-0 border-solid bg-gray-50 text-gray-500 border-gray-100 whitespace-nowrap"
                           style={{ minWidth: "140px" }}
                         ></th>
                       </tr>
@@ -378,7 +378,7 @@ export default function Dashboard() {
           {/* Footer */}
           <footer className="block py-4">
             <div className="container px-4 mx-auto">
-              <hr className="mb-4 border-b-1 border-blueGray-200" />
+              <hr className="mb-4 border-b-1 border-gray-200" />
               <div className="flex flex-wrap items-center justify-center md:justify-between">
                 <div className="w-full px-4 md:w-4/12">socii</div>
                 <div className="w-full px-4 md:w-8/12">
@@ -386,7 +386,7 @@ export default function Dashboard() {
                     <li>
                       <a
                         href="/"
-                        className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
+                        className="block px-3 py-1 text-sm font-semibold text-gray-600 hover:text-gray-800"
                       >
                         Home
                       </a>
@@ -394,7 +394,7 @@ export default function Dashboard() {
                     <li>
                       <a
                         href="/"
-                        className="block px-3 py-1 text-sm font-semibold text-blueGray-600 hover:text-blueGray-800"
+                        className="block px-3 py-1 text-sm font-semibold text-gray-600 hover:text-gray-800"
                       >
                         About Us
                       </a>
@@ -424,14 +424,12 @@ function BlockCard({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
-              <h5 className="text-xs font-bold uppercase text-blueGray-400">{title}</h5>
-              <span className="text-xl font-semibold text-blueGray-700">
-                {subTitle}
-              </span>
+              <h5 className="text-xs font-bold uppercase text-gray-400">{title}</h5>
+              <span className="text-xl font-semibold text-gray-700">{subTitle}</span>
             </div>
             <div className="relative flex-initial w-auto pl-4">{imgComponent}</div>
           </div>
-          <p className="mt-4 text-sm text-blueGray-400">
+          <p className="mt-4 text-sm text-gray-400">
             <span className={`${headingColor} mr-2`}>{heading}</span>
             <span className="whitespace-nowrap">{headingSubText}</span>
           </p>

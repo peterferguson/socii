@@ -7,10 +7,10 @@ const PortfolioHistoryCard = () => (
       <div className="px-4 py-3 mb-0 bg-transparent">
         <div className="flex flex-col items-center">
           <div className="relative flex-1 flex-grow w-full max-w-full">
-            <h6 className="mb-1 text-xs font-semibold uppercase text-blueGray-400">
+            <h6 className="mb-1 text-xs font-semibold uppercase text-gray-400">
               Holdings
             </h6>
-            <h2 className="text-xl font-semibold text-blueGray-700">
+            <h2 className="text-xl font-semibold text-gray-700">
               Portfolio Allocation
             </h2>
           </div>

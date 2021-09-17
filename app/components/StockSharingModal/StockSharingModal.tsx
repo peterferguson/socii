@@ -92,7 +92,7 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
           <span className="font-bold text-teal-300">{tickerSymbol}</span>!
         </Dialog.Title>
         <div className="mt-2">
-          <div className="text-sm font-primary text-blueGray-500">
+          <div className="text-sm font-primary text-gray-500">
             Select some data to tell your friends about!
           </div>
           <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
@@ -100,9 +100,7 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
           />
-          <div className="text-sm font-primary text-blueGray-500">
-            Got a price in mind?
-          </div>
+          <div className="text-sm font-primary text-gray-500">Got a price in mind?</div>
           <div className="pt-1 pb-2">
             <PriceInput
               setPrice={setTargetPrice}
@@ -110,12 +108,12 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
               pricePlaceholder={pricePlaceholder}
             />
           </div>
-          <div className="text-sm font-primary text-blueGray-500">
+          <div className="text-sm font-primary text-gray-500">
             Tell them your thoughts!
           </div>
           <div className="pt-2 mb-3">
             <textarea
-              className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-gray-300 text-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
               rows={4}
               placeholder="Bruh the wallstreetbets bros love it!"
               onChange={(e) => setMessage(e.target.value)}

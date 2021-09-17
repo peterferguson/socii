@@ -18,9 +18,9 @@ const MainLayout = ({ children }) => {
 
   return (
     <div className="grid grid-cols-8">
-      <div className=" col-span-1">{!is1Col && <Sidebar />}</div>
+      <div className="col-span-1">{!is1Col && <Sidebar />}</div>
       <StreamProvider>
-        <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4 col-span-7">
+        <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4 col-span-8 sm:col-span-7">
           <NavHeader />
           {/* Main Components */}
           <div className="w-full h-full overflow-auto overscroll-none no-scrollbar">

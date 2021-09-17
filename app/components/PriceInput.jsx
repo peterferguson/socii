@@ -3,10 +3,10 @@ import React from "react"
 const PriceInput = ({
   setPrice,
   pricePlaceholder = "0.00",
-  textStyling = "font-primary text-sm text-blueGray-500",
+  textStyling = "font-primary text-sm text-gray-500",
   showPrice = true,
 }) => (
-  <div className="text-blueGray-500">
+  <div className="text-gray-500">
     {showPrice && (
       <label htmlFor="price" className={`block ${textStyling}`}>
         Price

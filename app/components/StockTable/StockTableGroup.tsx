@@ -1,5 +1,5 @@
 import { getGroupPositions } from "@utils/getGroupPositions"
-import React , { useState , useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import StockTableBody from "./StockTableBody"
 import StockTableHeader from "./StockTableHeader"
 import { useRouter } from "next/router"
@@ -14,16 +14,16 @@ const addPctOfTotalGain = (position, _idx, positions) => ({
 })
 
 const StockTableGroup = ({ stockTableMeta, title = "Holdings Breakdown" }) => {
-  const [positions , setPositions]= useState([])
+  const [positions, setPositions] = useState([])
   const router = useRouter()
 
-  useEffect(()=>{
-    let { groupName }= router.query
-    getGroupPositions(String(groupName)).then((res)=>setPositions(res.positions))
-    return() =>{
+  useEffect(() => {
+    let { groupName } = router.query
+    getGroupPositions(String(groupName)).then((res) => setPositions(res.positions))
+    return () => {
       setPositions([])
     }
-  },[])
+  }, [])
 
   console.log("res positions ", positions)
   console.log(positions?.map(addPctOfTotalGain))
@@ -50,7 +50,7 @@ const StockTableTitle = ({ title, children }) => (
       <div className="px-4 py-3 mb-0 border-0 rounded-t">
         <div className="flex flex-wrap items-center">
           <div className="relative flex-1 flex-grow w-full max-w-full">
-            <h3 className="text-base font-semibold text-blueGray-700">{title}</h3>
+            <h3 className="text-base font-semibold text-gray-700">{title}</h3>
           </div>
         </div>
       </div>

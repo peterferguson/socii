@@ -6,6 +6,9 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      backdropBlur: {
+        xs: "2px",
+      },
       colors: {
         palette: {
           darkest: "#1595c9",
@@ -58,7 +61,6 @@ module.exports = {
           ...colors.gray,
           50: "#f3f5f7",
         },
-        blueGray: colors.blueGray,
         trueGray: colors.trueGray,
         teal: colors.teal,
         emerald: colors.emerald,

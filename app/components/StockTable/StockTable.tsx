@@ -36,7 +36,7 @@ const StockTableTitle = ({ title, children }) => (
       <div className="px-4 py-3 mb-0 border-0 rounded-t">
         <div className="flex flex-wrap items-center">
           <div className="relative flex-1 flex-grow w-full max-w-full">
-            <h3 className="text-base font-semibold text-blueGray-700">{title}</h3>
+            <h3 className="text-base font-semibold text-gray-700">{title}</h3>
           </div>
         </div>
       </div>

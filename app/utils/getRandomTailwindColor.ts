@@ -1,9 +1,8 @@
-import { getRandomArrayElement } from "./getRandomArrayElement";
-
+import { getRandomArrayElement } from "./getRandomArrayElement"
 
 export const getRandomTailwindColor = () => {
   const colors = [
-    "blueGray",
+    "gray",
     "trueGray",
     "teal",
     "emerald",
@@ -11,8 +10,8 @@ export const getRandomTailwindColor = () => {
     "orange",
     "lime",
     "pink",
-  ];
-  const range = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+  ]
+  const range = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
 
-  return `${getRandomArrayElement(colors)}-${getRandomArrayElement(range)}`;
-};
+  return `${getRandomArrayElement(colors)}-${getRandomArrayElement(range)}`
+}
