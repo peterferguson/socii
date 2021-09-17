@@ -20,7 +20,7 @@ export default function HeaderDropdownButton(props: DropdownButtonProps) {
   return (
     <Popover>
       <Popover.Button
-        className="appearance-none !p-1 nav-btn"
+        className="appearance-none focus:outline-none focus:ring-0 !p-1 nav-btn"
         aria-label={props.name}
         aria-haspopup="true"
       >
@@ -85,7 +85,7 @@ function DropdownMenu({ children }) {
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <Popover.Panel className="absolute right-0 w-56 p-2 mt-2 text-gray-600 bg-white border border-gray-100 shadow-md space-y-2 rounded-md">
+      <Popover.Panel className="absolute right-0 w-56 p-2 mt-2 text-gray-600 bg-white border border-gray-100 shadow-md -bottom-20 space-y-2 rounded-md">
         {children}
       </Popover.Panel>
     </Transition>

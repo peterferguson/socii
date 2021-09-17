@@ -31,7 +31,7 @@ const Searchbar = connectSearchBox(({ refine }) => {
           <div
             className={tw(
               "flex items-center justify-center bg-white rounded-full",
-              "appearance-none",
+              "appearance-none focus:outline-none focus:ring-0",
               open ? "w-full h-full" : "w-8 h-8"
             )}
           >
@@ -54,7 +54,7 @@ const Searchbar = connectSearchBox(({ refine }) => {
                 className={tw(
                   "leading-normal text-gray-400 transition duration-300 border-none rounded-full",
                   "h-full w-full placeholder-current -ml-2 py-1.5 focus:border-transparent",
-                  "focus:outline-none focus:ring-0 ring-opacity-90 dark:bg-gray-800"
+                  "focus:outline-none focus:ring-0 dark:bg-gray-800"
                 )}
               />
             )}
