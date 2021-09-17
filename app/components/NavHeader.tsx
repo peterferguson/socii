@@ -1,9 +1,9 @@
-import { HeaderButton, HeaderDropdownButton, Searchbar, UserPhoto } from "@components"
+import { HeaderDropdownButton, Searchbar, UserPhoto } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
-import { HiOutlineChevronDown, HiOutlineCog, HiOutlineMail } from "react-icons/hi"
+import { HiOutlineCog } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
 import { UrlObject } from "url"
@@ -88,9 +88,9 @@ const NavHeader: React.FC = () => {
       <header className="sticky z-40 items-center h-16 mx-4 mt-2 w-[calc(100%-32px)] dark:bg-gray-700 rounded-2xl">
         <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="flex items-center justify-between flex-grow w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
-            <div className="text-3xl font-light font-primary">{title}</div>
-            <div className="flex-grow" />
-            <div className="flex items-center justify-end w-1/4 space-x-1 sm:space-x-2">
+            <div className="pr-2 text-2xl font-light align-bottom sm:text-3xl font-primary">{title}</div>
+            <div className="flex-grow hidden sm:block" />
+            <div className="flex items-center justify-end w-11/12 sm:w-1/3 space-x-0 sm:space-x-2">
               <Searchbar />
               {/* <HeaderButton
                 name="Messages"

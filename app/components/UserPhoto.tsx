@@ -3,7 +3,7 @@ import { getRandomTailwindColor } from "@utils/getRandomTailwindColor"
 import React from "react"
 
 export default function UserPhoto({
-  className = "w-6 sm:w-8 h-6 sm:h-8 m-4 rounded-full",
+  className = "w-8 h-8 m-4 rounded-full",
 }) {
   const { user } = useAuth()
 
