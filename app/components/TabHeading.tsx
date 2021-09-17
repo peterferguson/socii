@@ -5,6 +5,7 @@ import { Tab } from "@headlessui/react";
 import React from "react";
 import { tw } from "@utils/tw";
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 export const TabHeading = ({ categories }) => (
   <Tab.List className="flex p-1 space-x-1 bg-gray-300/20 rounded-2xl">
@@ -19,7 +20,7 @@ export const TabHeading = ({ categories }) => (
             : "text-brand/60 hover:bg-white/20 hover:text-black"
         )}
       >
-        <Link href={`/groups?${category}`} as={`/groups/home/${category}`}>
+        <Link href={`${useRouter().route}?${category}`} as={`${useRouter().route}/tabs/${category.replace(" ","")}`}>
         {category}
         </Link>
       </Tab>

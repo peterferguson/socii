@@ -22,7 +22,7 @@ const GroupsHome = ({ leaders }) => {
   const { userGroups } = useAuth()
   const router = useRouter()
   const [selected , setSelected] = useState<string>("My Groups")
-
+console.log("r", router.route)
   let [categories, setCategories] = useState({
     "My Groups": [],
     Leaderboards: [],
