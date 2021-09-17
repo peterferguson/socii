@@ -85,7 +85,7 @@ const NavHeader: React.FC = () => {
   return (
     <InstantSearch {...searchProps}>
       <Configure hitsPerPage={3} />
-      <header className="sticky z-40 items-center h-16 mx-4 mt-2 w-[calc(100%-32px)] dark:bg-gray-700 rounded-2xl">
+      <header className="sticky z-40 items-center h-16 mt-2 ml-8 mr-4 border-b w-[calc(100%-56px)] dark:bg-gray-700">
         <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="flex items-center justify-between flex-grow w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div className="pr-2 text-2xl font-light align-bottom sm:text-3xl font-primary">{title}</div>

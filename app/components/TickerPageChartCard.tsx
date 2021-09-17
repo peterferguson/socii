@@ -109,8 +109,8 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               highlightedChange={highlightedChange}
               crosshairIndexValue={crosshairIndexValue}
               setCrosshairIndexValue={setCrosshairIndexValue}
-              heightScale={is1Col ? 0.35 : 0.6}
-              widthScale={is1Col ? 0.8 : 0.75}
+              heightScale={is1Col ? 0.35 : 0.5} // TODO: reduce size once we add other stock information
+              widthScale={0.8}
             />
           ) : (
             // TODO: Replace with skeleton loader
@@ -127,7 +127,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
                       borderColor: selected ? color : "transparent",
                       backgroundImage:
                         selected && is.not.safari()
-                          ? `linear-gradient(to bottom, #fff, ${color}20)`
+                          ? `linear-gradient(to bottom, #fff, ${color}10)`
                           : "",
                     }}
                   >

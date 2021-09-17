@@ -26,8 +26,6 @@ const Footer = () => {
   )
 }
 
-export default React.memo(Footer)
-
 export const FooterNavItem = ({ text, Icon, onClick, isActive, index }) => {
   return (
     <a
@@ -83,3 +81,4 @@ const FooterSearchButton = ({ onClick }) => (
     </div>
   </div>
 )
+export default React.memo(Footer)

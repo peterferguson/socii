@@ -70,13 +70,9 @@ export default function StockDisplay({ tickers }) {
     // TODO: Create our own version of this Ticker Tape banner
     <>
       <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
-        {/* <Link href="/stocks/popular"> */}
-        <div className="flex pt-4 pl-12 mb-1 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
-          Popular Stocks
-          {/* <div className="flex-grow" />
-            <FiChevronRight className="h-8 cursor-pointer mt-0.5" /> */}
+        <div className="w-full pt-6 text-3xl tracking-tight text-center uppercase cursor-pointer font-primary text-brand-dark">
+          Popular
         </div>
-        {/* </Link> */}
         <CardSlider tickers={tickers} />
         {/* TODO: Charts are not resizing on container change */}
         <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
