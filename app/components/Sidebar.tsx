@@ -39,7 +39,7 @@ const Sidebar = () => {
     <div className="hidden h-full rounded-t-2xl sm:block ">
       <div className="flex flex-col items-center justify-between h-full pt-4 bg-white dark:bg-gray-700">
         <div className="w-full">
-          <div className="flex items-center justify-center font-secondary mt-4">
+          <div className="flex items-center justify-center mt-4 font-secondary">
             {!is2Col ? <Logo className="text-4xl" /> : <Socii className="text-4xl" />}
           </div>
           <nav className="w-full pl-0 mt-6 lg:pl-2 lgr:pl-6">

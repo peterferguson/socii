@@ -19,7 +19,7 @@ export const TradeActivityCard = ({ activity }: { activity: ActivityItem }) => {
   return (
     <li
       key={activity.id}
-      className="relative flex items-center p-3 rounded-xl hover:bg-gray-50"
+      className="relative flex items-center p-3 rounded-xl hover:bg-gray-200"
     >
       {activity.symbol ? (
         <TickerLogo tickerSymbol={activity.symbol} className="w-10 h-10" />

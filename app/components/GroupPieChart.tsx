@@ -1,4 +1,5 @@
 import { DonutChart } from "@components"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
 
@@ -36,10 +37,10 @@ export default function GroupPieChart({
 
   return (
     <div
-      className={`
-      w-88 sm:w-full items-center justify-center flex flex-col m-0 sm:m-4 
-      mb-2 sm:mb-4 ${className}
-    `}
+      className={tw(
+        "w-88 sm:w-full items-center justify-center flex flex-col m-0 sm:m-4 mb-2 sm:mb-4",
+        className
+      )}
     >
       <Link href={`/groups/${groupName}`}>
         <a>

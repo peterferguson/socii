@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Work+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;1,200;1,400&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins&family=Work+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;1,200;1,400&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@100;200;300;400;600;800&display=swap");
 
 :root {
   --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */

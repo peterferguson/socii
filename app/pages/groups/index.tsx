@@ -10,7 +10,7 @@ import { Tab } from "@headlessui/react"
 import { TabHeading } from "@components/TabHeading"
 import { TabPanels } from "@components/TabPanels"
 import { GroupPortfolios } from "@components/GroupPortfolios"
-import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
+import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 import ComingSoon from "@components/ComingSoon"
 import { FaUserInjured } from "react-icons/fa"
 
@@ -28,10 +28,10 @@ const GroupsHome = ({ leaders }) => {
   return (
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
       <div className="container flex flex-col center">
-        <div className="flex flex-row justify-center bg-white rounded-lg shadow-lg font-primary text-l">
+        <div className="flex flex-row justify-center font-primary">
           <TabHeading categories={categories} />
         </div>
-        <TabPanels categories={categories}>
+        <TabPanels categories={categories} panelBackgroundColor="transparent">
           <div className={selected === "My Groups" ? "" : "hidden"}>{groupsCards}</div>
           <div className={selected === "Leaderboards" ? "" : "hidden"}>
             <LeaderboardPanel leaders={leaders} />

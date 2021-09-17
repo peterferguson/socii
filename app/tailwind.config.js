@@ -67,7 +67,7 @@ module.exports = {
       },
       fontFamily: {
         primary: ["Poppins", "sans-serif"],
-        secondary: ['"Work Sans"', "sans-serif"],
+        secondary: ['"Open Sans"', "sans-serif"],
       },
       fontSize: {
         tiniest: "0.5rem",

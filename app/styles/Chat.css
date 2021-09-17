@@ -1,5 +1,5 @@
-@tailwind utilities;
 @tailwind components;
+@tailwind utilities;
 
 @layer utilities {
   @variants responsive {
@@ -120,12 +120,8 @@
 @media screen and (max-width: 640px) {
   .str-chat-channel .str-chat__container {
     height: calc(var(--innerHeight));
-    height: calc(
-      100% - const(safe-area-inset-top) - const(safe-area-inset-bottom)
-    );
-    height: calc(
-      100% - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-    );
+    height: calc(100% - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+    height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     width: 100vw;
     z-index: 50;
     display: flex;

@@ -1,4 +1,4 @@
-import { HeaderButton, HeaderDropdownButton, Searchbar } from "@components"
+import { HeaderButton, HeaderDropdownButton, Searchbar, UserPhoto } from "@components"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
 import { NextRouter, useRouter } from "next/router"
@@ -59,29 +59,49 @@ const dropdownItems = (
   },
 ]
 
+const pathTitles = {
+  "/settings": "Settings",
+  "/groups": "Groups",
+  "/crypto": "Crypto",
+  "/stocks": "Stocks",
+  "/chat": "Chat",
+  "/portfolio": "Portfolio",
+}
+
+const routeTitle = (path: string) =>
+  pathTitles[
+    Object.keys(pathTitles)
+      .filter((k) => path?.includes(k))
+      .pop()
+  ]
+
 const NavHeader: React.FC = () => {
   const { signout } = useAuth()
   const router = useRouter()
   const items = useMemo(() => dropdownItems(router, signout), [router, signout])
 
+  const title = routeTitle(router.asPath)
+
   return (
     <InstantSearch {...searchProps}>
       <Configure hitsPerPage={3} />
-      <header className="sticky z-40 items-center h-16 mx-4 mt-2 bg-white shadow-md w-[calc(100%-32px)] dark:bg-gray-700 rounded-2xl">
+      <header className="sticky z-40 items-center h-16 mx-4 mt-2 w-[calc(100%-32px)] dark:bg-gray-700 rounded-2xl">
         <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="flex items-center justify-between flex-grow w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
-            <Searchbar />
+            <div className="text-3xl font-light font-primary">{title}</div>
             <div className="flex-grow" />
-            <div className="flex justify-end w-1/4 space-x-1 sm:space-x-2">
-              <HeaderButton
+            <div className="flex items-center justify-end w-1/4 space-x-1 sm:space-x-2">
+              <Searchbar />
+              {/* <HeaderButton
                 name="Messages"
                 icon={() => <HiOutlineMail className="w-6 h-6" />}
                 onClick={() => router.push("/chat")}
                 hasNotifications={true}
-              />
+              /> */}
               <HeaderDropdownButton
                 name="Settings Dropdown"
-                icon={() => <HiOutlineChevronDown className="w-6 h-6" />}
+                // icon={() => <HiOutlineChevronDown className="w-6 h-6" />}
+                icon={() => <UserPhoto />}
                 items={items}
               />
             </div>

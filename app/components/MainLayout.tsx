@@ -21,7 +21,7 @@ const MainLayout = ({ children }) => {
       <div className=" col-span-1">{!is1Col && <Sidebar />}</div>
       <StreamProvider>
         <div className="flex flex-col items-start w-full h-screen px-1 sm:py-2 sm:space-y-4 col-span-7">
-          {/* {!(is1Col && isChatRoute) && <NavHeader />} */}
+          <NavHeader />
           {/* Main Components */}
           <div className="w-full h-full overflow-auto overscroll-none no-scrollbar">
             <div className="flex flex-col flex-wrap mx-4 sm:flex-row">{children}</div>

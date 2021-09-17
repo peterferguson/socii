@@ -53,7 +53,7 @@ export const TradeHistory = () => {
       <div className="w-full max-w-md px-2 pt-4 pb-16 sm:max-w-xl sm:px-0 font-primary">
         <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
           <TabHeading categories={categories} />
-          <TabPanels categories={categories}>
+          <TabPanels categories={categories} panelBackgroundColor={"white"}>
             <ul>
               {activities.length ? (
                 activities
@@ -66,7 +66,7 @@ export const TradeHistory = () => {
                     )
                   )
               ) : (
-                <li className="relative flex items-center p-3 rounded-xl hover:bg-gray-50">
+                <li className="relative flex items-center p-3 rounded-xl hover:bg-gary-200">
                   Nothing to show here yet
                 </li>
               )}

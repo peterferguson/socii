@@ -1,12 +1,14 @@
 import { GroupPieChart, StockCard, StockCardSkeleton } from "@components"
 import { useAuth } from "@hooks"
-import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
-import { QueryDocumentSnapshot } from "firebase/firestore"
-import { iexQuote } from "@utils/iexQuote"
-import React, { useEffect, useState } from "react"
-import { useMountedState, useUnmountPromise } from "react-use"
-import { NoHoldingsPieCardSkeleton } from "./PieCard"
 import { getGroupCashBalanceListener } from "@lib/firebase/client/db/getGroupCashBalance"
+import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
+import { iexQuote } from "@utils/iexQuote"
+import { tw } from "@utils/tw"
+import { QueryDocumentSnapshot } from "firebase/firestore"
+import React, { useEffect, useState } from "react"
+import { useUnmountPromise } from "react-use"
+import { NoHoldingsPieCardSkeleton } from "./PieCard"
+
 export interface IGroupColumnCard {
   groupName: string
   className?: string
@@ -62,9 +64,10 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
     <>
       {holdingInfo?.length !== 0 ? (
         <div
-          className={`flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl ${
+          className={tw(
+            "flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl",
             className || ""
-          }`}
+          )}
         >
           <GroupPieChart
             groupName={groupName}
