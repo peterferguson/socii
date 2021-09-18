@@ -1,9 +1,11 @@
+import { Popover } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
 import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
-import React, { useMemo } from "react"
+import React, { useMemo, useState, useRef } from "react"
 import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
+import NavigationModal from "./NavigationModal/NavigationModal"
 import SociiSVG from "./SociiSVG"
 
 const Footer = () => {
@@ -17,12 +19,19 @@ const Footer = () => {
   )
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-white standalone:pb-4 rounded-t-3xl grid grid-cols-3">
-      {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
-        const props = { text, Icon, onClick, isActive, index: i }
-        return <Component key={`nav-item-${i}`} props={props} />
-      })}
-    </nav>
+    <Popover>
+      {({ open }) => (
+        <>
+          <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-white standalone:pb-4 rounded-t-3xl grid grid-cols-3">
+            {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
+              const props = { text, Icon, onClick, isActive, index: i }
+              return <Component key={`nav-item-${i}`} props={props} />
+            })}
+          </nav>
+          <NavigationModal open={open} />
+        </>
+      )}
+    </Popover>
   )
 }
 
@@ -68,8 +77,8 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   },
 ]
 
-const FooterSearchButton = ({ onClick }) => (
-  <div className="relative w-full">
+const FooterSearchButton = () => (
+  <Popover.Button as="div" className="relative w-full">
     <div
       className={tw(
         "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
@@ -77,8 +86,8 @@ const FooterSearchButton = ({ onClick }) => (
         ""
       )}
     >
-      <SociiSVG className="text-5xl p-0.5" onClick={onClick} />
+      <SociiSVG className="text-5xl p-0.5" />
     </div>
-  </div>
+  </Popover.Button>
 )
 export default React.memo(Footer)
