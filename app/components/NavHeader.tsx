@@ -89,8 +89,8 @@ const NavHeader: React.FC = () => {
         <div className="z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="flex items-center justify-between flex-grow w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div className="pr-2 text-2xl font-light align-bottom sm:text-3xl font-primary">{title}</div>
-            <div className="flex-grow hidden sm:block" />
-            <div className="flex items-center justify-end w-11/12 sm:w-1/3 space-x-0 sm:space-x-2">
+            <div className="flex-grow hidden md:block" />
+            <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
               <Searchbar />
               {/* <HeaderButton
                 name="Messages"
