@@ -1,32 +1,24 @@
 import LoadingIndicator from "@components/LoadingIndicator"
 import { Popover, Transition } from "@headlessui/react"
 import { tw } from "@utils/tw"
-import { useRouter } from "next/router"
-import React, { useEffect, useRef } from "react"
+import React, { Fragment, useRef } from "react"
 import { connectStateResults, Hits } from "react-instantsearch-dom"
-import { SearchHit } from "./SearchHit"
 import { useMediaQuery } from "react-responsive"
+import { SearchHit } from "./SearchHit"
 
 export const Loading = connectStateResults(({ isSearchStalled }) =>
   isSearchStalled ? <LoadingIndicator show={isSearchStalled} /> : null
 )
 
 // ! FIXME: If a user navigates to the same page they are on the loader appears indefinitely
-export default function SearchResultsModal({ showSearchCard, setShowSearchCard }) {
-  const router = useRouter()
+export default function SearchResultsModal({ open }) {
   const is1Col = useMediaQuery({ minWidth: 640 })
-
   const hitsRef = useRef(null)
-  const toggleSearchCard = () => setShowSearchCard(!showSearchCard)
-
-  useEffect(() => {
-    if (showSearchCard) toggleSearchCard()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath])
 
   // TODO: Implement nothing returned message
   return (
     <Transition
+      show={open}
       as={"ul"}
       enter="transition ease-in duration-200"
       enterFrom="opacity-0"
@@ -35,9 +27,25 @@ export default function SearchResultsModal({ showSearchCard, setShowSearchCard }
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <Popover.Panel static className={tw(is1Col && "w-full")}>
+      <Popover.Panel>
         {({ close }) => (
           <>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Popover.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span className="hidden" aria-hidden="true">
+              &#8203;
+            </span>
             <Loading className="p-4" />
             <Hits
               hitComponent={({ hit }) => <SearchHit hit={hit} close={close} />}

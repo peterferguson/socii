@@ -2,8 +2,13 @@ import { Tab } from "@headlessui/react"
 import React from "react"
 import { tw } from "@utils/tw"
 
-export const TabHeading = ({ categories }) => (
-  <Tab.List className="flex p-1 space-x-1 bg-gray-300/20 rounded-2xl">
+interface TabHeadingProps {
+  categories: { [key: string]: any[] }
+  className?: string
+}
+
+export const TabHeading = ({ categories, className }: TabHeadingProps) => (
+  <Tab.List className={tw("flex p-1 space-x-1 bg-gray-300/20 rounded-2xl", className)}>
     {Object.keys(categories).map((category) => (
       <Tab
         key={category}

@@ -3,7 +3,7 @@ import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
 import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
-import React, { useMemo, useState, useRef } from "react"
+import React, { useMemo } from "react"
 import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
 import NavigationModal from "./NavigationModal/NavigationModal"
 import SociiSVG from "./SociiSVG"
@@ -22,7 +22,7 @@ const Footer = () => {
     <Popover>
       {({ open }) => (
         <>
-          <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-white standalone:pb-4 rounded-t-3xl grid grid-cols-3">
+          <nav className="fixed inset-x-0 bottom-0 z-50 w-full mt-12 bg-white standalone:pb-safe-bottom rounded-t-3xl grid grid-cols-3">
             {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
               const props = { text, Icon, onClick, isActive, index: i }
               return <Component key={`nav-item-${i}`} props={props} />
@@ -57,7 +57,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   {
     text: !user ? "Home" : "Groups",
     Icon: !user ? HiOutlineHome : HiOutlineUserGroup,
-    onClick: () => router.push(!user ? "/" : `/user/${username}`),
+    onClick: () => router.push(!user ? "/" : "/groups"),
     isActive:
       !router.asPath.slice(1) ||
       (router.asPath.includes("user") && !router.asPath.includes("portfolio")),

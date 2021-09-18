@@ -1,13 +1,12 @@
 import { Popover, Transition } from "@headlessui/react"
+import { useAuth } from "@hooks"
 import { NextRouter, useRouter } from "next/router"
-import Link from "next/link"
-import { Fragment, useRef } from "react"
+import { Fragment } from "react"
 import { FaBitcoin as BitcoinIcon } from "react-icons/fa"
 import {
-  HiOutlineChat as ChatIcon,
   HiOutlineChartPie as PieChartIcon,
+  HiOutlineChat as ChatIcon,
 } from "react-icons/hi"
-import { useAuth } from "@hooks"
 
 const NavigationModal = ({ open }) => {
   const { user } = useAuth()
@@ -69,7 +68,6 @@ const NavigationModal = ({ open }) => {
     </Transition.Root>
   )
 }
-export default NavigationModal
 
 const NavItem = ({ name, description, onClick, Icon, isActive }) => (
   <Fragment>
@@ -118,3 +116,5 @@ const navItems = (username: string, router: NextRouter, close: () => void) => [
     isActive: router.asPath.includes("chat"),
   },
 ]
+
+export default NavigationModal

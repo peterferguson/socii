@@ -13,7 +13,7 @@ export default function ComingSoon({ children, color, description = "" }: IComin
     <div className="flex flex-col mt-0 bg-gray-50 sm:mt-8">
       <div
         className={tw(
-          "w-4/5 p-10 mx-auto my-20 text-center border-4 shadow-2xl cursor-pointer grid place-items-center sm:my-auto",
+          "w-4/5 p-10 mx-auto my-8 text-center border-4 shadow-xl cursor-pointer grid place-items-center sm:my-auto",
           `border-${color} bg-white bg-opacity-70`,
           "rounded-xl space-y-5"
         )}

@@ -80,7 +80,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
         <div
           className={tw(
             "flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl",
-            className || ""
+            className
           )}
         >
           <GroupPieChart

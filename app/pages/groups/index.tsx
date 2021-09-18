@@ -3,36 +3,39 @@
 // - Potential:
 //   - add "followed groups" page to check status of other open groups
 
-import React, { Fragment, useState, useMemo, useEffect } from "react"
+import ComingSoon from "@components/ComingSoon"
+import { GroupPortfoliosDynamic } from "@components/GroupPortfolios"
 import { LeaderboardPanel } from "@components/LeaderboardPanel"
-import { useAuth } from "@hooks"
-import { Tab } from "@headlessui/react"
 import { TabHeading } from "@components/TabHeading"
 import { TabPanels } from "@components/TabPanels"
-import { GroupPortfolios } from "@components/GroupPortfolios"
+import { Tab } from "@headlessui/react"
+import { useAuth } from "@hooks"
 import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
-import ComingSoon from "@components/ComingSoon"
+import React, { useState } from "react"
 import { FaUserInjured } from "react-icons/fa"
 
 const GroupsHome = ({ leaders }) => {
   const { user } = useAuth()
   const [selected, setSelected] = useState("My Groups")
-  let [categories, setCategories] = useState({
+  let [categories] = useState({
     "My Groups": [],
     Leaderboards: [],
     "Other Groups": [],
   })
 
-  const groupsCards: JSX.Element = useMemo(() => MyComp(user?.groups), [user?.groups])
-
   return (
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
-      <div className="container flex flex-col center">
-        <div className="flex flex-row justify-center font-primary">
-          <TabHeading categories={categories} />
+      <div className="container flex flex-col items-center overflow-x-hidden">
+        <div className="flex flex-row justify-center w-full font-primary">
+          <TabHeading
+            categories={categories}
+            className="w-full m-4 sm:m-0"
+          />
         </div>
         <TabPanels categories={categories} panelBackgroundColor="transparent">
-          <div className={selected === "My Groups" ? "" : "hidden"}>{groupsCards}</div>
+          <div className={selected === "My Groups" ? "" : "hidden"}>
+            <GroupPortfoliosDynamic userGroupsList={user?.groups} />
+          </div>
           <div className={selected === "Leaderboards" ? "" : "hidden"}>
             <LeaderboardPanel leaders={leaders} />
           </div>
@@ -46,10 +49,7 @@ const GroupsHome = ({ leaders }) => {
     </Tab.Group>
   )
 }
-export default GroupsHome
 
 export const getStaticProps = async () => await getLeaderBoardProps()
 
-export const MyComp = (userGroups: string[]) => (
-  <GroupPortfolios userGroupsList={userGroups} />
-)
+export default GroupsHome

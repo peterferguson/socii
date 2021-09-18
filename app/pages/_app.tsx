@@ -9,6 +9,7 @@ import "@styles/Chat.css"
 import "@styles/globals.css"
 import { isBrowser } from "@utils/isBrowser"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
+import { tw } from "@utils/tw"
 
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
@@ -22,7 +23,6 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 })
 
 const Footer = dynamic(() => import("@components/Footer"))
-const CuttoutFooter = dynamic(() => import("@components/CuttoutFooter"))
 const MainLayout = dynamic(() => import("@components/MainLayout"))
 
 // - Uncomment to console log web vitals
@@ -49,28 +49,24 @@ export default function MyApp({ Component, pageProps }) {
   const props = { ...pageProps, theme }
 
   return (
-    <AuthProvider>
-      <main
-        className={`min-h-screen no-scrollbar relative overflow-x-hidden 
-          overflow-y-scroll bg-gray-50 dark:bg-gray-800 
-          ${notMainLayout && "h-screen max-h-screen"}
-          selection:bg-brand-lightTeal/80 selection:text-teal-900`}
-      >
-        <Head />
-        <>
-          {/* TODO: Remove this notion when moved to monorepo */}
-          {notMainLayout ? (
-            <Component {...props} />
-          ) : (
-            <MainLayout {...props}>
-              {isBrowser && <Component {...props} />}
-              {/* {is1Col && !isChatRoute && <CuttoutFooter {...props} />} */}
-              {is1Col && !isChatRoute && <Footer {...props} />}
-            </MainLayout>
-          )}
-        </>
-        <Toaster {...toastProps} />
-      </main>
-    </AuthProvider>
+    <div
+      className={tw(
+        "max-h-screen h-screen w-screen max-w-screen no-scrollbar relative",
+        "overflow-hidden bg-gray-50 dark:bg-gray-800",
+        "selection:bg-brand-lightTeal/80 selection:text-teal-900"
+      )}
+    >
+      <Head />
+      <AuthProvider>
+        {/* TODO: Remove this notion when moved to monorepo */}
+        {notMainLayout ? (
+          <Component {...props} />
+        ) : (
+          <MainLayout {...props}>{isBrowser && <Component {...props} />}</MainLayout>
+        )}
+        {is1Col && !isChatRoute && <Footer {...props} />}
+      </AuthProvider>
+      <Toaster {...toastProps} />
+    </div>
   )
 }

@@ -121,8 +121,8 @@ body {
 /* Algolia Instant Search */
 /* TODO: Responsive search card */
 .ais-Hits {
-  @apply absolute top-12 sm:top-2 -left-20 sm:left-6 w-[80vw] sm:w-full p-8 sm:p-8 sm:my-8 bg-brand-light-est
-  rounded-lg shadow-xl backdrop-filter backdrop-blur-lg bg-clip-padding z-50;
+  @apply w-[80vw] mx-auto p-8 my-8 bg-gray-50
+  rounded-lg shadow-xl backdrop-filter backdrop-blur-lg bg-clip-padding z-20;
 }
 .ais-Hits-list {
   @apply flex flex-wrap space-y-4 items-center justify-center;
@@ -294,4 +294,102 @@ input[type="number"]::-webkit-outer-spin-button {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+/* React Vis */
+.react-vis-magic-css-import-rule {
+  display: inherit;
+}
+.rv-xy-plot {
+  color: #c3c3c3;
+  position: relative;
+}
+.rv-xy-plot__inner {
+  display: block;
+}
+.rv-xy-plot__axis__line {
+  fill: none;
+  stroke-width: 2px;
+  stroke: #e6e6e9;
+}
+.rv-xy-plot__axis__tick__line {
+  stroke: #e6e6e9;
+}
+.rv-xy-plot__axis__tick__text {
+  fill: #6b6b76;
+  font-size: 11px;
+}
+.rv-xy-plot__axis__title text {
+  fill: #6b6b76;
+  font-size: 11px;
+}
+.rv-xy-plot__grid-lines__line {
+  stroke: #e6e6e9;
+}
+.rv-xy-plot__circular-grid-lines__line {
+  fill-opacity: 0;
+  stroke: #e6e6e9;
+}
+.rv-xy-plot__series {
+  position: relative;
+}
+.rv-xy-plot__series path {
+  pointer-events: all;
+}
+.rv-xy-plot__series--line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+.rv-crosshair {
+  position: absolute;
+  font-size: 11px;
+  pointer-events: none;
+}
+.rv-crosshair__line {
+  background: #47d3d9;
+  width: 1px;
+}
+.rv-crosshair__inner {
+  position: absolute;
+  text-align: left;
+  top: 0;
+}
+.rv-crosshair__inner__content {
+  border-radius: 4px;
+  background: #3a3a48;
+  color: #fff;
+  font-size: 12px;
+  padding: 7px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.rv-crosshair__inner--left {
+  right: 4px;
+}
+.rv-crosshair__inner--right {
+  left: 4px;
+}
+.rv-crosshair__title {
+  font-weight: bold;
+  white-space: nowrap;
+}
+.rv-crosshair__item {
+  white-space: nowrap;
+}
+.rv-hint {
+  position: absolute;
+  pointer-events: none;
+}
+.rv-hint__content {
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 12px;
+  background: #3a3a48;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: left;
+  white-space: nowrap;
+}
+.rv-radial-chart .rv-xy-plot__series--label {
+  pointer-events: none;
 }

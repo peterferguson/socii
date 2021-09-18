@@ -6,7 +6,7 @@ import { NTAActivityCard } from "./NTAActivityCard"
 import { TabHeading } from "../TabHeading"
 import { TabPanels } from "../TabPanels"
 
-export const activityTypeMapping = {
+const activityTypeMapping = {
   Trades: ["FILL"],
   Cash: ["ACATC", "ACATS", "CSD", "CSR", "CSW"],
   General: [
@@ -77,3 +77,5 @@ export const TradeHistory = () => {
     </>
   )
 }
+
+export default TradeHistory

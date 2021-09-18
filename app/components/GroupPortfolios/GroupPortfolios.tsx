@@ -4,9 +4,9 @@ import GroupColumn from "@components/GroupColumnCard"
 import { PieCardSkeleton } from "@components/PieCard"
 import React from "react"
 
-export function GroupPortfolios({ userGroupsList }): JSX.Element {
+const GroupPortfolios = ({ userGroupsList }): JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center w-full my-14 sm:my-0">
+    <div className="flex flex-col items-center justify-center w-full my-8 sm:my-0">
       <div className="place-items-center grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto max-w-screen-thin">
         {userGroupsList?.length !== 0 ? (
           userGroupsList?.map((groupName, index) => (
@@ -23,3 +23,5 @@ export function GroupPortfolios({ userGroupsList }): JSX.Element {
     </div>
   )
 }
+
+export default React.memo(GroupPortfolios)

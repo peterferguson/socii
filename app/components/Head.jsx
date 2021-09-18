@@ -32,13 +32,6 @@ export default function Head(props) {
       <meta property="og:image" content={props.ogImage || defaultOGImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-
-      <link
-        href="https://unpkg.com/react-vis/dist/style.css"
-        rel="stylesheet"
-        key="react-vis"
-      />
-
       {/* No zoom and flow into notch */}
       <meta
         name="viewport"

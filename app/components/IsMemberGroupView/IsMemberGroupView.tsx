@@ -24,16 +24,16 @@ const IsMemberGroupView = ({ groupName }) => {
 
   return (
     <>
-      <div className="flex flex-col w-full max-w-full pb-5 bg-gray-50">
+      <div className="w-full p-4">
         <GroupColumnCard groupName={groupName} />
-        <div className="w-full mx-auto">
-          {/* Card stats */}
-          {/* TODO: Convert these into carousel cards organised by top percentage */}
-          <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {cards.map((card, i) => card(`card-${i}`))}
-          </div>
+
+        {/* Card stats */}
+        {/* TODO: Convert these into carousel cards organised by top percentage */}
+        <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map((card, i) => card(`card-${i}`))}
         </div>
-        <div className="w-full mx-auto overscroll-x-none">
+
+        <div className="overscroll-x-none">
           {/* Tables */}
           {/* <PortfolioHistoryCard /> */}
           <div className="flex flex-wrap w-full mt-4">

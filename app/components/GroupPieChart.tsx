@@ -8,6 +8,7 @@ export interface IGroupPieChart {
   holdingData: any
   currentPrices: any
   cashBalance: number
+  radius?: number
   className?: string
 }
 export default function GroupPieChart({
@@ -15,6 +16,7 @@ export default function GroupPieChart({
   holdingData,
   currentPrices,
   cashBalance,
+  radius = 250,
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
@@ -44,17 +46,18 @@ export default function GroupPieChart({
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
+          <div className="relative text-4xl text-center text-transparent cursor-pointer top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
             {groupName}
           </div>
         </a>
       </Link>
       {pieData?.length && portfolioValue && (
         <DonutChart
-          className="z-0 -mt-6"
+          className="relative z-0 -mt-6"
           data={pieData}
           scaling={0.35}
-          radius={250}
+          scaleToWindow={true}
+          radius={radius}
           text={{
             portfolio: `$${portfolioValue?.toFixed(2)}`,
             gain: `${gain.toFixed(2)}%`,
