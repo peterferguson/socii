@@ -41,8 +41,7 @@ export const FooterNavItem = ({ text, Icon, onClick, isActive, index }) => {
       className={tw(
         "flex flex-col items-center justify-center w-full py-2 font-primary text-tiny text-brand-dark text-center",
         index === 0 ? "ml-4" : "mr-4",
-        // isActive &&
-        //   "font-bold border-t-4 border-brand bg-gradient-to-t from-white to-brand-light dark:from-gray-700 dark:to-gray-800",
+        isActive && "text-brand-cyan-vivid",
         "transition duration-300"
       )}
       onClick={onClick}
@@ -60,7 +59,7 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
     onClick: () => router.push(!user ? "/" : "/groups"),
     isActive:
       !router.asPath.slice(1) ||
-      (router.asPath.includes("user") && !router.asPath.includes("portfolio")),
+      (router.asPath.includes("groups") && !router.asPath.includes("portfolio")),
     Component: ({ props }) => <FooterNavItem {...props} />,
   },
   {
@@ -82,7 +81,7 @@ const FooterSearchButton = () => (
     <div
       className={tw(
         "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
-        "transition duration-300 shadow-md rounded-full flex items-center justify-center",
+        "transition duration-300 shadow-xl rounded-full flex items-center justify-center",
         ""
       )}
     >

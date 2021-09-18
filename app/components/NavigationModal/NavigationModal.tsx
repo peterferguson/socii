@@ -1,5 +1,6 @@
 import { Popover, Transition } from "@headlessui/react"
 import { useAuth } from "@hooks"
+import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
 import { Fragment } from "react"
 import { FaBitcoin as BitcoinIcon } from "react-icons/fa"
@@ -11,6 +12,8 @@ import {
 const NavigationModal = ({ open }) => {
   const { user } = useAuth()
   const router = useRouter()
+  console.log(router.asPath)
+
   const username = user ? user.username : ""
 
   return (
@@ -54,9 +57,10 @@ const NavigationModal = ({ open }) => {
                 </div>
               </div> */}
                 <div className="px-4 py-8 bg-white grid grid-flow-row grid-cols-5 auto-rows-max gap-y-4 rounded-2xl">
-                  {navItems(username, router, close).map((props, i) => (
-                    <NavItem key={`nav-item-${i}`} {...props} />
-                  ))}
+                  {navItems(username, router, close).map((props, i) => {
+                    console.log(props.isActive)
+                    return <NavItem key={`nav-item-${i}`} {...props} />
+                  })}
                 </div>
                 {/** Separator for the modal and the footer menu */}
                 <div className="inline-flex w-full px-4 py-4 mt-3" />
@@ -75,11 +79,20 @@ const NavItem = ({ name, description, onClick, Icon, isActive }) => (
       className="flex items-center justify-center w-12 h-12 ml-2 rounded-full bg-gray-50"
       onClick={onClick}
     >
-      <Icon className="w-5 h-5 text-brand-cyan-vivid" />
+      <Icon
+        className={tw("w-5 h-5", isActive ? "text-brand-cyan-vivid" : "text-black")}
+      />
     </div>
     <div className="items-start p-1 ml-2 col-span-4" onClick={onClick}>
-      <h2 className="font-light font-primary text-brand-cyan-vivid">{name}</h2>
-      <p className="text-xs font-thin text-gray-300 font-secondary">{description}</p>
+      <h2
+        className={tw(
+          "font-light font-primary",
+          isActive ? "text-brand-cyan-vivid" : "text-black"
+        )}
+      >
+        {name}
+      </h2>
+      <p className="text-xs font-thin text-gray-400 font-secondary">{description}</p>
     </div>
   </Fragment>
 )
