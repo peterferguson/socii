@@ -44,7 +44,7 @@ const NavigationModal = ({ open }) => {
               leaveFrom="opacity-100 translate-y-0 "
               leaveTo="opacity-0 translate-y-12 "
             >
-              <div className="absolute bottom-0 w-full overflow-hidden text-left align-bottom bg-white shadow-xl standalone:mb-8 rounded-2xl transform transition-all">
+              <div className="fixed bottom-0 w-full overflow-hidden text-left bg-white shadow-xl standalone:mb-8 rounded-2xl transform transition-all">
                 {/** Useful for a coinbase-like top of modal alert */}
                 {/* <div className="px-4 pt-5 pb-4 bg-blue-100">
                 <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full">
