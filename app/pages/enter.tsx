@@ -25,7 +25,7 @@ const Enter = () => {
 
   return (
     <UnauthenticatedOnly>
-      <main className="h-full bg-brand-light">
+      <div className="h-screen bg-brand-light">
         <div className="relative flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
           <div className="absolute inset-0 z-0 bg-black/10" />
           <div className="relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-tr from-brand to-brand-teal transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl" />
@@ -43,7 +43,7 @@ const Enter = () => {
             ) : null}
           </ClientOnly>
         </div>
-      </main>
+      </div>
     </UnauthenticatedOnly>
   )
 }
