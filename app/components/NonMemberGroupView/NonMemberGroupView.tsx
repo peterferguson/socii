@@ -34,7 +34,7 @@ const NonMemberGroupView = ({ groupName }) => {
         >
           <h1
             className={tw(
-              `text-4xl font-bold uppercase text-pink transition duration-500`
+              `text-4xl font-semibold uppercase text-pink transition duration-500`
             )}
           >
             This Group Is Private

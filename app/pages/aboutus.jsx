@@ -3,7 +3,7 @@ import React from "react"
 export default function AboutUs() {
   return (
     <div className="flex flex-col h-screen p-12 text-brand leading-20">
-      <h1 className="p-4 font-bold font-primary text-8xl">About Us</h1>
+      <h1 className="p-4 font-semibold font-primary text-8xl">About Us</h1>
       <h2 className="items-center justify-center p-8 mx-auto text-5xl text-teal-300 font-primary">
         Invest with Friends
       </h2>

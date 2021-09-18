@@ -1,11 +1,13 @@
-import Logo from "@components/Logo";
-import React from "react";
-import { FcGoogle } from "react-icons/fc";
+import Logo from "@components/Logo"
+import React from "react"
+import { FcGoogle } from "react-icons/fc"
 
 export const EnterCard = ({ signinWith }) => (
   <div className="absolute z-10 w-full max-w-md p-10 bg-white space-y-8 rounded-xl">
     <div className="flex flex-col items-center justify-center text-center">
-      <h2 className="mt-6 text-4xl font-bold text-gray-900 font-primary">Welcome to</h2>
+      <h2 className="mt-6 text-4xl font-semibold text-gray-900 font-primary">
+        Welcome to
+      </h2>
       <Logo className="text-5xl" />
       <p className="mt-2 text-base text-gray-600 font-primary">
         Please link your account with one of the following providers:
@@ -23,4 +25,4 @@ export const EnterCard = ({ signinWith }) => (
       </span>
     </div>
   </div>
-);
+)

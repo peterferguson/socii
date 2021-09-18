@@ -1,4 +1,3 @@
-import { FooterDynamic } from "@components/Footer"
 import Head from "@components/Head"
 import { MainLayoutDynamic } from "@components/MainLayout"
 import { AuthProvider } from "@contexts/AuthProvider"
@@ -36,7 +35,6 @@ export default function MyApp({ Component, pageProps }) {
   const theme = "light"
 
   const router = useRouter()
-  const isChatRoute = router.asPath?.includes("/chat")
   const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
   const props = { ...pageProps, theme }
@@ -44,9 +42,10 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <div
       className={tw(
-        "max-h-screen h-screen w-screen max-w-screen no-scrollbar relative",
+        "no-scrollbar relative",
         "overflow-hidden bg-gray-50 dark:bg-gray-800",
-        "selection:bg-brand-lightTeal/80 selection:text-teal-900"
+        "selection:bg-brand-lightTeal/80 selection:text-teal-900",
+        !notMainLayout && "max-h-screen max-w-screen h-screen w-screen"
       )}
     >
       <Head />
@@ -55,11 +54,10 @@ export default function MyApp({ Component, pageProps }) {
         {notMainLayout ? (
           <Component {...props} />
         ) : (
-          <MainLayoutDynamic {...props}>
+          <MainLayoutDynamic>
             <Component {...props} />
           </MainLayoutDynamic>
         )}
-        {!isChatRoute && <FooterDynamic {...props} />}
       </AuthProvider>
       <Toaster {...toastProps} />
     </div>

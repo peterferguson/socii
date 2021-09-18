@@ -21,7 +21,7 @@ export default function ComingSoon({ children, color, description = "" }: IComin
         {children}
         <h1
           className={tw(
-            `text-2xl sm:text-4xl font-bold uppercase text-${color} transition duration-500`
+            `text-2xl sm:text-4xl font-semibold uppercase text-${color} transition duration-500`
           )}
         >
           Coming Soon
@@ -43,21 +43,21 @@ export default function ComingSoon({ children, color, description = "" }: IComin
             // href="https://www.facebook.com/socii"
             title="socii On Facebook"
           >
-            <FaFacebook className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500" />
+            <FaFacebook className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-semibold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500" />
           </a>
 
           <a
             // href="https://twitter.com/socii/"
             title="socii On Twitter"
           >
-            <FaTwitter className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500" />
+            <FaTwitter className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-semibold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500" />
           </a>
 
           <a
             // href="https://www.medium.com/user/socii/"
             title="socii On Medium"
           >
-            <FaMedium className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-bold tracking-wide hover:text-white hover:bg-black transition duration-500" />
+            <FaMedium className="w-16 sm:w-24 h-16 sm:h-24 px-1 sm:px-6 py-2 font-semibold tracking-wide hover:text-white hover:bg-black transition duration-500" />
           </a>
         </div>
       </div>

@@ -71,7 +71,7 @@ const OrderModal = ({ ticker, state, send }) => {
         <div className="flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl">
           <button
             type="button"
-            className="inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2 font-bold tracking-wider uppercase border border-transparent text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md hover:bg-green-200 hover:text-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+            className="inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2 font-semibold tracking-wider uppercase border border-transparent text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md hover:bg-green-200 hover:text-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
             onClick={handleSubmission}
           >
             {state.context.side} {ticker.tickerSymbol}

@@ -34,7 +34,7 @@ export default function FeatureSlider() {
             <p className="text-xs uppercase text-brand tracking-loose font-primary">
               Social Investing
             </p>
-            <p className="mb-2 text-3xl font-bold leading-normal md:text-4xl md:leading-relaxed font-primary">
+            <p className="mb-2 text-3xl font-semibold leading-normal md:text-4xl md:leading-relaxed font-primary">
               What is <Logo className="text-3xl md:text-4xl" />?
             </p>
             <p className="mb-4 text-sm text-black md:text-base"></p>
@@ -61,7 +61,7 @@ export default function FeatureSlider() {
                         <p className="mb-3 text-sm text-brand font-primary">
                           {item.supTitle}
                         </p>
-                        <div className="mb-3 text-lg font-bold md:text-2xl font-primary">
+                        <div className="mb-3 text-lg font-semibold md:text-2xl font-primary">
                           {item.title}
                         </div>
                         <p className="text-xs leading-snug text-gray-500 md:text-base font-secondary">

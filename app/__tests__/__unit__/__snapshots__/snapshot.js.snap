@@ -74,12 +74,12 @@ Array [
             className="pb-12 mb-12 border-b lg:mb-0 lg:pb-0 lg:border-b-0"
           >
             <h2
-              className="mb-4 text-4xl font-bold lg:text-4xl font-heading dark:text-white"
+              className="mb-4 text-4xl font-semibold lg:text-4xl font-heading dark:text-white"
             >
               Investing with friends
             </h2>
             <h2
-              className="mb-4 text-4xl font-bold text-transparent bg-gradient-to-r bg-clip-text to-brand-lightGreen from-brand via-brand-cyan-vivid lg:text-4xl font-heading dark:text-white"
+              className="mb-4 text-4xl font-semibold text-transparent bg-gradient-to-r bg-clip-text to-brand-lightGreen from-brand via-brand-cyan-vivid lg:text-4xl font-heading dark:text-white"
             >
               has never been easier!
             </h2>
@@ -88,7 +88,7 @@ Array [
             >
               Before 
               <span
-                className="font-bold"
+                className="font-semibold"
               >
                 socii
               </span>
@@ -109,7 +109,7 @@ Array [
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-semibold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   1
                 </span>
@@ -136,7 +136,7 @@ Array [
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-semibold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   2
                 </span>
@@ -163,7 +163,7 @@ Array [
                 className="px-4"
               >
                 <span
-                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-bold rounded-full text-brand font-heading bg-brand-natural-dark/5"
+                  className="flex items-center justify-center w-16 h-16 mx-auto text-2xl font-semibold rounded-full text-brand font-heading bg-brand-natural-dark/5"
                 >
                   3
                 </span>
@@ -203,7 +203,7 @@ Array [
           Social Investing
         </p>
         <p
-          className="mb-2 text-3xl font-bold leading-normal md:text-4xl md:leading-relaxed font-primary"
+          className="mb-2 text-3xl font-semibold leading-normal md:text-4xl md:leading-relaxed font-primary"
         >
           What is 
           <a
@@ -349,7 +349,7 @@ Array [
                   Social Investment Platform
                 </p>
                 <div
-                  className="mb-3 text-lg font-bold md:text-2xl font-primary"
+                  className="mb-3 text-lg font-semibold md:text-2xl font-primary"
                 >
                   Find & Share Investment Ideas
                 </div>
@@ -375,7 +375,7 @@ Array [
                   Incorporation Free
                 </p>
                 <div
-                  className="mb-3 text-lg font-bold md:text-2xl font-primary"
+                  className="mb-3 text-lg font-semibold md:text-2xl font-primary"
                 >
                   No Incorporation
                 </div>
@@ -401,7 +401,7 @@ Array [
                   Competitive Leagues
                 </p>
                 <div
-                  className="mb-3 text-lg font-bold md:text-2xl font-primary"
+                  className="mb-3 text-lg font-semibold md:text-2xl font-primary"
                 >
                   Public Group Leaderboards
                 </div>
@@ -427,7 +427,7 @@ Array [
                   Group Trade Execution
                 </p>
                 <div
-                  className="mb-3 text-lg font-bold md:text-2xl font-primary"
+                  className="mb-3 text-lg font-semibold md:text-2xl font-primary"
                 >
                   Execute Trades Directly From Chat
                 </div>
@@ -453,7 +453,7 @@ Array [
         className="mt-8 space-y-8"
       >
         <h1
-          className="text-3xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-tight"
+          className="text-3xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-tight"
         >
           Get your
           <span
@@ -642,7 +642,7 @@ Array [
                     title="socii On Facebook"
                   >
                     <svg
-                      className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500"
+                      className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500"
                       fill="currentColor"
                       height="1em"
                       stroke="currentColor"
@@ -665,7 +665,7 @@ Array [
                     title="socii On Twitter"
                   >
                     <svg
-                      className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500"
+                      className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500"
                       fill="currentColor"
                       height="1em"
                       stroke="currentColor"
@@ -688,7 +688,7 @@ Array [
                     title="socii On Medium"
                   >
                     <svg
-                      className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-black transition duration-500"
+                      className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-black transition duration-500"
                       fill="currentColor"
                       height="1em"
                       stroke="currentColor"

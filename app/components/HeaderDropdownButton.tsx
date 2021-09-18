@@ -49,7 +49,7 @@ function DropdownMenuItem(props: DropdownItemProps) {
       </span>
       <div className="flex-grow"></div>
       {props.notificationCount > 0 && (
-        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-600 bg-red-100 rounded-full justify-self-end dark:text-red-100 dark:bg-red-600">
+        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-semibold leading-none text-red-600 bg-red-100 rounded-full justify-self-end dark:text-red-100 dark:bg-red-600">
           {props.notificationCount}
         </span>
       )}

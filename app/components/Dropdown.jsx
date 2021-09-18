@@ -147,7 +147,7 @@ function DropdownItem({ item }) {
       </Link>
       {/* {item?.disabled && (
 	      <>
-		<div className="z-10 h-12 -mt-20 font-bold text-right uppercase w-30 backdrop-filter backdrop-blur-sm font-poppin text-opacity-40">
+		<div className="z-10 h-12 -mt-20 font-semibold text-right uppercase w-30 backdrop-filter backdrop-blur-sm font-poppin text-opacity-40">
 		  Coming soon{" "}
 		</div>
 	      </>

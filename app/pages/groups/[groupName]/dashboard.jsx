@@ -117,7 +117,7 @@ export default function Dashboard() {
                     </div>
                     {/* <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                       <button
-                        className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                        className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-semibold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
                         type="button"
                         style={{ transition: "all .15s ease" }}
                       >
@@ -237,7 +237,7 @@ export default function Dashboard() {
                     </div>
                     <div className="relative flex-1 flex-grow w-full max-w-full px-4 text-right">
                       <button
-                        className="px-3 py-1 mb-1 mr-1 text-xs font-bold text-white uppercase bg-indigo-500 rounded outline-none active:bg-indigo-600 focus:outline-none"
+                        className="px-3 py-1 mb-1 mr-1 text-xs font-semibold text-white uppercase bg-indigo-500 rounded outline-none active:bg-indigo-600 focus:outline-none"
                         type="button"
                         style={{ transition: "all .15s ease" }}
                       >
@@ -424,7 +424,7 @@ function BlockCard({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative flex-1 flex-grow w-full max-w-full pr-4">
-              <h5 className="text-xs font-bold uppercase text-gray-400">{title}</h5>
+              <h5 className="text-xs font-semibold uppercase text-gray-400">{title}</h5>
               <span className="text-xl font-semibold text-gray-700">{subTitle}</span>
             </div>
             <div className="relative flex-initial w-auto pl-4">{imgComponent}</div>

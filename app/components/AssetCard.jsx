@@ -11,9 +11,11 @@ export const AssetCard = ({ tickerSymbol, isin, shortName, price }) => (
     <Link href={`/stocks/${tickerSymbol}`}>
       <a className="py-8 mx-3 grid grid-cols-none">
         <p className="py-1 text-lg tracking-tight font-primary">{shortName}</p>
-        <h1 className="py-1 text-xl font-bold tracking-wider">{tickerSymbol}</h1>
+        <h1 className="py-1 text-xl font-semibold tracking-wider">{tickerSymbol}</h1>
         <div>
-          <div className={`font-bold text-3xl ${pnlTextColor(price?.changePercent)}`}>
+          <div
+            className={`font-semibold text-3xl ${pnlTextColor(price?.changePercent)}`}
+          >
             ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </div>
         </div>

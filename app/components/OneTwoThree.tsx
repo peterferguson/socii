@@ -62,7 +62,7 @@ const OneTwoThree = () => {
                     as="div"
                     className="w-full mx-auto my-8 text-gray-600 sm:w-2/3 text-tiny dark:text-gray-300 sm:text-sm md:text-base"
                   >
-                    Before <span className="font-bold">socii</span> investing with
+                    Before <span className="font-semibold">socii</span> investing with
                     friends meant setting up an investment club. A clumsy process with
                     many legal, regulatory & auditory issues to worry about.
                   </Transition.Child>
@@ -73,7 +73,7 @@ const OneTwoThree = () => {
               className="w-full max-w-sm px-8 mx-auto lg:w-1/2 sm:max-w-xl"
               ref={cardsRef}
             >
-              <ul className="mt-4 space-y-12 font-primary">
+              <ul className="mt-4 mb-24 space-y-12 font-primary">
                 {[0, 1, 2].map((i) => (
                   <Transition
                     as="li"
@@ -88,7 +88,7 @@ const OneTwoThree = () => {
                     <div className="absolute opacity-50 -inset-0.5 bg-gradient-to-r from-brand to-brand-teal group-hover:-inset-1 group-hover:opacity-100 rounded-2xl blur transition duration-500 group-hover:duration-200" />
                     <div className="relative flex p-2 bg-gray-50 rounded-2xl transition duration-1000 group-hover:btn-transition">
                       <div className="w-full px-4 grid grid-cols-5 place-items-center">
-                        <span className="-ml-4 text-2xl font-bold text-gray-500 rounded-full group-hover:text-transparent col-span-1 group-hover:bg-gradient-to-r group-hover:from-brand group-hover:to-brand-teal group-hover:bg-clip-text">
+                        <span className="-ml-4 text-2xl font-semibold text-gray-500 rounded-full group-hover:text-transparent col-span-1 group-hover:bg-gradient-to-r group-hover:from-brand group-hover:to-brand-teal group-hover:bg-clip-text">
                           {i + 1}
                         </span>
                         <div className="p-0 col-span-4 col-start-2 sm:p-2">

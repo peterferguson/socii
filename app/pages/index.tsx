@@ -12,13 +12,13 @@ export default function Home() {
   const { user } = useAuth()
   const [invited, setInvited] = useState(user?.invited || false)
   return (
-    <>
+    <div className="overflow-y-scroll">
       {/* TODO Add a wave transition animation to this gradient */}
       <Hero invited={invited} setInvited={setInvited} />
       <OneTwoThree />
       {/* <SociiFeatureSlider /> */}
       <Footer invited={invited} setInvited={setInvited} />
-    </>
+    </div>
   )
 }
 
@@ -26,7 +26,7 @@ const Footer = ({ invited, setInvited }) => (
   <div className="overflow-hidden bg-palette-lightest/5 max-h-lg">
     <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
       {invited ? (
-        <h1 className="mt-8 text-2xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-snug">
+        <h1 className="mt-8 text-2xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-snug">
           Thanks for signing up!
           <p className="text-xl font-thin font-secondary">
             Keep an eye on your inbox for your invite.
@@ -34,7 +34,7 @@ const Footer = ({ invited, setInvited }) => (
         </h1>
       ) : (
         <div className="mt-8 space-y-8">
-          <h1 className="text-3xl font-bold font-primary sm:text-4xl md:text-5xl md:leading-tight">
+          <h1 className="text-3xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-tight">
             Get your invite!
             {/* <span className="text-palette-primary"> Invite!</span> */}
           </h1>
@@ -82,21 +82,21 @@ const Footer = ({ invited, setInvited }) => (
                     // href="https://www.facebook.com/socii"
                     title="socii On Facebook"
                   >
-                    <FaFacebook className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500" />
+                    <FaFacebook className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-facebook text-facebook transition duration-500" />
                   </a>
 
                   <a
                     // href="https://twitter.com/socii/"
                     title="socii On Twitter"
                   >
-                    <FaTwitter className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500" />
+                    <FaTwitter className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-twitter text-twitter transition duration-500" />
                   </a>
 
                   <a
                     // href="https://www.medium.com/user/socii/"
                     title="socii On Medium"
                   >
-                    <FaMedium className="w-12 h-12 p-2  font-bold tracking-wide hover:text-white hover:bg-black transition duration-500" />
+                    <FaMedium className="w-12 h-12 p-2  font-semibold tracking-wide hover:text-white hover:bg-black transition duration-500" />
                   </a>
                 </div>
               </div>

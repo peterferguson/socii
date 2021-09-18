@@ -9,7 +9,7 @@ export const LeaderboardPanel = ({ leaders }) => {
   return (
     <section className="flex flex-col justify-between ">
       <div className="max-w-4xl mx-4 mt-12 sm:mt-20 md:mx-auto space-y-4">
-        <h1 className="mb-8 text-3xl font-bold tracking-wide uppercase font-primary">
+        <h1 className="mb-8 text-3xl font-semibold tracking-wide uppercase font-primary">
           Leaderboard
         </h1>
         <span className="text-sm font-primary">

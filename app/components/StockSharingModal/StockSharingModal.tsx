@@ -89,8 +89,8 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
           as="h3"
           className="text-lg font-medium text-gray-900 font-primary leading-6"
         >
-          Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
-          <span className="font-bold text-teal-300">{tickerSymbol}</span>!
+          Tell <span className="font-semibold text-brand">{selectedGroup}</span> about{" "}
+          <span className="font-semibold text-teal-300">{tickerSymbol}</span>!
         </Dialog.Title>
         <div className="mt-2">
           <div className="text-sm font-primary text-gray-500">

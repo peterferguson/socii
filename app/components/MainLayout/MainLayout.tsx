@@ -1,6 +1,8 @@
+import { FooterDynamic } from "@components/Footer"
 import NavHeader from "@components/NavHeader"
 import { StreamProvider } from "@contexts/streamContext"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
 import React from "react"
 import { useMediaQuery } from "react-responsive"
 
@@ -8,6 +10,9 @@ const Sidebar = dynamic(() => import("@components/Sidebar"))
 
 const MainLayout = ({ children }) => {
   const is1Col = !useMediaQuery({ minWidth: 640 })
+
+  const router = useRouter()
+  const isChatRoute = router.asPath?.includes("/chat")
 
   // TODO: Add default component sizes
   // 1, 2, 3, 4 column components
@@ -24,6 +29,7 @@ const MainLayout = ({ children }) => {
           </div>
         </main>
       </StreamProvider>
+      {!isChatRoute && <FooterDynamic />}
     </div>
   )
 }

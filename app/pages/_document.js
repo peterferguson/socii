@@ -38,11 +38,11 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#F9FAFB" />
           {/* <!-- this sets the color of url bar on iOS --> */}
           {/* <!-- TODO: Need to add this for dark theme --> */}
-          {/* <meta
+          <meta
             name="apple-mobile-web-app-status-bar-style"
             content="black-translucent"
-          ></meta> */}
-          <meta name="apple-mobile-web-app-status-bar-style" content="black"></meta>
+          ></meta>
+          {/* <meta name="apple-mobile-web-app-status-bar-style" content="black"></meta> */}
 
           {/* Fullscreen on iOS */}
           <meta name="apple-mobile-web-app-capable" content="yes"></meta>
