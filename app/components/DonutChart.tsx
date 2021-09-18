@@ -118,7 +118,7 @@ function DonutChart({
     <>
       {data && (
         <RadialChart {...chartProps} data={chartData}>
-          <div className="relative w-full mx-auto text-xl text-center text-gray-600 font-primary mt-[-13.5rem] z-1">
+          <div className="absolute w-full mx-auto text-xl text-center text-gray-600 top-[5.5rem] font-primary z-1">
             <div className="uppercase text-tiniest leading-4 ">portfolio</div>
             {text.portfolio}
             <div
@@ -134,7 +134,7 @@ function DonutChart({
               <div className="w-5/12 h-1 my-5 mb-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
               <Tooltip
                 text={cashInPortfolio ? "Remove Cash From Chart" : "Add Cash To Chart"}
-                className="absolute w-2/5 -bottom-14 inset-x-[6.5rem]"
+                className="absolute inset-x-[6.5rem] w-2/5 inset-y-20"
               >
                 <div className="uppercase text-tiny leading-4">Cash</div>
                 {text.cash}
