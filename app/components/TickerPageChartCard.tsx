@@ -116,7 +116,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
             // TODO: Replace with skeleton loader
             <div>Loading</div>
           )}
-          <Tab.List className="absolute flex h-12 pt-3 pr-2 text-sm bottom-7 font-secondary space-x-0.5 md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0">
+          <Tab.List className="absolute flex h-12 pt-4 pr-2 text-sm bottom-7 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0">
             {Object.keys(tabs).map((tab, i) => (
               <Tab key={`tab-${i}`} as={Fragment}>
                 {({ selected }) => (
