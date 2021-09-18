@@ -23,9 +23,9 @@ function WaitlistInvite({ invited, setInvited }) {
       }}
     >
       {invited ? (
-        <h1 className="mt-8 text-2xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-snug">
+        <h1 className="text-lg font-semibold font-primary sm:text-2xl md:text-3xl md:leading-snug">
           Thanks for signing up!
-          <p className="text-xl font-thin font-secondary">
+          <p className="text-base font-thin font-secondary">
             Keep an eye on your inbox for your invite.
           </p>
         </h1>
