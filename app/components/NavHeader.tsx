@@ -1,4 +1,6 @@
-import { HeaderDropdownButton, Searchbar, UserPhoto } from "@components"
+import HeaderDropdownButton from "@components/HeaderDropdownButton"
+import Searchbar from "@components/Searchbar"
+import UserPhoto from "@components/UserPhoto"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
 import { NextRouter, useRouter } from "next/router"
@@ -110,7 +112,7 @@ const NavHeader: React.FC = () => {
                 </div>
               </div>
             </div>
-          <SearchResultsModal open={open} />
+            <SearchResultsModal open={open} />
           </header>
         </InstantSearch>
       )}

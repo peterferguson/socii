@@ -1,29 +1,24 @@
+import { FooterDynamic } from "@components/Footer"
 import Head from "@components/Head"
+import { MainLayoutDynamic } from "@components/MainLayout"
 import { AuthProvider } from "@contexts/AuthProvider"
-import { useDarkMode } from "@hooks/useDarkMode"
 import useInnerViewport from "@hooks/useInnerViewport"
 import useOrientationWarning from "@hooks/useOrientationWarning"
 import useReceivePushNotifications from "@hooks/useReceivePushNotifications"
 import { toastProps } from "@lib/constants"
 import "@styles/Chat.css"
 import "@styles/globals.css"
-import { isBrowser } from "@utils/isBrowser"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
 import { tw } from "@utils/tw"
-
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React, { useEffect } from "react"
 import "react-file-utils/dist/index.css"
-import { useMediaQuery } from "react-responsive"
 import "../scripts/wdyr"
 
 const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaster), {
   ssr: true,
 })
-
-const Footer = dynamic(() => import("@components/Footer"))
-const MainLayout = dynamic(() => import("@components/MainLayout"))
 
 // - Uncomment to console log web vitals
 // export function reportWebVitals(metric) {
@@ -31,8 +26,6 @@ const MainLayout = dynamic(() => import("@components/MainLayout"))
 // }
 
 export default function MyApp({ Component, pageProps }) {
-  const is1Col = !useMediaQuery({ minWidth: 640 })
-
   useEffect(() => serviceWorkerInitialisation(), [])
 
   useOrientationWarning()
@@ -62,9 +55,11 @@ export default function MyApp({ Component, pageProps }) {
         {notMainLayout ? (
           <Component {...props} />
         ) : (
-          <MainLayout {...props}>{isBrowser && <Component {...props} />}</MainLayout>
+          <MainLayoutDynamic {...props}>
+            <Component {...props} />
+          </MainLayoutDynamic>
         )}
-        {is1Col && !isChatRoute && <Footer {...props} />}
+        {!isChatRoute && <FooterDynamic {...props} />}
       </AuthProvider>
       <Toaster {...toastProps} />
     </div>

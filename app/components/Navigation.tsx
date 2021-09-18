@@ -1,4 +1,5 @@
-import { ClientOnly, Logo } from "@components"
+import ClientOnly from "./ClientOnly"
+import Logo from "./Logo"
 import { useHasMounted } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
@@ -11,10 +12,6 @@ export default function Navigation({ showOptions }) {
   const username = user ? user.username : ""
   const router = useRouter()
   const hasMounted = useHasMounted()
-
-  useEffect(() => {
-    console.log("nav ", username)
-  }, [username])
 
   return (
     <div className="absolute top-0 z-50 flex flex-row w-full mx-auto bg-transparent h-[72px]">

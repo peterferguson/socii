@@ -1,4 +1,5 @@
-import { Logo, OutlineButton } from "@components"
+import Logo from "./Logo"
+import OutlineButton from "./OutlineButton"
 import React from "react"
 
 export default function FeatureSlider() {

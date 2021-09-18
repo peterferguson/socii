@@ -1,4 +1,3 @@
-import { MultiSelect, PriceInput } from "@components"
 import { InvestButtonModalContainer } from "@components/InvestButtonModal/InvestButtonModalContainer"
 import { Dialog } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
@@ -9,6 +8,8 @@ import { redirectWithToast } from "@utils/redirectWithToast"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
+import MultiSelect from "../MultiSelect"
+import PriceInput from "../PriceInput"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()

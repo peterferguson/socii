@@ -1,4 +1,3 @@
-import { GroupPieChart, StockCard, StockCardSkeleton } from "@components"
 import { useAuth } from "@hooks"
 import { getGroupCashBalanceListener } from "@lib/firebase/client/db/getGroupCashBalance"
 import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
@@ -7,7 +6,9 @@ import { tw } from "@utils/tw"
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
 import { useUnmountPromise } from "react-use"
+import GroupPieChart from "./GroupPieChart"
 import { NoHoldingsPieCardSkeleton } from "./PieCard"
+import StockCard, { StockCardSkeleton } from "./StockCard"
 
 export interface IGroupColumnCard {
   groupName: string

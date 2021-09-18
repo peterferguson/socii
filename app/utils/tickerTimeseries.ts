@@ -35,11 +35,11 @@ export const tickerTimeseries = async (
   } else {
     // * Get timeseries data from api
 
-    const functionsBaseUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net`
-    //   process.env.NODE_ENV === "production"
-    //     ? "https://europe-west2-sociiinvest.cloudfunctions.net"
-    //     : "http://localhost:5001/sociiinvest/europe-west2"
-    // }
+    const functionsBaseUrl =
+      process.env.NODE_ENV !== "test"
+        ? `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net`
+        : "http://localhost:5001/sociiinvest/europe-west2"
+
     const timeseriesBaseUrl = `${functionsBaseUrl}/get_historical_prices`
     const storeTimeseriesBaseUrl = `${functionsBaseUrl}/storeTimeseries`
 

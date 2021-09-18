@@ -6,19 +6,12 @@
 // - break into components to clean code
 // - deal with navigation to the page or how to find new groups
 
-import { AuthCheck, CardSlider, ClientOnly, GroupColumnCard } from "@components"
-import { useAuth } from "@hooks/useAuth"
-import { useStream } from "@hooks/useStream"
-import dynamic from "next/dynamic"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import { useMediaQuery } from "react-responsive"
 import { getGroupPrivacyOption } from "@lib/firebase/client/db/getGroupPrivacyOption"
 import { tw } from "@utils/tw"
+import React, { useEffect, useState } from "react"
 
 const NonMemberGroupView = ({ groupName }) => {
-  const is1Col = !useMediaQuery({ minWidth: 640 })
-  const [privacyOption, setPrivacyOption] = useState()
+  const [, setPrivacyOption] = useState()
 
   useEffect(() => {
     let unsubscribe
@@ -52,7 +45,7 @@ const NonMemberGroupView = ({ groupName }) => {
           <input
             type="text"
             name="price"
-            className="block w-full pr-12 border-brand appearance-none focus:ring-brand-dark focus:border-teal-500 pl-7 sm:text-sm rounded-md"
+            className="block w-full pr-12 appearance-none border-brand focus:ring-brand-dark focus:border-teal-500 pl-7 sm:text-sm rounded-md"
             placeholder="your message here"
             //onChange={(e) => setPrice(e.target.value)}
           />

@@ -1,4 +1,4 @@
-import { DonutChart } from "@components"
+import DonutChart from "@components/DonutChart"
 import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
@@ -11,6 +11,7 @@ export interface IGroupPieChart {
   radius?: number
   className?: string
 }
+
 export default function GroupPieChart({
   groupName,
   holdingData,

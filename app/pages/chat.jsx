@@ -1,4 +1,5 @@
-import { AuthCheck, ClientOnly } from "@components"
+import AuthCheck from "@components/AuthCheck"
+import ClientOnly from "@components/ClientOnly"
 import { useStream } from "@hooks/useStream"
 import dynamic from "next/dynamic"
 import Link from "next/link"
