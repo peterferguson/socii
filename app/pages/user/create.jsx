@@ -8,8 +8,9 @@ import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 
-export default function Username(props) {
-  const { user, username: existingUsername } = useAuth()
+export default function Username() {
+  const { user } = useAuth()
+  const { username: existingUsername } = user
   const router = useRouter()
   const [disabled, setDisabled] = useState(false)
   const [username, setUsername] = useState("")
@@ -50,7 +51,7 @@ export default function Username(props) {
   )
 
   const runAccountCreation = async (user, username) => {
-    const { token, expirationTime, streamToken, userWithoutToken } = user
+    const { userWithoutToken } = user
     const { status, message } = (
       await createAccount({ userWithoutToken, username })
     ).getData()
