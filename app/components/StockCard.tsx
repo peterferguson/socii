@@ -12,7 +12,7 @@ interface IStockCard {
 
 export default function StockCard({ holding, latestPrice, index }: IStockCard) {
   const tickerSymbol = holding.symbol
-  const [logoColor, setLogoColor] = useState(null)
+  const [logoColor, setLogoColor] = useState<string>(null)
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
 
   useEffect(() => {
