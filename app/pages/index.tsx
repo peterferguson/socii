@@ -12,7 +12,7 @@ export default function Home() {
   const { user } = useAuth()
   const [invited, setInvited] = useState(user?.invited || false)
   return (
-    <div className="overflow-y-scroll">
+    <div className="overflow-y-scroll no-scrollbar">
       {/* TODO Add a wave transition animation to this gradient */}
       <Hero invited={invited} setInvited={setInvited} />
       <OneTwoThree />
