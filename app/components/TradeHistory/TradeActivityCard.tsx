@@ -19,7 +19,7 @@ export const TradeActivityCard = ({ activity }: { activity: ActivityItem }) => {
   return (
     <li
       key={activity.id}
-      className="relative flex items-center p-3 rounded-xl hover:bg-gray-50"
+      className="relative flex items-center p-3 rounded-xl hover:bg-gray-200"
     >
       {activity.symbol ? (
         <TickerLogo tickerSymbol={activity.symbol} className="w-10 h-10" />
@@ -27,7 +27,7 @@ export const TradeActivityCard = ({ activity }: { activity: ActivityItem }) => {
         <div className="w-10 h-10 bg-gray-200 rounded-full shadow-lg animate-pulse" />
       )}
 
-      <div className="ml-4 hover:bg-gray-100">
+      <div className="ml-4 hover:bg-gray-50">
         <h4 className="font-medium text-gray-500 text-tiniest leading-5">
           {/* {activity.activityType === "JNLS"
             ? "Reward"

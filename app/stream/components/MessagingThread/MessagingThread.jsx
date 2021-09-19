@@ -13,7 +13,7 @@ const ThreadHeader = ({ closeThread, thread }) => {
   return (
     <div className="flex items-center justify-between h-16 bg-white border-b-2 border-gray-200 rounded-b-none shadow-xl md:h-16 rounded-xl border-opacity-25">
       <div className="flex items-center ml-5">
-        <p className="mr-5 text-lg font-bold font-primary">Thread</p>
+        <p className="mr-5 text-lg font-semibold font-primary">Thread</p>
         <p className="opacity-50 font-secondary">{getReplyCount()}</p>
       </div>
       <FiX className="w-8 h-8 mr-2 cursor-pointer" onClick={(e) => closeThread(e)} />

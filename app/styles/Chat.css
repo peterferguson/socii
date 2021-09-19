@@ -1,5 +1,5 @@
-@tailwind utilities;
 @tailwind components;
+@tailwind utilities;
 
 @layer utilities {
   @variants responsive {
@@ -13,14 +13,6 @@
       scrollbar-width: none; /* Firefox */
     }
   }
-}
-
-:root {
-  --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */
-  --sat: env(safe-area-inset-top);
-  --sar: env(safe-area-inset-right);
-  --sab: env(safe-area-inset-bottom);
-  --sal: env(safe-area-inset-left);
 }
 
 .messenger-chat.str-chat {
@@ -120,12 +112,8 @@
 @media screen and (max-width: 640px) {
   .str-chat-channel .str-chat__container {
     height: calc(var(--innerHeight));
-    height: calc(
-      100% - const(safe-area-inset-top) - const(safe-area-inset-bottom)
-    );
-    height: calc(
-      100% - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-    );
+    height: calc(100% - const(safe-area-inset-top) - const(safe-area-inset-bottom));
+    height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     width: 100vw;
     z-index: 50;
     display: flex;

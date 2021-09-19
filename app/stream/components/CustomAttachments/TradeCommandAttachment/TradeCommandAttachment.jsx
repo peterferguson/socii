@@ -24,13 +24,14 @@ const TradeCommandAttachment = ({ attachment }) => {
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const [isin, setIsin] = useState("")
 
-  const { username , user } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   const { client } = useChatContext()
   const { channel } = useChannelStateContext()
   const { message } = useMessageContext()
 
   const { price } = useTickerPrice(tickerSymbol.current)
-  const alpacaAccountId =  user.alpacaAccountId
+  const alpacaAccountId = user.alpacaAccountId
 
   useEffect(() => {
     const getISIN = async () => setIsin(await tickerToISIN(tickerSymbol.current))

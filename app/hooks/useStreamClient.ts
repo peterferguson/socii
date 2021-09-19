@@ -7,7 +7,8 @@ export interface StreamClientContext {
 }
 
 export const useStreamClient = (): StreamClientContext => {
-  const { user, username } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   const streamClient = useRef<StreamChat | null>(null)
 
   useEffect(() => {

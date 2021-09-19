@@ -3,9 +3,12 @@ const colors = require("tailwindcss/colors")
 module.exports = {
   mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class",
   theme: {
     extend: {
+      backdropBlur: {
+        xs: "2px",
+      },
       colors: {
         palette: {
           darkest: "#1595c9",
@@ -43,6 +46,7 @@ module.exports = {
           green: "#77B44E",
           lightGreen: "#79ffe1",
           lightPink: "#dca3c8",
+          teal: "#3fba",
           lightTeal: "#a6fff8",
           cyan: {
             DEFAULT: "#00D2EA",
@@ -53,7 +57,10 @@ module.exports = {
         bitcoin: "#f2a900",
         facebook: "#1778f2",
         twitter: "#1DA1F2",
-        blueGray: colors.blueGray,
+        gray: {
+          ...colors.gray,
+          50: "#f3f5f7",
+        },
         trueGray: colors.trueGray,
         teal: colors.teal,
         emerald: colors.emerald,
@@ -62,11 +69,19 @@ module.exports = {
       },
       fontFamily: {
         primary: ["Poppins", "sans-serif"],
-        secondary: ['"Work Sans"', "sans-serif"],
+        secondary: ['"Open Sans"', "sans-serif"],
       },
       fontSize: {
         tiniest: "0.5rem",
         tiny: "0.625rem",
+      },
+      fontWeight: {
+        thin: 100,
+        extralight: 200,
+        light: 300,
+        normal: 400,
+        semibold: 600,
+        bold: 800,
       },
       keyframes: {
         wiggle: {
@@ -144,6 +159,10 @@ module.exports = {
       },
       spacing: {
         0.5: "0.125rem",
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+        "safe-left": "env(safe-area-inset-left)",
+        "safe-right": "env(safe-area-inset-right)",
       },
     },
   },

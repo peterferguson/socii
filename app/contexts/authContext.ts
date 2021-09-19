@@ -3,8 +3,6 @@ import { createContext } from "react"
 
 export const authContext = createContext({
   user: null,
-  username: null,
-  userGroups: null,
   loading: false,
   // signinWithEmail,
   // signinWithGitHub,

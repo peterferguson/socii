@@ -1,5 +1,6 @@
 import AvatarGroup from "@stream/components/AvatarGroup"
 import { getTimeStamp } from "@utils/getTimeStamp"
+import { tw } from "@utils/tw"
 import Image from "next/image"
 import React, { useContext } from "react"
 import useMediaQuery from "react-responsive"
@@ -39,13 +40,13 @@ const MessagingChannelPreview = ({
 
   return (
     <div
-      className={`mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2
-        ${
-          channel?.id === activeChannel?.id
-            ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
-            : "hover:bg-blueGray-100 hover:shadow-xl hover:btn-transition"
-        }
-      `}
+      className={tw(
+        "mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2",
+        channel?.id === activeChannel?.id
+          ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
+          : "hover:bg-gray-50 hover:shadow-xl hover:btn-transition",
+        "umami--click--chat-channel-preview-channel-option"
+      )}
       onClick={() => {
         setActiveChannel(channel)
         is1Col && toggleChannelList()
@@ -56,7 +57,7 @@ const MessagingChannelPreview = ({
           src={channel.data.image}
           height={48}
           width={48}
-          className="rounded-full pl-2"
+          className="pl-2 rounded-full"
         />
       ) : (
         <AvatarGroup memberNames={members} />

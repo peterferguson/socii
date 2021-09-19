@@ -91,7 +91,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     >
       <input
         autoFocus
-        className="w-full ml-6 font-bold outline-none font-primary"
+        className="w-full ml-6 font-semibold outline-none font-primary"
         onBlur={updateChannel}
         onChange={(e) => setNewChannelName(e.target.value)}
         placeholder="Type a new name for the chat"
@@ -146,7 +146,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
           <AvatarGroup memberNames={memberNames} />
         )}
         {!isEditing ? (
-          <div className="flex-1 font-bold font-primary">
+          <div className="flex-1 font-semibold font-primary">
             {channelName.slice(0, 8) === "!members" ? title : channelName}
           </div>
         ) : (
@@ -155,51 +155,51 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
         {/* TODO: Convert to its own component */}
         <Fragment>
           <TypingIndicator />
-          {usingSettings ? (
-            !isEditing ? (
-              <div className="flex mr-1">
-                <a className="mx-1">
-                  <ImPencil
-                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                    onClick={() => {
-                      if (!isEditing) setIsEditing(true)
-                    }}
-                  />
-                </a>
-                <a className="mx-1">
-                  <ImUserPlus
-                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                    onClick={() => {
-                      if (!isEditing) setIsEditing(true)
-                    }}
-                  />
-                </a>
-                {channelName !== "sociians" && (
+          {channelName !== "sociians" ? (
+            usingSettings ? (
+              !isEditing ? (
+                <div className="flex mr-1">
+                  <a className="mx-1">
+                    <ImPencil
+                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                      onClick={() => {
+                        if (!isEditing) setIsEditing(true)
+                      }}
+                    />
+                  </a>
+                  <a className="mx-1">
+                    <ImUserPlus
+                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                      onClick={() => {
+                        if (!isEditing) setIsEditing(true)
+                      }}
+                    />
+                  </a>
                   <a className="mx-1">
                     <ImBin
                       className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
                       onClick={() => setShowDelete(true)}
                     />
                   </a>
-                )}
-                <a className="mx-1">
-                  <ImCross
-                    className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                    onClick={() => setUsingSettings(false)}
-                  />
-                </a>
-              </div>
+                  <a className="mx-1">
+                    <ImCross
+                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                      onClick={() => setUsingSettings(false)}
+                    />
+                  </a>
+                </div>
+              ) : (
+                <MdSave className="w-5 h-5 text-brand hover:text-brand-dark btn-transition" />
+              )
             ) : (
-              <MdSave className="w-5 h-5 text-brand hover:text-brand-dark btn-transition" />
+              <a className="mr-4">
+                <HiOutlineCog
+                  className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
+                  onClick={() => setUsingSettings(true)}
+                />
+              </a>
             )
-          ) : (
-            <a className="mr-4">
-              <HiOutlineCog
-                className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                onClick={() => setUsingSettings(true)}
-              />
-            </a>
-          )}
+          ) : null}
         </Fragment>
       </div>
       {showDelete && (

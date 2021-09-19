@@ -1,16 +1,24 @@
+import { getLogoColor } from "@lib/firebase/client/db/getLogoColor"
+import { tw } from "@utils/tw"
 import Link from "next/link"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { Holding } from "./GroupColumnCard"
 import TickerLogo from "./TickerLogo"
 
 interface IStockCard {
-  holding: any
+  holding: Holding
   latestPrice: number
   index: number
 }
 
 export default function StockCard({ holding, latestPrice, index }: IStockCard) {
   const tickerSymbol = holding.symbol
+  const [logoColor, setLogoColor] = useState<string>(null)
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
+
+  useEffect(() => {
+    getLogoColor(holding?.ISIN).then((color) => setLogoColor(color))
+  }, [holding?.ISIN])
 
   return (
     <li
@@ -18,14 +26,23 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
         index !== 0 ? "border-t border-gray-200 mt-2" : ""
       } `}
     >
-      <div className="flex p-2 bg-white">
+      <div
+        className={tw(
+          "flex p-2 bg-white",
+          "umami--click--stock-card",
+          `umami--click--${tickerSymbol}-stock-card`
+        )}
+      >
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="flex items-center justify-center flex-none flex-grow-0 mr-3 rounded-full cursor-pointer">
             <TickerLogo tickerSymbol={tickerSymbol} height="40" width="40" />
           </div>
         </Link>
         <div className="items-center flex-grow-0 pt-1 pr-4 min-w-[70px]">
-          <div className="text-base font-extrabold tracking-wider uppercase text-brand-shade-darkest font-primary">
+          <div
+            className="text-base tracking-wider uppercase text-brand-shade-darkest font-primary"
+            style={{ color: logoColor }}
+          >
             {tickerSymbol}
           </div>
           <div className="overflow-hidden font-thin tracking-wider uppercase text-brand-shade-darkest text-tiny">

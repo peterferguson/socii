@@ -35,7 +35,7 @@ const HorizontalAssetCard = ({
         <div className="flex-col flex-grow my-auto">
           <Link href={`stocks/${tickerSymbol}`}>
             <a
-              className="text-sm font-extrabold tracking-wider text-gray-400 uppercase font-primary"
+              className="text-sm font-semibold tracking-wider text-gray-400 uppercase font-primary"
               style={{ color: logoColor }}
             >
               {tickerSymbol}
@@ -69,10 +69,10 @@ export const HorizontalAssetCardSkeleton = ({ cardRef }) => (
   >
     <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
       <div className="items-center justify-center flex-none w-20 m-auto rounded-full">
-        <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />
+        <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />
       </div>
       <div className="flex-col flex-grow my-auto">
-        <div className="text-xs font-extrabold tracking-wider text-gray-400 uppercase font-primary animate-pulse">
+        <div className="text-xs font-semibold tracking-wider text-gray-400 uppercase font-primary animate-pulse">
           Ticker Symbol
         </div>
         <div className="flex tracking-wider text-gray-600 text-tiny font-primary animate-pulse">

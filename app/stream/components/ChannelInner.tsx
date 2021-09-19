@@ -22,7 +22,8 @@ const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Windo
 }) as any
 
 const ChannelInner = ({ toggleChannelList }) => {
-  const { username, user } = useAuth()
+  const { user } = useAuth()
+  const username = user ? user.username : ""
   //   const { addNotification } = useChannelActionContext()
   const { channel, messages } = useChannelStateContext()
 

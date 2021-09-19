@@ -3,66 +3,56 @@
 // - Potential:
 //   - add "followed groups" page to check status of other open groups
 
-import React , { Fragment , useState , useMemo , useEffect} from "react"
+import ComingSoon from "@components/ComingSoon"
+import { GroupPortfoliosDynamic } from "@components/GroupPortfolios"
 import { LeaderboardPanel } from "@components/LeaderboardPanel"
-import { useAuth } from "@hooks"
-import { AuthCheck } from "@components"
-import { Tab } from '@headlessui/react'
 import { TabHeading } from "@components/TabHeading"
 import { TabPanels } from "@components/TabPanels"
-import { GroupPortfolios } from "@components/GroupPortfolios"
-import { getLeaderBoardProps } from "../../utils/getLeaderBoardProps"
-import ComingSoon from "@components/ComingSoon"
+import { Tab } from "@headlessui/react"
+import { useAuth } from "@hooks"
+import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
+import React, { useState } from "react"
 import { FaUserInjured } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/dist/client/link"
 import dynamic from "next/dynamic"
 
 const GroupsHome = ({ leaders }) => {
-  const { userGroups } = useAuth()
-  const router = useRouter()
-  const [selected , setSelected] = useState<string>("My Groups")
-console.log("r", router.route)
-  let [categories, setCategories] = useState({
+  const { user } = useAuth()
+  const [selected, setSelected] = useState("My Groups")
+  let [categories] = useState({
     "My Groups": [],
     Leaderboards: [],
     "Other Groups": [],
   })
 
-  const groupsCards:JSX.Element = useMemo(() => 
-    MyComp(userGroups)
-  ,[userGroups])
-  
   return (
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
-      <div className = "container flex flex-col center" > 
-        <div className="flex flex-row justify-center bg-white rounded-lg shadow-lg font-primary text-l">
-        <TabHeading categories={categories} />
-        </div>    
-        <TabPanels categories={categories}> 
-            <div className = { (selected ==="My Groups") ? "" : "hidden" }>
-              {groupsCards}
-            </div> 
-            <div className = { (selected ==="Leaderboards") ? "" : "hidden" }>
-              <LeaderboardPanel leaders = {leaders}/>
-            </div>
-            <div className = { (selected ==="Other Groups") ? "" : "hidden" }>
-              <ComingSoon color="brand-pink" description="">
-                <FaUserInjured className={`w-24 h-24 text-brand-pink`} />
-              </ComingSoon>
-            </div>
-        </TabPanels>     
+      <div className="container flex flex-col items-center overflow-x-hidden">
+        <div className="flex flex-row justify-center w-full font-primary">
+          <TabHeading
+            categories={categories}
+            className="w-full m-4 sm:m-0"
+          />
+        </div>
+        <TabPanels categories={categories} panelBackgroundColor="transparent">
+          <div className={selected === "My Groups" ? "" : "hidden"}>
+            <GroupPortfoliosDynamic userGroupsList={user?.groups} />
+          </div>
+          <div className={selected === "Leaderboards" ? "" : "hidden"}>
+            <LeaderboardPanel leaders={leaders} />
+          </div>
+          <div className={selected === "Other Groups" ? "" : "hidden"}>
+            <ComingSoon color="brand-pink" description="">
+              <FaUserInjured className={`w-24 h-24 text-brand-pink`} />
+            </ComingSoon>
+          </div>
+        </TabPanels>
       </div>
     </Tab.Group>
   )
 }
-export default GroupsHome
 
 export const getStaticProps = async () => await getLeaderBoardProps()
 
-export const MyComp = (userGroups: string[]) => (
-  <GroupPortfolios userGroupsList= {userGroups}/>
-)
-
-
-
+export default GroupsHome

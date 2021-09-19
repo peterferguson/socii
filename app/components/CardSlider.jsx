@@ -1,11 +1,17 @@
 import { AssetCard } from "@components/AssetCard"
+import { tw } from "@utils/tw"
 import React from "react"
 
 // TODO: Add a isActive state and only navigate on click of the active card
 
 export default function CardSlider({ tickers }) {
   return (
-    <section className="flex p-12 overflow-x-scroll no-scrollbar">
+    <section
+      className={tw(
+        "flex p-12 overflow-x-scroll no-scrollbar",
+        "umami--drag--popular-stocks-card-slider"
+      )}
+    >
       {tickers.map(({ ticker, queryData, price }, i) => {
         return (
           <article

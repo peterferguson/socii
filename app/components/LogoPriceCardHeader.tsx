@@ -29,7 +29,7 @@ export default function LogoPriceCardHeader({
           <div
             className={
               "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
-               inline-block font-primary mt-1 text-blueGray-500"
+               inline-block font-primary mt-1 text-gray-500"
             }
           >
             {!shares ? (

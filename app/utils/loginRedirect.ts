@@ -8,8 +8,6 @@ export const loginRedirect = (
   userGroups: string[]
 ) => {
   toast.dismiss()
-  router.push(
-    !username ? "/user/create" : userGroups.length ? `/groups` : "/stocks"
-  )
+  router.push(!username ? "/user/create" : userGroups?.length ? `/groups` : "/stocks")
   toast.success(`Welcome ${userFirstName(displayName)}`)
 }

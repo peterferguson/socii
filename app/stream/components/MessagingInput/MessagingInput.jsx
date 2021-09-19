@@ -55,7 +55,7 @@ import { UploadsPreview } from "./UploadsPreview"
 const CommandIcon = ({ text }) => (
   <div className="flex items-center w-16 h-6 p-2 rounded-xl  bg-brand">
     <BsLightningFill className="w-4 h-4 text-white mr-0.5" />
-    <p className="text-xs font-bold text-white font-secondary">{text}</p>
+    <p className="text-xs font-semibold text-white font-secondary">{text}</p>
   </div>
 )
 
@@ -251,7 +251,7 @@ const MessagingInput = (props) => {
 
   const buttons = useMemo(() => emojiButtons, [])
 
-  // TODO: This padding is mainly to correct for lack of inset values 
+  // TODO: This padding is mainly to correct for lack of inset values
   // TODO: on iPhones when the app has been added to homescreen.
   // TODO: This is a worse UX for other platforms!
 

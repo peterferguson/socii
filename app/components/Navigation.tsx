@@ -1,13 +1,15 @@
-import { ClientOnly, Logo } from "@components"
+import ClientOnly from "./ClientOnly"
+import Logo from "./Logo"
 import { useHasMounted } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useEffect } from "react"
 const Dropdown = dynamic(() => import("components/Dropdown"))
 
 export default function Navigation({ showOptions }) {
   const { user, loading } = useAuth()
+  const username = user ? user.username : ""
   const router = useRouter()
   const hasMounted = useHasMounted()
 
@@ -20,7 +22,7 @@ export default function Navigation({ showOptions }) {
       <ClientOnly>
         {hasMounted
           ? showOptions &&
-            (user?.uid && !loading ? (
+            (username && !loading ? (
               <Dropdown />
             ) : (
               <button

@@ -1,32 +1,35 @@
-
-import React, { useState } from "react";
-import {PortfolioSummary } from "@components/DropdownPortfolioRow"
+import React, { useState } from "react"
+import { PortfolioSummary } from "@components/DropdownPortfolioRow"
 
 interface IProps {
-  open?: boolean;
+  open?: boolean
   // openContnet: Element
   // closedContent: Element
   group: String
 }
 
 const Collapsible: React.FC<IProps> = ({ open, children, group }) => {
-  const [isOpen, setIsOpen] = useState(closed);
+  const [isOpen, setIsOpen] = useState(closed)
 
   const handleFilterOpening = () => {
-    setIsOpen((prev) => !prev);
-  };
+    setIsOpen((prev) => !prev)
+  }
 
   return (
     <>
-      <div className="items-center w-full p-1 p-2 bg-gray-300 shadow-md cursor-pointer hover:bg-gray150- rounded-md" onClick={handleFilterOpening}>
+      <div
+        className="items-center w-full p-1 p-2 bg-gray-300 shadow-md cursor-pointer hover:bg-gray150- rounded-md"
+        onClick={handleFilterOpening}
+      >
         <div>
           {/* //{!isOpen ? ( */}
-            <div className="justify-content-between font-weight-bold divide-y-4">{<PortfolioSummary group = {group}/>} </div>
-         {/* // ) : ( */}
-            {/* <div className="p-1 bg-purple-500 justify-content-between font-weight-bold" > {<PortfolioDetails/>} </div> */}
-         {/* // )
+          <div className="justify-content-between font-weight-bold divide-y-4">
+            {<PortfolioSummary group={group} />}{" "}
+          </div>
+          {/* // ) : ( */}
+          {/* <div className="p-1 bg-purple-500 justify-content-between font-weight-bold" > {<PortfolioDetails/>} </div> */}
+          {/* // )
          // } */}
-          
         </div>
 
         <div className="border-bottom">
@@ -34,12 +37,10 @@ const Collapsible: React.FC<IProps> = ({ open, children, group }) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Collapsible;
-
-
+export default Collapsible
 
 // function Accordion(props) {
 //  return (

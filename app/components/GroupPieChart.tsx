@@ -1,4 +1,5 @@
-import { DonutChart } from "@components"
+import DonutChart from "@components/DonutChart"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
 
@@ -7,13 +8,16 @@ export interface IGroupPieChart {
   holdingData: any
   currentPrices: any
   cashBalance: number
+  radius?: number
   className?: string
 }
+
 export default function GroupPieChart({
   groupName,
   holdingData,
   currentPrices,
   cashBalance,
+  radius = 250,
   className = "",
 }: IGroupPieChart) {
   const portfolioValue = holdingData
@@ -36,24 +40,31 @@ export default function GroupPieChart({
 
   return (
     <div
-      className={`
-      w-88 sm:w-full items-center justify-center flex flex-col m-0 sm:m-4 
-      mb-2 sm:mb-4 ${className}
-    `}
+      className={tw(
+        "w-88 sm:w-full items-center justify-center flex flex-col m-0 sm:m-4 mb-2 sm:mb-4",
+        className
+      )}
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative z-10 text-4xl text-center text-transparent cursor-pointer top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink  to-brand">
+          <div
+            className={tw(
+              "relative text-4xl text-center text-transparent cursor-pointer z-[1] top-2",
+              "font-primary bg-clip-text bg-gradient-to-r from-brand-pink to-brand",
+              "umami--click--group-pie-chart-title"
+            )}
+          >
             {groupName}
           </div>
         </a>
       </Link>
       {pieData?.length && portfolioValue && (
         <DonutChart
-          className="z-0 -mt-6"
+          className="relative z-0 -mt-6"
           data={pieData}
           scaling={0.35}
-          radius={250}
+          scaleToWindow={true}
+          radius={radius}
           text={{
             portfolio: `$${portfolioValue?.toFixed(2)}`,
             gain: `${gain.toFixed(2)}%`,

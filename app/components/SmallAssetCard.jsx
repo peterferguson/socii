@@ -23,7 +23,7 @@ export const SmallAssetCard = ({
               onError={() => setLogoNotFound(true)}
             />
           ) : (
-            <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny">
+            <div className="flex items-center justify-center mx-auto font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny">
               {tickerSymbol}
             </div>
           )}

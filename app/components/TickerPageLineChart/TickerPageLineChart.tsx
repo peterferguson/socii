@@ -59,14 +59,14 @@ const TickerPageLineChart: React.FC<ITickerPageLineChart> = ({
         height={height * heightScale}
         width={width * widthScale}
         xType="time"
-        margin={{ left: 25, bottom: 75, top: 10 }}
+        margin={{ left: 25, bottom: is1Col ? 50 : 25, top: is1Col ? 5 : 25}}
       >
-        {!is1Col && (
+        {/* {!is1Col && (
           <XAxis
             tickLabelAngle={-75}
             tickFormat={(d: Date) => d.toLocaleDateString()}
           />
-        )}
+        )} */}
         <LineSeries {...lineSeriesProps} />
         {crosshairValue && <AreaSeries {...areaSeriesProps} />}
         {crosshairValue && !is1Col && (

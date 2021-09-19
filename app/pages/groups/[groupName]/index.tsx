@@ -15,7 +15,7 @@
 // - Portfolio Analysis (partnership with the likes of atom or simply wall st?)
 // - Investor section with description of joining date (etc... this should not be the focus!)
 
-import { AuthCheck } from "@components"
+import { AuthCheck } from "@components/AuthCheck"
 import { IsUsersGroup } from "@utils/IsUsersGroup"
 import { useRouter } from "next/router"
 import React from "react"

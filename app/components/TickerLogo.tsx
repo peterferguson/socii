@@ -52,7 +52,7 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
           />
         ) : (
           <div
-            className={`flex items-center justify-center font-semibold text-gray-500 bg-gray-100 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
+            className={`flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
           >
             {tickerSymbol}
           </div>

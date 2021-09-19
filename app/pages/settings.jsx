@@ -72,7 +72,7 @@ export default function Settings() {
                       Photo
                     </label>
                     <div className="flex items-center mt-1">
-                      <span className="inline-block w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
+                      <span className="inline-block w-12 h-12 overflow-hidden bg-gray-50 rounded-full">
                         <svg
                           className="w-full h-full text-gray-300"
                           fill="currentColor"

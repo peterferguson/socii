@@ -1,4 +1,3 @@
-import { MultiSelect, PriceInput } from "@components"
 import { InvestButtonModalContainer } from "@components/InvestButtonModal/InvestButtonModalContainer"
 import { Dialog } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
@@ -6,9 +5,12 @@ import { StreamClientContext } from "@hooks/useStreamClient"
 import { alphaVantageQueryOptions } from "@lib/constants"
 import { alphaVantageQuery } from "@lib/firebase/client/functions/index"
 import { redirectWithToast } from "@utils/redirectWithToast"
+import { tw } from "@utils/tw"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
+import MultiSelect from "../MultiSelect"
+import PriceInput from "../PriceInput"
 
 const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
@@ -88,11 +90,11 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
           as="h3"
           className="text-lg font-medium text-gray-900 font-primary leading-6"
         >
-          Tell <span className="font-bold text-brand">{selectedGroup}</span> about{" "}
-          <span className="font-bold text-teal-300">{tickerSymbol}</span>!
+          Tell <span className="font-semibold text-brand">{selectedGroup}</span> about{" "}
+          <span className="font-semibold text-teal-300">{tickerSymbol}</span>!
         </Dialog.Title>
         <div className="mt-2">
-          <div className="text-sm font-primary text-blueGray-500">
+          <div className="text-sm text-gray-500 font-primary">
             Select some data to tell your friends about!
           </div>
           <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
@@ -100,9 +102,7 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
           />
-          <div className="text-sm font-primary text-blueGray-500">
-            Got a price in mind?
-          </div>
+          <div className="text-sm text-gray-500 font-primary">Got a price in mind?</div>
           <div className="pt-1 pb-2">
             <PriceInput
               setPrice={setTargetPrice}
@@ -110,12 +110,17 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
               pricePlaceholder={pricePlaceholder}
             />
           </div>
-          <div className="text-sm font-primary text-blueGray-500">
+          <div className="text-sm text-gray-500 font-primary">
             Tell them your thoughts!
           </div>
           <div className="pt-2 mb-3">
             <textarea
-              className="relative w-full px-3 py-4 text-sm bg-white border-gray-300 form-textarea placeholder-blueGray-300 text-blueGray-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+              className={tw(
+                "relative w-full px-3 py-4 text-sm text-gray-600 placeholder-gray-300",
+                "bg-white border-gray-300 form-textarea rounded-md shadow-sm",
+                "focus:outline-none focus:ring-teal-500 focus:border-teal-500",
+                "umami--click--invest-button-share-modal-text-input"
+              )}
               rows={4}
               placeholder="Bruh the wallstreetbets bros love it!"
               onChange={(e) => setMessage(e.target.value)}
@@ -126,11 +131,14 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
           <div className="flex-grow" />
           <button
             type="button"
-            className={`
-                  justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900 
-                  bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 
-                  focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 
-                  focus-visible:ring-teal-500 ${sendClicked && "animate-pulse"}`}
+            className={tw(
+              "justify-center flex-none px-4 py-2 text-sm font-medium text-teal-900",
+              "bg-teal-100 border border-transparent rounded-md hover:bg-teal-200",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              "focus-visible:ring-teal-500",
+              "umami--click--invest-button-share-modal-send-button",
+              sendClicked && "animate-pulse"
+            )}
             onClick={sendMessageClickHandler}
           >
             To the moon 🌕

@@ -72,19 +72,17 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   return (
     <>
       {!error && (
-        <>
-          <div className="flex flex-col w-full sm:flex-row">
-            <PriceCard
-              isin={ticker?.isin}
-              tickerSymbol={ticker?.tickerSymbol}
-              shortName={ticker?.shortName}
-              price={price}
-              isPriceLoading={isLoading}
-            />
-            <div className="flex-grow hidden sm:block" />
-            <div className="flex-grow px-4 sm:flex-none sm:pl-8">
-              <InvestButton send={send} logoColor={logoColor} />
-            </div>
+        <div className="flex flex-col flex-wrap w-full sm:flex-row">
+          <PriceCard
+            isin={ticker?.isin}
+            tickerSymbol={ticker?.tickerSymbol}
+            shortName={ticker?.shortName}
+            price={price}
+            isPriceLoading={isLoading}
+          />
+          <div className="flex-grow hidden sm:block" />
+          <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+            <InvestButton send={send} logoColor={logoColor} />
           </div>
           <TickerPageChartCard
             tickerSymbol={ticker.tickerSymbol}
@@ -100,7 +98,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               setReturnToLastScreen={setReturnToLastScreen}
             />
           )}
-        </>
+        </div>
       )}
     </>
   )

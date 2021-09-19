@@ -24,7 +24,8 @@ const PortfolioSkeletons = () => (
 )
 
 function GroupPortfolios({ pagename }): JSX.Element {
-  const { userGroups } = useAuth()
+  const { user } = useAuth()
+  const userGroups = user && user.groups ? user.groups : []
 
   return (
     <div className="flex flex-col items-center justify-center w-full my-14 sm:my-0">

@@ -27,9 +27,9 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
     <article className="flex items-center justify-between p-6 uppercase bg-white shadow-md rounded-2xl">
       <div className="flex ">
         <button
-          className={`flex flex-col items-center justify-center px-4 py-2 font-bold
+          className={`flex flex-col items-center justify-center px-4 py-2 font-semibold
          ${
-           inGroup ? "bg-brand-light" : "bg-gray-100"
+           inGroup ? "bg-brand-light" : "bg-gray-50"
          } border border-gray-100 rounded sm:px-8 sm:py-4
          `}
         >
@@ -41,12 +41,12 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
         <div className="flex flex-col justify-between ml-4">
           <div className="items-center justify-between text-tiny sm:text-sm space-y-1 sm:space-y-4">
             <Link href={`groups/${groupName}`}>
-              <a className="font-bold">{groupName}</a>
+              <a className="font-semibold">{groupName}</a>
             </Link>
             <h2>
               Top Performer:
               <p
-                className={`flex flex-col tracking-wider uppercase font-bold ${pnlColor} `}
+                className={`flex flex-col tracking-wider uppercase font-semibold ${pnlColor} `}
               >
                 <p className="flex items-center">
                   <p className="mr-1 ">{topPerformer}</p>
@@ -85,8 +85,7 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
                 alt=""
               />
             </div>
-          </div>
-         */}
+          </div> */}
         </div>
       </div>
       <div className="flex flex-col items-center justify-between ml-4">

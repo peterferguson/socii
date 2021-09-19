@@ -2,52 +2,35 @@
 // - Implement proper view
 // - enable stream
 
-import { ClientOnly, GroupColumnCard } from "@components"
-import dynamic from "next/dynamic"
-import { useMediaQuery } from "react-responsive"
 import { PortfolioEquitySummaryCard } from "@components/PortfolioEquitySummaryCard"
-import { PortfolioHistoryCard } from "@components/PortfolioHistoryCard"
 import { StockTableGroupDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
-import { TradeHistory } from "../TradeHistory/TradeHistory"
+import { TradeHistory } from "../../components/TradeHistory/TradeHistory"
+import GroupColumnCard from "../GroupColumnCard"
 
-const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
-  ssr: false,
-})
-
-const IsGroupMemberView = ({groupName}) => {
-
-  const is1Col = !useMediaQuery({ minWidth: 640 })
+const IsGroupMemberView = ({ groupName }) => {
   const tableMeta = useMemo(() => StockTableMeta, [])
-  
+
   if (Array.isArray(groupName)) groupName = groupName[0]
 
-  return(
+  return (
     <>
-    <div className="flex flex-col w-full max-w-full pb-5 bg-blueGray-100">
-      <GroupColumnCard groupName={groupName} />
-      <div className="w-full mx-auto">
+      <div className="w-full p-4">
+        <GroupColumnCard groupName={groupName} />
         {/* Card stats */}
         {/* TODO: Convert these into carousel cards organised by top percentage */}
         <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((card, i) => card(`card-${i}`))}
         </div>
-      </div>
-      <div className="w-full mx-auto overscroll-x-none">
-        {/* Tables */}
-        {/* <PortfolioHistoryCard /> */}
-        <div className="flex flex-wrap w-full mt-4">
-          <StockTableGroupDynamic stockTableMeta={tableMeta} />
+        <div className="overscroll-x-none">
+          <div className="flex flex-wrap w-full mt-4">
+            <StockTableGroupDynamic stockTableMeta={tableMeta} />
+          </div>
+          <TradeHistory />
         </div>
-        <TradeHistory />
-        <ClientOnly>
-          {/* <StreamChatWithNoSSR client={client} /> */}
-          <div>test</div>
-        </ClientOnly>
       </div>
-    </div>
-  </>
+    </>
   )
 }
 

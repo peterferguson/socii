@@ -4,7 +4,7 @@ const Pricing = () => {
       <section className="flex flex-col items-center w-full py-12 lg:flex-row lg:justify-center lg:px-10 space-x-8">
         <article className="w-4/5 px-6 py-10 mb-10 text-center bg-white shadow-lg rounded-2xl lg:w-1/3 text-logo-darkBg">
           <h5
-            className="text-base font-bold text-transparent bg-clip-text"
+            className="text-base font-semibold text-transparent bg-clip-text"
             style={{
               backgroundImage:
                 "linear-gradient(135deg, #3fba 0,  #3fbaeb 5%, #3fba 95%)",
@@ -12,10 +12,10 @@ const Pricing = () => {
           >
             Basic
           </h5>
-          <h2 className="flex justify-center pb-4 mt-2 font-bold border-b border-gray-300">
+          <h2 className="flex justify-center pb-4 mt-2 font-semibold border-b border-gray-300">
             <span className="text-5xl ">Free</span>
           </h2>
-          <ul className="text-sm font-bold">
+          <ul className="text-sm font-semibold">
             {[
               <span key={`single-group`}>
                 <p>One group</p>
@@ -45,15 +45,15 @@ const Pricing = () => {
           </ul>
         </article>
         <article className="w-4/5 px-6 py-10 mb-10 text-center text-white shadow-xl rounded-2xl lg:w-1/3 bg-[#29B7C3]">
-          <h5 className="text-base font-bold">Premium</h5>
-          <h2 className="flex justify-center pb-4 mt-2 font-bold border-b border-gray-100">
+          <h5 className="text-base font-semibold">Premium</h5>
+          <h2 className="flex justify-center pb-4 mt-2 font-semibold border-b border-gray-100">
             <span className="mt-3 mr-1 text-3xl">£</span>
             <span className="text-5xl">4.99</span>
             <span className="mt-4 mr-1 text-xl">/mo</span>
           </h2>
-          <ul className=" text-sm font-bold">
+          <ul className=" text-sm font-semibold">
             {[
-              <p key="all-of-basic" className="font-extrabold">
+              <p key="all-of-basic" className="font-semibold">
                 Everything in basic
               </p>,
               <span key="unlimited-groups">

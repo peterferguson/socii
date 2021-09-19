@@ -8,6 +8,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { useMediaQuery } from "react-responsive"
 import is from "is_js"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
+import { tw } from "@utils/tw"
 
 interface ITickerPageLineChartProps {
   tickerSymbol: string
@@ -109,25 +110,29 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               highlightedChange={highlightedChange}
               crosshairIndexValue={crosshairIndexValue}
               setCrosshairIndexValue={setCrosshairIndexValue}
-              heightScale={is1Col ? 0.35 : 0.6}
-              widthScale={is1Col ? 0.8 : 0.75}
+              heightScale={is1Col ? 0.35 : 0.5} // TODO: reduce size once we add other stock information
+              widthScale={0.8}
             />
           ) : (
             // TODO: Replace with skeleton loader
             <div>Loading</div>
           )}
-          <Tab.List className="absolute flex h-12 pt-3 pr-2 text-sm bottom-7 font-secondary space-x-0.5 md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0">
+          <Tab.List className="absolute flex h-12 pt-4 pr-2 text-sm bottom-7 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0">
             {Object.keys(tabs).map((tab, i) => (
               <Tab key={`tab-${i}`} as={Fragment}>
                 {({ selected }) => (
                   <button
-                    className="flex items-center p-4 my-2 font-thin uppercase border-b-4 focus:outline-none transition-colors duration-200 text-brand-cyan-vivid"
+                    className={tw(
+                      "flex items-center p-4 my-2 font-thin uppercase border-b-4 focus:outline-none",
+                      "transition-colors duration-200 text-brand-cyan-vivid",
+                      `umami--click--stock-line-chart-tab-${tab}`
+                    )}
                     style={{
                       color,
                       borderColor: selected ? color : "transparent",
                       backgroundImage:
                         selected && is.not.safari()
-                          ? `linear-gradient(to bottom, #fff, ${color}20)`
+                          ? `linear-gradient(to bottom, #fff, ${color}10)`
                           : "",
                     }}
                   >

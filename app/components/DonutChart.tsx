@@ -47,6 +47,7 @@ function DonutChart({
     })
   )
   let [width, height] = useWindowSize()
+
   if (!scaleToWindow) {
     width = 350
     height = 300
@@ -94,8 +95,8 @@ function DonutChart({
 
   const chartProps = {
     className,
-    width,
-    height,
+    width: scaleToWindow ? Math.min(width * 0.75, 350) : width,
+    height: scaleToWindow ? Math.min(width * 0.75, 300) : height,
     innerRadius: radius * scaling,
     radius: radius * 1.2 * scaling,
     getAngle: (d) => d.theta,
@@ -118,26 +119,27 @@ function DonutChart({
     <>
       {data && (
         <RadialChart {...chartProps} data={chartData}>
-          <div className="relative w-full mx-auto text-xl text-center text-gray-600 font-primary mt-[-13.5rem] z-1">
-            <div className="uppercase text-tiniest leading-4 ">portfolio</div>
-            {text.portfolio}
-            <div
-              className={`absolute text-tiny leading-4 ${gainColor} inset-0 inset-y-11`}
-            >
-              {positiveGain ? "+" : "-"}
-              {text.gain}
+          <div className="absolute inset-x-0 flex flex-col items-center w-full text-center inset-y-[5.25rem] font-primary z-1">
+            <div className="uppercase text-tiniest leading-4 ">
+              portfolio
+              <p className="text-xl text-gray-600">{text.portfolio}</p>
+              <div className={`text-tiny leading-4 ${gainColor}`}>
+                {positiveGain ? "+" : "-"}
+                {text.gain}
+              </div>
             </div>
+            <div className="w-5/12 h-1 my-2 border-gray-200 border-b-[0.5px]" />
             <div
               className="mx-auto text-lg cursor-pointer font-primary"
               onClick={toggleCashInPortfolio}
             >
-              <div className="w-5/12 h-1 my-5 mb-3 border-gray-200 ml-[6.5rem] border-b-[0.5px]" />
               <Tooltip
                 text={cashInPortfolio ? "Remove Cash From Chart" : "Add Cash To Chart"}
-                className="absolute w-2/5 -bottom-14 inset-x-[6.5rem]"
               >
-                <div className="uppercase text-tiny leading-4">Cash</div>
-                {text.cash}
+                <div className="uppercase text-tiniest leading-4 ">
+                  Cash
+                  <p className="text-xl text-gray-600">{text.cash}</p>
+                </div>
               </Tooltip>
             </div>
           </div>

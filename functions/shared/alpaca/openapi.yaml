@@ -1645,7 +1645,7 @@ components:
         timestamp:
           type: array
           items:
-            type: int
+            type: integer
             description: epoch int
           example: [1580826600000, 1580827500000, 1580828400000]
         equity:

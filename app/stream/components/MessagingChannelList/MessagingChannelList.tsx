@@ -4,6 +4,7 @@ import React, { memo, useContext } from "react"
 import { MdChatBubbleOutline } from "react-icons/md"
 import { Avatar, ChatContext } from "stream-chat-react"
 import { SkeletonLoader } from "./SkeletonLoader"
+import { tw } from "@utils/tw"
 
 interface IMessagingChannelList {
   children?: React.ReactNode
@@ -26,9 +27,14 @@ const MessagingChannelList = ({
     <div className="flex flex-col h-full px-3 py-3 pt-5 overflow-x-hidden overflow-y-auto rounded-2xl no-scrollbar">
       <div className="flex items-center justify-between py-3 pl-5 mb-5">
         <Avatar image={image} name={name} size={40} />
-        <div className="flex text-base font-extrabold font-primary">{name || id}</div>
+        <div className="flex text-base font-semibold font-primary">{name || id}</div>
         <button
-          className="flex items-center justify-center w-10 h-10 ml-auto mr-5 border rounded-full shadow-2xl cursor-pointer bg-blueGray-50 border-brand-natural-darkest focus:outline-none"
+          className={tw(
+            "flex items-center justify-center w-10 h-10 ml-auto mr-5 border rounded-full",
+            "shadow-2xl cursor-pointer bg-gray-50 border-brand-natural-darkes",
+            "focus:outline-none",
+            "umami--click--chat-channel-preview-create-channel-button"
+          )}
           onClick={onCreateChannel}
         >
           <MdChatBubbleOutline className="w-5 h-5 text-brand" />

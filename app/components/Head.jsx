@@ -32,13 +32,6 @@ export default function Head(props) {
       <meta property="og:image" content={props.ogImage || defaultOGImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-
-      <link
-        href="https://unpkg.com/react-vis/dist/style.css"
-        rel="stylesheet"
-        key="react-vis"
-      />
-
       {/* No zoom and flow into notch */}
       <meta
         name="viewport"
@@ -49,7 +42,7 @@ export default function Head(props) {
           async
           defer
           data-website-id="c59a2266-173b-482e-95cd-e15432f036a5"
-          src="https://socii.up.railway.app/umami.js"
+          src="https://metrics.socii.app/umami.js"
         />
       )}
     </NextHead>
