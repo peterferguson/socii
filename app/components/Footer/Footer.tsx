@@ -3,7 +3,7 @@ import { useAuth } from "@hooks/useAuth"
 import FirebaseUser from "@models/FirebaseUser"
 import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
-import React, { useMemo } from "react"
+import React, { Fragment, useMemo } from "react"
 import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
 import SociiSVG from "../SociiSVG"
 import { NavigationModalDynamic } from "../NavigationModal"
@@ -19,7 +19,7 @@ const Footer = () => {
   )
 
   return (
-    <Popover>
+    <Popover as={Fragment}>
       {({ open }) => (
         <>
           <nav className="fixed inset-x-0 bottom-0 z-50 w-full mt-12 bg-white sm:hidden standalone:pb-safe-bottom rounded-t-3xl grid grid-cols-3">

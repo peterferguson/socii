@@ -1,6 +1,6 @@
 import { tw } from "@utils/tw"
 import { useState } from "react"
-import { joinWaitlist } from "../utils/joinWaitlist"
+import { joinWaitlist } from "@utils/joinWaitlist"
 
 function WaitlistInvite({ invited, setInvited }) {
   const [email, setEmail] = useState("")
@@ -30,7 +30,7 @@ function WaitlistInvite({ invited, setInvited }) {
           </p>
         </h1>
       ) : (
-        <div className="relative w-full ml-4 sm:ml-6 group">
+        <div className="relative w-full ml-4 sm:ml-6 group umami--click--join-waitlist-button">
           <div className="absolute inset-0 opacity-50 gradient-flow group-focus:-inset-0.5 group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 rounded-2xl blur transition duration-500 group-hover:duration-200" />
           <div className="relative flex justify-center w-full h-12">
             <input
@@ -44,8 +44,10 @@ function WaitlistInvite({ invited, setInvited }) {
               type="submit"
               className={tw(
                 clicked ? "pointer-events-none opacity-75" : "",
-                `relative py-1 px-2 gradient-flow text-white text-tiniest md:text-tiny rounded-r-2xl border-0
-          outline-none group-hover:ring-0 group-hover:border-transparent leading-0`
+                "relative py-1 px-2 gradient-flow text-white text-tiniest md:text-tiny",
+                "rounded-r-2xl border-0",
+                "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
+                "umami--click--waitlist-submit-button"
               )}
             >
               Get Invited

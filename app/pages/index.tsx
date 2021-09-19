@@ -33,7 +33,7 @@ const Footer = ({ invited, setInvited }) => (
           </p>
         </h1>
       ) : (
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 space-y-8 umami--click--landing-page-footer-waitlist-input">
           <h1 className="text-3xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-tight">
             Get your invite!
             {/* <span className="text-palette-primary"> Invite!</span> */}

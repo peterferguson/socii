@@ -1,7 +1,6 @@
 import Navigation from "@components/Navigation"
 import WaitlistInvite from "@components/WaitlistInvite"
 import { Transition } from "@headlessui/react"
-import { useAuth } from "@hooks/useAuth"
 import { useDisableScroll } from "@hooks/useDisableScroll"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
@@ -67,7 +66,7 @@ export const Hero = ({ invited, setInvited }) => {
           {/* <Circles className="absolute inset-0 z-50" /> */}
           <div className="relative pt-2 pl-8 text-black text-tiny sm:pl-16 sm:text-lg md:text-xl font-secondary">
             Buy stocks & crypto directly from your group chat.
-            <div className="absolute left-0 p-8 pt-12 w-96 sm:w-4/5 -bottom-28">
+            <div className="absolute left-0 p-8 pt-12 w-96 sm:w-4/5 -bottom-28 umami--click--landing-page-hero-waitlist-input">
               <WaitlistInvite invited={invited} setInvited={setInvited} />
             </div>
           </div>
