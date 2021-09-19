@@ -97,7 +97,7 @@ function DropdownMenu({ children }) {
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <Popover.Panel className="absolute right-0 w-56 p-2 mt-2 text-gray-600 bg-white border border-gray-100 shadow-md -bottom-20 space-y-2 rounded-md">
+      <Popover.Panel className="absolute right-0 w-56 p-2 mt-4 text-gray-600 bg-white border border-gray-100 shadow-md -bottom-24 space-y-2 rounded-md">
         {children}
       </Popover.Panel>
     </Transition>
