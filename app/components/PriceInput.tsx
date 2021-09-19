@@ -1,3 +1,4 @@
+import { tw } from "@utils/tw"
 import React from "react"
 
 const PriceInput = ({
@@ -21,7 +22,11 @@ const PriceInput = ({
         name="price"
         inputMode="decimal"
         id="price"
-        className="block w-full pr-12 border-gray-300 appearance-none focus:ring-teal-500 focus:border-teal-500 pl-7 sm:text-sm rounded-md"
+        className={tw(
+          "block w-full pr-12 border-gray-300 appearance-none",
+          "focus:ring-teal-500 focus:border-teal-500 pl-7 sm:text-sm rounded-md",
+          "umami--click--invest-button-share-modal-price-input"
+        )}
         placeholder={pricePlaceholder}
         onChange={(e) => setPrice(e.target.value)}
       />

@@ -1,4 +1,5 @@
 import { getLogoColor } from "@lib/firebase/client/db/getLogoColor"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { Holding } from "./GroupColumnCard"
@@ -25,7 +26,13 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
         index !== 0 ? "border-t border-gray-200 mt-2" : ""
       } `}
     >
-      <div className="flex p-2 bg-white">
+      <div
+        className={tw(
+          "flex p-2 bg-white",
+          "umami--click--stock-card",
+          `umami--click--${tickerSymbol}-stock-card`
+        )}
+      >
         <Link href={`/stocks/${tickerSymbol}`}>
           <div className="flex items-center justify-center flex-none flex-grow-0 mr-3 rounded-full cursor-pointer">
             <TickerLogo tickerSymbol={tickerSymbol} height="40" width="40" />

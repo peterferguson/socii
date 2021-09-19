@@ -1,4 +1,5 @@
 import { Popover, Transition } from "@headlessui/react"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
 import { ButtonProps, HeaderButtonChildren } from "./HeaderButton"
@@ -20,7 +21,10 @@ export default function HeaderDropdownButton(props: DropdownButtonProps) {
   return (
     <Popover>
       <Popover.Button
-        className="mr-2 appearance-none focus:outline-none focus:ring-0 !p-1 nav-btn"
+        className={tw(
+          "mr-2 appearance-none focus:outline-none focus:ring-0 !p-1 nav-btn",
+          "umami--click--nav-header-user-profile-photo"
+        )}
         aria-label={props.name}
         aria-haspopup="true"
       >
@@ -56,17 +60,25 @@ function DropdownMenuItem(props: DropdownItemProps) {
       {!!props.rightIcon && <props.rightIcon />}
     </>
   )
-
+  const className =
+    "inline-flex items-center justify-start w-full px-2 py-1 text-sm font-semibold text-black transition-colors duration-150 rounded-md hover:bg-brand-light hover:text-brand-cyan-vivid"
   return (
-    <li className="flex" onClick={props.onClick}>
+    <li
+      className={tw(
+        `flex umami--click--nav-header-dropdown-item-${props.name
+          .replace(/\s/g, "-")
+          .toLowerCase()}`
+      )}
+      onClick={props.onClick}
+    >
       {!props.onClick ? (
         <Link href={props.href}>
-          <a className="inline-flex items-center justify-start w-full px-2 py-1 text-sm font-semibold text-black transition-colors duration-150 rounded-md hover:bg-brand-light hover:text-brand-cyan-vivid">
+          <a className={className}>
             <ItemChildren />
           </a>
         </Link>
       ) : (
-        <div className="inline-flex items-center justify-start w-full px-2 py-1 text-sm font-semibold text-black transition-colors duration-150 rounded-md hover:bg-brand-light hover:text-brand-cyan-vivid">
+        <div className={className}>
           <ItemChildren />
         </div>
       )}

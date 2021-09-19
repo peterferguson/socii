@@ -1,3 +1,4 @@
+import { tw } from "@utils/tw"
 import { uncamelCase } from "@utils/uncamelCase"
 import React, { useState } from "react"
 import { FiChevronDown, FiX } from "react-icons/fi"
@@ -25,7 +26,12 @@ const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
     <div className="flex flex-col items-center w-full mx-auto">
       <div className="w-full">
         <div className="relative flex flex-col items-center">
-          <div className="flex w-full p-1 my-2 bg-white border border-gray-300 shadow-sm rounded-md">
+          <div
+            className={tw(
+              "flex w-full p-1 my-2 bg-white border border-gray-300 shadow-sm rounded-md",
+              "umami--click--invest-button-share-modal-toggle-dropdown"
+            )}
+          >
             <div className="flex flex-wrap flex-auto" onClick={toggleDropdown}>
               {selectedItems.map((tag, index) => {
                 return (
@@ -95,4 +101,3 @@ const Dropdown = ({ items, addItem }) => {
 export default Multiselect
 
 // TODO: Implement a better verison of the multiselect
-

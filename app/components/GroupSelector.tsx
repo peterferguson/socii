@@ -1,6 +1,7 @@
 import CheckIcon from "@components/BackgroundCheck"
 import { RadioGroup } from "@headlessui/react"
 import { getGroupDocsByName } from "@lib/firebase/client/db/getGroupDocsByName"
+import { tw } from "@utils/tw"
 import React, { useEffect, useState } from "react"
 
 export default function GroupSelectorRadioGroup({ groupNames, send, className = "" }) {
@@ -41,13 +42,15 @@ export default function GroupSelectorRadioGroup({ groupNames, send, className = 
             <RadioGroup.Option
               key={group.name}
               value={group}
-              className={({ active }) => `bg-white relative rounded-lg shadow-md px-4 
-                py-2 cursor-pointer focus:outline-none flex-1
-                ${
+              className={({ active }) =>
+                tw(
+                  "bg-white relative rounded-lg shadow-md px-4",
+                  "py-2 cursor-pointer focus:outline-none flex-1",
                   active &&
-                  "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60"
-                }
-                `}
+                    "ring-2 ring-offset-2 ring-offset-light-blue-300 ring-brand ring-opacity-60",
+                  "umami--click--invest-button-group-select-modal-group-option"
+                )
+              }
             >
               {({ checked }) => (
                 <>

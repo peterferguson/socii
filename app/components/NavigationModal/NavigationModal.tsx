@@ -12,8 +12,6 @@ import {
 const NavigationModal = ({ open }) => {
   const { user } = useAuth()
   const router = useRouter()
-  console.log(router.asPath)
-
   const username = user ? user.username : ""
 
   return (
@@ -76,7 +74,10 @@ const NavigationModal = ({ open }) => {
 const NavItem = ({ name, description, onClick, Icon, isActive }) => (
   <Fragment>
     <div
-      className="flex items-center justify-center w-12 h-12 ml-2 rounded-full bg-gray-50"
+      className={tw(
+        "flex items-center justify-center w-12 h-12 ml-2 rounded-full bg-gray-50",
+        `umami--click--navigation-modal-${name.toLowerCase()}`
+      )}
       onClick={onClick}
     >
       <Icon

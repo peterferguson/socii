@@ -5,6 +5,7 @@ import { useAuth } from "@hooks/useAuth"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { Price } from "@models/Price"
 import { dateAsNumeric } from "@utils/dateAsNumeric"
+import { tw } from "@utils/tw"
 import router from "next/router"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
@@ -71,7 +72,14 @@ const OrderModal = ({ ticker, state, send }) => {
         <div className="flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl">
           <button
             type="button"
-            className="inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2 font-semibold tracking-wider uppercase border border-transparent text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md hover:bg-green-200 hover:text-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+            className={tw(
+              "inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2",
+              "font-semibold tracking-wider uppercase border border-transparent",
+              "text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md",
+              "hover:bg-green-200 hover:text-green-600 focus:outline-none",
+              "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500",
+              `umami--click--invest-button-order-modal-${state.context.side}-button`
+            )}
             onClick={handleSubmission}
           >
             {state.context.side} {ticker.tickerSymbol}

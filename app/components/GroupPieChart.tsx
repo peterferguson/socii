@@ -47,7 +47,13 @@ export default function GroupPieChart({
     >
       <Link href={`/groups/${groupName}`}>
         <a>
-          <div className="relative text-4xl text-center text-transparent cursor-pointer z-[1] top-2 font-primary bg-clip-text bg-gradient-to-r from-brand-pink to-brand">
+          <div
+            className={tw(
+              "relative text-4xl text-center text-transparent cursor-pointer z-[1] top-2",
+              "font-primary bg-clip-text bg-gradient-to-r from-brand-pink to-brand",
+              "umami--click--group-pie-chart-title"
+            )}
+          >
             {groupName}
           </div>
         </a>

@@ -1,4 +1,5 @@
 import { Dialog } from "@headlessui/react"
+import { tw } from "@utils/tw"
 import React from "react"
 
 const ReturnToLastScreenModal = ({ open, setReturnToLastScreen }) => {
@@ -12,7 +13,7 @@ const ReturnToLastScreenModal = ({ open, setReturnToLastScreen }) => {
       onClose={() => {} /* do nothing */}
     >
       <div className="relative min-h-screen px-4 text-center">
-        <Dialog.Overlay className="fixed inset-0" />
+        <Dialog.Overlay className="fixed inset-0 umami--click--invest-button-return-to-last-screen-modal-overlay" />
         {/* This element is to trick the browser into centering the modal contents. */}
         <span className="inline-block h-screen align-middle" aria-hidden="true">
           &#8203;
@@ -32,13 +33,23 @@ const ReturnToLastScreenModal = ({ open, setReturnToLastScreen }) => {
           </div>
           <div className="flex items-center justify-center mx-auto mt-4 font-medium text-tiny sm:text-sm">
             <button
-              className="inline-flex justify-center px-4 py-2 mx-2 text-red-800 bg-red-200 border border-transparent sm:mx-8 rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+              className={tw(
+                "inline-flex justify-center px-4 py-2 mx-2 text-red-800 bg-red-200",
+                "border border-transparent sm:mx-8 rounded-md hover:bg-red-200",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500",
+                "umami--click--invest-button-return-to-last-screen-modal-no-action"
+              )}
               onClick={() => setReturnToLastScreen(false)}
             >
               No, start over!
             </button>
             <button
-              className="inline-flex justify-center px-4 py-2 mx-2 text-blue-800 bg-blue-100 border border-transparent sm:mx-8 rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              className={tw(
+                "inline-flex justify-center px-4 py-2 mx-2 text-blue-800 bg-blue-100",
+                "border border-transparent sm:mx-8 rounded-md hover:bg-blue-200",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500",
+                "umami--click--invest-button-return-to-last-screen-modal-yes-action"
+              )}
               onClick={() => setReturnToLastScreen(true)}
               ref={initialFocus}
             >

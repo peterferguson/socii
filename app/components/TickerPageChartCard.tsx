@@ -8,6 +8,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { useMediaQuery } from "react-responsive"
 import is from "is_js"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
+import { tw } from "@utils/tw"
 
 interface ITickerPageLineChartProps {
   tickerSymbol: string
@@ -121,7 +122,11 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               <Tab key={`tab-${i}`} as={Fragment}>
                 {({ selected }) => (
                   <button
-                    className="flex items-center p-4 my-2 font-thin uppercase border-b-4 focus:outline-none transition-colors duration-200 text-brand-cyan-vivid"
+                    className={tw(
+                      "flex items-center p-4 my-2 font-thin uppercase border-b-4 focus:outline-none",
+                      "transition-colors duration-200 text-brand-cyan-vivid",
+                      `umami--click--stock-line-chart-tab-${tab}`
+                    )}
                     style={{
                       color,
                       borderColor: selected ? color : "transparent",

@@ -1,4 +1,5 @@
 import { useAuth } from "@hooks/useAuth"
+import { tw } from "@utils/tw"
 import { useRouter } from "next/router"
 import React from "react"
 
@@ -16,7 +17,10 @@ export const InvestButton: React.FC<IInvestButtonProps> = ({ send, logoColor }) 
   return (
     <div
       style={{ backgroundColor: logoColor }}
-      className="mx-0 mt-2 mb-0 text-center btn btn-transition rounded-2xl sm:rounded-xl"
+      className={tw(
+        "mx-0 mt-2 mb-0 text-center btn btn-transition rounded-2xl sm:rounded-xl",
+        "umami--click--stock-invest-button-click"
+      )}
       onClick={() => (username ? send("CLICK") : router.push("/enter"))}
     >
       <span className="z-10 w-12 h-4 text-4xl">Invest</span>

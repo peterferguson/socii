@@ -35,14 +35,30 @@ const Footer = () => {
   )
 }
 
-export const FooterNavItem = ({ text, Icon, onClick, isActive, index }) => {
+interface FooterItemProps {
+  text?: string
+  Icon?: React.FC<{ className }>
+  onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void
+  isActive?: boolean
+  Component?: React.FC
+  index?: number
+}
+
+export const FooterNavItem = ({
+  text,
+  Icon,
+  onClick,
+  isActive,
+  index,
+}: FooterItemProps) => {
   return (
     <a
       className={tw(
         "flex flex-col items-center justify-center w-full py-2 font-primary text-tiny text-brand-dark text-center",
         index === 0 ? "ml-4" : "mr-4",
         isActive && "text-brand-cyan-vivid",
-        "transition duration-300"
+        "transition duration-300",
+        `umami--click--footer-nav-item-${text.toLowerCase()}`
       )}
       onClick={onClick}
     >
@@ -64,7 +80,6 @@ const links = (user: FirebaseUser, username: string, router: NextRouter) => [
   },
   {
     onClick: () => {},
-    isActive: router.asPath.includes("portfolio"),
     Component: ({ props }) => <FooterSearchButton {...props} username={username} />,
   },
   {
@@ -82,7 +97,7 @@ const FooterSearchButton = () => (
       className={tw(
         "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
         "transition duration-300 shadow-xl rounded-full flex items-center justify-center",
-        ""
+        "umami--click--footer-logo-button-click"
       )}
     >
       <SociiSVG className="text-5xl p-0.5" />

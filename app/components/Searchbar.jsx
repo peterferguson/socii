@@ -19,7 +19,8 @@ const Searchbar = connectSearchBox(({ refine, open }) => {
       className={tw(
         "flex items-center justify-center z-40 bg-white rounded-full",
         "appearance-none focus:outline-none focus:ring-0 border",
-        open ? "w-full h-full" : "w-8 h-8"
+        open ? "w-full h-full" : "w-8 h-8",
+        "umami--click--nav-header-search-icon"
       )}
     >
       <Popover.Button
