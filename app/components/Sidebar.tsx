@@ -1,24 +1,21 @@
 import Logo from "@components/Logo"
 import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
-import { useGroups } from "@hooks/useGroups"
-import { useTradingAccount } from "@hooks/useTradingAccount"
 import { getGroupData } from "@lib/firebase/client/db/getGroupData"
 import { tw } from "@utils/tw"
 import { group } from "console"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import { FaBitcoin, FaGlobeEurope } from "react-icons/fa"
 import {
-  HiOutlineCash,
   HiOutlineChartPie,
   HiOutlineChat,
   HiOutlineChevronRight,
   HiOutlineUserGroup,
 } from "react-icons/hi"
 import { useMediaQuery } from "react-responsive"
-import InformationTag, { InformationIconTag } from "./InformationTag/InformationTag"
+import { CashAvailable } from "./CashAvailable"
 
 // - https://www.tailwind-kit.com/components/sidebar
 const Sidebar = () => {
@@ -60,87 +57,6 @@ const Sidebar = () => {
         {/* <button className="p-4" onClick={toggleTheme}>
           toggle mode
         </button> */}
-      </div>
-    </div>
-  )
-}
-
-const CashAvailable = () => {
-  const { account, error } = useTradingAccount()
-  const is2Col = !useMediaQuery({ minWidth: 1024 })
-  const groups = useGroups()
-  const [totalGroupsCashBalance, setTotalGroupsCashBalance] = useState(0)
-
-  useEffect(
-    () =>
-      setTotalGroupsCashBalance(
-        Object.values(groups || {})?.reduce(
-          (acc, { cashBalance }) => acc + cashBalance,
-          0
-        )
-      ),
-    [groups]
-  )
-
-  const cashColor =
-    parseFloat(account?.cash) != 0
-      ? parseFloat(account?.cash) >= totalGroupsCashBalance
-        ? "green"
-        : "red"
-      : "red"
-
-  // - tw jit classes text-green-600 bg-green-50 text-red-500 bg-red-300
-
-  const CashIcon = ({ onClick }: { onClick?: () => void }) => (
-    <div
-      className={tw(
-        "flex items-center justify-center flex-shrink-0 w-12 h-12 rounded-full lg:mx-0 lg:h-8 lg:w-8",
-        `bg-${cashColor}-100`,
-        `text-${cashColor}-600`
-      )}
-      onClick={onClick}
-    >
-      <HiOutlineCash className="w-6 h-6" aria-hidden="true" />
-    </div>
-  )
-
-  const informationTagProps = {
-    InformationModalIcon: CashIcon,
-    informationTitle: "Cash Available",
-    InformationText: () => (
-      <div className="text-gray-600">
-        When the icon is <span className="text-green-600">green</span> then have met the
-        cash requirements of all your groups.
-        <br />
-        <br />
-        When <span className="text-red-600">red</span> then you don&#39;t have enough
-        cash to meet the requirements of all your groups.
-        <br />
-        <br />
-        You can always add more cash to your account to avoid missing out on any group
-        decisions.
-      </div>
-    ),
-  }
-
-  return (
-    <div className="w-full p-4 mb-4 grid grid-cols-1 lg:grid-cols-[1fr,6fr,1fr] place-items-center">
-      {is2Col ? (
-        <InformationIconTag InformationIcon={CashIcon} {...informationTagProps} />
-      ) : (
-        <CashIcon />
-      )}
-      <div className="items-center justify-end hidden pl-1 font-light lg:inline-flex">
-        <h3 className="text-sm text-logo-darkBg leading-4">
-          ${account?.cash}
-          <p className="text-gray-300 capitalize text-tiny">cash available</p>
-        </h3>
-      </div>
-      <div className="hidden mx-auto lg:inline-flex">
-        <InformationTag
-          className={"h-4 w-4 text-tiniest p-2"}
-          {...informationTagProps}
-        />
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ import {
   HiOutlineChat as ChatIcon,
 } from "react-icons/hi"
 
+import { CashAvailable } from "@components/CashAvailable"
+
 const NavigationModal = ({ open }) => {
   const { user } = useAuth()
   const router = useRouter()
@@ -45,16 +47,10 @@ const NavigationModal = ({ open }) => {
               leaveTo="opacity-0 translate-y-12 "
             >
               <div className="fixed bottom-0 w-full overflow-hidden text-left bg-white shadow-xl standalone:mb-8 rounded-2xl transform transition-all">
-                {/** Useful for a coinbase-like top of modal alert */}
-                {/* <div className="px-4 pt-5 pb-4 bg-blue-100">
-                <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full">
-                  <ExclamationIcon
-                    className="w-6 h-6 text-red-600"
-                    aria-hidden="true"
-                  />
+                <div className="px-4 pt-5 pb-4 bg-brand-light-est/75">
+                  <CashAvailable />
                 </div>
-              </div> */}
-                <div className="px-4 py-8 bg-white grid grid-flow-row grid-cols-5 auto-rows-max gap-y-4 rounded-2xl">
+                <div className="px-4 py-8 bg-white grid grid-flow-row grid-cols-5 auto-rows-max gap-y-4 rounded-t-2xl">
                   {navItems(username, router, close).map((props, i) => {
                     console.log(props.isActive)
                     return <NavItem key={`nav-item-${i}`} {...props} />
