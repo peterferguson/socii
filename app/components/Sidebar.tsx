@@ -41,13 +41,8 @@ const Sidebar = () => {
             {!is2Col ? <Logo className="text-4xl" /> : <Socii className="text-4xl" />}
           </div>
           <nav className="w-full pl-2 mt-6 lgr:pl-6">
-            {items.map((item, index) => {
-              if (item.isActive) {
-                console.log("index", index)
-                console.log("index", index - 1)
-                console.log("index", index + 1)
-              }
-              return index === 0 || index + 1 === items.length ? (
+            {items.map((item, index) =>
+              index === 0 || index + 1 === items.length ? (
                 <div
                   className={tw(
                     !item.isActive
@@ -109,7 +104,7 @@ const Sidebar = () => {
                   </div>
                 </Link>
               )
-            })}
+            )}
           </nav>
         </div>
         {/* Toggle theme */}
