@@ -1,14 +1,14 @@
 // // TODO
-// - Add group details cards
-// - decide on displayed content
 // - general activity feed
 // - link messages to stream?
-// - break into components to clean code
 // - deal with navigation to the page or how to find new groups
+// - tidy spacing on desktop
 
 import { getGroupPrivacyOption } from "@lib/firebase/client/db/getGroupPrivacyOption"
 import { tw } from "@utils/tw"
 import React, { useEffect, useState } from "react"
+import GroupInformaitonCard from "@components/GroupInformationCard"
+import GroupMembersCard from "@components/GroupMembersCard"
 
 const NonGroupMemberView = ({ groupName }) => {
   const [, setPrivacyOption] = useState()
@@ -20,9 +20,12 @@ const NonGroupMemberView = ({ groupName }) => {
   }, [groupName])
 
   return (
-    <div className="flex flex-col w-full h-full mt-0 bg-gray-50 sm:mt-8">
+    <div className="flex flex-col space-y-2 w-full h-full mt-0 bg-gray-50 sm:mt-8">
       <h2 className="pl-2 text-2xl text-gray-500 font-primary">Group Details</h2>
-      Founded: Members: Location: ...
+      <div className="flex flex-row justify-around sm: flex flex-col w-full">
+        <div>{GroupInformaitonCard(groupName)}</div>
+        <div>{GroupMembersCard(groupName)}</div>
+      </div>
       <h2 className="pl-2 text-2xl text-gray-500 font-primary">Portfolio Details</h2>
       <div>
         <div
