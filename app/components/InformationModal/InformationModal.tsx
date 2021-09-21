@@ -4,13 +4,13 @@ import { Fragment } from "react"
 const InformationModal = ({
   isOpen,
   closeModal,
-  InformationIcon,
+  InformationModalIcon,
   InformationText,
   informationTitle,
 }: {
   isOpen: boolean
   closeModal: () => void
-  InformationIcon: React.FC
+  InformationModalIcon: React.FC
   informationTitle: string
   InformationText: string | React.FC
 }) => (
@@ -52,7 +52,7 @@ const InformationModal = ({
               as="h3"
               className="flex items-center justify-center space-x-4"
             >
-              {InformationIcon && <InformationIcon />}
+              {InformationModalIcon && <InformationModalIcon />}
               <div className="text-xl font-medium text-center text-gray-900 leading-6">
                 {informationTitle}
               </div>
