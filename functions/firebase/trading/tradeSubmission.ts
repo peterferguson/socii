@@ -1,6 +1,6 @@
 import { logger } from "firebase-functions"
-import { firestore, functionConfig } from "../index.js"
 import { serverTimestamp } from "../firestore/index.js"
+import { firestore } from "../index.js"
 import { getAlpacaBuyPower } from "../utils/getAlpacaBuyPower.js"
 import { notEnoughBuyingPowerMessage } from "../utils/notEnoughBuyingPowerMessage.js"
 import { streamClient } from "../utils/streamClient.js"
@@ -34,17 +34,21 @@ export const tradeSubmission = async (
 
   // - Ensure each investor has enough cash to make the trade
   const canAffordTrade = await Promise.all(
-    alpacaIds.map(
-      async (id) =>
-        (await getAlpacaBuyPower(id)).buyingPower >=
-        (verifiedData.notional / investorCount) * 1.05 // - Add 5% buffer
-    )
+    alpacaIds.map(async (id: string) => {
+      const { cash } = await getAlpacaBuyPower(id)
+      return {
+        id,
+        cash,
+        isAffordable: cash >= (verifiedData.notional / investorCount) * 1.05,
+        // - Add 5% buffer
+      }
+    })
   )
 
   logger.log(`investors: ${investors.map((investor) => investor.data().uid)}`)
   logger.log(`canAffordTrade: ${canAffordTrade}`)
 
-  if (!canAffordTrade.every((canAfford) => canAfford))
+  if (!canAffordTrade.every(({ isAffordable }) => isAffordable))
     return submittedFromCallable
       ? { error: "Not enough cash" }
       : await streamClient
