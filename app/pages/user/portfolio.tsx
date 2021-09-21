@@ -4,6 +4,7 @@ import { StockTableDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
 import { TradeHistoryDynamic } from "@components/TradeHistory"
+import { BuyPowerSummaryCard } from "@components/BuyPowerSummaryCard"
 
 const Dashboard = () => {
   const tableMeta = useMemo(() => StockTableMeta, [])
@@ -30,7 +31,8 @@ export default Dashboard
 
 const cards = [
   (key: React.Key) => <PortfolioEquitySummaryCard key={key} />,
-  // (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
   (key: React.Key) => <VsMarketSummaryCard key={key} />,
+  // (key: React.Key) => <BuyPowerSummaryCard key={key} />,
+  // (key: React.Key) => <LastPurchaseSummaryCard key={key} />,
   // (key: React.Key) => <TopPerformerSummaryCard key={key} />,
 ]

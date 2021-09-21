@@ -52,7 +52,7 @@ const SummaryCard = ({
       {InformationText && informationTitle && (
         <InfoTag
           className="absolute bottom-4 sm:bottom-6 right-6"
-          InformationIcon={InformationIcon}
+          InformationModalIcon={InformationIcon}
           informationTitle={informationTitle}
           InformationText={InformationText}
         />

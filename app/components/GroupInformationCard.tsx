@@ -11,7 +11,7 @@ export default function GroupInformaitonCard(groupName: string) {
   const [groupData, setGroupData] = useState(Object)
 
   useEffect(()=>{
-    const data = getGroupData(groupName, setGroupData)
+    const data = getGroupData(groupName).then((data)=> setGroupData(data))
   },[])
 
   return (

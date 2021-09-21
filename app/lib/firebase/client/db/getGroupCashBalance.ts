@@ -6,6 +6,7 @@ import { firestore } from "."
  * Gets all data for `auth` object from users/{uid}
  * @param  {string} username
  */
+// FIXME: This is a bad implementation ... no need to send the dispatch, just return the listener
 
 export const getGroupCashBalanceListener = async (
   groupName: string,

@@ -1,8 +1,9 @@
 import Logo from "@components/Logo"
 import Socii from "@components/SociiSVG"
 import { useAuth } from "@hooks/useAuth"
-import { useDarkMode } from "@hooks/useDarkMode"
+import { getGroupData } from "@lib/firebase/client/db/getGroupData"
 import { tw } from "@utils/tw"
+import { group } from "console"
 import Link from "next/link"
 import { NextRouter, useRouter } from "next/router"
 import React, { useMemo } from "react"
@@ -14,6 +15,7 @@ import {
   HiOutlineUserGroup,
 } from "react-icons/hi"
 import { useMediaQuery } from "react-responsive"
+import { CashAvailable } from "./CashAvailable"
 
 // - https://www.tailwind-kit.com/components/sidebar
 const Sidebar = () => {
@@ -41,77 +43,16 @@ const Sidebar = () => {
             {!is2Col ? <Logo className="text-4xl" /> : <Socii className="text-4xl" />}
           </div>
           <nav className="w-full pl-2 mt-6 lgr:pl-6">
-            {items.map((item, index) => {
-              if (item.isActive) {
-                console.log("index", index)
-                console.log("index", index - 1)
-                console.log("index", index + 1)
-              }
-              return index === 0 || index + 1 === items.length ? (
-                <div
-                  className={tw(
-                    !item.isActive
-                      ? "bg-gray-50 w-full h-full cursor-pointer last:cursor-default"
-                      : ""
-                  )}
-                >
-                  <div
-                    className={tw(
-                      "flex h-4 transition-colors duration-200",
-                      item.isActive
-                        ? "bg-gray-50 rounded-l-2xl text-brand-cyan"
-                        : "bg-white text-brand-shade-darkest hover:text-brand-cyan"
-                    )}
-                    style={
-                      siblingActive[index] == "before"
-                        ? { borderTopRightRadius: "1.5rem" }
-                        : siblingActive[index] == "after"
-                        ? { borderBottomRightRadius: "1.5rem" }
-                        : {}
-                    }
-                  >
-                    {item?.icon && <item.icon className="w-5 h-5 lg:mx-0" />}
-                    <span className="hidden mx-4 text-sm font-primary lg:inline-flex">
-                      {item.name}
-                    </span>
-                  </div>
-                </div>
+            {items.map((item, index) =>
+              index === 0 || index + 1 === items.length ? (
+                <DummyItem isSiblingActive={siblingActive[index]} />
               ) : (
-                <Link href={item?.href || ""} key={`${item.name}-selector`}>
-                  <div
-                    className={tw(
-                      !item.isActive
-                        ? "bg-gray-50 w-full h-full cursor-pointer last:cursor-default"
-                        : ""
-                    )}
-                  >
-                    <div
-                      className={tw(
-                        "flex h-12 lg:h-16 w-full justify-center lgr:justify-start",
-                        "items-center pl-0 lg:pl-4 py-4 transition-colors duration-200",
-                        item.isActive
-                          ? "bg-gray-50 rounded-l-2xl text-brand-cyan"
-                          : "bg-white text-brand-shade-darkest hover:text-brand-cyan"
-                      )}
-                      style={
-                        siblingActive[index] == "before"
-                          ? { borderTopRightRadius: "1.5rem" }
-                          : siblingActive[index] == "after"
-                          ? { borderBottomRightRadius: "1.5rem" }
-                          : {}
-                      }
-                    >
-                      {item?.icon && <item.icon className="w-5 h-5 lg:mx-0" />}
-                      <span className="hidden mx-4 text-sm font-primary lg:inline-flex">
-                        {item.name}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+                <NavItem item={item} isSiblingActive={siblingActive[index]} />
               )
-            })}
+            )}
           </nav>
         </div>
+        <CashAvailable />
         {/* Toggle theme */}
         {/* <button className="p-4" onClick={toggleTheme}>
           toggle mode
@@ -121,7 +62,54 @@ const Sidebar = () => {
   )
 }
 
-export default React.memo(Sidebar)
+const DummyItem = ({ isSiblingActive }) => (
+  <div className="w-full h-full cursor-default bg-gray-50">
+    <div
+      className={tw("flex h-4 transition-colors duration-200 bg-white")}
+      style={
+        isSiblingActive == "before"
+          ? { borderTopRightRadius: "1.5rem" }
+          : isSiblingActive == "after"
+          ? { borderBottomRightRadius: "1.5rem" }
+          : {}
+      }
+    />
+  </div>
+)
+
+const NavItem = ({ item, isSiblingActive }) => (
+  <Link href={item?.href || ""} key={`${item.name}-selector`}>
+    <div
+      className={tw(
+        !item.isActive
+          ? "bg-gray-50 w-full h-full cursor-pointer last:cursor-default"
+          : ""
+      )}
+    >
+      <div
+        className={tw(
+          "flex h-12 lg:h-16 w-full justify-center lgr:justify-start",
+          "items-center pl-0 lg:pl-4 py-4 transition-colors duration-200",
+          item.isActive
+            ? "bg-gray-50 rounded-l-2xl text-brand-cyan"
+            : "bg-white text-brand-shade-darkest hover:text-brand-cyan"
+        )}
+        style={
+          isSiblingActive == "before"
+            ? { borderTopRightRadius: "1.5rem" }
+            : isSiblingActive == "after"
+            ? { borderBottomRightRadius: "1.5rem" }
+            : {}
+        }
+      >
+        {item?.icon && <item.icon className="w-5 h-5 lg:mx-0" />}
+        <span className="hidden mx-4 text-sm font-primary lg:inline-flex">
+          {item.name}
+        </span>
+      </div>
+    </div>
+  </Link>
+)
 
 const navItems = (router: NextRouter, username: string) => [
   {
@@ -194,3 +182,5 @@ const navItems = (router: NextRouter, username: string) => [
   //   isActive: router.asPath.includes("settings"),
   // },
 ]
+
+export default React.memo(Sidebar)
