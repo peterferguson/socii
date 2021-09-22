@@ -22,13 +22,14 @@ import React from "react"
 import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
 import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
 import { updateTradeEvents } from "@utils/updateTradeEvents"
+import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 
 export default function Group() {
   const router = useRouter()
   let { groupName } = router.query
   let isMember = IsUsersGroup()
 
-  if (Array.isArray(groupName)) groupName = groupName[0]
+  if (Array.isArray(groupName)) groupName = groupName.pop()
   return (
     <AuthCheck>
       {isMember ? (
@@ -41,4 +42,15 @@ export default function Group() {
 }
 
 // - For now simply update the trade events on every page load from the server-side
-export const getStaticProps = async () => updateTradeEvents()
+export const getStaticProps = async () => {
+  updateTradeEvents()
+  return { props: {} }
+}
+
+export async function getStaticPaths() {
+  const {
+    props: { leaders },
+  } = await getLeaderBoardProps()
+  const paths = leaders.map((leader) => ({ params: { groupName: leader.groupName } }))
+  return { paths, fallback: true }
+}
