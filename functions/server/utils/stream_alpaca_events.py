@@ -27,7 +27,7 @@ api_secret = os.environ.get("ALPACA_SECRET", "")
 @asynccontextmanager
 async def stream_alpaca_events(
     event_type: str,
-    event_params: EventQueryParams = Depends(EventQueryParams),
+    event_params: EventQueryParams = Depends(),
     timeout: int = 10,
 ):
     query_string = await event_params.get_query_string(event_type)

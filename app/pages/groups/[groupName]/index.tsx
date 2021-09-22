@@ -21,6 +21,7 @@ import { useRouter } from "next/router"
 import React from "react"
 import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
 import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
+import { updateTradeEvents } from "@utils/updateTradeEvents"
 
 export default function Group() {
   const router = useRouter()
@@ -38,3 +39,6 @@ export default function Group() {
     </AuthCheck>
   )
 }
+
+// - For now simply update the trade events on every page load from the server-side
+export const getStaticProps = async () => updateTradeEvents()

@@ -16,15 +16,18 @@ router = APIRouter()
 
 manager = ConnectionManager()
 
-# TODO: Having this as firebase verification token is not ideal.
-#       We should have a way to get the user's alpaca account id.
-#       That way we can return only their trades.
-@router.get("/", dependencies=[Depends(verify_token)])
+
+# @router.get("/", dependencies=[Depends(verify_token)])
+@router.get("/")
 async def get_trades(
     background_tasks: BackgroundTasks,
     query_params: EventQueryParams = Depends(),
 ):
-    return await get_events(event_type="trades", background_tasks=background_tasks)
+    return await get_events(
+        event_type="trades",
+        background_tasks=background_tasks,
+        event_params=query_params,
+    )
 
 
 @router.websocket("/stream")

@@ -1,4 +1,5 @@
 import { useAuth } from "@hooks"
+import { useTradeEvents } from "@hooks/useTradeEvents"
 import { getGroupCashBalanceListener } from "@lib/firebase/client/db/getGroupCashBalance"
 import { setHoldingData } from "@lib/firebase/client/db/setHoldingData"
 import { iexQuote } from "@utils/iexQuote"
