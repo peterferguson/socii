@@ -11,8 +11,15 @@ import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProp
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import {
+  getNewsArticles,
+  RapidApiNewsItem,
+  RapidApiNewsResult,
+} from "@utils/getNewsArticles"
+import { StockRecommendationsDynamic } from "@components/StockRecommendations"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -22,6 +29,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     3 * 60 * 1000,
     initialPrice
   )
+  const [news, setNews] = useState<RapidApiNewsResult>()
 
   const router = useRouter()
 
@@ -50,16 +58,21 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     if (holding) send("UPDATE_HOLDING", { holding })
   }, [positions, send, ticker?.tickerSymbol])
 
+  // useEffect(() => {
+  //   getNewsArticles(`${ticker?.exchange}:${ticker?.tickerSymbol}`).then(setNews)
+  // }, [ticker?.exchange, ticker?.tickerSymbol])
+
   // - Push the latest price to the array
   useEffect(() => {
-    if (price)
+    if (price?.iexRealtimePrice || price?.latestPrice) {
       timeseries?.push({
         timestamp:
           typeof price?.latestUpdate !== "string" && price?.latestUpdate?.unix() * 1000,
         close: price?.iexRealtimePrice || price?.latestPrice,
       })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [price])
+  }, [price?.iexRealtimePrice, price?.latestPrice, price?.latestUpdate])
 
   // TODO: Replace with skeleton loaders
   if (!tickers || router.isFallback)
@@ -81,11 +94,11 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             isPriceLoading={isLoading}
           />
           <div className="flex-grow hidden sm:block" />
-          <div className="flex-grow px-4 sm:flex-none sm:pl-8">
+          <div className="flex-grow sm:flex-none">
             <InvestButton send={send} logoColor={logoColor} />
           </div>
           <TickerPageChartCard
-            tickerSymbol={ticker.tickerSymbol}
+            tickerSymbol={ticker?.tickerSymbol}
             color={ticker?.logoColor}
             timeseries={timeseries}
           />
@@ -98,13 +111,39 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               setReturnToLastScreen={setReturnToLastScreen}
             />
           )}
+          <StockRecommendationsDynamic symbol={ticker.tickerSymbol} />
+          {/* <div className="text-xl font-primary">
+            News
+            {news?.value?.map((item) => (
+              <NewsItem key={item.id} item={item} />
+              ))}
+            </div> */}
         </div>
       )}
     </>
   )
 }
 
-// TODO: Remove tooltip and color price in the graph display of values
+const NewsItem = ({ item }: { item: RapidApiNewsItem }) => {
+  const [isError, setIsError] = useState(false)
+  return (
+    <div>
+      <a href={item.url}>
+        {!isError && (
+          <Image
+            src={item.image.thumbnail}
+            width={item.image.thumbnailWidth}
+            height={item.image.thumbnailHeight}
+            onError={() => setIsError(true)}
+          />
+        )}
+        {item.title}
+        <div className="">{item.description}</div>
+      </a>
+    </div>
+  )
+}
+
 export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
   // - For this page, we only retrieve one ticker so pop it off the array if passed in
 
@@ -112,7 +151,7 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
 
   try {
     // - These functions take arrays of tickers
-    const props = await getTickersStaticProps({
+    const data = await getTickersStaticProps({
       tickerDocs: await getTickerDocs([symbol]),
       timeseriesLimit: 0, // TODO: Remove this once we have a real timeseries api calls working
     })
@@ -128,12 +167,12 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
       timestamp: tick.timestamp.valueOf(),
     }))
 
-    props.props.tickers = props.props.tickers.map((ticker) => ({
+    data.props.tickers = data.props.tickers.map((ticker) => ({
       ...ticker,
       timeseries,
     }))
 
-    return { ...props, revalidate: 8000 }
+    return { ...data, revalidate: 8000 }
   } catch (e) {
     return { redirect: { destination: "/404", permanent: false } }
   }
@@ -141,7 +180,7 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
 
 // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getPopularTickersDocs()).docs?.map((doc) => {
+  const paths = (await getPopularTickersDocs())?.map((doc) => {
     const { tickerSymbol } = doc.data()
     return { params: { tickerSymbol } }
   })
