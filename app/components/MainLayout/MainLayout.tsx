@@ -23,7 +23,10 @@ const MainLayout = ({ children }) => {
       <NavHeader />
       <div className="col-span-1">{!is1Col && <Sidebar />}</div>
       <StreamProvider>
-        <main className="p-4 overflow-x-hidden overflow-y-scroll mt-14 sm:mt-20 standalone:mb-safe-bottom standalone:pb-20 standalone:pt-safe-top sm:py-2 sm:space-y-4 col-span-8 sm:col-span-7 no-scrollbar">
+        <main
+          className="p-4 overflow-x-hidden overflow-y-scroll mt-14 sm:mt-20 standalone:pb-safe-bottom standalone:pt-safe-top sm:space-y-4 col-span-8 sm:col-span-7 no-scrollbar"
+          style={{ paddingBottom: is1Col ? "5rem" : "1rem" }}
+        >
           <div className="flex flex-col items-center justify-center mx-4 sm:flex-row">
             {children}
           </div>
