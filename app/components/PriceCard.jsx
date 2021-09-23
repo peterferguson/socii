@@ -11,7 +11,7 @@ export default function PriceCard({
   isPriceLoading,
 }) {
   return (
-    <div className="p-4 mx-4 mt-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800">
+    <div className="p-4 mt-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800">
       <div className="flex items-center">
         <TickerLogo
           tickerSymbol={tickerSymbol}

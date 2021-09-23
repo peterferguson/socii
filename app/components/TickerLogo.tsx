@@ -29,8 +29,8 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const getISIN = async () => await mounted(tickerToISIN(tickerSymbol))
-    !ISIN && getISIN().then((ISIN) => setISIN(ISIN))
+    const getISIN = async () => setISIN(await mounted(tickerToISIN(tickerSymbol)))
+    !ISIN && getISIN()
   }, [ISIN, mounted, tickerSymbol])
 
   useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN, mounted])
@@ -38,7 +38,7 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   // TODO: Add a backup logo search
 
   return (
-    <Link href={`/stocks/${tickerSymbol}`}>
+    <Link href={`/stocks/${encodeURIComponent(tickerSymbol)}`}>
       <a className={`flex items-center justify-center rounded-full ${className}`}>
         {logoSrc && !isError ? (
           <Image
@@ -62,4 +62,4 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   )
 }
 
-export default React.memo(TickerLogo)
+export default TickerLogo

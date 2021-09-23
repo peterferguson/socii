@@ -76,7 +76,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
 
   return (
     <div className="flex items-center justify-center w-full h-2/3 ">
-      <div className="relative w-full p-2 m-4 bg-white shadow-lg rounded-xl">
+      <div className="relative w-full p-2 my-4  bg-white shadow-lg rounded-xl">
         <Tab.Group onChange={(index) => setActiveTab(Object.keys(tabs)[index])}>
           <div className="flex justify-between w-full h-20">
             {crosshairIndexValue !== tabs[activeTab]?.length - 1 && (
