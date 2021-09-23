@@ -31,7 +31,7 @@ export interface RapidApiNewsItem {
   isSafe: boolean
   datePublished: string
   provider: RapidApiNewsProvider
-  image: RapidApiImage
+  image?: RapidApiImage
 }
 
 export interface RapidApiNewsResult {
@@ -49,7 +49,7 @@ export const getNewsArticles = async (
   fromDate: string = null,
   endDate: string = null // -"2015-05-16T05:50:06"
 ): Promise<RapidApiNewsResult> => {
-  const hostUrl = process.env.RAPID_API_NEWS_URL || ""
+  const hostUrl = process.env.NEXT_PUBLIC_RAPID_API_NEWS_URL || ""
 
   const params = {
     q: query,
@@ -72,7 +72,7 @@ export const getNewsArticles = async (
       method: "GET",
       headers: {
         "x-rapidapi-host": hostUrl,
-        "x-rapidapi-key": process.env.RAPID_API_NEWS_KEY,
+        "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_NEWS_KEY,
       },
     })
   ).json()

@@ -2,6 +2,8 @@ import { InvestButton } from "@components/InvestButton"
 import { InvestButtonModal } from "@components/InvestButtonModal"
 import PriceCard from "@components/PriceCard"
 import { ReturnToLastScreenModalDynamic } from "@components/ReturnToLastScreenModal"
+import { StockNewsDynamic } from "@components/StockNews"
+import { StockRecommendationsDynamic } from "@components/StockRecommendations"
 import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions, useTickerPrice } from "@hooks"
 import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
@@ -11,15 +13,8 @@ import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProp
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import {
-  getNewsArticles,
-  RapidApiNewsItem,
-  RapidApiNewsResult,
-} from "@utils/getNewsArticles"
-import { StockRecommendationsDynamic } from "@components/StockRecommendations"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -29,8 +24,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     3 * 60 * 1000,
     initialPrice
   )
-  const [news, setNews] = useState<RapidApiNewsResult>()
-
   const router = useRouter()
 
   const { positions, error } = usePositions()
@@ -57,10 +50,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
       .pop()
     if (holding) send("UPDATE_HOLDING", { holding })
   }, [positions, send, ticker?.tickerSymbol])
-
-  // useEffect(() => {
-  //   getNewsArticles(`${ticker?.exchange}:${ticker?.tickerSymbol}`).then(setNews)
-  // }, [ticker?.exchange, ticker?.tickerSymbol])
 
   // - Push the latest price to the array
   useEffect(() => {
@@ -111,36 +100,17 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
               setReturnToLastScreen={setReturnToLastScreen}
             />
           )}
-          <StockRecommendationsDynamic symbol={ticker.tickerSymbol} />
-          {/* <div className="text-xl font-primary">
-            News
-            {news?.value?.map((item) => (
-              <NewsItem key={item.id} item={item} />
-              ))}
-            </div> */}
+          <StockRecommendationsDynamic symbol={ticker?.tickerSymbol} />
+          <div className="flex-grow hidden sm:block" />
+          <StockNewsDynamic
+            exchange={ticker?.exchange || ticker?.alpaca?.exchange}
+            symbol={ticker?.tickerSymbol}
+            shortName={ticker?.shortName}
+            logoColor={ticker?.logoColor}
+          />
         </div>
       )}
     </>
-  )
-}
-
-const NewsItem = ({ item }: { item: RapidApiNewsItem }) => {
-  const [isError, setIsError] = useState(false)
-  return (
-    <div>
-      <a href={item.url}>
-        {!isError && (
-          <Image
-            src={item.image.thumbnail}
-            width={item.image.thumbnailWidth}
-            height={item.image.thumbnailHeight}
-            onError={() => setIsError(true)}
-          />
-        )}
-        {item.title}
-        <div className="">{item.description}</div>
-      </a>
-    </div>
   )
 }
 

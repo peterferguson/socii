@@ -12,7 +12,7 @@ export const storeNewsArticles = async (symbol: string, news: RapidApiNewsItem[]
   const batch = writeBatch(firestore)
 
   for (const article of news) {
-    const articleRef = doc(firestore, `stocks/${symbol}/news`, article.id)
+    const articleRef = doc(firestore, `tickers/${symbol}/news`, article.id)
     batch.set(articleRef, article)
   }
 

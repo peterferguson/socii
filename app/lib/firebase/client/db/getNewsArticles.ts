@@ -1,6 +1,6 @@
 import { RapidApiNewsItem } from "@utils/getNewsArticles"
 import {
-  collectionGroup,
+  collection,
   getDocs,
   limit,
   orderBy,
@@ -23,13 +23,13 @@ export const getNewsArticles = async (
 
   if (lastDatePublished === "")
     newsQuery = query(
-      collectionGroup(firestore, `stocks/${symbol}/news`),
+      collection(firestore, `tickers/${symbol}/news`),
       orderBy("datePublished", "desc"),
       limit(pageCount)
     )
   else
     newsQuery = query(
-      collectionGroup(firestore, `stocks/${symbol}/news`),
+      collection(firestore, `tickers/${symbol}/news`),
       startAfter(lastDatePublished),
       limit(pageCount)
     )

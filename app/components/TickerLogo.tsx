@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
-import { useUnmountPromise } from "react-use"
+import { usePrevious, useUnmountPromise } from "react-use"
 
 interface ITickerLogoProps {
   tickerSymbol: string
@@ -27,6 +27,7 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   const [logoSrc, setLogoSrc] = useState("")
   const [ISIN, setISIN] = useState(isin)
   const [isError, setIsError] = useState(false)
+  const prevISIN = usePrevious(ISIN)
 
   useEffect(() => {
     const getISIN = async () => setISIN(await mounted(tickerToISIN(tickerSymbol)))
@@ -34,6 +35,8 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   }, [ISIN, mounted, tickerSymbol])
 
   useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN, mounted])
+
+  useEffect(() => prevISIN !== ISIN && setISIN(ISIN), [ISIN, prevISIN])
 
   // TODO: Add a backup logo search
 
