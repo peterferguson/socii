@@ -3,10 +3,12 @@ import { useRecommendations } from "@hooks/useRecommendations"
 import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
+import { useMediaQuery } from "react-responsive"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   const { recommendations } = useRecommendations(symbol)
+  const is1Col = useMediaQuery({ minWidth: "640px" })
   return (
     <div className="w-full mt-2 text-xl space-y-4 font-primary lg:w-2/5">
       <span>People also viewed</span>
@@ -16,11 +18,11 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
             <div key={recommendation} className="my-2">
               <div className="flex flex-col items-center justify-center">
                 <div className="flex-shrink-0">
-                  <div className="flex flex-col items-center ml-2">
+                  <div className="flex flex-col items-center">
                     <TickerLogo
                       tickerSymbol={recommendation}
-                      width="48"
-                      height="48"
+                      width={is1Col ? "32" : "48"}
+                      height={is1Col ? "32" : "48"}
                       className="rounded-full"
                     />
                     <Link href={`stocks/${recommendation}`}>
@@ -32,7 +34,7 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
                       </a>
                     </Link>
                   </div>
-                  <div className={tw("text-xs inline-flex space-x-2", data?.pnlColor)}>
+                  <div className={tw("text-xs inline-flex space-x-0.5 sm:space-x-2", data?.pnlColor)}>
                     <span className="text-xs font-medium">
                       {data?.pnlColor.includes("red") ? <FaArrowDown /> : <FaArrowUp />}
                     </span>
