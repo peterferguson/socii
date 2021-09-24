@@ -26,7 +26,7 @@ export default function Navigation({ showOptions }) {
               <Dropdown />
             ) : (
               <button
-                className="flex-none btn btn-transition"
+                className="flex-none m-4 btn btn-transition"
                 onClick={() => router.push("/enter")}
               >
                 Login
