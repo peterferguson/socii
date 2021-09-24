@@ -1,3 +1,5 @@
+import { fetchYahoo } from "./fetchYahoo"
+
 export interface YahooPriceData {
   currency?: string
   currencySymbol?: string
@@ -46,18 +48,7 @@ export const getYahooPrice = async (
   tickers: string[],
   filters: Array<keyof YahooPriceData> = []
 ): Promise<YahooPrice> => {
-  const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_price`
-
-  const yahooData = await (
-    await fetch(functionUrl, {
-      method: "POST",
-      mode: "cors",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        tickerSymbol: tickers.join(" "),
-      }),
-    })
-  ).json()
+  const yahooData = await fetchYahoo(tickers, "get_price")
 
   if (filters)
     return Object.entries(yahooData).reduce((acc, [key, value]) => {
