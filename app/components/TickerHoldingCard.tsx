@@ -1,5 +1,4 @@
 // TODO 
-// - check missmatch values between iex and alpaca - off by $1.05 on 751.53, seems alot
 // - order holdings list by size
 // - pin overall summary to bottom of the card
 
@@ -52,7 +51,8 @@ export default function TickerHoldingCard ({
   }, [user?.groups, holding?.qty])
 
     return (
-      <div className=" flex flex-col mx-2 mt-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800">
+      <div className="grid grid-rows-[4fr,1fr] mx-2 mt-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800">
+        <div>
         <div className="flex items-center p-2">
           <span className="mb-2 ml-2 text-base font-semibold tracking-wider text-gray-700 uppercase dark:text-white">
                 My Positions
@@ -78,7 +78,8 @@ export default function TickerHoldingCard ({
                 )
           ))}
         </div>
-        <div className="flex flex-row bg-brand-light rounded-2xl">
+        </div>
+        <div className="flex flex-row bg-brand-light rounded-b-2xl">
           <div className="flex px-3 flex-col pt-1">
             <div
               className={`flex items-center text-sm pb-0.5 ${pnlTextColor(
