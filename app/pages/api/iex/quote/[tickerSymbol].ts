@@ -16,8 +16,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const data = await iexClient.quote(tickerSymbol, { filter })
     return res.status(200).json(data)
   } catch (err) {
-    console.log(err)
-    return res.status(500).json({ error: err.message })
+    const [statusCode = 500, message] = err.message
+      .split("Response ")
+      .pop()
+      .split(" - ")
+
+    return res.status(statusCode).json({ error: message, code: statusCode })
   }
 }
 

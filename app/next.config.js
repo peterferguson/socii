@@ -20,6 +20,7 @@ module.exports = withPWA(
             "storage.googleapis.com",
             "lh6.googleusercontent.com",
             "lh3.googleusercontent.com",
+            "rapidapi.usearch.com",
           ],
         },
         purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds

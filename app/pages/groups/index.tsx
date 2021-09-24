@@ -9,8 +9,8 @@ import { LeaderboardPanel } from "@components/LeaderboardPanel"
 import { TabHeading } from "@components/TabHeading"
 import { TabPanels } from "@components/TabPanels"
 import { Tab } from "@headlessui/react"
-import { useAuth } from "@hooks"
 import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
+import { updateTradeEvents } from "@utils/updateTradeEvents"
 import React, { useState } from "react"
 import { FaUserInjured } from "react-icons/fa"
 import { useRouter } from "next/router"
@@ -18,7 +18,6 @@ import Link from "next/dist/client/link"
 import dynamic from "next/dynamic"
 
 const GroupsHome = ({ leaders }) => {
-  const { user } = useAuth()
   const [selected, setSelected] = useState("My Groups")
   let [categories] = useState({
     "My Groups": [],
@@ -30,14 +29,11 @@ const GroupsHome = ({ leaders }) => {
     <Tab.Group onChange={(index) => setSelected(Object.keys(categories)[index])}>
       <div className="container flex flex-col items-center overflow-x-hidden">
         <div className="flex flex-row justify-center w-full font-primary">
-          <TabHeading
-            categories={categories}
-            className="w-full m-4 sm:m-0"
-          />
+          <TabHeading categories={categories} className="w-full m-4 sm:m-0" />
         </div>
         <TabPanels categories={categories} panelBackgroundColor="transparent">
           <div className={selected === "My Groups" ? "" : "hidden"}>
-            <GroupPortfoliosDynamic userGroupsList={user?.groups} />
+            <GroupPortfoliosDynamic />
           </div>
           <div className={selected === "Leaderboards" ? "" : "hidden"}>
             <LeaderboardPanel leaders={leaders} />
@@ -53,6 +49,14 @@ const GroupsHome = ({ leaders }) => {
   )
 }
 
-export const getStaticProps = async () => await getLeaderBoardProps()
+export const getStaticProps = async () => {
+  const {
+    props: { leaders },
+  } = await getLeaderBoardProps()
+
+  updateTradeEvents()
+
+  return { props: { leaders } }
+}
 
 export default GroupsHome

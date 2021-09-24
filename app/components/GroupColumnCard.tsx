@@ -30,7 +30,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
   const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
-  const [currentPrices, setCurrentPrices] = useState([])
+  const [currentPrices, setCurrentPrices] = useState({})
 
   useEffect(() => {
     let unsubscribe
@@ -64,11 +64,20 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
       holdingInfo &&
         Promise.all(
           holdingInfo?.map(async ({ symbol }) => {
-            const price = await iexQuote(symbol, user?.token)
-            setCurrentPrices((previousState) => ({
-              ...previousState,
-              [symbol]: price?.iexRealtimePrice || price?.latestPrice,
-            }))
+            try {
+              const { iexRealtimePrice = null, latestPrice = null } = await iexQuote(
+                symbol,
+                user?.token
+              )
+              if (iexRealtimePrice || latestPrice) {
+                setCurrentPrices((previousState) => ({
+                  ...previousState,
+                  [symbol]: iexRealtimePrice || latestPrice,
+                }))
+              }
+            } catch (e) {
+              console.error(e)
+            }
           })
         )
     }
@@ -96,18 +105,18 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
             </span>
           </div>
           <ul className="w-full">
-            {holdingInfo?.map((holding, index) => {
-              return currentPrices ? (
+            {holdingInfo?.map((holding, index) =>
+              currentPrices ? (
                 <StockCard
                   key={`holding-${index}`}
                   holding={holding}
-                  latestPrice={currentPrices[holding?.symbol]}
+                  latestPrice={currentPrices?.[holding?.symbol]}
                   index={index}
                 />
               ) : (
                 <StockCardSkeleton />
               )
-            })}
+            )}
           </ul>
         </div>
       ) : (

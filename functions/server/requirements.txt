@@ -51,7 +51,7 @@ redis==3.5.3
 requests==2.25.0
 rsa>=4.7
 six==1.15.0
-starlette==0.13.6
+starlette>=0.13.6
 toml==0.10.2
 uritemplate==3.0.1
 urllib3>=1.26.5

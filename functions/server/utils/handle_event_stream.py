@@ -114,7 +114,7 @@ async def handle_event_stream(
             logger.info(
                 f"{event_type} event stream for {alpaca_id} since {last_event_id} is disconnected"
             )
-            print("Connection closed")
+            logger.info("Connection closed")
     except WebSocketDisconnect:
         await broadcast.disconnect()
         connection_manager.disconnect(websocket)

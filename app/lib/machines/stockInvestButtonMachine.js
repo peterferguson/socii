@@ -16,6 +16,17 @@ const dirtyActiveStates = (ctx) => {
 
 const wasOnState = (ctx, stateName) => lastActiveState(ctx) === stateName
 
+const initialContext = {
+  hasHolding: false,
+  wantsToShare: false,
+  group: "",
+  side: "",
+  orderType: "",
+  // - The following context is used to keep track of the state history
+  currentStateName: "idle",
+  historyStack: [],
+}
+
 // - updates to state context
 const selectShare = assign({ wantsToShare: true })
 const selectGroup = assign({ group: (_ctx, e) => e.groupName })
@@ -38,15 +49,12 @@ export const stockInvestButtonMachine = createMachine(
   {
     id: "investButton",
     initial: "idle",
-    context: {
-      hasHolding: false,
-      wantsToShare: false,
-      group: "",
-      side: "",
-      orderType: "",
-      // - The following context is used to keep track of the state history
-      currentStateName: "idle",
-      historyStack: [],
+    context: initialContext,
+    on: {
+      RESET: {
+        target: ".idle",
+        actions: assign((context) => initialContext),
+      },
     },
     states: {
       idle: {
