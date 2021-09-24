@@ -35,6 +35,8 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   // - where the next modal is closed regardless of the option selected
   const [returnToLastScreen, setReturnToLastScreen] = useState(null)
 
+  useEffect(() => console.log(state.value), [state.value])
+
   // - When the user navigates away from the page, we want to reset the state machine
   useEffect(() => {
     send("RESET")

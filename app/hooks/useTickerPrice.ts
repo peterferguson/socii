@@ -3,6 +3,7 @@ import dayjs from "dayjs"
 import useSWR from "swr"
 import { useAuth } from "./useAuth"
 import { Price } from "@models/Price"
+import { useEffect, useRef } from "react"
 
 export function useTickerPrice(
   tickerSymbol: string,
@@ -11,10 +12,15 @@ export function useTickerPrice(
 ): { price: Price; isLoading: boolean; isError: boolean } {
   const { user } = useAuth()
   const token = user?.token
-  const filters = "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency"
+  const marketOpen = useRef<boolean>(true)
+  const filters =
+    "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency,isUSMarketOpen"
 
+  // TODO: change conditional once pre/post-markets are implemented
   const { data, error } = useSWR(
-    [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token],
+    marketOpen.current // - Stop polling if market is closed
+      ? [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token]
+      : null,
     fetchWithToken,
     {
       refreshInterval: expirationTime ? expirationTime : 3 * 60 * 1000,
@@ -22,6 +28,12 @@ export function useTickerPrice(
       initialData,
     }
   )
+
+  useEffect(() => {
+    if (data?.isUSMarketOpen) marketOpen.current = data?.isUSMarketOpen
+    if (error?.statusCode === 402) marketOpen.current = false
+  }, [error?.statusCode, data?.isUSMarketOpen])
+
   return {
     price: {
       ...data,
