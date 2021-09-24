@@ -13,6 +13,7 @@ import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import TickerHoldingCard from "@components/TickerHoldingCard"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -24,7 +25,7 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   )
 
   const router = useRouter()
-
+  const [holding, setHolding] = useState(Object)
   const { positions, error } = usePositions()
 
   // - State machine for the invest button
@@ -47,7 +48,10 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     const holding = positions
       ?.filter((position) => position.symbol === ticker?.tickerSymbol)
       .pop()
-    if (holding) send("UPDATE_HOLDING", { holding })
+    if (holding) {
+      send("UPDATE_HOLDING", { holding })
+      setHolding(holding)
+    }
   }, [positions, send, ticker?.tickerSymbol])
 
   // - Push the latest price to the array
@@ -79,6 +83,12 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             shortName={ticker?.shortName}
             price={price}
             isPriceLoading={isLoading}
+          />
+          <TickerHoldingCard
+            holding={holding}
+            tickerSymbol={ticker?.tickerSymbol}
+            price={null}
+            isPriceLoading={true}
           />
           <div className="flex-grow hidden sm:block" />
           <div className="flex-grow px-4 sm:flex-none sm:pl-8">
