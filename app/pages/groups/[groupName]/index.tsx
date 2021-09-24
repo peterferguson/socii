@@ -19,8 +19,8 @@ import { AuthCheck } from "@components/AuthCheck"
 import { IsUsersGroup } from "@utils/IsUsersGroup"
 import { useRouter } from "next/router"
 import React from "react"
-import { NonMemberGroupViewDynamic } from "@components/NonMemberGroupView/index"
-import { IsMemberGroupViewDynamic } from "@components/IsMemberGroupView/index"
+import { NonGroupMemberViewDynamic } from "@components/NonGroupMemberView/index"
+import { IsGroupMemberViewDynamic } from "@components/IsGroupMemberView/index"
 import { updateTradeEvents } from "@utils/updateTradeEvents"
 import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 
@@ -33,9 +33,9 @@ export default function Group() {
   return (
     <AuthCheck>
       {isMember ? (
-        <IsMemberGroupViewDynamic groupName={groupName} />
-      ) : (
-        <NonMemberGroupViewDynamic groupName={groupName} />
+        <IsGroupMemberViewDynamic groupName= {groupName}/>
+        ):(
+        <NonGroupMemberViewDynamic groupName= {groupName}/>
       )}
     </AuthCheck>
   )

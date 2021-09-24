@@ -12,6 +12,7 @@ import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTim
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import TickerHoldingCard from "@components/TickerHoldingCard"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -65,6 +66,12 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             shortName={ticker?.shortName}
             price={price}
             isPriceLoading={isLoading}
+          />
+          <TickerHoldingCard
+            holding={holding}
+            tickerSymbol={ticker?.tickerSymbol}
+            price={null}
+            isPriceLoading={true}
           />
           <div className="flex-grow hidden sm:block" />
           <div className="flex-grow sm:flex-none">

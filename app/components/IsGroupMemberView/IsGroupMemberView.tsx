@@ -9,7 +9,7 @@ import React, { useMemo } from "react"
 import { TradeHistory } from "../../components/TradeHistory/TradeHistory"
 import GroupColumnCard from "../GroupColumnCard"
 
-const IsMemberGroupView = ({ groupName }) => {
+const IsGroupMemberView = ({ groupName }) => {
   const tableMeta = useMemo(() => StockTableMeta, [])
 
   if (Array.isArray(groupName)) groupName = groupName[0]
@@ -34,7 +34,7 @@ const IsMemberGroupView = ({ groupName }) => {
   )
 }
 
-export default IsMemberGroupView
+export default IsGroupMemberView
 
 const cards = [
   (key: React.Key) => <PortfolioEquitySummaryCard key={key} />,
