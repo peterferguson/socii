@@ -5,6 +5,7 @@ import { useAuth } from "./useAuth"
 import { Price } from "@models/Price"
 import { useEffect, useRef } from "react"
 
+// TODO: Allow this to handle multiple tickers
 export function useTickerPrice(
   tickerSymbol: string,
   expirationTime?: number, // - swr uses milliseconds (3 minutes default)

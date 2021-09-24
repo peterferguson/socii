@@ -4,5 +4,6 @@ export const updateTradeEvents = () => {
     process.env.NODE_ENV === "production"
       ? process.env.NEXT_PUBLIC_SERVER_BASE_URL
       : "http://localhost:5000"
-  fetch(`${serverBaseUrl}/api/v1/alpaca/events/trades/`)
+
+  fetch(`${serverBaseUrl}/api/v1/alpaca/events/trades/`).catch(function ignore() {})
 }
