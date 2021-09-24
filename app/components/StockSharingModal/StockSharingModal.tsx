@@ -1,3 +1,4 @@
+import { Dialog } from "@headlessui/react"
 import { useStream } from "@hooks/useStream"
 import { StreamClientContext } from "@hooks/useStreamClient"
 import { alphaVantageQueryOptions } from "@lib/constants"
@@ -80,10 +81,10 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
 
   return (
     <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
-      <h3 className="text-lg font-medium text-gray-900 font-primary leading-6">
+      <Dialog.Title className="text-lg font-medium text-gray-900 font-primary leading-6">
         Tell <span className="font-semibold text-brand">{selectedGroup}</span> about{" "}
         <span className="font-semibold text-teal-300">{tickerSymbol}</span>!
-      </h3>
+      </Dialog.Title>
       <div className="mt-2">
         <div className="text-sm text-gray-500 font-primary">
           Select some data to tell your friends about!

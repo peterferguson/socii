@@ -2,7 +2,7 @@ import { InvisibleButton } from "@components/InvisibleButton"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment, useRef } from "react"
 
-export const InvestButtonModalContainer = ({ children, open, send }) => {
+const InvestButtonModalContainer = ({ children, open, send }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   return (
     <Transition appear show={open} as={Fragment}>
@@ -36,3 +36,5 @@ export const InvestButtonModalContainer = ({ children, open, send }) => {
     </Transition>
   )
 }
+
+export default InvestButtonModalContainer

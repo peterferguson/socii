@@ -5,7 +5,7 @@ import { tw } from "@utils/tw"
 import { useMachine } from "@xstate/react"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import { InvestButtonModalContainer } from "./InvestButtonModal/InvestButtonModalContainer"
+import { InvestButtonModalContainerDynamic } from "./InvestButtonModalContainer"
 import { OrderModalDynamic } from "./OrderModal"
 import { ReturnToLastScreenModalDynamic } from "./ReturnToLastScreenModal"
 import { SelectGroupModalDynamic } from "./SelectGroupModal"
@@ -82,11 +82,11 @@ export const InvestButton: React.FC<IInvestButtonProps> = ({
         <span className="z-10 w-12 h-4 text-4xl">Invest</span>
       </div>
       {open && (
-        <InvestButtonModalContainer open={open} send={send}>
+        <InvestButtonModalContainerDynamic open={open} send={send}>
           {ModalContents ? (
             <ModalContents ticker={ticker} state={state} send={send} />
           ) : null}
-        </InvestButtonModalContainer>
+        </InvestButtonModalContainerDynamic>
       )}
     </>
   )
