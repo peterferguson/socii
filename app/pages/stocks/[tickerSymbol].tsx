@@ -1,17 +1,14 @@
 import { InvestButton } from "@components/InvestButton"
-import { InvestButtonModal } from "@components/InvestButtonModal"
 import PriceCard from "@components/PriceCard"
-import { ReturnToLastScreenModalDynamic } from "@components/ReturnToLastScreenModal"
 import { StockNewsDynamic } from "@components/StockNews"
 import { StockRecommendationsDynamic } from "@components/StockRecommendations"
 import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions, useTickerPrice } from "@hooks"
 import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
 import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
-import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
+import { Position } from "@models/alpaca/Position"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
-import { useMachine } from "@xstate/react"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
@@ -24,40 +21,20 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
     3 * 60 * 1000,
     initialPrice
   )
+
   const router = useRouter()
-
   const { positions, error } = usePositions()
-
-  // - State machine for the invest button
-  const [state, send] = useMachine(stockInvestButtonMachine)
-
-  // - Decoupling the state machine from the return to last screen modal avoids a bug
-  // - where the next modal is closed regardless of the option selected
-  const [returnToLastScreen, setReturnToLastScreen] = useState(null)
-
-  useEffect(() => console.log(state.value), [state.value])
-
-  // - When the user navigates away from the page, we want to reset the state machine
-  useEffect(() => {
-    send("RESET")
-    setReturnToLastScreen(null)
-  }, [router.asPath, send])
-
-  useEffect(() => {
-    returnToLastScreen !== null &&
-      send(returnToLastScreen ? "AGREE" : "DISAGREE") &&
-      setReturnToLastScreen(null)
-  }, [returnToLastScreen, send])
+  const [holding, setHolding] = useState<Position>(null)
 
   // TODO: Display a my position section if the user holds the stock
   // TODO: Breakdown the positions into groups if the user holds the stock
   // TODO: Add back buttons to modals
   useEffect(() => {
-    const holding = positions
+    const position = positions
       ?.filter((position) => position.symbol === ticker?.tickerSymbol)
       .pop()
-    if (holding) send("UPDATE_HOLDING", { holding })
-  }, [positions, send, ticker?.tickerSymbol])
+    if (position) setHolding(position)
+  }, [positions, ticker?.tickerSymbol])
 
   // - Push the latest price to the array
   useEffect(() => {
@@ -91,22 +68,13 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
           />
           <div className="flex-grow hidden sm:block" />
           <div className="flex-grow sm:flex-none">
-            <InvestButton send={send} logoColor={logoColor} />
+            <InvestButton ticker={ticker} holding={holding} logoColor={logoColor} />
           </div>
           <TickerPageChartCard
             tickerSymbol={ticker?.tickerSymbol}
             color={ticker?.logoColor}
             timeseries={timeseries}
           />
-          {InvestButtonModal && !state.matches("returnToLastScreen") && (
-            <InvestButtonModal ticker={ticker} state={state} send={send} />
-          )}
-          {state.matches("returnToLastScreen") && (
-            <ReturnToLastScreenModalDynamic
-              open={state?.matches("returnToLastScreen")}
-              setReturnToLastScreen={setReturnToLastScreen}
-            />
-          )}
           <StockRecommendationsDynamic symbol={ticker?.tickerSymbol} />
           <div className="flex-grow hidden sm:block" />
           <StockNewsDynamic
