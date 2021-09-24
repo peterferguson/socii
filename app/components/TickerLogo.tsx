@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
-import { usePrevious, useUnmountPromise } from "react-use"
+import { usePrevious } from "@hooks/usePrevious"
 
 interface ITickerLogoProps {
   tickerSymbol: string
@@ -23,22 +23,21 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   isin,
   tickerSymbol,
 }) => {
-  const mounted = useUnmountPromise()
   const [logoSrc, setLogoSrc] = useState("")
   const [ISIN, setISIN] = useState(isin)
+  const prevSymbol = usePrevious(tickerSymbol)
   const [isError, setIsError] = useState(false)
-  const prevISIN = usePrevious(ISIN)
 
   useEffect(() => {
-    const getISIN = async () => setISIN(await mounted(tickerToISIN(tickerSymbol)))
-    !ISIN && getISIN()
-  }, [ISIN, mounted, tickerSymbol])
+    const getISIN = async () => setISIN(await tickerToISIN(tickerSymbol))
 
-  useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN, mounted])
+    if (!ISIN || tickerSymbol !== prevSymbol) getISIN()
+  }, [ISIN, prevSymbol, tickerSymbol])
 
-  useEffect(() => prevISIN !== ISIN && setISIN(ISIN), [ISIN, prevISIN])
+  useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN])
 
   // TODO: Add a backup logo search
+  // TODO: Add loading state
 
   return (
     <Link href={`/stocks/${encodeURIComponent(tickerSymbol)}`}>

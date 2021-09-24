@@ -1,14 +1,15 @@
 import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart/TickerPageLineChart.dynamic"
 import { Tab } from "@headlessui/react"
+import { usePrevious } from "@hooks/usePrevious"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
+import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { pctChange } from "@utils/pctChange"
 import { pnlTextColor } from "@utils/pnlTextColor"
+import { tw } from "@utils/tw"
+import is from "is_js"
 import React, { Fragment, useEffect, useState } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { useMediaQuery } from "react-responsive"
-import is from "is_js"
-import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
-import { tw } from "@utils/tw"
 
 interface ITickerPageLineChartProps {
   tickerSymbol: string
@@ -22,12 +23,12 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
   color,
 }) => {
   const [tabs, setTabs] = useState({
-    "1D": timeseries,
-    "7D": [],
-    "1M": [],
-    "6M": [],
-    "1Y": [],
-    MAX: [],
+    "1D": { [tickerSymbol]: timeseries },
+    "7D": {},
+    "1M": {},
+    "6M": {},
+    "1Y": {},
+    MAX: {},
   })
   const [activeTab, setActiveTab] = useState("1D")
   const is1Col = !useMediaQuery({ minWidth: 640 })
@@ -60,11 +61,12 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
 
     if (!tabs[activeTab]?.length)
       getTimeseries().then((ts) =>
-        setTabs((prevTabs) => ({ ...prevTabs, [activeTab]: ts }))
+        setTabs((prevTabs) => ({ ...prevTabs, [activeTab]: { [tickerSymbol]: ts } }))
       )
-  }, [activeTab, tabs, tickerSymbol])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, tickerSymbol])
 
-  const deserialisedTimeseries = tabs[activeTab]?.map((d) => ({
+  const deserialisedTimeseries = tabs[activeTab]?.[tickerSymbol]?.map((d) => ({
     x: d.timestamp instanceof Date ? d.timestamp : new Date(d.timestamp),
     y: d.close,
   }))
@@ -101,7 +103,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
                 </p>
               </div>
             )}
-            <div className="flex-grow"></div>
+            <div className="flex-grow" />
           </div>
           {deserialisedTimeseries ? (
             <TickerPageLineChartDynamic

@@ -76,7 +76,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
       {!error && (
         <div className="flex flex-col flex-wrap w-full sm:flex-row">
           <PriceCard
-            isin={ticker?.isin}
             tickerSymbol={ticker?.tickerSymbol}
             shortName={ticker?.shortName}
             price={price}
