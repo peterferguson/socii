@@ -1,18 +1,18 @@
-// TODO 
+// TODO
 // Check if working in other pages!!!!
 // correct route to be general
-import { Tab } from "@headlessui/react";
-import React from "react";
-import { tw } from "@utils/tw";
+import { Tab } from "@headlessui/react"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import React from "react"
 
 interface TabHeadingProps {
   categories: { [key: string]: any[] }
   className?: string
 }
 
-export const TabHeading = ({ categories, className }: TabHeadingProps) => {
+export const TabHeading = ({ categories }: TabHeadingProps) => {
   const router = useRouter()
   return (
     <Tab.List className="flex p-1 space-x-1 bg-gray-300/20 rounded-2xl">
@@ -34,8 +34,11 @@ export const TabHeading = ({ categories, className }: TabHeadingProps) => {
             )
           }
         >
-          <Link href={`${useRouter().route}?${category}`} as={`${useRouter().route}/tabs/${category.replace(" ","")}`}>
-          {category}
+          <Link
+            href={`${router.route}?${category}`}
+            as={`${router.route}/tabs/${category.replace(" ", "")}`}
+          >
+            {category}
           </Link>
         </Tab>
       ))}
