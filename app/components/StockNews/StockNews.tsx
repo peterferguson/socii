@@ -33,7 +33,7 @@ export default StockNews
 const NewsItem = ({ item }: { item: RapidApiNewsItem }) => {
   const [isError, setIsError] = useState(false)
   return (
-    <div className="flex items-center p-4 lg:p-1 space-y-0.5">
+    <div className="flex items-center w-full p-4 lg:p-1 space-y-0.5">
       <a href={item.url}>
         {!isError && item.image.thumbnail && (
           <Image
