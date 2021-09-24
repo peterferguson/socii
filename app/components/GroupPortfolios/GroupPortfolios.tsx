@@ -9,7 +9,7 @@ const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()
   return (
     <div className="flex flex-col items-center justify-center w-full my-8 sm:my-0">
-      <div className="w-full place-items-center grid grid-flow-row sm:grid-flow-col gap-4 auto-cols-auto">
+      <div className="w-full place-items-center grid grid-flow-row lgr:grid-flow-col gap-4 auto-cols-auto">
         {user?.groups?.length !== 0 ? (
           user?.groups?.map((groupName, index) => (
             <GroupColumn
