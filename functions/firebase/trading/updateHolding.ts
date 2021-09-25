@@ -10,9 +10,8 @@
  * @param context
  * @returns tradeUpdateData if needed
  */
-import { logger } from "firebase-functions"
+import { arrayUnion, increment, serverTimestamp } from "../firestore/index.js"
 import { firestore } from "../index.js"
-import { serverTimestamp, increment, arrayUnion } from "../firestore/index.js"
 
 export const updateHolding = async (
   data: {
@@ -37,7 +36,7 @@ export const updateHolding = async (
   const ISIN = tradeData.assetRef.split("/").pop()
 
   const groupRef = firestore.collection("groups").doc(groupName)
-  let { cashBalance, investorCount } = (await groupRef.get()).data()
+  let { cashBalance, investorCount, privacyOption } = (await groupRef.get()).data()
 
   // 1. Batch update holdings
   const holdingDocRef = firestore.collection(`groups/${groupName}/holdings`).doc(ISIN)
@@ -45,6 +44,7 @@ export const updateHolding = async (
     holdingDocRef,
     tradeData,
     messageId,
+    privacyOption,
     qty,
   })
 
@@ -69,7 +69,13 @@ export const updateHolding = async (
   }
 }
 
-const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
+const upsertHolding = async ({
+  holdingDocRef,
+  tradeData,
+  messageId,
+  qty,
+  privacyOption,
+}) => {
   const { side, notional, assetRef, symbol, shortName, stockPrice } = tradeData
   const negativeEquityMultiplier = side.toLowerCase().includes("buy") ? 1 : -1
 
@@ -82,7 +88,7 @@ const upsertHolding = async ({ holdingDocRef, tradeData, messageId, qty }) => {
 
   // * Check if the holding already exists
   const holding = await holdingDocRef.get()
-  const outputData = { type: "", holdingData: {}, pnlPercentage: {} }
+  const outputData = { type: "", holdingData: {}, pnlPercentage: {}, privacyOption }
 
   if (holding.exists) {
     // - Trade already exists in holding ... do nothing
