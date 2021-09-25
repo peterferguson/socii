@@ -5,6 +5,7 @@ import { TradeActivityCard } from "./TradeActivityCard"
 import { NTAActivityCard } from "./NTAActivityCard"
 import { TabHeading } from "../TabHeading"
 import { TabPanels } from "../TabPanels"
+import { useTransfers } from "@hooks/useTransfers"
 
 const activityTypeMapping = {
   Trades: ["FILL"],
@@ -40,11 +41,22 @@ export const TradeHistory = () => {
 
   useEffect(() => {
     activities.length &&
-      setCategories((prev) => ({
-        ...prev,
-        [selected]: prev[selected]?.push?.(activities),
-      }))
-  }, [activities, selected])
+      setCategories((prev) => {
+        const filtered = Object.keys(prev).reduce((acc, key) => {
+          activities.filter((activity) => {
+            if (
+              activityTypeMapping[key].includes(activity.activityType) &&
+              !prev[key]?.map(({ id }) => id).includes(activity.id)
+            ) {
+              prev[key].push(activity)
+            }
+          })
+
+          return acc
+        }, {})
+        return { ...prev, ...filtered }
+      })
+  }, [activities])
 
   // TODO: Paginate the activities
   return (
@@ -55,20 +67,16 @@ export const TradeHistory = () => {
           <TabHeading categories={categories} />
           <TabPanels categories={categories} panelBackgroundColor={"white"}>
             <ul>
-              {activities.length ? (
-                activities
-                  .filter((a) => activityTypeMapping[selected].includes(a.activityType))
-                  .map((activity, idx) =>
-                    selected === "Trades" || activity?.activityType === "JNLS" ? (
-                      <TradeActivityCard key={`activity-${idx}`} activity={activity} />
-                    ) : (
-                      <NTAActivityCard key={`activity-${idx}`} activity={activity} />
-                    )
+              {categories[selected]?.length ? (
+                categories[selected]?.map((activity, idx) =>
+                  selected === "Trades" || activity?.activityType === "JNLS" ? (
+                    <TradeActivityCard key={`activity-${idx}`} activity={activity} />
+                  ) : (
+                    <NTAActivityCard key={`activity-${idx}`} activity={activity} />
                   )
+                )
               ) : (
-                <li className="relative flex items-center p-3 rounded-xl hover:bg-gary-200">
-                  Nothing to show here yet
-                </li>
+                <NothingToShow />
               )}
             </ul>
           </TabPanels>
@@ -77,5 +85,11 @@ export const TradeHistory = () => {
     </>
   )
 }
+
+const NothingToShow = () => (
+  <li className="relative flex items-center p-3 rounded-xl hover:bg-gary-200">
+    Nothing to show here yet
+  </li>
+)
 
 export default TradeHistory

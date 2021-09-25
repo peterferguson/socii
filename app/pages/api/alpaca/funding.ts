@@ -65,7 +65,7 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
       }
       break
     default: {
-      res.setHeader("Allow", ["POST"])
+      res.setHeader("Allow", ["POST", "DELETE"])
       res.status(405).end(`Method ${method} Not Allowed`)
     }
   }
