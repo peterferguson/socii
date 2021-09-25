@@ -78,7 +78,7 @@ export const getYahooTimeseries = async ({
     const { symbol, timestamp, dividends, ...ohlcv } = tick
 
     // TODO: Need to handle dividends!
-    if (dividends !== 0) return data
+    if (dividends && dividends !== 0) return data
 
     // - timestamp is in milliseconds & yahoo send nix timestamp wrt to US timezone
     // - we need to convert it to UTC since we are using UTC timezone with IEX data

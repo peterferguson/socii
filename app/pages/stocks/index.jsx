@@ -50,7 +50,10 @@ export default function StockDisplay({ tickers }) {
         tickerDocs.docs?.map(async (tickerDoc) => {
           const { tickerSymbol } = tickerDoc.data()
           const props = await getTickerProps(tickerDoc)
-          const price = await iexQuote(tickerSymbol, user?.token)
+
+          const price = tickerSymbol
+            ? await iexQuote(tickerSymbol, user?.token)
+            : undefined
           return { ...props, price }
         })
       )

@@ -30,7 +30,6 @@ interface ITickersStaticPropsResult {
 
 export const getTickersStaticProps = async ({
   tickerDocs,
-  timeseriesLimit = 30,
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
@@ -42,11 +41,7 @@ export const getTickersStaticProps = async ({
         tickerDocs?.map(async (tickerDoc) => {
           let ticker, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
-            const tickerProps = await getTickerProps(
-              tickerDoc,
-              timeseriesLimit,
-              subQueryField
-            )
+            const tickerProps = await getTickerProps(tickerDoc, subQueryField)
             ticker = tickerProps.ticker
             timeseries = tickerProps.timeseries
             dataQuery = tickerProps.dataQuery
