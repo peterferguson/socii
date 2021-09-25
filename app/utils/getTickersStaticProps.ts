@@ -2,11 +2,13 @@ import { DocumentData } from "@firebase/firestore"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { Price } from "@models/Price"
 import { getTickerProps } from "./getTickerProps"
+import { IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 const { Client } = require("iexjs")
 
 interface ITickersStaticProps {
   tickerDocs: DocumentData[]
-  timeseriesLimit?: number
+  period?: PeriodEnum
+  interval?: IntervalEnum
   subQueryField?: string
 }
 
@@ -30,6 +32,8 @@ interface ITickersStaticPropsResult {
 
 export const getTickersStaticProps = async ({
   tickerDocs,
+  period = PeriodEnum["1D"],
+  interval = IntervalEnum["1m"],
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
@@ -41,7 +45,12 @@ export const getTickersStaticProps = async ({
         tickerDocs?.map(async (tickerDoc) => {
           let ticker, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
-            const tickerProps = await getTickerProps(tickerDoc, subQueryField)
+            const tickerProps = await getTickerProps(
+              tickerDoc,
+              period,
+              interval,
+              subQueryField
+            )
             ticker = tickerProps.ticker
             timeseries = tickerProps.timeseries
             dataQuery = tickerProps.dataQuery

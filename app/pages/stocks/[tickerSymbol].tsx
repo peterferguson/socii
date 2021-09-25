@@ -104,28 +104,12 @@ export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } 
 
   try {
     // - These functions take arrays of tickers
-    const data = await getTickersStaticProps({
+    const { props } = await getTickersStaticProps({
       tickerDocs: await getTickerDocs([symbol]),
-      timeseriesLimit: 0, // TODO: Remove this once we have a real timeseries api calls working
+      period: PeriodEnum["1D"],
+      interval: IntervalEnum["1m"],
     })
-
-    const timeseries = (
-      await getYahooTimeseries({
-        tickers: [symbol],
-        period: PeriodEnum["1D"],
-        interval: IntervalEnum["1m"],
-      })
-    )[symbol].map((tick) => ({
-      ...tick,
-      timestamp: tick.timestamp.valueOf(),
-    }))
-
-    data.props.tickers = data.props.tickers.map((ticker) => ({
-      ...ticker,
-      timeseries,
-    }))
-
-    return { ...data, revalidate: 8000 }
+    return { props, revalidate: 8000 }
   } catch (e) {
     return { redirect: { destination: "/404", permanent: false } }
   }

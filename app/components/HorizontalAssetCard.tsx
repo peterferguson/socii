@@ -1,5 +1,6 @@
 import { Price } from "@models/Price"
 import { pnlBackgroundColor } from "@utils/pnlBackgroundColor"
+import { tw } from "@utils/tw"
 import Link from "next/link"
 import React from "react"
 import TickerLogo from "./TickerLogo"
@@ -62,14 +63,14 @@ const HorizontalAssetCard = ({
   )
 }
 
-export const HorizontalAssetCardSkeleton = ({ cardRef }) => (
+export const HorizontalAssetCardSkeleton = ({ cardRef, className }) => (
   <div
-    className="w-11/12 h-auto max-w-sm mx-auto my-2 animate-fade-in-up"
+    className={tw("w-11/12 h-auto max-w-sm mx-auto my-2 animate-fade-in-up", className)}
     ref={cardRef}
   >
     <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
       <div className="items-center justify-center flex-none w-20 m-auto rounded-full">
-        <div className="flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny animate-pulse" />
+        <div className="flex items-center justify-center font-semibold text-gray-500 rounded-full shadow-lg bg-gray-50 h-14 w-14 text-tiny animate-pulse" />
       </div>
       <div className="flex-col flex-grow my-auto">
         <div className="text-xs font-semibold tracking-wider text-gray-400 uppercase font-primary animate-pulse">
