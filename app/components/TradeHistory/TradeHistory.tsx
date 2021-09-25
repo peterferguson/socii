@@ -1,6 +1,7 @@
 import { Tab } from "@headlessui/react"
 import React, { useEffect, useState } from "react"
-import { useAccountActivities } from "../../hooks/useAccountActivities"
+import { useAccountActivities } from "@hooks/useAccountActivities"
+import { transferToNTAActivity } from "@utils/transferToNTAActivity"
 import { TradeActivityCard } from "./TradeActivityCard"
 import { NTAActivityCard } from "./NTAActivityCard"
 import { TabHeading } from "../TabHeading"
@@ -38,9 +39,11 @@ export const TradeHistory = () => {
   const [selected, setSelected] = useState("Trades")
 
   const { activities } = useAccountActivities({})
+  const { transfers } = useTransfers()
 
   useEffect(() => {
     activities.length &&
+      transfers.length &&
       setCategories((prev) => {
         const filtered = Object.keys(prev).reduce((acc, key) => {
           activities.filter((activity) => {
@@ -50,13 +53,20 @@ export const TradeHistory = () => {
             ) {
               prev[key].push(activity)
             }
+            if (key === "Cash") {
+              transfers.map(
+                (transfer) =>
+                  !prev[key]?.map(({ id }) => id).includes(transfer.id) &&
+                  prev[key].push(transferToNTAActivity(transfer))
+              )
+            }
           })
 
           return acc
         }, {})
         return { ...prev, ...filtered }
       })
-  }, [activities])
+  }, [activities, transfers])
 
   // TODO: Paginate the activities
   return (
@@ -69,7 +79,8 @@ export const TradeHistory = () => {
             <ul>
               {categories[selected]?.length ? (
                 categories[selected]?.map((activity, idx) =>
-                  selected === "Trades" || activity?.activityType === "JNLS" ? (
+                  (activity && selected === "Trades") ||
+                  activity?.activityType === "JNLS" ? (
                     <TradeActivityCard key={`activity-${idx}`} activity={activity} />
                   ) : (
                     <NTAActivityCard key={`activity-${idx}`} activity={activity} />
