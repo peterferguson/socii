@@ -8,6 +8,7 @@ import { useAuth } from "@hooks"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
 import { getGroupData } from "@lib/firebase/client/db"
 import { getStockHoldingData } from "@lib/firebase/client/db"
+import { usePrevious } from "@hooks/usePrevious"
 
 // TODO: Create a card for displaying the current holding information & splits by group on interaction
 export default function TickerHoldingCard({
@@ -20,6 +21,7 @@ export default function TickerHoldingCard({
   const [userGroups, setGroups] = useState(null)
   const { user } = useAuth()
   const [groupMemberCount, setGroupMemberCount] = useState({})
+  const prevSymbol = usePrevious(tickerSymbol)
 
   useEffect(() => {
     if (user?.groups) {
@@ -48,24 +50,30 @@ export default function TickerHoldingCard({
         })
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.groups, holding?.qty])
 
+  useEffect(
+    () => prevSymbol !== tickerSymbol && setHoldings(Array()),
+    [prevSymbol, tickerSymbol]
+  )
+
   return (
-    <div className="mx-2 mt-4 mb-2 bg-white shadow-lg grid grid-rows-[4fr,1fr] sm:mt-2 rounded-2xl dark:bg-gray-800">
-      <div>
-        <div className="flex items-center p-2">
-          <span className="mb-2 ml-2 text-base font-semibold tracking-wider text-gray-700 uppercase dark:text-white">
-            My Positions
-          </span>
-        </div>
+    <div className="mt-4 mb-2 bg-white shadow-lg standalone:container grid grid-rows-[4fr,1fr] sm:mt-2 rounded-2xl dark:bg-gray-800">
+      <div className="flex flex-col w-full p-2">
+        <span className="text-xl text-gray-700 leading-0 dark:text-white">
+          My Position
+        </span>
+        <div className="flex items-center"></div>
         <div className="divide-y divide-black">
           {groupHoldings?.map((details, i) =>
             details.qty ? (
-              <div className="flex flex-row" key={i}>
-                <span className="px-2 font-semibold text-brand">
-                  {details.groupName}:
-                </span>
-                <span className="px-4 text-xl font-semibold text-gray-700">
+              <div
+                className="flex items-center justify-between px-1"
+                key={`position-${i}`}
+              >
+                <span className="font-semibold text-brand">{details.groupName}:</span>
+                <span className="text-xl font-semibold text-gray-700">
                   {(
                     (parseFloat(details.qty) * parseFloat(holding.currentPrice)) /
                     groupMemberCount[details.groupName]
@@ -75,37 +83,35 @@ export default function TickerHoldingCard({
                   {(
                     parseFloat(details.qty) / groupMemberCount[details.groupName]
                   ).toFixed(2)}
-                  <p className="flex justify-center text-gray-400 text-tiny -pb-0.5 ">
-                    shares
-                  </p>
+                  <p className="text-gray-400 text-tiny ">shares</p>
                 </span>
               </div>
             ) : null
           )}
         </div>
       </div>
-      <div className="flex flex-row bg-brand-light rounded-b-2xl">
-        <div className="flex flex-col px-3 pt-1">
+      <div className="flex flex-row items-center justify-between space-x-3 bg-brand-light rounded-b-2xl">
+        <div className="flex flex-col pt-1 pl-3">
           <div
             className={`flex items-center text-sm pb-0.5 ${pnlTextColor(
               parseFloat(holding?.unrealizedPlpc)
             )}`}
           >
             {parseFloat(holding?.unrealizedPlpc) > 0 ? <FaCaretUp /> : <FaCaretDown />}
-            <span className="pr-1">{(holding?.unrealizedPlpc * 100)?.toFixed(2)}%</span>
+            <span>{(holding?.unrealizedPlpc * 100)?.toFixed(2)}%</span>
           </div>
           <p className="flex justify-center text-gray-400  text-tiny -pb-0.5 ">
             overall
           </p>
         </div>
         <div>
-          <p className="text-3xl  font-semibold text-gray-700 dark:text-gray-100">
+          <p className="text-3xl font-semibold text-gray-700 dark:text-gray-100">
             <span className="text-sm">$</span>
             {parseFloat(holding?.marketValue).toFixed(2)}
           </p>
         </div>
-        <div className="flex flex-col px-3 pt-1">
-          <span className="pr-1">{parseFloat(holding?.qty)?.toFixed(2)}</span>
+        <div className="flex flex-col pt-1 pr-3">
+          <span>{parseFloat(holding?.qty)?.toFixed(2)}</span>
           <p className="flex justify-center text-gray-400 text-tiny -pb-0.5 ">shares</p>
         </div>
       </div>

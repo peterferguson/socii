@@ -2,6 +2,7 @@ import { InvestButton } from "@components/InvestButton"
 import PriceCard from "@components/PriceCard"
 import { StockNewsDynamic } from "@components/StockNews"
 import { StockRecommendationsDynamic } from "@components/StockRecommendations"
+import { TickerHoldingCardDynamic } from "@components/TickerHoldingCard"
 import TickerPageChartCard from "@components/TickerPageChartCard"
 import { usePositions, useTickerPrice } from "@hooks"
 import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
@@ -12,7 +13,6 @@ import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTim
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import TickerHoldingCard from "@components/TickerHoldingCard"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -60,20 +60,21 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   return (
     <>
       {!error && (
-        <div className="flex flex-col flex-wrap w-full sm:flex-row">
+        <div className="flex flex-col flex-wrap justify-between w-full sm:flex-row">
           <PriceCard
             tickerSymbol={ticker?.tickerSymbol}
             shortName={ticker?.shortName}
             price={price}
             isPriceLoading={isLoading}
           />
-          <TickerHoldingCard
-            holding={holding}
-            tickerSymbol={ticker?.tickerSymbol}
-            price={null}
-            isPriceLoading={true}
-          />
-          <div className="flex-grow hidden sm:block" />
+          {holding && (
+            <TickerHoldingCardDynamic
+              holding={holding}
+              tickerSymbol={ticker?.tickerSymbol}
+              price={null}
+              isPriceLoading={true}
+            />
+          )}
           <div className="flex-grow sm:flex-none">
             <InvestButton ticker={ticker} holding={holding} logoColor={logoColor} />
           </div>
