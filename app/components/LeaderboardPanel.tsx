@@ -1,10 +1,12 @@
-import React, { Fragment, useState, useMemo } from "react"
+import React, { Fragment, useState, useMemo, useEffect } from "react"
 import { useAuth } from "@hooks"
 import LeaderBoardCard from "@components/LeaderBoardCard"
 
 export const LeaderboardPanel = ({ leaders }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
+
+  useEffect(() => console.log(leaders), [leaders])
 
   return (
     <section className="flex flex-col justify-between ">

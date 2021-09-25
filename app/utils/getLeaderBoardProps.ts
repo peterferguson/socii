@@ -54,8 +54,8 @@ export const getLeaderBoardProps = async () => {
     startDateStr: firstDayOfMonthString,
     endDateStr: todayString,
   })
-
-  console.log(`${priceData?.length} prices found`)
+  
+  console.log(`${Object.keys(priceData)?.length} prices found`)  
 
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day

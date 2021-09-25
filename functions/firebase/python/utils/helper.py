@@ -95,7 +95,7 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
     logging.info(f"history dataframe info: {buffer.getvalue()}")
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
     history.rename(columns={"date": "timestamp"}, inplace=True)
-    return history.to_dict(orient="records")
+    return history.fillna("").to_dict(orient="records")
 
 
 # - Some problem with the yahoo finance api... just do this client side

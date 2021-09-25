@@ -59,23 +59,27 @@ export const getYahooTimeseries = async ({
 }: getYahooTimeseriesProps): Promise<YahooTimeseries> => {
   const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
 
-  const yahooData = await (
-    await fetch(functionUrl, {
-      method: "POST",
-      mode: "cors",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        period,
-        interval,
-        tickerSymbol: tickers.join(" "),
-        start: startDateStr,
-        end: endDateStr,
-      }),
-    })
-  ).json()
+  const res = await fetch(functionUrl, {
+    method: "POST",
+    mode: "cors",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      period,
+      interval,
+      tickerSymbol: tickers.join(" "),
+      start: startDateStr,
+      end: endDateStr,
+    }),
+  })
+
+  const yahooData = await res.json()
 
   return yahooData?.reduce((data, tick) => {
-    const { symbol, timestamp, ...ohlcv } = tick
+    const { symbol, timestamp, dividends, ...ohlcv } = tick
+
+    // TODO: Need to handle dividends!
+    if (dividends !== 0) return data
+
     // - timestamp is in milliseconds & yahoo send nix timestamp wrt to US timezone
     // - we need to convert it to UTC since we are using UTC timezone with IEX data
     const timezoneDifference = dayjs().tz("America/New_York").utcOffset()

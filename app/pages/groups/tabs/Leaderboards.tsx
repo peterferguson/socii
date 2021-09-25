@@ -5,22 +5,12 @@ import { LeaderboardPanel } from "@components/LeaderboardPanel"
 import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 
 const GroupsHome = ({ leaders }) => {
-
   return (
     <div className="p-3 bg-white rounded-2xl focus:outline-none">
-      <LeaderboardPanel leaders = {leaders}/>
+      <LeaderboardPanel leaders={leaders} />
     </div>
   )
 }
 export default GroupsHome
 
 export const getStaticProps = async () => await getLeaderBoardProps()
-
-// // TODO fix paths
-// export async function getStaticPaths() {
-//     return {
-//       paths: [],
-//       fallback: "blocking",
-//     };
-//   }
-
