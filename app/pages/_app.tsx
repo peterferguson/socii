@@ -6,6 +6,7 @@ import useOrientationWarning from "@hooks/useOrientationWarning"
 import useReceivePushNotifications from "@hooks/useReceivePushNotifications"
 import { toastProps } from "@lib/constants"
 import "@styles/Chat.css"
+import "react-activity-feed/dist/index.css"
 import "@styles/globals.css"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
 import { tw } from "@utils/tw"
@@ -25,7 +26,7 @@ const Toaster = dynamic(() => import("react-hot-toast").then((mod) => mod.Toaste
 // }
 
 export default function MyApp({ Component, pageProps }) {
-  useEffect(() => serviceWorkerInitialisation(), [])
+  useEffect(serviceWorkerInitialisation, [])
 
   useOrientationWarning()
   useReceivePushNotifications()

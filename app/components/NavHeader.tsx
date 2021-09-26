@@ -1,17 +1,17 @@
 import HeaderDropdownButton from "@components/HeaderDropdownButton"
 import Searchbar from "@components/Searchbar"
 import UserPhoto from "@components/UserPhoto"
+import { Popover } from "@headlessui/react"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
+import dynamic from "next/dynamic"
 import { NextRouter, useRouter } from "next/router"
 import React, { Fragment, useMemo } from "react"
 import { HiOutlineCog } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
 import { UrlObject } from "url"
-import { Popover } from "@headlessui/react"
 
-import dynamic from "next/dynamic"
 const SearchResultsModal = dynamic(() => import("@components/SearchResultsModal"), {
   ssr: true,
 })

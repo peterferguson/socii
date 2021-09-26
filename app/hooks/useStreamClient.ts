@@ -1,15 +1,18 @@
 import { useAuth } from "@hooks/useAuth"
-import React, { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
+import { connect } from "getstream"
 
 export interface StreamClientContext {
   client: StreamChat
+  userFeed: any
 }
 
 export const useStreamClient = (): StreamClientContext => {
   const { user } = useAuth()
   const username = user ? user.username : ""
   const streamClient = useRef<StreamChat | null>(null)
+  const userFeed = useRef(null)
 
   useEffect(() => {
     streamClient.current = StreamChat.getInstance(
@@ -54,5 +57,12 @@ export const useStreamClient = (): StreamClientContext => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username])
 
-  return { client: streamClient.current }
+  useEffect(() => {
+    if (username && user?.streamToken) {
+      const client = connect(process.env.STREAM_API_KEY, user?.streamToken, username)
+      userFeed.current = client.feed("user", username, user?.streamToken)
+    }
+  }, [user?.streamToken, username])
+
+  return { client: streamClient.current, userFeed }
 }
