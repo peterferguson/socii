@@ -24,7 +24,7 @@ export default function GroupInformaitonCard(groupName: string) {
         height="40"
       />
       </div>
-      {groupData.groupName ? (
+      {groupData?.groupName ? (
       <div className="pt-1 ml-6">
         <div className="text-xl text-gray-900">{groupData.groupName}</div>
         <p className="text-base text-gray-600">Founded: {(groupData.startDate.toDate().toISOString().split('T')[0])}</p>
