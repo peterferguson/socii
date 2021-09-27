@@ -3663,6 +3663,7 @@
   color: black;
   /* variables */
   @apply rounded-2xl;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   background: #fff;
   margin-left: 0;
   /* set spacing when unfocused */

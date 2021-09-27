@@ -1,15 +1,11 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { useMessageContext } from "stream-chat-react"
-
-// WARN: IEX called for each instance of a buy command message
-// WARN: Should think about some how collecting the tickers referenced on the message list
-// WARN: And passing these so we then call the api less
 
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
 
-  const tickerSymbol = useRef<string>("")
+  const [tickerSymbol, setTickerSymbol] = useState<string>("")
   const shares = parseFloat(message.text.split(" shares")[0])
   const localPrice = message.text.split("cost of ").pop().trim()
   const action =
@@ -18,7 +14,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
 
   useEffect(() => {
     typeof attachment.tickerSymbol === "string" &&
-      (tickerSymbol.current = attachment.tickerSymbol)
+      setTickerSymbol(attachment.tickerSymbol)
   }, [attachment?.tickerSymbol])
 
   // TODO: The receipt is colored by buy-sell instead of by the loss or gain. Which should
@@ -26,9 +22,9 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
 
   return (
     <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-      {tickerSymbol.current && (
+      {attachment?.tickerSymbol && (
         <LogoPriceCardHeader
-          tickerSymbol={tickerSymbol.current.toUpperCase()}
+          tickerSymbol={tickerSymbol.toUpperCase()}
           action={action}
           shares={shares}
           price={cost}
