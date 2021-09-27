@@ -40,41 +40,39 @@ const StreamChat = ({ client }) => {
 
   // TODO: Replace light with theme when dark theme is implemented
   return client ? (
-    <Chat client={client} theme={`messaging ${theme}`}>
-      <div className="flex flex-col sm:flex-row overscroll-contain">
-        <Channel
-          channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
-          maxNumberOfFiles={3}
-          multipleUploads={true}
-          Attachment={CustomAttachmentDynamic}
-          TriggerProvider={CustomTriggerProviderDynamic}
-        >
-          <ChannelInner toggleChannelList={toggleChannelList} />
-        </Channel>
+    <div className="flex flex-col sm:flex-row overscroll-contain">
+      <Channel
+        channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
+        maxNumberOfFiles={3}
+        multipleUploads={true}
+        Attachment={CustomAttachmentDynamic}
+        TriggerProvider={CustomTriggerProviderDynamic}
+      >
+        <ChannelInner toggleChannelList={toggleChannelList} />
+      </Channel>
 
-        <Transition
-          show={["open", "idle"].includes(String(state.value))}
-          appear={true}
-          enter="transition-opacity duration-75"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <ChannelList
-            userID={client?.userID}
-            groupName={groupName}
-            send={send}
-            toggleChannelList={toggleChannelList}
-            onCreateChannel={onCreateChannel}
-          />
-        </Transition>
-      </div>
+      <Transition
+        show={["open", "idle"].includes(String(state.value))}
+        appear={true}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <ChannelList
+          userID={client?.userID}
+          groupName={groupName}
+          send={send}
+          toggleChannelList={toggleChannelList}
+          onCreateChannel={onCreateChannel}
+        />
+      </Transition>
       {isCreating && (
         <CreateChatModalDynamic isCreating={isCreating} setIsCreating={setIsCreating} />
       )}
-    </Chat>
+    </div>
   ) : null
 }
 
