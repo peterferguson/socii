@@ -1,10 +1,9 @@
 import { PortfolioEquitySummaryCard } from "@components/PortfolioEquitySummaryCard"
 import { PortfolioHistoryCard } from "@components/PortfolioHistoryCard"
 import { StockTableDynamic, StockTableMeta } from "@components/StockTable"
+import { TradeHistoryDynamic } from "@components/TradeHistory"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
-import { TradeHistoryDynamic } from "@components/TradeHistory"
-import { BuyPowerSummaryCard } from "@components/BuyPowerSummaryCard"
 
 const Dashboard = () => {
   const tableMeta = useMemo(() => StockTableMeta, [])

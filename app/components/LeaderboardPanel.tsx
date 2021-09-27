@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useMemo } from "react"
-import { useAuth } from "@hooks"
 import LeaderBoardCard from "@components/LeaderBoardCard"
+import { useAuth } from "@hooks"
+import React from "react"
 
 export const LeaderboardPanel = ({ leaders }) => {
   const { user } = useAuth()

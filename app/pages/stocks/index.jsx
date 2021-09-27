@@ -39,18 +39,16 @@ export default function StockDisplay({ tickers }) {
       const numTickers = is1Col ? 5 : is2Cols ? 10 : 15
       const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, numTickers)
 
-      lastTickerLoaded.current = tickerDocs.docs
-        ?.slice(
-          -beginLoadingMoreTickersNFromLast,
-          -beginLoadingMoreTickersNFromLast + 1
-        )
-        .pop()
+      lastTickerLoaded.current = tickerDocs.docs?.slice().pop()
 
       const tickers = await Promise.all(
         tickerDocs.docs?.map(async (tickerDoc) => {
           const { tickerSymbol } = tickerDoc.data()
           const props = await getTickerProps(tickerDoc)
-          const price = await iexQuote(tickerSymbol, user?.token)
+
+          const price = tickerSymbol
+            ? await iexQuote(tickerSymbol, user?.token)
+            : undefined
           return { ...props, price }
         })
       )
@@ -85,7 +83,7 @@ export default function StockDisplay({ tickers }) {
                   beginLoadingMoreTickersNFromLast
               return !timeseries?.length ? (
                 <HorizontalAssetCard
-                  key={`${ticker?.tickerSymbol}-${i}`}
+                  key={`${ticker?.tickerSymbol}`}
                   cardRef={null}
                   isin={ticker?.ISIN}
                   tickerSymbol={ticker?.tickerSymbol}
@@ -104,7 +102,10 @@ export default function StockDisplay({ tickers }) {
                 />
               )
             })}
-          <HorizontalAssetCardSkeleton cardRef={lastTickerRef} />
+          <HorizontalAssetCardSkeleton
+            cardRef={lastTickerRef}
+            className={loadingMoreTickers ? "block" : "invisible"}
+          />
           {/* REFACTOR */}
           {/* Compensate for the footer */}
           {is1Col && <div className="h-36"></div>}
@@ -117,7 +118,8 @@ export default function StockDisplay({ tickers }) {
 export async function getStaticProps() {
   return await getTickersStaticProps({
     tickerDocs: await getPopularTickersDocs(),
-    timeseriesLimit: 0,
+    period: null,
+    interval: null,
     subQueryField: "industry",
   })
 }

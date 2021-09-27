@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import calendar from "dayjs/plugin/calendar"
 import React from "react"
 import { FaHome } from "react-icons/fa"
+import { BsPeopleFill } from "react-icons/bs"
 dayjs.extend(calendar)
 
 const NTAActivityMapping: { [key: string]: string } = {
@@ -35,7 +36,11 @@ export const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
     className="relative flex items-center p-3 rounded-xl hover:bg-gray-50"
   >
     <div className="flex items-center justify-center w-10 h-10 text-white rounded-full shadow-lg bg-gradient-to-br from-brand-pink to-brand">
-      <FaHome className="w-5 h-5" />
+      {activity.status?.toLowerCase() !== "queued" ? (
+        <FaHome className="w-5 h-5" />
+      ) : (
+        <BsPeopleFill className="w-5 h-5" />
+      )}
     </div>
 
     <div className="ml-4 hover:bg-gray-50">
@@ -43,7 +48,7 @@ export const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
         {activity.status}
       </h4>
       <h3 className="text-sm font-medium capitalize leading-5">
-        {NTAActivityMapping[activity.activityType]}
+        {NTAActivityMapping[activity.activityType] || activity.activityType}
       </h3>
 
       <ul className="flex mt-1 font-normal text-gray-500 text-tiny space-x-1 leading-4">

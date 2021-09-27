@@ -13,6 +13,9 @@ import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 import { updateTradeEvents } from "@utils/updateTradeEvents"
 import React, { useState } from "react"
 import { FaUserInjured } from "react-icons/fa"
+import { useRouter } from "next/router"
+import Link from "next/dist/client/link"
+import dynamic from "next/dynamic"
 
 const GroupsHome = ({ leaders }) => {
   const [selected, setSelected] = useState("My Groups")

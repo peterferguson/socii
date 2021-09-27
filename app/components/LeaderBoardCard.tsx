@@ -1,6 +1,8 @@
+import { getGroupMembers } from "@lib/firebase/client/db/getGroupMembers"
 import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import MemberPhoto from "./MemberPhoto"
 import PctChangeTag from "./PctChangeTag"
 import PnlArrow from "./PnlArrow"
 
@@ -17,14 +19,21 @@ export interface Leader {
 const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => {
   const { groupName, portfolioValue, portfolioBreakdown, inGroup } = leader
 
+  const [members, setMembers] = useState([])
+
+  useEffect(() => {
+    if (groupName) getGroupMembers(groupName).then(setMembers)
+  }, [groupName])
   const topPerformer = Object.keys(portfolioBreakdown).reduce((a, b) =>
     portfolioBreakdown[b]["mtd%"] > portfolioBreakdown[a]["mtd%"] ? b : a
   )
   const topPerformerPct = portfolioBreakdown[topPerformer]["mtd%"]
   const pnlColor = pnlTextColor(topPerformerPct / 100)
 
+  // TODO: Add tooltip on photo hover with member username
+  // TODO: Fix overlapping over members photos
   return (
-    <article className="flex items-center justify-between p-6 uppercase bg-white shadow-md rounded-2xl">
+    <article className="flex items-center justify-between p-6  bg-white shadow-md rounded-2xl">
       <div className="flex ">
         <button
           className={`flex flex-col items-center justify-center px-4 py-2 font-semibold
@@ -38,10 +47,10 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
           </span>
           <span>{rank + 1}</span>
         </button>
-        <div className="flex flex-col justify-between ml-4">
-          <div className="items-center justify-between text-tiny sm:text-sm space-y-1 sm:space-y-4">
+        <div className="justify-between ml-4 grid grid-cols-flow gap-2 font-primary">
+          <div className="items-center justify-between text-tiny sm:text-sm space-y-1 sm:space-y-2">
             <Link href={`groups/${groupName}`}>
-              <a className="font-semibold">{groupName}</a>
+              <a className="text-lg font-semibold">{groupName}</a>
             </Link>
             <h2>
               Top Performer:
@@ -61,31 +70,20 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
               </p>
             </h2>
           </div>
-          {/* <div className="items-center hidden sm:flex">
+          <div className="items-center">
             <span className="mr-2 text-xs text-gray-700">Members: </span>
             <div className="flex overflow-hidden -space-x-1">
-              <img
-                className="inline-block w-6 h-6 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <img
-                className="inline-block w-6 h-6 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <img
-                className="inline-block w-6 h-6 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                alt=""
-              />
-              <img
-                className="inline-block w-6 h-6 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              {members.map((member) => (
+                <MemberPhoto
+                  username={member}
+                  height="24px"
+                  width="24px"
+                  key={member}
+                  className="inline-block ring-2 ring-white"
+                />
+              ))}
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-between ml-4">

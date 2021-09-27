@@ -1,4 +1,3 @@
-import { InvestButtonModalContainer } from "@components/InvestButtonModal/InvestButtonModalContainer"
 import { Dialog } from "@headlessui/react"
 import { useTickerPrice } from "@hooks"
 import { useAuth } from "@hooks/useAuth"
@@ -12,11 +11,6 @@ import toast from "react-hot-toast"
 import { LargeNumberInput } from "../LargeNumberInput"
 import PriceHeading from "../PriceHeading"
 import TickerLogo from "../TickerLogo"
-
-const orderScreenState = (state) =>
-  state.matches("active.limitOrder") ||
-  state.matches("active.cashOrder") ||
-  state.matches("active.shareOrder")
 
 const OrderModal = ({ ticker, state, send }) => {
   const { user } = useAuth()
@@ -52,41 +46,39 @@ const OrderModal = ({ ticker, state, send }) => {
     )
   }
   return (
-    <InvestButtonModalContainer open={orderScreenState(state)} send={send}>
-      <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
-        <Dialog.Title className="text-2xl font-medium text-gray-600 font-primary leading-6">
-          <PriceHeader
-            isin={ticker.ISIN}
-            symbol={ticker.tickerSymbol}
-            shortName={ticker.shortName}
-            price={price}
-          />
-        </Dialog.Title>
-        <LargeNumberInput
-          amount={amount}
-          orderType={state.context.orderType}
-          setAmount={setAmount}
-          side={state.context.side}
+    <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
+      <Dialog.Title className="text-2xl font-medium text-gray-600 font-primary leading-6">
+        <PriceHeader
+          isin={ticker.ISIN}
           symbol={ticker.tickerSymbol}
+          shortName={ticker.shortName}
+          price={price}
         />
-        <div className="flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl">
-          <button
-            type="button"
-            className={tw(
-              "inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2",
-              "font-semibold tracking-wider uppercase border border-transparent",
-              "text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md",
-              "hover:bg-green-200 hover:text-green-600 focus:outline-none",
-              "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500",
-              `umami--click--invest-button-order-modal-${state.context.side}-button`
-            )}
-            onClick={handleSubmission}
-          >
-            {state.context.side} {ticker.tickerSymbol}
-          </button>
-        </div>
+      </Dialog.Title>
+      <LargeNumberInput
+        amount={amount}
+        orderType={state.context.orderType}
+        setAmount={setAmount}
+        side={state.context.side}
+        symbol={ticker.tickerSymbol}
+      />
+      <div className="flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl">
+        <button
+          type="button"
+          className={tw(
+            "inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2",
+            "font-semibold tracking-wider uppercase border border-transparent",
+            "text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md",
+            "hover:bg-green-200 hover:text-green-600 focus:outline-none",
+            "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500",
+            `umami--click--invest-button-order-modal-${state.context.side}-button`
+          )}
+          onClick={handleSubmission}
+        >
+          {state.context.side} {ticker.tickerSymbol}
+        </button>
       </div>
-    </InvestButtonModalContainer>
+    </div>
   )
 }
 

@@ -7,4 +7,8 @@ import { firestore } from "."
  */
 
 export const getPopularTickersDocs = async () =>
-  await getDocs(query(collection(firestore, "tickers"), where("isPopular", "==", true)))
+  (
+    await getDocs(
+      query(collection(firestore, "tickers"), where("isPopular", "==", true))
+    )
+  ).docs

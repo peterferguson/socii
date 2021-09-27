@@ -35,16 +35,31 @@ if __name__ != "__main__":
 """
 
 
+@cors(methods=["POST"])
+def get_recommendations(request: Request) -> str:
+    ticker = yahoo_ticker_from_request(request)
+    return json.dumps(ticker.recommendations)
+
+
+@cors(methods=["POST"])
+def get_price(request: Request) -> str:
+    ticker = yahoo_ticker_from_request(request)
+    return json.dumps(ticker.price)
+
+
+@cors(methods=["POST"])
 def get_news(request: Request) -> str:
     ticker = yahoo_ticker_from_request(request)
     return json.dumps(ticker.news())
 
 
+@cors(methods=["POST"])
 def get_summary_detail(request: Request) -> str:
     ticker = yahoo_ticker_from_request(request)
     return json.dumps(ticker.summary_detail)
 
 
+@cors(methods=["POST"])
 def get_key_summary(request: Request) -> str:
     ticker = yahoo_ticker_from_request(request)
     return json.dumps(ticker.key_stats)

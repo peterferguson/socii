@@ -1,20 +1,22 @@
-import { QuerySnapshot } from "@firebase/firestore"
+import { DocumentData } from "@firebase/firestore"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { Price } from "@models/Price"
 import { getTickerProps } from "./getTickerProps"
+import { IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 const { Client } = require("iexjs")
 
 interface ITickersStaticProps {
-  tickerDocs: QuerySnapshot
-  timeseriesLimit?: number
+  tickerDocs: DocumentData[]
+  period?: PeriodEnum
+  interval?: IntervalEnum
   subQueryField?: string
 }
 
 interface TickerPropsData {
   ticker: any
   timeseries: OHLCTimeseries
-  dataQuery: any
-  price: Price
+  dataQuery?: any
+  price?: Price
 }
 
 export interface TickersProps {
@@ -30,23 +32,23 @@ interface ITickersStaticPropsResult {
 
 export const getTickersStaticProps = async ({
   tickerDocs,
-  timeseriesLimit = 30,
+  period = PeriodEnum["1D"],
+  interval = IntervalEnum["1m"],
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
-  console.log(process.env.IEX_TOKEN)
-
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
-  console.log(`Loading ${tickerDocs.size} tickers`)
+  console.log(`Loading ${tickerDocs.length} tickers`)
 
   return {
     props: {
       tickers: await Promise.all(
-        tickerDocs.docs.map(async (tickerDoc) => {
-          let ticker, timeseries: OHLCTimeseries  , dataQuery, price: Price
+        tickerDocs?.map(async (tickerDoc) => {
+          let ticker, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
             const tickerProps = await getTickerProps(
               tickerDoc,
-              timeseriesLimit,
+              period,
+              interval,
               subQueryField
             )
             ticker = tickerProps.ticker

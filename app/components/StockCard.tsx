@@ -65,13 +65,17 @@ export default function StockCard({ holding, latestPrice, index }: IStockCard) {
               <div className="w-12 bg-gray-200 animate-pulse"></div>
             )}
           </div>
-          <div
-            className={`${
-              pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
-            } text-gray-700 text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
-          >
-            {pnl.toFixed(2)}%
-          </div>
+          {pnl ? (
+            <div
+              className={`${
+                pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
+              } text-gray-700 text-tiny sm:text-xs px-2 rounded-full font-semibold w-full text-center inline-block`}
+            >
+              {pnl.toFixed(2)}%
+            </div>
+          ) : (
+            <div className="w-8 bg-gray-200 animate-pulse"></div>
+          )}
         </div>
       </div>
     </li>
