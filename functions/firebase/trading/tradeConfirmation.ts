@@ -68,9 +68,10 @@ export const tradeConfirmation = async (change, context) => {
   if (
     (latestPrice - tradeData.stockPrice) / tradeData.stockPrice > 0.025 &&
     !isSell(tradeData.type)
-  )
+  ) {
     logger.log(`The price has risen more than 2.5% since the price was agreed`)
-  else tradeData.stockPrice = latestPrice
+    return
+  } else tradeData.stockPrice = latestPrice
 
   if (tradeData.agreesToTrade.length === investorCount) {
     let postOrder: OrderObject
