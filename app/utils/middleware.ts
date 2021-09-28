@@ -46,13 +46,13 @@ export const withAuth = (handler) => async (req, res) => {
   const token = authHeader?.split(" ")?.pop()
   if (!token) res.status(401).end("Not authenticated. No token passed")
 
-
   let decodedToken
   try {
     decodedToken = await auth.verifyIdToken(token)
     if (!decodedToken || !decodedToken.uid)
       return res.status(401).end("Not authenticated")
-    req.uid = decodedToken.uid
+    req.token = token
+    req.decodedToken = decodedToken.uid
   } catch (error) {
     console.log(error.errorInfo)
     const errorCode = error.errorInfo.code
