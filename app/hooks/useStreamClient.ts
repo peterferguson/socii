@@ -2,9 +2,11 @@ import { useAuth } from "@hooks/useAuth"
 import { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
 import { connect } from "getstream"
+import { isBrowser } from "@utils/isBrowser"
 
 export interface StreamClientContext {
-  client: StreamChat
+  token: string
+  chatClient: StreamChat
   userFeed: any
 }
 
@@ -59,10 +61,21 @@ export const useStreamClient = (): StreamClientContext => {
 
   useEffect(() => {
     if (username && user?.streamToken) {
-      const client = connect(process.env.STREAM_API_KEY, user?.streamToken, username)
+      console.log(`Connecting ${username} to their feed`)
+      const client = connect(
+        process.env.NEXT_PUBLIC_STREAM_API_KEY,
+        user?.streamToken,
+        username
+      )
       userFeed.current = client.feed("user", username, user?.streamToken)
+      console.log(userFeed.current)
+      console.log(`Connected ${username} to their feed`)
     }
   }, [user?.streamToken, username])
 
-  return { client: streamClient.current, userFeed }
+  return {
+    token: user?.streamToken,
+    chatClient: streamClient.current,
+    userFeed: userFeed.current,
+  }
 }

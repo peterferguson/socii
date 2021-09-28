@@ -1,16 +1,16 @@
 import ClientOnly from "@components/ClientOnly"
 import { AuthCheck } from "@components/AuthCheck"
-import { useStream } from "@hooks/useStream"
 import dynamic from "next/dynamic"
+import { ChatContext } from "stream-chat-react"
 import Link from "next/link"
-import React from "react"
+import React, { useContext } from "react"
 
 const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
 })
 
 const ChatPage = () => {
-  const { client } = useStream()
+  const { client } = useContext(ChatContext)
   return (
     <AuthCheck>
       <ClientOnly>

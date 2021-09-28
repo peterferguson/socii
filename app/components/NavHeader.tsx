@@ -7,6 +7,7 @@ import algoliasearch from "algoliasearch/lite"
 import dynamic from "next/dynamic"
 import { NextRouter, useRouter } from "next/router"
 import React, { Fragment, useMemo } from "react"
+import { NotificationDropdown } from "react-activity-feed"
 import { HiOutlineCog } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
@@ -104,6 +105,7 @@ const NavHeader: React.FC = () => {
                 <div className="flex-grow hidden md:block" />
                 <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
                   <Searchbar open={open} />
+                  <NotificationDropdown />
                   <HeaderDropdownButton
                     name="Settings Dropdown"
                     icon={() => <UserPhoto />}
