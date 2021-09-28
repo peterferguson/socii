@@ -20,8 +20,8 @@ event_endpoint_mapping = {
     "nta": "nta",  # non-trading activity
 }
 
-api_key = os.environ.get("ALPACA_KEY", "")
-api_secret = os.environ.get("ALPACA_SECRET", "")
+api_key = os.environ.get("APCA_API_KEY_ID", "")
+api_secret = os.environ.get("APCA_API_SECRET_KEY", "")
 
 
 @asynccontextmanager
@@ -35,7 +35,7 @@ async def stream_alpaca_events(
 
     try:
         with s.get(
-            os.getenv("ALPACA_BASE_URL", "")
+            os.getenv("APCA_API_BASE_URL", "")
             + f"events/"
             + event_endpoint_mapping[event_type]
             + query_string,

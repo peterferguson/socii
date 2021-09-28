@@ -25,8 +25,8 @@ event_endpoint_mapping = {
     "nta": "nta",  # non-trading activity
 }
 
-api_key = os.environ.get("ALPACA_KEY", "")
-api_secret = os.environ.get("ALPACA_SECRET", "")
+api_key = os.environ.get("APCA_API_KEY_ID", "")
+api_secret = os.environ.get("APCA_API_SECRET_KEY", "")
 
 broadcast = Broadcast(os.environ.get("REDIS_URL", "redis://localhost:6379"))
 
