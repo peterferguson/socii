@@ -30,14 +30,14 @@ export const tradeSubmission = async (
   const investors = (await investorsRef.get()).docs
   const investorCount = investors.length
 
-  const alpacaIds = investors.map((investor) => investor.data().alpacaAccountId)
-
   // - Ensure each investor has enough cash to make the trade
   const canAffordTrade = await Promise.all(
-    alpacaIds.map(async (id: string) => {
-      const { cash } = await getAlpacaBuyPower(id)
+    investors.map(async (investor) => {
+      const data = investor.data()
+      logger.log(`Getting buying power for ${data.username}`)
+      const { cash } = await getAlpacaBuyPower(data.alpacaAccountId)
       return {
-        id,
+        id: data.alpacaAccountId,
         cash,
         isAffordable: cash >= (verifiedData.notional / investorCount) * 1.05,
         // - Add 5% buffer
@@ -50,7 +50,7 @@ export const tradeSubmission = async (
 
   if (!canAffordTrade.every(({ isAffordable }) => isAffordable))
     return submittedFromCallable
-      ? { error: "Not enough cash" }
+      ? { error: "Some group members don't have enough cash" }
       : await streamClient
           .channel("group", verifiedData.groupName)
           .sendMessage(notEnoughBuyingPowerMessage(verifiedData.username))
