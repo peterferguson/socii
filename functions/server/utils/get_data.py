@@ -49,7 +49,6 @@ async def get_latest_quotes(symbols):
     async with aiohttp.ClientSession(
         auth=aiohttp.BasicAuth(api_key, api_secret)
     ) as session:
-
         tasks = []
         for symbol in symbols:
             tasks.append(asyncio.ensure_future(get_latest_quote(session, symbol)))
@@ -57,7 +56,7 @@ async def get_latest_quotes(symbols):
         return await asyncio.gather(*tasks)
 
 
-async def get_data(stream: Stream, data_type: str, symbols: List[str], data):
+def stream_quotes(stream: Stream, data_type: str, symbols: List[str], data):
     """
     Get realtime data from Alpaca API.
 
@@ -77,54 +76,30 @@ async def get_data(stream: Stream, data_type: str, symbols: List[str], data):
     logger.info(f"Getting {data_type} data for {symbols} from Alpaca API")
 
     quote_symbols = symbols if data_type == "quotes" else None
-    trade_symbols = symbols if data_type == "trades" else None
 
-    if not quote_symbols and not trade_symbols:
+    if not quote_symbols:
         return
 
-    market_time = await get_market_time()
-    logger.info(f"Market time: {market_time}")
+    # - continue until quotes for all symbols are received
+    logger.info("Subscribing to quotes...")
 
-    data["_meta"] = market_time
+    @stream.on_quote(*quote_symbols)
+    async def _(quote):
+        logger.info(quote)
+        data[quote.symbol] = quote._raw
+        logger.info(quote)
 
-    if quote_symbols:
+        # ---------------------------------------------------------------------------
+        # - Uncomment to stream quote data continuously with three seconds delay
+        # ---------------------------------------------------------------------------
+        # await asyncio.sleep(3)
 
-        if not market_time["is_open"]:
-            logger.info("Market is closed, getting historical quote data")
+        # stream.subscribe_crypto_trades(print_crypto_trade, "BTCUSD")
 
-            latest = await get_latest_quotes(symbols)
-            for result in latest:
-                data[result["symbol"]] = result
-
-            return
-
-        # - continue until quotes for all symbols are received
-        logger.info("Waiting for data...")
-
-        @stream.on_quote(*quote_symbols)
-        async def _(quote):
-            data[quote.symbol] = quote._raw
-            logger.info(quote)
-
-            # ---------------------------------------------------------------------------
-            # - Uncomment to stream quote data continuously with three seconds delay
-            # ---------------------------------------------------------------------------
-            # await asyncio.sleep(3)
-
-            try:
-                stream.unsubscribe_quotes(quote.symbol)
-            except RuntimeError:
-                #  ignore event loop is already running exception
-                pass
-            try:
-                stream.run()  # keep the stream alive
-            except RuntimeError:
-                #  ignore event loop is already running exception
-                pass
-
-            # stream.subscribe_crypto_trades(print_crypto_trade, "BTCUSD")
-
-        while any(symbol not in data.keys() for symbol in symbols):
-            pass
+    try:
+        stream.run()  # keep the stream alive
+    except RuntimeError:
+        #  ignore event loop is already running exception
+        pass
 
     return
