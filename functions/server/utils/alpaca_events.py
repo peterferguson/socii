@@ -36,7 +36,7 @@ def alpaca_events(timeout=5):
             try:
                 with s.get(
                     os.getenv("APCA_API_BASE_URL", "")
-                    + f"events/"
+                    + "/v1/events/"
                     + event_endpoint_mapping[event_type]
                     + query_string,
                     auth=(api_key, api_secret),

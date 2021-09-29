@@ -1,12 +1,10 @@
 import aiohttp
 import asyncio
 import os
-import requests
 import logging
 from typing import List
 
 from alpaca_trade_api.stream import Stream
-from alpaca_trade_api.rest import REST
 
 logger = logging.getLogger("main")
 
@@ -15,25 +13,29 @@ api_key = os.environ.get("APCA_API_KEY_ID", "")
 api_secret = os.environ.get("APCA_API_SECRET_KEY", "")
 
 
-def get_market_time():
+# TODO: add support for crypto trades
+# TODO: REFACTOR - move to utils, create a websocket forward so we can actually connect on the frontend?
+
+
+async def get_market_time():
     """
     Get the current market time.
     """
-    logger.info(os.environ.get("APCA_API_BASE_URL", "") + "clock")
-    market_time_request = requests.get(
-        os.environ.get("APCA_API_BASE_URL", "") + "clock",
-        auth=(api_key, api_secret),
-    )
-
-    logger.info(market_time_request.status_code)
-    return market_time_request.json()
+    async with aiohttp.ClientSession(
+        auth=aiohttp.BasicAuth(api_key, api_secret)
+    ) as session:
+        async with session.get(
+            os.environ.get("APCA_API_BASE_URL", "") + "/v1/clock",
+        ) as response:
+            data = await response.json()
+            return data
 
 
 async def get_latest_quote(session, symbol):
     """
     Get the latest quote for a given symbol.
     """
-    url = f"https://data.sandbox.alpaca.markets/v2/stocks/{symbol}/quotes/latest"
+    url = os.environ.get("APCA_API_DATA_URL", "") + f"/v2/stocks/{symbol}/quotes/latest"
     async with session.get(url) as resp:
         logger.info(resp.status)
         return await resp.json()
@@ -57,7 +59,20 @@ async def get_latest_quotes(symbols):
 
 async def get_data(stream: Stream, data_type: str, symbols: List[str], data):
     """
-    Get data from Alpaca API.
+    Get realtime data from Alpaca API.
+
+    Alpaca historical quotes are delayed by 15 minutes. So in order to get the latest
+    quotes, we need use the websocket during market hours.
+
+    Args:
+        stream: Stream object
+        data_type: data type to get
+        symbols: list of symbols to get data for
+        data: data to get
+
+    Returns:
+        data: data from Alpaca API
+
     """
     logger.info(f"Getting {data_type} data for {symbols} from Alpaca API")
 
@@ -67,8 +82,10 @@ async def get_data(stream: Stream, data_type: str, symbols: List[str], data):
     if not quote_symbols and not trade_symbols:
         return
 
-    market_time = get_market_time()
+    market_time = await get_market_time()
     logger.info(f"Market time: {market_time}")
+
+    data["_meta"] = market_time
 
     if quote_symbols:
 
@@ -108,8 +125,6 @@ async def get_data(stream: Stream, data_type: str, symbols: List[str], data):
             # stream.subscribe_crypto_trades(print_crypto_trade, "BTCUSD")
 
         while any(symbol not in data.keys() for symbol in symbols):
-            # logger.info([symbol not in data.keys() for symbol in symbols])
-            # logger.info(data)
             pass
 
     return
