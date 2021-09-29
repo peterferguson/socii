@@ -62,15 +62,26 @@ export interface AlpacaQuote {
   symbol: string
   quote: {
     t: string // - Timestamp in RFC-3339 format with nanosecond precision
-    ax: keyof AlpacaExchanges // - Exchange where the ask was made
+    ax: keyof typeof AlpacaExchanges // - Exchange where the ask was made
     ap: number // - Ask price
     as: number // - Ask size
-    bx: keyof AlpacaExchanges // - Exchange where the bid was made
+    bx: keyof typeof AlpacaExchanges // - Exchange where the bid was made
     bp: number // - Bid price
     bs: number // - Bid size
     c: (keyof AlpacaQuoteConditions)[] // - Trade conditions
     z: string // - Tape
   }
+}
+
+interface MarketClock {
+  timestamp: string
+  is_open: boolean
+  next_open: string
+  next_close: string
+}
+
+export interface AlpacaQuoteData {
+  [symbol: string]: AlpacaQuote
 }
 
 const baseUrl =
@@ -83,7 +94,7 @@ const baseUrl =
 export const getRealtimeQuotes = async (
   symbols: string[],
   token: string = null
-): Promise<AlpacaQuote> => {
+): Promise<{ meta: MarketClock; quotes: AlpacaQuoteData }> => {
   const tickers = symbols.join(",")
   token = token ? token : jwt.sign({}, process.env.ALPACA_SECRET)
   const data = await fetch(
@@ -97,5 +108,6 @@ export const getRealtimeQuotes = async (
   }
 
   const json = await data.json()
-  return json as AlpacaQuote
+  const { _meta: meta, ...quotes } = json
+  return { meta, quotes }
 }
