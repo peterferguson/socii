@@ -22,7 +22,7 @@ const StreamChat = ({ client }) => {
   if (!client) return null
 
   return (
-    <div className="flex flex-col sm:flex-row overscroll-contain">
+    <div className="flex flex-col overflow-hidden sm:flex-row">
       <Channel
         maxNumberOfFiles={3}
         multipleUploads={true}

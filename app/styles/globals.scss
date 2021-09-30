@@ -20,8 +20,6 @@
 @import "stream-chat-react/dist/scss/LoadingChannels";
 @import "stream-chat-react/dist/scss/LoadMoreButton";
 @import "stream-chat-react/dist/scss/Message";
-@import "stream-chat-react/dist/scss/MessageCommerce";
-@import "stream-chat-react/dist/scss/MessageTeam";
 @import "stream-chat-react/dist/scss/MessageActions";
 @import "stream-chat-react/dist/scss/MessageInput";
 @import "stream-chat-react/dist/scss/MessageInputFlat";
@@ -49,17 +47,24 @@
   --sab: env(safe-area-inset-bottom);
   --sar: env(safe-area-inset-right);
   --sal: env(safe-area-inset-left);
-  scroll-behavior: smooth;
+  --standaloneHeight: calc(var(--innerHeight) - var(--sat) - var(--sab));
 }
 
 body {
-  max-height: calc(var(--innerHeight) - 2 * var(--sat) - 2 * var(--sab));
-
+  height: var(--innerHeight);
+  max-height: var(--innerHeight);
   /* Adjusting for status bars */
   padding: 20 0 0 2; /* fallback for older browsers */
   padding: constant(safe-area-inset-top) constant(safe-area-inset-right)
     constant(safe-area-inset-bottom) constant(safe-area-inset-left);
   padding: var(--sat) var(--sar) var(--sab) var(--sal);
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
 
   /* Disable iOS Callouts & highlighting */
   -webkit-tap-highlight-color: transparent;
@@ -486,6 +491,20 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* Mobile View */
+@media (display-mode: standalone) {
+  .str-chat.messaging{
+    @apply bg-white;
+  }
+
+  .str-chat-channel {
+    height: var(--standaloneHeight);
+    width: 100vw;
+    position: fixed;
+    inset: 0;
+    padding: var(--sat) var(--sar) calc(var(--sab)*1.8) var(--sal);
+  }
+}
+
 @media screen and (max-width: 640px) {
   /*
    * This is to prevent the browser navigation bars from hiding the app
@@ -506,8 +525,8 @@ body::-webkit-scrollbar-thumb {
   }
 
   #mobile-channel-list {
+    @apply relative h-[var(--innerHeight)] standalone:h-[var(--standaloneHeight)];
     width: 100vw;
-    height: var(--innerHeight);
     position: fixed;
     top: 0;
     left: 0;
@@ -532,5 +551,34 @@ body::-webkit-scrollbar-thumb {
     overflow-y: unset;
     box-shadow: unset;
     transition: unset;
+  }
+}
+
+// edit the messaging input field
+
+.str-chat__textarea {
+  height: auto;
+  flex: 1;
+  textarea {
+    width: 100%;
+    outline: none;
+    padding: var(--sm-p);
+    background: var(--white);
+    @apply focus-within:ring-0;
+    appearance: none;
+    border: none;
+    font-size: var(--md-font);
+    min-height: 42px;
+    transition: height 100ms ease-in;
+    resize: none;
+
+    &:focus {
+      background: var(--white);
+      border: 1px solid var(--primary-color);
+    }
+
+    &:placeholder {
+      color: var(--black50);
+    }
   }
 }

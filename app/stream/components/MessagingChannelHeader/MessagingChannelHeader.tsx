@@ -110,6 +110,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
       <div
         className={tw(
           "h-12 bg-white grid md:h-16 border-opacity-25",
+          is1Col && "fixed top-0 left-0 z-50",
           isEditing ? "grid-cols-5" : "grid-cols-2"
         )}
         style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
