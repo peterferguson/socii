@@ -31,7 +31,7 @@ export const LargeNumberInput = ({ amount, orderType, setAmount, side, symbol })
           type="number"
           id="price"
           name="price"
-          className={`w-full pointer-cursor text-center border-none h-72 ${inputTextSize} placeholder-brand text-brand font-primary leading-6 ${
+          className={`w-full pointer-cursor text-center border-none focus:h-auto sm:focus:h-72 h-72  ${inputTextSize} placeholder-brand text-brand font-primary leading-6 ${
             !amount ? "focus:animate-pulse" : ""
           } focus:appearance-none focus:border-none focus:ring-0`}
           placeholder="0"
