@@ -2,6 +2,7 @@ import { FooterDynamic } from "@components/Footer"
 import NavHeader from "@components/NavHeader"
 import { StreamProvider } from "@contexts/streamContext"
 import { useStreamClient } from "@hooks"
+import { tw } from "@utils/tw"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import React from "react"
@@ -31,7 +32,11 @@ const MainLayout = ({ children }) => {
         {client && (
           <Chat client={client} theme={`messaging ${theme}`}>
             <main
-              className="p-4 overflow-x-hidden overflow-y-scroll mt-14 sm:mt-20 standalone:pb-safe-bottom standalone:pt-safe-top sm:space-y-4 col-span-8 sm:col-span-7 no-scrollbar"
+              className={tw(
+                "p-4 overflow-x-hidden mt-14 sm:mt-20",
+                "sm:space-y-4 col-span-8 sm:col-span-7 no-scrollbar",
+                !isChatRoute  && "standalone:pb-safe-bottom standalone:pt-safe-top overflow-y-scroll"
+              )}
               style={{ paddingBottom: is1Col ? "5rem" : "1rem" }}
             >
               <div className="flex flex-col items-center justify-center mx-4 sm:flex-row">

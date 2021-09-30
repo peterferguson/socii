@@ -40,7 +40,7 @@ const StreamChat = ({ client }) => {
 
   // TODO: Replace light with theme when dark theme is implemented
   return client ? (
-    <div className="flex flex-col sm:flex-row overscroll-none">
+    <div className="flex flex-col sm:flex-row overscroll-contain">
       <Channel
         channel={groupName && client.channel("group", groupName?.replace(/\s/g, "-"))}
         maxNumberOfFiles={3}

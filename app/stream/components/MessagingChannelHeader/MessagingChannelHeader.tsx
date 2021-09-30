@@ -40,7 +40,6 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const inputRef = useRef(null)
   const router = useRouter()
 
-  const onGroupPage = router.asPath.includes("groups")
   useEffect(
     () =>
       setMemberNames(
@@ -156,7 +155,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
         <Fragment>
           <TypingIndicator />
           {/* TODO: Generalise the channelName condition to a chat type condition */}
-          <div className="flex justify-end mr-2">
+          <div className="flex justify-end mr-4">
             {channelName !== "sociians" ? (
               usingSettings ? (
                 !isEditing ? (
@@ -204,11 +203,14 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
 }
 
 const HeaderButton = ({ Icon, onClick, className = null }) => (
-  <button className={tw(className, "mx-1")}>
-    <Icon
-      className="w-6 h-6 sm:w-5 sm:h-5 text-brand hover:text-brand-dark btn-transition"
-      onClick={onClick}
-    />
+  <button
+    className={tw(
+      className,
+      "mx-1 flex-grow-0 opacity-50 cursor-pointer btn-transition",
+      "hover:text-brand-dark hover:opacity-100 grid place-items-center"
+    )}
+  >
+    <Icon className="w-5 h-5" onClick={onClick} />
   </button>
 )
 

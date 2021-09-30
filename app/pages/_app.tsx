@@ -1,7 +1,7 @@
 import Head from "@components/Head"
 import { MainLayoutDynamic } from "@components/MainLayout"
 import { AuthProvider } from "@contexts/AuthProvider"
-import useInnerViewport from "@hooks/useInnerViewport"
+// import useInnerViewport from "@hooks/useInnerViewport"
 import useOrientationWarning from "@hooks/useOrientationWarning"
 import useReceivePushNotifications from "@hooks/useReceivePushNotifications"
 import { toastProps } from "@lib/constants"
@@ -29,7 +29,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useOrientationWarning()
   useReceivePushNotifications()
-  useInnerViewport()
+  // useInnerViewport()
 
   // const [theme, ,] = useDarkMode()
   const theme = "light"
