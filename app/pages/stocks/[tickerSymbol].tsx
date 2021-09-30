@@ -9,7 +9,7 @@ import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickers
 import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
 import { Position } from "@models/alpaca/Position"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
-import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
+import { IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
