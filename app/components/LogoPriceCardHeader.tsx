@@ -35,7 +35,7 @@ export default function LogoPriceCardHeader({
         <div className="w-auto h-auto p-1 text-center">
           <div
             className={
-              "text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
+              "text-base lg:text-xl px-2 mx-1 rounded-full font-semibold w-full text-center \
                inline-block font-primary mt-1 text-gray-500"
             }
           >
