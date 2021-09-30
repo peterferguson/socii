@@ -574,7 +574,7 @@ body::-webkit-scrollbar-thumb {
 
     &:focus {
       background: var(--white);
-      border: 1px solid var(--primary-color);
+      border: none;
     }
 
     &:placeholder {

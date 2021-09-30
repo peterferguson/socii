@@ -41,7 +41,7 @@ const MessagingChannelPreview = ({
   return (
     <div
       className={tw(
-        "grid grid-cols-5 bg-white p-4",
+        "grid grid-cols-5 bg-white p-4 shadow",
         "mb-2 mx-5 rounded-lg cursor-pointer max-w-[158px] h-20 pl-2",
         channel?.id === activeChannel?.id
           ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"

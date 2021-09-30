@@ -260,7 +260,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="min-h-[40px] max-w-96">
+        <div className="flex items-center focus-within:border focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads && command.icon}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
