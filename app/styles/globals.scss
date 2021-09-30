@@ -1,27 +1,70 @@
+// External dependencies (copied from libraries to rectify built file path discrepancies)
+@import "stream-chat-react/dist/scss/vendor/emoji-mart.scss"; // copy from '../../node_modules/emoji-mart/css/emoji-mart.css'
+@import "stream-chat-react/dist/scss/vendor/mml-react.scss"; // copy from '../../node_modules/mml-react/dist/styles/index.css'
+@import "stream-chat-react/dist/scss/vendor/react-file-utils.scss"; // copy from '../../node_modules/react-file-utils/dist/index.css'
+
+// Components
+@import "stream-chat-react/dist/scss/_variables.scss";
+@import "stream-chat-react/dist/scss/base.scss";
+@import "stream-chat-react/dist/scss/Attachment";
+@import "stream-chat-react/dist/scss/AttachmentActions";
+@import "stream-chat-react/dist/scss/Avatar";
+@import "stream-chat-react/dist/scss/Card";
+@import "stream-chat-react/dist/scss/ChannelList";
+@import "stream-chat-react/dist/scss/ChannelListMessenger";
+@import "stream-chat-react/dist/scss/ChannelPreview";
+@import "stream-chat-react/dist/scss/ChatDown";
+@import "stream-chat-react/dist/scss/DateSeparator";
+@import "stream-chat-react/dist/scss/EditMessageForm";
+@import "stream-chat-react/dist/scss/InfiniteScrollPaginator";
+@import "stream-chat-react/dist/scss/LoadingChannels";
+@import "stream-chat-react/dist/scss/LoadMoreButton";
+@import "stream-chat-react/dist/scss/Message";
+@import "stream-chat-react/dist/scss/MessageActions";
+@import "stream-chat-react/dist/scss/MessageInput";
+@import "stream-chat-react/dist/scss/MessageInputFlat";
+@import "stream-chat-react/dist/scss/MessageList";
+@import "stream-chat-react/dist/scss/MessageNotification";
+@import "stream-chat-react/dist/scss/MessageRepliesCountButton";
+@import "stream-chat-react/dist/scss/ReactionList";
+@import "stream-chat-react/dist/scss/ReactionSelector";
+@import "stream-chat-react/dist/scss/SendButton";
+@import "stream-chat-react/dist/scss/SimpleReactionsList";
+@import "stream-chat-react/dist/scss/Thread";
+@import "stream-chat-react/dist/scss/Tooltip";
+@import "stream-chat-react/dist/scss/TypingIndicator";
+@import "stream-chat-react/dist/scss/VirtualMessage";
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@100;200;300;400;600;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* @import url("https://fonts.googleapis.com/css2?family=Poppins&family=Work+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;1,200;1,400&display=swap"); */
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@100;200;300;400;600;800&display=swap");
-
 :root {
   --innerHeight: calc(var(--rawInnerVh, 1vh) * 100); /* Fallbacks to 100vh */
   --sat: env(safe-area-inset-top);
-  --sar: env(safe-area-inset-right);
   --sab: env(safe-area-inset-bottom);
+  --sar: env(safe-area-inset-right);
   --sal: env(safe-area-inset-left);
-  scroll-behavior: smooth;
+  --standaloneHeight: calc(var(--innerHeight) - var(--sat) - var(--sab));
 }
 
 body {
-  min-height: calc(100% - env(safe-area-inset-top));
-
+  height: var(--innerHeight);
+  max-height: var(--innerHeight);
   /* Adjusting for status bars */
   padding: 20 0 0 2; /* fallback for older browsers */
   padding: constant(safe-area-inset-top) constant(safe-area-inset-right)
     constant(safe-area-inset-bottom) constant(safe-area-inset-left);
   padding: var(--sat) var(--sar) var(--sab) var(--sal);
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
 
   /* Disable iOS Callouts & highlighting */
   -webkit-tap-highlight-color: transparent;
@@ -167,11 +210,11 @@ select,
 a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: text;
-  -khtml-user-select: none;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
+  -webkit-importr-select: text;
+  -khtml-importr-select: none;
+  -moz-importr-select: text;
+  -ms-importr-select: text;
+  importr-select: text;
 }
 
 /* Remove spinner from number input */
@@ -392,4 +435,150 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .rv-radial-chart .rv-xy-plot__series--label {
   pointer-events: none;
+}
+
+/* Stream Chat React */
+body::-webkit-scrollbar {
+  background: transparent;
+}
+
+body {
+  scrollbar-color: transparent transparent;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.str-chat-channel.messaging .str-chat__main-panel {
+  padding: 0 !important;
+  min-width: 250px;
+}
+
+.messaging.str-chat .str-chat__list .str-chat__reverse-infinite-scroll {
+  padding-top: 0;
+}
+
+.messaging.str-chat.dark .str-chat__list {
+  padding: 0 30px 0;
+  background: #282a2d;
+}
+
+/* .str-chat-channel.messaging .str-chat__main-panel {
+  padding: 30px 30px 0 0px;
+}
+ */
+.str-chat-channel.messaging .str-chat__main-panel:not(:last-child) {
+  padding: 20px 0 0 0px;
+}
+
+.str-chat-channel.messaging
+  .str-chat__main-panel:not(:last-child)
+  .messaging__channel-header {
+  border-radius: 10px 0px 0px 0px;
+}
+
+.str-chat__message--system {
+  padding: 20px;
+}
+
+.str-chat__thread-start {
+  display: none;
+}
+
+/* Mobile View */
+@media (display-mode: standalone) {
+  .str-chat.messaging{
+    @apply bg-white;
+  }
+
+  .str-chat-channel {
+    height: var(--standaloneHeight);
+    width: 100vw;
+    position: fixed;
+    inset: 0;
+    padding: var(--sat) var(--sar) calc(var(--sab)*1.8) var(--sal);
+  }
+}
+
+@media screen and (max-width: 640px) {
+  /*
+   * This is to prevent the browser navigation bars from hiding the app
+   * on some mobile browsers. The app-height variable is set dynamically
+   * using javascript.
+   */
+  .str-chat-channel {
+    height: var(--innerHeight);
+  }
+
+  .str-chat-channel-list.messaging {
+    float: unset;
+  }
+
+  .str-chat__message-text-inner,
+  .str-chat__message-simple-text-inner {
+    font-size: var(--md-font);
+  }
+
+  #mobile-channel-list {
+    @apply relative h-[var(--innerHeight)] standalone:h-[var(--standaloneHeight)];
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate3d(-100vw, 0, 0);
+    transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  }
+
+  #mobile-channel-list.show {
+    transform: translate3d(0vw, 0, 0);
+    z-index: 1000;
+  }
+}
+
+/* To fix inherited styles (as per Team and Customer Support apps */
+@media screen and (max-width: 960px) {
+  .str-chat-channel-list.messaging {
+    position: unset;
+    left: unset;
+    top: unset;
+    z-index: unset;
+    min-height: unset;
+    overflow-y: unset;
+    box-shadow: unset;
+    transition: unset;
+  }
+}
+
+// edit the messaging input field
+
+.str-chat__textarea {
+  height: auto;
+  flex: 1;
+  textarea {
+    width: 100%;
+    outline: none;
+    padding: var(--sm-p);
+    background: var(--white);
+    @apply focus-within:ring-0;
+    appearance: none;
+    border: none;
+    font-size: var(--md-font);
+    min-height: 42px;
+    transition: height 100ms ease-in;
+    resize: none;
+
+    &:focus {
+      background: var(--white);
+      border: none;
+    }
+
+    &:placeholder {
+      color: var(--black50);
+    }
+  }
 }

@@ -1,7 +1,6 @@
 import React from "react"
 import { Attachment } from "stream-chat-react"
 import {
-  InvestCommandAttachmentDynamic,
   InvestmentConfirmationAttachmentDynamic,
   InvestmentReceiptAttachmentDynamic,
   StockDisplayAttachmentDynamic,
@@ -19,8 +18,9 @@ export default function CustomAttachment(props) {
       return <InvestmentConfirmationAttachmentDynamic attachment={attachment} />
     case "stock":
       return <StockDisplayAttachmentDynamic attachment={attachment} />
-    case "invest":
-      return <InvestCommandAttachmentDynamic attachment={attachment} />
+    // TODO: Readd the invest chat command to stream then uncomment this
+    // case "invest":
+    //   return <InvestCommandAttachmentDynamic attachment={attachment} />
     case "buy":
       return <TradeCommandAttachmentDynamic attachment={attachment} tradeType={"buy"} />
     case "sell":

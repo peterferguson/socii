@@ -1,7 +1,7 @@
 import { getRandomImage } from "@utils/getRandomImage"
 import { getInitials } from "@utils/getInitials"
 import React, { memo, useContext } from "react"
-import { MdChatBubbleOutline } from "react-icons/md"
+import { HiOutlinePencilAlt } from "react-icons/hi"
 import { Avatar, ChatContext } from "stream-chat-react"
 import { SkeletonLoader } from "./SkeletonLoader"
 import { tw } from "@utils/tw"
@@ -24,7 +24,7 @@ const MessagingChannelList = ({
   const image = getRandomImage(getInitials(name))
 
   const ListHeaderWrapper = ({ children }) => (
-    <div className="flex flex-col h-full px-3 py-3 pt-5 overflow-x-hidden overflow-y-auto rounded-2xl no-scrollbar">
+    <div className="flex flex-col px-6 py-3 pt-5 overflow-x-hidden overflow-y-auto rounded-2xl no-scrollbar space-y-4">
       <div className="flex items-center justify-between py-3 pl-5 mb-5">
         <Avatar image={image} name={name} size={40} />
         <div className="flex text-base font-semibold font-primary">{name || id}</div>
@@ -37,7 +37,7 @@ const MessagingChannelList = ({
           )}
           onClick={onCreateChannel}
         >
-          <MdChatBubbleOutline className="w-5 h-5 text-brand" />
+          <HiOutlinePencilAlt className="w-5 h-5 text-brand" />
         </button>
       </div>
       {children}

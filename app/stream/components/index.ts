@@ -11,6 +11,6 @@ export { default as MessagingChannelPreview } from "./MessagingChannelPreview/Me
 export { MessagingChannelPreviewDynamic } from "./MessagingChannelPreview/MessagingChannelPreview.dynamic"
 export { default as MessagingInput } from "./MessagingInput/MessagingInput"
 export { MessagingInputDynamic } from "./MessagingInput/MessagingInput.dynamic"
-export { default as MessagingThread } from "./MessagingThread/MessagingThread"
-export { MessagingThreadDynamic } from "./MessagingThread/MessagingThread.dynamic"
+export { default as MessagingThread } from "./MessagingThreadHeader/MessagingThreadHeader"
+export { MessagingThreadDynamic } from "./MessagingThreadHeader/MessagingThreadHeader.dynamic"
 export { default as TypingIndicator } from "./TypingIndicator"

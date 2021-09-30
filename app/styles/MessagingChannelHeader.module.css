@@ -35,14 +35,15 @@
 }
 
 .messaging__channel-header__avatars {
-  display: flex;
+  /* display: flex;
+
   align-items: center;
   height: 40px;
   min-width: 40px;
   max-width: 40px;
   border-radius: 20px;
-  overflow: hidden;
-  @apply p-2;
+  overflow: hidden; */
+  @apply p-2 flex items-center justify-center max-w-10 min-w-10 overflow-hidden h-10;
 }
 
 .messaging__channel-header__avatars.two div:first-child {
