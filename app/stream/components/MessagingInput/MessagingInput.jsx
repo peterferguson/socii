@@ -257,7 +257,7 @@ const MessagingInput = (props) => {
 
   return (
     <div
-      className="flex items-center justify-center px-2 py-8 bg-white sm:py-2 w-[80%] sm:w-full overscroll-contain"
+      className="flex items-center justify-center p-2 bg-white w-[80%] sm:w-full overscroll-contain"
       style={{ borderBottomLeftRadius: "1rem", borderBottomRightRadius: "1rem" }}
     >
       <EmojiButton

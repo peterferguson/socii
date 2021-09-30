@@ -15,7 +15,7 @@
 }
 
 body {
-  max-height: calc(100% - var(--sat) - var(--sab));
+  max-height: calc(var(--innerHeight) - 2 * var(--sat) - 2 * var(--sab));
 
   /* Adjusting for status bars */
   padding: 20 0 0 2; /* fallback for older browsers */
@@ -392,4 +392,107 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .rv-radial-chart .rv-xy-plot__series--label {
   pointer-events: none;
+}
+
+/* Stream Chat React */
+body::-webkit-scrollbar {
+  background: transparent;
+}
+
+body {
+  scrollbar-color: transparent transparent;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.str-chat-channel.messaging .str-chat__main-panel {
+  padding: 0 !important;
+  min-width: 250px;
+}
+
+.messaging.str-chat .str-chat__list .str-chat__reverse-infinite-scroll {
+  padding-top: 0;
+}
+
+.messaging.str-chat.dark .str-chat__list {
+  padding: 0 30px 0;
+  background: #282a2d;
+}
+
+/* .str-chat-channel.messaging .str-chat__main-panel {
+  padding: 30px 30px 0 0px;
+}
+ */
+.str-chat-channel.messaging .str-chat__main-panel:not(:last-child) {
+  padding: 20px 0 0 0px;
+}
+
+.str-chat-channel.messaging
+  .str-chat__main-panel:not(:last-child)
+  .messaging__channel-header {
+  border-radius: 10px 0px 0px 0px;
+}
+
+.str-chat__message--system {
+  padding: 20px;
+}
+
+.str-chat__thread-start{
+  display: none;
+}
+
+/* Mobile View */
+@media screen and (max-width: 640px) {
+  /*
+   * This is to prevent the browser navigation bars from hiding the app
+   * on some mobile browsers. The app-height variable is set dynamically
+   * using javascript.
+   */
+  .str-chat-channel {
+    height: var(--innerHeight);
+  }
+
+  .str-chat-channel-list.messaging {
+    float: unset;
+  }
+
+  .str-chat__message-text-inner,
+    .str-chat__message-simple-text-inner{
+      font-size: var(--md-font);
+    }
+
+  #mobile-channel-list {
+    width: 100vw;
+    height: var(--innerHeight);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate3d(-100vw, 0, 0);
+    transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  }
+
+  #mobile-channel-list.show {
+    transform: translate3d(0vw, 0, 0);
+    z-index: 1000;
+  }
+}
+
+/* To fix inherited styles (as per Team and Customer Support apps */
+@media screen and (max-width: 960px) {
+  .str-chat-channel-list.messaging {
+    position: unset;
+    left: unset;
+    top: unset;
+    z-index: unset;
+    min-height: unset;
+    overflow-y: unset;
+    box-shadow: unset;
+    transition: unset;
+  }
 }

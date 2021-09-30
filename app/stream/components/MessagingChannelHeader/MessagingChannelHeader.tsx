@@ -1,16 +1,17 @@
+import { HamburgerIcon } from "@components/HamburgerIcon"
+import { tw } from "@utils/tw"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
+import { AiOutlineDelete } from "react-icons/ai"
+import { FiX } from "react-icons/fi"
+import { HiOutlinePencil, HiOutlineUserAdd } from "react-icons/hi"
+import { IoArrowBackSharp, IoSettingsOutline } from "react-icons/io5"
 import { MdSave } from "react-icons/md"
 import { useMediaQuery } from "react-responsive"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import TypingIndicator from "../TypingIndicator"
-
-import { FaChevronLeft, FaList } from "react-icons/fa"
-import { HiOutlineCog } from "react-icons/hi"
-import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
-import { tw } from "@utils/tw"
 
 const DeleteChannelModal = dynamic(() => import("@components/DeleteChatModal"))
 const AvatarGroup = dynamic(
@@ -114,13 +115,17 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
         style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
       >
         <div
-          className={tw("flex items-center justify-center", isEditing && "col-span-4")}
+          className={tw(
+            "flex items-center justify-center ml-4 space-x-1",
+            isEditing && "col-span-4"
+          )}
         >
           {is1Col && (
             <HeaderButton
-              Icon={FaChevronLeft}
-              className="ml-4 mr-2 cursor-pointer"
-              onClick={() => router.back()}
+              Icon={() => (
+                <IoArrowBackSharp className="w-5 h-5" onClick={() => router.back()} />
+              )}
+              className="mx-0"
             />
           )}
           <button
@@ -128,9 +133,8 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
             title="Channel List"
           >
             <HeaderButton
-              Icon={FaList}
-              className="ml-0 mr-4 sm:ml-6"
-              onClick={toggleChannelList}
+              Icon={() => <HamburgerIcon onClick={toggleChannelList} />}
+              className="mx-0"
             />
           </button>
           {channel.data.image ? (
@@ -162,29 +166,33 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
                   <>
                     {[
                       {
-                        Icon: ImPencil,
+                        Icon: HiOutlinePencil,
                         onClick: () => !isEditing && setIsEditing(true),
                       },
                       // TODO: Create add chat member modal
-                      { Icon: ImUserPlus, onClick: () => null },
-                      { Icon: ImBin, onClick: () => setShowDelete(true) },
-                      { Icon: ImCross, onClick: () => setUsingSettings(false) },
+                      { Icon: HiOutlineUserAdd, onClick: () => null },
+                      { Icon: AiOutlineDelete, onClick: () => setShowDelete(true) },
+                      { Icon: FiX, onClick: () => setUsingSettings(false) },
                     ].map(({ Icon, onClick }, i) => (
                       <HeaderButton
                         key={`header-btn-${i}`}
-                        Icon={Icon}
-                        onClick={onClick}
+                        Icon={() => <Icon className="w-5 h-5" onClick={onClick} />}
                       />
                     ))}
                   </>
                 ) : (
-                  <HeaderButton Icon={MdSave} onClick={() => null} />
+                  <HeaderButton
+                    Icon={() => <MdSave className="w-5 h-5" onClick={() => null} />}
+                  />
                 )
               ) : (
                 <HeaderButton
-                  Icon={HiOutlineCog}
-                  className="mr-4"
-                  onClick={() => setUsingSettings(true)}
+                  Icon={() => (
+                    <IoSettingsOutline
+                      className="w-5 h-5"
+                      onClick={() => setUsingSettings(true)}
+                    />
+                  )}
                 />
               )
             ) : null}
@@ -202,15 +210,15 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   )
 }
 
-const HeaderButton = ({ Icon, onClick, className = null }) => (
+const HeaderButton = ({ Icon, className = null }) => (
   <button
     className={tw(
-      className,
       "mx-1 flex-grow-0 opacity-50 cursor-pointer btn-transition",
-      "hover:text-brand-dark hover:opacity-100 grid place-items-center"
+      "hover:text-brand-dark hover:opacity-100 grid place-items-center",
+      className
     )}
   >
-    <Icon className="w-5 h-5" onClick={onClick} />
+    <Icon />
   </button>
 )
 

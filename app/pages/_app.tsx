@@ -1,11 +1,12 @@
 import Head from "@components/Head"
 import { MainLayoutDynamic } from "@components/MainLayout"
 import { AuthProvider } from "@contexts/AuthProvider"
-// import useInnerViewport from "@hooks/useInnerViewport"
+import useInnerViewport from "@hooks/useInnerViewport"
 import useOrientationWarning from "@hooks/useOrientationWarning"
 import useReceivePushNotifications from "@hooks/useReceivePushNotifications"
 import { toastProps } from "@lib/constants"
-import "@styles/Chat.css"
+// import "@styles/Chat.css"
+import "stream-chat-react/dist/css/index.css"
 import "@styles/globals.css"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
 import { tw } from "@utils/tw"
@@ -29,7 +30,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useOrientationWarning()
   useReceivePushNotifications()
-  // useInnerViewport()
+  useInnerViewport()
 
   // const [theme, ,] = useDarkMode()
   const theme = "light"
