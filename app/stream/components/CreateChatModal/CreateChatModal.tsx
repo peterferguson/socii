@@ -36,7 +36,7 @@ const CreateChatModal = ({ isCreating, setIsCreating }: CreateChatModalProps) =>
     <Transition appear show={isCreating} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-50 overflow-y-auto"
+        className="fixed inset-0 z-50 overflow-y-auto backdrop-filter backdrop-blur"
         onClose={closeModal}
       >
         <div className="min-h-screen px-4 text-center">

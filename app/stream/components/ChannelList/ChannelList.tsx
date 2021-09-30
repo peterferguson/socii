@@ -1,8 +1,6 @@
 import dynamic from "next/dynamic"
-import React, { useRef } from "react"
-import { useClickAway } from "react-use"
+import React, { useEffect, useRef } from "react"
 import { MessagingChannelListDynamic, MessagingChannelPreviewDynamic } from ".."
-import { ChannelSearch } from "./ChannelSearch/ChannelSearch"
 
 const StreamChannelList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.ChannelList) as any,
@@ -12,8 +10,7 @@ const StreamChannelList = dynamic(
 const ChannelList = ({
   userID,
   onCreateChannel,
-  groupName,
-  send,
+  showChannelList,
   toggleChannelList,
 }) => {
   const ref = useRef(null)
@@ -21,20 +18,24 @@ const ChannelList = ({
   const options = { state: true, watch: true, presence: true, limit: 5 }
   const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
 
-  useClickAway(ref, () => send("TOGGLE"), ["mousedown", "touchstart"])
+  useEffect(() => {
+    const mobileChannelList = document.querySelector("#mobile-channel-list")
+    if (showChannelList && mobileChannelList) {
+      mobileChannelList.classList.add("show")
+      document.body.style.overflow = "hidden"
+    } else if (!showChannelList && mobileChannelList) {
+      mobileChannelList.classList.remove("show")
+      document.body.style.overflow = "auto"
+    }
+  }, [showChannelList])
 
   return (
-    <div
-      className={`mx-4 transition duration-600 ease-in-out z-50 no-scrollbar`}
-      ref={ref}
-    >
+    <div id="mobile-channel-list" ref={ref} onClick={toggleChannelList}>
       <StreamChannelList
         filters={filter}
         sort={sort}
         options={options}
-        showChannelSearch={true}
-        ChannelSearch={ChannelSearch}
-        customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
+        // customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
         List={(props) => (
           <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
         )}

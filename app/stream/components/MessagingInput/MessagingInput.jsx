@@ -1,15 +1,10 @@
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useMemo,
-  useReducer,
-  useState,
-} from "react"
+import { tw } from "@utils/tw"
+import React, { memo, useCallback, useContext, useReducer } from "react"
 import { ImageDropzone } from "react-file-utils"
 import { BsLightning, BsLightningFill } from "react-icons/bs"
-import { FaDollarSign } from "react-icons/fa"
-import { HiOutlineEmojiHappy, HiOutlinePaperAirplane } from "react-icons/hi"
+import { BiDollar } from "react-icons/bi"
+import { FiSend } from "react-icons/fi"
+import { HiOutlineEmojiHappy } from "react-icons/hi"
 import { logChatPromiseExecution } from "stream-chat"
 import {
   ChannelActionContext,
@@ -55,7 +50,7 @@ import { UploadsPreview } from "./UploadsPreview"
 const CommandIcon = ({ text }) => (
   <div className="flex items-center w-16 h-6 p-2 rounded-xl  bg-brand">
     <BsLightningFill className="w-4 h-4 text-white mr-0.5" />
-    <p className="text-xs font-semibold text-white font-secondary">{text}</p>
+    <span className="text-xs font-semibold text-white font-secondary">{text}</span>
   </div>
 )
 
@@ -63,10 +58,6 @@ const commandTypes = {
   GIPHY: {
     name: "giphy",
     icon: <CommandIcon text="GIPHY" />,
-  },
-  INVEST: {
-    name: "invest",
-    icon: <CommandIcon text="INVEST" />,
   },
   BUY: {
     name: "buy",
@@ -76,18 +67,15 @@ const commandTypes = {
     name: "sell",
     icon: <CommandIcon text="SELL" />,
   },
+  // TODO: Readd invest command to stream
+  // INVEST: {
+  //   name: "invest",
+  //   icon: <CommandIcon text="INVEST" />,
+  // },
   // TICKER: AssetLogo, //TODO: Create a component to get a asset logo as a icon
   // STOCK: AssetLogo,
   // CRYPTO: AssetLogo,
   // ETF: AssetLogo,
-}
-
-// * Icons for buttons in input section
-const emojiButtons = {
-  emoji: { icon: HiOutlineEmojiHappy },
-  ticker: { icon: FaDollarSign },
-  command: { icon: BsLightning },
-  submit: { icon: HiOutlinePaperAirplane, className: "transform rotate-90" },
 }
 
 const useCommand = () => {
@@ -130,9 +118,9 @@ const useCommand = () => {
       case commandTypes.GIPHY.name:
         setNewCommand(commandTypes.GIPHY)
         return true
-      case commandTypes.INVEST.name:
-        setNewCommand(commandTypes.INVEST)
-        return true
+      // case commandTypes.INVEST.name:
+      //   setNewCommand(commandTypes.INVEST)
+      //   return true
       case commandTypes.BUY.name:
         setNewCommand(commandTypes.BUY)
         return true
@@ -157,22 +145,23 @@ const useCommand = () => {
   ]
 }
 
-const EmojiButton = React.forwardRef(({ emojiButton, onClick }, ref) => (
+const MessageInputIconButton = React.forwardRef(({ className, Icon, onClick }, ref) => (
   <div
-    className="flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition hover:text-brand-dark hover:opacity-100"
+    className={tw(
+      "flex-grow-0 px-2 opacity-50 cursor-pointer btn-transition",
+      "hover:text-brand-dark hover:opacity-100",
+      className
+    )}
     role="button"
     aria-roledescription="button"
     onClick={onClick}
     ref={ref || null}
   >
-    <emojiButton.icon
-      className={`h-5 w-5 md:h-6 md:w-6 ${emojiButton?.className ?? ""}`}
-    />
+    <Icon className="w-5 h-5 md:h-6 md:w-6" />
   </div>
 ))
 
 const MessagingInput = (props) => {
-  const [hasNotch, setHasNotch] = useState(false)
   const { acceptedFiles, maxNumberOfFiles, multipleUploads, channel } =
     useContext(ChannelStateContext)
   const { sendMessage } = useContext(ChannelActionContext)
@@ -249,24 +238,18 @@ const MessagingInput = (props) => {
     })
   }
 
-  const buttons = useMemo(() => emojiButtons, [])
-
-  // TODO: This padding is mainly to correct for lack of inset values
-  // TODO: on iPhones when the app has been added to homescreen.
-  // TODO: This is a worse UX for other platforms!
-
   return (
     <div
-      className="flex items-center justify-center px-2 py-8 bg-white sm:py-2 w-[80%] sm:w-full"
+      className="flex items-center justify-center p-2 bg-white standalone:mb-4"
       style={{ borderBottomLeftRadius: "1rem", borderBottomRightRadius: "1rem" }}
     >
-      <EmojiButton
-        emojiButton={buttons.emoji}
+      <MessageInputIconButton
+        Icon={HiOutlineEmojiHappy}
         onClick={messageInput.openEmojiPicker}
         ref={messageInput.emojiPickerRef}
       />
-      <EmojiButton emojiButton={buttons.command} onClick={onClickCommand} />
-      <EmojiButton emojiButton={buttons.ticker} onClick={onClickTicker} />
+      <MessageInputIconButton Icon={BiDollar} onClick={onClickCommand} />
+      <MessageInputIconButton Icon={BsLightning} onClick={onClickTicker} />
       <ImageDropzone
         accept={acceptedFiles}
         handleFiles={messageInput.uploadNewFiles}
@@ -277,7 +260,7 @@ const MessagingInput = (props) => {
           command.mode
         }
       >
-        <div className="message-input-wrapper min-h-[40px] max-w-96">
+        <div className="flex items-center focus-within:border focus-within:border-brand">
           {command.mode && !messageInput.numberOfUploads && command.icon}
           <UploadsPreview {...messageInput} />
           <ChatAutoComplete
@@ -293,7 +276,11 @@ const MessagingInput = (props) => {
           />
         </div>
       </ImageDropzone>
-      <EmojiButton emojiButton={buttons.submit} onClick={messageInput.handleSubmit} />
+      <MessageInputIconButton
+        Icon={FiSend}
+        className="rotate-45"
+        onClick={messageInput.handleSubmit}
+      />
       <EmojiPicker {...messageInput} />
     </div>
   )

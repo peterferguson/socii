@@ -2,11 +2,7 @@ import { useAuth } from "@hooks"
 import dynamic from "next/dynamic"
 import React, { useEffect, useState } from "react"
 import { useChannelStateContext } from "stream-chat-react"
-import {
-  MessagingChannelHeaderDynamic,
-  MessagingInputDynamic,
-  MessagingThreadDynamic,
-} from "."
+import { MessagingChannelHeaderDynamic, MessagingInputDynamic } from "."
 
 const MessageInput = dynamic(
   () => import("stream-chat-react").then((mod) => mod.MessageInput) as any,
@@ -15,6 +11,13 @@ const MessageInput = dynamic(
 const MessageList = dynamic(
   () => import("stream-chat-react").then((mod) => mod.MessageList) as any,
   { ssr: false }
+) as any
+
+const Thread = dynamic(
+  () => import("stream-chat-react").then((mod) => mod.Thread as any),
+  {
+    ssr: false,
+  }
 ) as any
 
 const Window = dynamic(() => import("stream-chat-react").then((mod) => mod.Window), {
@@ -71,7 +74,7 @@ const ChannelInner = ({ toggleChannelList }) => {
         />
         <MessageInput Input={MessagingInputDynamic} />
       </Window>
-      <MessagingThreadDynamic />
+      <Thread Input={MessagingInputDynamic} />
     </>
   )
 }

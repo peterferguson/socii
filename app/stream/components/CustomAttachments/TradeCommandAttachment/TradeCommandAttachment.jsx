@@ -4,22 +4,18 @@ import { tradeSubmission } from "@lib/firebase/client/functions"
 import { useAuth } from "hooks/useAuth"
 import dynamic from "next/dynamic"
 import React, { useEffect, useRef, useState } from "react"
+import { useUnmountPromise } from "react-use"
 import {
-  LoadingIndicator,
   useChannelStateContext,
   useChatContext,
-  useMessageContext,
+  useMessageContext
 } from "stream-chat-react"
-import { useUnmountPromise } from "react-use"
-import { ephemeralStatuses } from "@lib/constants"
+import MMLButton from "../../../MML/Button"
+import MMLNumberInput from "../../../MML/NumberInput"
 
-const MML = dynamic(() => import("mml-react").then((mod) => mod.MML), {
-  loading: LoadingIndicator,
-})
-const TradeMMLConverter = dynamic(() => import("../converters/TradeMMLConverter"))
 const LogoPriceCardHeader = dynamic(() => import("@components/LogoPriceCardHeader"))
 
-const TradeCommandAttachment = ({ attachment }) => {
+const TradeCommandAttachment = ({ attachment, tradeType }) => {
   const mounted = useUnmountPromise()
   const tickerSymbol = useRef(attachment?.tickerSymbol?.toUpperCase())
   const [isin, setIsin] = useState("")
@@ -31,6 +27,9 @@ const TradeCommandAttachment = ({ attachment }) => {
   const { message } = useMessageContext()
 
   const { price } = useTickerPrice(tickerSymbol.current)
+  const [amount, setAmount] = useState(price?.iexRealtimePrice || price?.latestPrice)
+  const handleAmountChange = (e) => setAmount(e.target.value)
+
   const alpacaAccountId = user.alpacaAccountId
 
   useEffect(() => {
@@ -42,93 +41,81 @@ const TradeCommandAttachment = ({ attachment }) => {
 
   const groupName = channel.cid.split(":").pop()
 
+  const onSubmit = async (data) => {
+    const tradeArgs = {
+      username,
+      alpacaAccountId,
+      groupName,
+      assetRef: `tickers/${isin}`,
+      messageId: message.id,
+      executionCurrency: "USD",
+      assetCurrency: "USD",
+      stockPrice: price?.iexRealtimePrice || price?.latestPrice,
+      // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
+      notional: parseFloat(data.amount),
+      //cost: parseFloat(data.cost || data.amount),
+      //qty: parseFloat(data.shares),
+      symbol: tickerSymbol.current,
+      timeInForce: "day",
+      // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
+    }
+    //TODO: Review redundancy with orderType (may not be with limit orders)
+    // - Write to firestore & send confirmation message in thread
+    if ("buy" in data) {
+      await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }))
+      await mounted(
+        client.partialUpdateMessage(message.id, {
+          set: { status: "complete" },
+        })
+      )
+    }
+    if ("sell" in data) {
+      await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "sell" }))
+      await mounted(
+        client.partialUpdateMessage(message.id, {
+          set: { status: "complete" },
+        })
+      )
+    }
+    if ("cancel" in data) {
+      await mounted(
+        client.partialUpdateMessage(message.id, {
+          set: { status: "cancelled" },
+        })
+      )
+    }
+  }
+
   return (
     <>
       {isin && (
         <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
-          <LogoPriceCardHeader
-            {...{
-              price: (price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2),
-              priceChange: price?.changePercent,
-              ISIN: isin,
-              tickerSymbol: tickerSymbol.current,
-            }}
-          />
-          <MML
-            converters={converters(price?.iexRealtimePrice || price?.latestPrice)}
-            source={attachment.mml}
-            onSubmit={async (data) => {
-              const tradeArgs = {
-                username,
-                alpacaAccountId,
-                groupName,
-                assetRef: `tickers/${isin}`,
-                messageId: message.id,
-                executionCurrency: "USD",
-                assetCurrency: "USD",
-                stockPrice: price?.iexRealtimePrice || price?.latestPrice,
-                // TODO: NEED TO ENSURE THESE ARE NOT NULL ↓
-                notional: parseFloat(data.amount),
-                //cost: parseFloat(data.cost || data.amount),
-                //qty: parseFloat(data.shares),
-                symbol: tickerSymbol.current,
-                timeInForce: "day",
-                // TODO: NEED TO ENSURE THESE ARE NOT NULL ↑
-              }
-              //TODO: Review redundancy with orderType (may not be with limit orders)
-              // - Write to firestore & send confirmation message in thread
-              if ("buy" in data) {
-                await mounted(
-                  tradeSubmission({ ...tradeArgs, type: "market", side: "buy" })
-                )
-                await mounted(
-                  client.partialUpdateMessage(message.id, {
-                    set: { status: "complete" },
-                  })
-                )
-              }
-              if ("sell" in data) {
-                await mounted(
-                  tradeSubmission({ ...tradeArgs, type: "market", side: "sell" })
-                )
-                await mounted(
-                  client.partialUpdateMessage(message.id, {
-                    set: { status: "complete" },
-                  })
-                )
-              }
-              if ("cancel" in data) {
-                await mounted(
-                  client.partialUpdateMessage(message.id, {
-                    set: { status: "cancelled" },
-                  })
-                )
-              }
-            }}
-            Loading={LoadingIndicator}
-          />
+          <LogoPriceCardHeader tickerSymbol={tickerSymbol.current} />
+          <div className="flex flex-col">
+            <MMLNumberInput
+              name={"Amount"}
+              onChange={handleAmountChange}
+              value={amount}
+            />
+            <div className="flex flex-row mt-1">
+              <MMLButton
+                name="cancel"
+                className="flex-grow mx-2 btn-transition hover:bg-red-400"
+                text="Cancel"
+                onSubmit={onSubmit}
+              />
+              <MMLButton
+                name={tradeType}
+                className="flex-grow mx-2 btn-transition"
+                text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
+                onSubmit={onSubmit}
+              />
+            </div>
+          </div>
         </div>
       )}
     </>
   )
 }
-
-// TODO: Add different views of the buy card for users who did not submit it
-// - Creates a object of all actions and their CustomMMLConverterFunctions
-const converters = (cost) =>
-  Object.assign(
-    {},
-    ...["buy", "sell"].map((type) => ({
-      // eslint-disable-next-line react/display-name
-      [type]: (tag) => (
-        <TradeMMLConverter
-          {...tag.node.attributes}
-          key={tag.key}
-          costPerShare={cost}
-          tradeType={type}
-        />
-      ),
-    }))
-  )
 
 export default React.memo(TradeCommandAttachment)
