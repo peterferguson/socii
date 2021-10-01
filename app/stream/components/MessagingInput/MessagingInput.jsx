@@ -15,6 +15,7 @@ import {
   useMessageInputState,
 } from "stream-chat-react"
 import { UploadsPreview } from "./UploadsPreview"
+import { useMediaQuery } from "react-responsive"
 
 // * Actions split by state
 
@@ -162,6 +163,7 @@ const MessageInputIconButton = React.forwardRef(({ className, Icon, onClick }, r
 ))
 
 const MessagingInput = (props) => {
+  const is1Col = useMediaQuery({ minWidth: 640 })
   const { acceptedFiles, maxNumberOfFiles, multipleUploads, channel } =
     useContext(ChannelStateContext)
   const { sendMessage } = useContext(ChannelActionContext)
@@ -240,7 +242,10 @@ const MessagingInput = (props) => {
 
   return (
     <div
-      className="flex items-center justify-center p-2 bg-white standalone:mb-4"
+      className={tw(
+        "flex items-center justify-center p-2 bg-white standalone:mb-4",
+        is1Col && "fixed bottom-0 left-0 z-20"
+      )}
       style={{ borderBottomLeftRadius: "1rem", borderBottomRightRadius: "1rem" }}
     >
       <MessageInputIconButton

@@ -64,13 +64,13 @@ const MainLayout = ({ children }) => {
                   !isMobileChat && "mx-4"
                 )}
               >
-                {children }
+                {children}
               </div>
             </main>
           </Chat>
         )}
       </StreamProvider>
-      {!isChatRoute && <FooterDynamic />}
+      <FooterDynamic />
     </div>
   )
 }

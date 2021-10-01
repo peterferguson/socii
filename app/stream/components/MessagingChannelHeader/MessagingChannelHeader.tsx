@@ -1,8 +1,6 @@
-import { HamburgerIcon } from "@components/HamburgerIcon"
 import { tw } from "@utils/tw"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { AiOutlineDelete } from "react-icons/ai"
 import { FiX } from "react-icons/fi"
@@ -39,7 +37,6 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const [title, setTitle] = useState("")
 
   const inputRef = useRef(null)
-  const router = useRouter()
 
   useEffect(
     () =>
@@ -109,7 +106,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     <Fragment>
       <div
         className={tw(
-          "h-12 bg-white grid md:h-16 border-opacity-25",
+          "h-12 w-full bg-white grid md:h-16 border-opacity-25",
           is1Col && "fixed top-0 left-0 z-50",
           isEditing ? "grid-cols-5" : "grid-cols-2"
         )}
@@ -124,20 +121,11 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
           {is1Col && (
             <HeaderButton
               Icon={() => (
-                <IoArrowBackSharp className="w-5 h-5" onClick={() => router.back()} />
+                <IoArrowBackSharp className="w-5 h-5" onClick={toggleChannelList} />
               )}
               className="mx-0"
             />
           )}
-          <button
-            className="pointer-events-auto grid place-items-center"
-            title="Channel List"
-          >
-            <HeaderButton
-              Icon={() => <HamburgerIcon onClick={toggleChannelList} />}
-              className="mx-0"
-            />
-          </button>
           {channel.data.image ? (
             <Image
               src={channel.data.image}
