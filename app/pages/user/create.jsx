@@ -47,19 +47,18 @@ export default function Username() {
         setLoading(false)
       }
     }, 500),
-    []
+    [username]
   )
 
   const runAccountCreation = async (user, username) => {
     const { userWithoutToken } = user
-    const { status, message } = (
-      await createAccount({ userWithoutToken, username })
-    ).getData()
-    if (status === "success") {
-      toast.success(message)
-      router.push(`/user/${username}`)
+    let res = {}
+    createAccount({ user, username }).then((r) => res=r)
+    if (res.status === "success") {
+      toast.success(res.message)
+      router.push(`/groups`)
     } else {
-      toast.error(`Sorry there was a problem! ${message}`)
+      toast.error(`Sorry there was a problem! ${res.message}`)
     }
   }
 
