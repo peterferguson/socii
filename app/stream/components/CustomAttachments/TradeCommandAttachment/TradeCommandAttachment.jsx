@@ -1,5 +1,5 @@
 import { useTickerPrice } from "@hooks/useTickerPrice"
-import { tickerToISIN } from "@lib/firebase/client/db/tickerToISIN"
+import { getTickerISIN } from "@lib/firebase/client/db/getTickerISIN"
 import { tradeSubmission } from "@lib/firebase/client/functions"
 import { useAuth } from "hooks/useAuth"
 import dynamic from "next/dynamic"
@@ -8,7 +8,7 @@ import { useUnmountPromise } from "react-use"
 import {
   useChannelStateContext,
   useChatContext,
-  useMessageContext
+  useMessageContext,
 } from "stream-chat-react"
 import MMLButton from "../../../MML/Button"
 import MMLNumberInput from "../../../MML/NumberInput"
@@ -33,7 +33,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   const alpacaAccountId = user.alpacaAccountId
 
   useEffect(() => {
-    const getISIN = async () => setIsin(await tickerToISIN(tickerSymbol.current))
+    const getISIN = async () => setIsin(await getTickerISIN(tickerSymbol.current))
     !isin && mounted(getISIN())
   }, [isin, mounted])
 

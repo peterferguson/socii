@@ -6,7 +6,7 @@ import { firestore } from "."
  * @param  {string} ticker
  */
 
-export const tickerToISIN = async (ticker: string): Promise<string> =>
+export const getTickerISIN = async (ticker: string): Promise<string> =>
   (ticker &&
     (
       await getDocs(
