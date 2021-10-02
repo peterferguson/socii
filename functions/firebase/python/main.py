@@ -47,6 +47,11 @@ def get_price(request: Request) -> str:
     return json.dumps(ticker.price)
 
 
+@cors(methods=["GET"])
+def get_trending(request: Request) -> str:
+    return json.dumps(yq.get_trending())
+
+
 @cors(methods=["POST"])
 def get_news(request: Request) -> str:
     ticker = yahoo_ticker_from_request(request)

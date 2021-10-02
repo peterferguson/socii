@@ -10,6 +10,7 @@ import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickers
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { iexQuote } from "@utils/iexQuote"
+import { fetchYahoo } from "@utils/fetchYahoo"
 import React, { useEffect, useRef, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 
@@ -116,10 +117,16 @@ export default function StockDisplay({ tickers }) {
 }
 
 export async function getStaticProps() {
+  // const trendingTickers = await getYahooTrending()
   return await getTickersStaticProps({
     tickerDocs: await getPopularTickersDocs(),
     period: null,
     interval: null,
-    subQueryField: "industry",
   })
+}
+
+const getYahooTrending = async () => {
+  const trendingTickers = await fetchYahoo([], "get_trending", "GET")
+  console.log(trendingTickers)
+  return trendingTickers
 }
