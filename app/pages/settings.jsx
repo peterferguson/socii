@@ -11,6 +11,13 @@ import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import CheckIcon from "@components/BackgroundCheck"
 import { updateUserData } from "@lib/firebase/client/functions"
+import { tw } from "@utils/tw"
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth"
+import { auth } from "@lib/firebase/client/auth"
+import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
 
 export default function Settings() {
   const { user } = useAuth()
@@ -18,6 +25,33 @@ export default function Settings() {
   const [username, setUsername] = useState("")
   const [isValidUsername, setisValidUsername] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [retrieveEmail, setRetrieveEmail] = useState(null)
+  const [email, setEmail] = useState(null)
+
+  useEffect(()=>{
+    if (retrieveEmail){
+      const getEmail= async () => {
+        const { user: rawUser } = await signInWithPopup(auth, new GoogleAuthProvider())
+        setEmail(user.email)
+      }
+      getEmail()
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[retrieveEmail])
+
+  useEffect(()=>{
+    if(email){
+      // check if email is used elsewhere, update if available
+      getUsernameWithEmail(email).then((r)=> {
+        if(r){
+          toast.error(`Sorry the email ${email} is taken`)
+        } else {
+          runUpdateEmail( user, email )
+        }
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[email])
 
   const onChange = (e) => {
     const val = e.target.value
@@ -27,8 +61,10 @@ export default function Settings() {
     setisValidUsername(false)
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => checkUsername(username), [username])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkUsername = useCallback(
     debounce(async (name) => {
       if (name.length >= 3) {
@@ -41,8 +77,12 @@ export default function Settings() {
     [username]
   )
 
+  //TODO less repetitive way where all fields are sent in object
   const runUpdateUsername = async (user, username) => {
     updateUserData({uid: user.uid, updateData: {username: username}}).then((r)=>toast.success(`updated username to ${username}`))
+  }
+  const runUpdateEmail = async (user, email) => {
+    updateUserData({uid: user.uid, updateData: {email: email}}).then((r)=>toast.success(`updated email to ${email}`))
   }
 
   return (
@@ -59,7 +99,7 @@ export default function Settings() {
                     share.
                   </p>
                   <p className="mt-1 text-sm font-semibold text-pink-300">
-                  For now you can update your username only. - keep an eye on our social media for future releases!
+                  You can update your username for now.. the other options will come soon  - keep an eye on our social media for future releases!
                   </p>
                 </div>
               </div>
@@ -155,7 +195,7 @@ export default function Settings() {
                       Photo
                     </label>
                     <div className="flex items-center mt-1">
-                      <span className="inline-block w-12 h-12 overflow-hidden bg-gray-50 rounded-full">
+                      <span className="inline-block w-12 h-12 overflow-hidden rounded-full bg-gray-50">
                         <svg
                           className="w-full h-full text-gray-300"
                           fill="currentColor"
@@ -230,7 +270,7 @@ export default function Settings() {
                     Enter you personal and contact details here.
                   </p>
                   <p className="mt-1 text-sm font-semibold text-pink-300">
-                  This section will be used soon - keep an eye on our social media for future releases!
+                  You can update your email for now.. the other options will come soon - keep an eye on our social media for future releases!
                   </p>
                 </div>
               </div>
@@ -242,13 +282,20 @@ export default function Settings() {
                         >
                           Email address
                         </label>
-                        <input
-                          type="text"
-                          name="email-address"
-                          id="email-address"
-                          autoComplete="email"
-                          className="block w-full mt-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
-                        />
+                        <button
+            type="submit"
+            className={tw(
+              "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
+              "rounded-2xl border-1",
+              "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
+              "umami--click--waitlist-submit-button"
+            )}
+            onClick={async (e) => {
+              setRetrieveEmail(true)
+            }}
+          >
+            Change Email
+          </button>
                       </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
