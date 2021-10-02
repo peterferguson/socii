@@ -1,4 +1,5 @@
 import io
+import json
 import logging
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -88,9 +89,24 @@ def get_history(request: Request) -> Optional[List[Dict[str, Union[str, int]]]]:
         return None
 
     buffer = io.StringIO()
-    history = ticker.history(
-        period=period, interval=interval, start=start, end=end
-    ).reset_index()
+    history = ticker.history(period=period, interval=interval, start=start, end=end)
+
+    if type(history) == dict:
+        """
+        On the first day of the time period passed in, the history is a dict
+        The data is more of a meta data object, so converting the meta to a dataframe
+        """
+        logging.info(f"history returned a dict: {json.dumps(history)}")
+        return [
+            {
+                "symbol": ticker,
+                "timestamp": data["meta"]["regularMarketTime"],
+                "close": data["meta"]["chartPreviousClose"],
+            }
+            for ticker, data in history.items()
+        ]
+
+    history = history.reset_index()
     history.info(buf=buffer)
     logging.info(f"history dataframe info: {buffer.getvalue()}")
     history.date = pd.to_datetime(history.date).map(lambda x: int(x.timestamp() * 1000))
