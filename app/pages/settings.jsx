@@ -1,13 +1,52 @@
+//TODO
+  // - Improve input method to scale for multiple fields
+  // - Add links to rest of fields, currently only username updated 
+  // - Also update user doc and other apps relying on username
+
 import { useAuth } from "@hooks/useAuth"
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
+import debounce from "lodash/debounce"
+import { usernameExists } from "@lib/firebase/client/db/index"
+import toast from "react-hot-toast"
+import { FiX } from "react-icons/fi"
+import CheckIcon from "@components/BackgroundCheck"
+import { updateUserData } from "@lib/firebase/client/functions"
 
 export default function Settings() {
   const { user } = useAuth()
-  return (
-    <>
-      {/* <div className="w-full sm:w-1/2 xl:w-1/3"> */}
-    <div >
+  const [disabled, setDisabled] = useState(false)
+  const [username, setUsername] = useState("")
+  const [isValidUsername, setisValidUsername] = useState(false)
+  const [loading, setLoading] = useState(false)
 
+  const onChange = (e) => {
+    const val = e.target.value
+    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+    setLoading(true)
+    re.test(val) ? setUsername(val) : setUsername("")
+    setisValidUsername(false)
+  }
+
+  useEffect(() => checkUsername(username), [username])
+
+  const checkUsername = useCallback(
+    debounce(async (name) => {
+      if (name.length >= 3) {
+        const empty = await usernameExists(username)
+        setisValidUsername(empty)
+        !empty && toast.error(`Sorry the username ${name} is taken`)
+        setLoading(false)
+      }
+    }, 500),
+    [username]
+  )
+
+  const runUpdateUsername = async (user, username) => {
+    updateUserData({uid: user.uid, updateData: {username: username}}).then((r)=>toast.success(`updated username to ${username}`))
+  }
+
+  return (
+    <div >
       <div>
         <div className="flex flex-col px-4 md:gap-6">
           <div className="shadow sm:rounded-md sm:overflow-hidden">
@@ -20,10 +59,55 @@ export default function Settings() {
                     share.
                   </p>
                   <p className="mt-1 text-sm font-semibold text-pink-300">
-                  This section will be used soon - kep an eye on our social media for future releases!
+                  For now you can update your username only. - keep an eye on our social media for future releases!
                   </p>
                 </div>
               </div>
+              <div>
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Username
+                </label>
+                <div className="flex flex-row rounded-md shadow-sm">
+                  <div className="text-gray-700 bg-white border rounded-lg border-brand-dark border-opacity-30 focus:outline-none active:border-opacity-100 active:border-brand focus:border-opacity-100 focus:border-brand">
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      className="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+                      placeholder="Elonmusket"
+                      onChange={onChange}
+                    />
+                  </div>
+                    <div className="justify-center">
+                      <div
+                        className={`bg-white text-sm sm:text-tiny align-middle ${
+                          isValidUsername ? "text-brand btn-transition" : "text-red-400"
+                        }`}
+                        onKeyDown={null}
+                      >
+                        {isValidUsername ? (
+                          <CheckIcon className="w-6" onClick={null} />
+                        ) : (
+                          <FiX className="w-6 h-6" />
+                        )}
+                      </div>
+                    </div>
+                    <button 
+                      type="button"
+                      className="text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                      onClick={async (e) => {
+                        e.preventDefault()
+                        isValidUsername && (await runUpdateUsername(user, username))
+                      }}
+                      disabled={disabled}
+                    >
+                      {!disabled ? "Update" : "Creating..."}
+                    </button>
+                  </div>
+                </div>
               <div className="grid grid-cols-3 gap-6">
                 <div className="col-span-3 sm:col-span-2">
                   <label
@@ -146,7 +230,7 @@ export default function Settings() {
                     Enter you personal and contact details here.
                   </p>
                   <p className="mt-1 text-sm font-semibold text-pink-300">
-                    For now you can update you email address only.
+                  This section will be used soon - keep an eye on our social media for future releases!
                   </p>
                 </div>
               </div>
@@ -428,7 +512,5 @@ export default function Settings() {
       </div>
 
     </div>
-
-    </>
   )
 }

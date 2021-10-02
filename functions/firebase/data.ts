@@ -1,5 +1,5 @@
 import bent from "bent"
-import * as cors from "cors"
+// import * as cors from "cors"
 import { firestore } from "./index.js"
 import { serverTimestamp, Timestamp } from "./firestore/index.js"
 import { cleanJsonResponse } from "./utils/cleanJsonResponse"

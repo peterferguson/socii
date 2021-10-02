@@ -101,4 +101,5 @@ module.exports = {
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),
   updateHolding: functions.region(london).https.onCall(trading.updateHolding),
   createAccount: functions.region(london).https.onCall(accounts.createAccount),
+  updateUserData: functions.region(london).https.onCall(accounts.updateUserData),
 }
