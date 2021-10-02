@@ -5,18 +5,31 @@
 import { PortfolioEquitySummaryCard } from "@components/PortfolioEquitySummaryCard"
 import { StockTableGroupDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
-import React, { useMemo } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import { GroupTradeHistory } from "../../components/GroupTradeHistory/GroupTradeHistory"
 import GroupColumnCard from "../GroupColumnCard"
+import { AddGroupMemberModalDynamic } from "@components/AddGroupMemberModal"
+import { Dialog } from "@headlessui/react"
+import { InvisibleButton } from "@components/InvisibleButton"
 
 const IsGroupMemberView = ({ groupName }) => {
   const tableMeta = useMemo(() => StockTableMeta, [])
+  const [addingMember, setAddingMember] = useState(true)
 
   if (Array.isArray(groupName)) groupName = groupName[0]
 
   return (
     <>
       <div className="w-full p-4">
+        {/* <button
+          type="button"
+          className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
+          onClick={() => setAddingMember(true)}
+          title="Create a group"
+          >
+            ADD
+        </button> */}
+        <AddGroupMemberModalDynamic open={addingMember} />
         <GroupColumnCard groupName={groupName} />
         {/* Card stats */}
         {/* TODO: Convert these into carousel cards organised by top percentage */}
