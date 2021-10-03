@@ -12,6 +12,7 @@ import { UrlObject } from "url"
 import { Popover } from "@headlessui/react"
 
 import dynamic from "next/dynamic"
+import InformationTag from "./InformationTag/InformationTag"
 const SearchResultsModal = dynamic(() => import("@components/SearchResultsModal"), {
   ssr: true,
 })
@@ -73,7 +74,7 @@ const pathTitles = {
   "/crypto": "Crypto",
   "/stocks": "Stocks",
   "/chat": "Chat",
-  "/portfolio": "Portfolio",
+  "/portfolio": "Personal Portfolio",
 }
 
 const routeTitle = (path: string) =>
@@ -82,6 +83,13 @@ const routeTitle = (path: string) =>
       .filter((k) => path?.includes(k))
       .pop()
   ]
+
+  // should more pages require info, make function to check which info to display
+  const addedInfo =<InformationTag
+    className={"h-4 w-4 text-tiniest p-2"}
+    InformationText={"This is your personal portfolio - it displays your share of assets, combined from all your groups."} 
+    informationTitle={"Personal Portfolio"}                    
+    />
 
 const NavHeader: React.FC = () => {
   const { signout } = useAuth()
@@ -98,8 +106,12 @@ const NavHeader: React.FC = () => {
           <header className="fixed inset-y-0 left-0 z-10 items-center w-full pt-4 h-11 sm:h-16 sm:left-[12.5%] sm:w-[87.5%]">
             <div className="flex flex-col justify-center h-full px-3 mx-auto flex-center">
               <div className="flex items-center justify-between flex-grow w-full pl-1 border-b bg-gray-50 dark:bg-gray-700 lg:max-w-68 sm:pr-2 sm:ml-0">
-                <div className="px-2 text-2xl font-light align-bottom sm:text-3xl font-primary">
-                  {title}
+                <div className="flex flex-row px-2 text-2xl font-light align-bottom sm:text-3xl font-primary">
+                  {title} {title === "Personal Portfolio" ? (
+                    addedInfo
+                  ):(
+                    null
+                  )}
                 </div>
                 <div className="flex-grow hidden md:block" />
                 <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
