@@ -56,6 +56,7 @@ export default function Username() {
       await createAccount({ userWithoutToken, username })
     ).getData()
     if (status === "success") {
+      toast.dismiss()
       toast.success(message)
       router.push(`/user/${username}`)
     } else {

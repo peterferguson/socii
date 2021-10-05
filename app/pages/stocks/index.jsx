@@ -76,40 +76,10 @@ export default function StockDisplay({ tickers }) {
     <>
       <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
         <div className="w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
-          Categories
-        </div>
-        <div className="overflow-scroll grid grid-cols-5 grid-rows-3 place-content-center gap-2 space-x-12 place-items-start space-y-4">
-          {Object.entries(categories).map(([shortName, { emoji }], index) =>
-            emoji ? (
-              <Link key={`category-${index}`} href={`/stocks/categories/${shortName}`}>
-                <a
-                  className={tw(
-                    "w-auto h-6 px-5 duration-150 border rounded-full transition-colors",
-                    "border border-gray-300 text-gray-600"
-                    // "text-color-700 border-brand-color bg-brand-color/20".replaceAll(
-                    //   "color",
-                    //   ["blue", "pink", "purple", "teal"][index % 4]
-                    // )
-                    // // text-pink-700 border-brand-pink bg-brand-pink/20
-                    // // text-purple-700 border-brand-purple bg-brand-purple/20
-                    // // text-blue-700 border-brand-blue bg-brand-blue/20
-                    // // text-green-700 border-brand-green bg-brand-green/20
-                    // // text-teal-700 border-brand-teal bg-brand-teal/20
-                  )}
-                >
-                  <div className="flex items-center justify-start flex-grow space-x-2 text-tiny">
-                    <span>{emoji}</span>
-                    <span>{shortName}</span>
-                  </div>
-                </a>
-              </Link>
-            ) : null
-          )}
-        </div>
-        <div className="w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
           Popular
         </div>
         <CardSlider tickers={tickers} />
+        <Categories categories={categories} />
         {/* TODO: Charts are not resizing on container change */}
         <div className="content-center w-full mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
           {tickers
@@ -167,3 +137,65 @@ const getYahooTrending = async () => {
   console.log(trendingTickers)
   return trendingTickers
 }
+
+const Categories = ({ categories }) => (
+  <>
+    <div className="w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
+      Categories
+    </div>
+    <section
+      className={tw(
+        "flex p-4 overflow-x-scroll sm:no-scrollbar",
+        "umami--drag--popular-stocks-category-card-slider"
+      )}
+    >
+      {Object.entries(categories).map(([shortName, { emoji }], index) =>
+        emoji ? (
+          <Link key={`category-${index}`} href={`/stocks/categories/${shortName}`}>
+            <a
+              className={tw(
+                "mx-1 rounded-2xl border border-gray-300 text-gray-600 h-28",
+                "flex flex-col transition relative p-6 rounded-2xl bg-white",
+                "clear-both"
+              )}
+            >
+              <div className="flex items-center justify-center w-10 rounded-full space-x-2 text-tiny">
+                <div className="absolute flex items-center justify-center w-12 h-12 m-auto mt-3 text-lg rounded-full bg-gray-200/60">
+                  {emoji}
+                </div>
+                <div className="absolute flex items-center justify-center text-xs bottom-2 inset-x-1 font-primary font-md">
+                  {shortName}
+                </div>
+              </div>
+            </a>
+          </Link>
+        ) : null
+      )}
+    </section>
+    {/* TODO: This needs to be like lightyears collections */}
+    {/* <section
+  className={tw(
+    "overflow-scroll grid grid-cols-8 sm:grid-cols-5 auto-rows-fr place-items-center sm:no-scrollbar space-x-1 space-y-2 sm:space-y-3"
+    )}
+    style={{ gridAutoFlow: "row dense" }}
+    >
+    {Object.entries(categories).map(([shortName, { emoji }], index) =>
+    emoji ? (
+      <Link key={`category-${index}`} href={`/stocks/categories/${shortName}`}>
+      <a
+      className={tw(
+        "h-6 px-5 rounded-full border border-gray-300 text-gray-600",
+        "flex items-center justify-center"
+        )}
+        >
+        <div className="flex items-center justify-center flex-grow space-x-2 text-tiny">
+        <span>{emoji}</span>
+        <span>{shortName}</span>
+        </div>
+        </a>
+        </Link>
+        ) : null
+        )}
+      </section> */}
+  </>
+)
