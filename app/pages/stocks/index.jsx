@@ -46,12 +46,12 @@ export default function StockDisplay({ tickers }) {
       const numTickers = is1Col ? 5 : is2Cols ? 10 : 15
       const tickerDocs = await getMainPageStocks(lastTickerLoaded.current, numTickers)
 
-      lastTickerLoaded.current = tickerDocs.docs?.slice().pop()
+      lastTickerLoaded.current = tickerDocs?.slice().pop()
 
       const tickers = await Promise.all(
-        tickerDocs.docs?.map(async (tickerDoc) => {
+        tickerDocs?.map(async (tickerDoc) => {
           const { tickerSymbol } = tickerDoc.data()
-          const props = await getTickerProps(tickerDoc)
+          const props = await getTickerProps(tickerDoc, null, null)
 
           const price = tickerSymbol
             ? await iexQuote(tickerSymbol, user?.token)

@@ -3,8 +3,8 @@ import HorizontalAssetCard, {
 } from "@components/HorizontalAssetCard"
 import { useAuth } from "@hooks"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { getMainPageStocks } from "@lib/firebase/client/db/getMainPageStocks"
 import { getTickerDocs } from "@lib/firebase/client/db/getTickerDocs"
+import { Price } from "@models/Price"
 import { getTickerCategoryShortNames } from "@utils/getTickerCategoryShortNames"
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps, TickersProps } from "@utils/getTickersStaticProps"
@@ -52,11 +52,17 @@ const CategoryPage: React.FC<CategoryTickerProps> = ({
       const tickers = await Promise.all(
         tickerDocs?.map(async (tickerDoc) => {
           const { tickerSymbol } = tickerDoc.data()
-          const props = await getTickerProps([tickerDoc], null, null)
+          const props = await getTickerProps(tickerDoc, null, null)
 
-          const price = tickerSymbol
-            ? await iexQuote(tickerSymbol, user?.token)
-            : undefined
+          let price: Price
+          try {
+            price = tickerSymbol ? await iexQuote(tickerSymbol, user?.token) : undefined
+          } catch (err) {
+            console.log(`Failed to find price for ${tickerSymbol}`)
+            console.log(err)
+            console.log(price)
+          }
+
           return { ...props, price }
         })
       )
@@ -89,7 +95,7 @@ const CategoryPage: React.FC<CategoryTickerProps> = ({
           price={price}
         />
       ))}
-      {moreTickers.current.length &&
+      {moreTickers.current.length > 0 &&
         moreTickers.current.map(({ ticker, price }) => (
           <HorizontalAssetCard
             key={`${ticker?.tickerSymbol}`}
