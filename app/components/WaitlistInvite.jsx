@@ -1,4 +1,5 @@
 import { useAuth } from "@hooks/useAuth"
+import { alreadyOnWaitlist } from "@utils/alreadyOnWaitlist"
 import { joinWaitlist } from "@utils/joinWaitlist"
 import { tw } from "@utils/tw"
 import { useRouter } from "next/router"
@@ -16,9 +17,12 @@ function WaitlistInvite({ invited, setInvited }) {
 
   useEffect(() => {
     const addToWaitlist = async () => {
-      const joinResponse = await joinWaitlist(user.email)
-      // TODO: add error handling for joinWaitlist
-      joinResponse.ok && setInvited(true)
+      const { isOnWaitlist } = await alreadyOnWaitlist(user.email)
+      if (isOnWaitlist === "false") {
+        const joinResponse = await joinWaitlist(user.email)
+        // TODO: add error handling for joinWaitlist
+        joinResponse.ok && setInvited(true)
+      }
     }
 
     if (user?.email) {
