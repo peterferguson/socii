@@ -1,6 +1,5 @@
 import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart/TickerPageLineChart.dynamic"
 import { Tab } from "@headlessui/react"
-import { usePrevious } from "@hooks/usePrevious"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { pctChange } from "@utils/pctChange"
@@ -82,7 +81,9 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
         <Tab.Group onChange={(index) => setActiveTab(Object.keys(tabs)[index])}>
           <div className="flex justify-between w-full h-20">
             {crosshairIndexValue !== tabs[activeTab]?.length - 1 && (
-              <div className="flex-none p-2 sm:p-4">
+              <div
+                className={tw("flex-none p-2 sm:p-4", !highlightedClose && "invisible")}
+              >
                 <span className="z-10 text-lg text-left text-gray-700 dark:text-gray-100 leading-4 sm:text-4xl">
                   ${highlightedClose?.toFixed(2)}
                 </span>

@@ -2,7 +2,7 @@ import { Popover, Transition } from "@headlessui/react"
 import { useAuth } from "@hooks"
 import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 import { FaBitcoin as BitcoinIcon } from "react-icons/fa"
 import {
   HiOutlineChartPie as PieChartIcon,
@@ -15,10 +15,18 @@ const NavigationModal = ({ open }) => {
   const { user } = useAuth()
   const router = useRouter()
   const username = user ? user.username : ""
-
+  const isChatRoute = router.pathname.startsWith("/chat")
+  // ! ↓ Added by copilot ... they know 👀
+  // const isWalletRoute = router.pathname.startsWith("/wallet") // - TODO: add wallet route
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Popover.Panel as="div" className="fixed inset-0 z-10 overflow-y-auto">
+      <Popover.Panel
+        as="div"
+        className={tw(
+          "fixed inset-0 overflow-y-auto",
+          isChatRoute ? "z-[1001]" : "z-10"
+        )}
+      >
         {({ close }) => (
           <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center">
             <Transition.Child

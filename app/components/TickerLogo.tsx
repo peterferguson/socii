@@ -1,4 +1,4 @@
-import { tickerToISIN } from "@lib/firebase/client/db"
+import { getTickerData, getTickerISIN } from "@lib/firebase/client/db"
 import { logoUrl } from "@utils/logoUrl"
 import Image from "next/image"
 import Link from "next/link"
@@ -24,12 +24,17 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   tickerSymbol,
 }) => {
   const [logoSrc, setLogoSrc] = useState("")
+  const [fractionble, setFractionable] = useState(false)
   const [ISIN, setISIN] = useState(isin)
   const prevSymbol = usePrevious(tickerSymbol)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const getISIN = async () => setISIN(await tickerToISIN(tickerSymbol))
+    const getISIN = async () => {
+      const data = await getTickerData(tickerSymbol)
+      setISIN(data.ISIN)
+      // setFractionable(data?.alpaca?.fractionable)
+    }
 
     if (!ISIN || tickerSymbol !== prevSymbol) getISIN()
   }, [ISIN, prevSymbol, tickerSymbol])
@@ -41,7 +46,9 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
 
   return (
     <Link href={`/stocks/${encodeURIComponent(tickerSymbol)}`}>
-      <a className={`flex items-center justify-center rounded-full ${className}`}>
+      <a
+        className={`relative flex items-center justify-center rounded-full ${className}`}
+      >
         {logoSrc && !isError ? (
           <Image
             src={logoSrc}
@@ -59,6 +66,13 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
             {tickerSymbol}
           </div>
         )}
+        {/* {fractionble && (
+          <div
+            className={`absolute bottom-0 right-0 grid place-items-center border-2 border-white font-semibold bg-brand text-white rounded-full h-4 w-4 text-tiniest ${className}`}
+          >
+            F
+          </div>
+        )} */}
       </a>
     </Link>
   )

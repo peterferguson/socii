@@ -7,10 +7,10 @@ export const getTickerProps = async (
   tickerDoc: DocumentData,
   period: PeriodEnum,
   interval: IntervalEnum,
-  subQueryField: string
+  subQueryField: string = ""
 ): Promise<{ ticker: any; timeseries: OHLCTimeseries; dataQuery: any }> => {
   // * Get ticker company data
-  const ticker = tickerDoc.data()
+  const ticker = tickerDoc?.data?.()
   let dataQuery, data, timeseries
 
   if (period && interval) {

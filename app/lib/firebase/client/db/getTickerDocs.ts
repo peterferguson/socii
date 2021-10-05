@@ -1,12 +1,29 @@
-import { collection, getDocs, query, where } from "firebase/firestore"
+import {
+  collection,
+  DocumentData,
+  getDocs,
+  query,
+  QueryDocumentSnapshot,
+  where,
+} from "firebase/firestore"
 import { firestore } from "."
 
-export const getTickerDocs = async (tickerSymbols: string[]) =>
-  (
-    await getDocs(
-      query(
-        collection(firestore, "tickers"),
-        where("tickerSymbol", "in", tickerSymbols)
-      )
+export const getTickerDocs = async (
+  tickers: string[]
+): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
+  const docs = []
+  // - firestore `in` query is limited to arrays of length 10
+  for (let i = 0; i < tickers.length; i += 10) {
+    docs.push(
+      ...(
+        await getDocs(
+          query(
+            collection(firestore, "tickers"),
+            where("alpaca.symbol", "in", tickers.slice(i, i + 10))
+          )
+        )
+      ).docs
     )
-  ).docs
+  }
+  return docs
+}

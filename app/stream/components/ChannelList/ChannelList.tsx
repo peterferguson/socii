@@ -20,11 +20,14 @@ const ChannelList = ({
 
   useEffect(() => {
     const mobileChannelList = document.querySelector("#mobile-channel-list")
+    const mobileFooter = document.querySelector("#mobile-footer")
     if (showChannelList && mobileChannelList) {
       mobileChannelList.classList.add("show")
+      mobileFooter.classList.add("show")
       document.body.style.overflow = "hidden"
     } else if (!showChannelList && mobileChannelList) {
       mobileChannelList.classList.remove("show")
+      mobileFooter.classList.remove("show")
       document.body.style.overflow = "auto"
     }
   }, [showChannelList])

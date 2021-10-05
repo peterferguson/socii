@@ -17,7 +17,7 @@ export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data
     >
       <div className="flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl">
         <div className="justify-center flex-none w-20 mx-auto rounded-full">
-          <Link href={`stocks/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <TickerLogo
               isin={ISIN}
               tickerSymbol={tickerSymbol}
@@ -25,14 +25,14 @@ export default function ChartCard({ cardRef, ISIN, tickerSymbol, shortName, data
               width="40"
             />
           </Link>
-          <Link href={`stocks/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <a>
               <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                 {shortName}
               </div>
             </a>
           </Link>
-          <Link href={`stocks/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <a>
               <div className="font-semibold tracking-wider text-center text-gray-600 uppercase text-tiny">
                 {tickerSymbol}

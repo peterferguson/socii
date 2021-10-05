@@ -1,11 +1,13 @@
 from fastapi import APIRouter
 
-from api.v1.alpaca.events import trades, transfers, accounts, journals, nta
+from .events import events_router
+from .data import data_router
 
 alpaca_router = APIRouter()
 
-alpaca_router.include_router(trades.router, prefix="/trades", tags=["trades"])
-alpaca_router.include_router(journals.router, prefix="/journals", tags=["journals"])
-alpaca_router.include_router(accounts.router, prefix="/accounts", tags=["accounts"])
-alpaca_router.include_router(transfers.router, prefix="/transfers", tags=["transfers"])
-alpaca_router.include_router(nta.router, prefix="/nta", tags=["nta"])
+alpaca_router.include_router(
+    events_router, prefix="/alpaca/events", tags=["alpaca", "events"]
+)
+alpaca_router.include_router(
+    data_router, prefix="/alpaca/data", tags=["alpaca", "data"]
+)

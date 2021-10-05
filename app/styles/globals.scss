@@ -491,7 +491,7 @@ body::-webkit-scrollbar-thumb {
 
 /* Mobile View */
 @media (display-mode: standalone) {
-  .str-chat.messaging{
+  .str-chat.messaging {
     @apply bg-white;
   }
 
@@ -500,7 +500,7 @@ body::-webkit-scrollbar-thumb {
     width: 100vw;
     position: fixed;
     inset: 0;
-    padding: var(--sat) var(--sar) calc(var(--sab)*1.8) var(--sal);
+    padding: var(--sat) var(--sar) calc(var(--sab) * 1.8) var(--sal);
   }
 }
 
@@ -536,6 +536,14 @@ body::-webkit-scrollbar-thumb {
   #mobile-channel-list.show {
     transform: translate3d(0vw, 0, 0);
     z-index: 1000;
+  }
+
+  #mobile-footer.show {
+    display: flex;
+    z-index: 1002;
+  }
+  #mobile-footer-modal.show {
+    z-index: 1001;
   }
 }
 

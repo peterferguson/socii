@@ -35,9 +35,9 @@ class LogConfig(BaseModel):
 class Settings(BaseSettings):
     PROJECT_NAME: str = "socii alpaca events server"
     API_V1_STR: str = "/api/v1"
-    ALPACA_KEY: str
-    ALPACA_SECRET: str
-    ALPACA_BASE_URL: str
+    APCA_API_KEY_ID: str
+    APCA_API_SECRET_KEY: str
+    APCA_API_BASE_URL: str
     FIREBASE_PROJECT_ID: str
     GOOGLE_APPLICATION_CREDENTIALS: str
     CORS_ORIGINS: List[AnyHttpUrl] = [
