@@ -7,10 +7,13 @@ import { useAuth } from "@hooks"
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
 import { getMainPageStocks } from "@lib/firebase/client/db/getMainPageStocks"
 import { getPopularTickersDocs } from "@lib/firebase/client/db/getPopularTickersDocs"
+import { fetchYahoo } from "@utils/fetchYahoo"
+import { getTickerCategoryShortNames } from "@utils/getTickerCategoryShortNames"
 import { getTickerProps } from "@utils/getTickerProps"
 import { getTickersStaticProps } from "@utils/getTickersStaticProps"
 import { iexQuote } from "@utils/iexQuote"
-import { fetchYahoo } from "@utils/fetchYahoo"
+import { tw } from "@utils/tw"
+import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { useMediaQuery } from "react-responsive"
 
@@ -21,6 +24,7 @@ export default function StockDisplay({ tickers }) {
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
   const { user } = useAuth()
+  const [categories, setCategories] = useState({})
 
   // - For infinite scroll
   const [loadingMoreTickers, setLoadingMoreTickers] = useState(false)
@@ -33,6 +37,8 @@ export default function StockDisplay({ tickers }) {
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
   const is2Cols = !useMediaQuery({ minWidth: 1024 })
+
+  useEffect(() => getTickerCategoryShortNames().then(setCategories), [])
 
   useEffect(() => {
     const getMoreTickers = async () => {
@@ -69,7 +75,38 @@ export default function StockDisplay({ tickers }) {
     // TODO: Create our own version of this Ticker Tape banner
     <>
       <main className="flex flex-wrap flex-grow w-full sm:w-[calc(100vw-560px)] h-[calc(100vh-120px)]">
-        <div className="w-full pt-6 text-3xl tracking-tight text-center uppercase cursor-pointer font-primary text-brand-dark">
+        <div className="w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
+          Categories
+        </div>
+        <div className="overflow-scroll grid grid-cols-5 grid-rows-3 place-content-center gap-2 space-x-12 place-items-start space-y-4">
+          {Object.entries(categories).map(([shortName, { emoji }], index) =>
+            emoji ? (
+              <Link key={`category-${index}`} href={`/stocks/categories/${shortName}`}>
+                <a
+                  className={tw(
+                    "w-auto h-6 px-5 duration-150 border rounded-full transition-colors",
+                    "border border-gray-300 text-gray-600"
+                    // "text-color-700 border-brand-color bg-brand-color/20".replaceAll(
+                    //   "color",
+                    //   ["blue", "pink", "purple", "teal"][index % 4]
+                    // )
+                    // // text-pink-700 border-brand-pink bg-brand-pink/20
+                    // // text-purple-700 border-brand-purple bg-brand-purple/20
+                    // // text-blue-700 border-brand-blue bg-brand-blue/20
+                    // // text-green-700 border-brand-green bg-brand-green/20
+                    // // text-teal-700 border-brand-teal bg-brand-teal/20
+                  )}
+                >
+                  <div className="flex items-center justify-start flex-grow space-x-2 text-tiny">
+                    <span>{emoji}</span>
+                    <span>{shortName}</span>
+                  </div>
+                </a>
+              </Link>
+            ) : null
+          )}
+        </div>
+        <div className="w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark">
           Popular
         </div>
         <CardSlider tickers={tickers} />

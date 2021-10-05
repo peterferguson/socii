@@ -38,10 +38,13 @@ async def get_latest_quote(session, symbol):
     url = os.environ.get("APCA_API_DATA_URL", "") + f"/v2/stocks/{symbol}/quotes/latest"
     async with session.get(url) as resp:
         logger.info(resp.status)
-        return await resp.json()
+        if resp.ok:
+            return await resp.json()
+        else:
+            logger.error(f"Error getting quote for {symbol}")
 
 
-async def get_latest_quotes(symbols):
+async def get_latest_quotes(symbols: List[str]):
     """
     Get the latest quote for a given list of symbols async.
     """

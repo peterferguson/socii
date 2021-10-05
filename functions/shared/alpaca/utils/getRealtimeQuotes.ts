@@ -95,8 +95,18 @@ export const getRealtimeQuotes = async (
   symbols: string[],
   token: string = null
 ): Promise<{ meta: MarketClock; quotes: AlpacaQuoteData }> => {
-  const tickers = symbols.join(",")
   token = token ? token : jwt.sign({}, process.env.ALPACA_SECRET)
+  const data = { meta: {} as MarketClock, quotes: {} as AlpacaQuoteData }
+  for (let i = 0; i < symbols.length; i += 10) {
+    console.log(`Fetching ${symbols.slice(i, i + 10)}`)
+    const { meta, quotes } = await getQuotes(symbols.slice(i, i + 10).join(","), token)
+    data.meta = meta
+    data.quotes = { ...data.quotes, ...quotes }
+  }
+  return data
+}
+
+const getQuotes = async (tickers, token) => {
   const data = await fetch(
     `${baseUrl}/alpaca/data/quotes?symbols=${tickers}&token=${token}`
   )
@@ -107,7 +117,6 @@ export const getRealtimeQuotes = async (
     throw err
   }
 
-  const json = await data.json()
-  const { _meta: meta, ...quotes } = json
+  const { _meta: meta, ...quotes } = await data.json()
   return { meta, quotes }
 }

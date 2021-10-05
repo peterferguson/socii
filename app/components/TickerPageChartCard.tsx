@@ -1,6 +1,5 @@
 import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart/TickerPageLineChart.dynamic"
 import { Tab } from "@headlessui/react"
-import { usePrevious } from "@hooks/usePrevious"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { pctChange } from "@utils/pctChange"

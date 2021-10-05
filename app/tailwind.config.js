@@ -63,6 +63,7 @@ module.exports = {
           // 50: "#f3f5f7",
         },
         teal: colors.teal,
+        purple: colors.purple,
         emerald: colors.emerald,
         pink: colors.pink,
       },

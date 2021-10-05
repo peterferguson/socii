@@ -61,10 +61,12 @@ async def get_quotes(
 
     if not market_time["is_open"]:
         logger.info("Market is closed, getting historical quote data")
+        logger.info(f"for {symbols}")
 
-        latest = await get_latest_quotes(symbols)
+        latest = await get_latest_quotes(symbols.split(","))
         for result in latest:
-            data[result["symbol"]] = result
+            if data and result and result["symbol"] in data:
+                data[result["symbol"]] = result
 
         return data
 
