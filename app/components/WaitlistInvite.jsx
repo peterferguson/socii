@@ -1,10 +1,13 @@
 import { useAuth } from "@hooks/useAuth"
 import { joinWaitlist } from "@utils/joinWaitlist"
 import { tw } from "@utils/tw"
+import { useRouter } from "next/router"
 import { useEffect } from "react"
+import toast from "react-hot-toast"
 
 function WaitlistInvite({ invited, setInvited }) {
   const { user, signinWithGoogle } = useAuth()
+  const router = useRouter()
   // 1
   // TODO: Write a function to listen to notion for confirmation to add the user
   // TODO: to the invited list.
@@ -20,6 +23,19 @@ function WaitlistInvite({ invited, setInvited }) {
 
     user && getEmail()
   }, [user, setInvited])
+
+  useEffect(() => {
+    if (user?.username) {
+      toast.dismiss()
+      toast.success(`Welcome ${user.username}!`)
+      router.push("/stocks")
+    }
+    if (user?.invited) {
+      toast.dismiss()
+      toast.success(`Your invite has been accepted!`)
+      router.push("/enter")
+    }
+  }, [router, user?.invited, user?.username])
 
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
