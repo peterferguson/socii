@@ -15,14 +15,18 @@ function WaitlistInvite({ invited, setInvited }) {
   // TODO: If the user has already been invited direct them to the enter page
 
   useEffect(() => {
-    const getEmail = async () => {
+    const addToWaitlist = async () => {
       const joinResponse = await joinWaitlist(user.email)
       // TODO: add error handling for joinWaitlist
       joinResponse.ok && setInvited(true)
     }
 
-    user && getEmail()
-  }, [user, setInvited])
+    if (user?.email) {
+      if (user?.username) router.push("/stocks")
+      else if (!invited) addToWaitlist()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email])
 
   useEffect(() => {
     if (user?.username) {
@@ -47,7 +51,7 @@ function WaitlistInvite({ invited, setInvited }) {
           </p>
         </h1>
       ) : (
-        <div className="relative w-full ml-4 sm:ml-6 group umami--click--join-waitlist-button">
+        <div className="relative w-full sm:ml-6 group umami--click--join-waitlist-button">
           <div className="absolute inset-0 opacity-50 gradient-flow group-focus:-inset-0.5 group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 rounded-2xl blur transition duration-500 group-hover:duration-200" />
           <div className="relative flex justify-center  h-12">
             <button
