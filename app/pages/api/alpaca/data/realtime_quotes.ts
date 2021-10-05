@@ -1,5 +1,6 @@
 import {
-  AlpacaQuote,
+  MarketClock,
+  AlpacaQuoteData,
   getRealtimeQuotes,
 } from "@socii/shared/alpaca/utils/getRealtimeQuotes"
 import { withAuth, withCORS } from "@utils/middleware"
@@ -14,7 +15,10 @@ interface AuthRequest extends NextApiRequest {
 
 export async function handleRealtimeQuotes(
   req: AuthRequest,
-  res: NextApiResponse<AlpacaQuote>
+  res: NextApiResponse<{
+    meta: MarketClock
+    quotes: AlpacaQuoteData
+  }>
 ) {
   const { method } = req
 
