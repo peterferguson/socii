@@ -61,7 +61,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
     }
     //TODO: Review redundancy with orderType (may not be with limit orders)
     // - Write to firestore & send confirmation message in thread
-    if ("buy" in data) {
+    if (data.option=="buy") {
       await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }))
       await mounted(
         client.partialUpdateMessage(message.id, {
@@ -69,7 +69,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
         })
       )
     }
-    if ("sell" in data) {
+    if (data.option=="sell") {
       await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "sell" }))
       await mounted(
         client.partialUpdateMessage(message.id, {
@@ -77,7 +77,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
         })
       )
     }
-    if ("cancel" in data) {
+    if (data.option=="cancel") {
       await mounted(
         client.partialUpdateMessage(message.id, {
           set: { status: "cancelled" },
@@ -102,13 +102,13 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
                 name="cancel"
                 className="flex-grow mx-2 btn-transition hover:bg-red-400"
                 text="Cancel"
-                onSubmit={onSubmit}
+                onSubmit={() => onSubmit({amount, option:"cancel"})}
               />
               <MMLButton
                 name={tradeType}
                 className="flex-grow mx-2 btn-transition"
                 text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
-                onSubmit={onSubmit}
+                onSubmit={() => onSubmit({amount, option:tradeType})}
               />
             </div>
           </div>

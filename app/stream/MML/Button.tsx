@@ -11,24 +11,20 @@ export type ButtonProps = {
   value?: string
   /** Optional button icon name to display besides the text (from [material icons](https://material.io/resources/icons/)) */
   icon?: string
+  /** onSubmit fn to execute on click */
+  onSubmit?: ()=>void
 }
 
 /**
  * Button can be used to open a URL, submit the form or trigger a select when clicked
  */
-const MMLButton: FC<ButtonProps> = ({ className, text, name, value, icon }) => (
+const MMLButton: FC<ButtonProps> = ({ className, text, name, value, icon, onSubmit }) => (
   <button
     className={className || ""}
     type="submit"
     name={name}
     value={value}
-    onClick={(event: SyntheticEvent) => {
-      const input = document.createElement("input")
-      input.type = "hidden"
-      input.name = name || ""
-      input.value = value || ""
-      event.currentTarget?.closest("form")?.appendChild(input)
-    }}
+    onClick={onSubmit}
   >
     {text ? text : null}
     {icon ? icon : null}

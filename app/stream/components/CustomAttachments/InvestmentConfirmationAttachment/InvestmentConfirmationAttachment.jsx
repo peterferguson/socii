@@ -16,6 +16,15 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   const [action, shares] = message.text.split("to ").pop().split("shares")[0].split(" ")
   const cost = message.text.split("for ").pop().split(". Do")[0]
 
+  const onSubmit= async () => {
+    // ! Trade is based on the groups selection process.
+    // ! Defaults to uanimous decision.
+      agreesToTrade(groupName, message.id, user.uid, alpacaAccountId)
+      // const updated = await client.partialUpdateMessage(message.id, {
+      //   set: {  },
+      // })
+  }
+
   // TODO: Add different views of the buy card for users who did not submit it
 
   return (
@@ -40,16 +49,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
           name="yes"
           className="w-1/2 mx-2 outline-btn btn-transition"
           text={"Yes"}
-          onSubmit={async (data) => {
-            // ! Trade is based on the groups selection process.
-            // ! Defaults to uanimous decision.
-            if ("yes" in data) {
-              agreesToTrade(groupName, message.id, user.uid, alpacaAccountId)
-              // const updated = await client.partialUpdateMessage(message.id, {
-              //   set: {  },
-              // })
-            }
-          }}
+          onSubmit={()=> onSubmit()}
         />
       </div>
     </div>
