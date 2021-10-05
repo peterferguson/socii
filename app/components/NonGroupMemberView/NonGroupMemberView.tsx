@@ -20,9 +20,9 @@ const NonGroupMemberView = ({ groupName }) => {
   }, [groupName])
 
   return (
-    <div className="flex flex-col space-y-2 w-full h-full mt-0 bg-gray-50 sm:mt-8">
+    <div className="flex flex-col w-full h-full mt-0 space-y-2 bg-gray-50 sm:mt-8">
       <h2 className="pl-2 text-2xl text-gray-500 font-primary">Group Details</h2>
-      <div className="flex flex-row justify-around sm: flex flex-col w-full">
+      <div className="flex flex-row justify-around w-full sm:flex-col">
         <div>{GroupInformaitonCard(groupName)}</div>
         <div>{GroupMembersCard(groupName)}</div>
       </div>

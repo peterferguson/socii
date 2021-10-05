@@ -3,7 +3,6 @@
 // correct route to be general
 import { Tab } from "@headlessui/react"
 import { tw } from "@utils/tw"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 
@@ -34,12 +33,7 @@ export const TabHeading = ({ categories }: TabHeadingProps) => {
             )
           }
         >
-          <Link
-            href={`${router.route}?${category}`}
-            as={`${router.route}/tabs/${category.replace(" ", "")}`}
-          >
-            {category}
-          </Link>
+          {category}
         </Tab>
       ))}
     </Tab.List>

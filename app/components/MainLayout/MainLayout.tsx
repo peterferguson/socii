@@ -54,7 +54,7 @@ const MainLayout = ({ children }) => {
             <main
               className={tw(
                 !isMobileChat &&
-                  "p-4 col-span-8 sm:col-span-7 overflow-x-hidden mt-14 sm:mt-20 standalone:pb-safe-bottom standalone:pt-safe-top overflow-y-scroll"
+                  "px-0 sm:px-4  py-2 sm:py-4 col-span-8 sm:col-span-7 overflow-x-hidden mt-14 sm:mt-20 standalone:pb-safe-bottom standalone:pt-safe-top overflow-y-scroll"
               )}
               style={{ paddingBottom: is1Col ? "5rem" : "1rem" }}
             >
