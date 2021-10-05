@@ -61,10 +61,10 @@ export const useProvideAuth = () => {
     redirect !== "" && Router.push(redirect)
   }
 
-  const signinWithFacebook = (redirect: string | UrlObject) =>
+  const signinWithFacebook = (redirect: string | UrlObject = "") =>
     signinWithProvider(new FacebookAuthProvider(), redirect)
 
-  const signinWithGoogle = (redirect: string | UrlObject) =>
+  const signinWithGoogle = (redirect: string | UrlObject = "") =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
   const signout = async (
