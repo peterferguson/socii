@@ -33,7 +33,7 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
     const getISIN = async () => {
       const data = await getTickerData(tickerSymbol)
       setISIN(data.ISIN)
-      setFractionable(data?.alpaca?.fractionable)
+      // setFractionable(data?.alpaca?.fractionable)
     }
 
     if (!ISIN || tickerSymbol !== prevSymbol) getISIN()
@@ -66,13 +66,13 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
             {tickerSymbol}
           </div>
         )}
-        {fractionble && (
+        {/* {fractionble && (
           <div
             className={`absolute bottom-0 right-0 grid place-items-center border-2 border-white font-semibold bg-brand text-white rounded-full h-4 w-4 text-tiniest ${className}`}
           >
             F
           </div>
-        )}
+        )} */}
       </a>
     </Link>
   )
