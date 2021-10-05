@@ -1,5 +1,5 @@
 import { useAuth } from "@hooks/useAuth"
-import { alreadyOnWaitlist } from "@utils/alreadyOnWaitlist"
+import { checkAlreadyOnWaitlist } from "@utils/checkAlreadyOnWaitlist"
 import { joinWaitlist } from "@utils/joinWaitlist"
 import { tw } from "@utils/tw"
 import { useRouter } from "next/router"
@@ -17,11 +17,20 @@ function WaitlistInvite({ invited, setInvited }) {
 
   useEffect(() => {
     const addToWaitlist = async () => {
-      const { isOnWaitlist } = await alreadyOnWaitlist(user.email)
+      const { isOnWaitlist, isInvited } = await checkAlreadyOnWaitlist(user.email)
+      console.log("already", isOnWaitlist)
+      if (isInvited === true) {
+          toast.dismiss()
+          toast.success(`Your invite has been accepted!`)
+          router.push("/user/create")
+      } else if (isInvited === false) {
+        toast.dismiss()
+        toast.error("Your invite has not been accepted yet! You're 12th in the queue..")
+      }
       if (isOnWaitlist === "false") {
         const joinResponse = await joinWaitlist(user.email)
         // TODO: add error handling for joinWaitlist
-        joinResponse.ok && setInvited(true)
+        joinResponse.ok && setInvited(true) && toast.success("You've been added to the waitlist") 
       }
     }
 
@@ -31,19 +40,6 @@ function WaitlistInvite({ invited, setInvited }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.email])
-
-  useEffect(() => {
-    if (user?.username) {
-      toast.dismiss()
-      toast.success(`Welcome ${user.username}!`)
-      router.push("/stocks")
-    }
-    if (user?.invited) {
-      toast.dismiss()
-      toast.success(`Your invite has been accepted!`)
-      router.push("/enter")
-    }
-  }, [router, user?.invited, user?.username])
 
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">

@@ -12,7 +12,7 @@ export default async function (req, res) {
       },
     })
     const { results } = queryResponse
-    if (results.length > 0) return res.status(200).json({ isOnWaitlist: true })
+    if (results.length > 0) return res.status(200).json( {isInvited: results[0].properties["Is Invited"].select.name === "yes"} )
     return res.status(200).json({ isOnWaitlist: false })
   } catch (err) {
     console.log("Error", err)
