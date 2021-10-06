@@ -4,6 +4,7 @@ import useSWR from "swr"
 import { useAuth } from "./useAuth"
 import { Price } from "@models/Price"
 import { useEffect, useRef } from "react"
+import { iexQuote } from "@utils/iexQuote"
 
 // TODO: Allow this to handle multiple tickers
 export function useTickerPrice(
@@ -20,9 +21,9 @@ export function useTickerPrice(
   // TODO: change conditional once pre/post-markets are implemented
   const { data, error } = useSWR(
     marketOpen.current // - Stop polling if market is closed
-      ? [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token]
+      ? [tickerSymbol, token, filters]
       : null,
-    fetchWithToken,
+    iexQuote,
     {
       refreshInterval: expirationTime ? expirationTime : 3 * 60 * 1000,
       refreshWhenOffline: false,

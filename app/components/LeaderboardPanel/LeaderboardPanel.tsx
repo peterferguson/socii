@@ -2,9 +2,10 @@ import LeaderBoardCard from "@components/LeaderBoardCard"
 import { useAuth } from "@hooks"
 import React from "react"
 
-export const LeaderboardPanel = ({ leaders }) => {
+const LeaderboardPanel = ({ leaders }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
+  console.log(leaders.map(({ rank }) => rank))
 
   return (
     <section className="flex flex-col justify-between ">
@@ -39,3 +40,5 @@ export const LeaderboardPanel = ({ leaders }) => {
     </section>
   )
 }
+
+export default LeaderboardPanel

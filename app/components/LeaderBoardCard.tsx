@@ -3,7 +3,6 @@ import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import MemberPhoto from "./MemberPhoto"
-import PctChangeTag from "./PctChangeTag"
 import PnlArrow from "./PnlArrow"
 
 export interface Leader {
@@ -17,7 +16,7 @@ export interface Leader {
 }
 
 const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => {
-  const { groupName, portfolioValue, portfolioBreakdown, inGroup } = leader
+  const { groupName, portfolioBreakdown, inGroup } = leader
 
   const [members, setMembers] = useState([])
 

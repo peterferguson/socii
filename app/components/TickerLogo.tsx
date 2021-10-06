@@ -1,10 +1,10 @@
-import { getTickerData, getTickerISIN } from "@lib/firebase/client/db"
+import { usePrevious } from "@hooks/usePrevious"
+import { getTickerData } from "@lib/firebase/client/db"
 import { logoUrl } from "@utils/logoUrl"
 import Image from "next/image"
 import Link from "next/link"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
-import { usePrevious } from "@hooks/usePrevious"
 
 interface ITickerLogoProps {
   tickerSymbol: string
@@ -24,23 +24,24 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   tickerSymbol,
 }) => {
   const [logoSrc, setLogoSrc] = useState("")
+  const [unmounted, setUnmounted] = useState(false)
   const [fractionble, setFractionable] = useState(false)
   const [ISIN, setISIN] = useState(isin)
   const prevSymbol = usePrevious(tickerSymbol)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const getISIN = async () => {
-      const data = await getTickerData(tickerSymbol)
-      setISIN(data.ISIN)
-      // setFractionable(data?.alpaca?.fractionable)
+    if ((!ISIN || tickerSymbol !== prevSymbol) && !unmounted) {
+      getTickerData(tickerSymbol).then(({ ISIN }) => {
+        setISIN(ISIN)
+        // setFractionable(alpaca?.fractionable)
+      })
     }
-
-    if (!ISIN || tickerSymbol !== prevSymbol) getISIN()
-  }, [ISIN, prevSymbol, tickerSymbol])
+  }, [ISIN, prevSymbol, tickerSymbol, unmounted])
 
   useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN])
 
+  useEffect(() => () => setUnmounted(true), [])
   // TODO: Add a backup logo search
   // TODO: Add loading state
 
