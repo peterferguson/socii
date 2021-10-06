@@ -8,7 +8,6 @@ export const getLeaderBoardProps = async () => {
   // * The timescale will be since the  beginning of the month.
   // * On the first of the month, the leaderboard is reset.
   const firestore = require("@lib/firebase/server/firebase-admin").firestore
-  const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
 
   const query = firestore
     .collectionGroup("holdings")
@@ -54,8 +53,8 @@ export const getLeaderBoardProps = async () => {
     startDateStr: firstDayOfMonthString,
     endDateStr: todayString,
   })
-  
-  console.log(`${Object.keys(priceData)?.length} prices found`)  
+
+  console.log(`${Object.keys(priceData)?.length} prices found`)
 
   // - monthly pct change lagging by one day
   // ! latest data is the close of the previous market day
@@ -80,9 +79,9 @@ export const getLeaderBoardProps = async () => {
     [groupName: string]: {
       portfolioValue: number
       portfolioBreakdown: {
-        [symbol: string]: { ["portfolio%"]: number; ["mtd%"]: number }
+        [symbol: string]: { portfolioPct: number; mtdPct: number }
       }[]
-      "%pnl": number
+      pnlPct: number
     }
   } = Object.entries(groupHoldings).reduce((initial, [groupName, { holdings }]) => {
     const portfolioValue = holdings
@@ -93,9 +92,9 @@ export const getLeaderBoardProps = async () => {
       (initial, { symbol, qty }) =>
         Object.assign(initial, {
           [symbol]: {
-            "portfolio%":
+            portfolioPct:
               (100 * (priceData?.[symbol].slice().pop().close * qty)) / portfolioValue,
-            "mtd%": tickerPriceChanges?.[symbol],
+            mtdPct: tickerPriceChanges?.[symbol],
           },
         }),
       {}
@@ -106,12 +105,12 @@ export const getLeaderBoardProps = async () => {
     })
   }, {})
 
-  // - Get %pnl for each group
+  // - Get pnlPct for each group
   for (const [groupName, split] of Object.entries(portfolioSplits)) {
-    portfolioSplits[groupName]["%pnl"] = Object.entries(tickerPriceChanges)
+    portfolioSplits[groupName].pnlPct = Object.entries(tickerPriceChanges)
       .map(([ticker, pctChange]) =>
         ticker in split.portfolioBreakdown
-          ? 0.01 * pctChange * split.portfolioBreakdown[ticker]["portfolio%"]
+          ? 0.01 * pctChange * split.portfolioBreakdown[ticker].portfolioPct
           : 0
       )
       .reduce((a, b) => a + b)
@@ -119,7 +118,7 @@ export const getLeaderBoardProps = async () => {
 
   const leaders: Leader[] = Object.entries(portfolioSplits)
     .map(([groupName, split]) => ({ groupName, ...split }))
-    .sort((a, b) => b[Object.keys(b)[0]]["%pnl"] - a[Object.keys(a)[0]]["%pnl"])
+    .sort(({ pnlPct: pnlA }, { pnlPct: pnlB }) => pnlB - pnlA)
 
   return { props: { leaders } }
 }
