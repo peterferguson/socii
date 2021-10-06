@@ -139,7 +139,9 @@ export const tradeConfirmation = async (change, context) => {
         if (tradeData.side == "buy")
           groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         // 3. send a message to inform about pending order
-        await channel.sendMessage(investmentPendingMML(tradeData))
+        await channel.sendMessage(
+          investmentPendingMML({ ...tradeData, tradeId, alpacaOrderId: postOrder?.id })
+        )
         return
 
       case "failed":
