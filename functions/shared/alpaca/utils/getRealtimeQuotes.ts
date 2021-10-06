@@ -86,7 +86,7 @@ export interface AlpacaQuoteData {
 
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? "https://server.socii.com/api/v1/"
+    ? "https://server.socii.com/api/v1"
     : process.env.NODE_ENV === "development" && process.env.LOCAL_DEVELOPMENT !== "true"
     ? "https://socii-server-development.up.railway.app"
     : "http://localhost:5000/api/v1"

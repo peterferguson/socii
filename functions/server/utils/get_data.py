@@ -88,19 +88,27 @@ def stream_quotes(stream: Stream, data_type: str, symbols: List[str], data):
 
     @stream.on_quote(*quote_symbols)
     async def _(quote):
-        logger.info(quote)
+        logger.info("Quotes received")
         data[quote.symbol] = quote._raw
-        logger.info(quote)
+        if all(symbol in data.keys() for symbol in quote_symbols):
+            try:
+                stream.unsubscribe_quotes(*symbols)
+            except RuntimeError:
+                #  ignore event loop is already running exception
+                pass
+            finally:
+                return
 
         # ---------------------------------------------------------------------------
         # - Uncomment to stream quote data continuously with three seconds delay
         # ---------------------------------------------------------------------------
         # await asyncio.sleep(3)
 
+        # TODO: add support for crypto trades
         # stream.subscribe_crypto_trades(print_crypto_trade, "BTCUSD")
 
     try:
-        stream.run()  # keep the stream alive
+        stream.run()
     except RuntimeError:
         #  ignore event loop is already running exception
         pass
