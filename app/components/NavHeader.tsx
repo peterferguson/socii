@@ -10,9 +10,10 @@ import { VscSignOut } from "react-icons/vsc"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
 import { UrlObject } from "url"
 import { Popover } from "@headlessui/react"
-
 import dynamic from "next/dynamic"
 import InformationTag from "./InformationTag/InformationTag"
+import { tw } from "@utils/tw"
+
 const SearchResultsModal = dynamic(() => import("@components/SearchResultsModal"), {
   ssr: true,
 })
@@ -106,7 +107,8 @@ const NavHeader: React.FC = () => {
           <header className="fixed inset-y-0 left-0 z-10 items-center w-full pt-4 h-11 sm:h-16 sm:left-[12.5%] sm:w-[87.5%]">
             <div className="flex flex-col justify-center h-full px-3 mx-auto flex-center">
               <div className="flex items-center justify-between flex-grow w-full pl-1 border-b bg-gray-50 dark:bg-gray-700 lg:max-w-68 sm:pr-2 sm:ml-0">
-                <div className="flex flex-row px-2 text-2xl font-light align-bottom sm:text-3xl font-primary">
+                <div className={tw("flex flex-row px-2 font-light align-bottom sm:text-3xl font-primary",
+                title=="Personal Portfolio" ? "text-s" : "text-2xl")} >
                   {title} {title === "Personal Portfolio" ? (
                     addedInfo
                   ):(
