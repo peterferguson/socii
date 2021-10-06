@@ -117,3 +117,10 @@ async def get_quotes(symbols: str):
     logger.info("Received quotes: ", data)
 
     return data
+
+
+###############################################################################
+# TODO We need to handle concurrent connections! For now we can simply create #
+# TODO a queue which we add the symbols to be queried to and simply store     #
+# TODO them in firestore which can then be subscribed to from anywhere        #
+###############################################################################
