@@ -89,7 +89,7 @@ export default function GroupColumnCard({ groupName, className }: IGroupColumnCa
       {holdingInfo?.length !== 0 ? (
         <div
           className={tw(
-            "flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl",
+            "flex flex-col items-center p-4 mb-4 bg-white shadow-lg rounded-2xl min-h-max",
             className
           )}
         >

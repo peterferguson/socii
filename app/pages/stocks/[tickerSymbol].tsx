@@ -13,6 +13,7 @@ import { IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import { LoadingIndicator } from "stream-chat-react"
 
 const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   let { ticker, timeseries, price: initialPrice } = tickers?.[0] || {}
@@ -52,8 +53,8 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   // TODO: Replace with skeleton loaders
   if (!tickers || router.isFallback)
     return (
-      <div className="items-center justify-center mx-auto text-4xl font-primary text-brand-lightTeal">
-        Loading...
+      <div className="grid place-items-center">
+        <LoadingIndicator color="#3fba" size={80} />
       </div>
     )
 

@@ -12,7 +12,7 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   return (
     <div className="w-full mt-2 text-xl space-y-4 font-primary lg:w-2/5">
       <span>People also viewed</span>
-      <div className="w-full p-4 bg-white shadow-lg grid grid-cols-5 rounded-2xl place-items-center">
+      <div className="w-full p-4 bg-white shadow-lg grid grid-flow-col auto-cols-auto rounded-2xl place-items-center">
         {recommendations &&
           Object.entries(recommendations).map(([recommendation, data]) => (
             <div key={recommendation} className="my-2">

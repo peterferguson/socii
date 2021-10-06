@@ -123,10 +123,7 @@ function DonutChart({
             <div className="uppercase text-tiniest leading-4 ">
               portfolio
               <p className="text-xl text-gray-600">{text.portfolio}</p>
-              <div className={`text-tiny leading-4 ${gainColor}`}>
-                {positiveGain ? "+" : "-"}
-                {text.gain}
-              </div>
+              <div className={`text-tiny leading-4 ${gainColor}`}>{text.gain}</div>
             </div>
             <div className="w-5/12 h-1 my-2 border-gray-200 border-b-[0.5px]" />
             <div

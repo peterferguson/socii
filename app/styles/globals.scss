@@ -346,8 +346,8 @@ input[type="number"]::-webkit-outer-spin-button {
   display: inherit;
 }
 .rv-xy-plot {
-  color: #c3c3c3;
   position: relative;
+  margin: auto;
 }
 .rv-xy-plot__inner {
   display: block;
@@ -503,7 +503,6 @@ body::-webkit-scrollbar-thumb {
     }
   }
 }
-
 
 /* Mobile View */
 @media (display-mode: standalone) {
