@@ -10,6 +10,7 @@ import {
   useChatContext,
   useMessageContext,
 } from "stream-chat-react"
+import toast from "react-hot-toast"
 import MMLButton from "../../../MML/Button"
 import MMLNumberInput from "../../../MML/NumberInput"
 
@@ -61,27 +62,25 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
     }
     //TODO: Review redundancy with orderType (may not be with limit orders)
     // - Write to firestore & send confirmation message in thread
-    if (data.option=="buy") {
-      await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "buy" }))
-      await mounted(
-        client.partialUpdateMessage(message.id, {
-          set: { status: "complete" },
-        })
+    if (data.option == "buy" || data.option == "sell") {
+      await toast.promise(
+        tradeSubmission({ ...tradeArgs, type: "market", side: data.option }),
+        {
+          loading: "sending order...",
+          success: <b>${tickerSymbol.current} order sent to group!</b>,
+          error: <b>Could not send order to group.</b>,
+        }
       )
+      await client.partialUpdateMessage(message.id, { set: { status: "complete" } })
     }
-    if (data.option=="sell") {
-      await mounted(tradeSubmission({ ...tradeArgs, type: "market", side: "sell" }))
-      await mounted(
-        client.partialUpdateMessage(message.id, {
-          set: { status: "complete" },
-        })
-      )
-    }
-    if (data.option=="cancel") {
-      await mounted(
-        client.partialUpdateMessage(message.id, {
-          set: { status: "cancelled" },
-        })
+    if (data.option == "cancel") {
+      await toast.promise(
+        client.partialUpdateMessage(message.id, { set: { status: "cancelled" } }),
+        {
+          loading: "cancelling order...",
+          success: <b>${tickerSymbol.current} order cancelled!</b>,
+          error: <b>Could not cancel order.</b>,
+        }
       )
     }
   }
@@ -102,13 +101,13 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
                 name="cancel"
                 className="flex-grow mx-2 btn-transition hover:bg-red-400"
                 text="Cancel"
-                onSubmit={() => onSubmit({amount, option:"cancel"})}
+                onSubmit={() => onSubmit({ amount, option: "cancel" })}
               />
               <MMLButton
                 name={tradeType}
                 className="flex-grow mx-2 btn-transition"
                 text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
-                onSubmit={() => onSubmit({amount, option:tradeType})}
+                onSubmit={() => onSubmit({ amount, option: tradeType })}
               />
             </div>
           </div>

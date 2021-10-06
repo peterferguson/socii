@@ -12,13 +12,20 @@ export type ButtonProps = {
   /** Optional button icon name to display besides the text (from [material icons](https://material.io/resources/icons/)) */
   icon?: string
   /** onSubmit fn to execute on click */
-  onSubmit?: ()=>void
+  onSubmit?: () => Promise<void>
 }
 
 /**
  * Button can be used to open a URL, submit the form or trigger a select when clicked
  */
-const MMLButton: FC<ButtonProps> = ({ className, text, name, value, icon, onSubmit }) => (
+const MMLButton: FC<ButtonProps> = ({
+  className,
+  text,
+  name,
+  value,
+  icon,
+  onSubmit,
+}) => (
   <button
     className={className || ""}
     type="submit"
