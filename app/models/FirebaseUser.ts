@@ -10,5 +10,6 @@ export default interface FirebaseUser extends Omit<UserInfo, "photoURL"> {
   alpacaAccountId?: string
   streamToken?: string
   fcmToken?: string
-  invited?: boolean
+  isInvited?: boolean
+  isOnWaitlist?: boolean
 }

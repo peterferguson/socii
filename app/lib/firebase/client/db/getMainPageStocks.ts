@@ -14,12 +14,14 @@ export const getMainPageStocks = async (
   lastLoaded: DocumentReference,
   stockLimit: number
 ) =>
-  await getDocs(
-    query(
-      collection(firestore, "tickers"),
-      where("alpaca.lastUpdated", ">", new Date(0)),
-      orderBy("alpaca.lastUpdated", "asc"),
-      startAfter(lastLoaded ?? 0),
-      limit(stockLimit)
+  (
+    await getDocs(
+      query(
+        collection(firestore, "tickers"),
+        where("alpaca.lastUpdated", ">", new Date(0)),
+        orderBy("alpaca.lastUpdated", "asc"),
+        startAfter(lastLoaded ?? 0),
+        limit(stockLimit)
+      )
     )
-  )
+  ).docs

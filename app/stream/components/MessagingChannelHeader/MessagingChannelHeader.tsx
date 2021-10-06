@@ -1,15 +1,15 @@
+import { tw } from "@utils/tw"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-import { useRouter } from "next/router"
 import React, { Fragment, useContext, useEffect, useRef, useState } from "react"
+import { AiOutlineDelete } from "react-icons/ai"
+import { FiX } from "react-icons/fi"
+import { HiOutlinePencil, HiOutlineUserAdd } from "react-icons/hi"
+import { IoArrowBackSharp, IoSettingsOutline } from "react-icons/io5"
 import { MdSave } from "react-icons/md"
 import { useMediaQuery } from "react-responsive"
 import { ChannelStateContext, ChatContext } from "stream-chat-react"
 import TypingIndicator from "../TypingIndicator"
-
-import { FaChevronLeft, FaList } from "react-icons/fa"
-import { HiOutlineCog } from "react-icons/hi"
-import { ImBin, ImCross, ImPencil, ImUserPlus } from "react-icons/im"
 
 const DeleteChannelModal = dynamic(() => import("@components/DeleteChatModal"))
 const AvatarGroup = dynamic(
@@ -37,9 +37,7 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
   const [title, setTitle] = useState("")
 
   const inputRef = useRef(null)
-  const router = useRouter()
 
-  const onGroupPage = router.asPath.includes("groups")
   useEffect(
     () =>
       setMemberNames(
@@ -101,105 +99,93 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     </form>
   )
 
-  const deleteChannel = async () => {
-    await channel.delete()
-    // ? this should proably be a open channel list
-    toggleChannelList()
-  }
+  // ? this should proably be a open channel list
+  const deleteChannel = async () => (await channel.delete()) && toggleChannelList()
 
   return (
     <Fragment>
       <div
-        className="flex items-center justify-between h-12 bg-white md:h-16 border-opacity-25"
+        className={tw(
+          "h-12 w-full bg-white grid md:h-16 border-opacity-25",
+          is1Col && "fixed top-0 left-0 z-50",
+          isEditing ? "grid-cols-5" : "grid-cols-2"
+        )}
         style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
       >
-        {is1Col && (
-          <FaChevronLeft
-            className="w-5 h-5 ml-4 mr-2 cursor-pointer text-brand hover:text-brand-dark btn-transition"
-            onClick={() => router.back()}
-          />
-        )}
-        <button
-          disabled={onGroupPage}
-          className="pointer-events-auto"
-          title={
-            !onGroupPage ? "Channel List" : "Channel Lists are disabled on group pages"
-          }
+        <div
+          className={tw(
+            "flex items-center justify-center ml-4 space-x-1",
+            isEditing && "col-span-4"
+          )}
         >
-          <FaList
-            className={`w-5 h-5 ${
-              is1Col ? "ml-0" : "ml-6"
-            } mr-4 text-brand hover:text-brand-dark ${
-              !onGroupPage && "btn-transition"
-            }`}
-            onClick={toggleChannelList}
-          />
-        </button>
-        {channel.data.image ? (
-          <Image
-            src={channel.data.image}
-            height={40}
-            width={40}
-            className="rounded-full"
-          />
-        ) : (
-          <AvatarGroup memberNames={memberNames} />
-        )}
-        {!isEditing ? (
-          <div className="flex-1 font-semibold font-primary">
-            {channelName.slice(0, 8) === "!members" ? title : channelName}
-          </div>
-        ) : (
-          <EditHeader />
-        )}
+          {is1Col && (
+            <HeaderButton
+              Icon={() => (
+                <IoArrowBackSharp className="w-5 h-5" onClick={toggleChannelList} />
+              )}
+              className="mx-0"
+            />
+          )}
+          {channel.data.image ? (
+            <Image
+              src={channel.data.image}
+              height={40}
+              width={40}
+              className="rounded-full"
+            />
+          ) : (
+            <AvatarGroup memberNames={memberNames} />
+          )}
+          {!isEditing ? (
+            <div className="flex-1 font-semibold font-primary">
+              {channelName.slice(0, 8) === "!members" ? title : channelName}
+            </div>
+          ) : (
+            <EditHeader />
+          )}
+        </div>
         {/* TODO: Convert to its own component */}
         <Fragment>
           <TypingIndicator />
-          {channelName !== "sociians" ? (
-            usingSettings ? (
-              !isEditing ? (
-                <div className="flex mr-1">
-                  <a className="mx-1">
-                    <ImPencil
-                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                      onClick={() => {
-                        if (!isEditing) setIsEditing(true)
-                      }}
-                    />
-                  </a>
-                  <a className="mx-1">
-                    <ImUserPlus
-                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                      onClick={() => {
-                        if (!isEditing) setIsEditing(true)
-                      }}
-                    />
-                  </a>
-                  <a className="mx-1">
-                    <ImBin
-                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                      onClick={() => setShowDelete(true)}
-                    />
-                  </a>
-                  <a className="mx-1">
-                    <ImCross
-                      className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                      onClick={() => setUsingSettings(false)}
-                    />
-                  </a>
-                </div>
+          {/* TODO: Generalise the channelName condition to a chat type condition */}
+          <div className="flex justify-end mr-4">
+            {channelName !== "sociians" ? (
+              usingSettings ? (
+                !isEditing ? (
+                  <>
+                    {[
+                      {
+                        Icon: HiOutlinePencil,
+                        onClick: () => !isEditing && setIsEditing(true),
+                      },
+                      // TODO: Create add chat member modal
+                      { Icon: HiOutlineUserAdd, onClick: () => null },
+                      { Icon: AiOutlineDelete, onClick: () => setShowDelete(true) },
+                      { Icon: FiX, onClick: () => setUsingSettings(false) },
+                    ].map(({ Icon, onClick }, i) => (
+                      <HeaderButton
+                        key={`header-btn-${i}`}
+                        Icon={() => <Icon className="w-5 h-5" onClick={onClick} />}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <HeaderButton
+                    Icon={() => <MdSave className="w-5 h-5" onClick={() => null} />}
+                  />
+                )
               ) : (
-                <MdSave className="w-5 h-5 text-brand hover:text-brand-dark btn-transition" />
-              )
-            ) : (
-              <a className="mr-4">
-                <HiOutlineCog
-                  className="w-5 h-5 text-brand hover:text-brand-dark btn-transition"
-                  onClick={() => setUsingSettings(true)}
+                <HeaderButton
+                  Icon={() => (
+                    <IoSettingsOutline
+                      className="w-5 h-5"
+                      onClick={() => setUsingSettings(true)}
+                    />
+                  )}
                 />
-              </a>
-            )
-          ) : null}
+              )
+            ) : null}
+          </div>
         </Fragment>
       </div>
       {showDelete && (
@@ -212,5 +198,17 @@ const MessagingChannelHeader = ({ toggleChannelList }) => {
     </Fragment>
   )
 }
+
+const HeaderButton = ({ Icon, className = null }) => (
+  <button
+    className={tw(
+      "mx-1 flex-grow-0 opacity-50 cursor-pointer btn-transition",
+      "hover:text-brand-dark hover:opacity-100 grid place-items-center",
+      className
+    )}
+  >
+    <Icon />
+  </button>
+)
 
 export default React.memo(MessagingChannelHeader)

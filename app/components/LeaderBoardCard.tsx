@@ -3,21 +3,20 @@ import { pnlTextColor } from "@utils/pnlTextColor"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import MemberPhoto from "./MemberPhoto"
-import PctChangeTag from "./PctChangeTag"
 import PnlArrow from "./PnlArrow"
 
 export interface Leader {
   groupName: string
   portfolioValue: number
   portfolioBreakdown: {
-    [tickerSymbol: string]: { ["portfolio%"]: number; ["mtd%"]: number }
+    [tickerSymbol: string]: { portfolioPct: number; mtdPct: number }
   }[]
-  "%pnl": number
+  pnlPct: number
   inGroup?: boolean
 }
 
 const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => {
-  const { groupName, portfolioValue, portfolioBreakdown, inGroup } = leader
+  const { groupName, portfolioBreakdown, inGroup } = leader
 
   const [members, setMembers] = useState([])
 
@@ -25,9 +24,9 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
     if (groupName) getGroupMembers(groupName).then(setMembers)
   }, [groupName])
   const topPerformer = Object.keys(portfolioBreakdown).reduce((a, b) =>
-    portfolioBreakdown[b]["mtd%"] > portfolioBreakdown[a]["mtd%"] ? b : a
+    portfolioBreakdown[b].mtdPct > portfolioBreakdown[a].mtdPct ? b : a
   )
-  const topPerformerPct = portfolioBreakdown[topPerformer]["mtd%"]
+  const topPerformerPct = portfolioBreakdown[topPerformer].mtdPct
   const pnlColor = pnlTextColor(topPerformerPct / 100)
 
   // TODO: Add tooltip on photo hover with member username
@@ -89,8 +88,8 @@ const LeaderBoardCard = ({ rank, leader }: { rank: number; leader: Leader }) => 
       <div className="flex flex-col items-center justify-between ml-4">
         <div className="tracking-wider font-primary">
           <p className="text-center text-tiny sm:text-sm">Gain</p>
-          <p className={`text-sm sm:text-base ${pnlTextColor(leader["%pnl"])}`}>
-            {leader["%pnl"].toFixed(2)}%
+          <p className={`text-sm sm:text-base ${pnlTextColor(leader?.pnlPct)}`}>
+            {leader?.pnlPct.toFixed(2)}%
           </p>
         </div>
       </div>

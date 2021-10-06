@@ -5,8 +5,7 @@ import useInnerViewport from "@hooks/useInnerViewport"
 import useOrientationWarning from "@hooks/useOrientationWarning"
 import useReceivePushNotifications from "@hooks/useReceivePushNotifications"
 import { toastProps } from "@lib/constants"
-import "@styles/Chat.css"
-import "@styles/globals.css"
+import "@styles/globals.scss"
 import { serviceWorkerInitialisation } from "@utils/serviceWorkerInitialisation"
 import { tw } from "@utils/tw"
 import dynamic from "next/dynamic"
@@ -42,8 +41,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <div
       className={tw(
-        "no-scrollbar relative",
-        "overflow-hidden bg-gray-50 dark:bg-gray-800",
+        "no-scrollbar relative overflow-hidden bg-gray-50 dark:bg-gray-800",
         "selection:bg-brand-lightTeal/80 selection:text-teal-900",
         !notMainLayout && "max-h-screen max-w-screen h-screen w-screen"
       )}

@@ -1,6 +1,5 @@
 import { TickerPageLineChartDynamic } from "@components/TickerPageLineChart/TickerPageLineChart.dynamic"
 import { Tab } from "@headlessui/react"
-import { usePrevious } from "@hooks/usePrevious"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "@utils/getYahooTimeseries"
 import { pctChange } from "@utils/pctChange"
@@ -10,6 +9,7 @@ import is from "is_js"
 import React, { Fragment, useEffect, useState } from "react"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { useMediaQuery } from "react-responsive"
+import { LoadingIndicator } from "stream-chat-react"
 
 interface ITickerPageLineChartProps {
   tickerSymbol: string
@@ -78,11 +78,13 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
 
   return (
     <div className="flex items-center justify-center w-full h-2/3 ">
-      <div className="relative w-full p-2 my-4  bg-white shadow-lg rounded-xl">
+      <div className="relative w-full p-2 my-4 bg-white shadow-lg min-h-[400px] rounded-xl">
         <Tab.Group onChange={(index) => setActiveTab(Object.keys(tabs)[index])}>
           <div className="flex justify-between w-full h-20">
             {crosshairIndexValue !== tabs[activeTab]?.length - 1 && (
-              <div className="flex-none p-2 sm:p-4">
+              <div
+                className={tw("flex-none p-2 sm:p-4", !highlightedClose && "invisible")}
+              >
                 <span className="z-10 text-lg text-left text-gray-700 dark:text-gray-100 leading-4 sm:text-4xl">
                   ${highlightedClose?.toFixed(2)}
                 </span>
@@ -116,10 +118,11 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               widthScale={0.8}
             />
           ) : (
-            // TODO: Replace with skeleton loader
-            <div>Loading</div>
+            <div className="grid place-items-center">
+              <LoadingIndicator color="#3fba" size={80} />
+            </div>
           )}
-          <Tab.List className="absolute flex h-12 pt-4 pr-2 text-sm bottom-7 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0">
+          <Tab.List className="absolute flex h-12 pt-4 text-sm bottom-7 right-6 left-6 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0 sm:left-auto">
             {Object.keys(tabs).map((tab, i) => (
               <Tab key={`tab-${i}`} as={Fragment}>
                 {({ selected }) => (

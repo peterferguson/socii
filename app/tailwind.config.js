@@ -41,6 +41,7 @@ module.exports = {
             darker: "#00576D",
             darkest: "#003248",
           },
+          blue: { DEFAULT: "#36cff9" },
           purple: { DEFAULT: "#A181EE", light: "#CCB3FE" },
           pink: "#FF72B4",
           green: "#77B44E",
@@ -59,12 +60,11 @@ module.exports = {
         twitter: "#1DA1F2",
         gray: {
           ...colors.gray,
-          50: "#f3f5f7",
+          // 50: "#f3f5f7",
         },
-        trueGray: colors.trueGray,
         teal: colors.teal,
+        purple: colors.purple,
         emerald: colors.emerald,
-        orange: colors.orange,
         pink: colors.pink,
       },
       fontFamily: {

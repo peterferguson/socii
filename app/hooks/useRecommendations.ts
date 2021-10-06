@@ -39,20 +39,19 @@ export const useRecommendations = (symbol: string) => {
         ])
         setData(
           data.reduce((acc, datum) => {
-            const pnlColor = pnlTextColor(
-              price?.[datum.tickerSymbol]?.regularMarketChangePercent
-            )
+            const symbol = datum.tickerSymbol.split(".")[0]
+            const pnlColor = pnlTextColor(price?.[symbol]?.regularMarketChangePercent)
 
             if (acc)
               return {
                 ...acc,
-                [datum.tickerSymbol]: {
+                [symbol]: {
                   ...datum,
-                  ...price[datum.tickerSymbol],
+                  ...price[symbol],
                   pnlColor,
                 },
               }
-            else return { [datum.tickerSymbol]: datum }
+            else return { [symbol]: datum }
           }, {})
         )
       }

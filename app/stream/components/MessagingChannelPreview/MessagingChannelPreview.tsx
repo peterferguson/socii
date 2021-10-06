@@ -41,7 +41,8 @@ const MessagingChannelPreview = ({
   return (
     <div
       className={tw(
-        "mb-2 mx-5 rounded-lg cursor-pointer flex justify-between max-w-[158px] items-center pl-2",
+        "grid grid-cols-5 bg-white p-4 shadow",
+        "mb-2 mx-5 rounded-lg cursor-pointer max-w-[158px] h-20 pl-2",
         channel?.id === activeChannel?.id
           ? " bg-gradient-to-r from-brand/30 via-brand-cyan/30 to-brand-cyan-green/30 hover:shadow-xl hover:btn-transition"
           : "hover:bg-gray-50 hover:shadow-xl hover:btn-transition",
@@ -55,23 +56,24 @@ const MessagingChannelPreview = ({
       {channel.data.image ? (
         <Image
           src={channel.data.image}
-          height={48}
-          width={48}
-          className="pl-2 rounded-full"
+          layout="responsive"
+          height={40}
+          width={40}
+          className="rounded-full"
         />
       ) : (
-        <AvatarGroup memberNames={members} />
+        <AvatarGroup memberNames={members} size={40} />
       )}
-      <div className="flex flex-col items-center w-full m-2 overflow-ellipsis">
-        <div className="flex items-center justify-between h-4 m-0 mb-1">
-          <span className="m-0  text-base font-medium text-black font-secondary  overflow-ellipsis whitespace-nowrap">
+      <div className="flex flex-col items-center w-full sm:w-auto overflow-ellipsis col-span-4">
+        <div className="flex items-center justify-between w-full h-4 mb-2 sm:w-auto">
+          <div className="text-sm font-semibold text-black font-secondary overflow-ellipsis whitespace-nowrap">
             {channel.data.name || getChannelName(members, channelName)}
-          </span>
-          <span className="pl-1 m-0 overflow-hidden text-tiny font-secondary text-trueGray-600 whitespace-nowrap">
+          </div>
+          <div className="pl-1 overflow-hidden text-gray-600 text-tiny sm:text-tiniest font-secondary whitespace-nowrap">
             {getTimeStamp(channel)}
-          </span>
+          </div>
         </div>
-        <span className="h-4 m-0 text-center text-tiny text-trueGray-600 font-secondary overflow-ellipsis">
+        <span className="w-full text-gray-400 sm:w-auto text-tiniest font-secondary overflow-ellipsis">
           {latestMessage || "Send a message"}
         </span>
       </div>

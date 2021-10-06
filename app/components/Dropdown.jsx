@@ -93,7 +93,7 @@ export default function Dropdown() {
           >
             <Popover.Panel
               static
-              className="absolute z-10 px-6 mt-20 w-max -top-0.5 right-2 sm:px-0 lg:max-w-3xl"
+              className="absolute z-10 px-3 mt-20 w-max -top-0.5 right-1 sm:right-2 sm:px-0 lg:max-w-3xl"
             >
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative bg-white grid gap-8 p-7">

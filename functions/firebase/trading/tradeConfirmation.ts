@@ -1,6 +1,7 @@
 import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../../shared/alpaca/index.js"
-import { firestore, iexClient, tradeClient } from "../index.js"
+import { getRealtimeQuotes } from "../../shared/alpaca/utils/getRealtimeQuotes"
+import { firestore, tradeClient } from "../index.js"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
 import { isSell } from "../utils/isSell"
 import { streamClient } from "../utils/streamClient"
@@ -21,15 +22,24 @@ export const tradeConfirmation = async (change, context) => {
   const tradeData = await change.after.data()
   const latestAgreesId = tradeData.agreesToTrade.slice(-1)[0].split("/")[1]
 
+  const symbol = tradeData.symbol as string
+
   if (tradeData.executionStatus) return // - do nothing
 
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  const { latestPrice, isUSMarketOpen, primaryExchange } = await iexClient.quote(
-    tradeData.symbol,
-    { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
-  )
+  const {
+    meta,
+    quotes: {
+      [symbol]: { quote },
+    },
+  } = await getRealtimeQuotes([symbol])
+
+  const latestPrice = isSell(tradeData.type) ? quote.bp : quote.ap
+  const primaryExchange = isSell(tradeData.type) ? quote.bx : quote.ax
+
+  const isUSMarketOpen = meta.is_open
 
   logger.log("IEX latestPrice", latestPrice, "& execution price:", tradeData.stockPrice)
 
@@ -37,7 +47,7 @@ export const tradeConfirmation = async (change, context) => {
     isUSMarketOpen,
     primaryExchange,
     latestPrice,
-    tradeData.symbol,
+    symbol,
     groupName,
     latestAgreesId
   )
@@ -68,9 +78,10 @@ export const tradeConfirmation = async (change, context) => {
   if (
     (latestPrice - tradeData.stockPrice) / tradeData.stockPrice > 0.025 &&
     !isSell(tradeData.type)
-  )
+  ) {
     logger.log(`The price has risen more than 2.5% since the price was agreed`)
-  else tradeData.stockPrice = latestPrice
+    return
+  } else tradeData.stockPrice = latestPrice
 
   if (tradeData.agreesToTrade.length === investorCount) {
     let postOrder: OrderObject
@@ -85,14 +96,12 @@ export const tradeConfirmation = async (change, context) => {
         logger.log(
           `Sending ${tradeData.side} order for $${
             tradeData.notional / investorCount
-          } of ${
-            tradeData.symbol
-          } for user ${username} with alpaca id ${alpacaAccountId}`
+          } of ${symbol} for user ${username} with alpaca id ${alpacaAccountId}`
         )
         postOrder = await tradeClient.postOrders(
           alpacaAccountId,
           CreateOrder.from({
-            symbol: tradeData.symbol,
+            symbol: symbol,
             side: tradeData.side,
             time_in_force: tradeData.timeInForce,
             type: tradeData.type,
@@ -130,7 +139,9 @@ export const tradeConfirmation = async (change, context) => {
         if (tradeData.side == "buy")
           groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         // 3. send a message to inform about pending order
-        await channel.sendMessage(investmentPendingMML(tradeData))
+        await channel.sendMessage(
+          investmentPendingMML({ ...tradeData, tradeId, alpacaOrderId: postOrder?.id })
+        )
         return
 
       case "failed":

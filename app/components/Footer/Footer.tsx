@@ -5,13 +5,14 @@ import { tw } from "@utils/tw"
 import { NextRouter, useRouter } from "next/router"
 import React, { Fragment, useMemo } from "react"
 import { HiOutlineGlobe, HiOutlineHome, HiOutlineUserGroup } from "react-icons/hi"
-import SociiSVG from "../SociiSVG"
 import { NavigationModalDynamic } from "../NavigationModal"
+import SociiSVG from "../SociiSVG"
 
 const Footer = () => {
   const router = useRouter()
   const { user } = useAuth()
   const username = user ? user.username : ""
+  const isChatRoute = router.pathname.startsWith("/chat")
 
   const navLinks = useMemo(
     () => links(user, username, router),
@@ -22,7 +23,14 @@ const Footer = () => {
     <Popover as={Fragment}>
       {({ open }) => (
         <>
-          <nav className="fixed inset-x-0 bottom-0 z-50 w-full mt-12 bg-white sm:hidden standalone:pb-safe-bottom rounded-t-3xl grid grid-cols-3">
+          <nav
+            id="mobile-footer"
+            className={tw(
+              "fixed inset-x-0 bottom-0 w-full mt-12 bg-white sm:hidden z-40",
+              "standalone:pb-safe-bottom rounded-t-3xl grid grid-cols-3",
+              isChatRoute && "hidden"
+            )}
+          >
             {navLinks.map(({ text, Icon, onClick, isActive, Component }, i) => {
               const props = { text, Icon, onClick, isActive, index: i }
               return <Component key={`nav-item-${i}`} props={props} />
@@ -95,8 +103,9 @@ const FooterSearchButton = () => (
   <Popover.Button as="div" className="relative w-full">
     <div
       className={tw(
-        "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
-        "transition duration-300 shadow-xl rounded-full flex items-center justify-center",
+        "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white",
+        "text-tiny text-brand-dark text-center  shadow-xl rounded-full flex ",
+        "transition duration-300 items-center justify-center",
         "umami--click--footer-logo-button-click"
       )}
     >

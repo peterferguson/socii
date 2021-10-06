@@ -1,9 +1,9 @@
 import { auth } from "@lib/firebase/client/auth"
 import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
-import { isInvited } from "@lib/firebase/client/db/isInvited"
 import { setUserState } from "@lib/firebase/client/db/setUserState"
 import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
 import FirebaseUser from "@models/FirebaseUser"
+import { checkAlreadyOnWaitlist } from "@utils/checkAlreadyOnWaitlist"
 import { formatUser } from "@utils/formatUser"
 import { userFirstName } from "@utils/userFirstName"
 import {
@@ -61,10 +61,10 @@ export const useProvideAuth = () => {
     redirect !== "" && Router.push(redirect)
   }
 
-  const signinWithFacebook = (redirect: string | UrlObject) =>
+  const signinWithFacebook = (redirect: string | UrlObject = "") =>
     signinWithProvider(new FacebookAuthProvider(), redirect)
 
-  const signinWithGoogle = (redirect: string | UrlObject) =>
+  const signinWithGoogle = (redirect: string | UrlObject = "") =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
   const signout = async (
@@ -87,13 +87,17 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
-    if (user?.uid && !user?.username && !user?.invited) {
+    if (user?.uid && !user?.username && !user?.isInvited) {
       getUsernameWithEmail(user?.email).then((usersUsername) => {
         setUser((prevUser) => ({ ...prevUser, username: usersUsername }))
         // - Dont check for invite if user has username
         if (usersUsername) return
-        isInvited(user?.email).then((userInvited) =>
-          setUser((prevUser) => ({ ...prevUser, invited: userInvited }))
+        checkAlreadyOnWaitlist(user.email).then(({ isOnWaitlist, isInvited }) =>
+          setUser((prevUser) => ({
+            ...prevUser,
+            isOnWaitlist,
+            isInvited,
+          }))
         )
       })
       setLoading(false)
@@ -102,7 +106,8 @@ export const useProvideAuth = () => {
     unsubscribe = user?.uid && setUserState(user.uid, setUser)
 
     return () => unsubscribe?.()
-  }, [user?.email, user?.invited, user?.uid, user?.username])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email, user?.uid])
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())

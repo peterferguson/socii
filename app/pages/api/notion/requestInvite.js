@@ -31,5 +31,5 @@ export default async function (req, res) {
     console.log("Error", err)
   }
 
-  res.status(200).json({ status: "success" })
+  return res.status(200).json({ status: "success" })
 }

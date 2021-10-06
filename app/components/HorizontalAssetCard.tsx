@@ -34,7 +34,7 @@ const HorizontalAssetCard = ({
           <TickerLogo isin={isin} tickerSymbol={tickerSymbol} height="48" width="48" />
         </div>
         <div className="flex-col flex-grow my-auto">
-          <Link href={`stocks/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <a
               className="text-sm font-semibold tracking-wider text-gray-400 uppercase font-primary"
               style={{ color: logoColor }}
@@ -42,7 +42,7 @@ const HorizontalAssetCard = ({
               {tickerSymbol}
             </a>
           </Link>
-          <Link href={`stocks/${tickerSymbol}`}>
+          <Link href={`/stocks/${tickerSymbol}`}>
             <a className="flex text-xs tracking-wider text-gray-600 font-primary">
               {shortName}
             </a>

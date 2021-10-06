@@ -8,7 +8,7 @@ import React from "react"
 const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()
   return (
-    <div className="flex flex-col items-center justify-center w-full my-8 sm:my-0">
+    <div className="flex flex-col items-center justify-center w-full my-8 sm:my-0 min-h-[500px] ">
       <div className="w-full place-items-center grid grid-flow-row lgr:grid-flow-col gap-4 auto-cols-auto">
         {user?.groups?.length !== 0 ? (
           user?.groups?.map((groupName, index) => (

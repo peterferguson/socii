@@ -1,9 +1,9 @@
-import { fetchWithToken } from "@utils/fetchWithToken"
 import dayjs from "dayjs"
 import useSWR from "swr"
 import { useAuth } from "./useAuth"
 import { Price } from "@models/Price"
 import { useEffect, useRef } from "react"
+import { iexQuote } from "@utils/iexQuote"
 
 // TODO: Allow this to handle multiple tickers
 export function useTickerPrice(
@@ -14,15 +14,13 @@ export function useTickerPrice(
   const { user } = useAuth()
   const token = user?.token
   const marketOpen = useRef<boolean>(true)
-  const filters =
-    "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency,isUSMarketOpen"
 
   // TODO: change conditional once pre/post-markets are implemented
   const { data, error } = useSWR(
     marketOpen.current // - Stop polling if market is closed
-      ? [`/api/iex/quote/${tickerSymbol}?filter=${filters}`, token]
+      ? [tickerSymbol, token]
       : null,
-    fetchWithToken,
+    iexQuote,
     {
       refreshInterval: expirationTime ? expirationTime : 3 * 60 * 1000,
       refreshWhenOffline: false,
