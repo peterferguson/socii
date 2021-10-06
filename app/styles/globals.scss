@@ -47,6 +47,9 @@
   --sab: env(safe-area-inset-bottom);
   --sar: env(safe-area-inset-right);
   --sal: env(safe-area-inset-left);
+  --desktopChatHeight: calc(
+    var(--innerHeight) - 120px
+  ); /* 72px is the height of the header */
   --standaloneHeight: calc(var(--innerHeight) - var(--sat) - var(--sab));
 }
 
@@ -488,6 +491,19 @@ body::-webkit-scrollbar-thumb {
 .str-chat__thread-start {
   display: none;
 }
+
+.str-chat-channel {
+  height: var(--desktopChatHeight);
+  font-family: var(--second-font);
+  color: var(--black);
+  &.messaging {
+    background-color: var(--grey-gainsboro);
+    &.dark {
+      background-color: var(--dark-grey);
+    }
+  }
+}
+
 
 /* Mobile View */
 @media (display-mode: standalone) {
