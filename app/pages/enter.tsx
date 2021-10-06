@@ -8,7 +8,6 @@ import { loginRedirect } from "@utils/loginRedirect"
 import { useAuth } from "hooks/useAuth"
 import React, { useEffect, useRef } from "react"
 
-// ? Should we REQUIRE that the user login with email
 // TODO: Implement account linking
 // TODO: Implement a route for invitees which has the invited email so we can bypass the auth verification & attach the email to whatever auth user is provided
 // TODO: Implement Apple login on iOS devices
@@ -16,12 +15,11 @@ import React, { useEffect, useRef } from "react"
 const Enter = () => {
   const { user, signinWithGoogle } = useAuth()
   const hasMounted = useHasMounted()
-  const email = useRef(user?.email)
 
   useEffect(() => {
-    if (user?.uid && (user?.invited || user?.username))
+    if (user?.uid && (user?.isInvited || user?.username))
       loginRedirect(user?.displayName, user?.username, user?.groups)
-  }, [user?.displayName, user?.groups, user?.invited, user?.uid, user?.username])
+  }, [user?.displayName, user?.groups, user?.isInvited, user?.uid, user?.username])
 
   return (
     <UnauthenticatedOnly>
@@ -32,10 +30,10 @@ const Enter = () => {
           <ClientOnly>
             {hasMounted ? (
               user?.uid ? (
-                user.invited || user?.username ? (
+                user.isInvited || user?.username ? (
                   <WelcomeSplash />
                 ) : (
-                  <NotInvitedDynamic email={email.current} />
+                  <NotInvitedDynamic />
                 )
               ) : (
                 <EnterCard signinWith={signinWithGoogle} />

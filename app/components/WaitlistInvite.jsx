@@ -9,37 +9,36 @@ import toast from "react-hot-toast"
 function WaitlistInvite({ invited, setInvited }) {
   const { user, signinWithGoogle } = useAuth()
   const router = useRouter()
-  // 1
-  // TODO: Write a function to listen to notion for confirmation to add the user
-  // TODO: to the invited list.
-  // 2
-  // TODO: If the user has already been invited direct them to the enter page
 
   useEffect(() => {
-    const addToWaitlist = async () => {
-      const { isOnWaitlist, isInvited } = await checkAlreadyOnWaitlist(user.email)
-      console.log("already", isOnWaitlist)
-      if (isInvited === true) {
-          toast.dismiss()
-          toast.success(`Your invite has been accepted!`)
-          router.push("/user/create")
-      } else if (isInvited === false) {
-        toast.dismiss()
-        toast.error("Your invite has not been accepted yet! You're 12th in the queue..")
-      }
-      if (isOnWaitlist === "false") {
-        const joinResponse = await joinWaitlist(user.email)
-        // TODO: add error handling for joinWaitlist
-        joinResponse.ok && setInvited(true) && toast.success("You've been added to the waitlist") 
-      }
-    }
-
     if (user?.email) {
       if (user?.username) router.push("/stocks")
-      else if (!invited) addToWaitlist()
+      if (user?.isInvited === true) {
+        toast.dismiss()
+        toast.success(`Your invite has been accepted!`)
+        router.push("/user/create")
+      } else if (user?.isInvited === false) {
+        toast.dismiss()
+        toast.error("Your invite has not been accepted yet! You're 12th in the queue...")
+      }
+      if (user?.isOnWaitlist === "false") {
+        joinWaitlist(user.email).then(
+          (joinResponse) =>
+            // TODO: add error handling for joinWaitlist
+            joinResponse.ok &&
+            setInvited(true) &&
+            toast.success("You've been added to the waitlist")
+        )
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email])
+  }, [
+    router,
+    setInvited,
+    user?.email,
+    user?.isInvited,
+    user?.isOnWaitlist,
+    user?.username,
+  ])
 
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
@@ -52,18 +51,32 @@ function WaitlistInvite({ invited, setInvited }) {
         </h1>
       ) : (
         <div className="relative w-full sm:ml-6 group umami--click--join-waitlist-button">
-          <div className="absolute inset-0 opacity-50 gradient-flow group-focus:-inset-0.5 group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 rounded-2xl blur transition duration-500 group-hover:duration-200" />
+          <div
+            className={tw(
+              "absolute inset-0 opacity-50 gradient-flow group-focus:-inset-0.5",
+              "group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100",
+              "group-focus-within:opacity-100 group-hover:opacity-100 rounded-2xl blur",
+              "transition duration-500 group-hover:duration-200"
+            )}
+          />
           <div className="relative flex justify-center  h-12">
             <button
               type="submit"
               className={tw(
-                user ? "pointer-events-none opacity-75" : "",
                 "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
                 "rounded-2xl border-1",
                 "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
                 "umami--click--waitlist-submit-button"
               )}
-              onClick={signinWithGoogle}
+              onClick={() => {
+                console.log(user?.username)
+                console.log(user?.email)
+                user?.username
+                  ? router.push("/stocks")
+                  : user?.email
+                  ? router.push("/enter")
+                  : signinWithGoogle()
+              }}
             >
               Get Invited
             </button>

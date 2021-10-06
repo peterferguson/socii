@@ -1,18 +1,27 @@
 import { JoinWaitlistToastDynamic } from "@components/JoinWaitlistToast"
 import { default as Socii } from "@components/SociiSVG"
+import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
 import Link from "next/link"
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import toast, { useToasterStore } from "react-hot-toast"
 
-const NotInvited = ({ email }: { email: string }) => {
+const NotInvited = () => {
+  const { user } = useAuth()
+  const email = useRef(user?.email)
   const { toasts } = useToasterStore()
 
   useEffect(() => {
-    toast.custom((t) => <JoinWaitlistToastDynamic t={t} email={email} />, {
-      duration: 15000,
-      position: "top-center",
-    })
+    if (user?.isOnWaitlist !== false && user?.isInvited === false) {
+      toast.dismiss()
+      toast.custom((t) => <JoinWaitlistToastDynamic t={t} email={email} />, {
+        duration: 15000,
+        position: "top-center",
+      })
+    } else {
+      toast.dismiss()
+      toast.error("Your invite has not been accepted yet! You're 12th in the queue...")
+    }
     return () => {
       setTimeout(() => toasts.map((t) => toast.dismiss(t.id)), 3000)
     }

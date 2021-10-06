@@ -10,7 +10,7 @@ import { Hero } from "../components/Hero"
 // TODO: Add is visible ref to each component to load the animations properly
 export default function Home() {
   const { user } = useAuth()
-  const [invited, setInvited] = useState(user?.invited || false)
+  const [invited, setInvited] = useState(user?.isInvited || false)
   return (
     <div className="overflow-y-scroll no-scrollbar">
       {/* TODO Add a wave transition animation to this gradient */}
