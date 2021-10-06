@@ -26,7 +26,7 @@ const Footer = () => {
           <nav
             id="mobile-footer"
             className={tw(
-              "fixed inset-x-0 bottom-0 w-full mt-12 bg-white sm:hidden",
+              "fixed inset-x-0 bottom-0 w-full mt-12 bg-white sm:hidden z-40",
               "standalone:pb-safe-bottom rounded-t-3xl grid grid-cols-3",
               isChatRoute && "hidden"
             )}
@@ -103,8 +103,9 @@ const FooterSearchButton = () => (
   <Popover.Button as="div" className="relative w-full">
     <div
       className={tw(
-        "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white text-tiny text-brand-dark text-center",
-        "transition duration-300 shadow-xl rounded-full flex items-center justify-center",
+        "absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white",
+        "text-tiny text-brand-dark text-center  shadow-xl rounded-full flex ",
+        "transition duration-300 items-center justify-center",
         "umami--click--footer-logo-button-click"
       )}
     >
