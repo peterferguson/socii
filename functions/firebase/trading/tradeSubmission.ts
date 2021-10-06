@@ -79,8 +79,11 @@ export const tradeSubmission = async (
       messageId,
     })
 
-    return submittedFromCallable
-      ? await streamClient.channel("group", verifiedData.groupName).sendMessage(message)
-      : await streamClient.updateMessage(message)
+    // ! Reverting back to sending new messages each time since message completion is happening on the client-side
+    // return submittedFromCallable
+    return await streamClient
+      .channel("group", verifiedData.groupName)
+      .sendMessage(message)
+    // : await streamClient.updateMessage(message)
   }
 }
