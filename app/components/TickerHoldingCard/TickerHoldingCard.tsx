@@ -65,7 +65,7 @@ export default function TickerHoldingCard({
           My Position
         </span>
         <div className="flex items-center"></div>
-        <div className="divide-y divide-black">
+        <div className="divide-y divide-gray-700">
           {groupHoldings?.map((details, i) =>
             details.qty ? (
               <div

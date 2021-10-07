@@ -40,7 +40,7 @@ const OrderModal = ({ ticker, state, send }) => {
       {
         loading: "submitting...",
         success: () => {
-          router.push(`/groups/${state.context.group}`)
+          router.push(`/chat?cid=${state.context.group}`)
           return <b>Trade Submitted!</b>
         },
         error: <b>Could not submit trade.</b>,

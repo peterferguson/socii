@@ -68,11 +68,12 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
     }
   }
 
-  const sendMessageClickHandler = (_e) => {
+  const sendMessageClickHandler = (_) => {
     toast.promise(sendStockInfo(), {
       loading: "sending...",
       success: () => {
-        redirectWithToast(router, `/groups/${selectedGroup}`)
+        // redirectWithToast(router, `/chat?cid=${selectedGroup}`)
+        router.push(`/chat?cid=${selectedGroup}`)
         return <b>Stock Info Sent!</b>
       },
       error: <b>Could not send info.</b>,
@@ -82,7 +83,7 @@ const StockSharingModal = ({ ticker, state, send, pricePlaceholder = "0.00" }) =
   return (
     <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
       <Dialog.Title className="text-lg font-medium text-gray-900 font-primary leading-6">
-        Tell <span className="font-semibold text-brand">{selectedGroup}</span> about{" "}
+        Tell <span className="font-semibold text-brand">{selectedGroup}</span> about
         <span className="font-semibold text-teal-300">{tickerSymbol}</span>!
       </Dialog.Title>
       <div className="mt-2">
