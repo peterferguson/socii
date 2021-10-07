@@ -124,7 +124,11 @@ export default function StockDisplay({ tickers }) {
 }
 
 export async function getStaticProps() {
-  // const trendingTickers = await getYahooTrending()
+  // try {
+  //   const trendingTickers = await getYahooTrending()
+  // } catch (e) {
+  //   console.log(e)
+  // }
   return await getTickersStaticProps({
     tickerDocs: await getPopularTickersDocs(),
     period: null,
@@ -133,7 +137,7 @@ export async function getStaticProps() {
 }
 
 const getYahooTrending = async () => {
-  const trendingTickers = await fetchYahoo([], "get_trending", "GET")
+  const trendingTickers = await fetchYahoo([], "get_trending")
   console.log(trendingTickers)
   return trendingTickers
 }
@@ -159,7 +163,7 @@ const Categories = ({ categories }) => (
                 "clear-both"
               )}
             >
-              <div className="flex items-center justify-center w-10 rounded-full text-center text-tiny">
+              <div className="flex items-center justify-center w-10 text-center rounded-full text-tiny">
                 <div className="absolute flex items-center justify-center w-12 h-12 m-auto mt-3 text-lg rounded-full bg-gray-200/60">
                   {emoji}
                 </div>

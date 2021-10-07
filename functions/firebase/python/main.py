@@ -47,7 +47,7 @@ def get_price(request: Request) -> str:
     return json.dumps(ticker.price)
 
 
-@cors(methods=["GET"])
+@cors()
 def get_trending(request: Request) -> str:
     return json.dumps(yq.get_trending())
 
