@@ -19,7 +19,9 @@ function WaitlistInvite({ invited, setInvited }) {
         router.push("/user/create")
       } else if (user?.isInvited === false) {
         toast.dismiss()
-        toast.error("Your invite has not been accepted yet! You're 12th in the queue...")
+        toast.error(
+          "Your invite has not been accepted yet! You're 12th in the queue..."
+        )
       }
       if (user?.isOnWaitlist === "false") {
         joinWaitlist(user.email).then(
@@ -69,8 +71,6 @@ function WaitlistInvite({ invited, setInvited }) {
                 "umami--click--waitlist-submit-button"
               )}
               onClick={() => {
-                console.log(user?.username)
-                console.log(user?.email)
                 user?.username
                   ? router.push("/stocks")
                   : user?.email
