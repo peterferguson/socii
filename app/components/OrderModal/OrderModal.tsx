@@ -24,7 +24,9 @@ const OrderModal = ({ ticker, state, send }) => {
       alpacaAccountId: user.alpacaAccountId,
       groupName: state.context.group,
       assetRef: `tickers/${ticker.ISIN}`,
-      messageId: `${username}-${state.context.group}-${dateAsNumeric(new Date())}`,
+      messageId: `${username}-${state.context.side}-${ticker.tickerSymbol}-${Math.floor(
+        new Date().getTime() / 1000
+      )}`,
       executionCurrency: "USD",
       assetCurrency: "USD",
       stockPrice: price.iexRealtimePrice || price.latestPrice,

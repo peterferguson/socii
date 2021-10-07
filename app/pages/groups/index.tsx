@@ -30,9 +30,9 @@ const GroupsHome = ({ leaders }) => {
           <ul>
             {selected === "My Groups" ? (
               <GroupPortfoliosDynamic />
-            ) : (
+            ) : selected === "Leaderboards" ? (
               <LeaderboardPanelDynamic leaders={leaders} />
-            )}
+            ) : null}
           </ul>
         </TabPanels>
       </div>

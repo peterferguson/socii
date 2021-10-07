@@ -1,7 +1,7 @@
 import { logger } from "firebase-functions"
 import { CreateOrder, OrderObject } from "../../shared/alpaca/index.js"
 import { getRealtimeQuotes } from "../../shared/alpaca/utils/getRealtimeQuotes"
-import { firestore, tradeClient } from "../index.js"
+import { firestore, iexClient, tradeClient } from "../index.js"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
 import { isSell } from "../utils/isSell"
 import { streamClient } from "../utils/streamClient"
@@ -154,7 +154,6 @@ export const tradeConfirmation = async (change, context) => {
 }
 
 const getIexPrice = async (symbol: string) => {
-  const iexClient = require("../index.js").iexClient
   const { latestPrice, isUSMarketOpen, primaryExchange } = await iexClient.quote(
     symbol,
     { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
