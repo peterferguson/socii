@@ -159,7 +159,7 @@ const Categories = ({ categories }) => (
                 "clear-both"
               )}
             >
-              <div className="flex items-center justify-center w-10 rounded-full space-x-2 text-tiny">
+              <div className="flex items-center justify-center w-10 rounded-full text-center text-tiny">
                 <div className="absolute flex items-center justify-center w-12 h-12 m-auto mt-3 text-lg rounded-full bg-gray-200/60">
                   {emoji}
                 </div>
