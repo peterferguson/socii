@@ -29,17 +29,18 @@ export const tradeConfirmation = async (change, context) => {
   const groupRef = firestore.collection("groups").doc(groupName)
   let { cashBalance, investorCount } = (await groupRef.get()).data()
 
-  const {
-    meta,
-    quotes: {
-      [symbol]: { quote },
-    },
-  } = await getRealtimeQuotes([symbol])
-
-  const latestPrice = isSell(tradeData.type) ? quote.bp : quote.ap
-  const primaryExchange = isSell(tradeData.type) ? quote.bx : quote.ax
-
-  const isUSMarketOpen = meta.is_open
+  // ! alpaca quote is failing in some instances, for now we will use iex as a fallback
+  let alpacaQuote, iexPrice
+  try {
+    alpacaQuote = await getAlpacaPrice(symbol, tradeData.type)
+  } catch (e) {
+    console.log(e)
+    console.log("Using iex as a fallback")
+    iexPrice = await getIexPrice(symbol)
+  }
+  const { latestPrice, isUSMarketOpen, primaryExchange } = alpacaQuote
+    ? alpacaQuote
+    : iexPrice
 
   logger.log("IEX latestPrice", latestPrice, "& execution price:", tradeData.stockPrice)
 
@@ -150,4 +151,28 @@ export const tradeConfirmation = async (change, context) => {
         return
     }
   }
+}
+
+const getIexPrice = async (symbol: string) => {
+  const iexClient = require("../index.js").iexClient
+  const { latestPrice, isUSMarketOpen, primaryExchange } = await iexClient.quote(
+    symbol,
+    { filter: "latestPrice,isUSMarketOpen,primaryExchange" }
+  )
+  return { latestPrice, isUSMarketOpen, primaryExchange }
+}
+
+const getAlpacaPrice = async (symbol: string, tradeType) => {
+  const {
+    meta,
+    quotes: {
+      [symbol]: { quote },
+    },
+  } = await getRealtimeQuotes([symbol])
+
+  const latestPrice = isSell(tradeType) ? quote.bp : quote.ap
+  const primaryExchange = isSell(tradeType) ? quote.bx : quote.ax
+
+  const isUSMarketOpen = meta.is_open
+  return { latestPrice, isUSMarketOpen, primaryExchange }
 }

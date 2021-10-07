@@ -3,7 +3,7 @@
     "lib": ["esnext", "dom"],
     "module": "commonjs",
     "target": "esnext",
-    "outDir": "lib",
+    "outDir": "firebase/lib",
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],
     "esModuleInterop": true,
@@ -15,5 +15,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["firebase", "shared"],
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "firebase/lib"]
 }
