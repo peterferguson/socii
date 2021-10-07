@@ -1,7 +1,7 @@
 import { logger } from "firebase-functions"
 import { firestore } from "../index.js"
 import { failedStatuses } from "../utils/determineTradeStatus.js"
-import { updateHolding } from "./updateHolding.js"
+import { updateHolding } from "../firestore/db/updateHolding.js"
 
 export const checkTradeStatus = async (change, context) => {
   // - get document info
