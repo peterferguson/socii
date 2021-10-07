@@ -36,6 +36,8 @@ const ChannelList = ({
     }
   }, [showChannelList])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   return (
     <div id="mobile-channel-list" ref={ref} onClick={toggleChannelList}>
       <StreamChannelList

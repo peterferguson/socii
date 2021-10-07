@@ -13,7 +13,7 @@ const Channel = dynamic(() => import("stream-chat-react").then((mod) => mod.Chan
 // ! This is really the component for the chat page
 // TODO: ... create a components/pages folder
 const StreamChat = ({ client }) => {
-  const [showChannelList, setShowChannelList] = useState(false)
+  const [showChannelList, setShowChannelList] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
   const onCreateChannel = () => setIsCreating(!isCreating)
   const toggleChannelList = () => setShowChannelList(!showChannelList)
