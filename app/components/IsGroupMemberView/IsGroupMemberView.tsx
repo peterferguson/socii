@@ -6,7 +6,7 @@ import { PortfolioEquitySummaryCard } from "@components/PortfolioEquitySummaryCa
 import { StockTableGroupDynamic, StockTableMeta } from "@components/StockTable"
 import { VsMarketSummaryCard } from "@components/VsMarketSummaryCard"
 import React, { useMemo } from "react"
-import { TradeHistory } from "../../components/TradeHistory/TradeHistory"
+import { GroupTradeHistory } from "../../components/GroupTradeHistory/GroupTradeHistory"
 import GroupColumnCard from "../GroupColumnCard"
 
 const IsGroupMemberView = ({ groupName }) => {
@@ -27,7 +27,7 @@ const IsGroupMemberView = ({ groupName }) => {
           <div className="flex flex-wrap w-full mt-4">
             <StockTableGroupDynamic stockTableMeta={tableMeta} />
           </div>
-          <TradeHistory />
+          <GroupTradeHistory groupName={groupName} />
         </div>
       </div>
     </>
