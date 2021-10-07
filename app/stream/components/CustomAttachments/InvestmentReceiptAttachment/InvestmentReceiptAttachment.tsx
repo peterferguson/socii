@@ -1,14 +1,17 @@
 import LogoPriceCardHeader from "@components/LogoPriceCardHeader"
-import { isMarketOpen } from "@utils/isMarketOpen"
 import { updateTradeEvents } from "@utils/updateTradeEvents"
 import React, { useEffect, useState } from "react"
 import { useChatContext, useMessageContext } from "stream-chat-react"
 import { subscribeToTrade } from "@lib/firebase/client/db/subscribeToTrade"
+import { useMarketClock } from "@hooks/useMarketClock"
 
 // TODO: Convert state to a state machine
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { client } = useChatContext()
   const { message } = useMessageContext()
+  const {
+    marketClock: { isOpen: isMarketOpen },
+  } = useMarketClock()
   const { tradeId } = attachment
   const [isSettled, setIsSettled] = useState(false)
   const [tickerSymbol, setTickerSymbol] = useState("")
@@ -20,18 +23,18 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
   )
 
   useEffect(() => {
-    !isSettled &&
-      isMarketOpen().then((isOpen) => isPending && isOpen && updateTradeEvents())
-    if (isSettled && isPending) {
-      client.updateMessage({
-        ...message,
-        text: message.text.replace("IS PENDING", ""),
-        attachments: message.attachments.map((attached) => {
-          return attached.type === "receipt"
-            ? { ...attached, orderExecutionStatus }
-            : attached
-        }),
-      } as any)
+    if (isPending) {
+      !isSettled && isMarketOpen && updateTradeEvents()
+      isSettled &&
+        client.updateMessage({
+          ...message,
+          text: message.text.replace("IS PENDING", ""),
+          attachments: message.attachments.map((attached) => {
+            return attached.type === "receipt"
+              ? { ...attached, orderExecutionStatus }
+              : attached
+          }),
+        } as any)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPending, isSettled])
