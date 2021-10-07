@@ -75,7 +75,7 @@ export const CashAvailable = () => {
       <div className="inline-flex items-center justify-end pl-1 font-light align-middle sm:hidden lg:inline-flex">
         <h3 className="text-xl text-right sm:text-left sm:text-sm text-logo-darkBg leading-4">
           <span className="text-sm sm:text-tiny">$</span>
-          {account?.cash}
+          {parseFloat(account?.cash)?.toFixed(2)}
           <p className="text-gray-500 capitalize sm:text-gray-300 text-tiny">
             cash available
           </p>
