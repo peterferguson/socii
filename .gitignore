@@ -90,7 +90,7 @@ node_modules/
 
 # production
 /build
-functions/lib
+functions/firebase/lib
 
 # misc
 .DS_Store
