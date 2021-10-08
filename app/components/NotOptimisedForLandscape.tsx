@@ -6,7 +6,7 @@ export const NotOptimisedForLandscape = (t) => (
   <div
     className={`${
       t.visible ? "animate-enter" : "animate-leave"
-    } max-w-md w-full bg-gray-50 dark:bg-logo-darkBg shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+    } max-w-md w-full bg-gray-50 dark:bg-brand-black shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
   >
     <span className="p-2">
       Sorry we are not yet optimised for landscape <b>yet!</b>

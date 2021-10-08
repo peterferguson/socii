@@ -23,12 +23,12 @@ const Tooltip = ({
       <div
         className={`
           ${!position && "left-1/2 transform -translate-x-1/2"}
-          w-full px-4 py-1 text-xs text-white bg-logo-darkBg rounded bottom-full tooltip
+          w-full px-4 py-1 text-xs text-white bg-brand-black rounded bottom-full tooltip
       `}
       >
         {text}
         <svg
-          className={`absolute text-logo-darkBg h-2
+          className={`absolute text-brand-black h-2
             ${!position && "left-1/2 transform -translate-x-1/2 top-full"}
             ${position?.left ? "top-full left-0 ml-3" : ""}
             ${position?.top ? "w-full left-0" : ""}
