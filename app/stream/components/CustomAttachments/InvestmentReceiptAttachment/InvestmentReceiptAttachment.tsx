@@ -9,6 +9,8 @@ import { useMarketClock } from "@hooks/useMarketClock"
 const InvestmentReceiptAttachment = ({ attachment }) => {
   const { client } = useChatContext()
   const { message } = useMessageContext()
+  const { cid } = message
+  const groupName = cid.split(":").pop()
   const {
     marketClock: { isOpen: isMarketOpen },
   } = useMarketClock()
@@ -37,12 +39,12 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
         } as any)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending, isSettled])
+  }, [isPending, isSettled, isMarketOpen])
 
   useEffect(() => {
     let unsubscribe
     if (tradeId && !isSettled) {
-      unsubscribe = subscribeToTrade("founders", tradeId, (snapshot) => {
+      unsubscribe = subscribeToTrade(groupName, tradeId, (snapshot) => {
         const tradeData = snapshot.data()
         if (tradeData) {
           const { executionStatus } = tradeData

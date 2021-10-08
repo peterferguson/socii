@@ -31,13 +31,15 @@ export const tradeConfirmation = async (change, context) => {
 
   // ! alpaca quote is failing in some instances, for now we will use iex as a fallback
   let alpacaQuote, iexPrice
-  try {
-    alpacaQuote = await getAlpacaPrice(symbol, tradeData.type)
-  } catch (e) {
-    console.log(e)
-    console.log("Using iex as a fallback")
-    iexPrice = await getIexPrice(symbol)
-  }
+  // try {
+  //   alpacaQuote = await getAlpacaPrice(symbol, tradeData.type)
+  // } catch (e) {
+  //   console.log(e)
+  //   console.log("Using iex as a fallback")
+  //   iexPrice = await getIexPrice(symbol)
+  // }
+  iexPrice = await getIexPrice(symbol)
+
   const { latestPrice, isUSMarketOpen, primaryExchange } = alpacaQuote
     ? alpacaQuote
     : iexPrice
