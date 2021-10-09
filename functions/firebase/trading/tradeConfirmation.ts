@@ -143,7 +143,12 @@ export const tradeConfirmation = async (change, context) => {
           groupRef.update({ cashBalance: cashBalance - tradeData.notional })
         // 3. send a message to inform about pending order
         await channel.sendMessage(
-          investmentPendingMML({ ...tradeData, tradeId, alpacaOrderId: postOrder?.id })
+          investmentPendingMML({
+            ...tradeData,
+            tradeId,
+            alpacaOrderId: postOrder?.id,
+            orderStatus: postOrder.status, // TODO: add this as part of pill in pending mml
+          })
         )
         return
 

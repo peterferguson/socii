@@ -19,6 +19,10 @@ export const investmentPendingMML = (tradeData) => {
         tickerSymbol: tradeData.symbol,
         tradeId: tradeData.tradeId,
         alpacaOrderId: tradeData.alpacaOrderId,
+        orderStatus: tradeData.orderStatus,
+        side: tradeData.type,
+        cost: tradeData.notional,
+        price: tradeData.stockPrice,
       },
     ],
   }
