@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import time
 import threading
 
 from alpaca_trade_api.common import URL
@@ -50,7 +51,7 @@ async def get_quotes(symbols: str):
 
     data["_meta"] = market_time
 
-    if not market_time["is_open"]:
+    if market_time["is_open"]:
         logger.info("Market is closed, getting historical quote data")
         logger.info(f"for {symbols}")
 
@@ -73,8 +74,11 @@ async def get_quotes(symbols: str):
         thread.start()
         logger.info("Waiting for quotes...")
 
+        start = time.time()
         while any(symbol not in data.keys() for symbol in symbols.split(",")):
             await asyncio.sleep(0.1)
+            if time.time() - start > 10:
+                break
 
         print("Got quotes")
         print("Stopping the thread")
