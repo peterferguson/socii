@@ -3,10 +3,11 @@ import Searchbar from "@components/Searchbar"
 import UserPhoto from "@components/UserPhoto"
 import { useAuth } from "@hooks/useAuth"
 import algoliasearch from "algoliasearch/lite"
-import { NextRouter, useRouter } from "next/router"
-import React, { Fragment, useMemo } from "react"
+import router, { NextRouter, useRouter } from "next/router"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { HiOutlineCog } from "react-icons/hi"
 import { VscSignOut } from "react-icons/vsc"
+import { IoAdd } from "react-icons/io5"
 import { Configure, InstantSearch } from "react-instantsearch-dom"
 import { UrlObject } from "url"
 import { Popover } from "@headlessui/react"
@@ -85,19 +86,43 @@ const routeTitle = (path: string) =>
       .pop()
   ]
 
-  // should more pages require info, make function to check which info to display
-  const addedInfo =<InformationTag
-    className={"h-4 w-4 text-tiniest p-2"}
-    InformationText={"This is your personal portfolio - it displays your share of assets, combined from all your groups."} 
-    informationTitle={"Personal Portfolio"}                    
-    />
+const addedInfo =<InformationTag
+  className={"h-4 w-4 text-tiniest p-2"}
+  InformationText={"This is your personal portfolio - it displays your share of assets, combined from all your groups."} 
+  informationTitle={"Personal Portfolio"}                    
+  />
+
+const createGroup =<button
+  type="button"
+  className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
+  onClick={() => router.push("/groups/create")}
+  title="Create a group"
+  >
+    <IoAdd/>
+  </button>
 
 const NavHeader: React.FC = () => {
   const { signout } = useAuth()
   const router = useRouter()
   const items = useMemo(() => dropdownItems(router, signout), [router, signout])
+  const [currentPage, setCurrentPage] = useState(null)
 
   const title = routeTitle(router.asPath)
+
+  const pageHeaderItem = (title) => {
+    switch (title){
+      case "Personal Portfolio":
+        return addedInfo
+      case "Groups":
+        return createGroup
+      default:
+        return null
+    }
+  }
+
+  useEffect(()=> {
+    if (title) setCurrentPage(pageHeaderItem(title))
+  }, [title])
 
   return (
     <Popover as={Fragment}>
@@ -109,11 +134,13 @@ const NavHeader: React.FC = () => {
               <div className="flex items-center justify-between flex-grow w-full pl-1 border-b bg-gray-50 dark:bg-gray-700 lg:max-w-68 sm:pr-2 sm:ml-0">
                 <div className={tw("flex flex-row px-2 font-light align-bottom sm:text-3xl font-primary",
                 title=="Personal Portfolio" ? "text-s" : "text-2xl")} >
-                  {title} {title === "Personal Portfolio" ? (
-                    addedInfo
+                  {title} 
+                  <span className="w-2/3 p-1 m-1 h-2/3">{currentPage ? (
+                    currentPage
                   ):(
                     null
                   )}
+                  </span>
                 </div>
                 <div className="flex-grow hidden md:block" />
                 <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
