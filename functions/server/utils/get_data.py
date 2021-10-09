@@ -4,7 +4,7 @@ import os
 import logging
 from typing import List
 
-from alpaca_trade_api.stream import Stream
+from alpaca_trade_api.stream import Stream, _DataStream
 
 logger = logging.getLogger("main")
 
@@ -27,8 +27,7 @@ async def get_market_time():
         async with session.get(
             os.environ.get("APCA_API_BASE_URL", "") + "/v1/clock",
         ) as response:
-            data = await response.json()
-            return data
+            return await response.json()
 
 
 async def get_latest_quote(session, symbol):
@@ -39,7 +38,14 @@ async def get_latest_quote(session, symbol):
     async with session.get(url) as resp:
         logger.info(resp.status)
         if resp.ok:
-            return await resp.json()
+            data = await resp.json()
+            return {
+                "symbol": data["symbol"],
+                "quote": {
+                    "timestamp": data["quote"].pop("t"),
+                    **_DataStream("", "", "")._cast("q", data["quote"])._raw,
+                },
+            }
         else:
             logger.error(f"Error getting quote for {symbol}")
 

@@ -56,63 +56,63 @@ async def get_quotes(symbols: str):
 
         latest = await get_latest_quotes(symbols.split(","))
         for result in latest:
-            if data and result and result["symbol"] in data:
+            if result and result["symbol"] not in data:
                 data[result["symbol"]] = result
-
         return data
+    else:
+        stream = Stream(data_stream_url=URL(data_url), data_feed=feed)
+        event = threading.Event()
 
-    stream = Stream(data_stream_url=URL(data_url), data_feed=feed)
-    event = threading.Event()
+        loop = asyncio.new_event_loop()
 
-    loop = asyncio.new_event_loop()
+        thread = threading.Thread(
+            target=consumer_thread,
+            args=(stream, loop, "quotes", symbols.split(","), data),
+        )
 
-    thread = threading.Thread(
-        target=consumer_thread, args=(stream, loop, "quotes", symbols.split(","), data)
-    )
+        thread.start()
+        logger.info("Waiting for quotes...")
 
-    thread.start()
-    logger.info("Waiting for quotes...")
+        while any(symbol not in data.keys() for symbol in symbols.split(",")):
+            await asyncio.sleep(0.1)
 
-    while any(symbol not in data.keys() for symbol in symbols.split(",")):
-        await asyncio.sleep(0.1)
+        print("Got quotes")
+        print("Stopping the thread")
+        thread.join(1 * len(symbols.split(",")))
+        event.set()
 
-    print("Got quotes")
-    print("Stopping the thread")
-    thread.join(1 * len(symbols.split(",")))
-    event.set()
+        # ! Alpaca API doesn't seem to like closing the stream
+        # ! so we have to manually close it
+        print("Unsubscribing from the stream")
+        asyncio.run_coroutine_threadsafe(
+            stream._data_ws._ws.send(
+                msgpack.packb(
+                    {
+                        "action": "unsubscribe",
+                        "trades": (),
+                        "quotes": symbols.split(","),
+                        "bars": (),
+                        "dailyBars": (),
+                    }
+                )
+            ),
+            loop,
+        )
+        stream._data_ws._handlers["quotes"] = None
+        asyncio.run_coroutine_threadsafe(stream._data_ws._ws.close(), loop)
+        asyncio.run_coroutine_threadsafe(stream.stop_ws(), loop)
 
-    # ! Alpaca API doesn't seem to like closing the stream
-    # ! so we have to manually close it
-    print("Unsubscribing from the stream")
-    asyncio.run_coroutine_threadsafe(
-        stream._data_ws._ws.send(
-            msgpack.packb(
-                {
-                    "action": "unsubscribe",
-                    "trades": (),
-                    "quotes": symbols.split(","),
-                    "bars": (),
-                    "dailyBars": (),
-                }
-            )
-        ),
-        loop,
-    )
-    stream._data_ws._handlers["quotes"] = None
-    asyncio.run_coroutine_threadsafe(stream._data_ws._ws.close(), loop)
-    asyncio.run_coroutine_threadsafe(stream.stop_ws(), loop)
+        print("Stopping event loop")
+        try:
+            loop.stop()
+        except RuntimeError:
+            # Futures have not yet stopped but they will run forever if we don't
+            pass
 
-    print("Stopping event loop")
-    try:
-        loop.stop()
-    except RuntimeError:
-        # Futures have not yet stopped but they will run forever if we don't
-        pass
-
-    # Thread can still be alive at this point. Do another join without a timeout
-    # to verify thread shutdown.
-    thread.join()
-    print("thread has stopped.")
+        # Thread can still be alive at this point. Do another join without a timeout
+        # to verify thread shutdown.
+        thread.join()
+        print("thread has stopped.")
 
     logger.info("Received quotes: ", data)
 
