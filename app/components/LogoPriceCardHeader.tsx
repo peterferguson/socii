@@ -8,6 +8,7 @@ interface ILogoHeader {
   cost?: number
   purchasePrice?: number
   className?: string
+  showChange?: boolean
 }
 
 // - show the logo and the price of the ticker.
@@ -18,6 +19,7 @@ export default function LogoPriceCardHeader({
   cost,
   purchasePrice,
   className = "",
+  showChange = true,
 }: ILogoHeader) {
   const { price: priceData } = useTickerPrice(tickerSymbol)
 
@@ -41,7 +43,9 @@ export default function LogoPriceCardHeader({
           >
             {tickerSymbol} &bull; ${price}
           </div>
-          {priceChange && <PctChangeTag pctChange={priceChange} />}
+          {showChange && priceChange !== null && (
+            <PctChangeTag pctChange={priceChange} />
+          )}
         </div>
       </a>
     </>

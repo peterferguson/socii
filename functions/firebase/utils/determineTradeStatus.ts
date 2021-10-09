@@ -15,6 +15,9 @@ export const pendingStatuses = [
 
 export const successStatuses = ["filled", "partially_filled"]
 
+// TODO: add better handling for individual statuses
+// ! this code is copied in the app/lib/constants.ts
+
 export const determineTradeStatus = (responseStatus: string) => {
   const status = failedStatuses.includes(responseStatus)
     ? "failed"
