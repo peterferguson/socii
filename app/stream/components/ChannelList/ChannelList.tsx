@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import { useRouter } from "next/router"
 import React, { useEffect, useRef } from "react"
 import { MessagingChannelListDynamic, MessagingChannelPreviewDynamic } from ".."
 
@@ -17,6 +18,9 @@ const ChannelList = ({
   const filter = { members: { $in: [userID] } }
   const options = { state: true, watch: true, presence: true, limit: 5 }
   const sort = { last_message_at: -1, updated_at: -1, cid: 1 }
+  const router = useRouter()
+  let { cid } = router.query
+  cid = Array.isArray(cid) ? cid.pop() : cid
 
   useEffect(() => {
     const mobileChannelList = document.querySelector("#mobile-channel-list")
@@ -32,13 +36,15 @@ const ChannelList = ({
     }
   }, [showChannelList])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   return (
     <div id="mobile-channel-list" ref={ref} onClick={toggleChannelList}>
       <StreamChannelList
         filters={filter}
         sort={sort}
         options={options}
-        // customActiveChannel={groupName?.replace(/\s/g, "-") || ""}
+        customActiveChannel={`groups:${cid?.replace(/\s/g, "-")}` || ""}
         List={(props) => (
           <MessagingChannelListDynamic {...props} onCreateChannel={onCreateChannel} />
         )}

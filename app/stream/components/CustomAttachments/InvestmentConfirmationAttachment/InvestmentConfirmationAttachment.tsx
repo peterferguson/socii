@@ -33,9 +33,9 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
         error: agrees ? "Error agreeing to trade" : "Error disagreeing to trade",
       }
     )
-    await client.partialUpdateMessage(message.id, {
-      set: { status: "cancelled" },
-    })
+    // await client.partialUpdateMessage(message.id, {
+    //   set: { status: "cancelled" },
+    // })
   }
 
   // TODO: Add different views of the buy card for users who did not submit it

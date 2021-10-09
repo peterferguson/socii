@@ -24,7 +24,9 @@ const OrderModal = ({ ticker, state, send }) => {
       alpacaAccountId: user.alpacaAccountId,
       groupName: state.context.group,
       assetRef: `tickers/${ticker.ISIN}`,
-      messageId: `${username}-${state.context.group}-${dateAsNumeric(new Date())}`,
+      messageId: `${username}-${state.context.side}-${ticker.tickerSymbol}-${Math.floor(
+        new Date().getTime() / 1000
+      )}`,
       executionCurrency: "USD",
       assetCurrency: "USD",
       stockPrice: price.iexRealtimePrice || price.latestPrice,
@@ -38,7 +40,7 @@ const OrderModal = ({ ticker, state, send }) => {
       {
         loading: "submitting...",
         success: () => {
-          router.push(`/groups/${state.context.group}`)
+          router.push(`/chat?cid=${state.context.group}`)
           return <b>Trade Submitted!</b>
         },
         error: <b>Could not submit trade.</b>,

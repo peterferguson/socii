@@ -9,7 +9,7 @@ const JoinWaitlistToast = ({ t, email }) => (
     className={tw(
       t.visible ? "animate-enter" : "animate-leave",
       "max-w-md w-full shadow-lg rounded-lg pointer-events-auto flex h-16",
-      "p-4 text-tiny bg-white dark:bg-logo-darkBg font-secondary",
+      "p-4 text-tiny bg-white dark:bg-brand-black font-secondary",
       "sm:leading-0 sm:text-base items-center justify-center text-center",
       "align-middle font-primary leading-6"
     )}

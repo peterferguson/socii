@@ -1,11 +1,7 @@
-import { firestore, functionConfig } from "../index.js"
-import { updateHolding } from "./updateHolding.js"
-import { journalShares } from "./journalShares.js"
-import { investmentFailedMML } from "./mml/investmentFailedMML"
-import { investmentReceiptMML } from "./mml/investmentReceiptMML"
 import { logger } from "firebase-functions"
-import { StreamChat } from "stream-chat"
+import { firestore } from "../index.js"
 import { failedStatuses } from "../utils/determineTradeStatus.js"
+import { updateHolding } from "../firestore/db/updateHolding.js"
 
 export const checkTradeStatus = async (change, context) => {
   // - get document info
@@ -13,12 +9,15 @@ export const checkTradeStatus = async (change, context) => {
   logger.log("Event Details: ", eventDetails)
 
   const {
-    stream: { api_key, secret },
-  } = functionConfig
-
-  const {
     event,
-    order: { filled_qty: qty, client_order_id: clientOrderId },
+    order: {
+      filled_qty: qty,
+      client_order_id: clientOrderId,
+      status,
+      filled_at: filledAt,
+      filled_avg_price: avgPrice,
+      at: eventTimestamp,
+    },
   } = eventDetails
 
   const [groupName, messageId] = clientOrderId.split("|")
@@ -28,42 +27,37 @@ export const checkTradeStatus = async (change, context) => {
 
   logger.log("trade data", tradeData)
 
-  const streamClient = new StreamChat(api_key, secret)
-  const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
-
   if (event == "fill") {
-    logger.log("fill")
-    // update holding, send message to group and journal shares
     const updateInformation = await updateHolding({
       groupName,
       messageId,
       tradeData,
-      executionStatus: "success",
+      executionStatus: status,
       qty,
     })
-    await channel.sendMessage(investmentReceiptMML(tradeData))
-    if (tradeData.side == "buy") {
-      journalShares({
-        agreesToTrade: tradeData.agreesToTrade,
-        qty,
-        symbol: tradeData.symbol,
-        direction: "toAccounts",
-      })
-    }
-    // TODO Create a journal for the cash from a sale. Currently it will be held in firm account
-    tradeRef.update(updateInformation)
+    tradeRef.update({
+      ...updateInformation,
+      executionQty: qty,
+      executionTimestamp: new Date(filledAt),
+      executionPrice: avgPrice,
+      executionUpdateTimestamp: new Date(),
+    })
   } else if (failedStatuses.includes(event)) {
-
     logger.log("not filled")
-    
+
+    // TODO: update trade status from failed to match alpacas status
+
     if (tradeData.side == "buy") {
-      // - return money to group
+      // - return held money to group
       const groupRef = firestore.collection("groups").doc(groupName)
       let { cashBalance } = (await groupRef.get()).data()
       logger.log("cash balance: ", cashBalance)
       groupRef.update({ cashBalance: cashBalance + tradeData.notional })
     }
-    tradeRef.update({ executionStatus: "failed" })
-    await channel.sendMessage(investmentFailedMML(tradeData))
+    tradeRef.update({
+      executionStatus: "failed",
+      executionTimestamp: new Date(eventTimestamp),
+      executionUpdateTimestamp: new Date(),
+    })
   }
 }

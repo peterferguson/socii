@@ -2,7 +2,7 @@ const Pricing = () => {
   return (
     <body className="w-full h-full py-16 antialiased font-primary">
       <section className="flex flex-col items-center w-full py-12 lg:flex-row lg:justify-center lg:px-10 space-x-8">
-        <article className="w-4/5 px-6 py-10 mb-10 text-center bg-white shadow-lg rounded-2xl lg:w-1/3 text-logo-darkBg">
+        <article className="w-4/5 px-6 py-10 mb-10 text-center bg-white shadow-lg rounded-2xl lg:w-1/3 text-brand-black">
           <h5
             className="text-base font-semibold text-transparent bg-clip-text"
             style={{

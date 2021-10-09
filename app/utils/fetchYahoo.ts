@@ -7,6 +7,7 @@ export const fetchYahoo = async (
 ) => {
   const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/${endpoint}`
 
+  // TODO: add yahoo prefix when necessary
   switch (method) {
     case "POST":
       return await fetcher(functionUrl, {
@@ -14,7 +15,7 @@ export const fetchYahoo = async (
         mode: "cors",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          tickerSymbol: tickers.join(" "),
+          tickerSymbol: tickers.map((ticker) => ticker.split(".")[0]).join(" "),
         }),
       })
     case "GET":

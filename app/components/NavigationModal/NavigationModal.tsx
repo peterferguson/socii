@@ -60,7 +60,6 @@ const NavigationModal = ({ open }) => {
                 </div>
                 <div className="px-4 py-8 bg-white grid grid-flow-row grid-cols-5 auto-rows-max gap-y-4 rounded-t-2xl">
                   {navItems(username, router, close).map((props, i) => {
-                    console.log(props.isActive)
                     return <NavItem key={`nav-item-${i}`} {...props} />
                   })}
                 </div>

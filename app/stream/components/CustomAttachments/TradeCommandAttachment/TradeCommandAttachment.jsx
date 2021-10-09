@@ -71,7 +71,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
           error: <b>Could not send order to group.</b>,
         }
       )
-      await client.partialUpdateMessage(message.id, { set: { status: "complete" } })
+      // await client.partialUpdateMessage(message.id, { set: { status: "complete" } })
     }
     if (data.option == "cancel") {
       await toast.promise(

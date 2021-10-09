@@ -150,3 +150,20 @@ export const toastProps: ToastProps = {
 export const logoBaseUrl: string = `https://storage.googleapis.com/${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/logos`
 
 export const ephemeralStatuses = ["complete", "cancelled"]
+
+export const alpacaFailedStatuses = ["cancelled", "expired", "rejected", "suspended"]
+
+export const alpacaPendingStatuses = [
+  "new",
+  "done_for_day",
+  "pending_cancel",
+  "pending_replace",
+  "pending_new",
+  "accepted_for_bidding",
+  "stopped",
+  "calculated",
+  "accepted",
+  "replaced",
+]
+
+export const alpacaSuccessStatuses = ["filled", "partially_filled"]

@@ -29,7 +29,7 @@ export const TabHeading = ({ categories }: TabHeadingProps) => {
                 .toLowerCase()}`,
               selected
                 ? "bg-white shadow"
-                : "hover:text-brand/80 hover:bg-white/20 text-logo-darkBg/50"
+                : "hover:text-brand/80 hover:bg-white/20 text-brand-black/50"
             )
           }
         >

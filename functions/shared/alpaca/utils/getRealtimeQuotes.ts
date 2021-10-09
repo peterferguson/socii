@@ -1,6 +1,56 @@
 import fetch from "node-fetch"
 import jwt from "jsonwebtoken"
 
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://server.socii.app/api/v1"
+    : process.env.NODE_ENV === "development" && process.env.LOCAL_DEVELOPMENT !== "true"
+    ? "https://socii-server-development.up.railway.app"
+    : "http://localhost:5000/api/v1"
+
+// - Ensuring that the env vars are defined
+// - This only seems to be a problem in firebase functions so we'll just check for it here
+if (
+  Object.keys(process.env).filter(
+    (key) => key === "ALPACA_KEY" || key === "ALPACA_SECRET"
+  ).length !== 2
+) {
+  const functions = require("firebase-functions")
+  const functionConfig = functions.config()
+  process.env.ALPACA_KEY = functionConfig.alpaca.key
+  process.env.ALPACA_SECRET = functionConfig.alpaca.secret
+}
+
+export const getRealtimeQuotes = async (
+  symbols: string[],
+  token: string = null
+): Promise<{ meta: MarketClock; quotes: AlpacaQuoteData }> => {
+  token = token ? token : jwt.sign({}, process.env.ALPACA_SECRET)
+  const data = { meta: {} as MarketClock, quotes: {} as AlpacaQuoteData }
+  for (let i = 0; i < symbols.length; i += 10) {
+    console.log(`Fetching ${symbols.slice(i, i + 10)}`)
+    const { meta, quotes } = await getQuotes(symbols.slice(i, i + 10).join(","), token)
+    data.meta = meta
+    data.quotes = { ...data.quotes, ...quotes }
+  }
+  return data
+}
+
+const getQuotes = async (tickers, token) => {
+  const data = await fetch(
+    `${baseUrl}/alpaca/data/quotes?symbols=${tickers}&token=${token}`
+  )
+
+  if (!data.ok) {
+    const err = new Error(data.statusText)
+    err["status"] = data.status
+    throw err
+  }
+
+  const { _meta: meta, ...quotes } = await data.json()
+  return { meta, quotes }
+}
+
 export enum AlpacaExchanges {
   "A" = "NYSE American (AMEX)",
   "B" = "NASDAQ OMX BX",
@@ -82,41 +132,4 @@ export interface MarketClock {
 
 export interface AlpacaQuoteData {
   [symbol: string]: AlpacaQuote
-}
-
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://server.socii.com/api/v1"
-    : process.env.NODE_ENV === "development" && process.env.LOCAL_DEVELOPMENT !== "true"
-    ? "https://socii-server-development.up.railway.app"
-    : "http://localhost:5000/api/v1"
-
-export const getRealtimeQuotes = async (
-  symbols: string[],
-  token: string = null
-): Promise<{ meta: MarketClock; quotes: AlpacaQuoteData }> => {
-  token = token ? token : jwt.sign({}, process.env.ALPACA_SECRET)
-  const data = { meta: {} as MarketClock, quotes: {} as AlpacaQuoteData }
-  for (let i = 0; i < symbols.length; i += 10) {
-    console.log(`Fetching ${symbols.slice(i, i + 10)}`)
-    const { meta, quotes } = await getQuotes(symbols.slice(i, i + 10).join(","), token)
-    data.meta = meta
-    data.quotes = { ...data.quotes, ...quotes }
-  }
-  return data
-}
-
-const getQuotes = async (tickers, token) => {
-  const data = await fetch(
-    `${baseUrl}/alpaca/data/quotes?symbols=${tickers}&token=${token}`
-  )
-
-  if (!data.ok) {
-    const err = new Error(data.statusText)
-    err["status"] = data.status
-    throw err
-  }
-
-  const { _meta: meta, ...quotes } = await data.json()
-  return { meta, quotes }
 }

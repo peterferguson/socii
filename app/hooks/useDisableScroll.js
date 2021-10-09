@@ -14,13 +14,14 @@ const preventDefaultForScrollKeys = (e) => {
 // modern Chrome requires { passive: false } when adding event
 let supportsPassive = false
 try {
-  window.addEventListener(
-    "test",
-    null,
-    Object.defineProperty({}, "passive", {
-      get: () => (supportsPassive = true),
-    })
-  )
+  if (window)
+    window.addEventListener(
+      "test",
+      null,
+      Object.defineProperty({}, "passive", {
+        get: () => (supportsPassive = true),
+      })
+    )
 } catch (e) {
   console.log(e)
 }

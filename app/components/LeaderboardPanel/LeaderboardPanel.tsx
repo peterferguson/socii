@@ -5,7 +5,6 @@ import React from "react"
 const LeaderboardPanel = ({ leaders }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
-  console.log(leaders.map(({ rank }) => rank))
 
   return (
     <section className="flex flex-col justify-between ">

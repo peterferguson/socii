@@ -3,5 +3,5 @@ export const pnlTextColor = (pctChange: number): string => {
     ? "text-emerald-500"
     : pctChange < 0
     ? "text-red-500"
-    : "text-brand"
+    : "text-gray-600"
 }

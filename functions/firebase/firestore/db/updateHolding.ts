@@ -10,8 +10,8 @@
  * @param context
  * @returns tradeUpdateData if needed
  */
-import { arrayUnion, increment, serverTimestamp } from "../firestore/index.js"
-import { firestore } from "../index.js"
+import { arrayUnion, increment, serverTimestamp } from "../index.js"
+import { firestore } from "../../index.js"
 
 export const updateHolding = async (
   data: {
@@ -88,7 +88,7 @@ const upsertHolding = async ({
 
   // * Check if the holding already exists
   const holding = await holdingDocRef.get()
-  const outputData = { type: "", holdingData: {}, pnlPercentage: {}, privacyOption }
+  const outputData = { type: "", holdingData: {}, pnlPercentage: {} }
 
   if (holding.exists) {
     // - Trade already exists in holding ... do nothing
@@ -118,6 +118,7 @@ const upsertHolding = async ({
     outputData.type = "set"
 
     outputData.holdingData = {
+      privacyOption,
       assetRef,
       symbol,
       shortName,

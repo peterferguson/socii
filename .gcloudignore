@@ -13,5 +13,14 @@
 .git
 .gitignore
 
-node_modules
+/node_modules/
+/server/
+/workers/
+/temp/
+/__tests__/
+/requests/
+/firebase/ # we only want to include the .js files from lib 
+/socii_firestore_backup/
+tsconfig.json 
+start-up.bash
 #!include:.gitignore
