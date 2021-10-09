@@ -29,7 +29,6 @@ def consumer_thread(stream, loop, data_type, symbols, data):
     try:
         stream_quotes(stream, data_type, symbols, data)
         logger.info("Consumer thread finished")
-        logger.info(data)
     finally:
         logger.info("Closing stream")
 
@@ -51,7 +50,7 @@ async def get_quotes(symbols: str):
 
     data["_meta"] = market_time
 
-    if market_time["is_open"]:
+    if not market_time["is_open"]:
         logger.info("Market is closed, getting historical quote data")
         logger.info(f"for {symbols}")
 
@@ -62,7 +61,6 @@ async def get_quotes(symbols: str):
         return data
     else:
         stream = Stream(data_stream_url=URL(data_url), data_feed=feed)
-        event = threading.Event()
 
         loop = asyncio.new_event_loop()
 
@@ -77,48 +75,27 @@ async def get_quotes(symbols: str):
         start = time.time()
         while any(symbol not in data.keys() for symbol in symbols.split(",")):
             await asyncio.sleep(0.1)
-            if time.time() - start > 10:
+            if time.time() - start > 3 * len(symbols.split(",")):
+                logger.info("Reached timeout")
                 break
 
-        print("Got quotes")
-        print("Stopping the thread")
-        thread.join(1 * len(symbols.split(",")))
-        event.set()
-
-        # ! Alpaca API doesn't seem to like closing the stream
-        # ! so we have to manually close it
-        print("Unsubscribing from the stream")
-        asyncio.run_coroutine_threadsafe(
-            stream._data_ws._ws.send(
-                msgpack.packb(
-                    {
-                        "action": "unsubscribe",
-                        "trades": (),
-                        "quotes": symbols.split(","),
-                        "bars": (),
-                        "dailyBars": (),
-                    }
-                )
-            ),
-            loop,
+        logger.info(
+            f"Got quotes for {' '.join([k for k in data.keys() if k != '_meta'])}"
         )
-        stream._data_ws._handlers["quotes"] = None
-        asyncio.run_coroutine_threadsafe(stream._data_ws._ws.close(), loop)
+        logger.info("Stopping websocket")
         asyncio.run_coroutine_threadsafe(stream.stop_ws(), loop)
 
-        print("Stopping event loop")
+        logger.info("Stopping event loop")
         try:
             loop.stop()
         except RuntimeError:
             # Futures have not yet stopped but they will run forever if we don't
             pass
 
-        # Thread can still be alive at this point. Do another join without a timeout
-        # to verify thread shutdown.
+        logger.info("Stopping the thread")
         thread.join()
-        print("thread has stopped.")
 
-    logger.info("Received quotes: ", data)
+    logger.info(f"Received quotes: {data}")
 
     return data
 
