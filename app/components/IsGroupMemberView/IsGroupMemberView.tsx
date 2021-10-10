@@ -18,16 +18,18 @@ const IsGroupMemberView = ({ groupName }) => {
   return (
     <>
       <div className="w-full p-4">
+        <GroupColumnCard groupName={groupName} />
+        <div className="flex flex-col items-center justify-center">
         <button
           type="button"
-          className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
+          className="flex justify-center p-1 text-gray-100 bg-gray-300 rounded-lg text-l hover"
           onClick={() => setAddingMember(true)}
           title="Create a group"
           >
-            ADD
+            Add a member
         </button>
-        <AddGroupMemberModalDynamic open={addingMember} />
-        <GroupColumnCard groupName={groupName} />
+        <AddGroupMemberModalDynamic isOpen={addingMember} closeModal={()=>setAddingMember(false)} />
+        </div>
         {/* Card stats */}
         {/* TODO: Convert these into carousel cards organised by top percentage */}
         <div className="grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
