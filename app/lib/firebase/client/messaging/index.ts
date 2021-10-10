@@ -23,6 +23,7 @@ const initialiseMessaging = async () => {
 export const messaging = initialiseMessaging()
 
 export const getFCMToken = async (uid: string) => {
+  console.log("getting fcm token")
   "serviceWorker" in navigator &&
     registerValidSW("./firebase-messaging-sw.js", {
       onUpdate: updateServiceWorker,
@@ -33,6 +34,9 @@ export const getFCMToken = async (uid: string) => {
   if (fcmTokenInFirebase) return fcmTokenInFirebase
 
   const messaging = await initialiseMessaging()
+
+  console.log("notification permissions?")
+  console.log(Notification.permission)
 
   try {
     const status = await Notification.requestPermission()

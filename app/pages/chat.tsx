@@ -3,7 +3,10 @@ import { AuthCheck } from "@components/AuthCheck"
 import { useStream } from "@hooks/useStream"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import React from "react"
+import React, { useEffect } from "react"
+import { getFCMToken } from "@lib/firebase/client/messaging"
+import { useAuth } from "@hooks/useAuth"
+import { isBrowser } from "@utils/isBrowser"
 
 const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
   ssr: false,
@@ -11,6 +14,10 @@ const StreamChatWithNoSSR = dynamic(() => import("@stream/components/Chat"), {
 
 const ChatPage = () => {
   const { client } = useStream()
+  const { user } = useAuth()
+  useEffect(() => {
+    isBrowser && user?.uid && getFCMToken(user.uid)
+  }, [user.uid])
   return (
     <AuthCheck>
       <ClientOnly>

@@ -10,9 +10,9 @@ export const updateServiceWorker = (
   const registrationWaiting = serviceWorkerRegistration.waiting
   if (registrationWaiting) {
     registrationWaiting.postMessage({ type: "SKIP_WAITING" })
-    registrationWaiting.addEventListener("statechange", (e) => {
-      console.log(e.target)
-      if (e.target.state === "activated") window.location.reload()
-    })
+    registrationWaiting.addEventListener(
+      "statechange",
+      (e) => e.target.state === "activated" && window.location.reload()
+    )
   }
 }
