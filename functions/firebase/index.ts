@@ -100,4 +100,5 @@ module.exports = {
   alphaVantageQuery: functions.region(london).https.onCall(data.alphaVantageQuery),
   tradeSubmission: functions.region(london).https.onCall(trading.tradeSubmission),
   createAccount: functions.region(london).https.onCall(accounts.createAccount),
+  updateUserData: functions.region(london).https.onCall(accounts.updateUserData),
 }

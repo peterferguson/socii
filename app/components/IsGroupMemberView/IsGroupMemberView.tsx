@@ -9,26 +9,23 @@ import React, { useMemo, useRef, useState } from "react"
 import { GroupTradeHistory } from "../../components/GroupTradeHistory/GroupTradeHistory"
 import GroupColumnCard from "../GroupColumnCard"
 import { AddGroupMemberModalDynamic } from "@components/AddGroupMemberModal"
-import { Dialog } from "@headlessui/react"
-import { InvisibleButton } from "@components/InvisibleButton"
-
 const IsGroupMemberView = ({ groupName }) => {
   const tableMeta = useMemo(() => StockTableMeta, [])
-  const [addingMember, setAddingMember] = useState(true)
+  const [addingMember, setAddingMember] = useState(Boolean)
 
   if (Array.isArray(groupName)) groupName = groupName[0]
 
   return (
     <>
       <div className="w-full p-4">
-        {/* <button
+        <button
           type="button"
           className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
           onClick={() => setAddingMember(true)}
           title="Create a group"
           >
             ADD
-        </button> */}
+        </button>
         <AddGroupMemberModalDynamic open={addingMember} />
         <GroupColumnCard groupName={groupName} />
         {/* Card stats */}
