@@ -55,7 +55,7 @@ const MessagingChannelPreview = ({
     >
       {channel.data.image ? (
         <Image
-          src={channel.data.image}
+          src={channel.data.image as string}
           layout="responsive"
           height={40}
           width={40}

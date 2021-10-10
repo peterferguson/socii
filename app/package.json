@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "test": "jest",
     "lint": "eslint . --ext ts --ext tsx --ext js",
@@ -29,6 +30,7 @@
     ]
   },
   "dependencies": {
+    "@capacitor/ios": "^3.2.4",
     "@headlessui/react": "^1.4.1",
     "@notionhq/client": "^0.2.2",
     "@socii/shared": "file:../functions/shared",

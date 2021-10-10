@@ -16,6 +16,7 @@ module.exports = withPWA(
         exclude: path.resolve(__dirname, "public/icons/"),
         images: {
           disableStaticImages: true,
+          loader: "imgix",
           domains: [
             "storage.googleapis.com",
             "lh6.googleusercontent.com",

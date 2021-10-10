@@ -123,7 +123,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     return { params: { tickerSymbol } }
   })
 
-  return { paths, fallback: true }
+  return { paths, fallback: false }
 }
 
 export default TickerPage

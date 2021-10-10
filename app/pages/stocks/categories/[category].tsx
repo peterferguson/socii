@@ -151,7 +151,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = Object.keys(categories).map((shortName) => ({
     params: { category: shortName },
   }))
-  return { paths, fallback: "blocking" }
+  return { paths, fallback: false }
 }
 
 export default CategoryPage

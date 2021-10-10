@@ -1,0 +1,6 @@
+{
+	"appId": "app.socii.app",
+	"appName": "socii",
+	"webDir": "out",
+	"bundledWebRuntime": false
+}
