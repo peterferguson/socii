@@ -18,6 +18,7 @@ import {
 } from "firebase/auth"
 import { auth } from "@lib/firebase/client/auth"
 import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
+import { joinWaitlist } from "@utils/joinWaitlist"
 
 export default function Settings() {
   const { user } = useAuth()
@@ -77,11 +78,14 @@ export default function Settings() {
     [username]
   )
 
-  //TODO less repetitive way where all fields are sent in object
-  const runUpdateUsername = async (user, username) => {
-    updateUserData({uid: user.uid, updateData: {username: username}}).then((r)=>toast.success(`updated username to ${username}`))
-  }
+  // //TODO less repetitive way where all fields are sent in object
+  // TODO username not updateable until stream  id can be changed
+  // const runUpdateUsername = async (user, username) => {
+  //   updateUserData({uid: user.uid, updateData: {username: username}}).then((r)=>toast.success(`updated username to ${username}`))
+  // }
+  // TODO The email should be updated in Alpaca too
   const runUpdateEmail = async (user, email) => {
+    joinWaitlist(email, "yes")
     updateUserData({uid: user.uid, updateData: {email: email}}).then((r)=>toast.success(`updated email to ${email}`))
   }
 
@@ -90,7 +94,7 @@ export default function Settings() {
       <div>
         <div className="flex flex-col px-4 md:gap-6">
           <div className="shadow sm:rounded-md sm:overflow-hidden">
-            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+            <div className="px-4 py-4 bg-white space-y-3 sm:p-6">
               <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
                   <h3 className="text-lg font-medium text-gray-900 leading-6">Profile</h3>
@@ -99,55 +103,50 @@ export default function Settings() {
                     share.
                   </p>
                   <p className="mt-1 text-sm font-semibold text-pink-300">
-                  You can update your username for now.. the other options will come soon  - keep an eye on our social media for future releases!
+                  These options will be enabled soon  - keep an eye on our social media for future releases!
                   </p>
                 </div>
               </div>
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
+              <label
+                htmlFor="username"
+                className="text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
+              <div className="flex flex-row h-2/3">
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  className="mr-8 border border-gray-300 rounded-lg appearance-none shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
+                  placeholder="Elonmusket"
+                  onChange={onChange}
+                />
+                <div
+                  className={`h-10 w-10 bg-none text-sm sm:text-tiny ${
+                    isValidUsername ? "text-brand btn-transition" : "text-red-400"
+                  } p-0.5 justify-center ml-[-4.5rem] mt-[1.45rem]`}
+                  onKeyDown={null}
                 >
-                  Username
-                </label>
-                <div className="flex flex-row rounded-md shadow-sm">
-                  <div className="text-gray-700 bg-white border rounded-lg border-brand-dark border-opacity-30 focus:outline-none active:border-opacity-100 active:border-brand focus:border-opacity-100 focus:border-brand">
-                    <input
-                      type="text"
-                      name="username"
-                      id="username"
-                      className="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
-                      placeholder="Elonmusket"
-                      onChange={onChange}
-                    />
-                  </div>
-                    <div className="justify-center">
-                      <div
-                        className={`bg-white text-sm sm:text-tiny align-middle ${
-                          isValidUsername ? "text-brand btn-transition" : "text-red-400"
-                        }`}
-                        onKeyDown={null}
-                      >
-                        {isValidUsername ? (
-                          <CheckIcon className="w-6" onClick={null} />
-                        ) : (
-                          <FiX className="w-6 h-6" />
-                        )}
-                      </div>
-                    </div>
-                    <button 
-                      type="button"
-                      className="text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-                      onClick={async (e) => {
-                        e.preventDefault()
-                        isValidUsername && (await runUpdateUsername(user, username))
-                      }}
-                      disabled={disabled}
-                    >
-                      {!disabled ? "Update" : "Creating..."}
-                    </button>
-                  </div>
+                  {isValidUsername ? (
+                    <CheckIcon className="w-6" onClick={null} />
+                  ) : (
+                    <FiX className="w-6 h-6" />
+                  )}
                 </div>
+                <button 
+                  type="button"
+                  className="text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    // isValidUsername && (await runUpdateUsername(user, username))
+                  }}
+                  disabled={disabled}
+                >
+                  {!disabled ? "Update" : "Creating..."}
+                </button>
+              </div>
+                
               <div className="grid grid-cols-3 gap-6">
                 <div className="col-span-3 sm:col-span-2">
                   <label
