@@ -1,2 +1,2 @@
-export { default as AddGroupMember } from "./AddGroupMemberModal"
+export { default as AddGroupMemberModal } from "./AddGroupMemberModal"
 export { AddGroupMemberModalDynamic } from "./AddGroupMemberModal.dynamic"

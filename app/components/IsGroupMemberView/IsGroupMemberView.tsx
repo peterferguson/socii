@@ -9,6 +9,7 @@ import React, { useMemo, useRef, useState } from "react"
 import { GroupTradeHistory } from "../../components/GroupTradeHistory/GroupTradeHistory"
 import GroupColumnCard from "../GroupColumnCard"
 import { AddGroupMemberModalDynamic } from "@components/AddGroupMemberModal"
+
 const IsGroupMemberView = ({ groupName }) => {
   const tableMeta = useMemo(() => StockTableMeta, [])
   const [addingMember, setAddingMember] = useState(Boolean)

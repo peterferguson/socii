@@ -61,6 +61,11 @@ module.exports = {
     .firestore.document("usernames/{username}")
     .onWrite(stream.addToSociiansChat),
 
+  addMemberToGroupChat: functions
+    .region(london)
+    .firestore.document("groups/{groupName}/investors/{username}")
+    .onWrite(stream.addMemberToGroupChat),
+
   incrementInvestors: functions
     .region(london)
     .firestore.document("groups/{groupName}/investors/{investorUsername}")

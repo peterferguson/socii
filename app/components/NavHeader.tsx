@@ -14,6 +14,7 @@ import { Popover } from "@headlessui/react"
 import dynamic from "next/dynamic"
 import InformationTag from "./InformationTag/InformationTag"
 import { tw } from "@utils/tw"
+import { CreateGroupModalDynamic } from "./CreateGroupModal"
 
 const SearchResultsModal = dynamic(() => import("@components/SearchResultsModal"), {
   ssr: true,
@@ -86,28 +87,32 @@ const routeTitle = (path: string) =>
       .pop()
   ]
 
-const addedInfo =<InformationTag
-  className={"h-4 w-4 text-tiniest p-2"}
-  InformationText={"This is your personal portfolio - it displays your share of assets, combined from all your groups."} 
-  informationTitle={"Personal Portfolio"}                    
-  />
-
-const createGroup =<button
-  type="button"
-  className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
-  onClick={() => router.push("/groups/create")}
-  title="Create a group"
-  >
-    <IoAdd/>
-  </button>
-
 const NavHeader: React.FC = () => {
   const { signout } = useAuth()
   const router = useRouter()
   const items = useMemo(() => dropdownItems(router, signout), [router, signout])
   const [currentPage, setCurrentPage] = useState(null)
+  const [addingMember, setAddingMember] = useState(Boolean)
 
   const title = routeTitle(router.asPath)
+
+  const addedInfo =<InformationTag
+    className={"h-4 w-4 text-tiniest p-2"}
+    InformationText={"This is your personal portfolio - it displays your share of assets, combined from all your groups."} 
+    informationTitle={"Personal Portfolio"}                    
+  />
+
+  const createGroup =
+      <button
+        type="button"
+        className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
+        onClick={() => {
+          setAddingMember(true)
+          }}
+        title="Create a group"
+      >
+        <IoAdd/>
+      </button>
 
   const pageHeaderItem = (title) => {
     switch (title){
@@ -142,6 +147,7 @@ const NavHeader: React.FC = () => {
                   )}
                   </span>
                 </div>
+                <CreateGroupModalDynamic isOpen={addingMember} closeModal={()=>setAddingMember(false)} />
                 <div className="flex-grow hidden md:block" />
                 <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
                   <Searchbar open={open} />
