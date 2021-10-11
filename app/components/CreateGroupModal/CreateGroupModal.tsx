@@ -1,7 +1,6 @@
-import { Fragment } from "react"
+import { Fragment, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import React from "react"
-
 import CreateGroup from "./CreateGroup"
 
 const CreateGroupModal = ({ isOpen, closeModal, }: {
@@ -9,6 +8,8 @@ const CreateGroupModal = ({ isOpen, closeModal, }: {
   closeModal: () => void
 }) => {
 
+  const [creating, setCreating] = useState(false)
+   
   return(
   <Transition appear show={isOpen} as={Fragment}>
     <Dialog
@@ -44,7 +45,8 @@ const CreateGroupModal = ({ isOpen, closeModal, }: {
           leaveTo="opacity-0 scale-95"
         >
           <div className="inline-block w-full max-w-md p-6 my-8 text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
-            <CreateGroup/>
+            <CreateGroup processing = {()=> setCreating(true)} />
+            {creating ? closeModal() : null}
           </div>
         </Transition.Child>
       </div>

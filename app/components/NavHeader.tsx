@@ -92,7 +92,7 @@ const NavHeader: React.FC = () => {
   const router = useRouter()
   const items = useMemo(() => dropdownItems(router, signout), [router, signout])
   const [currentPage, setCurrentPage] = useState(null)
-  const [addingMember, setAddingMember] = useState(Boolean)
+  const [creatingGroup, setCreatingGroup] = useState(Boolean)
 
   const title = routeTitle(router.asPath)
 
@@ -107,7 +107,7 @@ const NavHeader: React.FC = () => {
         type="button"
         className="text-gray-100 bg-gray-300 rounded-lg text-l hover"
         onClick={() => {
-          setAddingMember(true)
+          setCreatingGroup(true)
           }}
         title="Create a group"
       >
@@ -147,7 +147,7 @@ const NavHeader: React.FC = () => {
                   )}
                   </span>
                 </div>
-                <CreateGroupModalDynamic isOpen={addingMember} closeModal={()=>setAddingMember(false)} />
+                <CreateGroupModalDynamic isOpen={creatingGroup} closeModal={()=>setCreatingGroup(false)} />
                 <div className="flex-grow hidden md:block" />
                 <div className="flex items-center justify-end w-11/12 md:w-1/2 space-x-0 sm:space-x-2">
                   <Searchbar open={open} />

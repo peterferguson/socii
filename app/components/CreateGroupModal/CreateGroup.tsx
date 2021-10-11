@@ -16,7 +16,7 @@ import toast from "react-hot-toast"
 import { FiX } from "react-icons/fi"
 import { HiOutlineUserGroup } from "react-icons/hi"
 
-export default function CreateGroup() {
+export default function CreateGroup ( {processing} : {processing: ()=>void} ) {
   const { user } = useAuth()
   const username = user ? user.username : ""
   const router = useRouter()
@@ -147,6 +147,7 @@ export default function CreateGroup() {
                 try{
                   toast.dismiss()
                   toast.success("Creating your group!")
+                  processing()
                   createGroup(
                     user,
                     username,
@@ -169,6 +170,5 @@ export default function CreateGroup() {
           </button>
         </div>
       </form>
-  
   )
 }

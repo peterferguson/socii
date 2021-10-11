@@ -39,7 +39,7 @@ export async function createGroup(
     initialDeposit: lumpSumOption.amount,
     subscriptionAmount: depositOption.amount,
     startDate: serverTimestamp(),
-    investorCount: 1, // TODO: Increment this on addition of new investors
+    investorCount: 0, 
     investors: [username],
   })
   batch.set(investorsRef, {
