@@ -48,7 +48,7 @@ function DropdownMenuItem(props: DropdownItemProps) {
   const ItemChildren = () => (
     <>
       {!!props.leftIcon && <props.leftIcon />}
-      <span className="inline-flex items-center justify-center pl-2 font-thin uppercase font-primary">
+      <span className="inline-flex items-center justify-center pl-2 font-thin uppercase font-primary hover:cursor-pointer">
         {props.name}
       </span>
       <div className="flex-grow"></div>

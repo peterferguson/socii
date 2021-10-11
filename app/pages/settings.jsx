@@ -1,49 +1,174 @@
+//TODO
+  // - Improve input method to scale for multiple fields
+  // - Add links to rest of fields, currently only username updated 
+  // - Also update user doc and other apps relying on username
+
 import { useAuth } from "@hooks/useAuth"
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
+import debounce from "lodash/debounce"
+import { usernameExists } from "@lib/firebase/client/db/index"
+import toast from "react-hot-toast"
+import { FiX } from "react-icons/fi"
+import CheckIcon from "@components/BackgroundCheck"
+import { updateUserData } from "@lib/firebase/client/functions"
+import { tw } from "@utils/tw"
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth"
+import { auth } from "@lib/firebase/client/auth"
+import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
+import { joinWaitlist } from "@utils/joinWaitlist"
 
 export default function Settings() {
   const { user } = useAuth()
-  return (
-    <>
-      {/* <div className="w-full sm:w-1/2 xl:w-1/3"> */}
+  const [disabled, setDisabled] = useState(false)
+  const [username, setUsername] = useState("")
+  const [isValidUsername, setisValidUsername] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [retrieveEmail, setRetrieveEmail] = useState(null)
+  const [email, setEmail] = useState(null)
 
+  useEffect(()=>{
+    if (retrieveEmail){
+      const getEmail= async () => {
+        const { user: rawUser } = await signInWithPopup(auth, new GoogleAuthProvider())
+        setEmail(user.email)
+      }
+      getEmail()
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[retrieveEmail])
+
+  useEffect(()=>{
+    if(email){
+      // check if email is used elsewhere, update if available
+      getUsernameWithEmail(email).then((r)=> {
+        if(r){
+          toast.error(`Sorry the email ${email} is taken`)
+        } else {
+          runUpdateEmail( user, email )
+        }
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[email])
+
+  const onChange = (e) => {
+    const val = e.target.value
+    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+    setLoading(true)
+    re.test(val) ? setUsername(val) : setUsername("")
+    setisValidUsername(false)
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => checkUsername(username), [username])
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkUsername = useCallback(
+    debounce(async (name) => {
+      if (name.length >= 3) {
+        const empty = await usernameExists(username)
+        setisValidUsername(empty)
+        !empty && toast.error(`Sorry the username ${name} is taken`)
+        setLoading(false)
+      }
+    }, 500),
+    [username]
+  )
+
+  // //TODO less repetitive way where all fields are sent in object
+  // TODO username not updateable until stream  id can be changed
+  // const runUpdateUsername = async (user, username) => {
+  //   updateUserData({uid: user.uid, updateData: {username: username}}).then((r)=>toast.success(`updated username to ${username}`))
+  // }
+  // TODO The email should be updated in Alpaca too
+  const runUpdateEmail = async (user, email) => {
+    joinWaitlist(email, "yes")
+    updateUserData({uid: user.uid, updateData: {email: email}}).then((r)=>toast.success(`updated email to ${email}`))
+  }
+
+  return (
+    <div >
       <div>
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium text-gray-900 leading-6">Profile</h3>
-              <p className="mt-1 text-sm text-gray-600">
-                This information will be displayed publicly so be careful what you
-                share.
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
-              <div className="shadow sm:rounded-md sm:overflow-hidden">
-                <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company-website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Website
-                      </label>
-                      <div className="flex mt-1 rounded-md shadow-sm">
-                        <span className="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
-                          http://
-                        </span>
-                        <input
-                          type="text"
-                          name="company-website"
-                          id="company-website"
-                          className="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
-                          placeholder="www.example.com"
-                        />
-                      </div>
-                    </div>
+        <div className="flex flex-col px-4 md:gap-6">
+          <div className="shadow sm:rounded-md sm:overflow-hidden">
+            <div className="px-4 py-4 bg-white space-y-3 sm:p-6">
+              <div className="md:col-span-1">
+                <div className="px-4 sm:px-0">
+                  <h3 className="text-lg font-medium text-gray-900 leading-6">Profile</h3>
+                  <p className="mt-1 text-sm text-gray-600">
+                    This information will be displayed publicly so be careful what you
+                    share.
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-pink-300">
+                  These options will be enabled soon  - keep an eye on our social media for future releases!
+                  </p>
+                </div>
+              </div>
+              <label
+                htmlFor="username"
+                className="text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
+              <div className="flex flex-row h-2/3">
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  className="mr-8 border border-gray-300 rounded-lg appearance-none shadow-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand text-tiny sm:text-base"
+                  placeholder="Elonmusket"
+                  onChange={onChange}
+                />
+                <div
+                  className={`h-10 w-10 bg-none text-sm sm:text-tiny ${
+                    isValidUsername ? "text-brand btn-transition" : "text-red-400"
+                  } p-0.5 justify-center ml-[-4.5rem] mt-[1.45rem]`}
+                  onKeyDown={null}
+                >
+                  {isValidUsername ? (
+                    <CheckIcon className="w-6" onClick={null} />
+                  ) : (
+                    <FiX className="w-6 h-6" />
+                  )}
+                </div>
+                <button 
+                  type="button"
+                  className="text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    // isValidUsername && (await runUpdateUsername(user, username))
+                  }}
+                  disabled={disabled}
+                >
+                  {!disabled ? "Update" : "Creating..."}
+                </button>
+              </div>
+                
+              <div className="grid grid-cols-3 gap-6">
+                <div className="col-span-3 sm:col-span-2">
+                  <label
+                    htmlFor="company-website"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Website
+                  </label>
+                  <div className="flex mt-1 rounded-md shadow-sm">
+                    <span className="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
+                      http://
+                    </span>
+                    <input
+                      type="text"
+                      name="company-website"
+                      id="company-website"
+                      className="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+                      placeholder="www.example.com"
+                    />
                   </div>
+                </div>
+              </div>
 
                   <div>
                     <label
@@ -62,9 +187,6 @@ export default function Settings() {
                         defaultValue={""}
                       />
                     </div>
-                    <p className="mt-2 text-sm text-gray-500">
-                      Brief description for your profile. URLs are hyperlinked.
-                    </p>
                   </div>
 
                   <div>
@@ -72,7 +194,7 @@ export default function Settings() {
                       Photo
                     </label>
                     <div className="flex items-center mt-1">
-                      <span className="inline-block w-12 h-12 overflow-hidden bg-gray-50 rounded-full">
+                      <span className="inline-block w-12 h-12 overflow-hidden rounded-full bg-gray-50">
                         <svg
                           className="w-full h-full text-gray-300"
                           fill="currentColor"
@@ -90,7 +212,7 @@ export default function Settings() {
                     </div>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Cover photo
                     </label>
@@ -130,45 +252,50 @@ export default function Settings() {
                         </p>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Save
-                  </button>
+                  </div> */}
                 </div>
               </div>
-            </form>
-          </div>
         </div>
       </div>
 
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
-        </div>
-      </div>
-
-      <div className="mt-10 sm:mt-0">
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium text-gray-900 leading-6">
-                Personal Information
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                Use a permanent address where you can receive mail.
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
-              <div className="overflow-hidden shadow sm:rounded-md">
-                <div className="px-4 py-5 bg-white sm:p-6">
+      <div className="py-4">
+      <div className="flex flex-col px-4 md:gap-6">
+          <div className="shadow sm:rounded-md sm:overflow-hidden">
+            <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+              <div className="md:col-span-1">
+                <div className="px-4 sm:px-0">
+                  <h3 className="text-lg font-medium text-gray-900 leading-6">Personal Information</h3>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Enter you personal and contact details here.
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-pink-300">
+                  You can update your email for now.. the other options will come soon - keep an eye on our social media for future releases!
+                  </p>
+                </div>
+              </div>
                   <div className="grid grid-cols-6 gap-6">
+                    <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="email-address"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Email address
+                        </label>
+                        <button
+            type="submit"
+            className={tw(
+              "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
+              "rounded-2xl border-1",
+              "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
+              "umami--click--waitlist-submit-button"
+            )}
+            onClick={async (e) => {
+              setRetrieveEmail(true)
+            }}
+          >
+            Change Email
+          </button>
+                      </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="first-name"
@@ -197,22 +324,6 @@ export default function Settings() {
                         name="last-name"
                         id="last-name"
                         autoComplete="family-name"
-                        className="block w-full mt-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-4">
-                      <label
-                        htmlFor="email-address"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Email address
-                      </label>
-                      <input
-                        type="text"
-                        name="email-address"
-                        id="email-address"
-                        autoComplete="email"
                         className="block w-full mt-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                       />
                     </div>
@@ -299,42 +410,26 @@ export default function Settings() {
                     </div>
                   </div>
                 </div>
-                <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Save
-                  </button>
-                </div>
               </div>
-            </form>
-          </div>
         </div>
       </div>
 
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
-        </div>
-      </div>
+      <div className="py-4">
+        <div className="flex flex-col px-4 md:gap-6">
+            <div className="shadow sm:rounded-md sm:overflow-hidden">
+              <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+                <div className="md:col-span-1">
+                  <div className="px-4 sm:px-0">
+                    <h3 className="text-lg font-medium text-gray-900 leading-6">Notifications</h3>
+                    <p className="mt-1 text-sm text-gray-600">
+                      Decide which communications you&apos;d like to receieve and how.
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-pink-300">
+                      This section will be enabled soon.
+                    </p>
+                  </div>
+                </div>
 
-      <div className="mt-10 sm:mt-0">
-        <div className="md:grid md:grid-cols-3 md:gap-6">
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-              <h3 className="text-lg font-medium text-gray-900 leading-6">
-                Notifications
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                Decide which communications you&apos;d like to receive and how.
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
-              <div className="overflow-hidden shadow sm:rounded-md">
-                <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
                     <legend className="text-base font-medium text-gray-900">
                       By Email
@@ -457,19 +552,11 @@ export default function Settings() {
                     </div>
                   </fieldset>
                 </div>
-                <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Save
-                  </button>
-                </div>
               </div>
-            </form>
+
           </div>
-        </div>
       </div>
-    </>
+
+    </div>
   )
 }

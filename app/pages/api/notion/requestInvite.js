@@ -22,7 +22,7 @@ export default async function (req, res) {
         },
         "Is Invited": {
           select: {
-            name: "no",
+            name: `${req.body.isInvited}`,
           },
         },
       },
