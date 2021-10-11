@@ -59,7 +59,6 @@ export default function CreateGroup() {
   )
 
   return (
-  
       <form className="w-full">
         <div className="px-4 py-3 mb-3 leading-tight text-gray-700 bg-white shadow-lg appearance-none rounded-t-3xl sm:rounded-xl">
           <div className="flex items-center justify-center w-20 h-20 mx-auto -mt-12 overflow-hidden text-white border-white rounded-full shadow-lg bg-brand border-[3px]">
@@ -145,17 +144,24 @@ export default function CreateGroup() {
             onClick={(e) => {
               e.preventDefault()
               if (isValidGroupName) {
-                createGroup(
-                  user,
-                  username,
-                  groupName,
-                  privacyOption,
-                  depositOption,
-                  lumpSumOption,
-                  groupDescription
-                )
-
-                router.push(`/groups/${groupName}`)
+                try{
+                  toast.dismiss()
+                  toast.success("Creating your group!")
+                  createGroup(
+                    user,
+                    username,
+                    groupName,
+                    privacyOption,
+                    depositOption,
+                    lumpSumOption,
+                    groupDescription
+                  )
+                  router.push(`/groups/${groupName}`)
+                } catch(e){
+                  console.log("Error ",e)
+                  toast.dismiss()
+                  toast.error("Failed to create group")
+                }
               }
             }}
           >
