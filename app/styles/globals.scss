@@ -54,6 +54,12 @@
   --standaloneHeight: calc(var(--innerHeight) - var(--sat) - var(--sab));
 }
 
+// - Removes any selection of text
+// TODO: only apply this to the main layout (not the content pages)
+*:not(input):not(textarea):not([contenteditable]) {
+  -webkit-user-select: none;
+}
+
 body {
   height: var(--innerHeight);
   max-height: var(--innerHeight);

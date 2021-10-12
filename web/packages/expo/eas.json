@@ -1,0 +1,30 @@
+{
+  "build": {
+    "release": {
+      "releaseChannel": "production",
+      "env": {
+        "STAGE": "production",
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii-development"
+      }
+    },
+    "preview": {
+      "releaseChannel": "staging",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "STAGE": "staging",
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii-development"
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "STAGE": "development",
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii-development"
+      }
+    }
+  }
+}
