@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, Fragment } from "react"
+import { useEffect, useState, useCallback, useRef, Fragment, useContext } from "react"
 import debounce from "lodash/debounce"
 import { Dialog, Transition } from "@headlessui/react"
 import React from "react"
@@ -10,6 +10,8 @@ import { useRouter } from "next/router"
 import { IoIosPeople } from "react-icons/io"
 import { doc, serverTimestamp, writeBatch } from "firebase/firestore"
 import { firestore } from "@lib/firebase/client/db"
+import ChatUserSearch, { StreamUser } from "@stream/components/ChatUserSearch"
+
 
 const AddGroupMemberModal = ({ isOpen, closeModal, }: {
   isOpen: boolean
@@ -18,67 +20,46 @@ const AddGroupMemberModal = ({ isOpen, closeModal, }: {
 
   const [username, setUsername] =useState("")
   const [disabled, setDisabled] = useState(false)
-  const [isValidUsername, setisValidUsername] = useState(false)
+  const [selectedUsers, setSelectedUsers] = useState<StreamUser[]>([])
+  const [users, setUsers] = useState<StreamUser[]>([])
   const router = useRouter()
   const groupName = router.query
 
-  // //TODO - replace with user search function
- /////////////////////////////////////
-  const onChange = (e) => {
-    const val = e.target.value
-    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
-    re.test(val) ? setUsername(val) : setUsername("")
-    setisValidUsername(false)
-  }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => checkUsername(username), [username])
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkUsername = useCallback(
-    debounce(async (name) => {
-      if (name.length >= 3) {
-        const empty = await usernameExists(username)
-        setisValidUsername(!empty)
-        toast.dismiss()
-        empty ? toast.error(`The username ${name} doesn't exist`)
-          : toast.success(`Username ${name} is valid`)
+  const runUpdateGroup = async () => {
+    // These id will come from stream and should be the username
+    selectedUsers.map(async (u) => {
+      let username = u.id
+      try{
+        const userDetails = (await getUserWithUsername(username))
+        let {uid, groups, alpacaAccountId} = userDetails.data()
+  
+        if (groups.includes(groupName.groupName)){
+          let err = new Error()
+          err["reason"]="User already in group!"
+          throw err
+        } 
+        // Update list for user
+        updateUserData({uid: uid, updateData: {groups: [...groups, groupName.groupName]}})
+        // Update investors for group
+        const investorsRef = doc(firestore, `groups/${groupName.groupName}/investors/${username}`)
+        const batch = writeBatch(firestore)
+        batch.set(investorsRef, {
+          isFounder: false,
+          joinDate: serverTimestamp(),
+          uid: uid,
+          alpacaAccountId: alpacaAccountId,
+        })
+        await batch.commit()
+        .then(()=>toast.success(`Added ${username} to ${groupName.groupName}`))
+        closeModal()
+  
+      } catch(error){
+        toast.error(`Failed to add user: ${error.reason}`)
+        console.log(error.reason)
+        closeModal()
       }
-    }, 1000),
-    [username]
-  )
- /////////////////////////////////////
-
-  const runUpdateGroup = async (username) => {
-    try{
-      const userDetails = (await getUserWithUsername(username))
-      let {uid, groups, alpacaAccountId} = userDetails.data()
-
-      if (groups.includes(groupName.groupName)){
-        let err = new Error()
-        err["reason"]="User already in group!"
-        throw err
-      } 
-      // Update list for user
-      updateUserData({uid: uid, updateData: {groups: [...groups, groupName.groupName]}})
-      // Update investors for group
-      const investorsRef = doc(firestore, `groups/${groupName.groupName}/investors/${username}`)
-      const batch = writeBatch(firestore)
-      batch.set(investorsRef, {
-        isFounder: false,
-        joinDate: serverTimestamp(),
-        uid: uid,
-        alpacaAccountId: alpacaAccountId,
-      })
-      await batch.commit()
-      .then(()=>toast.success(`Added ${username} to ${groupName.groupName}`))
-      closeModal()
-
-    } catch(error){
-      toast.error(`Failed to add user: ${error.reason}`)
-      console.log(error.reason)
-      closeModal()
-    }
+    })
   }
 
   return(
@@ -130,13 +111,11 @@ const AddGroupMemberModal = ({ isOpen, closeModal, }: {
                 Type the username below
               </p>
             </div>
-            <input
-                type="text"
-                name="username"
-                id="username"
-                className="flex-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Elonmusket"
-                onChange={onChange}
+            <ChatUserSearch
+                selectedUsers={selectedUsers}
+                setSelectedUsers={setSelectedUsers}
+                users={users}
+                setUsers={setUsers}
               />
 
             <div className="flex items-center justify-center mx-auto mt-4">
@@ -145,7 +124,7 @@ const AddGroupMemberModal = ({ isOpen, closeModal, }: {
                 className="inline-flex justify-center px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-teal-500"
                 onClick={async (e) => {
                   e.preventDefault()
-                  isValidUsername && (await runUpdateGroup(username))
+                  await runUpdateGroup()
                 }}
                 disabled={disabled}
               >
