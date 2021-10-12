@@ -27,7 +27,7 @@ const JoinWaitlistToast = ({ t, email }) => (
 
     <button
       onClick={() => {
-        joinWaitlist(email)
+        joinWaitlist(email, "no")
         toast.dismiss(t.id)
         toast.success("Awesome! Keep an eye on your email for updates!", {
           icon: "👀",
