@@ -10,6 +10,7 @@
   "dependencies": {
     "@next/bundle-analyzer": "^11.1.2",
     "app": "*",
+    "firebase": "^9.1.2",
     "next": "^11.1.0",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.1",
