@@ -5,10 +5,5 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.10.3"
-  },
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "firebase": "^9.1.2",
-    "isomorphic-unfetch": "^3.1.0"
   }
 }

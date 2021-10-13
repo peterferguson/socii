@@ -16,9 +16,5 @@
     "build": "cd packages/next && yarn build",
     "deploy": "vercel --prod --no-clipboard",
     "postinstall": "patch-package"
-  },
-  "dependencies": {
-    "tailwindcss": "^2.2.16",
-    "twrnc": "^2.0.0-rc.3"
   }
 }
