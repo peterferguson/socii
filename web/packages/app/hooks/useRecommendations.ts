@@ -5,10 +5,14 @@ import { getYahooRecommendations } from "../utils/getYahooRecommendations"
 import { pnlTextColor } from "../utils/pnlTextColor"
 import { usePrevious } from "./usePrevious"
 
+export interface AlpacaData {
+  symbol: string
+}
 export interface RecommendationData extends YahooPriceData {
   logoColor: string
   pnlColor: string
   ISIN: string
+  alpaca: AlpacaData
 }
 
 interface Recommendations {
