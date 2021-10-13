@@ -5,9 +5,10 @@ import { getYahooRecommendations } from "../utils/getYahooRecommendations"
 import { pnlTextColor } from "../utils/pnlTextColor"
 import { usePrevious } from "./usePrevious"
 
-interface RecommendationData extends YahooPriceData {
+export interface RecommendationData extends YahooPriceData {
   logoColor: string
   pnlColor: string
+  ISIN: string
 }
 
 interface Recommendations {

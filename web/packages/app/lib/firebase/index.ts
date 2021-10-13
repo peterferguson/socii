@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore/lite"
+import { getFirestore, setLogLevel, initializeFirestore } from "firebase/firestore"
 
 export const londonRegion = "europe-west2"
 
@@ -14,4 +14,4 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-export const db = getFirestore(app)
+export const db = initializeFirestore(app, { experimentalForceLongPolling: true })
