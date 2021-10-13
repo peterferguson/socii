@@ -65,10 +65,10 @@ const ChannelInner = ({ toggleChannelList }) => {
       messages.filter(
         (msg) =>
           !(
+            msg?.onlyForMe ? ![user?.uid].includes(String(msg?.onlyForMe)) : false ||  
             (((msg.attachments.some(({ type }) => type === "buy" || type === "sell") &&
               msg.user.id !== username) ||
-              ["complete", "cancelled"].includes(msg?.status)) &&
-              ![user?.uid].includes(String(msg?.onlyForMe))) ||
+            ["complete", "cancelled"].includes(msg?.status))) ||
             (msg.command_info?.name && !msg.attachments.length)
           )
       )

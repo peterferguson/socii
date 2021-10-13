@@ -4,6 +4,7 @@ import { getRealtimeQuotes } from "../../shared/alpaca/utils/getRealtimeQuotes"
 import { firestore, iexClient, tradeClient } from "../index.js"
 import { determineTradeStatus } from "../utils/determineTradeStatus"
 import { isSell } from "../utils/isSell"
+import { priceChangedMessage } from "../utils/priceChangedMessage.js"
 import { streamClient } from "../utils/streamClient"
 import { warnPriceVariationOnMarketClose } from "../utils/warnPriceVariationOnMarketClose"
 import { investmentPendingMML } from "./mml/investmentPendingMML"
@@ -83,6 +84,11 @@ export const tradeConfirmation = async (change, context) => {
     !isSell(tradeData.type)
   ) {
     logger.log(`The price has risen more than 2.5% since the price was agreed`)
+    await streamClient
+      .channel("group", groupName)
+      .sendMessage(
+        await priceChangedMessage(latestPrice, symbol, latestAgreesId)
+      )
     return
   } else tradeData.stockPrice = latestPrice
 
