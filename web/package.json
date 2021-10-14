@@ -18,6 +18,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "sentry-expo": "^4.0.3",
     "tailwindcss": "^2.2.16"
   }
 }

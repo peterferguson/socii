@@ -44,32 +44,29 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   // TODO: Add a backup logo search
   // TODO: Add loading state
 
-  return (
-    <>
-      {logoSrc && !isError ? (
-        <Image
-          source={{
-            uri: logoSrc,
-          }}
-          style={{
-            width: width || DEFAULT_HEIGHT_AND_WIDTH,
-            height: height || DEFAULT_HEIGHT_AND_WIDTH,
-          }}
-          onError={() => setIsError(true)}
-          resizeMethod="resize"
-        />
-      ) : (
-        <View
-          style={{
-            ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
-            width: width || DEFAULT_HEIGHT_AND_WIDTH,
-            height: height || DEFAULT_HEIGHT_AND_WIDTH,
-          }}
-        >
-          <Text style={tw`font-semibold text-gray-500 text-tiny`}>{tickerSymbol}</Text>
-        </View>
-      )}
-    </>
+  return logoSrc && !isError ? (
+    <Image
+      source={{
+        uri: logoSrc,
+      }}
+      style={{
+        ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
+        width: parseInt(width) || DEFAULT_HEIGHT_AND_WIDTH,
+        height: parseInt(height) || DEFAULT_HEIGHT_AND_WIDTH,
+      }}
+      onError={() => setIsError(true)}
+      resizeMethod="resize"
+    />
+  ) : (
+    <View
+      style={{
+        ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
+        width: width || DEFAULT_HEIGHT_AND_WIDTH,
+        height: height || DEFAULT_HEIGHT_AND_WIDTH,
+      }}
+    >
+      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{tickerSymbol}</Text>
+    </View>
   )
 }
 

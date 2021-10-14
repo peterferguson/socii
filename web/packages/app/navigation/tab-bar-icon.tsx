@@ -5,5 +5,5 @@ export function TabBarIcon(props: {
   name: React.ComponentProps<typeof Feather>['name'];
   color: string;
 }) {
-  return <Feather size={25} {...props} />;
+  return <Feather size={25} {...props}  />;
 }

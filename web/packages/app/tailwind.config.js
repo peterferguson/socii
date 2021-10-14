@@ -1,4 +1,4 @@
-// const colors = require("tailwindcss/colors")
+const colors = require("tailwindcss/colors")
 
 module.exports = {
   mode: "jit",
@@ -54,14 +54,14 @@ module.exports = {
         bitcoin: "#f2a900",
         facebook: "#1778f2",
         twitter: "#1DA1F2",
-        // gray: {
-        //   ...colors.gray,
-        //   // 50: "#f3f5f7",
-        // },
-        // teal: colors.teal,
-        // purple: colors.purple,
-        // emerald: colors.emerald,
-        // pink: colors.pink,
+        gray: {
+          ...colors.gray,
+          50: "#f3f5f7",
+        },
+        teal: colors.teal,
+        purple: colors.purple,
+        emerald: colors.emerald,
+        pink: colors.pink,
       },
       fontFamily: {
         primary: ["Poppins", "sans-serif"],

@@ -1,6 +1,6 @@
-import { TabBarIcon } from "app/navigation/tab-bar-icon"
+import Feather from "@expo/vector-icons/build/Feather"
 import React from "react"
-import { FlatList, Text, useWindowDimensions, View, SafeAreaView } from "react-native"
+import { FlatList, Text, useWindowDimensions, View } from "react-native"
 import { RecommendationData, useRecommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
 import TickerLogo from "./TickerLogo"
@@ -8,23 +8,24 @@ import TickerLogo from "./TickerLogo"
 const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   const { recommendations } = useRecommendations(symbol)
   return (
-    <View style={tw`w-full mt-2 font-primary lg:w-2/5`}>
-      <Text style={tw`text-xl text-white mb-4`}>People also viewed</Text>
-      <SafeAreaView
+    <View style={tw`w-full m-2 font-primary lg:w-2/5`}>
+      <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
+      <View
         style={{
-          ...tw`w-full p-4 bg-white shadow-lg rounded-2xl flex flex-row justify-center 
-          items-center`,
-          flex: 1,
+          ...tw`m-4 p-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl items-center`,
         }}
       >
         {recommendations && (
           <FlatList
             data={Object.values(recommendations)}
-            renderItem={RecommendationItem}
+            renderItem={({ item: recommendation }) => (
+              <RecommendationItem item={recommendation} />
+            )}
             keyExtractor={(item) => item.ISIN}
+            horizontal={true}
           />
         )}
-      </SafeAreaView>
+      </View>
     </View>
   )
 }
@@ -34,24 +35,24 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
 }) => {
   const { width } = useWindowDimensions()
   const is1Col = width < 640
-  console.log(recommendation)
+
+  const pnlColor = tw`${recommendation?.pnlColor}`.color as string
 
   return (
-    <View style={tw`my-2`}>
+    <View style={tw`my-2 mx-2`}>
       <View style={tw`flex flex-col items-center justify-center`}>
         <View style={tw`flex-shrink-0`}>
           <View style={tw`flex flex-col items-center`}>
             <View
-              style={tw.style(
-                "rounded-full p-0.5",
+              style={tw`rounded-full p-0.5 ${
                 !is1Col && recommendation?.pnlColor.replace("text", "bg")
-              )}
+              }`}
             >
               <View style={tw`bg-white rounded-full p-0.5`}>
                 <TickerLogo
                   tickerSymbol={recommendation.alpaca.symbol}
-                  width={is1Col ? "32" : "48"}
-                  height={is1Col ? "32" : "48"}
+                  width={is1Col ? "40" : "48"}
+                  height={is1Col ? "40" : "48"}
                   isin={recommendation?.ISIN}
                 />
               </View>
@@ -62,23 +63,17 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
                 color: recommendation?.logoColor,
               }}
             >
-              {recommendation}
+              {recommendation.alpaca.symbol}
             </Text>
           </View>
-          <View
-            style={tw.style(
-              "text-xs inline-flex space-x-0.5 sm:space-x-2",
-              recommendation?.pnlColor
-            )}
-          >
-            <Text style={tw`text-xs font-medium`}>
-              {recommendation?.pnlColor.includes("red") ? (
-                <TabBarIcon name="arrow-up" color={"#ffff3e"} />
-              ) : (
-                <TabBarIcon name="arrow-down" color={"#dfdc"} />
-              )}
-            </Text>
-            <Text style={tw`text-xs font-medium`}>
+          <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>
+            <Feather
+              name={
+                recommendation?.pnlColor.includes("red") ? "arrow-up" : "arrow-down"
+              }
+              color={pnlColor}
+            />
+            <Text style={tw`text-xs font-medium ${recommendation?.pnlColor}`}>
               {(recommendation?.regularMarketChangePercent * 100).toFixed(2)}%
             </Text>
           </View>
