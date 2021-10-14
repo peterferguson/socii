@@ -64,20 +64,18 @@ module.exports = {
         pink: colors.pink,
       },
       fontFamily: {
-        primary: ["Poppins", "sans-serif"],
-        secondary: ['"Open Sans"', "sans-serif"],
+        "poppins-100": "poppins-100",
+        "poppins-200": "poppins-200",
+        "poppins-300": "poppins-300",
+        "poppins-400": "poppins-400",
+        "poppins-500": "poppins-500",
+        "poppins-600": "poppins-600",
+        "poppins-700": "poppins-700",
+        "poppins-800": "poppins-800",
       },
       fontSize: {
         tiniest: "0.5rem",
         tiny: "0.625rem",
-      },
-      fontWeight: {
-        thin: 100,
-        extralight: 200,
-        light: 300,
-        normal: 400,
-        semibold: 600,
-        bold: 800,
       },
       keyframes: {
         wiggle: {
