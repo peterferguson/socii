@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, Image } from "react-native"
+import { View, Text, Image, Platform } from "react-native"
 import { usePrevious } from "../hooks/usePrevious"
 import { getTickerData } from "../lib/firebase/client/db/getTickerData"
 import tw from "../lib/tailwind"
@@ -44,27 +44,26 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
   // TODO: Add a backup logo search
   // TODO: Add loading state
 
+  const logoStyle = {
+    ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
+    width: parseInt(width) || DEFAULT_HEIGHT_AND_WIDTH,
+    height: parseInt(height) || DEFAULT_HEIGHT_AND_WIDTH,
+  }
+
+  // @ts-ignore
+  const { elevation, ...iosStyle } = logoStyle
+
   return logoSrc && !isError ? (
     <Image
       source={{
         uri: logoSrc,
       }}
-      style={{
-        ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
-        width: parseInt(width) || DEFAULT_HEIGHT_AND_WIDTH,
-        height: parseInt(height) || DEFAULT_HEIGHT_AND_WIDTH,
-      }}
+      style={Platform.OS === "ios" ? iosStyle : logoStyle}
       onError={() => setIsError(true)}
       resizeMethod="resize"
     />
   ) : (
-    <View
-      style={{
-        ...tw`flex items-center justify-center bg-gray-50 rounded-full shadow-lg`,
-        width: width || DEFAULT_HEIGHT_AND_WIDTH,
-        height: height || DEFAULT_HEIGHT_AND_WIDTH,
-      }}
-    >
+    <View style={Platform.OS === "ios" ? iosStyle : logoStyle}>
       <Text style={tw`font-semibold text-gray-500 text-tiny`}>{tickerSymbol}</Text>
     </View>
   )

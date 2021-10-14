@@ -1,12 +1,22 @@
 // import { useAuth } from "@hooks/useAuth"
-// import CardSlider from "@components/CardSlider"
+import CardSlider from "../../components/OverlappingCardSlider"
 import React, { useEffect, useState } from "react"
-import { FlatList, Text, View, Pressable } from "react-native"
+import { FlatList, Text, View, SectionList, ScrollView } from "react-native"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import tw from "../../lib/tailwind"
 import { TickerCategories } from "../../models/TickerCategories"
 import { useRouter } from "../../navigation/use-router"
 import { getTickerCategoryShortNames } from "../../utils/getTickerCategoryShortNames"
+import { CategoryCard } from "../../components/CategoryCard"
+import { Ticker } from "../../models/Ticker"
+
+const defaultPrice = {
+  latestPrice: 0,
+  changePercent: -0.1,
+  iexRealtimePrice: 0,
+  latestUpdate: "9999-12-31",
+  currency: "USD",
+}
 
 export default function StockScreen({ tickers }) {
   // TODO: large screen vertical cards - small horizontal cards
@@ -188,95 +198,79 @@ export default function StockScreen({ tickers }) {
     getTickerCategoryShortNames().then(setCategories)
   }, [])
 
-  return (
-    // TODO: Create our own version of this Ticker Tape banner
-    <>
-      <View style={tw`flex flex-wrap flex-grow w-full`}>
-        <Text
-          style={tw`pt-6 text-3xl text-white pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
-        >
-          Popular
-        </Text>
-        {/* <CardSlider tickers={tickers} /> */}
-        <Categories categories={categories} />
+  const sectionComponents: {
+    data: { Component: React.FC<any>; props: any }[]
+    title: string
+  }[] = [
+    {
+      data: [
+        {
+          Component: CardSlider,
+          props: {
+            tickers: tickers.map((ticker) => ({ ticker, price: defaultPrice })),
+          },
+        },
+      ],
+      title: "Popular",
+    },
+    { data: [{ Component: Categories, props: { categories } }], title: "Categories" },
+    { data: [{ Component: TickerCards, props: { tickers } }], title: "All" },
+  ]
 
-        <FlatList
-          data={tickers}
-          renderItem={({ item: ticker }) => {
-            return (
-              <HorizontalAssetCard
-                key={`${ticker?.tickerSymbol}`}
-                isin={ticker?.ISIN}
-                tickerSymbol={ticker?.tickerSymbol}
-                shortName={ticker?.shortName}
-                logoColor={ticker?.logoColor}
-                price={{
-                  latestPrice: 0,
-                  changePercent: -0.1,
-                  iexRealtimePrice: 0,
-                  latestUpdate: "9999-12-31",
-                  currency: "USD",
-                }}
-              />
-            )
-          }}
-          keyExtractor={(item) => item.tickerSymbol}
-        />
-      </View>
-    </>
+  return (
+    <ScrollView>
+      <SectionList
+        contentContainerStyle={tw`flex-1 flex-wrap flex-col flex-grow w-full`}
+        sections={sectionComponents}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => <item.Component {...item.props} />}
+        renderSectionHeader={({ section }) => (
+          <Text
+            style={tw`pt-6 text-3xl text-white pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
+          >
+            {section.title}
+          </Text>
+        )}
+      />
+    </ScrollView>
   )
 }
+
+const TickerCards = ({ tickers }: { tickers: Ticker[] }) => (
+  <FlatList
+    data={tickers}
+    renderItem={({ item: ticker }) => (
+      <HorizontalAssetCard
+        key={`${ticker?.tickerSymbol}`}
+        isin={ticker?.ISIN}
+        tickerSymbol={ticker?.tickerSymbol}
+        shortName={ticker?.shortName}
+        logoColor={ticker?.logoColor}
+        price={defaultPrice}
+      />
+    )}
+    keyExtractor={(item) => item.tickerSymbol}
+    onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
+    onEndReachedThreshold={0.5}
+  />
+)
 
 const Categories = ({ categories }: { categories: TickerCategories }) => {
   const router = useRouter()
   return (
-    <>
-      <Text
-        style={tw.style(
-          "w-full pt-6 text-3xl tracking-tight uppercase cursor-pointer font-primary text-brand-dark"
-        )}
-      >
-        Categories
-      </Text>
-      <View
-        style={tw.style(
-          "flex p-4 overflow-x-scroll sm:no-scrollbar",
-          "umami--drag--popular-stocks-category-card-slider"
-        )}
-      >
-        <FlatList
-          data={Object.entries(categories)}
-          horizontal={true}
-          renderItem={({ item: [shortName, { emoji }] }) =>
-            emoji ? (
-              <CategoryCard shortName={shortName} emoji={emoji} router={router} />
-            ) : null
-          }
-          keyExtractor={(item) => item[0]}
-        />
-      </View>
-    </>
-  )
-}
-
-const CategoryCard = ({ shortName, emoji, router }) => {
-  console.log(tw`text-xs font-poppins-400 font-md justify-between`)
-
-  return (
-    <Pressable
-      key={`category-${shortName}`}
-      onPress={() => router.push(`/stocks/categories/${shortName}`)}
+    <View
+      style={tw.style("flex p-4", "umami--drag--popular-stocks-category-card-slider")}
     >
-      <View
-        style={tw`mx-1 rounded-2xl border border-gray-300 text-gray-600 h-28 p-6 bg-white dark:bg-brand-black`}
-      >
-        <View style={tw`flex flex-col items-center justify-center w-10`}>
-          <View style={tw`bg-gray-300/60 rounded-full`}>
-            <Text style={tw`w-12 h-12 text-center text-lg `}>{emoji}</Text>
-          </View>
-        </View>
-        <Text style={tw`text-tiny font-poppins-400 w-14`}>{shortName}</Text>
-      </View>
-    </Pressable>
+      <FlatList
+        data={Object.entries(categories).sort(() => 0.5 - Math.random())}
+        horizontal={true}
+        renderItem={({ item: [shortName, { emoji }] }) =>
+          emoji ? (
+            <CategoryCard shortName={shortName} emoji={emoji} router={router} />
+          ) : null
+        }
+        keyExtractor={(item) => item[0]}
+      />
+    </View>
   )
 }

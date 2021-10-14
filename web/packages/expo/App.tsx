@@ -23,6 +23,7 @@ import {
   OpenSans_700Bold,
   OpenSans_800ExtraBold,
 } from "@expo-google-fonts/open-sans"
+import { useDeviceContext } from "twrnc"
 
 enableScreens(true)
 
@@ -43,6 +44,7 @@ export default function App() {
     "open-sans-800": OpenSans_800ExtraBold,
   })
 
+  useDeviceContext(tw)
   if (!fontIsLoaded) return <AppLoading />
 
   return (

@@ -60,8 +60,7 @@ const HorizontalAssetCard = ({
           <Text
             style={tw`overflow-hidden text-sm font-semibold tracking-wider text-gray-600 uppercase overflow-ellipsis`}
           >
-            {/* ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)} */}
-            $10.00
+            ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </Text>
           <View style={tw`${pnlColor} px-2 py-0.5 rounded-full w-full`}>
             <Text
