@@ -1179,6 +1179,11 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@expo-google-fonts/open-sans@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/open-sans/-/open-sans-0.2.0.tgz#59d94d5994e75afed4a576344533d321250b86a5"
+  integrity sha512-lbRUwBvVuFqotB3OBdYI5d0Jj848hM16gvfAL/dKMgzXsamvCfNFoRqWojCpJNXl0rrmdNkuQFBwxY3A4DtN9A==
+
 "@expo-google-fonts/poppins@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/poppins/-/poppins-0.2.0.tgz#f6df892909142740b53d3227cb5eb24990ece151"

@@ -72,6 +72,11 @@ module.exports = {
         "poppins-600": "poppins-600",
         "poppins-700": "poppins-700",
         "poppins-800": "poppins-800",
+        "open-sans-300": "open-sans-300",
+        "open-sans-400": "open-sans-400",
+        "open-sans-600": "open-sans-600",
+        "open-sans-700": "open-sans-700",
+        "open-sans-800": "open-sans-800",
       },
       fontSize: {
         tiniest: "0.5rem",
