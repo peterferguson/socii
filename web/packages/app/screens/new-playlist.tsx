@@ -1,6 +1,6 @@
 import React from "react"
 import { Platform, Button, Pressable, useWindowDimensions } from "react-native"
-import { View, Text, TextInput } from "dripsy"
+import { View, Text, TextInput } from "react-native"
 import tw from "../lib/tailwind"
 import { useRouter } from "app/navigation/use-router"
 
@@ -10,20 +10,9 @@ export default function NewPlaylistScreen() {
 
   return (
     <>
+      <View style={tw`absolute inset-0 flex items-center justify-center p-4 sm:p-6`} />
       <View
-        style={tw`absolute inset-0 flex items-center justify-center p-4 sm:p-6`}
-        //   {
-        //   position: "absolute",
-        //   top: 0,
-        //   right: 0,
-        //   bottom: 0,
-        //   left: 0,
-        //   opacity: 0.8,
-        //   backgroundColor: "black",
-        // }}
-      />
-      <View
-        sx={{
+        style={{
           ...Platform.select({
             web: {
               backgroundColor: "#333",
@@ -50,8 +39,7 @@ export default function NewPlaylistScreen() {
           padding: 24,
         }}
       >
-        <Text sx={{ color: "white", fontWeight: "bold" }}>New Playlist</Text>
-
+        <Text style={{ color: "white", fontWeight: "bold" }}>New Playlist</Text>
         <TextInput
           style={[
             {
@@ -73,14 +61,14 @@ export default function NewPlaylistScreen() {
         />
 
         {Platform.OS !== "ios" ? (
-          <View sx={{ flexDirection: "row", justifyContent: "flex-end" }}>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <Button
               onPress={() => {
                 router.back()
               }}
               title="Cancel"
             />
-            <View sx={{ width: 8 }} />
+            <View style={{ width: 8 }} />
             <Pressable
               onPress={() => {
                 router.back()

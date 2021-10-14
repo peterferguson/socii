@@ -13,18 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "isolatedModules": true,
-    "baseUrl": "./",
-    "paths": {
-      "@lib/*": ["lib/*"],
-      "@firebase/*": ["lib/firebase/*"],
-      "@api/*": ["pages/api/*"],
-      "@hooks/*": ["hooks/*"],
-      "@components/*": ["components/*"],
-      "@utils/*": ["utils/*"],
-      "@pages/*": ["pages/*"],
-      "@public/*": ["public/*"]
-    }
+    "isolatedModules": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],

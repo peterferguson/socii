@@ -13,17 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "isolatedModules": true,
-    "baseUrl": "./",
-    "paths": {
-      "@lib/*": ["../app/lib/*"],
-      "@api/*": ["../app/pages/api/*"],
-      "@hooks/*": ["../app/hooks/*"],
-      "@components/*": ["../app/components/*"],
-      "@utils/*": ["../app/utils/*"],
-      "@pages/*": ["../app/pages/*"],
-      "@public/*": ["../app/public/*"]
-    }
+    "isolatedModules": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],

@@ -1,6 +1,6 @@
 import React from "react"
 import { Pressable, Button } from "react-native"
-import { Text } from "dripsy"
+import { Text } from "react-native"
 import tw from "../lib/tailwind"
 
 import { useRouter } from "app/navigation/use-router"
@@ -25,7 +25,7 @@ export default function PlaylistsScreen() {
           }}
           style={tw`mt-4 flex items-center justify-center`}
         >
-          <Text sx={{ color: "white" }}>{`Playlist ${index + 1}`}</Text>
+          <Text style={{ color: "white" }}>{`Playlist ${index + 1}`}</Text>
         </Pressable>
       ))}
     </>

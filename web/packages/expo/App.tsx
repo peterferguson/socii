@@ -16,6 +16,13 @@ import {
   Poppins_700Bold,
   Poppins_800ExtraBold,
 } from "@expo-google-fonts/poppins"
+import {
+  OpenSans_300Light,
+  OpenSans_400Regular,
+  OpenSans_600SemiBold,
+  OpenSans_700Bold,
+  OpenSans_800ExtraBold,
+} from "@expo-google-fonts/open-sans"
 
 enableScreens(true)
 
@@ -29,6 +36,11 @@ export default function App() {
     "poppins-600": Poppins_600SemiBold,
     "poppins-700": Poppins_700Bold,
     "poppins-800": Poppins_800ExtraBold,
+    "open-sans-300": OpenSans_300Light,
+    "open-sans-400": OpenSans_400Regular,
+    "open-sans-600": OpenSans_600SemiBold,
+    "open-sans-700": OpenSans_700Bold,
+    "open-sans-800": OpenSans_800ExtraBold,
   })
 
   if (!fontIsLoaded) return <AppLoading />

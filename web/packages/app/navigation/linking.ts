@@ -1,91 +1,81 @@
-import * as Linking from 'expo-linking';
-import type { NavigationContainer } from '@react-navigation/native';
-import type { BottomTabNavigatorParams } from './bottom-tab-navigator/types';
-import {
-  HomeStackParams,
-  PlaylistsStackParams,
-  ProfileStackParams
-} from './types';
+import * as Linking from "expo-linking"
+import type { NavigationContainer } from "@react-navigation/native"
+import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
+import { HomeStackParams, PlaylistsStackParams, ProfileStackParams } from "./types"
 
-type Props = React.ComponentProps<typeof NavigationContainer>['linking'];
+type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
-function makeTabPath<Path extends keyof BottomTabNavigatorParams>(
-  path: Path
-): Path {
-  return path;
+function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
+  return path
 }
 
 function makePlaylistStackPath<Path extends keyof PlaylistsStackParams>(
   path: Path
 ): Path {
-  return path;
+  return path
 }
 
-function makeProfileStackPath<Path extends keyof ProfileStackParams>(
-  path: Path
-): Path {
-  return path;
+function makeProfileStackPath<Path extends keyof ProfileStackParams>(path: Path): Path {
+  return path
 }
 
-function makeHomeStackPath<Path extends keyof HomeStackParams>(
-  path: Path
-): Path {
-  return path;
+function makeHomeStackPath<Path extends keyof HomeStackParams>(path: Path): Path {
+  return path
 }
 
 function makeType<T>(t: T) {
-  return t;
+  return t
 }
 
 const playlistStackPaths = makeType({
-  playlists: makePlaylistStackPath('playlists'),
-  playlist: makePlaylistStackPath('playlist'),
-  new: makePlaylistStackPath('new')
-});
+  playlists: makePlaylistStackPath("playlists"),
+  playlist: makePlaylistStackPath("playlist"),
+  new: makePlaylistStackPath("new"),
+})
 
-const profileStackPaths = makeType({
-  profile: makeProfileStackPath('profile')
-});
+const stocksStackPaths = makeType({
+  stocks: makeProfileStackPath("stocks"),
+})
 
 const homeStackPaths = makeType({
-  home: makeHomeStackPath('home')
-});
+  home: makeHomeStackPath("home"),
+})
 
 const tabPaths = makeType({
-  home: makeTabPath('homeTab'),
-  playlists: makeTabPath('playlistsTab'),
-  profile: makeTabPath('profileTab')
-});
+  home: makeTabPath("homeTab"),
+  playlists: makeTabPath("playlistsTab"),
+  stocks: makeTabPath("stocksTab"),
+})
 
 const linking: Props = {
-  prefixes: [Linking.makeUrl('/')],
+  prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
       [tabPaths.home]: {
-        path: '',
+        path: "",
         initialRouteName: homeStackPaths.home,
         screens: {
-          [homeStackPaths.home]: ''
-        }
+          [homeStackPaths.home]: "",
+        },
       },
       [tabPaths.playlists]: {
         initialRouteName: playlistStackPaths.playlists,
-        path: 'playlists',
+        path: "playlists",
         screens: {
-          [playlistStackPaths.playlists]: '',
-          [playlistStackPaths.playlist]: ':id',
-          [playlistStackPaths.new]: 'new'
-        }
+          [playlistStackPaths.playlists]: "",
+          [playlistStackPaths.playlist]: ":id",
+          [playlistStackPaths.new]: "new",
+        },
       },
-      [tabPaths.profile]: {
-        path: 'profile',
-        initialRouteName: profileStackPaths.profile,
+      [tabPaths.stocks]: {
+        path: "stocks",
+        initialRouteName: stocksStackPaths.stocks,
         screens: {
-          [profileStackPaths.profile]: ''
-        }
-      }
-    }
-  }
-};
+          [stocksStackPaths.stocks]: "",
+        },
+      },
+    },
+  },
+}
 
-export { linking };
+export { linking }

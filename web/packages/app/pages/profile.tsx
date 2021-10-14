@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react"
 
-import createStackNavigator from 'app/navigation/create-stack-navigator';
-import ProfileScreen from 'app/screens/profile';
-import { ProfileStackParams } from 'app/navigation/types';
+import createStackNavigator from "app/navigation/create-stack-navigator"
+import ProfileScreen from "app/screens/stocks"
+import { ProfileStackParams } from "app/navigation/types"
 
-const ProfileStack = createStackNavigator<ProfileStackParams>();
+const ProfileStack = createStackNavigator<ProfileStackParams>()
 
 function ProfileNavigator() {
   return (
@@ -17,17 +17,17 @@ function ProfileNavigator() {
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
-          borderBottomWidth: 0
-        }
+          borderBottomWidth: 0,
+        },
       }}
     >
       <ProfileStack.Screen
-        name="profile"
+        name="stocks"
         component={ProfileScreen}
-        options={{ title: 'Profile', headerTitle: 'Profile' }}
+        options={{ title: "Profile", headerTitle: "Profile" }}
       />
     </ProfileStack.Navigator>
-  );
+  )
 }
 
-export default ProfileNavigator;
+export default ProfileNavigator
