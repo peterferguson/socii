@@ -14,15 +14,15 @@
     "esModuleInterop": true,
     "module": "esnext",
     "isolatedModules": true,
-    "baseUrl": "../../",
+    "baseUrl": "./",
     "paths": {
-      "@lib/*": ["packages/app/lib/*"],
-      "@api/*": ["packages/app/pages/api/*"],
-      "@hooks/*": ["packages/app/hooks/*"],
-      "@components/*": ["packages/app/components/*"],
-      "@utils/*": ["packages/app/utils/*"],
-      "@pages/*": ["packages/app/pages/*"],
-      "@public/*": ["packages/app/public/*"]
+      "@lib/*": ["../app/lib/*"],
+      "@api/*": ["../app/pages/api/*"],
+      "@hooks/*": ["../app/hooks/*"],
+      "@components/*": ["../app/components/*"],
+      "@utils/*": ["../app/utils/*"],
+      "@pages/*": ["../app/pages/*"],
+      "@public/*": ["../app/public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

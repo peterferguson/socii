@@ -14,16 +14,16 @@
     "esModuleInterop": true,
     "module": "esnext",
     "isolatedModules": true,
-    "baseUrl": "/",
+    "baseUrl": "./",
     "paths": {
-      "@lib/*": ["packages/app/lib/*"],
-      "@firebase/*": ["packages/app/lib/firebase/*"],
-      "@api/*": ["packages/app/pages/api/*"],
-      "@hooks/*": ["packages/app/hooks/*"],
-      "@components/*": ["packages/app/components/*"],
-      "@utils/*": ["packages/app/utils/*"],
-      "@pages/*": ["packages/app/pages/*"],
-      "@public/*": ["packages/app/public/*"]
+      "@lib/*": ["lib/*"],
+      "@firebase/*": ["lib/firebase/*"],
+      "@api/*": ["pages/api/*"],
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"],
+      "@pages/*": ["pages/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

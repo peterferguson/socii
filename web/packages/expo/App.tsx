@@ -1,21 +1,17 @@
-import React from 'react';
-import { enableScreens } from 'react-native-screens';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DripsyProvider } from 'dripsy';
+import React from "react"
+import { enableScreens } from "react-native-screens"
+import { StatusBar } from "expo-status-bar"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import tw from "../app/lib/tailwind"
+import { Navigation } from "app/navigation"
 
-import { theme } from 'app/theme';
-import { Navigation } from 'app/navigation';
-
-enableScreens(true);
+enableScreens(true)
 
 export default function App() {
   return (
-    <DripsyProvider theme={theme}>
-      <SafeAreaProvider style={{ backgroundColor: 'black' }}>
-        <StatusBar style="dark" />
-        <Navigation />
-      </SafeAreaProvider>
-    </DripsyProvider>
-  );
+    <SafeAreaProvider style={tw`bg-gray-50 flex-1`}>
+      <StatusBar style="light" />
+      <Navigation />
+    </SafeAreaProvider>
+  )
 }
