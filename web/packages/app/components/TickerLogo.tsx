@@ -7,7 +7,7 @@ import { useRouter } from "../navigation/use-router"
 import { logoUrl } from "../utils/logoUrl"
 
 interface ITickerLogoProps {
-  tickerSymbol: string
+  symbol: string
   isin?: string
   width?: string
   height?: string
@@ -15,28 +15,23 @@ interface ITickerLogoProps {
 
 const DEFAULT_HEIGHT_AND_WIDTH = "56px"
 
-const TickerLogo: React.FC<ITickerLogoProps> = ({
-  height,
-  width,
-  isin,
-  tickerSymbol,
-}) => {
+const TickerLogo: React.FC<ITickerLogoProps> = ({ height, width, isin, symbol }) => {
   const [logoSrc, setLogoSrc] = useState("")
   const router = useRouter()
   const [unmounted, setUnmounted] = useState(false)
   const [fractionble, setFractionable] = useState(false)
   const [ISIN, setISIN] = useState(isin)
-  const prevSymbol = usePrevious(tickerSymbol)
+  const prevSymbol = usePrevious(symbol)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    if ((!ISIN || tickerSymbol !== prevSymbol) && !unmounted) {
-      getTickerData(tickerSymbol).then(({ ISIN }) => {
+    if ((!ISIN || symbol !== prevSymbol) && !unmounted) {
+      getTickerData(symbol).then(({ ISIN }) => {
         setISIN(ISIN)
         // setFractionable(alpaca?.fractionable)
       })
     }
-  }, [ISIN, prevSymbol, tickerSymbol, unmounted])
+  }, [ISIN, prevSymbol, symbol, unmounted])
 
   useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN])
 
@@ -64,7 +59,7 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
     />
   ) : (
     <View style={Platform.OS === "ios" ? iosStyle : logoStyle}>
-      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{tickerSymbol}</Text>
+      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{symbol}</Text>
     </View>
   )
 }

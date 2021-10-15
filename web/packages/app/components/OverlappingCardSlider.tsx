@@ -25,9 +25,9 @@ export default function CardSlider({ tickers }: { tickers: CardTicker[] }) {
       renderItem={({ item: { ticker, price } }) => (
         <View
           style={{
-            ...tw`mb-auto mx-4 bg-white rounded-2xl border-l-4`,
+            ...tw`mx-2 bg-white rounded-2xl border-l-4`,
             borderColor: ticker?.logoColor,
-            flex: 1, 
+            flex: 1,
             flexGrow: 1,
           }}
         >
@@ -36,12 +36,14 @@ export default function CardSlider({ tickers }: { tickers: CardTicker[] }) {
             style={tw`h-60 w-40 p-4`}
           >
             <TickerLogo
-              tickerSymbol={ticker.alpaca.symbol}
+              symbol={ticker.alpaca.symbol}
               isin={ticker.ISIN}
               height="52"
               width="52"
             />
-            <View style={{ ...tw`flex-col py-8 px-2`, alignContent: "stretch", flex: 1 }}>
+            <View
+              style={{ ...tw`flex-col py-8 px-2`, alignContent: "stretch", flex: 1 }}
+            >
               <Text
                 style={{
                   ...tw`py-1 text-xl font-semibold tracking-wider`,

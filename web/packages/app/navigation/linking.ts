@@ -1,7 +1,7 @@
 import * as Linking from "expo-linking"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
-import { HomeStackParams, PlaylistsStackParams, ProfileStackParams } from "./types"
+import { HomeStackParams, PlaylistsStackParams, StocksStackParams } from "./types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
@@ -15,7 +15,7 @@ function makePlaylistStackPath<Path extends keyof PlaylistsStackParams>(
   return path
 }
 
-function makeProfileStackPath<Path extends keyof ProfileStackParams>(path: Path): Path {
+function makeStockStackPath<Path extends keyof StocksStackParams>(path: Path): Path {
   return path
 }
 
@@ -34,7 +34,8 @@ const playlistStackPaths = makeType({
 })
 
 const stocksStackPaths = makeType({
-  stocks: makeProfileStackPath("stocks"),
+  stocks: makeStockStackPath("stocks"),
+  stock: makeStockStackPath("stock"),
 })
 
 const homeStackPaths = makeType({
@@ -72,6 +73,7 @@ const linking: Props = {
         initialRouteName: stocksStackPaths.stocks,
         screens: {
           [stocksStackPaths.stocks]: "",
+          [stocksStackPaths.stock]: ":symbol",
         },
       },
     },

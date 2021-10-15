@@ -1,18 +1,19 @@
 import Feather from "@expo/vector-icons/build/Feather"
 import React from "react"
-import { FlatList, Text, useWindowDimensions, View } from "react-native"
+import { FlatList, Text, useWindowDimensions, View, Pressable } from "react-native"
 import { RecommendationData, useRecommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
+import { useRouter } from "../navigation/use-router"
 import TickerLogo from "./TickerLogo"
 
 const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   const { recommendations } = useRecommendations(symbol)
   return (
-    <View style={tw`w-full m-2 font-primary lg:w-2/5`}>
+    <View style={tw`w-full px-4 font-primary lg:w-2/5`}>
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
       <View
         style={{
-          ...tw`m-4 p-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl items-center`,
+          ...tw`p-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl items-center`,
         }}
       >
         {recommendations && (
@@ -23,6 +24,7 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
             )}
             keyExtractor={(item) => item.ISIN}
             horizontal={true}
+            scrollEnabled={false}
           />
         )}
       </View>
@@ -34,12 +36,13 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
   item: recommendation,
 }) => {
   const { width } = useWindowDimensions()
+  const router = useRouter()
   const is1Col = width < 640
-
+  const symbol = recommendation.alpaca.symbol
   const pnlColor = tw`${recommendation?.pnlColor}`.color as string
 
   return (
-    <View style={tw`my-2 mx-2`}>
+    <Pressable style={tw`my-2 mx-2`} onPress={() => router.push(`/stocks/${symbol}`)}>
       <View style={tw`flex flex-col items-center justify-center`}>
         <View style={tw`flex-shrink-0`}>
           <View style={tw`flex flex-col items-center`}>
@@ -50,7 +53,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
             >
               <View style={tw`bg-white rounded-full p-0.5`}>
                 <TickerLogo
-                  tickerSymbol={recommendation.alpaca.symbol}
+                  symbol={symbol}
                   width={is1Col ? "40" : "48"}
                   height={is1Col ? "40" : "48"}
                   isin={recommendation?.ISIN}
@@ -63,7 +66,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
                 color: recommendation?.logoColor,
               }}
             >
-              {recommendation.alpaca.symbol}
+              {symbol}
             </Text>
           </View>
           <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>
@@ -79,7 +82,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   )
 }
 
