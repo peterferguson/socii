@@ -15,9 +15,9 @@ const { useParam } = createParam<Query>()
 
 export default function StockScreen({ navigation, route }: StockScreenProps) {
   // const [symbol, _] = useParam("symbol")
-  const { symbol } = route.params
   // - as with useState we can set the symbol with the second param
   // - this will be useful when we want to set the symbol from the recommendations
+  const { symbol } = route.params
 
   // - This will be useful for dynamically updating the heading title
   // useEffect(() => {
@@ -31,7 +31,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
     <View>
       <PriceCard
         symbol={symbol}
-        shortName={symbol}
+        shortName={tickerData?.shortName}
         price={undefined}
         isPriceLoading={true}
       />

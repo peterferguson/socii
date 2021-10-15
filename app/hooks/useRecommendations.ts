@@ -15,6 +15,7 @@ interface Recommendations {
 }
 
 // TODO: add loading state
+// TODO: Create cancellable query (using swr?)... moving quickly between screens can cause this to run multiple times & lag
 export const useRecommendations = (symbol: string) => {
   const [recommendations, setRecommendations] = useState<string[]>([])
   const [data, setData] = useState<any>()
