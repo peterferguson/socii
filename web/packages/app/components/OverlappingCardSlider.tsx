@@ -52,7 +52,7 @@ export default function CardSlider({ tickers }: { tickers: CardTicker[] }) {
               >
                 {ticker.alpaca.symbol}
               </Text>
-              <Text style={tw`py-1 text-lg tracking-tight font-primary`}>
+              <Text style={tw`py-1 text-lg tracking-tight font-poppins-400`}>
                 {ticker.shortName}
               </Text>
             </View>

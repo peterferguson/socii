@@ -7,11 +7,19 @@ const NEXT_PUBLIC_FIREBASE_PROJECT_ID = "socii-development"
 export const fetchYahoo = async (
   tickers: string[],
   endpoint: string,
-  method: string = "POST"
+  method: string = "POST",
+  body: any = null
 ) => {
   const functionUrl = `https://europe-west2-${NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/${endpoint}`
 
-  console.log(`Fetching ${tickers.length} tickers from ${functionUrl}`)
+  if (!body)
+    body = {
+      tickerSymbol: tickers.map((ticker) => ticker.split(".")[0]).join(" "),
+    }
+
+  console.log(`Fetching ${tickers.length} tickers data from endpoint ${functionUrl}`)
+  console.log("headers", method, JSON.stringify(body))
+
   // TODO: add yahoo prefix when necessary
   switch (method) {
     case "POST":
@@ -19,9 +27,7 @@ export const fetchYahoo = async (
         method: "POST",
         mode: "cors",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          tickerSymbol: tickers.map((ticker) => ticker.split(".")[0]).join(" "),
-        }),
+        body: JSON.stringify(body),
       }).catch((e) => e.message)
     case "GET":
       return await fetcher(functionUrl, {

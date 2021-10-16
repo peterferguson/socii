@@ -37,13 +37,13 @@ const HorizontalAssetCard = ({
         style={tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}
       >
         <View style={tw`items-center justify-center flex w-20 m-auto rounded-full`}>
-          <TickerLogo isin={isin} tickerSymbol={tickerSymbol} height="48" width="48" />
+          <TickerLogo isin={isin} symbol={tickerSymbol} height="48" width="48" />
         </View>
         <View style={tw`flex-col flex-grow my-auto`}>
           <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
             <Text
               style={{
-                ...tw`text-sm font-semibold tracking-wider text-gray-400 uppercase font-primary`,
+                ...tw`text-sm tracking-wider text-gray-400 uppercase font-poppins-600`,
                 color: logoColor,
               }}
             >
@@ -51,20 +51,22 @@ const HorizontalAssetCard = ({
             </Text>
           </Pressable>
           <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
-            <Text style={tw`flex text-xs tracking-wider text-gray-600 font-primary`}>
+            <Text
+              style={tw`flex text-xs tracking-wider text-gray-600 font-poppins-400`}
+            >
               {shortName}
             </Text>
           </Pressable>
         </View>
         <View style={tw`flex flex-col items-center justify-center w-20`}>
           <Text
-            style={tw`overflow-hidden text-sm font-semibold tracking-wider text-gray-600 uppercase overflow-ellipsis`}
+            style={tw`overflow-hidden text-sm tracking-wider font-open-sans-600 text-gray-600 uppercase overflow-ellipsis`}
           >
             ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </Text>
           <View style={tw`${pnlColor} px-2 py-0.5 rounded-full w-full`}>
             <Text
-              style={tw`text-black text-tiny sm:text-xs font-semibold text-center ${pnlTextColor}`}
+              style={tw`text-black text-tiny sm:text-xs font-open-sans-600 text-center ${pnlTextColor}`}
             >
               M: {(price?.changePercent * 100)?.toFixed(2)}%
             </Text>
@@ -84,11 +86,13 @@ export const HorizontalAssetCardSkeleton = ({}) => (
         />
         <View style={tw`flex-col flex-grow my-auto`}>
           <Text
-            style={tw`text-xs font-semibold tracking-wider text-gray-400 uppercase font-primary`}
+            style={tw`text-xs font-semibold tracking-wider text-gray-400 uppercase font-poppins-400`}
           >
             Ticker Symbol
           </Text>
-          <Text style={tw`flex tracking-wider text-gray-600 text-tiny font-primary`}>
+          <Text
+            style={tw`flex tracking-wider text-gray-600 text-tiny font-poppins-400`}
+          >
             Company Name
           </Text>
         </View>

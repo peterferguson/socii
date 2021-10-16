@@ -18,4 +18,3 @@ export async function fetcher<JSON = any>(
 
   return await res.json()
 }
-

@@ -1,7 +1,5 @@
-import dayjs from "dayjs"
-
 export type OHLC = {
-  timestamp: Date | number | string | dayjs.Dayjs
+  timestamp: number
   open?: number
   high?: number
   low?: number

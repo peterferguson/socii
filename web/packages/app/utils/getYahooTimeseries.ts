@@ -1,8 +1,9 @@
-import { DateStr } from "@models/DateStr"
-import { OHLC } from "@models/OHLC"
+import { DateStr } from "../models/DateStr"
+import { OHLC } from "../models/OHLC"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
+import { fetchYahoo } from "./fetchYahoo"
 dayjs.extend(timezone)
 dayjs.extend(utc)
 
@@ -57,25 +58,21 @@ export const getYahooTimeseries = async ({
   period,
   interval,
 }: getYahooTimeseriesProps): Promise<YahooTimeseries> => {
-  const functionUrl = `https://europe-west2-${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/get_historical_prices`
-
-  const res = await fetch(functionUrl, {
-    method: "POST",
-    mode: "cors",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      period,
-      interval,
-      tickerSymbol: tickers.join(" "),
-      start: startDateStr,
-      end: endDateStr,
-    }),
+  const yahooData = await fetchYahoo(tickers, "get_historical_prices", "POST", {
+    period,
+    interval,
+    tickerSymbol: tickers.join(" "),
+    start: startDateStr,
+    end: endDateStr,
   })
 
-  const yahooData = await res.json()
-
   return yahooData?.reduce((data, tick) => {
-    const { symbol, timestamp, dividends, ...ohlcv } = tick
+    let {
+      symbol,
+      timestamp,
+      dividends,
+      ...ohlcv
+    }: { symbol: string; timestamp: number; dividends: number; ohlcv: OHLC } = tick
 
     // TODO: Need to handle dividends!
     if (dividends && dividends !== 0) return data
@@ -85,26 +82,13 @@ export const getYahooTimeseries = async ({
     const timezoneDifference = dayjs().tz("America/New_York").utcOffset()
     // console.log(dayjs(timestamp).subtract(timezoneDifference, "minute").local().format())
 
-    if (symbol in data)
-      data[symbol].push({
-        ...ohlcv,
-        timestamp: dayjs(timestamp)
-          .subtract(timezoneDifference, "minute")
-          .local()
-          .format(),
-      })
-    else
-      Object.assign(data, {
-        [symbol]: [
-          {
-            ...ohlcv,
-            timestamp: dayjs(timestamp)
-              .subtract(timezoneDifference, "minute")
-              .local()
-              .format(),
-          },
-        ],
-      })
+    timestamp = dayjs(timestamp)
+      .subtract(timezoneDifference, "minute")
+      .local()
+      .valueOf()
+
+    if (symbol in data) data[symbol].push({ ...ohlcv, timestamp })
+    else Object.assign(data, { [symbol]: [{ ...ohlcv, timestamp }] })
     return data
   }, {})
 }

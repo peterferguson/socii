@@ -9,7 +9,7 @@ import TickerLogo from "./TickerLogo"
 const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   const { recommendations } = useRecommendations(symbol)
   return (
-    <View style={tw`w-full px-4 font-primary lg:w-2/5`}>
+    <View style={tw`w-full px-4 font-poppins-400 lg:w-2/5`}>
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
       <View
         style={{

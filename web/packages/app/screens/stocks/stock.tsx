@@ -2,6 +2,7 @@ import type { StockScreenProps } from "app/navigation/types"
 import { createParam } from "app/navigation/use-param"
 import React from "react"
 import { View } from "react-native"
+import ChartCard from "../../components/ChartCard/ChartCard"
 import InvestButton from "../../components/InvestButton"
 import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
@@ -36,6 +37,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         isPriceLoading={true}
       />
       <InvestButton logoColor={tickerData?.logoColor} />
+      <ChartCard symbol={symbol} timeseries={[]} color={tickerData?.logoColor} />
       <StockRecommendations symbol={symbol} />
     </View>
   )
