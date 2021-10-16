@@ -45,12 +45,17 @@ function WaitlistInvite({ invited, setInvited }) {
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
       {invited ? (
-        <h1 className="text-lg font-semibold font-primary sm:text-2xl md:text-3xl md:leading-snug">
-          Thanks for signing up!
-          <p className="text-base font-thin font-secondary">
-            Keep an eye on your inbox for your invite.
-          </p>
-        </h1>
+        <button
+          className={tw(
+            "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
+            "rounded-2xl border-1",
+            "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
+            
+          )}
+          disabled={true}
+        >
+          You&#39;re on the waitlist! Keep an eye on your email.
+        </button>
       ) : (
         <div className="relative w-full sm:ml-6 group umami--click--join-waitlist-button">
           <div
@@ -65,7 +70,7 @@ function WaitlistInvite({ invited, setInvited }) {
             <button
               type="submit"
               className={tw(
-                "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
+                "relative w-full py-1 px-2 gradient-flow text-white text-s md:text-xs",
                 "rounded-2xl border-1",
                 "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
                 "umami--click--waitlist-submit-button"
@@ -78,7 +83,7 @@ function WaitlistInvite({ invited, setInvited }) {
                   : signinWithGoogle()
               }}
             >
-              Get Invited
+              Join the Waitlist!
             </button>
           </div>
         </div>
