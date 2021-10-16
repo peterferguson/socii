@@ -45,17 +45,28 @@ function WaitlistInvite({ invited, setInvited }) {
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
       {invited ? (
-        <button
-          className={tw(
-            "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
-            "rounded-2xl border-1",
-            "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
-            
-          )}
-          disabled={true}
-        >
-          You&#39;re on the waitlist! Keep an eye on your email.
-        </button>
+        <div className="relative w-full sm:ml-6 group">
+          <div
+            className={tw(
+              "absolute inset-0 opacity-50 group-focus:-inset-0.5",
+              "group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100",
+              "rounded-2xl",
+            )}
+          />
+          <div className="relative flex justify-center h-12">
+            <div
+              className={tw(
+                "relative w-full py-1 px-2 flex justify-center text-black text-sm md:text-sm",
+                "rounded-2xl border-1",
+                "outline-none leading-0",
+              )}
+            >
+              <span className="animate-pulse">🎉 </span> 
+              <span className="font-bold" > You&#39;re on the waitlist! </span> 
+              <span className="animate-pulse"> 🎉</span>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="relative w-full sm:ml-6 group umami--click--join-waitlist-button">
           <div
