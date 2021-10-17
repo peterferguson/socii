@@ -1,5 +1,6 @@
 import Logo from "@components/Logo"
 import OneTwoThree from "@components/OneTwoThree"
+import ScreenDemo from "@components/ScreenDemo"
 import WaitlistInvite from "@components/WaitlistInvite"
 import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
@@ -15,6 +16,7 @@ export default function Home() {
     <div className="overflow-y-scroll no-scrollbar">
       {/* TODO Add a wave transition animation to this gradient */}
       <Hero invited={invited} setInvited={setInvited} />
+      <ScreenDemo/>
       <OneTwoThree />
       {/* <SociiFeatureSlider /> */}
       <Footer invited={invited} setInvited={setInvited} />
