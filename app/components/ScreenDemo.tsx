@@ -27,21 +27,21 @@ const ScreenDemo = () => {
       Title: "Search for Stocks",
       Info: "Search thousands of stocks for price history, charts, or even current news regarding the company",
       Icon: IoAnalyticsSharp,
-      Image: "/icons/stocks_iphone.png"
+      Image: "/images/stocks_iphone.png"
     },
     {
       Tab: "Groups",
       Title: "Share with Groups",
       Info: "Share the information you find with your group, direct in your chat",
       Icon: IoIosPeople,
-      Image: "/icons/chat_iphone.png"
+      Image: "/images/chat_iphone.png"
     },
     {
       Tab: "Leaderboards",
       Title: "Check Other Groups",
       Info: "Compare yourself against other groups, and win prizes in competitions",
       Icon: IoIosStats,
-      Image:  "/icons/leaderboard_iphone.png"
+      Image:  "/images/leaderboard_iphone.png"
     },
   ]
   useEffect(()=>{
