@@ -9,47 +9,6 @@ import { IoIosPeople, IoIosStats } from "react-icons/io"
 import { useWindowSize } from "@hooks"
 // import LineTo from "react-lineto"
 
-const screens = [
-  {
-    title: "Search for Stocks",
-    info: "Search thousands of stocks for price history, charts, or even current news regarding the company",
-    Icon: IoAnalyticsSharp,
-    Image: () => (
-      <Image
-        className="absolute inset-0 z-10 w-full h-full"
-        src={"/images/GOOG-iphone-screenshot.png"}
-        alt="socii-GOOG-stock-screenshot"
-        layout="fill"
-      />
-    ),
-  },
-  {
-    title: "Share with Groups",
-    info: "Share the information you find with your group, direct in your chat",
-    Icon: IoIosPeople,
-    Image: () => (
-      <Image
-        className="absolute inset-0 z-10 w-full h-full"
-        src={"/images/chat-screenshot.png"}
-        alt="socii-chat-screenshot"
-        layout="fill"
-      />
-    ),
-  },
-  {
-    title: "Check Other Groups",
-    info: "Compare yourself against other groups, and win prizes in competitions",
-    Icon: IoIosStats,
-    Image: () => (
-      <Image
-        className="absolute inset-0 z-10 w-full h-full"
-        src={"/images/leaderboard-screenshot.png"}
-        alt="socii-leaderboard-screenshot"
-        layout="fill"
-      />
-    ),
-  },
-]
 // TODO ALIGN INFO UNDER BUTTONS!! (line 97)
 // TODO put line behind image (line 95)
 const ScreenDemo = () => {
@@ -57,6 +16,48 @@ const ScreenDemo = () => {
   const cardsRef = useRef(null)
   const cardsEntry = useIntersectionObserver(cardsRef, {})
   const cardsVisible = !!cardsEntry?.isIntersecting
+
+  const screens = [
+    {
+      title: "Search for Stocks",
+      info: "Search thousands of stocks for price history, charts, or even current news regarding the company",
+      Icon: IoAnalyticsSharp,
+      Image: () => (
+        <Image
+          className="absolute inset-0 z-10 w-full h-full"
+          src={"/images/GOOG-iphone-screenshot.png"}
+          alt="socii-GOOG-stock-screenshot"
+          layout="fill"
+        />
+      ),
+    },
+    {
+      title: "Share with Groups",
+      info: "Share the information you find with your group, direct in your chat",
+      Icon: IoIosPeople,
+      Image: () => (
+        <Image
+          className="absolute inset-0 z-10 w-full h-full"
+          src={"/images/chat-screenshot.png"}
+          alt="socii-chat-screenshot"
+          layout="fill"
+        />
+      ),
+    },
+    {
+      title: "Check Other Groups",
+      info: "Compare yourself against other groups, and win prizes in competitions",
+      Icon: IoIosStats,
+      Image: () => (
+        <Image
+          className="absolute inset-0 z-10 w-full h-full"
+          src={"/images/leaderboard-screenshot.png"}
+          alt="socii-leaderboard-screenshot"
+          layout="fill"
+        />
+      ),
+    },
+  ]
 
   const [selectedTab, setSelectedTab] = useState(0)
 
