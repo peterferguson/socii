@@ -78,7 +78,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
 
   return (
     <div className="flex items-center justify-center w-full h-2/3 ">
-      <div className="relative w-full p-2 my-4 bg-white shadow-lg min-h-[400px] rounded-xl">
+      <div className="relative flex flex-col items-center justify-center w-full p-2 my-4 bg-white shadow-lg min-h-[400px] rounded-xl">
         <Tab.Group onChange={(index) => setActiveTab(Object.keys(tabs)[index])}>
           <div className="flex justify-between w-full h-20">
             {crosshairIndexValue !== tabs[activeTab]?.length - 1 && (
@@ -118,11 +118,19 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
               widthScale={0.8}
             />
           ) : (
-            <div className="grid place-items-center">
+            <div
+              className="grid place-items-center"
+              style={{ height: `calc(100vh * ${is1Col ? 0.35 : 0.5})` }}
+            >
               <LoadingIndicator color="#3fba" size={80} />
             </div>
           )}
-          <Tab.List className="absolute flex h-12 pt-4 text-sm bottom-7 right-6 left-6 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base sm:top-0 sm:right-0 sm:left-auto">
+          <Tab.List
+            className={tw(
+              "flex h-12 -mt-8 text-sm bottom-7 right-6 left-6 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base",
+              "sm:absolute sm:top-0 sm:right-0 sm:left-auto z-50"
+            )}
+          >
             {Object.keys(tabs).map((tab, i) => (
               <Tab key={`tab-${i}`} as={Fragment}>
                 {({ selected }) => (
