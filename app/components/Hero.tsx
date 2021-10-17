@@ -64,7 +64,7 @@ export const Hero = ({ invited, setInvited }) => {
             </Transition>
           </div>
           {/* <Circles className="absolute inset-0 z-50" /> */}
-          <div className="relative pt-2 pl-8 text-black text-tiny sm:pl-16 sm:text-lg md:text-xl font-secondary">
+          <div className="relative pt-2 pl-8 text-xs text-black sm:pl-16 sm:text-lg md:text-xl font-secondary">
             Buy stocks & crypto directly from your group chat.
             <div className="absolute left-0 p-8 pt-12 w-96 sm:w-4/5 -bottom-28 umami--click--landing-page-hero-waitlist-input">
               <WaitlistInvite invited={invited} setInvited={setInvited} />

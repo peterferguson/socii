@@ -81,7 +81,7 @@ function WaitlistInvite({ invited, setInvited }) {
             <button
               type="submit"
               className={tw(
-                "relative w-full py-1 px-2 gradient-flow text-white text-s md:text-xs",
+                "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-s",
                 "rounded-2xl border-1",
                 "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
                 "umami--click--waitlist-submit-button"
