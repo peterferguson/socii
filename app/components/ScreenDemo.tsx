@@ -6,8 +6,10 @@ import { useMediaQuery } from "react-responsive"
 import Image from "next/image"
 import { IoAnalyticsSharp } from "react-icons/io5"
 import { IoIosPeople, IoIosStats } from "react-icons/io"
+import LineTo from "react-lineto"
 
-// TODO ALIGN INFO UNDER BUTTONS!! 
+// TODO ALIGN INFO UNDER BUTTONS!! (line 97)
+// TODO put line behind image (line 95)
 const ScreenDemo = () => {
 
   const [animated, setAnimated] = React.useState(false)
@@ -23,14 +25,14 @@ const ScreenDemo = () => {
     {
       Tab: "Stocks",
       Title: "Search for Stocks",
-      Info: "Search thousands of stocks for price history or current news",
+      Info: "Search thousands of stocks for price history, charts, or even current news regarding the company",
       Icon: IoAnalyticsSharp,
       Image: "/icons/stocks_iphone.png"
     },
     {
       Tab: "Groups",
       Title: "Share with Groups",
-      Info: "Share the information with your group, direct in your chat",
+      Info: "Share the information you find with your group, direct in your chat",
       Icon: IoIosPeople,
       Image: "/icons/chat_iphone.png"
     },
@@ -63,23 +65,24 @@ const ScreenDemo = () => {
               >
                 <Transition 
                     show={cardsVisible || animated}
-                    enter="transition transform delay-1000 duration-700 ease-in"
+                    enter="transition transform delay-500 duration-700 ease-in"
                     enterFrom="opacity-0 translate-y-24"
                     enterTo="translate-y-0"
                     afterEnter={() => setAnimated(true)}
                 >    
                   <div className="flex flex-col items-center">
-                    <div ref ={cardsRef}>
-                      <Image src={selectedTabInfo?.Image ? selectedTabInfo?.Image: "/icons/stocks_iphone.png" } alt="image" height="500" width="250" />
+                    <div ref ={cardsRef} >
+                      <Image className="z-1 A" src={selectedTabInfo?.Image ? selectedTabInfo?.Image: "/icons/stocks_iphone.png" } alt="image" height="500" width="250" />
                     </div>
                     <div className="flex flex-row pb-3">
                       {screenInfo.map((item, i )=>(
                         <button 
                           key={i}
                           onClick={()=>setSelectedTab(item.Tab)}
+                          
                         >
                           <div className="p-2">
-                            <div className={selectedTab==item.Tab? "ring-2 gradient-flow opacity-50 ring-purple-500 p-2 rounded-full" : "ring-2 ring-brand p-2 rounded-full"}>
+                            <div className={selectedTab==item.Tab? "ring-2 gradient-flow opacity-50 ring-purple-500 p-2 rounded-full B" : "ring-2 ring-brand p-2 rounded-full"}>
                               <div className="flex items-center justify-center flex-shrink sm:h-10 sm:w-10">
                                 <item.Icon 
                                 className={tw("w-10 h-10 m-1",
@@ -88,13 +91,14 @@ const ScreenDemo = () => {
                             </div>
                           </div>
                         </button>
-                      ))}                  
+                      ))}    
+                      <LineTo from="B" to="A" fromAnchor="top center"  borderWidth={2} borderColor="purple" className="z-0 p-2 opacity-50"/>      
                     </div>
-                    <div className="flex flex-col">
-                      <div className="pb-3 font-semibold text-m">
+                    <div className="flex flex-col items-center ">
+                      <div className="pb-3 text-lg font-semibold">
                         {selectedTabInfo?.Title}
                       </div>
-                      <div className="text-sm ">
+                      <div className="text-base sm:text-m">
                         {selectedTabInfo?.Info}
                       </div>
                     </div>
