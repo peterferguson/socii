@@ -1,11 +1,14 @@
-import { useEffect, useRef } from "react"
+import { useRef, useEffect } from "react"
+import type { MutableRefObject } from "react"
 
-export const usePrevious = (value) => {
-  const ref = useRef()
-
+/**
+ * a type-safe version of the `usePrevious` hook described here:
+ * @see {@link https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state}
+ */
+export function usePrevious<T>(value: T): MutableRefObject<T | undefined>["current"] {
+  const ref = useRef<T>()
   useEffect(() => {
-    if (value !== undefined) ref.current = value
+    ref.current = value
   }, [value])
-
   return ref.current
 }

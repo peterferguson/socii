@@ -1,110 +1,167 @@
-import {
-  //   ChartDot,
-  ChartPath,
-  ChartPathProvider,
-  monotoneCubicInterpolation,
-} from "@rainbow-me/animated-charts"
-import ChartDot from "../ChartDot"
 import React, { useEffect, useState } from "react"
-import { useWindowDimensions, View } from "react-native"
+import { useWindowDimensions, View, Text } from "react-native"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import Animated, {
+  useAnimatedProps,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
+import { mixPath, useVector } from "react-native-redash"
+import Svg, { Path } from "react-native-svg"
+import { usePrevious } from "../../hooks/usePrevious"
 import tw from "../../lib/tailwind"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
+import { buildGraph, GraphData } from "../../utils/buildGraph"
 import {
   getYahooTimeseries,
   IntervalEnum,
   PeriodEnum,
 } from "../../utils/getYahooTimeseries"
-import TimespanSelector from "../TimespanSelector"
+import Cursor from "./Cursor"
 
 interface ITickerPageLineChartProps {
   symbol: string
   timeseries: OHLCTimeseries
-  color: string
+  logoColor: string
 }
+
+type TabLabel = keyof typeof PeriodEnum
+type Graphs = {
+  [label in TabLabel]+?: {
+    graphData: GraphData
+    timeseries: OHLCTimeseries
+  }
+}
+
+const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 const ChartCard: React.FC<ITickerPageLineChartProps> = ({
   symbol,
   timeseries,
-  color,
+  logoColor,
 }) => {
-  const [graphs, setGraphs] = useState({
-    "1D": { [symbol]: { timeseries, points: null } },
-    "7D": {},
-    "1M": {},
-    "6M": {},
-    "1Y": {},
-    MAX: {},
+  const [graphs, setGraphs] = useState<Graphs>({
+    "1D": {
+      graphData: timeseries.length ? buildGraph(timeseries) : null,
+      timeseries: timeseries.length ? timeseries : null,
+    },
+    "7D": { graphData: null, timeseries: null },
+    "1M": { graphData: null, timeseries: null },
+    "6M": { graphData: null, timeseries: null },
+    "1Y": { graphData: null, timeseries: null },
+    MAX: { graphData: null, timeseries: null },
   })
-  const [activeTab, setActiveTab] = useState("1D")
-  const { width: SIZE } = useWindowDimensions()
+
+  const { width: WINDOW_WIDTH } = useWindowDimensions()
+  const BUTTON_WIDTH = (WINDOW_WIDTH - 32) / Object.keys(graphs).length
+
+  const activeTab = useSharedValue<TabLabel>("1D")
+
+  const translation = useVector()
+  const transition = useSharedValue(0)
+  const prevTab = usePrevious(activeTab)
+  const animatedProps = useAnimatedProps(() => {
+    console.log("animatedProps")
+
+    if (!graphs[activeTab.value].graphData?.path) return { d: "" }
+    console.log("correct animatedProps")
+
+    const prevPath = graphs[prevTab.value].graphData?.path
+    const nextPath = graphs[activeTab.value].graphData?.path
+    return { d: mixPath(transition.value, prevPath, nextPath) }
+  })
+
+  console.log(animatedProps)
+
+  const style = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: withTiming(
+          BUTTON_WIDTH * Object.keys(graphs).indexOf(activeTab.value)
+        ),
+      },
+    ],
+  }))
 
   // TODO: refactor into custom hook
   useEffect(() => {
-    if (!graphs[activeTab]?.[symbol]?.timeseries?.length)
+    if (!graphs[activeTab.value].timeseries?.length)
       getYahooTimeseries({
         tickers: [symbol],
-        period: PeriodEnum[activeTab],
+        period: PeriodEnum[activeTab.value],
         interval:
           IntervalEnum[
-            activeTab === "1D"
+            activeTab.value === "1D"
               ? "5m"
-              : activeTab.includes("D")
+              : activeTab.value.includes("D")
               ? "30m"
-              : activeTab.includes("MAX")
+              : activeTab.value.includes("MAX")
               ? "1W"
               : "1D"
           ],
       }).then((ts) =>
         setGraphs((prevTabs) => ({
           ...prevTabs,
-          [activeTab]: {
-            [symbol]: {
-              timseries: ts[symbol],
-              points: monotoneCubicInterpolation({
-                data: ts[symbol]?.map((d) => ({
-                  x: d.timestamp,
-                  y: d.close,
-                })),
-                includeExtremes: true,
-                range: 100,
-              }),
-            },
+          [activeTab.value]: {
+            timseries: ts[symbol],
+            graphData: buildGraph(ts[symbol]),
           },
         }))
       )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, symbol])
+  }, [activeTab.value])
+
+  // useEffect(() => console.log(graphs), [graphs])
 
   return (
     <View
       style={tw`my-2 p-4 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-col justify-center items-center`}
     >
-      <ChartPathProvider
-        data={{
-          points: graphs[activeTab]?.[symbol]?.points,
-          smoothingStrategy: "bezier",
-        }}
-      >
-        <ChartPath
-          height={(2 * SIZE) / 3}
-          stroke={color}
-          strokeWidth={3}
-          selectedStrokeWidth={3}
-          width={(21 * SIZE) / 24}
-          hapticsEnabled={true}
-          hitSlop={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
+      <View style={{ height: (2 * WINDOW_WIDTH) / 3 }}>
+        {graphs[activeTab.value].graphData?.path && (
+          <Svg width={(21 * WINDOW_WIDTH) / 24} height={(2 * WINDOW_WIDTH) / 3}>
+            <AnimatedPath
+              animatedProps={animatedProps}
+              fill="transparent"
+              stroke={logoColor}
+              strokeWidth={3}
+            />
+          </Svg>
+        )}
+        <Cursor
+          translation={translation}
+          path={graphs[activeTab.value].graphData?.path}
+          logoColor={logoColor}
         />
-        <ChartDot style={{ backgroundColor: color }} />
-        <TimespanSelector
-          backgroundColor={color}
-          height={(1 * SIZE) / 12}
-          items={Object.keys(graphs)}
-          onSelect={(tab) => setActiveTab(tab)}
-          style={tw`pb-2`}
-        />
-      </ChartPathProvider>
+      </View>
+      <View style={{ ...tw`flex-row bg-transparent`, width: WINDOW_WIDTH - 32 }}>
+        <View style={tw`absolute inset-0`}>
+          <Animated.View
+            style={[
+              { backgroundColor: logoColor, width: BUTTON_WIDTH, ...tw`rounded-full` },
+              style,
+            ]}
+          />
+        </View>
+        {(Object.keys(graphs) as TabLabel[]).map((label) => (
+          <TouchableWithoutFeedback
+            key={label}
+            onPress={() => {
+              prevTab.value = activeTab.value
+              transition.value = 0
+              activeTab.value = label
+              transition.value = withTiming(1)
+            }}
+          >
+            <Animated.View style={{ ...tw`pt-8`, width: BUTTON_WIDTH }}>
+              <Text style={{ ...tw`text-center font-poppins-600`, color: logoColor }}>
+                {label}
+              </Text>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        ))}
+      </View>
     </View>
   )
 }
