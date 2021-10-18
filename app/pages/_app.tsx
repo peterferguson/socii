@@ -34,17 +34,18 @@ export default function MyApp({ Component, pageProps }) {
   const theme = "light"
 
   const router = useRouter()
-  const nonStandardLayoutRoutes = ["/", "/enter", "/404", "/500"]
+  const nonStandardLayoutRoutes = ["/", "/enter", "/aboutus", "/404", "/500"]
   const notMainLayout = nonStandardLayoutRoutes.includes(router.asPath)
   const props = { ...pageProps, theme }
 
   return (
     <div
       className={tw(
-        "no-scrollbar relative overflow-hidden bg-gray-50 dark:bg-gray-800",
+        "no-scrollbar overflow-y-scroll relative overflow-hidden bg-gray-50 dark:bg-gray-800",
         "selection:bg-brand-lightTeal/80 selection:text-teal-900",
         !notMainLayout && "max-h-screen max-w-screen h-screen w-screen"
       )}
+      style={{scrollbarGutter: "auto | stable && both-edges?"}}
     >
       <Head />
       <AuthProvider>

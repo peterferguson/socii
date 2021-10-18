@@ -45,7 +45,7 @@ export const Hero = ({ invited, setInvited }) => {
           />
         </div>
       </Transition.Root>
-      <div className="h-screen grid grid-cols-3 bg-gradient-to-tl via-white to-white from-palette-lightest">
+      <div className="h-screen grid grid-cols-3">
         <div className="flex flex-col justify-center mx-auto col-span-2">
           <div className="z-40 pt-4 pl-6 text-5xl text-white sm:pl-12 sm:text-7xl font-primary mix-blend-difference">
             <Transition

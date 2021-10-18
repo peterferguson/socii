@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { IoIosPeople, IoIosStats } from "react-icons/io"
 import { IoAnalyticsSharp } from "react-icons/io5"
 import { useMediaQuery } from "react-responsive"
+import { useWindowScroll, useWindowSize } from "react-use"
 
 const screens = [
   {
@@ -61,6 +62,8 @@ const ScreenDemo = () => {
   const [changeDirection, setChangeDirection] = useState<"right" | "left" | undefined>(
     undefined
   )
+  const { height } = useWindowSize()
+  const { y } = useWindowScroll()
 
   const is1Col = !useMediaQuery({ minWidth: 640 })
 
@@ -76,10 +79,19 @@ const ScreenDemo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedScreenIndex])
 
+  useEffect(() => {
+    y > height && setSelectedScreenIndex(Math.floor((y - height / 2) / height))
+  }, [height, y])
+
   return (
-    <div className="relative h-full">
-      <section className="relative h-full max-h-full p-4">
-        <div className="absolute inset-0 p-4 sm:p-6 lg:p-8 bg-gradient-to-tr via-white from-white to-palette-lightest" />
+    <div className="relative h-[300vh]">
+      <section
+        className={tw(
+          "h-full max-h-full p-4",
+          y > height && y < 3 * height ? "fixed" : "absolute",
+          y < 3 * height ? "inset-0" : `bottom-0 top-[200vh] inset-x-0`
+        )}
+      >
         <div className="relative flex p-4 max-w-7xl sm:p-6 lg:p-8 dark:bg-gray-800">
           <div className="w-full px-8 mx-auto sm:mx-0" ref={cardsRef}>
             <Transition
@@ -91,13 +103,11 @@ const ScreenDemo = () => {
               afterEnter={() => setAnimated(true)}
             >
               <div className="flex flex-col items-center sm:flex-row sm:w-full">
-                {is1Col && (
-                  <Screens
-                    selectedScreenIndex={selectedScreenIndex}
-                    changeDirection={changeDirection}
-                  />
-                )}
-                <div className="flex flex-row pb-3 mt-12 sm:items-center sm:flex-col">
+                <Screens
+                  selectedScreenIndex={selectedScreenIndex}
+                  changeDirection={changeDirection}
+                />
+                <div className="flex flex-row pb-3 mt-12 sm:ml-24 sm:items-center sm:flex-col">
                   {screens.map((item, i) => (
                     <>
                       {i !== 0 && (
@@ -179,12 +189,6 @@ const ScreenDemo = () => {
                     )}
                   </Transition>
                 ))}
-                {!is1Col && (
-                  <Screens
-                    selectedScreenIndex={selectedScreenIndex}
-                    changeDirection={changeDirection}
-                  />
-                )}
               </div>
             </Transition>
           </div>
