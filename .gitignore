@@ -272,3 +272,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# This is a temporary ignore for the web folder.
+/web

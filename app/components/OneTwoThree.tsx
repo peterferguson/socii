@@ -1,5 +1,4 @@
 import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { tw } from "@utils/tw"
 import React, { useRef } from "react"
 import { Transition } from "@headlessui/react"
 import { useMediaQuery } from "react-responsive"
@@ -7,15 +6,15 @@ import { useMediaQuery } from "react-responsive"
 const steps = [
   {
     heading: "Sign Up",
-    subheading: "Simply connect with your google account.",
+    subheading: "Connect your Google account.",
   },
   {
     heading: "Invite Your Friends",
-    subheading: "Ask your friends join your investment club.",
+    subheading: "Ask your friends join your group.",
   },
   {
     heading: "Start Investing Together",
-    subheading: "Simply start discussing & placing orders!",
+    subheading: "Start discussing & placing orders!",
   },
 ]
 
@@ -34,9 +33,9 @@ const OneTwoThree = () => {
   const is1Col = useMediaQuery({ minWidth: 640 })
 
   return (
-    <div className="relative h-full">
-      <section className="relative h-full max-h-full p-4">
-        <div className="absolute inset-0 p-4 sm:p-6 lg:p-8 bg-gradient-to-tr via-white from-white to-palette-lightest" />
+    <div className="relative h-full font-primary">
+      <section className="relative h-full max-h-full p-4 pt-20">
+        <div className="absolute inset-0 p-4 sm:p-6 lg:p-8 bg-gradient-to-tr via-white from-palette-lightest to-white" />
         <div className="relative flex p-4 max-w-7xl sm:p-6 lg:p-8 dark:bg-gray-800">
           <div className="flex flex-wrap">
             <div className="w-full px-8">
@@ -45,8 +44,8 @@ const OneTwoThree = () => {
                   <Transition.Child
                     appear={true}
                     as="h2"
-                    className="mb-4 text-2xl text-center text-black font-primary sm:text-5xl leading-10"
-                    enter="transition transform delay-500 duration-700 ease-in"
+                    className="mb-4 text-2xl text-center text-black font-primary sm:text-5xl leading-[3rem]"
+                    enter="transition transform delay-150 duration-700 ease-in"
                     enterFrom="skew-y-8 translate-y-24 opacity-0"
                     enterTo="translate-y-0 opacity-100"
                   >
@@ -62,9 +61,10 @@ const OneTwoThree = () => {
                     as="div"
                     className="w-full mx-auto my-8 text-gray-600 sm:w-2/3 text-tiny dark:text-gray-300 sm:text-sm md:text-base"
                   >
-                    Before <span className="font-semibold">socii</span> investing with
+                    Before <span className="font-semibold">socii</span>, investing with
                     friends meant setting up an investment club. A clumsy process with
-                    many legal, regulatory & auditory issues to worry about.
+                    many legal, regulatory & auditory issues to worry about. Now all you
+                    have to do is...
                   </Transition.Child>
                 </Transition>
               </div>
@@ -73,7 +73,7 @@ const OneTwoThree = () => {
               className="w-full max-w-sm px-8 mx-auto lg:w-1/2 sm:max-w-xl"
               ref={cardsRef}
             >
-              <ul className="mt-4 mb-24 space-y-12 font-primary">
+              <ul className="mt-4 mb-24 space-y-8 font-primary">
                 {[0, 1, 2].map((i) => (
                   <Transition
                     as="li"
@@ -95,7 +95,7 @@ const OneTwoThree = () => {
                           <h3 className="mt-2 text-sm font-semibold dark:text-white sm:text-xl">
                             {steps[i].heading}
                           </h3>
-                          <p className="font-thin leading-loose text-gray-600 text-tiny dark:text-gray-300 sm:text-base">
+                          <p className="leading-loose text-gray-500 text-tiny dark:text-gray-300 sm:text-base">
                             {steps[i].subheading}
                           </p>
                         </div>

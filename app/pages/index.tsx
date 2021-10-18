@@ -1,5 +1,6 @@
 import Logo from "@components/Logo"
 import OneTwoThree from "@components/OneTwoThree"
+import ScreenDemo from "@components/ScreenDemo"
 import WaitlistInvite from "@components/WaitlistInvite"
 import { useAuth } from "@hooks/useAuth"
 import { tw } from "@utils/tw"
@@ -11,12 +12,19 @@ import { Hero } from "../components/Hero"
 export default function Home() {
   const { user } = useAuth()
   const [invited, setInvited] = useState(user?.isInvited || false)
+
   return (
-    <div className="overflow-y-scroll no-scrollbar">
+    <div className="relative overflow-y-scroll no-scrollbar">
       {/* TODO Add a wave transition animation to this gradient */}
+      <div className="absolute inset-0">
+        <div className="w-screen h-screen bg-gradient-to-tl via-white to-white from-palette-lightest" />
+        <div className="w-screen h-screen bg-gradient-to-tr via-white from-white to-palette-lightest" />
+        <div className="w-screen h-screen bg-gradient-to-bl via-white from-white to-palette-lightest" />
+        <div className="w-screen h-screen bg-gradient-to-br via-white to-white from-palette-lightest" />
+      </div>
       <Hero invited={invited} setInvited={setInvited} />
+      <ScreenDemo />
       <OneTwoThree />
-      {/* <SociiFeatureSlider /> */}
       <Footer invited={invited} setInvited={setInvited} />
     </div>
   )
@@ -34,7 +42,7 @@ const Footer = ({ invited, setInvited }) => (
         </h1>
       ) : (
         <div className="mt-8 space-y-8 umami--click--landing-page-footer-waitlist-input">
-          <h1 className="text-3xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-tight">
+          <h1 className="text-3xl font-medium font-primary sm:text-4xl md:text-5xl md:leading-tight">
             Get your invite!
             {/* <span className="text-palette-primary"> Invite!</span> */}
           </h1>
@@ -52,30 +60,16 @@ const Footer = ({ invited, setInvited }) => (
             <div className=" grid grid-rows-2 space-y-4 divide-y">
               <div className="px-4 mx-auto max-w-screen-xl">
                 <ul className="flex flex-wrap justify-between mx-auto text-lg font-light max-w-screen-md">
-                  <li className="m-2">
-                    <a
-                      className="text-gray-800 hover:text-brand dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
-                      href="/"
-                    >
-                      FAQ
-                    </a>
-                  </li>
-                  <li className="m-2">
-                    <a
-                      className="text-gray-800 hover:text-brand dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
-                      href="/"
-                    >
-                      Terms & Conditions
-                    </a>
-                  </li>
-                  <li className="m-2">
-                    <a
-                      className="text-gray-800 hover:text-brand dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
-                      href="/"
-                    >
-                      About Us
-                    </a>
-                  </li>
+                  {["FAQ", "Terms & Conditions", "About Us"].map((item, index) => (
+                    <li className="m-2" key={index}>
+                      <a
+                        className="text-gray-800 hover:text-brand dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
+                        href="/"
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
                 <div className="flex items-center justify-between max-w-xs pt-4 mx-auto">
                   <a

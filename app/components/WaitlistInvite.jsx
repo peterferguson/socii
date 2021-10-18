@@ -45,12 +45,28 @@ function WaitlistInvite({ invited, setInvited }) {
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
       {invited ? (
-        <h1 className="text-lg font-semibold font-primary sm:text-2xl md:text-3xl md:leading-snug">
-          Thanks for signing up!
-          <p className="text-base font-thin font-secondary">
-            Keep an eye on your inbox for your invite.
-          </p>
-        </h1>
+        <div className="relative w-full sm:ml-6 group">
+          <div
+            className={tw(
+              "absolute inset-0 opacity-50 group-focus:-inset-0.5",
+              "group-focus-within:-inset-0.5 group-hover:-inset-0.5 group-focus:opacity-100",
+              "rounded-2xl",
+            )}
+          />
+          <div className="relative flex justify-center h-12">
+            <div
+              className={tw(
+                "relative w-full py-1 px-2 flex justify-center text-black text-sm md:text-sm",
+                "rounded-2xl border-1",
+                "outline-none leading-0",
+              )}
+            >
+              <span className="animate-pulse">🎉 </span> 
+              <span className="font-bold" > You&#39;re on the waitlist! </span> 
+              <span className="animate-pulse"> 🎉</span>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="relative w-full sm:ml-6 group umami--click--join-waitlist-button">
           <div
@@ -65,7 +81,7 @@ function WaitlistInvite({ invited, setInvited }) {
             <button
               type="submit"
               className={tw(
-                "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-xs",
+                "relative w-full py-1 px-2 gradient-flow text-white text-xs md:text-s",
                 "rounded-2xl border-1",
                 "outline-none group-hover:ring-0 group-hover:border-transparent leading-0",
                 "umami--click--waitlist-submit-button"
@@ -78,7 +94,7 @@ function WaitlistInvite({ invited, setInvited }) {
                   : signinWithGoogle()
               }}
             >
-              Get Invited
+              Join the Waitlist!
             </button>
           </div>
         </div>

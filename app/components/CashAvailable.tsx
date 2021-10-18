@@ -17,10 +17,7 @@ export const CashAvailable = () => {
   useEffect(
     () =>
       setTotalGroupsCashBalance(
-        Object.values(groups || {})?.reduce(
-          (acc, { cashBalance }) => acc + cashBalance,
-          0
-        )
+        Object.values(groups || {})?.reduce((acc, group) => acc + group?.cashBalance, 0)
       ),
     [groups]
   )

@@ -45,7 +45,7 @@ export const Hero = ({ invited, setInvited }) => {
           />
         </div>
       </Transition.Root>
-      <div className="h-screen grid grid-cols-3 bg-gradient-to-tl via-white to-white from-palette-lightest">
+      <div className="h-screen grid grid-cols-3">
         <div className="flex flex-col justify-center mx-auto col-span-2">
           <div className="z-40 pt-4 pl-6 text-5xl text-white sm:pl-12 sm:text-7xl font-primary mix-blend-difference">
             <Transition
@@ -64,7 +64,7 @@ export const Hero = ({ invited, setInvited }) => {
             </Transition>
           </div>
           {/* <Circles className="absolute inset-0 z-50" /> */}
-          <div className="relative pt-2 pl-8 text-black text-tiny sm:pl-16 sm:text-lg md:text-xl font-secondary">
+          <div className="relative pt-2 pl-8 text-xs text-black sm:pl-16 sm:text-lg md:text-xl font-secondary">
             Buy stocks & crypto directly from your group chat.
             <div className="absolute left-0 p-8 pt-12 w-96 sm:w-4/5 -bottom-28 umami--click--landing-page-hero-waitlist-input">
               <WaitlistInvite invited={invited} setInvited={setInvited} />
@@ -75,27 +75,3 @@ export const Hero = ({ invited, setInvited }) => {
     </div>
   )
 }
-
-const Circles = ({ className }) => (
-  <div className={`${className}`}>
-    <svg
-      id="visual"
-      viewBox="0 0 900 600"
-      width="900"
-      height="600"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      version="1.1"
-    >
-      <g fill="none" stroke="#3fb" opacity="0.4" strokeWidth="5">
-        <circle r="102" cx="1" cy="316" />
-        <circle r="11" cx="666" cy="116" />
-        <circle r="11" cx="546" cy="441" />
-        <circle r="78" cx="124" cy="93" />
-        <circle r="38" cx="205" cy="399" />
-        <circle r="28" cx="840" cy="435" />
-        <circle r="92" cx="380" cy="141" />
-      </g>
-    </svg>
-  </div>
-)
