@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive"
 const steps = [
   {
     heading: "Sign Up",
-    subheading: "Simply connect with your Google account.",
+    subheading: "Connect your Google account.",
   },
   {
     heading: "Invite Your Friends",
@@ -33,7 +33,7 @@ const OneTwoThree = () => {
   const is1Col = useMediaQuery({ minWidth: 640 })
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full font-primary">
       <section className="relative h-full max-h-full p-4 pt-20">
         <div className="absolute inset-0 p-4 sm:p-6 lg:p-8 bg-gradient-to-tr via-white from-palette-lightest to-white" />
         <div className="relative flex p-4 max-w-7xl sm:p-6 lg:p-8 dark:bg-gray-800">
@@ -44,7 +44,7 @@ const OneTwoThree = () => {
                   <Transition.Child
                     appear={true}
                     as="h2"
-                    className="mb-4 text-2xl text-center text-black font-primary sm:text-5xl leading-10"
+                    className="mb-4 text-2xl text-center text-black font-primary sm:text-5xl leading-[3rem]"
                     enter="transition transform delay-150 duration-700 ease-in"
                     enterFrom="skew-y-8 translate-y-24 opacity-0"
                     enterTo="translate-y-0 opacity-100"
@@ -63,7 +63,8 @@ const OneTwoThree = () => {
                   >
                     Before <span className="font-semibold">socii</span>, investing with
                     friends meant setting up an investment club. A clumsy process with
-                    many legal, regulatory & auditory issues to worry about. Now all you have to do is...
+                    many legal, regulatory & auditory issues to worry about. Now all you
+                    have to do is...
                   </Transition.Child>
                 </Transition>
               </div>
