@@ -1,13 +1,11 @@
-import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
-import { tw } from "@utils/tw"
-import React, { useEffect, useRef, useState } from "react"
 import { Transition } from "@headlessui/react"
-import { useMediaQuery } from "react-responsive"
+import { useIntersectionObserver } from "@hooks/useIntersectionObserver"
+import { usePrevious } from "@hooks/usePrevious"
+import { tw } from "@utils/tw"
 import Image from "next/image"
-import { IoAnalyticsSharp } from "react-icons/io5"
+import React, { useEffect, useRef, useState } from "react"
 import { IoIosPeople, IoIosStats } from "react-icons/io"
-import { useWindowSize } from "@hooks"
-// import LineTo from "react-lineto"
+import { IoAnalyticsSharp } from "react-icons/io5"
 
 // TODO ALIGN INFO UNDER BUTTONS!! (line 97)
 // TODO put line behind image (line 95)
@@ -16,6 +14,24 @@ const ScreenDemo = () => {
   const cardsRef = useRef(null)
   const cardsEntry = useIntersectionObserver(cardsRef, {})
   const cardsVisible = !!cardsEntry?.isIntersecting
+
+  const [selectedScreenIndex, setSelectedScreenIndex] = useState(0)
+  const previousScreenIndex = usePrevious(selectedScreenIndex)
+  const [changeDirection, setChangeDirection] = useState<"right" | "left" | undefined>(
+    undefined
+  )
+
+  useEffect(() => {
+    setChangeDirection(
+      previousScreenIndex !== undefined
+        ? // @ts-ignore
+          selectedScreenIndex > previousScreenIndex
+          ? "right"
+          : "left"
+        : undefined
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedScreenIndex])
 
   const screens = [
     {
@@ -59,10 +75,6 @@ const ScreenDemo = () => {
     },
   ]
 
-  const [selectedTab, setSelectedTab] = useState(0)
-
-  const IphoneImage = screens[selectedTab].Image
-
   return (
     <div className="relative h-full">
       <section className="relative h-full max-h-full p-4">
@@ -83,6 +95,7 @@ const ScreenDemo = () => {
                 <div className="flex flex-col items-center">
                   <div
                     ref={cardsRef}
+                    className="bg-gray-50"
                     style={{
                       position: "relative",
                       borderRadius: "2.5rem",
@@ -90,7 +103,88 @@ const ScreenDemo = () => {
                     }}
                   >
                     <IphoneMock>
-                      <IphoneImage />
+                      <Transition
+                        className="absolute inset-0 z-10 flex w-full h-full"
+                        show={
+                          selectedScreenIndex === 0 && changeDirection !== undefined
+                        }
+                        appear={true}
+                        unmount={false}
+                        enter="transition ease-in-out duration-300 transform"
+                        enterFrom={
+                          changeDirection === "right"
+                            ? "translate-x-full"
+                            : "-translate-x-full"
+                        }
+                        enterTo="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform"
+                        leaveFrom="translate-x-0"
+                        leaveTo={
+                          changeDirection === "right"
+                            ? "-translate-x-full"
+                            : "translate-x-full"
+                        }
+                      >
+                        <Image
+                          src={"/images/GOOG-iphone-screenshot.png"}
+                          alt="socii-GOOG-stock-screenshot"
+                          layout="fill"
+                        />
+                      </Transition>
+                      <Transition
+                        className="absolute inset-0 z-10 flex w-full h-full"
+                        show={
+                          selectedScreenIndex === 1 && changeDirection !== undefined
+                        }
+                        unmount={false}
+                        enter="transition ease-in-out duration-300 transform"
+                        enterFrom={
+                          changeDirection === "right"
+                            ? "translate-x-full"
+                            : "-translate-x-full"
+                        }
+                        enterTo="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform"
+                        leaveFrom="translate-x-0"
+                        leaveTo={
+                          changeDirection === "right"
+                            ? "-translate-x-full"
+                            : "translate-x-full"
+                        }
+                      >
+                        <Image
+                          src={"/images/chat-screenshot.png"}
+                          alt="socii-chat-screenshot"
+                          layout="fill"
+                        />
+                      </Transition>
+                      <Transition
+                        className="absolute inset-0 z-10 flex w-full h-full"
+                        show={
+                          selectedScreenIndex === 2 && changeDirection !== undefined
+                        }
+                        unmount={false}
+                        enter="transition ease-in-out duration-300 transform"
+                        enterFrom={
+                          changeDirection === "right"
+                            ? "translate-x-full"
+                            : "-translate-x-full"
+                        }
+                        enterTo="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform"
+                        leaveFrom="translate-x-0"
+                        leaveTo={
+                          changeDirection === "right"
+                            ? "-translate-x-full"
+                            : "translate-x-full"
+                        }
+                      >
+                        <Image
+                          src={"/images/leaderboard-screenshot.png"}
+                          alt="socii-leaderboard-screenshot"
+                          layout="fill"
+                        />
+                      </Transition>
                     </IphoneMock>
                   </div>
                   <div className="flex flex-row pb-3 mt-12">
@@ -100,18 +194,18 @@ const ScreenDemo = () => {
                           <div
                             key={`line-${i - 1}`}
                             className={`z-0 w-20 sm:w-32 h-0 mt-6 border ${
-                              selectedTab > i - 1
+                              selectedScreenIndex > i - 1
                                 ? "border-brand/80"
                                 : "border-brand/40"
                             }`}
                           />
                         )}
-                        <button key={i} onClick={() => setSelectedTab(i)}>
+                        <button key={i} onClick={() => setSelectedScreenIndex(i)}>
                           <div className="flex items-center justify-center">
                             <div
                               className={tw(
                                 "ring-2 z-10 rounded-full p-2 space-x-6",
-                                selectedTab == i
+                                selectedScreenIndex == i
                                   ? "gradient-flow opacity-50 ring-purple-500"
                                   : "ring-brand"
                               )}
@@ -120,7 +214,9 @@ const ScreenDemo = () => {
                                 <item.Icon
                                   className={tw(
                                     "w-6 h-6 m-1",
-                                    selectedTab == i ? "text-white" : "text-brand"
+                                    selectedScreenIndex == i
+                                      ? "text-white"
+                                      : "text-brand"
                                   )}
                                   aria-hidden="true"
                                 />
@@ -137,9 +233,11 @@ const ScreenDemo = () => {
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
                   >
-                    <div className="pb-3 text-lg">{screens[selectedTab].title}</div>
+                    <div className="pb-3 text-lg">
+                      {screens[selectedScreenIndex].title}
+                    </div>
                     <div className="text-base font-thin sm:text-sm">
-                      {screens[selectedTab].info}
+                      {screens[selectedScreenIndex].info}
                     </div>
                   </Transition>
                 </div>
@@ -153,9 +251,9 @@ const ScreenDemo = () => {
 }
 
 const IphoneMock = ({ children }) => (
-  <div className="relative mx-auto overflow-hidden border-white shadow-xl h-[712px] w-[350px] rounded-[2.5rem] border-[14px]">
+  <div className="relative mx-auto overflow-hidden border-white shadow-xl h-[500px] w-[250px] md:h-[712px] md:w-[350px] rounded-[2.5rem] border-[14px]">
     <div className="absolute inset-x-0 top-0 z-50">
-      <div className="z-20 w-40 h-6 mx-auto bg-white rounded-b-3xl" />
+      <div className="z-20 h-4 mx-auto bg-white w-28 md:w-40 md:h-6 rounded-b-3xl" />
     </div>
     {children}
   </div>
