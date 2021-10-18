@@ -40,7 +40,7 @@ const GroupsHome = ({ leaders }) => {
   )
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const {
     props: { leaders },
   } = await getLeaderBoardProps()

@@ -121,7 +121,7 @@ interface StaticProps {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({
+export const getServerSideProps: GetStaticProps = async ({
   params: { category },
 }: StaticProps) => {
   // FIXME: Is there a way we can not call this twice and just pass the tickers?
@@ -141,17 +141,19 @@ export const getStaticProps: GetStaticProps = async ({
       revalidate: 8000,
     }
   } catch (e) {
-    return { redirect: { destination: "/404", permanent: false } }
+    console.log(e)
   }
+
+  return { notFound: true }
 }
 
-// TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
-export const getStaticPaths: GetStaticPaths = async () => {
-  const categories = await getTickerCategoryShortNames()
-  const paths = Object.keys(categories).map((shortName) => ({
-    params: { category: shortName },
-  }))
-  return { paths, fallback: "blocking" }
-}
+// // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const categories = await getTickerCategoryShortNames()
+//   const paths = Object.keys(categories).map((shortName) => ({
+//     params: { category: shortName },
+//   }))
+//   return { paths, fallback: "blocking" }
+// }
 
 export default CategoryPage

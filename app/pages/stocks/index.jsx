@@ -123,7 +123,7 @@ export default function StockDisplay({ tickers }) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   // try {
   //   const trendingTickers = await getYahooTrending()
   // } catch (e) {

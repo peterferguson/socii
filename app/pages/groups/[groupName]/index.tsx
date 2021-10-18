@@ -16,13 +16,12 @@
 // - Investor section with description of joining date (etc... this should not be the focus!)
 
 import { AuthCheck } from "@components/AuthCheck"
+import { IsGroupMemberViewDynamic } from "@components/IsGroupMemberView/index"
+import { NonGroupMemberViewDynamic } from "@components/NonGroupMemberView/index"
 import { IsUsersGroup } from "@utils/IsUsersGroup"
+import { updateTradeEvents } from "@utils/updateTradeEvents"
 import { useRouter } from "next/router"
 import React from "react"
-import { NonGroupMemberViewDynamic } from "@components/NonGroupMemberView/index"
-import { IsGroupMemberViewDynamic } from "@components/IsGroupMemberView/index"
-import { updateTradeEvents } from "@utils/updateTradeEvents"
-import { getLeaderBoardProps } from "@utils/getLeaderBoardProps"
 
 export default function Group() {
   const router = useRouter()
@@ -33,24 +32,24 @@ export default function Group() {
   return (
     <AuthCheck>
       {isMember ? (
-        <IsGroupMemberViewDynamic groupName= {groupName}/>
-        ):(
-        <NonGroupMemberViewDynamic groupName= {groupName}/>
+        <IsGroupMemberViewDynamic groupName={groupName} />
+      ) : (
+        <NonGroupMemberViewDynamic groupName={groupName} />
       )}
     </AuthCheck>
   )
 }
 
 // - For now simply update the trade events on every page load from the server-side
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   updateTradeEvents()
   return { props: {} }
 }
 
-export async function getStaticPaths() {
-  const {
-    props: { leaders },
-  } = await getLeaderBoardProps()
-  const paths = leaders.map((leader) => ({ params: { groupName: leader.groupName } }))
-  return { paths, fallback: true }
-}
+// export async function getStaticPaths() {
+//   const {
+//     props: { leaders },
+//   } = await getLeaderBoardProps()
+//   const paths = leaders.map((leader) => ({ params: { groupName: leader.groupName } }))
+//   return { paths, fallback: true }
+// }
