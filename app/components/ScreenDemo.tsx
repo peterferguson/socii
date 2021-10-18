@@ -199,9 +199,9 @@ const ScreenDemo = () => {
 }
 
 const IphoneMock = ({ children }) => (
-  <div className="relative mx-auto overflow-hidden border-white shadow-xl h-[500px] w-[250px] md:h-[712px] md:w-[350px] rounded-[2.5rem] border-[14px]">
+  <div className="relative mx-auto overflow-hidden border-black shadow-xl h-[490px] w-[245px] md:h-[712px] md:w-[350px] rounded-[2.5rem] border-[10px]">
     <div className="absolute inset-x-0 top-0 z-50">
-      <div className="z-20 h-4 mx-auto bg-white w-28 md:w-40 md:h-6 rounded-b-3xl" />
+      <div className="z-20 h-4 mx-auto bg-black w-28 md:w-40 md:h-6 rounded-b-3xl" />
     </div>
     {children}
   </div>
