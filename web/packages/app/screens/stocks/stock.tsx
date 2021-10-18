@@ -37,7 +37,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         isPriceLoading={true}
       />
       <InvestButton logoColor={tickerData?.logoColor} />
-      <ChartCard symbol={symbol} timeseries={[]} logoColor={tickerData?.logoColor} />
+      <ChartCard symbol={symbol} logoColor={tickerData?.logoColor} />
       <StockRecommendations symbol={symbol} />
     </View>
   )

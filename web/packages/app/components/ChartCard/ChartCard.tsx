@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useWindowDimensions, View, Text } from "react-native"
+import { Text, useWindowDimensions, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, {
   useAnimatedProps,
@@ -10,19 +10,15 @@ import Animated, {
 import { mixPath, useVector } from "react-native-redash"
 import Svg, { Path } from "react-native-svg"
 import { usePrevious } from "../../hooks/usePrevious"
+import { useTimeseries } from "../../hooks/useTimeseries"
 import tw from "../../lib/tailwind"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
 import { buildGraph, GraphData } from "../../utils/buildGraph"
-import {
-  getYahooTimeseries,
-  IntervalEnum,
-  PeriodEnum,
-} from "../../utils/getYahooTimeseries"
+import { IntervalEnum, PeriodEnum } from "../../utils/getYahooTimeseries"
 import Cursor from "./Cursor"
 
 interface ITickerPageLineChartProps {
   symbol: string
-  timeseries: OHLCTimeseries
   logoColor: string
 }
 
@@ -36,16 +32,9 @@ type Graphs = {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 
-const ChartCard: React.FC<ITickerPageLineChartProps> = ({
-  symbol,
-  timeseries,
-  logoColor,
-}) => {
+const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) => {
   const [graphs, setGraphs] = useState<Graphs>({
-    "1D": {
-      graphData: timeseries.length ? buildGraph(timeseries) : null,
-      timeseries: timeseries.length ? timeseries : null,
-    },
+    "1D": { graphData: null, timeseries: null },
     "7D": { graphData: null, timeseries: null },
     "1M": { graphData: null, timeseries: null },
     "6M": { graphData: null, timeseries: null },
@@ -55,24 +44,46 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({
 
   const { width: WINDOW_WIDTH } = useWindowDimensions()
   const BUTTON_WIDTH = (WINDOW_WIDTH - 32) / Object.keys(graphs).length
-
   const activeTab = useSharedValue<TabLabel>("1D")
-
   const translation = useVector()
   const transition = useSharedValue(0)
   const prevTab = usePrevious(activeTab)
-  const animatedProps = useAnimatedProps(() => {
-    console.log("animatedProps")
 
-    if (!graphs[activeTab.value].graphData?.path) return { d: "" }
-    console.log("correct animatedProps")
-
-    const prevPath = graphs[prevTab.value].graphData?.path
-    const nextPath = graphs[activeTab.value].graphData?.path
-    return { d: mixPath(transition.value, prevPath, nextPath) }
+  const { timeseries, isLoading, isError } = useTimeseries({
+    symbols: [symbol],
+    period: PeriodEnum[activeTab.value],
+    interval:
+      IntervalEnum[
+        activeTab.value === "1D"
+          ? "5m"
+          : activeTab.value.includes("D")
+          ? "30m"
+          : activeTab.value.includes("MAX")
+          ? "1W"
+          : "1D"
+      ],
   })
 
-  console.log(animatedProps)
+  useEffect(() => {
+    if (!isLoading && !isError)
+      setGraphs((prevTabs) => ({
+        ...prevTabs,
+        [activeTab.value]: {
+          timseries: timeseries,
+          // @ts-ignore
+          // - here we are using a single timeseries so ignoring this
+          graphData: buildGraph(timeseries),
+        },
+      }))
+  }, [activeTab.value, timeseries, isLoading, isError])
+
+  const animatedProps = useAnimatedProps(() => {
+    const prevPath = graphs[prevTab?.value ?? "1D"].graphData?.path
+    const nextPath = graphs[activeTab.value].graphData?.path
+    return {
+      d: nextPath && prevPath ? mixPath(transition.value, prevPath, nextPath) : "",
+    }
+  })
 
   const style = useAnimatedStyle(() => ({
     transform: [
@@ -83,37 +94,6 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({
       },
     ],
   }))
-
-  // TODO: refactor into custom hook
-  useEffect(() => {
-    if (!graphs[activeTab.value].timeseries?.length)
-      getYahooTimeseries({
-        tickers: [symbol],
-        period: PeriodEnum[activeTab.value],
-        interval:
-          IntervalEnum[
-            activeTab.value === "1D"
-              ? "5m"
-              : activeTab.value.includes("D")
-              ? "30m"
-              : activeTab.value.includes("MAX")
-              ? "1W"
-              : "1D"
-          ],
-      }).then((ts) =>
-        setGraphs((prevTabs) => ({
-          ...prevTabs,
-          [activeTab.value]: {
-            timseries: ts[symbol],
-            graphData: buildGraph(ts[symbol]),
-          },
-        }))
-      )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab.value])
-
-  // useEffect(() => console.log(graphs), [graphs])
-
   return (
     <View
       style={tw`my-2 p-4 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-col justify-center items-center`}

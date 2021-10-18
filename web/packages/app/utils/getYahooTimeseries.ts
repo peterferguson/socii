@@ -43,8 +43,8 @@ export interface YahooTimeseries {
   [tickerSymbol: string]: OHLC[]
 }
 
-interface getYahooTimeseriesProps {
-  tickers: string[]
+export interface getYahooTimeseriesProps {
+  symbols: string[]
   startDateStr?: DateStr
   endDateStr?: DateStr
   period?: PeriodEnum
@@ -52,16 +52,16 @@ interface getYahooTimeseriesProps {
 }
 
 export const getYahooTimeseries = async ({
-  tickers,
+  symbols,
   startDateStr,
   endDateStr,
   period,
   interval,
 }: getYahooTimeseriesProps): Promise<YahooTimeseries> => {
-  const yahooData = await fetchYahoo(tickers, "get_historical_prices", "POST", {
+  const yahooData = await fetchYahoo(symbols, "get_historical_prices", "POST", {
     period,
     interval,
-    tickerSymbol: tickers.join(" "),
+    tickerSymbol: symbols.join(" "),
     start: startDateStr,
     end: endDateStr,
   })

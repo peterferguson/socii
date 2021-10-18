@@ -2384,6 +2384,11 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
+"@nandorojo/swr-react-native@^1.0.0-beta.8.1":
+  version "1.0.0-beta.8.1"
+  resolved "https://registry.yarnpkg.com/@nandorojo/swr-react-native/-/swr-react-native-1.0.0-beta.8.1.tgz#cf3c3940b665cfe3aa8aa61063d1ab2c4441de99"
+  integrity sha512-jPyh9OzgnvL9rTwWCTP6fX8uZB4P03xFOn3xKCZ05nFH+ZWKSC139nT59vtg+s45io2EYkUeZjz7o6P7RA0m8w==
+
 "@napi-rs/triples@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
@@ -2695,6 +2700,11 @@
     strip-ansi "^5.2.0"
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
+
+"@react-native-community/netinfo@6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.2.tgz#3b61757c46d0f387815d42b651bbee1eb998a385"
+  integrity sha512-HbVIv6p+VAzSqALkfKKNbtSy0TneL7EILIqxiOjt/5weVdTuZ88NRyPNQAZBh6W8QYirXJo3f00ryMk9iLs7gQ==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
