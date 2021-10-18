@@ -33,6 +33,7 @@ const ScreenDemo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedScreenIndex])
 
+  // - Define this here to ensure images are loaded before animation
   const screens = [
     {
       title: "Search for Stocks",
@@ -40,7 +41,6 @@ const ScreenDemo = () => {
       Icon: IoAnalyticsSharp,
       Image: () => (
         <Image
-          className="absolute inset-0 z-10 w-full h-full"
           src={"/images/GOOG-iphone-screenshot.png"}
           alt="socii-GOOG-stock-screenshot"
           layout="fill"
@@ -53,7 +53,6 @@ const ScreenDemo = () => {
       Icon: IoIosPeople,
       Image: () => (
         <Image
-          className="absolute inset-0 z-10 w-full h-full"
           src={"/images/chat-screenshot.png"}
           alt="socii-chat-screenshot"
           layout="fill"
@@ -66,7 +65,6 @@ const ScreenDemo = () => {
       Icon: IoIosStats,
       Image: () => (
         <Image
-          className="absolute inset-0 z-10 w-full h-full"
           src={"/images/leaderboard-screenshot.png"}
           alt="socii-leaderboard-screenshot"
           layout="fill"
@@ -74,6 +72,8 @@ const ScreenDemo = () => {
       ),
     },
   ]
+
+  const IphoneImage = screens[selectedScreenIndex].Image
 
   return (
     <div className="relative h-full">
@@ -103,88 +103,40 @@ const ScreenDemo = () => {
                     }}
                   >
                     <IphoneMock>
-                      <Transition
-                        className="absolute inset-0 z-10 flex w-full h-full"
-                        show={
-                          selectedScreenIndex === 0 && changeDirection !== undefined
-                        }
-                        appear={true}
-                        unmount={false}
-                        enter="transition ease-in-out duration-300 transform"
-                        enterFrom={
-                          changeDirection === "right"
-                            ? "translate-x-full"
-                            : "-translate-x-full"
-                        }
-                        enterTo="translate-x-0"
-                        leave="transition ease-in-out duration-300 transform"
-                        leaveFrom="translate-x-0"
-                        leaveTo={
-                          changeDirection === "right"
-                            ? "-translate-x-full"
-                            : "translate-x-full"
-                        }
-                      >
+                      {/* 💩 solution to having the first image appear before transition */}
+                      {selectedScreenIndex === 0 && changeDirection === undefined && (
                         <Image
                           src={"/images/GOOG-iphone-screenshot.png"}
                           alt="socii-GOOG-stock-screenshot"
                           layout="fill"
                         />
-                      </Transition>
-                      <Transition
-                        className="absolute inset-0 z-10 flex w-full h-full"
-                        show={
-                          selectedScreenIndex === 1 && changeDirection !== undefined
-                        }
-                        unmount={false}
-                        enter="transition ease-in-out duration-300 transform"
-                        enterFrom={
-                          changeDirection === "right"
-                            ? "translate-x-full"
-                            : "-translate-x-full"
-                        }
-                        enterTo="translate-x-0"
-                        leave="transition ease-in-out duration-300 transform"
-                        leaveFrom="translate-x-0"
-                        leaveTo={
-                          changeDirection === "right"
-                            ? "-translate-x-full"
-                            : "translate-x-full"
-                        }
-                      >
-                        <Image
-                          src={"/images/chat-screenshot.png"}
-                          alt="socii-chat-screenshot"
-                          layout="fill"
-                        />
-                      </Transition>
-                      <Transition
-                        className="absolute inset-0 z-10 flex w-full h-full"
-                        show={
-                          selectedScreenIndex === 2 && changeDirection !== undefined
-                        }
-                        unmount={false}
-                        enter="transition ease-in-out duration-300 transform"
-                        enterFrom={
-                          changeDirection === "right"
-                            ? "translate-x-full"
-                            : "-translate-x-full"
-                        }
-                        enterTo="translate-x-0"
-                        leave="transition ease-in-out duration-300 transform"
-                        leaveFrom="translate-x-0"
-                        leaveTo={
-                          changeDirection === "right"
-                            ? "-translate-x-full"
-                            : "translate-x-full"
-                        }
-                      >
-                        <Image
-                          src={"/images/leaderboard-screenshot.png"}
-                          alt="socii-leaderboard-screenshot"
-                          layout="fill"
-                        />
-                      </Transition>
+                      )}
+                      {[0, 1, 2].map((i) => (
+                        <Transition
+                          key={`transition-image-${i}`}
+                          className="absolute inset-0 z-10 flex w-full h-full"
+                          show={
+                            selectedScreenIndex === i && changeDirection !== undefined
+                          }
+                          unmount={false}
+                          enter="transition ease-in-out duration-300 transform"
+                          enterFrom={
+                            changeDirection === "right"
+                              ? "translate-x-full"
+                              : "-translate-x-full"
+                          }
+                          enterTo="translate-x-0"
+                          leave="transition ease-in-out duration-300 transform"
+                          leaveFrom="translate-x-0"
+                          leaveTo={
+                            changeDirection === "right"
+                              ? "-translate-x-full"
+                              : "translate-x-full"
+                          }
+                        >
+                          <IphoneImage />
+                        </Transition>
+                      ))}
                     </IphoneMock>
                   </div>
                   <div className="flex flex-row pb-3 mt-12">
