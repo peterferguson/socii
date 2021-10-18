@@ -75,27 +75,3 @@ export const Hero = ({ invited, setInvited }) => {
     </div>
   )
 }
-
-const Circles = ({ className }) => (
-  <div className={`${className}`}>
-    <svg
-      id="visual"
-      viewBox="0 0 900 600"
-      width="900"
-      height="600"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      version="1.1"
-    >
-      <g fill="none" stroke="#3fb" opacity="0.4" strokeWidth="5">
-        <circle r="102" cx="1" cy="316" />
-        <circle r="11" cx="666" cy="116" />
-        <circle r="11" cx="546" cy="441" />
-        <circle r="78" cx="124" cy="93" />
-        <circle r="38" cx="205" cy="399" />
-        <circle r="28" cx="840" cy="435" />
-        <circle r="92" cx="380" cy="141" />
-      </g>
-    </svg>
-  </div>
-)

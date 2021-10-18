@@ -45,7 +45,7 @@ const OneTwoThree = () => {
                     appear={true}
                     as="h2"
                     className="mb-4 text-2xl text-center text-black font-primary sm:text-5xl leading-10"
-                    enter="transition transform delay-500 duration-700 ease-in"
+                    enter="transition transform delay-150 duration-700 ease-in"
                     enterFrom="skew-y-8 translate-y-24 opacity-0"
                     enterTo="translate-y-0 opacity-100"
                   >
