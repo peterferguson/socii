@@ -6,7 +6,6 @@ import Image from "next/image"
 import React, { useEffect, useRef, useState } from "react"
 import { IoIosPeople, IoIosStats } from "react-icons/io"
 import { IoAnalyticsSharp } from "react-icons/io5"
-import { useMediaQuery } from "react-responsive"
 import { useWindowScroll, useWindowSize } from "react-use"
 
 const screens = [
@@ -65,8 +64,6 @@ const ScreenDemo = () => {
   const { height } = useWindowSize()
   const { y } = useWindowScroll()
 
-  const is1Col = !useMediaQuery({ minWidth: 640 })
-
   useEffect(() => {
     setChangeDirection(
       previousScreenIndex !== undefined
@@ -82,6 +79,11 @@ const ScreenDemo = () => {
   useEffect(() => {
     y > height && setSelectedScreenIndex(Math.floor((y - height / 2) / height))
   }, [height, y])
+
+  const handleClick = (index: number) => () => {
+    window.scroll(0, height + index * height)
+    setSelectedScreenIndex(index)
+  }
 
   return (
     <div className="relative h-[300vh]">
@@ -120,7 +122,7 @@ const ScreenDemo = () => {
                           }`}
                         />
                       )}
-                      <button key={i} onClick={() => setSelectedScreenIndex(i)}>
+                      <button key={i} onClick={handleClick(i)}>
                         <div className="flex items-center justify-center">
                           <div
                             className={tw(
