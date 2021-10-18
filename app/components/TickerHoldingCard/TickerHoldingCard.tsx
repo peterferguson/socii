@@ -11,12 +11,7 @@ import { getStockHoldingData } from "@lib/firebase/client/db"
 import { usePrevious } from "@hooks/usePrevious"
 
 // TODO: Create a card for displaying the current holding information & splits by group on interaction
-export default function TickerHoldingCard({
-  holding,
-  tickerSymbol,
-  price,
-  isPriceLoading,
-}) {
+export default function TickerHoldingCard({ holding, tickerSymbol }) {
   const [groupHoldings, setHoldings] = useState(Array())
   const [userGroups, setGroups] = useState(null)
   const { user } = useAuth()
@@ -33,7 +28,7 @@ export default function TickerHoldingCard({
     if (userGroups) {
       userGroups.map((group) => {
         getGroupData(group).then((data) =>
-          setGroupMemberCount((prev) => ({ ...prev, [group]: data.investorCount }))
+          setGroupMemberCount((prev) => ({ ...prev, [group]: data?.investorCount }))
         )
       })
     }

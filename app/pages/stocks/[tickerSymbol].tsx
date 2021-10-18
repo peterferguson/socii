@@ -72,8 +72,6 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
             <TickerHoldingCardDynamic
               holding={holding}
               tickerSymbol={ticker?.tickerSymbol}
-              price={null}
-              isPriceLoading={true}
             />
           )}
           <div className="flex-grow sm:flex-none">
@@ -98,32 +96,34 @@ const TickerPage: React.FC<TickersProps> = ({ tickers }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async ({ params: { tickerSymbol } }) => {
+export const getServerSideProps: GetStaticProps = async ({
+  params: { tickerSymbol },
+}) => {
   // - For this page, we only retrieve one ticker so pop it off the array if passed in
 
   const symbol = typeof tickerSymbol === "string" ? tickerSymbol : tickerSymbol.pop()
 
   try {
     // - These functions take arrays of tickers
-    const { props } = await getTickersStaticProps({
+    return await getTickersStaticProps({
       tickerDocs: await getTickerDocs([symbol]),
       period: PeriodEnum["1D"],
       interval: IntervalEnum["1m"],
     })
-    return { props, revalidate: 8000 }
   } catch (e) {
-    return { redirect: { destination: "/404", permanent: false } }
+    console.log(e)
   }
+  return { notFound: true }
 }
 
-// TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getPopularTickersDocs())?.map((doc) => {
-    const { tickerSymbol } = doc.data()
-    return { params: { tickerSymbol } }
-  })
+// // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const paths = (await getPopularTickersDocs())?.map((doc) => {
+//     const { tickerSymbol } = doc.data()
+//     return { params: { tickerSymbol } }
+//   })
 
-  return { paths, fallback: true }
-}
+//   return { paths, fallback: true }
+// }
 
 export default TickerPage

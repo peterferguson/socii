@@ -127,7 +127,7 @@ const TickerPageChartCard: React.FC<ITickerPageLineChartProps> = ({
           )}
           <Tab.List
             className={tw(
-              "flex h-12 -mt-8 text-sm bottom-7 right-6 left-6 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base",
+              "flex h-12 -mt-8 sm:mt-0 text-sm bottom-7 right-6 left-6 font-secondary md:space-x-1 sm:pr-3 sm:pt-6 md:p-6 sm:text-base",
               "sm:absolute sm:top-0 sm:right-0 sm:left-auto z-50"
             )}
           >
