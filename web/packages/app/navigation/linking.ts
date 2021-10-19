@@ -1,7 +1,7 @@
 import * as Linking from "expo-linking"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
-import { HomeStackParams, PlaylistsStackParams, StocksStackParams } from "./types"
+import { EnterStackParams, PlaylistsStackParams, StocksStackParams } from "./types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
@@ -19,7 +19,7 @@ function makeStockStackPath<Path extends keyof StocksStackParams>(path: Path): P
   return path
 }
 
-function makeHomeStackPath<Path extends keyof HomeStackParams>(path: Path): Path {
+function makeEnterStackPath<Path extends keyof EnterStackParams>(path: Path): Path {
   return path
 }
 
@@ -38,12 +38,12 @@ const stocksStackPaths = makeType({
   stock: makeStockStackPath("stock"),
 })
 
-const homeStackPaths = makeType({
-  home: makeHomeStackPath("home"),
+const enterStackPaths = makeType({
+  enter: makeEnterStackPath("enter"),
 })
 
 const tabPaths = makeType({
-  home: makeTabPath("homeTab"),
+  enter: makeTabPath("enterTab"),
   playlists: makeTabPath("playlistsTab"),
   stocks: makeTabPath("stocksTab"),
 })
@@ -52,11 +52,11 @@ const linking: Props = {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      [tabPaths.home]: {
+      [tabPaths.enter]: {
         path: "",
-        initialRouteName: homeStackPaths.home,
+        initialRouteName: enterStackPaths.enter,
         screens: {
-          [homeStackPaths.home]: "",
+          [enterStackPaths.enter]: "",
         },
       },
       [tabPaths.playlists]: {

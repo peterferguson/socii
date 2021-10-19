@@ -11,8 +11,8 @@ type StocksStackParams = {
   stock: { symbol: string }
 }
 
-type HomeStackParams = {
-  home: undefined
+type EnterStackParams = {
+  enter: undefined
 }
 
 // type StackParams = ProfileStackParams & HomeStackParams & PlayListStackParams;
@@ -35,6 +35,6 @@ export type {
   StockScreenProps,
   NextNavigationProps,
   PlaylistsStackParams,
-  HomeStackParams,
+  EnterStackParams,
   StocksStackParams,
 }

@@ -1,13 +1,11 @@
-import React, { useReducer, useMemo, useEffect } from "react"
-import { NavigationContainer, useLinkTo } from "@react-navigation/native"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-
-import { linking } from "app/navigation/linking"
+import { NavigationContainer, useLinkTo } from "@react-navigation/native"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
+import { linking } from "app/navigation/linking"
 import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
+import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
-import tw from "../lib/tailwind"
 
 function LinkTo() {
   const linkTo = useLinkTo()

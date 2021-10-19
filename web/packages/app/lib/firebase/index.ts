@@ -1,6 +1,7 @@
 import Constants from "expo-constants"
 import { initializeApp } from "firebase/app"
 import { initializeFirestore } from "firebase/firestore"
+import { initializeAuth } from "firebase/auth"
 
 export const londonRegion = "europe-west2"
 
@@ -21,3 +22,4 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 export const db = initializeFirestore(app, { experimentalForceLongPolling: true })
+export const auth = initializeAuth(app)

@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
 export type BottomTabNavigatorParams = {
-  homeTab: undefined
+  enterTab: undefined
   playlistsTab: undefined
   stocksTab: undefined
 }

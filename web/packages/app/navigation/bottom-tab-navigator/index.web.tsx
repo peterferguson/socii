@@ -33,7 +33,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       }}
     >
       <BottomTab.Screen
-        name="homeTab"
+        name="enterTab"
         listeners={{
           tabPress: (e) => {
             e.preventDefault()
