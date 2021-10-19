@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { getYForX, Vector, Path } from "react-native-redash"
 
-const CURSOR = 50
+const CURSOR = 12
 
 interface CursorProps {
   path: Path
@@ -52,7 +52,7 @@ const Cursor = ({ path, translation, logoColor }: CursorProps) => {
           <Animated.View
             style={[
               {
-                ...tw`opacity-10 items-center justify-center rounded-full`,
+                ...tw`items-center justify-center rounded-full`,
                 backgroundColor: logoColor,
                 width: CURSOR,
                 height: CURSOR,
@@ -60,7 +60,12 @@ const Cursor = ({ path, translation, logoColor }: CursorProps) => {
               style,
             ]}
           >
-            <View style={{ ...tw`h-4 w-4 rounded-full`, backgroundColor: logoColor }} />
+            <View
+              style={{
+                ...tw`rounded-full h-8 w-8 opacity-30`,
+                backgroundColor: logoColor,
+              }}
+            />
           </Animated.View>
         </Animated.View>
       </PanGestureHandler>
