@@ -1,15 +1,21 @@
+import Constants from "expo-constants"
 import { initializeApp } from "firebase/app"
-import { getFirestore, setLogLevel, initializeFirestore } from "firebase/firestore"
+import { initializeFirestore } from "firebase/firestore"
 
 export const londonRegion = "europe-west2"
 
+const { firebase } = Constants.manifest.extra
+
+const { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId } =
+  firebase
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBQw3aLVDyR66szb7Ehdyb19PUpq7Fiz1s",
-  authDomain: "socii-development.firebaseapp.com",
-  projectId: "socii-development",
-  storageBucket: "socii-development.appspot.com",
-  messagingSenderId: "1030307422946",
-  appId: "1:1030307422946:web:05361d94261912a406f4bb",
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
 }
 
 // Initialize Firebase
