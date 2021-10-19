@@ -1,8 +1,9 @@
 import { fetcher } from "./fetcher"
 import Constants from "expo-constants"
 
-const NEXT_PUBLIC_FIREBASE_PROJECT_ID = "socii-development"
-// Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+const {
+  firebase: { projectId },
+} = Constants.manifest.extra
 
 export const fetchYahoo = async (
   tickers: string[],
@@ -10,7 +11,7 @@ export const fetchYahoo = async (
   method: string = "POST",
   body: any = null
 ) => {
-  const functionUrl = `https://europe-west2-${NEXT_PUBLIC_FIREBASE_PROJECT_ID}.cloudfunctions.net/${endpoint}`
+  const functionUrl = `https://europe-west2-${projectId}.cloudfunctions.net/${endpoint}`
 
   if (!body)
     body = {
