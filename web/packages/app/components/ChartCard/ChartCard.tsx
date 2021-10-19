@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Text, useWindowDimensions, View } from "react-native"
+import { Dimensions, Text, useWindowDimensions, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, {
   useAnimatedProps,
@@ -32,6 +32,11 @@ type Graphs = {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 
+const tabs = ["1D", "7D", "1M", "6M", "1Y", "MAX"] as TabLabel[]
+const { width: WINDOW_WIDTH } = Dimensions.get("window")
+const WIDTH = WINDOW_WIDTH - 64
+const BUTTON_WIDTH = (WIDTH - 32) / tabs.length
+
 const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) => {
   const [graphs, setGraphs] = useState<Graphs>({
     "1D": { graphData: null, timeseries: null },
@@ -42,8 +47,6 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
     MAX: { graphData: null, timeseries: null },
   })
 
-  const { width: WINDOW_WIDTH } = useWindowDimensions()
-  const BUTTON_WIDTH = (WINDOW_WIDTH - 32) / Object.keys(graphs).length
   const activeTab = useSharedValue<TabLabel>("1D")
   const translation = useVector()
   const transition = useSharedValue(0)
@@ -85,41 +88,51 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
     }
   })
 
-  const style = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: withTiming(
-          BUTTON_WIDTH * Object.keys(graphs).indexOf(activeTab.value)
-        ),
-      },
-    ],
-  }))
+  const style = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: withTiming(BUTTON_WIDTH * tabs.indexOf(activeTab.value)) },
+      ],
+    }
+  })
+
   return (
     <View
-      style={tw`my-2 p-4 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-col justify-center items-center`}
+      style={tw`my-2 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-1 flex-col justify-center items-center`}
     >
-      <View style={{ height: (2 * WINDOW_WIDTH) / 3 }}>
-        {graphs[activeTab.value].graphData?.path && (
-          <Svg width={(21 * WINDOW_WIDTH) / 24} height={(2 * WINDOW_WIDTH) / 3}>
-            <AnimatedPath
-              animatedProps={animatedProps}
-              fill="transparent"
-              stroke={logoColor}
-              strokeWidth={3}
-            />
-          </Svg>
-        )}
+      <View style={{ height: WIDTH - 56, width: WIDTH - 48, ...tw`-ml-8 mb-8` }}>
+        <Svg width={WIDTH} height={WIDTH}>
+          <AnimatedPath
+            animatedProps={animatedProps}
+            fill="transparent"
+            stroke={logoColor}
+            strokeWidth={3}
+          />
+        </Svg>
+
         <Cursor
           translation={translation}
           path={graphs[activeTab.value].graphData?.path}
           logoColor={logoColor}
         />
       </View>
-      <View style={{ ...tw`flex-row bg-transparent`, width: WINDOW_WIDTH - 32 }}>
+      <View
+        style={{
+          ...tw`flex-row`,
+          width: WIDTH - 32,
+        }}
+      >
         <View style={tw`absolute inset-0`}>
           <Animated.View
             style={[
-              { backgroundColor: logoColor, width: BUTTON_WIDTH, ...tw`rounded-full` },
+              {
+                backgroundColor: logoColor,
+                width: (3.5 * BUTTON_WIDTH) / 5,
+                height: (3.5 * BUTTON_WIDTH) / 5,
+                ...tw`rounded-full`,
+                marginLeft: (7 / 50) * BUTTON_WIDTH,
+                marginTop: (-11 / 50) * BUTTON_WIDTH,
+              },
               style,
             ]}
           />
@@ -134,8 +147,13 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
               transition.value = withTiming(1)
             }}
           >
-            <Animated.View style={{ ...tw`pt-8`, width: BUTTON_WIDTH }}>
-              <Text style={{ ...tw`text-center font-poppins-600`, color: logoColor }}>
+            <Animated.View style={{ width: BUTTON_WIDTH }}>
+              <Text
+                style={{
+                  ...tw`text-center font-poppins-600 text-xs`,
+                  color: label === activeTab.value ? "white" : logoColor,
+                }}
+              >
                 {label}
               </Text>
             </Animated.View>

@@ -4,9 +4,9 @@ import { Dimensions } from "react-native"
 import { parse, Path } from "react-native-redash"
 import { OHLCTimeseries } from "../models/OHLCTimseries"
 
-export const SIZE = Dimensions.get("window").width
+export const SIZE = Dimensions.get("window").width - 96
 
-const POINTS = 100 // - number of points to display
+const POINTS = 180 // - number of points to display
 
 export interface GraphData {
   minPrice: number
@@ -16,20 +16,13 @@ export interface GraphData {
 }
 
 export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
-  if (!timeseries.length)
-    return {
-      minPrice: 0,
-      maxPrice: 0,
-      percentChange: 0,
-      path: parse(""),
-    }
   const priceList = timeseries.slice(0, POINTS)
   const formattedValues = priceList.map(
     (ohlc) => [ohlc.close, ohlc.timestamp / 1000] as [number, number]
   )
 
-  const dates = formattedValues.map((value) => value[0])
-  const prices = formattedValues.map((value) => value[1])
+  const prices = formattedValues.map((value) => value[0])
+  const dates = formattedValues.map((value) => value[1])
 
   const scaleX = scaleLinear()
     .domain([Math.min(...dates), Math.max(...dates)])
@@ -42,8 +35,8 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
     minPrice,
     maxPrice,
     percentChange:
-      timeseries[timeseries.length - 1]?.close -
-      timeseries[0]?.close / timeseries[0]?.close,
+      (timeseries[timeseries.length - 1]?.close - timeseries[0]?.close) /
+      timeseries[0]?.close,
     path: parse(
       shape
         .line()

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef, useEffect } from "react"
 import { View } from "react-native"
 import tw from "../../lib/tailwind"
 import { PanGestureHandler } from "react-native-gesture-handler"
@@ -9,6 +9,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated"
 import { getYForX, Vector, Path } from "react-native-redash"
+import { usePrevious } from "../../hooks/usePrevious"
 
 const CURSOR = 12
 
@@ -20,18 +21,29 @@ interface CursorProps {
 
 const Cursor = ({ path, translation, logoColor }: CursorProps) => {
   const isActive = useSharedValue(false)
+  const previousY = useRef(0)
   const onGestureEvent = useAnimatedGestureHandler({
     onStart: () => {
       isActive.value = true
     },
     onActive: (event) => {
-      translation.x.value = event.x
-      translation.y.value = getYForX(path, translation.x.value) || 0
+      if (event.x <= 0) {
+        translation.x.value = 0
+        translation.y.value = previousY.current
+      } else {
+        translation.x.value = event.x
+        translation.y.value = getYForX(path, translation.x.value)
+        previousY.current = translation.y.value
+      }
     },
     onEnd: () => {
       isActive.value = false
     },
   })
+
+  useEffect(() => {
+    previousY.current = translation.y.value
+  }, [translation.y.value])
 
   const style = useAnimatedStyle(() => {
     const translateX = translation.x.value - CURSOR / 2
