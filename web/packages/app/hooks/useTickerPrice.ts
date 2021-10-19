@@ -1,9 +1,9 @@
 import dayjs from "dayjs"
 import useSWR from "swr"
 import { useAuth } from "./useAuth"
-import { Price } from "@models/Price"
+import { Price } from "../models/Price"
 import { useEffect, useRef } from "react"
-import { iexQuote } from "@utils/iexQuote"
+import { iexQuote } from "../utils/iexQuote"
 
 // TODO: Allow this to handle multiple tickers
 export function useTickerPrice(
@@ -11,8 +11,8 @@ export function useTickerPrice(
   expirationTime?: number, // - swr uses milliseconds (3 minutes default)
   initialData?: Price
 ): { price: Price; isLoading: boolean; isError: boolean } {
-  const { user } = useAuth()
-  const token = user?.token
+  // const { user } = useAuth()
+  // const token = user?.token
   const marketOpen = useRef<boolean>(true)
 
   // TODO: change conditional once pre/post-markets are implemented

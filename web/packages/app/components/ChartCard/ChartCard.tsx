@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react"
-import { Dimensions, Text, useWindowDimensions, View } from "react-native"
+import React from "react"
+import { Dimensions, Text, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, {
   useAnimatedProps,
@@ -7,27 +7,21 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
-import { mixPath, useVector } from "react-native-redash"
+import { mixPath, Vector } from "react-native-redash"
 import Svg, { Path } from "react-native-svg"
 import { usePrevious } from "../../hooks/usePrevious"
-import { useTimeseries } from "../../hooks/useTimeseries"
 import tw from "../../lib/tailwind"
-import { OHLCTimeseries } from "../../models/OHLCTimseries"
-import { buildGraph, GraphData } from "../../utils/buildGraph"
-import { IntervalEnum, PeriodEnum } from "../../utils/getYahooTimeseries"
+import { Graphs } from "../../screens/stocks/stock"
+import { PeriodEnum } from "../../utils/getYahooTimeseries"
 import Cursor from "./Cursor"
 
+type TabLabel = keyof typeof PeriodEnum
 interface ITickerPageLineChartProps {
   symbol: string
   logoColor: string
-}
-
-type TabLabel = keyof typeof PeriodEnum
-type Graphs = {
-  [label in TabLabel]+?: {
-    graphData: GraphData
-    timeseries: OHLCTimeseries
-  }
+  translation: Vector<Animated.SharedValue<number>>
+  graphs: Graphs
+  activeGraph: Animated.SharedValue<TabLabel>
 }
 
 const AnimatedPath = Animated.createAnimatedComponent(Path)
@@ -37,70 +31,64 @@ const { width: WINDOW_WIDTH } = Dimensions.get("window")
 const WIDTH = WINDOW_WIDTH - 64
 const BUTTON_WIDTH = (WIDTH - 32) / tabs.length
 
-const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) => {
-  const [graphs, setGraphs] = useState<Graphs>({
-    "1D": { graphData: null, timeseries: null },
-    "7D": { graphData: null, timeseries: null },
-    "1M": { graphData: null, timeseries: null },
-    "6M": { graphData: null, timeseries: null },
-    "1Y": { graphData: null, timeseries: null },
-    MAX: { graphData: null, timeseries: null },
-  })
-
-  const activeTab = useSharedValue<TabLabel>("1D")
-  const translation = useVector()
+const ChartCard: React.FC<ITickerPageLineChartProps> = ({
+  symbol,
+  logoColor,
+  translation,
+  graphs,
+  activeGraph,
+}) => {
+  const prevTab = usePrevious(activeGraph)
   const transition = useSharedValue(0)
-  const prevTab = usePrevious(activeTab)
-
-  const { timeseries, isLoading, isError } = useTimeseries({
-    symbols: [symbol],
-    period: PeriodEnum[activeTab.value],
-    interval:
-      IntervalEnum[
-        activeTab.value === "1D"
-          ? "5m"
-          : activeTab.value.includes("D")
-          ? "30m"
-          : activeTab.value.includes("MAX")
-          ? "1W"
-          : "1D"
-      ],
-  })
-
-  useEffect(() => {
-    if (!isLoading && !isError)
-      setGraphs((prevTabs) => ({
-        ...prevTabs,
-        [activeTab.value]: {
-          timseries: timeseries,
-          // @ts-ignore
-          // - here we are using a single timeseries so ignoring this
-          graphData: buildGraph(timeseries),
-        },
-      }))
-  }, [activeTab.value, timeseries, isLoading, isError])
-
   const animatedProps = useAnimatedProps(() => {
     const prevPath = graphs[prevTab?.value ?? "1D"].graphData?.path
-    const nextPath = graphs[activeTab.value].graphData?.path
+    const nextPath = graphs[activeGraph.value].graphData?.path
     return {
-      d: nextPath && prevPath ? mixPath(transition.value, prevPath, nextPath) : "",
+      d:
+        nextPath || prevPath
+          ? mixPath(transition.value, prevPath, nextPath, Animated.Extrapolate.CLAMP)
+          : "",
     }
   })
 
   const style = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: withTiming(BUTTON_WIDTH * tabs.indexOf(activeTab.value)) },
+        { translateX: withTiming(BUTTON_WIDTH * tabs.indexOf(activeGraph.value)) },
       ],
     }
   })
 
+  // const { minPrice, maxPrice } = graphs[activeGraph.value].graphData || {}
+  const firstPrice = graphs[activeGraph.value].timeseries?.[0].close || 0
+  const lastPrice = graphs[activeGraph.value].timeseries?.slice().pop().close || 0
+  const firstPoint = graphs[activeGraph.value].graphData?.path.curves[0].c2.y || 0
+  const lastPoint =
+    graphs[activeGraph.value].graphData?.path.curves.slice().pop().c2.y || 0
+
+  // console.log(graphs[activeGraph.value].timeseries)
   return (
     <View
       style={tw`my-2 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-1 flex-col justify-center items-center`}
     >
-      <View style={{ height: WIDTH - 56, width: WIDTH - 48, ...tw`-ml-8 mb-8` }}>
+      <View style={{ height: WIDTH - 56, width: WIDTH - 96, ...tw`-ml-16 mb-8` }}>
+        {/* {[
+          { price: firstPrice, point: firstPoint },
+          { price: lastPrice, point: lastPoint },
+        ].map(({ price, point }, index) => (
+          <Text
+            style={{
+              ...tw`text-tiny p-1 font-poppins-800`,
+              paddingTop: point > (WIDTH - 56) / 2 ? 0 : 4,
+              position: "absolute",
+              color: logoColor,
+              top: point,
+              left: index === 0 ? -32 : WIDTH - 46,
+            }}
+          >
+            {parseFloat(price?.toFixed(2)) || null}
+          </Text>
+        ))} */}
         <Svg width={WIDTH} height={WIDTH}>
           <AnimatedPath
             animatedProps={animatedProps}
@@ -112,7 +100,7 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
 
         <Cursor
           translation={translation}
-          path={graphs[activeTab.value].graphData?.path}
+          path={graphs[activeGraph.value].graphData?.path}
           logoColor={logoColor}
         />
       </View>
@@ -141,9 +129,9 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
           <TouchableWithoutFeedback
             key={label}
             onPress={() => {
-              prevTab.value = activeTab.value
+              prevTab.value = activeGraph.value
               transition.value = 0
-              activeTab.value = label
+              activeGraph.value = label
               transition.value = withTiming(1)
             }}
           >
@@ -151,7 +139,7 @@ const ChartCard: React.FC<ITickerPageLineChartProps> = ({ symbol, logoColor }) =
               <Text
                 style={{
                   ...tw`text-center font-poppins-600 text-xs`,
-                  color: label === activeTab.value ? "white" : logoColor,
+                  color: label === activeGraph.value ? "white" : logoColor,
                 }}
               >
                 {label}

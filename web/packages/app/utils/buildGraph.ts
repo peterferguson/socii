@@ -6,9 +6,9 @@ import { OHLCTimeseries } from "../models/OHLCTimseries"
 
 export const SIZE = Dimensions.get("window").width - 96
 
-const POINTS = 180 // - number of points to display
-
 export interface GraphData {
+  minTimestamp: number
+  maxTimestamp: number
   minPrice: number
   maxPrice: number
   percentChange: number
@@ -16,6 +16,7 @@ export interface GraphData {
 }
 
 export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
+  const POINTS = timeseries.length
   const priceList = timeseries.slice(0, POINTS)
   const formattedValues = priceList.map(
     (ohlc) => [ohlc.close, ohlc.timestamp / 1000] as [number, number]
@@ -24,14 +25,17 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
   const prices = formattedValues.map((value) => value[0])
   const dates = formattedValues.map((value) => value[1])
 
-  const scaleX = scaleLinear()
-    .domain([Math.min(...dates), Math.max(...dates)])
-    .range([0, SIZE])
+  const minTimestamp = Math.min(...dates)
+  const maxTimestamp = Math.max(...dates)
   const minPrice = Math.min(...prices)
   const maxPrice = Math.max(...prices)
+
+  const scaleX = scaleLinear().domain([minTimestamp, maxTimestamp]).range([0, SIZE])
   const scaleY = scaleLinear().domain([minPrice, maxPrice]).range([SIZE, 0])
 
   return {
+    minTimestamp,
+    maxTimestamp,
     minPrice,
     maxPrice,
     percentChange:
@@ -42,7 +46,8 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
         .line()
         .x(([, x]) => scaleX(x) as number)
         .y(([y]) => scaleY(y) as number)
-        .curve(shape.curveBasis)(formattedValues) as string
+        (formattedValues) as string
+        // .curve(shape.curveBasis)(formattedValues) as string
     ),
   }
 }

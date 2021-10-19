@@ -1,6 +1,6 @@
 import Feather from "@expo/vector-icons/build/Feather"
 import React from "react"
-import { FlatList, Text, useWindowDimensions, View, Pressable } from "react-native"
+import { Pressable, Text, useWindowDimensions, View } from "react-native"
 import { RecommendationData, useRecommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
@@ -14,13 +14,15 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
       <View
         style={{
           ...tw`p-4 mt-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl flex flex-row justify-evenly items-center`,
-          minHeight: "17.5%",
+          minHeight: "15%",
         }}
       >
         {recommendations &&
-          Object.values(recommendations).map((recommendation: RecommendationData) => (
-            <RecommendationItem item={recommendation} />
-          ))}
+          Object.values(recommendations).map(
+            (recommendation: RecommendationData, i) => (
+              <RecommendationItem item={recommendation} key={`recommendation-${i}`} />
+            )
+          )}
       </View>
     </View>
   )
@@ -36,20 +38,20 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
   const pnlColor = tw`${recommendation?.pnlColor}`.color as string
 
   return (
-    <Pressable style={tw`my-2 mx-2`} onPress={() => router.push(`/stocks/${symbol}`)}>
+    <Pressable style={tw`mx-2`} onPress={() => router.push(`/stocks/${symbol}`)}>
       <View style={tw`flex flex-col items-center justify-center`}>
         <View style={tw`flex-shrink-0`}>
           <View style={tw`flex flex-col items-center`}>
             <View
-              style={tw`rounded-full p-0.5 ${
+              style={tw`rounded-full ${
                 !is1Col && recommendation?.pnlColor.replace("text", "bg")
               }`}
             >
-              <View style={tw`bg-white rounded-full p-0.5`}>
+              <View style={tw`bg-white rounded-full `}>
                 <TickerLogo
                   symbol={symbol}
-                  width={is1Col ? "40" : "48"}
-                  height={is1Col ? "40" : "48"}
+                  width={"48"}
+                  height={"48"}
                   isin={recommendation?.ISIN}
                 />
               </View>

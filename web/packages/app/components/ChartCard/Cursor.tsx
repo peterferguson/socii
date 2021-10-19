@@ -1,15 +1,14 @@
-import React, { useRef, useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { View } from "react-native"
-import tw from "../../lib/tailwind"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
   useAnimatedGestureHandler,
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
 } from "react-native-reanimated"
-import { getYForX, Vector, Path } from "react-native-redash"
-import { usePrevious } from "../../hooks/usePrevious"
+import { getYForX, Path, Vector } from "react-native-redash"
+import tw from "../../lib/tailwind"
 
 const CURSOR = 12
 
