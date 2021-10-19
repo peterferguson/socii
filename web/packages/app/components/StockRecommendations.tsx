@@ -13,21 +13,14 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
       <View
         style={{
-          ...tw`p-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl items-center`,
+          ...tw`p-4 mt-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl flex flex-row justify-evenly items-center`,
           minHeight: "17.5%",
         }}
       >
-        {recommendations && (
-          <FlatList
-            data={Object.values(recommendations)}
-            renderItem={({ item: recommendation }) => (
-              <RecommendationItem item={recommendation} />
-            )}
-            keyExtractor={(item) => item.ISIN}
-            horizontal={true}
-            scrollEnabled={false}
-          />
-        )}
+        {recommendations &&
+          Object.values(recommendations).map((recommendation: RecommendationData) => (
+            <RecommendationItem item={recommendation} />
+          ))}
       </View>
     </View>
   )
