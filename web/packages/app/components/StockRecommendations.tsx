@@ -14,6 +14,7 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
       <View
         style={{
           ...tw`p-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl items-center`,
+          minHeight: "17.5%",
         }}
       >
         {recommendations && (
