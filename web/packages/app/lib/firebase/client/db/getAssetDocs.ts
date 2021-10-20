@@ -8,12 +8,10 @@ import {
 } from "firebase/firestore"
 import { db } from "../../index"
 
-export const getTickerDocs = async (
-  tickers: string[]
+export const getAssetDocs = async (
+  assets: string[]
 ): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
   return (
-    await getDocs(
-      query(collection(db, "tickers"), where("alpaca.symbol", "in", tickers))
-    )
+    await getDocs(query(collection(db, "assets"), where("alpaca.asset", "in", assets)))
   ).docs
 }

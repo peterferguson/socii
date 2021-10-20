@@ -15,7 +15,7 @@ import { Pressable, View, Text } from "react-native"
 import tw from "../lib/tailwind"
 
 // interface IInvestButtonProps {
-//   ticker: any
+//   asset: any
 //   holding: Position
 //   logoColor: string
 // }
@@ -31,7 +31,7 @@ import tw from "../lib/tailwind"
 //   cashOrder: { Component: OrderModalDynamic },
 // }
 
-const InvestButton: React.FC<any> = ({ ticker, holding, logoColor }) => {
+const InvestButton: React.FC<any> = ({ asset, holding, logoColor }) => {
   const router = useRouter()
   //   const username = user ? user.username : ""
 

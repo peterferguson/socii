@@ -12,7 +12,7 @@ export interface OrderObject {
   replacedBy?: string
   replaces?: string
   assetId?: string
-  symbol?: string
+  asset?: string
   assetClass?: string
   notional?: string
   qty?: string

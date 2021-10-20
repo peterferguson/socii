@@ -1,6 +1,6 @@
 export interface Position {
   assetId?: string
-  symbol?: string
+  asset?: string
   exchange?: string
   assetClass?: string
   avgEntryPrice?: string

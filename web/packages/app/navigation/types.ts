@@ -8,7 +8,7 @@ type PlaylistsStackParams = {
 }
 type StocksStackParams = {
   stocks: undefined
-  stock: { symbol: string }
+  stock: { asset: string }
 }
 
 type EnterStackParams = {

@@ -40,11 +40,11 @@ export enum IntervalEnum {
 }
 
 export interface YahooTimeseries {
-  [tickerSymbol: string]: OHLC[]
+  [assetAsset: string]: OHLC[]
 }
 
 export interface getYahooTimeseriesProps {
-  symbols: string[]
+  assets: string[]
   startDateStr?: DateStr
   endDateStr?: DateStr
   period?: PeriodEnum
@@ -52,27 +52,27 @@ export interface getYahooTimeseriesProps {
 }
 
 export const getYahooTimeseries = async ({
-  symbols,
+  assets,
   startDateStr,
   endDateStr,
   period,
   interval,
 }: getYahooTimeseriesProps): Promise<YahooTimeseries> => {
-  const yahooData = await fetchYahoo(symbols, "get_historical_prices", "POST", {
+  const yahooData = await fetchYahoo(assets, "get_historical_prices", "POST", {
     period,
     interval,
-    tickerSymbol: symbols.join(" "),
+    assetAsset: assets.join(" "),
     start: startDateStr,
     end: endDateStr,
   })
 
   return yahooData?.reduce((data, tick) => {
     let {
-      symbol,
+      asset,
       timestamp,
       dividends,
       ...ohlcv
-    }: { symbol: string; timestamp: number; dividends: number; ohlcv: OHLC } = tick
+    }: { asset: string; timestamp: number; dividends: number; ohlcv: OHLC } = tick
 
     // TODO: Need to handle dividends!
     if (dividends && dividends !== 0) return data
@@ -87,8 +87,8 @@ export const getYahooTimeseries = async ({
       .local()
       .valueOf()
 
-    if (symbol in data) data[symbol].push({ ...ohlcv, timestamp })
-    else Object.assign(data, { [symbol]: [{ ...ohlcv, timestamp }] })
+    if (asset in data) data[asset].push({ ...ohlcv, timestamp })
+    else Object.assign(data, { [asset]: [{ ...ohlcv, timestamp }] })
     return data
   }, {})
 }

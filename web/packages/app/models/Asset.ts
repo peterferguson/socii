@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 
-interface AlpacaTickerMeta {
+interface AlpacaAssetMeta {
   class?: "us_equity"
   easy_to_borrow?: boolean
   exchange: "NASDAQ"
@@ -11,13 +11,13 @@ interface AlpacaTickerMeta {
   name: string
   shortable?: boolean
   status?: "active" | "inactive"
-  symbol: string
+  asset: string
   tradable: boolean
 }
 
-export interface Ticker {
+export interface Asset {
   ISIN: string
-  alpaca: AlpacaTickerMeta
+  alpaca: AlpacaAssetMeta
   assetType: string
   exchangeAbbreviation:
     | "NMS"
@@ -34,6 +34,6 @@ export interface Ticker {
   marketCountry: string
   marketName: string
   shortName: string
-  tickerSymbol: string
+  assetAsset: string
   yahooMarketSuffix: string
 }

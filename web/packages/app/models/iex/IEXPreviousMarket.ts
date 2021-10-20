@@ -1,5 +1,5 @@
-import { IEXPrevious } from "./IEXPrevious";
+import { IEXPrevious } from "./IEXPrevious"
 
 export interface IEXPreviousMarket {
-  [symbol: string]: IEXPrevious;
+  [asset: string]: IEXPrevious
 }

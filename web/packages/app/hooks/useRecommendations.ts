@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { getTickerDocs } from "../lib/firebase/client/db/getTickerDocs"
+import { getAssetDocs } from "../lib/firebase/client/db/getAssetDocs"
 import { getYahooPrice, YahooPriceData } from "../utils/getYahooPrice"
 import { getYahooRecommendations } from "../utils/getYahooRecommendations"
 import { pnlTextColor } from "../utils/pnlTextColor"
 import { usePrevious } from "./usePrevious"
 
 export interface AlpacaData {
-  symbol: string
+  asset: string
 }
 export interface RecommendationData extends YahooPriceData {
   logoColor: string
@@ -20,49 +20,49 @@ interface Recommendations {
 }
 
 // TODO: add loading state
-export const useRecommendations = (symbol: string) => {
+export const useRecommendations = (asset: string) => {
   const [recommendationList, setRecommendationList] = useState<string[]>([])
   const [recommendationData, setRecommendationData] = useState<any>()
 
-  const previousSymbol = usePrevious(symbol)
+  const previousAsset = usePrevious(asset)
 
   useEffect(() => {
-    if (symbol) {
-      previousSymbol !== symbol && setRecommendationList([])
+    if (asset) {
+      previousAsset !== asset && setRecommendationList([])
 
-      getYahooRecommendations({ tickers: [symbol] }).then((data) => {
+      getYahooRecommendations({ assets: [asset] }).then((data) => {
         setRecommendationList(Array.from(new Set(data)))
       })
     }
-  }, [previousSymbol, symbol])
+  }, [previousAsset, asset])
 
   useEffect(() => {
     if (recommendationList.length > 0) {
-      const getTickerData = async () => {
+      const getAssetData = async () => {
         const price = await getYahooPrice(recommendationList, [
           "regularMarketChangePercent",
         ])
-        const data = (await getTickerDocs(recommendationList))?.map((doc) => doc.data())
+        const data = (await getAssetDocs(recommendationList))?.map((doc) => doc.data())
 
         setRecommendationData(
           data.reduce((acc, datum) => {
-            const symbol = datum.tickerSymbol.split(".")[0]
-            const pnlColor = pnlTextColor(price?.[symbol]?.regularMarketChangePercent)
+            const asset = datum.assetAsset.split(".")[0]
+            const pnlColor = pnlTextColor(price?.[asset]?.regularMarketChangePercent)
 
             if (acc)
               return {
                 ...acc,
-                [symbol]: {
+                [asset]: {
                   ...datum,
-                  ...price[symbol],
+                  ...price[asset],
                   pnlColor,
                 },
               }
-            else return { [symbol]: datum }
+            else return { [asset]: datum }
           }, {})
         )
       }
-      getTickerData()
+      getAssetData()
     }
   }, [recommendationList])
 

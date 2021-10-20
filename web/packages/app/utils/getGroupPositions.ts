@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 
 interface Position {
-  symbol: string
+  asset: string
   qty: string
   marketValue: string
   unrealizedPl: string
@@ -26,19 +26,19 @@ export const getGroupPositions = async (groupName: string) => {
   }
 
   const positions = holdings.docs.map((doc) => {
-    const { symbol, qty, avgPrice } = doc.data()
-    return { symbol, qty, avgPrice }
+    const { asset, qty, avgPrice } = doc.data()
+    return { asset, qty, avgPrice }
   })
 
   const priceData = await getYahooTimeseries({
-    tickers: positions.map((pos) => pos.symbol),
+    assets: positions.map((pos) => pos.asset),
     period: PeriodEnum["1D"],
     interval: IntervalEnum["1D"],
   })
 
   return {
     positions: positions.map((pos) => {
-      const marketPrice = priceData[pos.symbol]?.pop().close
+      const marketPrice = priceData[pos.asset]?.pop().close
 
       const { marketValue, unrealizedPl } = marketCalculations(
         pos.qty,

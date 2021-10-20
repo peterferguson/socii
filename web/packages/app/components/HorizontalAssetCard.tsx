@@ -2,7 +2,7 @@ import { Price } from "../models/Price"
 import { pnlBackgroundColor } from "../utils/pnlBackgroundColor"
 import tw from "../lib/tailwind"
 import React from "react"
-import TickerLogo from "./TickerLogo"
+import AssetLogo from "./AssetLogo"
 import { View, Text, Pressable } from "react-native"
 import { useRouter } from "../navigation/use-router"
 
@@ -10,7 +10,7 @@ interface IHorizontalAssetCard {
   cardRef?: React.MutableRefObject<any>
   isin: string
   logoColor: string
-  tickerSymbol: string
+  assetAsset: string
   shortName: string
   price: Price
 }
@@ -18,7 +18,7 @@ interface IHorizontalAssetCard {
 const HorizontalAssetCard = ({
   cardRef,
   isin,
-  tickerSymbol,
+  assetAsset,
   logoColor,
   shortName,
   price,
@@ -37,20 +37,20 @@ const HorizontalAssetCard = ({
         style={tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}
       >
         <View style={tw`items-center justify-center flex w-20 m-auto rounded-full`}>
-          <TickerLogo isin={isin} symbol={tickerSymbol} height="48" width="48" />
+          <AssetLogo isin={isin} asset={assetAsset} height="48" width="48" />
         </View>
         <View style={tw`flex-col flex-grow my-auto`}>
-          <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
+          <Pressable onPress={() => router.push(`/stocks/${assetAsset}`)}>
             <Text
               style={{
                 ...tw`text-sm tracking-wider text-gray-400 uppercase font-poppins-600`,
                 color: logoColor,
               }}
             >
-              {tickerSymbol}
+              {assetAsset}
             </Text>
           </Pressable>
-          <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
+          <Pressable onPress={() => router.push(`/stocks/${assetAsset}`)}>
             <Text
               style={tw`flex text-xs tracking-wider text-gray-600 font-poppins-400`}
             >
@@ -88,7 +88,7 @@ export const HorizontalAssetCardSkeleton = ({}) => (
           <Text
             style={tw`text-xs font-semibold tracking-wider text-gray-400 uppercase font-poppins-400`}
           >
-            Ticker Symbol
+            Asset Asset
           </Text>
           <Text
             style={tw`flex tracking-wider text-gray-600 text-tiny font-poppins-400`}

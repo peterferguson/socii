@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, Image, Platform } from "react-native"
 import { usePrevious } from "../hooks/usePrevious"
-import { getTickerData } from "../lib/firebase/client/db/getTickerData"
+import { getAssetData } from "../lib/firebase/client/db/getAssetData"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import { logoUrl } from "../utils/logoUrl"
 
-interface ITickerLogoProps {
-  symbol: string
+interface IAssetLogoProps {
+  asset: string
   isin?: string
   width?: string
   height?: string
@@ -15,23 +15,23 @@ interface ITickerLogoProps {
 
 const DEFAULT_HEIGHT_AND_WIDTH = "56px"
 
-const TickerLogo: React.FC<ITickerLogoProps> = ({ height, width, isin, symbol }) => {
+const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, isin, asset }) => {
   const [logoSrc, setLogoSrc] = useState("")
   const router = useRouter()
   const [unmounted, setUnmounted] = useState(false)
   const [fractionble, setFractionable] = useState(false)
   const [ISIN, setISIN] = useState(isin)
-  const prevSymbol = usePrevious(symbol)
+  const prevAsset = usePrevious(asset)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    if ((!ISIN || symbol !== prevSymbol) && !unmounted) {
-      getTickerData(symbol).then(({ ISIN }) => {
+    if ((!ISIN || asset !== prevAsset) && !unmounted) {
+      getAssetData(asset).then(({ ISIN }) => {
         setISIN(ISIN)
         // setFractionable(alpaca?.fractionable)
       })
     }
-  }, [ISIN, prevSymbol, symbol, unmounted])
+  }, [ISIN, prevAsset, asset, unmounted])
 
   useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN])
 
@@ -59,9 +59,9 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({ height, width, isin, symbol })
     />
   ) : (
     <View style={Platform.OS === "ios" ? iosStyle : logoStyle}>
-      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{symbol}</Text>
+      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{asset}</Text>
     </View>
   )
 }
 
-export default TickerLogo
+export default AssetLogo

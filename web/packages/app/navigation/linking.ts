@@ -73,7 +73,7 @@ const linking: Props = {
         initialRouteName: stocksStackPaths.stocks,
         screens: {
           [stocksStackPaths.stocks]: "",
-          [stocksStackPaths.stock]: ":symbol",
+          [stocksStackPaths.stock]: ":asset",
         },
       },
     },

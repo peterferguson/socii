@@ -4,10 +4,10 @@ import { Pressable, Text, useWindowDimensions, View } from "react-native"
 import { RecommendationData, useRecommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
-import TickerLogo from "./TickerLogo"
+import AssetLogo from "./AssetLogo"
 
-const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
-  const { recommendations } = useRecommendations(symbol)
+const StockRecommendations: React.FC<{ asset: string }> = ({ asset }) => {
+  const { recommendations } = useRecommendations(asset)
   return (
     <View style={tw`w-full px-4 font-poppins-400 lg:w-2/5`}>
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
@@ -34,11 +34,11 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
   const { width } = useWindowDimensions()
   const router = useRouter()
   const is1Col = width < 640
-  const symbol = recommendation.alpaca.symbol
+  const asset = recommendation.alpaca.asset
   const pnlColor = tw`${recommendation?.pnlColor}`.color as string
 
   return (
-    <Pressable style={tw`mx-2`} onPress={() => router.push(`/stocks/${symbol}`)}>
+    <Pressable style={tw`mx-2`} onPress={() => router.push(`/stocks/${asset}`)}>
       <View style={tw`flex flex-col items-center justify-center`}>
         <View style={tw`flex-shrink-0`}>
           <View style={tw`flex flex-col items-center`}>
@@ -48,8 +48,8 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
               }`}
             >
               <View style={tw`bg-white rounded-full `}>
-                <TickerLogo
-                  symbol={symbol}
+                <AssetLogo
+                  asset={asset}
                   width={"48"}
                   height={"48"}
                   isin={recommendation?.ISIN}
@@ -62,7 +62,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
                 color: recommendation?.logoColor,
               }}
             >
-              {symbol}
+              {asset}
             </Text>
           </View>
           <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>

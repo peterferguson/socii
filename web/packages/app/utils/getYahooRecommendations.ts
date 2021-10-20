@@ -1,10 +1,10 @@
 import { fetchYahoo } from "./fetchYahoo"
 
 export const getYahooRecommendations = async ({
-  tickers,
+  assets,
 }: {
-  tickers: string[]
+  assets: string[]
 }): Promise<string[]> => {
-  const yahooData = await fetchYahoo(tickers, "get_recommendations")
-  return yahooData[tickers[0]]?.recommendedSymbols.map((d) => d.symbol)
+  const yahooData = await fetchYahoo(assets, "get_recommendations")
+  return yahooData[assets[0]]?.recommendedAssets.map((d) => d.asset)
 }

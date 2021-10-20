@@ -1,7 +1,7 @@
 import { IEXIssueType } from "./IEXIssueType"
 
 export interface IEXCompanyResponse {
-  symbol: string
+  asset: string
   companyName: string
   exchange: string
   industry: string

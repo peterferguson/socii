@@ -6,18 +6,18 @@ import {
 } from "../utils/getYahooTimeseries"
 
 export const useTimeseries = ({
-  symbols,
+  assets,
   period,
   interval,
 }: getYahooTimeseriesProps) => {
   const { data: timeseries, error } = useSWRNative<YahooTimeseries, Error>(
-    [symbols.join("-"), period, interval],
-    (symbols, period, interval) =>
-      getYahooTimeseries({ symbols: symbols.split("-"), period, interval })
+    [assets.join("-"), period, interval],
+    (assets, period, interval) =>
+      getYahooTimeseries({ assets: assets.split("-"), period, interval })
   )
 
   return {
-    timeseries: (symbols.length === 1 ? timeseries?.[symbols[0]] : timeseries) || {},
+    timeseries: (assets.length === 1 ? timeseries?.[assets[0]] : timeseries) || {},
     isLoading: !timeseries && !error,
     isError: error,
   }

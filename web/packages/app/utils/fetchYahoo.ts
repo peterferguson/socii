@@ -6,7 +6,7 @@ const {
 } = Constants.manifest.extra
 
 export const fetchYahoo = async (
-  tickers: string[],
+  assets: string[],
   endpoint: string,
   method: string = "POST",
   body: any = null
@@ -15,10 +15,10 @@ export const fetchYahoo = async (
 
   if (!body)
     body = {
-      tickerSymbol: tickers.map((ticker) => ticker.split(".")[0]).join(" "),
+      assetAsset: assets.map((asset) => asset.split(".")[0]).join(" "),
     }
 
-  console.log(`Fetching ${tickers.length} tickers data from endpoint ${functionUrl}`)
+  console.log(`Fetching ${assets.length} assets data from endpoint ${functionUrl}`)
   console.log("headers", method, JSON.stringify(body))
 
   // TODO: add yahoo prefix when necessary

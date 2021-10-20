@@ -13,14 +13,14 @@ import ChartCard from "../../components/ChartCard/ChartCard"
 import InvestButton from "../../components/InvestButton"
 import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
-import { useTickerData } from "../../hooks/useTickerData"
+import { useAssetData } from "../../hooks/useAssetData"
 import { useTimeseries } from "../../hooks/useTimeseries"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
 import { buildGraph, GraphData, SIZE } from "../../utils/buildGraph"
 import { IntervalEnum, PeriodEnum } from "../../utils/getYahooTimeseries"
 
 type Query = {
-  symbol: string
+  asset: string
 }
 
 const { useParam } = createParam<Query>()
@@ -35,18 +35,18 @@ export type Graphs = {
 }
 
 export default function StockScreen({ navigation, route }: StockScreenProps) {
-  // const [symbol, _] = useParam("symbol")
-  // - as with useState we can set the symbol with the second param
-  // - this will be useful when we want to set the symbol from the recommendations
-  const { symbol } = route.params
+  // const [asset, _] = useParam("asset")
+  // - as with useState we can set the asset with the second param
+  // - this will be useful when we want to set the asset from the recommendations
+  const { asset } = route.params
 
   // - This will be useful for dynamically updating the heading title
   // useEffect(() => {
-  //   navigation.setParams({ headerTitle: symbol })
+  //   navigation.setParams({ headerTitle: asset })
   // }, [])
 
-  const [data] = useTickerData([symbol])
-  const tickerData = data?.[symbol]
+  const [data] = useAssetData([asset])
+  const assetData = data?.[asset]
   const [graphs, setGraphs] = useState<Graphs>({
     "1D": { graphData: null, timeseries: null },
     "7D": { graphData: null, timeseries: null },
@@ -60,7 +60,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const translation = useVector()
 
   const { timeseries, isLoading, isError } = useTimeseries({
-    symbols: [symbol],
+    assets: [asset],
     period: PeriodEnum[activeTab.value],
     interval:
       IntervalEnum[
@@ -115,21 +115,21 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 24 }}>
           <PriceCard
-            symbol={symbol}
-            shortName={tickerData?.shortName}
+            asset={asset}
+            shortName={assetData?.shortName}
             price={price.value}
             changePercent={changePercent.value}
             timestamp={timestamp.value}
           />
-          <InvestButton logoColor={tickerData?.logoColor} />
+          <InvestButton logoColor={assetData?.logoColor} />
           <ChartCard
-            symbol={symbol}
+            asset={asset}
             graphs={graphs}
             translation={translation}
             activeGraph={activeTab}
-            logoColor={tickerData?.logoColor}
+            logoColor={assetData?.logoColor}
           />
-          <StockRecommendations symbol={symbol} />
+          <StockRecommendations asset={asset} />
         </View>
       </ScrollView>
     </View>

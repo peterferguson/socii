@@ -32,10 +32,10 @@ function StocksNavigator() {
           name="stock"
           component={StockScreen}
           options={({ route }) => ({
-            title: route.params.symbol,
-            headerTitle: route.params.symbol,
+            title: route.params.asset,
+            headerTitle: route.params.asset,
           })}
-          // TODO: Add symbol as the title of the screen the transition to price on scroll
+          // TODO: Add asset as the title of the screen the transition to price on scroll
           // TODO: a la coinbase blog https://blog.coinbase.com/coinbases-animated-tabbar-in-react-native-4b3fdd4473e
         />
       </StocksStack.Group>

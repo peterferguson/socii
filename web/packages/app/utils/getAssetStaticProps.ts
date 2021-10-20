@@ -1,59 +1,59 @@
 import { DocumentData } from "@firebase/firestore"
 import { OHLCTimeseries } from "@models/OHLCTimseries"
 import { Price } from "@models/Price"
-import { getTickerProps } from "./getTickerProps"
+import { getAssetProps } from "./getAssetProps"
 import { IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 const { Client } = require("iexjs")
 
-interface ITickersStaticProps {
-  tickerDocs: DocumentData[]
+interface IAssetsStaticProps {
+  assetDocs: DocumentData[]
   period?: PeriodEnum
   interval?: IntervalEnum
   subQueryField?: string
 }
 
-interface TickerPropsData {
-  ticker: any
+interface AssetPropsData {
+  asset: any
   timeseries: OHLCTimeseries
   dataQuery?: any
   price?: Price
 }
 
-export interface TickersProps {
-  tickers: TickerPropsData[]
+export interface AssetsProps {
+  assets: AssetPropsData[]
 }
 
-interface ITickersStaticPropsResult {
-  props: TickersProps
+interface IAssetsStaticPropsResult {
+  props: AssetsProps
 }
 
 // TODO: Remove the timeseries query so we can pull it separately and load other data first
-// TODO: Allow a query list to filter the return in the ticker data
+// TODO: Allow a query list to filter the return in the asset data
 
-export const getTickersStaticProps = async ({
-  tickerDocs,
+export const getAssetStaticProps = async ({
+  assetDocs,
   period = PeriodEnum["1D"],
   interval = IntervalEnum["1m"],
   subQueryField = "",
-}: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
+}: IAssetsStaticProps): Promise<IAssetsStaticPropsResult> => {
   const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
-  console.log(`Loading ${tickerDocs.length} tickers`)
+  console.log(`Loading ${assetDocs.length} assets`)
 
   return {
     props: {
-      tickers: await Promise.all(
-        tickerDocs?.map(async (tickerDoc) => {
-          let ticker, timeseries: OHLCTimeseries, dataQuery, price: Price
+      assets: await Promise.all(
+        assetDocs?.map(async (assetDoc) => {
+          let asset, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
-            const tickerProps = await getTickerProps(
-              tickerDoc,
+            const assetProps = await getAssetProps(
+              assetDoc,
               period,
               interval,
               subQueryField
             )
-            ticker = tickerProps.ticker
-            timeseries = tickerProps.timeseries
-            dataQuery = tickerProps.dataQuery
+            asset = assetProps.asset
+            timeseries = assetProps.timeseries
+            dataQuery = assetProps.dataQuery
           } catch (e) {
             console.error(e)
           }
@@ -67,7 +67,7 @@ export const getTickersStaticProps = async ({
           // !
           // !
           try {
-            price = await iexClient.quote(ticker.tickerSymbol, {
+            price = await iexClient.quote(asset.assetAsset, {
               filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
             })
           } catch (error) {
@@ -75,7 +75,7 @@ export const getTickersStaticProps = async ({
           }
 
           return {
-            ticker: JSON.parse(JSON.stringify(ticker)) || {}, // - serialize nested dates
+            asset: JSON.parse(JSON.stringify(asset)) || {}, // - serialize nested dates
             timeseries: (timeseries || []) as OHLCTimeseries,
             dataQuery: dataQuery || {},
             price: (price || {}) as Price,

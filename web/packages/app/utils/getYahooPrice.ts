@@ -2,7 +2,7 @@ import { fetchYahoo } from "./fetchYahoo"
 
 export interface YahooPriceData {
   currency?: string
-  currencySymbol?: string
+  currencyAsset?: string
   exchange?: string
   exchangeDataDelayedBy?: number
   exchangeName?: string
@@ -36,19 +36,19 @@ export interface YahooPriceData {
   regularMarketTime?: string
   regularMarketVolume?: number
   shortName?: string
-  symbol?: string
+  asset?: string
   toCurrency?: any
-  underlyingSymbol?: any
+  underlyingAsset?: any
 }
 interface YahooPrice {
-  [symbol: string]: YahooPriceData
+  [asset: string]: YahooPriceData
 }
 
 export const getYahooPrice = async (
-  tickers: string[],
+  assets: string[],
   filters: Array<keyof YahooPriceData> = []
 ): Promise<YahooPrice> => {
-  const yahooData = await fetchYahoo(tickers, "get_price")
+  const yahooData = await fetchYahoo(assets, "get_price")
 
   if (filters)
     return Object.entries(yahooData).reduce((acc, [key, value]) => {

@@ -1,6 +1,6 @@
 import { IEXEarning } from "./IEXEarning"
 
 export interface IEXEarningsResponse {
-  symbol: string
+  asset: string
   earnings: IEXEarning[]
 }

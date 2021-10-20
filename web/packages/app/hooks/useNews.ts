@@ -5,16 +5,16 @@ import { useEffect, useState } from "react"
 import { storeNewsArticles } from "@lib/firebase/client/db/storeNewsArticles"
 import { usePrevious } from "./usePrevious"
 
-export const useStockNews = (query: string, symbol: string) => {
+export const useStockNews = (query: string, asset: string) => {
   const [news, setNews] = useState<RapidApiNewsItem[]>([])
   const [dbFetchError, setDbFetchError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [notInDb, setNotInDb] = useState(false)
 
-  const prevSymbol = usePrevious(symbol)
+  const prevAsset = usePrevious(asset)
 
   useEffect(() => {
-    // getNewsArticlesFromFirebase(symbol)
+    // getNewsArticlesFromFirebase(asset)
     //   .then((articles) => {
     //     if (articles.length > 0) {
     //       setNews(articles)
@@ -32,17 +32,17 @@ export const useStockNews = (query: string, symbol: string) => {
         setNotInDb(true)
       })
     }
-  }, [dbFetchError, news.length, query, symbol])
+  }, [dbFetchError, news.length, query, asset])
 
   useEffect(() => {
     if (notInDb) {
-      storeNewsArticles(symbol, news)
+      storeNewsArticles(asset, news)
     }
-  }, [news, notInDb, symbol])
+  }, [news, notInDb, asset])
 
   useEffect(() => {
-    if (prevSymbol !== symbol) setNews([])
-  }, [prevSymbol, symbol])
+    if (prevAsset !== asset) setNews([])
+  }, [prevAsset, asset])
 
   return { news, loading }
 }

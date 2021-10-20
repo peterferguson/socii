@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react"
 import { FlatList, Text, View, SectionList, ScrollView } from "react-native"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import tw from "../../lib/tailwind"
-import { TickerCategories } from "../../models/TickerCategories"
+import { AssetCategories } from "../../models/AssetCategories"
 import { useRouter } from "../../navigation/use-router"
-import { getTickerCategoryShortNames } from "../../utils/getTickerCategoryShortNames"
+import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
 import { CategoryCard } from "../../components/CategoryCard"
-import { Ticker } from "../../models/Ticker"
+import { Asset } from "../../models/Asset"
+import { useYahoo } from "../../hooks/useYahoo"
 
 const defaultPrice = {
   latestPrice: 0,
@@ -18,12 +19,15 @@ const defaultPrice = {
   currency: "USD",
 }
 
-export default function StockScreen({ tickers }) {
+export default function StockScreen({ asset }) {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
   // const { user } = useAuth()
-  tickers = [
+
+  const { data: trending, isLoading } = useYahoo([], "get_trending")
+
+  asset = [
     {
       ISIN: "US02079K1079",
       alpaca: {
@@ -40,7 +44,7 @@ export default function StockScreen({ tickers }) {
         name: "Alphabet Inc. Class C Capital Stock",
         shortable: true,
         status: "active",
-        symbol: "GOOG",
+        asset: "GOOG",
         tradable: true,
       },
       assetType: "EQUITY",
@@ -57,7 +61,7 @@ export default function StockScreen({ tickers }) {
       pnlColor: "text-emerald-500",
       regularMarketChangePercent: 0.022302397,
       shortName: "Alphabet Inc.",
-      tickerSymbol: "GOOG",
+      assetAsset: "GOOG",
       yahooMarketSuffix: "",
     },
     {
@@ -76,7 +80,7 @@ export default function StockScreen({ tickers }) {
         name: "Amazon.com, Inc. Common Stock",
         shortable: true,
         status: "active",
-        symbol: "AMZN",
+        asset: "AMZN",
         tradable: true,
       },
       assetType: "EQUITY",
@@ -98,7 +102,7 @@ export default function StockScreen({ tickers }) {
       pnlColor: "text-emerald-500",
       regularMarketChangePercent: 0.0065889303,
       shortName: "Amazon.com, Inc.",
-      tickerSymbol: "AMZN",
+      assetAsset: "AMZN",
       timeseriesLastUpdated: {
         nanoseconds: 143000000,
         seconds: 1624054058,
@@ -121,7 +125,7 @@ export default function StockScreen({ tickers }) {
         name: "Apple Inc. Common Stock",
         shortable: true,
         status: "active",
-        symbol: "AAPL",
+        asset: "AAPL",
         tradable: true,
       },
       assetType: "EQUITY",
@@ -143,7 +147,7 @@ export default function StockScreen({ tickers }) {
       pnlColor: "text-emerald-500",
       regularMarketChangePercent: 0.014548315,
       shortName: "Apple Inc.",
-      tickerSymbol: "AAPL",
+      assetAsset: "AAPL",
       timeseriesLastUpdated: {
         nanoseconds: 257000000,
         seconds: 1624054974,
@@ -166,7 +170,7 @@ export default function StockScreen({ tickers }) {
         name: "Facebook, Inc. Class A Common Stock",
         shortable: true,
         status: "active",
-        symbol: "FB",
+        asset: "FB",
         tradable: true,
       },
       assetType: "EQUITY",
@@ -184,7 +188,7 @@ export default function StockScreen({ tickers }) {
       pnlColor: "text-emerald-500",
       regularMarketChangePercent: 0.013742783,
       shortName: "Facebook, Inc.",
-      tickerSymbol: "FB",
+      assetAsset: "FB",
       timeseriesLastUpdated: {
         nanoseconds: 304000000,
         seconds: 1624060404,
@@ -192,70 +196,46 @@ export default function StockScreen({ tickers }) {
       yahooMarketSuffix: "",
     },
   ]
-  const [categories, setCategories] = useState<TickerCategories>({} as TickerCategories)
+  const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
   useEffect(() => {
-    getTickerCategoryShortNames().then(setCategories)
+    getAssetCategoryShortNames().then(setCategories)
   }, [])
-
-  const sectionComponents: {
-    data: { Component: React.FC<any>; props: any }[]
-    title: string
-  }[] = [
-    {
-      data: [
-        {
-          Component: CardSlider,
-          props: {
-            tickers: tickers.map((ticker) => ({ ticker, price: defaultPrice })),
-          },
-        },
-      ],
-      title: "Popular",
-    },
-    { data: [{ Component: Categories, props: { categories } }], title: "Categories" },
-    { data: [{ Component: TickerCards, props: { tickers } }], title: "All" },
-  ]
 
   return (
     <ScrollView>
-      <SectionList
-        contentContainerStyle={tw`flex-1 flex-wrap flex-col flex-grow w-full`}
-        sections={sectionComponents}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => <item.Component {...item.props} />}
-        renderSectionHeader={({ section }) => (
-          <Text
-            style={tw`pt-6 text-3xl text-white pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
-          >
-            {section.title}
-          </Text>
-        )}
-      />
+      <View>
+        <Title title={"Trending"} />
+        <CardSlider assets={asset.map((asset) => ({ asset, price: defaultPrice }))} />
+        <Title title={"Categories"} />
+        <Categories categories={categories} />
+        <Title title={"All"} />
+        <AssetCards asset={asset} />
+      </View>
     </ScrollView>
   )
 }
 
-const TickerCards = ({ tickers }: { tickers: Ticker[] }) => (
+const AssetCards = ({ asset }: { asset: Asset[] }) => (
   <FlatList
-    data={tickers}
-    renderItem={({ item: ticker }) => (
+    data={asset}
+    renderItem={({ item: asset }) => (
       <HorizontalAssetCard
-        key={`${ticker?.tickerSymbol}`}
-        isin={ticker?.ISIN}
-        tickerSymbol={ticker?.tickerSymbol}
-        shortName={ticker?.shortName}
-        logoColor={ticker?.logoColor}
+        key={`${asset?.assetAsset}`}
+        isin={asset?.ISIN}
+        assetAsset={asset?.assetAsset}
+        shortName={asset?.shortName}
+        logoColor={asset?.logoColor}
         price={defaultPrice}
       />
     )}
-    keyExtractor={(item) => item.tickerSymbol}
+    keyExtractor={(item) => item.assetAsset}
     onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
     onEndReachedThreshold={0.5}
   />
 )
 
-const Categories = ({ categories }: { categories: TickerCategories }) => {
+const Categories = ({ categories }: { categories: AssetCategories }) => {
   const router = useRouter()
   return (
     <View
@@ -274,3 +254,11 @@ const Categories = ({ categories }: { categories: TickerCategories }) => {
     </View>
   )
 }
+
+const Title = ({ title }: { title: string }) => (
+  <Text
+    style={tw`pt-6 text-3xl text-white pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
+  >
+    {title}
+  </Text>
+)

@@ -1,5 +1,4 @@
-
 export interface IEXRelevantResponse {
-  peers: boolean;
-  symbols: string[];
+  peers: boolean
+  assets: string[]
 }

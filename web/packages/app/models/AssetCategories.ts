@@ -1,7 +1,7 @@
-export interface TickerCategories {
+export interface AssetCategories {
   [categoryName: string]: {
     category_names: string[]
     emoji: string
-    tickers: string[]
+    assets: string[]
   }
 }

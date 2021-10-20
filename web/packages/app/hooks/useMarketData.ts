@@ -3,12 +3,12 @@ import { IEXQuoteResponse } from "@models/iex/IEXQuoteResponse"
 import { fetcher } from "@utils/fetcher"
 import useSWR from "swr"
 
-export const useMarketData = (marketSymbol: string = "SPY", filter: string = "") => {
+export const useMarketData = (marketAsset: string = "SPY", filter: string = "") => {
   const { user } = useAuth()
 
   const queryUrl = filter
-    ? `/api/iex/quote/${marketSymbol}?filter=${filter}`
-    : `/api/iex/quote/${marketSymbol}`
+    ? `/api/iex/quote/${marketAsset}?filter=${filter}`
+    : `/api/iex/quote/${marketAsset}`
 
   const { data: market, error } = useSWR<IEXQuoteResponse>(
     user?.token ? [queryUrl, user?.token] : null,

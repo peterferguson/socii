@@ -1,7 +1,7 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore"
 import { db } from "../../index"
 
-interface TickerData {
+interface AssetData {
   ISIN: string
   alpaca: {
     class: string
@@ -14,7 +14,7 @@ interface TickerData {
     name: string
     shortable: boolean
     status: string
-    symbol: string
+    asset: string
     tradable: boolean
     assetType: string
   }
@@ -30,23 +30,23 @@ interface TickerData {
   marketCountry: string
   marketName: string
   shortName: string
-  tickerSymbol: string
+  assetAsset: string
   timeseriesLastUpdated: string | Date
   yahooMarketSuffix: string
 }
 
 /*
- * Gets the data from ticker/{isin} document by querying the `tickerSymbol`
- * @param  {string} tickerSymbol
+ * Gets the data from asset/{isin} document by querying the `assetAsset`
+ * @param  {string} assetAsset
  */
 
-export const getTickerData = async (tickerSymbol: string): Promise<TickerData> => {
-  const tickerQuery = query(
-    collection(db, "tickers"),
-    where("alpaca.symbol", "==", tickerSymbol),
+export const getAssetData = async (assetAsset: string): Promise<AssetData> => {
+  const assetQuery = query(
+    collection(db, "assets"),
+    where("alpaca.asset", "==", assetAsset),
     limit(1)
   )
-  const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
-  // TODO: Create a model of the ticker data
-  return { ...tickerDoc?.data(), ISIN: tickerDoc?.id } as TickerData
+  const assetDoc = (await getDocs(assetQuery)).docs?.pop()
+  // TODO: Create a model of the asset data
+  return { ...assetDoc?.data(), ISIN: assetDoc?.id } as AssetData
 }

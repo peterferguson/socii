@@ -2,42 +2,42 @@ import { pnlTextColor } from "../utils/pnlTextColor"
 import React from "react"
 import { View, FlatList, Pressable, Text } from "react-native"
 import tw from "../lib/tailwind"
-import TickerLogo from "./TickerLogo"
+import AssetLogo from "./AssetLogo"
 import { useRouter } from "../navigation/use-router"
-import { Ticker } from "../models/Ticker"
+import { Asset } from "../models/Asset"
 import { Price } from "../models/Price"
 
 // TODO: Add a isActive state and only navigate on click of the active card
 
-interface CardTicker {
-  ticker: Ticker
+interface CardAsset {
+  asset: Asset
   price: Price
 }
 
-export default function CardSlider({ tickers }: { tickers: CardTicker[] }) {
+export default function CardSlider({ assets }: { assets: CardAsset[] }) {
   const router = useRouter()
   return (
     <FlatList
       style={tw`flex-row p-4 umami--drag--popular-stocks-card-slider`}
-      data={tickers}
+      data={assets}
       horizontal={true}
-      keyExtractor={({ ticker }) => ticker.alpaca.symbol}
-      renderItem={({ item: { ticker, price } }) => (
+      keyExtractor={({ asset }) => asset.alpaca.asset}
+      renderItem={({ item: { asset, price } }) => (
         <View
           style={{
             ...tw`mx-2 bg-white rounded-2xl border-l-4`,
-            borderColor: ticker?.logoColor,
+            borderColor: asset?.logoColor,
             flex: 1,
             flexGrow: 1,
           }}
         >
           <Pressable
-            onPress={() => router.push(`/stocks/${ticker.alpaca.symbol}`)}
+            onPress={() => router.push(`/stocks/${asset.alpaca.asset}`)}
             style={tw`h-60 w-40 p-4`}
           >
-            <TickerLogo
-              symbol={ticker.alpaca.symbol}
-              isin={ticker.ISIN}
+            <AssetLogo
+              asset={asset.alpaca.asset}
+              isin={asset.ISIN}
               height="52"
               width="52"
             />
@@ -47,13 +47,13 @@ export default function CardSlider({ tickers }: { tickers: CardTicker[] }) {
               <Text
                 style={{
                   ...tw`py-1 text-xl font-semibold tracking-wider`,
-                  color: ticker.logoColor,
+                  color: asset.logoColor,
                 }}
               >
-                {ticker.alpaca.symbol}
+                {asset.alpaca.asset}
               </Text>
               <Text style={tw`py-1 text-lg tracking-tight font-poppins-400`}>
-                {ticker.shortName}
+                {asset.shortName}
               </Text>
             </View>
             <View style={tw`px-2`}>

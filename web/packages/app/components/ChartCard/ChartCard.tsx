@@ -16,8 +16,8 @@ import { PeriodEnum } from "../../utils/getYahooTimeseries"
 import Cursor from "./Cursor"
 
 type TabLabel = keyof typeof PeriodEnum
-interface ITickerPageLineChartProps {
-  symbol: string
+interface IAssetPageLineChartProps {
+  asset: string
   logoColor: string
   translation: Vector<Animated.SharedValue<number>>
   graphs: Graphs
@@ -31,8 +31,8 @@ const { width: WINDOW_WIDTH } = Dimensions.get("window")
 const WIDTH = WINDOW_WIDTH - 64
 const BUTTON_WIDTH = (WIDTH - 32) / tabs.length
 
-const ChartCard: React.FC<ITickerPageLineChartProps> = ({
-  symbol,
+const ChartCard: React.FC<IAssetPageLineChartProps> = ({
+  asset,
   logoColor,
   translation,
   graphs,
