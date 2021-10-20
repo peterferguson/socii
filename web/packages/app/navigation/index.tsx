@@ -65,6 +65,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
         <BottomSheetModalProvider>
           <BottomTabNavigator Component={Component} pageProps={pageProps} />
         </BottomSheetModalProvider>
+        {/* <Notifications /> */}
       </AuthProvider>
     </NavigationContainer>
   )

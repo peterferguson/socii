@@ -1,15 +1,12 @@
+import * as Google from "expo-auth-session/providers/google"
+import Constants from "expo-constants"
+import * as WebBrowser from "expo-web-browser"
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import React from "react"
 import { SafeAreaView, View } from "react-native"
 import { EnterCard } from "../components/EnterCard"
-import { useAuth } from "../hooks/useAuth"
-import tw from "../lib/tailwind"
-
-import * as WebBrowser from "expo-web-browser"
-import { ResponseType } from "expo-auth-session"
-import * as Google from "expo-auth-session/providers/google"
 import { auth } from "../lib/firebase"
-import Constants from "expo-constants"
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
+import tw from "../lib/tailwind"
 
 const CLIENT_ID = Constants.manifest.extra.firebase.clientId
 
@@ -41,6 +38,7 @@ export default function EnterScreen() {
         <View
           style={tw`relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg space-y-8 bg-gradient-to-tr from-brand to-brand-teal transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 rounded-3xl`}
         />
+
         <EnterCard signinWith={() => promptAsync()} />
       </View>
     </SafeAreaView>
