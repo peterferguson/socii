@@ -3,6 +3,7 @@ import React from "react"
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import EnterScreen from "../screens/enter"
 import { EnterStackParams } from "app/navigation/types"
+import Header from "../components/Headers/EnterHeader"
 
 const EnterStack = createStackNavigator<EnterStackParams>()
 
@@ -24,7 +25,8 @@ function EnterNavigator() {
       <EnterStack.Screen
         name="enter"
         component={EnterScreen}
-        options={{ title: "Enter", headerTitle: "Login" }}
+        // options={{ title: "Enter", headerTitle: "Login" }}
+        options={{ headerTitle: (props) => <Header headerTitle={"Login"} /> }}
       />
     </EnterStack.Navigator>
   )
