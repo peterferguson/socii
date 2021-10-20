@@ -1,16 +1,16 @@
 // import { useAuth } from "@hooks/useAuth"
-import CardSlider from "../../components/OverlappingCardSlider"
 import React, { useEffect, useState } from "react"
-import { FlatList, Text, View, SectionList, ScrollView } from "react-native"
+import { FlatList, ScrollView, Text, View } from "react-native"
+import { CategoryCard } from "../../components/CategoryCard"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
+import CardSlider from "../../components/OverlappingCardSlider"
+import { useAuth } from "../../hooks/useAuth"
+import { useYahooTrending } from "../../hooks/useYahooTrending"
 import tw from "../../lib/tailwind"
+import { Asset } from "../../models/Asset"
 import { AssetCategories } from "../../models/AssetCategories"
 import { useRouter } from "../../navigation/use-router"
 import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
-import { CategoryCard } from "../../components/CategoryCard"
-import { Asset } from "../../models/Asset"
-import { useYahoo } from "../../hooks/useYahoo"
-import { useYahooTrending } from "../../hooks/useYahooTrending"
 
 const defaultPrice = {
   latestPrice: 0,
@@ -24,7 +24,7 @@ export default function StockScreen({ asset }) {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
-  // const { user } = useAuth()
+  const { user } = useAuth()
 
   const { trending, isLoading } = useYahooTrending()
   console.log("trending", trending)

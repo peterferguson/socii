@@ -1,9 +1,9 @@
-import React from "react"
-
 import createStackNavigator from "app/navigation/create-stack-navigator"
+import { StocksStackParams } from "app/navigation/types"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
-import { StocksStackParams } from "app/navigation/types"
+import React from "react"
+import HeaderContainer from "../../components/Headers/HeaderContainer"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
@@ -26,7 +26,12 @@ function StocksNavigator() {
         <StocksStack.Screen
           name="stocks"
           component={StocksScreen}
-          options={{ title: "Stocks", headerTitle: "Stocks" }}
+          options={{
+            title: "Stocks",
+            headerTitle: () => (
+              <HeaderContainer headerTitle={"Stocks"} text={"Stocks"} />
+            ),
+          }}
         />
         <StocksStack.Screen
           name="stock"
