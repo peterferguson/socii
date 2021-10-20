@@ -1,6 +1,6 @@
-import { useAuth } from "@hooks"
-import { TransferResource } from "@socii/shared/alpaca"
-import { fetcher } from "@utils/fetcher"
+import { useAuth } from "../hooks/useAuth"
+import { TransferResource } from "alpaca"
+import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"
 
 // ? Could extend this to allow posting transfers from the frontend too

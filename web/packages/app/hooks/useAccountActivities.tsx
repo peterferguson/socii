@@ -1,6 +1,6 @@
-import { useAuth } from "@hooks"
-import { ActivityItem, ActivityType } from "@socii/shared/alpaca"
-import { fetcher } from "@utils/fetcher"
+import { useAuth } from "../hooks/useAuth"
+import { ActivityItem, ActivityType } from "alpaca"
+import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"
 
 export interface IAccountActivites {

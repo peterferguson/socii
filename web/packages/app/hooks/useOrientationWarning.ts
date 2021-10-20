@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { isBrowser } from "@utils/isBrowser"
-import raiseNotOptimisedForLandscapeToast from "@utils/raiseNotOptimisedForLandscapeToast"
+import { isBrowser } from "../utils/isBrowser"
+import raiseNotOptimisedForLandscapeToast from "../utils/raiseNotOptimisedForLandscapeToast"
 
 const useOrientationWarning = () => {
   const [screenAspectRatio, setScreenAspectRatio] = useState(

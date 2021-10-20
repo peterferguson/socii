@@ -1,5 +1,5 @@
-import { useAuth } from "@hooks"
-import { getGroupData } from "@lib/firebase/client/db/getGroupData"
+import { useAuth } from "../hooks/useAuth"
+import { getGroupData } from "../lib/firebase/client/db/getGroupData"
 import { useEffect, useState } from "react"
 
 export const useGroups = () => {

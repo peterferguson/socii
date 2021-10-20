@@ -1,0 +1,9 @@
+{
+  "name": "alpaca",
+  "version": "1.0.0",
+  "scripts": {},
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.10.3"
+  }
+}

@@ -1,4 +1,4 @@
-import { useAuth } from "@hooks/useAuth"
+import { useAuth } from "../hooks/useAuth"
 import React, { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
 

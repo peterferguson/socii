@@ -1,11 +1,3 @@
-import { auth } from "@lib/firebase/client/auth"
-import { getUsernameWithEmail } from "@lib/firebase/client/db/getUsernameWithEmail"
-import { setUserState } from "@lib/firebase/client/db/setUserState"
-import { storeFailedLogin } from "@lib/firebase/client/db/storeFailedLogin"
-import FirebaseUser from "@models/FirebaseUser"
-import { checkAlreadyOnWaitlist } from "@utils/checkAlreadyOnWaitlist"
-import { formatUser } from "@utils/formatUser"
-import { userFirstName } from "@utils/userFirstName"
 import {
   AuthProvider,
   FacebookAuthProvider,
@@ -14,16 +6,26 @@ import {
   signInWithPopup,
   signOut,
   User,
+  signInWithCredential,
 } from "firebase/auth"
-import Router from "next/router"
 import { useEffect, useState } from "react"
-import toast from "react-hot-toast"
-import { UrlObject } from "url"
+// import toast from "react-hot-toast"
+// import { UrlObject } from "url"
+import { auth } from "../lib/firebase"
+import { getUsernameWithEmail } from "../lib/firebase/client/db/getUsernameWithEmail"
+import { setUserState } from "../lib/firebase/client/db/setUserState"
+import { storeFailedLogin } from "../lib/firebase/client/db/storeFailedLogin"
+import FirebaseUser from "../models/FirebaseUser"
+import { useRouter } from "../navigation/use-router"
+import { checkAlreadyOnWaitlist } from "../utils/checkAlreadyOnWaitlist"
+import { formatUser } from "../utils/formatUser"
+import { userFirstName } from "../utils/userFirstName"
 
 //Ref https://docs.react2025.com/firebase/use-auth
 
 export const useProvideAuth = () => {
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
   const [user, setUser] = useState<FirebaseUser>(null)
 
   const handleUser = async (rawUser: User | null) => {
@@ -33,11 +35,12 @@ export const useProvideAuth = () => {
     return formattedUser
   }
 
-  const signinWithProvider = async (
-    provider: AuthProvider,
-    redirect: string | UrlObject = ""
-  ) => {
+
+
+  const signinWithProvider = async (provider: AuthProvider, redirect: string = "") => {
     setLoading(true)
+    console.log("signinWithProvider provider", provider)
+    console.log("signinWithProvider redirect", redirect)
     try {
       const { user: rawUser } = await signInWithPopup(auth, provider)
       handleUser(rawUser)
@@ -55,29 +58,26 @@ export const useProvideAuth = () => {
           : FacebookAuthProvider.credentialFromError(error)
       email && storeFailedLogin(email, credential)
 
-      toast.error(errorMessage)
+      // toast.error(errorMessage)
     }
 
-    redirect !== "" && Router.push(redirect)
+    redirect !== "" && router.push(redirect)
   }
 
-  const signinWithFacebook = (redirect: string | UrlObject = "") =>
+  const signinWithFacebook = (redirect: string = "") =>
     signinWithProvider(new FacebookAuthProvider(), redirect)
 
-  const signinWithGoogle = (redirect: string | UrlObject = "") =>
+  const signinWithGoogle = (redirect: string = "") =>
     signinWithProvider(new GoogleAuthProvider(), redirect)
 
-  const signout = async (
-    redirect: string | UrlObject = "/",
-    showToast: boolean = true
-  ) => {
+  const signout = async (redirect: string = "/", showToast: boolean = true) => {
     await signOut(auth)
     console.log("signed out")
     const firstname = userFirstName(user?.displayName)
-    toast.dismiss()
-    showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
+    // toast.dismiss()
+    // showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
     setUser(null)
-    redirect !== "" && Router.push(redirect)
+    redirect !== "" && router.push(redirect)
   }
 
   useEffect(() => {

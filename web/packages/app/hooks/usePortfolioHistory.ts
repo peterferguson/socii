@@ -1,8 +1,8 @@
-import { PortfolioHistory } from "@socii/shared/alpaca/models/PortfolioHistory"
-import { useAuth } from "@hooks"
-import { PortfolioHistoryTimeseries } from "@models/PortfolioHistoryTimeseries"
-import { fetcher } from "@utils/fetcher"
-import { portfolioHistoryToTimeseries } from "@utils/portfolioHistoryToTimeseries"
+import { PortfolioHistory } from "alpaca/models/PortfolioHistory"
+import { useAuth } from "../hooks/useAuth"
+import { PortfolioHistoryTimeseries } from "../models/PortfolioHistoryTimeseries"
+import { fetcher } from "../utils/fetcher"
+import { portfolioHistoryToTimeseries } from "../utils/portfolioHistoryToTimeseries"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
 

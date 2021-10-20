@@ -1,7 +1,7 @@
-import { useAuth } from "@hooks"
-import { AccountExtended } from "@socii/shared/alpaca/models/AccountExtended"
-import { TradingAccount } from "@socii/shared/alpaca/models/TradingAccount"
-import { fetcher } from "@utils/fetcher"
+import { useAuth } from "../hooks/useAuth"
+import { AccountExtended } from "alpaca/models/AccountExtended"
+import { TradingAccount } from "alpaca/models/TradingAccount"
+import { fetcher } from "../utils/fetcher"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
 

@@ -6,6 +6,7 @@ import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
+import { AuthProvider } from "../contexts/AuthProvider"
 
 function LinkTo() {
   const linkTo = useLinkTo()
@@ -59,10 +60,12 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
           options?.title ? `${options.title} - Record Pool` : "Record Pool",
       }}
     >
-      <LinkTo />
-      <BottomSheetModalProvider>
-        <BottomTabNavigator Component={Component} pageProps={pageProps} />
-      </BottomSheetModalProvider>
+      <AuthProvider>
+        <LinkTo />
+        <BottomSheetModalProvider>
+          <BottomTabNavigator Component={Component} pageProps={pageProps} />
+        </BottomSheetModalProvider>
+      </AuthProvider>
     </NavigationContainer>
   )
 }

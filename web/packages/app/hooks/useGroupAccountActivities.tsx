@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { getGroupTradeHistory } from "@lib/firebase/client/db/getGroupTradeHistory"
-import { Timestamp } from "@firebase/firestore"
+import { getGroupTradeHistory } from "../lib/firebase/client/db/getGroupTradeHistory"
+import { Timestamp } from "../firebase/firestore"
 
 // TODO remove duplicate GroupTradeItem declaration
 export interface GroupTradeItem {

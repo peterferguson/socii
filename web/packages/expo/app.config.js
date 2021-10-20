@@ -4,17 +4,17 @@ const STAGE = process.env.STAGE
 
 const envConfig = {
   development: {
-    scheme: "com.example.development",
+    scheme: "app.socii.development",
     icon: "./assets/icon.development.png",
     backgroundColor: "#FF0000",
   },
   staging: {
-    scheme: "com.example.staging",
+    scheme: "app.socii.staging",
     icon: "./assets/icon.staging.png",
     backgroundColor: "#8000FF",
   },
   production: {
-    scheme: "com.example",
+    scheme: "app.socii",
     icon: "./assets/icon.png",
     backgroundColor: "#1610FF",
   },
@@ -25,9 +25,9 @@ const config = envConfig[STAGE || "development"]
 export default {
   name: "socii",
   description: "Invest With Friends",
-  slug: "socii",
+  slug: "socii-development",
   scheme: "socii",
-  owner: "socii",
+  owner: "peterferguson",
   icon: config.icon,
   version: "0.0.1",
   splash: {
@@ -75,6 +75,7 @@ export default {
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey: process.env.FIREBASE_PRIVATE_KEY,
+      clientId: process.env.FIREBASE_CLIENT_ID,
     },
     algolia: {
       algoliaId: process.env.NEXT_PUBLIC_ALGOLIA_ID,

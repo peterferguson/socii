@@ -1,6 +1,6 @@
-import { useAuth } from "@hooks"
-import { Position } from "@models/alpaca"
-import { fetcher } from "@utils/fetcher"
+import { useAuth } from "../hooks/useAuth"
+import { Position } from "../models/alpaca"
+import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"
 
 export const usePositions = () => {

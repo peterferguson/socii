@@ -1,4 +1,4 @@
-import { isBrowser } from "@utils/isBrowser"
+import { isBrowser } from "../utils/isBrowser"
 import { useEffect } from "react"
 import { deviceType } from "detect-it"
 import { innerVh } from "inner-vh"

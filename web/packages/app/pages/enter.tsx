@@ -1,7 +1,7 @@
 import React from "react"
 
 import createStackNavigator from "app/navigation/create-stack-navigator"
-import EnterScreen from "app/screens/enter"
+import EnterScreen from "../screens/enter"
 import { EnterStackParams } from "app/navigation/types"
 
 const EnterStack = createStackNavigator<EnterStackParams>()

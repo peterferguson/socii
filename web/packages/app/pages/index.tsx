@@ -1,3 +1,3 @@
-import Home from './enter';
+import enter from "./enter"
 
-export default Home;
+export default enter

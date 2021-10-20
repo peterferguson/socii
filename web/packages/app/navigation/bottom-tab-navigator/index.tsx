@@ -30,7 +30,7 @@ export function BottomTabNavigator(props: NextNavigationProps) {
         name="enterTab"
         component={EnterNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="enter" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <BottomTab.Screen

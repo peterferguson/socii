@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import { isBrowser } from "@utils/isBrowser"
-import { messaging as messagingPromise } from "@lib/firebase/client/messaging"
-import { onMessage } from "@firebase/messaging"
+import { isBrowser } from "../utils/isBrowser"
+import { messaging as messagingPromise } from "../lib/firebase/client/messaging"
+import { onMessage } from "../firebase/messaging"
 import toast from "react-hot-toast"
 
 const useReceivePushNotifications = () => {

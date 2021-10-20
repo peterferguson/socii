@@ -1,5 +1,5 @@
-import { cameliseKeys } from "@utils/cameliseKeys"
-import { fetcher } from "@utils/fetcher"
+import { cameliseKeys } from "../utils/cameliseKeys"
+import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"
 
 interface MarketClock {
