@@ -27,19 +27,21 @@ export default function StockScreen({ asset }) {
   const { user } = useAuth()
 
   const { trending, isLoading } = useYahooTrending()
-  console.log("trending", trending)
 
   const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
   // @ts-ignore
-  useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
+  // useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (
     <ScrollView>
       <View>
         <Title title={"Trending"} />
         <CardSlider
-          assets={trending.map(({ asset }) => ({ asset, price: defaultPrice }))}
+          assets={trending.map((asset) => ({
+            asset: Object.values(asset).pop(),
+            price: defaultPrice,
+          }))}
         />
         <Title title={"Categories"} />
         <Categories categories={categories} />

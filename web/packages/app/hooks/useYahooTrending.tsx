@@ -11,7 +11,7 @@ export const useYahooTrending = (): {
 } => {
   const { data, isLoading, isError } = useYahoo([], "get_trending")
 
-  const symbols = data?.quotes || []
+  const symbols: string[] = data?.quotes.map(({ symbol }) => symbol) || []
 
   const trending = useAssetData(symbols)
 
