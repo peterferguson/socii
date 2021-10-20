@@ -15,7 +15,7 @@ export const fetchYahoo = async (
 
   if (!body)
     body = {
-      assetAsset: assets.map((asset) => asset.split(".")[0]).join(" "),
+      tickerSymbol: assets.map((asset) => asset.split(".")[0]).join(" "),
     }
 
   console.log(`Fetching ${assets.length} assets data from endpoint ${functionUrl}`)

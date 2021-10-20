@@ -46,7 +46,7 @@ export const useRecommendations = (asset: string) => {
 
         setRecommendationData(
           data.reduce((acc, datum) => {
-            const asset = datum.assetAsset.split(".")[0]
+            const asset = datum.tickerSymbol.split(".")[0]
             const pnlColor = pnlTextColor(price?.[asset]?.regularMarketChangePercent)
 
             if (acc)

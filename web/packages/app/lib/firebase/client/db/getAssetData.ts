@@ -30,20 +30,20 @@ interface AssetData {
   marketCountry: string
   marketName: string
   shortName: string
-  assetAsset: string
+  tickerSymbol: string
   timeseriesLastUpdated: string | Date
   yahooMarketSuffix: string
 }
 
 /*
- * Gets the data from asset/{isin} document by querying the `assetAsset`
- * @param  {string} assetAsset
+ * Gets the data from asset/{isin} document by querying the `tickerSymbol`
+ * @param  {string} tickerSymbol
  */
 
-export const getAssetData = async (assetAsset: string): Promise<AssetData> => {
+export const getAssetData = async (tickerSymbol: string): Promise<AssetData> => {
   const assetQuery = query(
     collection(db, "assets"),
-    where("alpaca.asset", "==", assetAsset),
+    where("alpaca.asset", "==", tickerSymbol),
     limit(1)
   )
   const assetDoc = (await getDocs(assetQuery)).docs?.pop()

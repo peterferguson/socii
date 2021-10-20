@@ -7,7 +7,7 @@ import { iexQuote } from "../utils/iexQuote"
 
 // TODO: Allow this to handle multiple assets
 export function useAssetPrice(
-  assetAsset: string,
+  tickerSymbol: string,
   expirationTime?: number, // - swr uses milliseconds (3 minutes default)
   initialData?: Price
 ): { price: Price; isLoading: boolean; isError: boolean } {
@@ -18,7 +18,7 @@ export function useAssetPrice(
   // TODO: change conditional once pre/post-markets are implemented
   const { data, error } = useSWR(
     marketOpen.current // - Stop polling if market is closed
-      ? [assetAsset, token]
+      ? [tickerSymbol, token]
       : null,
     iexQuote,
     {

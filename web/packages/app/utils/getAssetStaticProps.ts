@@ -67,7 +67,7 @@ export const getAssetStaticProps = async ({
           // !
           // !
           try {
-            price = await iexClient.quote(asset.assetAsset, {
+            price = await iexClient.quote(asset.tickerSymbol, {
               filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
             })
           } catch (error) {

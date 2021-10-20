@@ -40,7 +40,7 @@ export enum IntervalEnum {
 }
 
 export interface YahooTimeseries {
-  [assetAsset: string]: OHLC[]
+  [tickerSymbol: string]: OHLC[]
 }
 
 export interface getYahooTimeseriesProps {
@@ -61,7 +61,7 @@ export const getYahooTimeseries = async ({
   const yahooData = await fetchYahoo(assets, "get_historical_prices", "POST", {
     period,
     interval,
-    assetAsset: assets.join(" "),
+    tickerSymbol: assets.join(" "),
     start: startDateStr,
     end: endDateStr,
   })

@@ -21,7 +21,7 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
       style={tw`flex-row p-4 umami--drag--popular-stocks-card-slider`}
       data={assets}
       horizontal={true}
-      keyExtractor={({ asset }) => asset.alpaca.asset}
+      keyExtractor={({ asset }) => asset.alpaca.symbol}
       renderItem={({ item: { asset, price } }) => (
         <View
           style={{
@@ -32,11 +32,11 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
           }}
         >
           <Pressable
-            onPress={() => router.push(`/stocks/${asset.alpaca.asset}`)}
+            onPress={() => router.push(`/stocks/${asset.alpaca.symbol}`)}
             style={tw`h-60 w-40 p-4`}
           >
             <AssetLogo
-              asset={asset.alpaca.asset}
+              asset={asset.alpaca.symbol}
               isin={asset.ISIN}
               height="52"
               width="52"
@@ -50,7 +50,7 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
                   color: asset.logoColor,
                 }}
               >
-                {asset.alpaca.asset}
+                {asset.alpaca.symbol}
               </Text>
               <Text style={tw`py-1 text-lg tracking-tight font-poppins-400`}>
                 {asset.shortName}

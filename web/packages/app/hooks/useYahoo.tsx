@@ -10,7 +10,8 @@ export const useYahoo = (
   const { data, error } = useSWRNative<any, Error>(
     [assets.join("-"), endpoint, method, body],
     (assets, endpoint, method, body) =>
-      fetchYahoo(assets.split("-"), endpoint, method, body)
+      fetchYahoo(assets.split("-"), endpoint, method, body),
+    { errorRetryCount: 3 }
   )
 
   return {

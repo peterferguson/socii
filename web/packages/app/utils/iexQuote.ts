@@ -1,10 +1,14 @@
 import { fetchWithToken } from "./fetchWithToken"
 
 export const iexQuote = async (
-  assetAsset: string,
+  tickerSymbol: string,
   token: string,
   filter: string = "latestPrice,changePercent,iexRealtimePrice,latestUpdate,currency,isUSMarketOpen"
 ) =>
-  assetAsset
-    ? await fetchWithToken(`/api/iex/quote/${assetAsset}?filter=${filter}`, token, null)
+  tickerSymbol
+    ? await fetchWithToken(
+        `/api/iex/quote/${tickerSymbol}?filter=${filter}`,
+        token,
+        null
+      )
     : null

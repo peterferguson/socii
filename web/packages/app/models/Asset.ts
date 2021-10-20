@@ -11,7 +11,7 @@ interface AlpacaAssetMeta {
   name: string
   shortable?: boolean
   status?: "active" | "inactive"
-  asset: string
+  symbol: string
   tradable: boolean
 }
 
@@ -34,6 +34,6 @@ export interface Asset {
   marketCountry: string
   marketName: string
   shortName: string
-  assetAsset: string
+  tickerSymbol: string
   yahooMarketSuffix: string
 }
