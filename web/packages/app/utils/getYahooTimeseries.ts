@@ -68,11 +68,11 @@ export const getYahooTimeseries = async ({
 
   return yahooData?.reduce((data, tick) => {
     let {
-      asset,
+      symbol,
       timestamp,
       dividends,
       ...ohlcv
-    }: { asset: string; timestamp: number; dividends: number; ohlcv: OHLC } = tick
+    }: { symbol: string; timestamp: number; dividends: number; ohlcv: OHLC } = tick
 
     // TODO: Need to handle dividends!
     if (dividends && dividends !== 0) return data
@@ -87,8 +87,8 @@ export const getYahooTimeseries = async ({
       .local()
       .valueOf()
 
-    if (asset in data) data[asset].push({ ...ohlcv, timestamp })
-    else Object.assign(data, { [asset]: [{ ...ohlcv, timestamp }] })
+    if (symbol in data) data[symbol].push({ ...ohlcv, timestamp })
+    else Object.assign(data, { [symbol]: [{ ...ohlcv, timestamp }] })
     return data
   }, {})
 }

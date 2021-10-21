@@ -17,7 +17,7 @@ export interface GraphData {
 
 export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
   const POINTS = timeseries.length
-  const priceList = timeseries.slice(0, POINTS)
+  const priceList = timeseries?.slice(0, POINTS)
   const formattedValues = priceList.map(
     (ohlc) => [ohlc.close, ohlc.timestamp / 1000] as [number, number]
   )
@@ -45,9 +45,8 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
       shape
         .line()
         .x(([, x]) => scaleX(x) as number)
-        .y(([y]) => scaleY(y) as number)
-        (formattedValues) as string
-        // .curve(shape.curveBasis)(formattedValues) as string
+        .y(([y]) => scaleY(y) as number)(formattedValues) as string
+      // .curve(shape.curveBasis)(formattedValues) as string
     ),
   }
 }

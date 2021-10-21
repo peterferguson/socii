@@ -9,7 +9,7 @@ import AssetLogo from "./AssetLogo"
 const StockRecommendations: React.FC<{ asset: string }> = ({ asset }) => {
   const { recommendations } = useRecommendations(asset)
   return (
-    <View style={tw`w-full px-4 font-poppins-400 lg:w-2/5`}>
+    <View style={tw`w-full px-4 font-poppins-400 `}>
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
       <View
         style={{
@@ -34,7 +34,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
   const { width } = useWindowDimensions()
   const router = useRouter()
   const is1Col = width < 640
-  const asset = recommendation.alpaca.asset
+  const asset = recommendation.alpaca.symbol
   const pnlColor = tw`${recommendation?.pnlColor}`.color as string
 
   return (

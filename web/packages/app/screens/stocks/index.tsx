@@ -20,7 +20,7 @@ const defaultPrice = {
   currency: "USD",
 }
 
-export default function StockScreen({ asset }) {
+export default function StocksScreen({ asset }) {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
@@ -28,10 +28,12 @@ export default function StockScreen({ asset }) {
 
   const { trending, isLoading } = useYahooTrending()
 
+  console.log(trending.map((asset) => Object.values(asset)))
+
   const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
   // @ts-ignore
-  // useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
+  useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (
     <ScrollView>
@@ -46,26 +48,26 @@ export default function StockScreen({ asset }) {
         <Title title={"Categories"} />
         <Categories categories={categories} />
         <Title title={"All"} />
-        <AssetCards asset={asset} />
+        <AssetCards assets={trending.map((asset) => Object.values(asset).pop())} />
       </View>
     </ScrollView>
   )
 }
 
-const AssetCards = ({ asset }: { asset: Asset[] }) => (
+const AssetCards = ({ assets }: { assets: Asset[] }) => (
   <FlatList
-    data={asset}
+    data={assets}
     renderItem={({ item: asset }) => (
       <HorizontalAssetCard
-        key={`${asset?.tickerSymbol}`}
+        key={`${asset?.alpaca.symbol}`}
         isin={asset?.ISIN}
-        tickerSymbol={asset?.tickerSymbol}
+        symbol={asset?.alpaca.symbol}
         shortName={asset?.shortName}
         logoColor={asset?.logoColor}
         price={defaultPrice}
       />
     )}
-    keyExtractor={(item) => item.tickerSymbol}
+    keyExtractor={(item, i) => item.alpaca.symbol}
     onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
     onEndReachedThreshold={0.5}
   />

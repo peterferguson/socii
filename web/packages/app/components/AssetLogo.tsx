@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, Image, Platform } from "react-native"
+import useSWRNative from "@nandorojo/swr-react-native"
+import { Image, Platform, Text, View } from "react-native"
 import { usePrevious } from "../hooks/usePrevious"
 import { getAssetData } from "../lib/firebase/client/db/getAssetData"
 import tw from "../lib/tailwind"
-import { useRouter } from "../navigation/use-router"
 import { logoUrl } from "../utils/logoUrl"
 
 interface IAssetLogoProps {
@@ -17,25 +17,18 @@ const DEFAULT_HEIGHT_AND_WIDTH = "56px"
 
 const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, isin, asset }) => {
   const [logoSrc, setLogoSrc] = useState("")
-  const router = useRouter()
-  const [unmounted, setUnmounted] = useState(false)
-  const [fractionble, setFractionable] = useState(false)
-  const [ISIN, setISIN] = useState(isin)
   const prevAsset = usePrevious(asset)
   const [isError, setIsError] = useState(false)
 
-  useEffect(() => {
-    if ((!ISIN || asset !== prevAsset) && !unmounted) {
-      getAssetData(asset).then(({ ISIN }) => {
-        setISIN(ISIN)
-        // setFractionable(alpaca?.fractionable)
-      })
-    }
-  }, [ISIN, prevAsset, asset, unmounted])
+  const [fractionble, setFractionable] = useState(false)
 
-  useEffect(() => ISIN && setLogoSrc(logoUrl(ISIN)), [ISIN])
+  const { data, error } = useSWRNative(
+    !isin || asset !== prevAsset ? asset : null,
+    getAssetData
+  )
 
-  useEffect(() => () => setUnmounted(true), [])
+  useEffect(() => data?.ISIN && setLogoSrc(logoUrl(data?.ISIN)), [data?.ISIN])
+
   // TODO: Add a backup logo search
   // TODO: Add loading state
 
@@ -50,9 +43,7 @@ const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, isin, asset }) =>
 
   return logoSrc && !isError ? (
     <Image
-      source={{
-        uri: logoSrc,
-      }}
+      source={{ uri: logoSrc }}
       style={Platform.OS === "ios" ? iosStyle : logoStyle}
       onError={() => setIsError(true)}
       resizeMethod="resize"

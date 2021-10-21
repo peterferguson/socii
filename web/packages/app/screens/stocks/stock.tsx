@@ -75,7 +75,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   })
 
   useEffect(() => {
-    if (!isLoading && !isError) {
+    if (!isLoading && !isError && timeseries.length) {
       setGraphs((prevTabs) => ({
         ...prevTabs,
         [activeTab.value]: {

@@ -42,8 +42,8 @@ interface AssetData {
 
 export const getAssetData = async (tickerSymbol: string): Promise<AssetData> => {
   const assetQuery = query(
-    collection(db, "assets"),
-    where("alpaca.asset", "==", tickerSymbol),
+    collection(db, "tickers"),
+    where("alpaca.symbol", "==", tickerSymbol),
     limit(1)
   )
   const assetDoc = (await getDocs(assetQuery)).docs?.pop()

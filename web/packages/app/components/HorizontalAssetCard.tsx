@@ -10,7 +10,7 @@ interface IHorizontalAssetCard {
   cardRef?: React.MutableRefObject<any>
   isin: string
   logoColor: string
-  tickerSymbol: string
+  symbol: string
   shortName: string
   price: Price
 }
@@ -18,7 +18,7 @@ interface IHorizontalAssetCard {
 const HorizontalAssetCard = ({
   cardRef,
   isin,
-  tickerSymbol,
+  symbol,
   logoColor,
   shortName,
   price,
@@ -27,6 +27,10 @@ const HorizontalAssetCard = ({
   const pnlTextColor = pnlColor.replace("200", "600").replace("bg", "text")
 
   const router = useRouter()
+
+  console.log(symbol);
+  
+  
 
   return (
     <View
@@ -37,20 +41,20 @@ const HorizontalAssetCard = ({
         style={tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}
       >
         <View style={tw`items-center justify-center flex w-20 m-auto rounded-full`}>
-          <AssetLogo isin={isin} asset={tickerSymbol} height="48" width="48" />
+          <AssetLogo isin={isin} asset={symbol} height="48" width="48" />
         </View>
         <View style={tw`flex-col flex-grow my-auto`}>
-          <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
+          <Pressable onPress={() => router.push(`/stocks/${symbol}`)}>
             <Text
               style={{
                 ...tw`text-sm tracking-wider text-gray-400 uppercase font-poppins-600`,
                 color: logoColor,
               }}
             >
-              {tickerSymbol}
+              {symbol}
             </Text>
           </Pressable>
-          <Pressable onPress={() => router.push(`/stocks/${tickerSymbol}`)}>
+          <Pressable onPress={() => router.push(`/stocks/${symbol}`)}>
             <Text
               style={tw`flex text-xs tracking-wider text-gray-600 font-poppins-400`}
             >

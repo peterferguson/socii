@@ -6,7 +6,7 @@ import { pnlTextColor } from "../utils/pnlTextColor"
 import { usePrevious } from "./usePrevious"
 
 export interface AlpacaData {
-  asset: string
+  symbol: string
 }
 export interface RecommendationData extends YahooPriceData {
   logoColor: string
