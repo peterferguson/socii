@@ -3,12 +3,13 @@ import { checkAlreadyOnWaitlist } from "@utils/checkAlreadyOnWaitlist"
 import { joinWaitlist } from "@utils/joinWaitlist"
 import { tw } from "@utils/tw"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 function WaitlistInvite({ invited, setInvited }) {
   const { user, signinWithGoogle } = useAuth()
   const router = useRouter()
+  const [ clicked, setClicked ] = useState()
 
   useEffect(() => {
     if (user?.email) {
@@ -19,11 +20,11 @@ function WaitlistInvite({ invited, setInvited }) {
         router.push("/user/create")
       } else if (user?.isInvited === false) {
         toast.dismiss()
-        toast.error(
-          "Your invite has not been accepted yet! You're 12th in the queue..."
+        toast.success(
+          "Your on the waitlist! You're 12th in the queue..."
         )
       }
-      if (user?.isOnWaitlist === "false") {
+      if (user?.isOnWaitlist === false && clicked ) {
         joinWaitlist(user.email).then(
           (joinResponse) =>
             // TODO: add error handling for joinWaitlist
@@ -31,6 +32,7 @@ function WaitlistInvite({ invited, setInvited }) {
             setInvited(true) &&
             toast.success("You've been added to the waitlist")
         )
+        setClicked(false)
       }
     }
   }, [
@@ -44,7 +46,7 @@ function WaitlistInvite({ invited, setInvited }) {
 
   return (
     <div className="flex justify-center w-full max-w-lg font-secondary">
-      {invited ? (
+      {invited || user?.isInvited != null ? (
         <div className="relative w-full sm:ml-6 group">
           <div
             className={tw(
@@ -88,10 +90,8 @@ function WaitlistInvite({ invited, setInvited }) {
               )}
               onClick={() => {
                 user?.username
-                  ? router.push("/stocks")
-                  : user?.email
-                  ? router.push("/enter")
-                  : signinWithGoogle()
+                  ? setInvited(true)
+                  : (setClicked(true) , signinWithGoogle())
               }}
             >
               Join the Waitlist!

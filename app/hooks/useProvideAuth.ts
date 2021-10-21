@@ -107,7 +107,7 @@ export const useProvideAuth = () => {
 
     return () => unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email, user?.uid])
+  }, [user?.email, user?.uid, loading])
 
   const getFreshToken = async () => {
     console.log("getFreshToken called", new Date())
