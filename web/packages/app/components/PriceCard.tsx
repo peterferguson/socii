@@ -3,33 +3,38 @@ import calendar from "dayjs/plugin/calendar"
 import React from "react"
 import { Text, View } from "react-native"
 import tw from "../lib/tailwind"
+import { Asset } from "../models/Asset"
 import { pnlTextColor } from "../utils/pnlTextColor"
 import AssetLogo from "./AssetLogo"
 
 dayjs.extend(calendar)
 
 const PriceCard: React.FC<{
-  asset: string
-  shortName: string
+  asset: Asset
   price: number
   changePercent: number
   timestamp: number
-}> = ({ asset, shortName, price, changePercent, timestamp }) => (
+}> = ({ asset, price, changePercent, timestamp }) => (
   <View
     style={tw`p-4 mt-4 mx-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800`}
   >
     <View style={tw`flex-row items-center`}>
-      <AssetLogo asset={asset} height="64px" width="64px" />
+      <AssetLogo
+        asset={asset?.alpaca.symbol}
+        isin={asset?.ISIN}
+        height="64px"
+        width="64px"
+      />
       <View style={tw`flex flex-col`}>
         <Text
           style={tw`mb-2 ml-2 text-base font-poppins-700 tracking-wider text-gray-700 uppercase dark:text-white`}
         >
-          {asset}
+          {asset?.alpaca.symbol}
         </Text>
         <Text
           style={tw`ml-2 text-xs font-poppins-600 tracking-wider text-gray-500 uppercase dark:text-white`}
         >
-          {shortName}
+          {asset?.shortName}
         </Text>
       </View>
     </View>

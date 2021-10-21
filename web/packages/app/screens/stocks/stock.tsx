@@ -15,6 +15,7 @@ import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
 import { useAssetData } from "../../hooks/useAssetData"
 import { useTimeseries } from "../../hooks/useTimeseries"
+import { Asset } from "../../models/Asset"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
 import { buildGraph, GraphData, SIZE } from "../../utils/buildGraph"
 import { IntervalEnum, PeriodEnum } from "../../utils/getYahooTimeseries"
@@ -38,15 +39,19 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   // const [asset, _] = useParam("asset")
   // - as with useState we can set the asset with the second param
   // - this will be useful when we want to set the asset from the recommendations
-  const { asset } = route.params
+  const { asset: symbol } = route.params
 
   // - This will be useful for dynamically updating the heading title
   // useEffect(() => {
   //   navigation.setParams({ headerTitle: asset })
   // }, [])
 
-  const [data] = useAssetData([asset])
-  const assetData = data?.[asset]
+  const [asset, setAsset] = useState<Asset>()
+
+  const [data] = useAssetData([symbol])
+
+  useEffect(() => !asset && data && setAsset(data[symbol]), [data])
+
   const [graphs, setGraphs] = useState<Graphs>({
     "1D": { graphData: null, timeseries: null },
     "7D": { graphData: null, timeseries: null },
@@ -60,7 +65,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const translation = useVector()
 
   const { timeseries, isLoading, isError } = useTimeseries({
-    assets: [asset],
+    assets: [symbol],
     period: PeriodEnum[activeTab.value],
     interval:
       IntervalEnum[
@@ -116,20 +121,19 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         <View style={{ marginBottom: 24 }}>
           <PriceCard
             asset={asset}
-            shortName={assetData?.shortName}
             price={price.value}
             changePercent={changePercent.value}
             timestamp={timestamp.value}
           />
-          <InvestButton logoColor={assetData?.logoColor} />
+          <InvestButton logoColor={asset?.logoColor} />
           <ChartCard
-            asset={asset}
+            asset={symbol}
             graphs={graphs}
             translation={translation}
             activeGraph={activeTab}
-            logoColor={assetData?.logoColor}
+            logoColor={asset?.logoColor}
           />
-          <StockRecommendations asset={asset} />
+          <StockRecommendations asset={symbol} />
         </View>
       </ScrollView>
     </View>

@@ -28,10 +28,6 @@ const HorizontalAssetCard = ({
 
   const router = useRouter()
 
-  console.log(symbol);
-  
-  
-
   return (
     <View
       ref={cardRef ? cardRef : null}

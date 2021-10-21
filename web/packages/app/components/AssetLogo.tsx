@@ -1,35 +1,27 @@
 import React, { useEffect, useState } from "react"
-import useSWRNative from "@nandorojo/swr-react-native"
 import { Image, Platform, Text, View } from "react-native"
 import { usePrevious } from "../hooks/usePrevious"
-import { getAssetData } from "../lib/firebase/client/db/getAssetData"
 import tw from "../lib/tailwind"
 import { logoUrl } from "../utils/logoUrl"
 
 interface IAssetLogoProps {
   asset: string
-  isin?: string
+  isin: string
   width?: string
   height?: string
 }
 
 const DEFAULT_HEIGHT_AND_WIDTH = "56px"
 
-const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, isin, asset }) => {
+const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) => {
   const [logoSrc, setLogoSrc] = useState("")
   const prevAsset = usePrevious(asset)
   const [isError, setIsError] = useState(false)
 
-  const [fractionble, setFractionable] = useState(false)
-
-  const { data, error } = useSWRNative(
-    !isin || asset !== prevAsset ? asset : null,
-    getAssetData
-  )
-
-  useEffect(() => data?.ISIN && setLogoSrc(logoUrl(data?.ISIN)), [data?.ISIN])
+  useEffect(() => isin && setLogoSrc(logoUrl(isin)), [isin])
 
   // TODO: Add a backup logo search
+  // TODO? maybe add fractional icon
   // TODO: Add loading state
 
   const logoStyle = {
