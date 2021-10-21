@@ -1,26 +1,24 @@
-import React, { useRef } from "react"
+import React, { useMemo, useEffect } from "react"
 import { Asset } from "../models/Asset"
-import { useAssetData } from "./useAssetData"
+import { AssetsObject, useAssetData } from "./useAssetData"
 import { useYahoo } from "./useYahoo"
 
-interface ITrendingAsset {
-  [symbol: string]: Asset
-}
 export const useYahooTrending = (): {
-  trending: ITrendingAsset[]
+  trending: AssetsObject
   isLoading: boolean
   isError: Error | null
 } => {
   const { data, isLoading, isError } = useYahoo([], "get_trending")
-  const symbols = useRef([] as string[])
 
-  if (!symbols.current?.length)
-    symbols.current = data?.quotes?.map(({ symbol }) => symbol)
+  const symbols = useMemo(
+    () => data?.quotes?.length && data.quotes.map(({ symbol }) => symbol),
+    [data?.quotes]
+  )
 
-  const trending = useAssetData(symbols.current)
+  const trending = useAssetData(symbols)
 
   return {
-    trending: trending.length !== 0 ? trending : [],
+    trending: trending ? trending : ({} as AssetsObject),
     isLoading,
     isError,
   }

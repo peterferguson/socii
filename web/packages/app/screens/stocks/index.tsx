@@ -20,15 +20,13 @@ const defaultPrice = {
   currency: "USD",
 }
 
-export default function StocksScreen({ asset }) {
+export default function StocksScreen() {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
-  const { user } = useAuth()
-
-  const { trending, isLoading } = useYahooTrending()
-
-  console.log(trending.map((asset) => Object.values(asset)))
+  const { trending } = useYahooTrending()
+  // TODO: This recalls the api every time the screen is loaded leading to bad UX
+  // ? Maybe use a cache to store the data and only call the api when the user refreshes the screen
 
   const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
@@ -40,15 +38,15 @@ export default function StocksScreen({ asset }) {
       <View>
         <Title title={"Trending"} />
         <CardSlider
-          assets={trending.map((asset) => ({
-            asset: Object.values(asset).pop(),
+          assets={Object.values(trending).map((asset) => ({
+            asset: asset,
             price: defaultPrice,
           }))}
         />
         <Title title={"Categories"} />
         <Categories categories={categories} />
         <Title title={"All"} />
-        <AssetCards assets={trending.map((asset) => Object.values(asset).pop())} />
+        <AssetCards assets={Object.values(trending)} />
       </View>
     </ScrollView>
   )
@@ -71,7 +69,7 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => (
     onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
     onEndReachedThreshold={0.5}
   />
-)
+) 
 
 const Categories = ({ categories }: { categories: AssetCategories }) => {
   const router = useRouter()
