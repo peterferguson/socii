@@ -4,7 +4,7 @@ import Animated, { useDerivedValue } from "react-native-reanimated"
 import { ReText } from "react-native-redash"
 import tw from "../../lib/tailwind"
 
-// - Amended from here ↓↓↓
+// - Modified from here ↓↓↓
 //  - https://github.com/rainbow-me/rainbow/blob/733373ff33975fc0d2e2ad00db6d3b868da4ff4b/src/components/expanded-state/chart/chart-data-labels/ChartDateLabel.js
 
 const MONTHS = [
@@ -22,17 +22,11 @@ const MONTHS = [
   "Dec",
 ]
 
-function formatDatetime(
-  value: string,
-  chartTimeSharedValue: Animated.SharedValue<string>
-) {
+function formatTimestamp(chartTimeSharedValue: Animated.SharedValue<number>) {
   "worklet"
   // we have to do it manually due to limitations of reanimated
-  if (value === "") {
-    return chartTimeSharedValue.value
-  }
 
-  const date = new Date(Number(value) * 1000)
+  const date = new Date(chartTimeSharedValue.value * 1000)
   const now = new Date()
 
   let res = MONTHS[date.getMonth()] + " "
@@ -80,10 +74,13 @@ export const TimeLabel = ({
   style = tw`text-gray-400 text-tiny`,
   chartTimeSharedValue,
 }) => {
-  const formattedValue = useDerivedValue(() => formatDatetime("", chartTimeSharedValue))
+  const formattedValue = useDerivedValue(() => formatTimestamp(chartTimeSharedValue))
   return (
     <View>
-      <ReText style={style} text={formattedValue || null} />
+      <ReText
+        style={style}
+        text={(formattedValue || null) as Animated.SharedValue<string>}
+      />
     </View>
   )
 }

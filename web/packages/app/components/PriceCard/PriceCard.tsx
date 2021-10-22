@@ -41,14 +41,14 @@ const PriceCard: React.FC<{
     return priceValue.toFixed(2)
   }, [(translation.y.value, maxPrice, minPrice)])
 
-  const time = useDerivedValue(() => {
-    const timestamp = interpolate(
+  const time = useDerivedValue(() =>
+    interpolate(
       translation.x.value,
       [0, SIZE],
       [minTimestamp, maxTimestamp],
       Extrapolate.CLAMP
     )
-  })
+  )
 
   const changePercent = useDerivedValue(() => {
     const percent =
@@ -93,8 +93,8 @@ const PriceCard: React.FC<{
               style={tw`mt-4 mb-2 text-4xl font-semibold text-left text-gray-700 dark:text-gray-100`}
               text={price || null}
             />
-            <TimeLabel chartTimeSharedValue={time} />
           </View>
+            <TimeLabel chartTimeSharedValue={time} />
         </View>
         <View style={tw`px-1 mt-[3.25rem]`}>
           <ReText style={[tw`text-base`, pnlColorStyle]} text={changePercent} />
