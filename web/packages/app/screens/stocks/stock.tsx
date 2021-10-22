@@ -2,17 +2,11 @@ import type { StockScreenProps } from "app/navigation/types"
 import { createParam } from "app/navigation/use-param"
 import React, { useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
-import {
-  Extrapolate,
-  interpolate,
-  useDerivedValue,
-  useSharedValue,
-  withTiming
-} from "react-native-reanimated"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useVector } from "react-native-redash"
 import ChartCard from "../../components/ChartCard/ChartCard"
 import InvestButton from "../../components/InvestButton"
-import PriceCard from "../../components/PriceCard"
+import PriceCard from "../../components/PriceCard/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
 import { useAssetData } from "../../hooks/useAssetData"
 import { usePrevious } from "../../hooks/usePrevious"
@@ -20,7 +14,7 @@ import { useRecommendations } from "../../hooks/useRecommendations"
 import { useTimeseries } from "../../hooks/useTimeseries"
 import { Asset } from "../../models/Asset"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
-import { buildGraph, GraphData, SIZE } from "../../utils/buildGraph"
+import { buildGraph, GraphData } from "../../utils/buildGraph"
 import { IntervalEnum, PeriodEnum } from "../../utils/getYahooTimeseries"
 
 type Query = {
@@ -85,9 +79,6 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
     transition.value = withTiming(1)
   }
 
-  const graphData = graphs[activeTab.value].graphData
-  const priceForComparison = graphs[activeTab.value].timeseries?.[0].close
-
   const { timeseries } = useTimeseries({
     assets: [symbol],
     period: PeriodEnum[activeTab.value],
@@ -116,50 +107,6 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
       }))
   }, [timeseries, activeTab.value])
 
-  const { minTimestamp, maxTimestamp, minPrice, maxPrice } = graphData || {}
-
-  // TODO: get the length of the graph so that we can use the interpolation to plot the actual price & timestamp!
-  // TODO: need to know when the graph is being dragged so we can go back to the initial values after animation
-  const price = useDerivedValue(
-    () =>
-      interpolate(
-        translation.y.value,
-        [0, SIZE],
-        [maxPrice, minPrice],
-        Extrapolate.CLAMP
-      )[(translation.y.value, maxPrice, minPrice)]
-  )
-  const timestamp = useDerivedValue(
-    () =>
-      interpolate(
-        translation.x.value,
-        [0, SIZE],
-        [minTimestamp, maxTimestamp],
-        Extrapolate.CLAMP
-      )[(translation.x.value, minTimestamp, maxTimestamp)]
-  )
-
-  const changePercent = useDerivedValue(
-    () => priceForComparison && (price.value - priceForComparison) / priceForComparison,
-    [(price.value, priceForComparison)]
-  )
-
-  useEffect(() => console.log("price", price.value), [price.value])
-  useEffect(() => console.log("timestamp", timestamp.value), [timestamp.value])
-  useEffect(
-    () => console.log("changePercent", changePercent.value),
-    [changePercent.value]
-  )
-
-  useEffect(
-    () => console.log("translation", translation.x.value),
-    [translation.x.value]
-  )
-  useEffect(
-    () => console.log("translation", translation.y.value),
-    [translation.y.value]
-  )
-
   return (
     <View style={{ flex: 1 }}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
@@ -169,9 +116,9 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             symbol={symbol}
             isin={assets[symbol]?.ISIN}
             shortName={assets?.[symbol]?.shortName}
-            price={price}
-            changePercent={changePercent}
-            timestamp={timestamp}
+            graphData={graphs[activeTab.value].graphData}
+            translation={translation}
+            priceForComparison={graphs[activeTab.value].timeseries?.[0].close}
           />
           <InvestButton logoColor={assets[symbol]?.logoColor} />
           <ChartCard
