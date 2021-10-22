@@ -1,13 +1,14 @@
 import Feather from "@expo/vector-icons/build/Feather"
 import React from "react"
 import { Pressable, Text, useWindowDimensions, View } from "react-native"
-import { RecommendationData, useRecommendations } from "../hooks/useRecommendations"
+import { RecommendationData, Recommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import AssetLogo from "./AssetLogo"
 
-const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
-  const { recommendations } = useRecommendations(symbol)
+const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
+  recommendations,
+}) => {
   return (
     <View style={tw`w-full px-4 font-poppins-400 `}>
       <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
@@ -20,7 +21,14 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
         {recommendations &&
           Object.values(recommendations).map(
             (recommendation: RecommendationData, i) => (
-              <RecommendationItem item={recommendation} key={`recommendation-${i}`} />
+              <RecommendationItem
+                key={`recommendation-${i}`}
+                symbol={recommendation.alpaca.symbol}
+                pnlColor={recommendation.pnlColor}
+                isin={recommendation.ISIN}
+                logoColor={recommendation.logoColor}
+                regularMarketChangePercent={recommendation.regularMarketChangePercent}
+              />
             )
           )}
       </View>
@@ -28,15 +36,13 @@ const StockRecommendations: React.FC<{ symbol: string }> = ({ symbol }) => {
   )
 }
 
-const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
-  item: {
-    pnlColor,
-    ISIN,
-    logoColor,
-    regularMarketChangePercent,
-    alpaca: { symbol },
-  },
-}) => {
+const RecommendationItem: React.FC<{
+  symbol: string
+  pnlColor: string
+  isin: string
+  logoColor: string
+  regularMarketChangePercent: number
+}> = ({ symbol, pnlColor, isin, logoColor, regularMarketChangePercent }) => {
   const { width } = useWindowDimensions()
   const router = useRouter()
   const is1Col = width < 640
@@ -48,7 +54,13 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
           <View style={tw`flex flex-col items-center`}>
             <View style={tw`rounded-full ${!is1Col && pnlColor.replace("text", "bg")}`}>
               <View style={tw`bg-white rounded-full `}>
-                <AssetLogo asset={symbol} width={"48"} height={"48"} isin={ISIN} />
+                <AssetLogo
+                  key={symbol}
+                  asset={symbol}
+                  width={"48"}
+                  height={"48"}
+                  isin={isin}
+                />
               </View>
             </View>
             <Text
@@ -63,7 +75,7 @@ const RecommendationItem: React.FC<{ item: RecommendationData }> = ({
           <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>
             <Feather
               name={pnlColor.includes("red") ? "arrow-up" : "arrow-down"}
-              color={tw`pnlColor`.color as string}
+              color={tw`${pnlColor}`.color as string}
             />
             <Text style={tw`text-xs font-medium ${pnlColor}`}>
               {(regularMarketChangePercent * 100).toFixed(2)}%

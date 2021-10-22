@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getAssetDocs } from "../lib/firebase/client/db/getAssetDocs"
-import { getYahooPrice, YahooPriceData } from "../utils/getYahooPrice"
+import { Asset } from "../models/Asset"
+import { getYahooPrice } from "../utils/getYahooPrice"
 import { getYahooRecommendations } from "../utils/getYahooRecommendations"
 import { pnlTextColor } from "../utils/pnlTextColor"
 import { usePrevious } from "./usePrevious"
@@ -8,14 +9,19 @@ import { usePrevious } from "./usePrevious"
 export interface AlpacaData {
   symbol: string
 }
-export interface RecommendationData extends YahooPriceData {
-  logoColor: string
+// export interface RecommendationData extends YahooPriceData {
+//   logoColor: string
+//   pnlColor: string
+//   ISIN: string
+//   alpaca: AlpacaData
+// }
+
+export interface RecommendationData extends Asset {
+  regularMarketChangePercent: number
   pnlColor: string
-  ISIN: string
-  alpaca: AlpacaData
 }
 
-interface Recommendations {
+export interface Recommendations {
   [recommendation: string]: RecommendationData
 }
 
