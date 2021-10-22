@@ -16,7 +16,8 @@ const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) =>
   const logoSrc = useMemo(() => logoUrl(isin), [isin])
   const [isError, setIsError] = useState(false)
 
-  useEffect(() => console.log("AssetLogo:", asset, isin), [asset, isin])
+  // useEffect(() => console.log("AssetLogo:", asset, isin), [asset, isin])
+  // useEffect(() => console.log("error:", isError), [isError])
 
   // TODO: Add a backup logo search
   // TODO? maybe add fractional icon

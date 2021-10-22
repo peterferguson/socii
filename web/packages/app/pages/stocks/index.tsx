@@ -49,3 +49,13 @@ function StocksNavigator() {
 }
 
 export default StocksNavigator
+
+/* 
+- There is a lot of redundant state on the stock screens that can be removed
+- The stock screen will not only need data on the stock, but also recommendations.
+- These require the same queries to firebase so we should try to pass this data between the screens
+- in some efficient way. Caching/Context seems like a good idea initially but this is not fully baked.
+
+- At least initially we should pass the query result for the stock to the stock screen on navigation
+- and then pass the query result for the recommendations to the recommendations screen on navigation
+*/

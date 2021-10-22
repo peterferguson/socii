@@ -60,7 +60,7 @@ const HorizontalAssetCard = ({
         </View>
         <View style={tw`flex flex-col items-center justify-center w-20`}>
           <Text
-            style={tw`overflow-hidden text-sm tracking-wider font-open-sans-600 text-gray-600 uppercase overflow-ellipsis`}
+            style={tw`overflow-hidden text-sm tracking-wider font-open-sans-600 text-gray-600 uppercase `}
           >
             ${(price?.iexRealtimePrice || price?.latestPrice)?.toFixed(2)}
           </Text>
@@ -98,7 +98,7 @@ export const HorizontalAssetCardSkeleton = ({}) => (
         </View>
         <View style={tw`flex flex-col items-center justify-center w-20`}>
           <Text
-            style={tw`overflow-hidden font-semibold tracking-wider text-gray-600 uppercase text-tiny overflow-ellipsis`}
+            style={tw`overflow-hidden font-semibold tracking-wider text-gray-600 uppercase text-tiny `}
           >
             Price
           </Text>

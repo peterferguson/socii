@@ -15,7 +15,7 @@ export const EnterCard = ({ signinWith }) => (
     </View>
     <View style={tw`flex flex-col items-center justify-center mx-auto `}>
       <Pressable
-        style={tw`w-8/12 p-1 text-xs font-thin text-black bg-white border border-gray-200 rounded-full sm:text-sm h-11 hover:shadow-lg duration-300`}
+        style={tw`w-8/12 p-1 text-xs font-thin text-black bg-white border border-gray-200 rounded-full sm:text-sm h-11 hover:shadow-lg `}
         onPress={() => signinWith("")}
       >
         <Text

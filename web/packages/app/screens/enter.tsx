@@ -3,7 +3,7 @@ import Constants from "expo-constants"
 import * as WebBrowser from "expo-web-browser"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import React from "react"
-import { SafeAreaView, View, Pressable, Text, Image } from "react-native"
+import { SafeAreaView, View } from "react-native"
 import { EnterCard } from "../components/EnterCard"
 import { useAuth } from "../hooks/useAuth"
 import { auth } from "../lib/firebase"
@@ -39,7 +39,7 @@ export default function EnterScreen() {
       >
         <View style={tw`absolute inset-0 z-0 bg-black/10`} />
         <View
-          style={tw`relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 max-h-lg  sm:-rotate-6 rounded-3xl`}
+          style={tw`relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 sm:-rotate-6 rounded-3xl`}
         />
         {user ? (
           <View style={tw`text-center items-center justify-center flex-1`} />

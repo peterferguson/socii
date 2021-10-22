@@ -20,7 +20,7 @@ const PriceCard: React.FC<{
     style={tw`p-4 mt-4 mx-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800`}
   >
     <View style={tw`flex-row items-center`}>
-      <AssetLogo asset={symbol} isin={isin} height="64px" width="64px" />
+      <AssetLogo key={symbol} asset={symbol} isin={isin} height="64px" width="64px" />
       <View style={tw`flex flex-col`}>
         <Text
           style={tw`mb-2 ml-2 text-base font-poppins-700 tracking-wider text-gray-700 uppercase dark:text-white`}
@@ -34,7 +34,7 @@ const PriceCard: React.FC<{
         </Text>
       </View>
     </View>
-    <View style={tw`flex flex-row justify-between align-baseline`}>
+    <View style={tw`flex flex-row justify-between `}>
       {/* TODO: loading skeleton */}
       <View style={tw`flex-col items-start pl-1`}>
         <View style={tw`flex-row items-center pl-1`}>

@@ -30,7 +30,7 @@ export default function StocksScreen() {
 
   const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
-  // @ts-ignore
+  // @ts-ignore 
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (

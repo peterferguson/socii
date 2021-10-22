@@ -14,7 +14,7 @@ import InvestButton from "../../components/InvestButton"
 import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
 import { useAssetData } from "../../hooks/useAssetData"
-import { usePrevious } from "../../hooks/usePrevious"
+import { useRecommendations } from "../../hooks/useRecommendations"
 import { useTimeseries } from "../../hooks/useTimeseries"
 import { Asset } from "../../models/Asset"
 import { OHLCTimeseries } from "../../models/OHLCTimseries"
@@ -36,6 +36,10 @@ export type Graphs = {
   }
 }
 
+interface AssetData {
+  [symbol: string]: Asset
+}
+
 export default function StockScreen({ navigation, route }: StockScreenProps) {
   // const [asset, _] = useParam("asset")
   // - as with useState we can set the asset with the second param
@@ -47,7 +51,15 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   const { asset: symbol } = route.params
 
-  const asset = useAssetData([symbol])[symbol]
+  const asset = useAssetData([symbol])
+  const { recommendations } = useRecommendations(symbol)
+
+  const [assets, setAssets] = useState<AssetData>({ ...asset, ...recommendations })
+
+  useEffect(
+    () => setAssets((a) => ({ ...a, ...asset, ...recommendations })),
+    [asset, recommendations]
+  )
 
   const [graphs, setGraphs] = useState<Graphs>({
     "1D": { graphData: null, timeseries: null },
@@ -60,6 +72,9 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   const activeTab = useSharedValue<TabLabel>("1D")
   const translation = useVector()
+
+  const graphData = graphs[activeTab.value].graphData
+  const priceForComparison = graphs[activeTab.value].timeseries?.[0].close
 
   const { timeseries } = useTimeseries({
     assets: [symbol],
@@ -87,106 +102,36 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
           graphData: buildGraph(timeseries),
         },
       }))
-  }, [activeTab.value, timeseries])
+  }, [timeseries, activeTab.value])
 
-  // const { minTimestamp, maxTimestamp, minPrice, maxPrice } =
-  //   graphs[activeTab.value].graphData || {}
-
-  // // TODO: get the length of the graph so that we can use the interpolation to plot the actual price & timestamp!
-  // // TODO: need to know when the graph is being dragged so we can go back to the initial values after animation
-  // const price = useDerivedValue(() =>
-  //   interpolate(translation.y.value, [0, SIZE], [maxPrice, minPrice], Extrapolate.CLAMP)
-  // )
-  // const timestamp = useDerivedValue(() =>
-  //   interpolate(
-  //     translation.x.value,
-  //     [0, SIZE],
-  //     [minTimestamp, maxTimestamp],
-  //     Extrapolate.CLAMP
-  //   )
-  // )
-
-  // const changePercent = useDerivedValue(() => {
-  //   const firstPrice = graphs[activeTab.value].timeseries?.[0].close
-  //   return (price.value - firstPrice) / firstPrice
-  // })
-
-  // useEffect(() => console.log("price", price.value), [price.value])
-  // useEffect(() => console.log("timestamp", timestamp.value), [timestamp.value])
-  // useEffect(
-  //   () => console.log("changePercent", changePercent.value),
-  //   [changePercent.value]
-  // )
-
-  // useEffect(
-  //   () => console.log("translation", translation.x.value),
-  //   [translation.x.value]
-  // )
-  // useEffect(
-  //   () => console.log("translation", translation.y.value),
-  //   [translation.y.value]
-  // )
-
-  return (
-    <View style={{ flex: 1 }}>
-      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 24 }}>
-          <AnimatedPriceCard
-            symbol={symbol}
-            isin={asset?.ISIN}
-            shortName={asset?.shortName}
-            graphData={graphs[activeTab.value].graphData}
-            translation={translation}
-            priceForComparison={graphs[activeTab.value].timeseries?.[0].close}
-          />
-          {/* <PriceCard
-            symbol={symbol}
-            isin={asset?.ISIN}
-            shortName={asset?.shortName}
-            price={price.value}
-            changePercent={changePercent.value}
-            timestamp={timestamp.value}
-          /> */}
-          <InvestButton logoColor={asset?.logoColor} />
-          <ChartCard
-            graphs={graphs}
-            translation={translation}
-            activeGraph={activeTab}
-            logoColor={asset?.logoColor}
-          />
-          <StockRecommendations symbol={symbol} />
-        </View>
-      </ScrollView>
-    </View>
-  )
-}
-
-const AnimatedPriceCard: React.FC<{
-  symbol: string
-  isin: string
-  shortName: string
-  graphData: GraphData
-  translation: Vector<Animated.SharedValue<number>>
-  priceForComparison: number
-}> = ({ symbol, isin, shortName, graphData, translation, priceForComparison }) => {
   const { minTimestamp, maxTimestamp, minPrice, maxPrice } = graphData || {}
 
   // TODO: get the length of the graph so that we can use the interpolation to plot the actual price & timestamp!
   // TODO: need to know when the graph is being dragged so we can go back to the initial values after animation
-  const price = useDerivedValue(() =>
-    interpolate(translation.y.value, [0, SIZE], [maxPrice, minPrice], Extrapolate.CLAMP)
+  const price = useDerivedValue(
+    () =>
+      interpolate(
+        translation.y.value,
+        [0, SIZE],
+        [maxPrice, minPrice],
+        Extrapolate.CLAMP
+      ),
+    [translation.y.value, maxPrice, minPrice]
   )
-  const timestamp = useDerivedValue(() =>
-    interpolate(
-      translation.x.value,
-      [0, SIZE],
-      [minTimestamp, maxTimestamp],
-      Extrapolate.CLAMP
-    )
+  const timestamp = useDerivedValue(
+    () =>
+      interpolate(
+        translation.x.value,
+        [0, SIZE],
+        [minTimestamp, maxTimestamp],
+        Extrapolate.CLAMP
+      ),
+    [translation.x.value, minTimestamp, maxTimestamp]
   )
 
   const changePercent = useDerivedValue(
-    () => (price.value - priceForComparison) / priceForComparison
+    () => (price.value - priceForComparison) / priceForComparison,
+    [price.value, priceForComparison]
   )
 
   useEffect(() => console.log("price", price.value), [price.value])
@@ -206,13 +151,28 @@ const AnimatedPriceCard: React.FC<{
   )
 
   return (
-    <PriceCard
-      symbol={symbol}
-      isin={isin}
-      shortName={shortName}
-      price={price.value}
-      changePercent={changePercent.value}
-      timestamp={timestamp.value}
-    />
+    <View style={{ flex: 1 }}>
+      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
+        <View style={{ marginBottom: 24 }}>
+          <PriceCard
+            key={symbol}
+            symbol={symbol}
+            isin={assets[symbol]?.ISIN}
+            shortName={assets?.[symbol]?.shortName}
+            price={price.value}
+            changePercent={changePercent.value}
+            timestamp={timestamp.value}
+          />
+          <InvestButton logoColor={assets[symbol]?.logoColor} />
+          <ChartCard
+            graphs={graphs}
+            translation={translation}
+            activeGraph={activeTab}
+            logoColor={assets[symbol]?.logoColor}
+          />
+          <StockRecommendations recommendations={recommendations} />
+        </View>
+      </ScrollView>
+    </View>
   )
 }
