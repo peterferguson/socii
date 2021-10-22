@@ -1,23 +1,20 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  withTiming
-} from "react-native-reanimated";
-import tw from "../../lib/tailwind";
-import { TabLabel, BUTTON_WIDTH, tabs, WIDTH } from "./ChartCard";
+import React from "react"
+import { View } from "react-native"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import tw from "../../lib/tailwind"
+import { BUTTON_WIDTH, TabLabel, tabs, WIDTH } from "./constants"
 
 export const ChartTabRow: React.FC<{
-  logoColor: string;
-  activeTab: Animated.SharedValue<TabLabel>;
+  logoColor: string
+  activeTab: Animated.SharedValue<TabLabel>
 }> = ({ children, logoColor, activeTab }) => {
   const buttonBgStyle = useAnimatedStyle(() => {
     return {
       transform: [
         { translateX: withTiming(BUTTON_WIDTH * tabs.indexOf(activeTab.value)) },
       ],
-    };
-  });
+    }
+  })
 
   return (
     <View style={{ ...tw`flex-row`, width: WIDTH - 32 }}>
@@ -33,9 +30,10 @@ export const ChartTabRow: React.FC<{
               marginTop: (-11 / 50) * BUTTON_WIDTH,
             },
             buttonBgStyle,
-          ]} />
+          ]}
+        />
       </View>
       {children}
     </View>
-  );
-};
+  )
+}

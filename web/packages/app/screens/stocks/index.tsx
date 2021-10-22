@@ -4,7 +4,6 @@ import { FlatList, ScrollView, Text, View } from "react-native"
 import { CategoryCard } from "../../components/CategoryCard"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import CardSlider from "../../components/OverlappingCardSlider"
-import { useAuth } from "../../hooks/useAuth"
 import { useYahooTrending } from "../../hooks/useYahooTrending"
 import tw from "../../lib/tailwind"
 import { Asset } from "../../models/Asset"
@@ -30,7 +29,7 @@ export default function StocksScreen() {
 
   const [categories, setCategories] = useState<AssetCategories>({} as AssetCategories)
 
-  // @ts-ignore 
+  // @ts-ignore
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (
@@ -69,7 +68,7 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => (
     onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
     onEndReachedThreshold={0.5}
   />
-) 
+)
 
 const Categories = ({ categories }: { categories: AssetCategories }) => {
   const router = useRouter()

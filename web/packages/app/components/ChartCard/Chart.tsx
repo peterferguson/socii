@@ -1,32 +1,35 @@
-import React from "react";
-import { View } from "react-native";
-import Animated, { useAnimatedProps } from "react-native-reanimated";
-import { mixPath, Vector } from "react-native-redash";
-import Svg from "react-native-svg";
-import tw from "../../lib/tailwind";
-import { Graphs } from "../../screens/stocks/stock";
-import Cursor from "./Cursor";
-import { TabLabel, WIDTH, AnimatedPath } from "./ChartCard";
+import React from "react"
+import { View } from "react-native"
+import Animated, { useAnimatedProps } from "react-native-reanimated"
+import { mixPath, Vector } from "react-native-redash"
+import Svg, { Path } from "react-native-svg"
+import tw from "../../lib/tailwind"
+import { Graphs } from "../../screens/stocks/stock"
+import { TabLabel, WIDTH } from "./constants"
+import Cursor from "./Cursor"
+
+export const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 export const Chart: React.FC<{
-  graphs: Graphs;
-  prevTab: Animated.SharedValue<TabLabel>;
-  activeTab: Animated.SharedValue<TabLabel>;
-  transition: Animated.SharedValue<number>;
-  logoColor: string;
-  translation: Vector<Animated.SharedValue<number>>;
+  graphs: Graphs
+  prevTab: Animated.SharedValue<TabLabel>
+  activeTab: Animated.SharedValue<TabLabel>
+  transition: Animated.SharedValue<number>
+  logoColor: string
+  translation: Vector<Animated.SharedValue<number>>
 }> = ({ graphs, prevTab, activeTab, transition, logoColor, translation }) => {
   const animatedProps = useAnimatedProps(() => {
-    const prevPath = graphs[prevTab?.value ?? "1D"].graphData?.path;
-    const nextPath = graphs[activeTab.value].graphData?.path;
+    const prevPath = graphs[prevTab?.value ?? "1D"].graphData?.path
+    const nextPath = graphs[activeTab.value].graphData?.path
     return {
-      d: nextPath || prevPath
-        ? mixPath(transition.value, prevPath, nextPath, Animated.Extrapolate.CLAMP)
-        : "",
-    };
-  });
+      d:
+        nextPath || prevPath
+          ? mixPath(transition.value, prevPath, nextPath, Animated.Extrapolate.CLAMP)
+          : "",
+    }
+  })
 
-  React.useEffect(() => console.log(activeTab.value), [activeTab.value]);
+  React.useEffect(() => console.log(activeTab.value), [activeTab.value])
 
   // const { minPrice, maxPrice } = graphs[activeTab.value].graphData || {}
   // const firstPrice = graphs[activeTab.value].timeseries?.[0].close || 0
@@ -58,13 +61,15 @@ export const Chart: React.FC<{
           animatedProps={animatedProps}
           fill="transparent"
           stroke={logoColor}
-          strokeWidth={3} />
+          strokeWidth={3}
+        />
       </Svg>
 
       <Cursor
         translation={translation}
         path={graphs[activeTab.value].graphData?.path}
-        logoColor={logoColor} />
+        logoColor={logoColor}
+      />
     </View>
-  );
-};
+  )
+}

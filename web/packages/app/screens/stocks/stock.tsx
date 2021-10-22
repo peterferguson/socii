@@ -169,9 +169,9 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             symbol={symbol}
             isin={assets[symbol]?.ISIN}
             shortName={assets?.[symbol]?.shortName}
-            price={price.value}
-            changePercent={changePercent.value}
-            timestamp={timestamp.value}
+            price={price}
+            changePercent={changePercent}
+            timestamp={timestamp}
           />
           <InvestButton logoColor={assets[symbol]?.logoColor} />
           <ChartCard
