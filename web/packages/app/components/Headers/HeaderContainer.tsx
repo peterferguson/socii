@@ -2,7 +2,6 @@ import React from "react"
 import { Image, Pressable, View } from "react-native"
 import { useAuth } from "../../hooks/useAuth"
 import tw from "../../lib/tailwind"
-import { userFirstName } from "../../utils/userFirstName"
 import HeaderText from "../Text/HeaderText"
 
 const HeaderContainer = ({

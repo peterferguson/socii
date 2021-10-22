@@ -17,7 +17,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
 
   return (
     <BottomTab.Navigator
-      initialRouteName="playlistsTab"
+      initialRouteName="groupsTab"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#fff",
@@ -47,11 +47,11 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
         {component}
       </BottomTab.Screen>
       <BottomTab.Screen
-        name="playlistsTab"
+        name="groupsTab"
         listeners={{
           tabPress: (e) => {
             e.preventDefault()
-            router.push("/playlists")
+            router.push("/groups")
           },
         }}
         options={{

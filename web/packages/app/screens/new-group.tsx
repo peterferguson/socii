@@ -4,7 +4,7 @@ import { View, Text, TextInput } from "react-native"
 import tw from "../lib/tailwind"
 import { useRouter } from "app/navigation/use-router"
 
-export default function NewPlaylistScreen() {
+export default function NewGroupScreen() {
   const { width } = useWindowDimensions()
   const router = useRouter()
 
@@ -39,7 +39,7 @@ export default function NewPlaylistScreen() {
           padding: 24,
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold" }}>New Playlist</Text>
+        <Text style={{ color: "white", fontWeight: "bold" }}>New Group</Text>
         <TextInput
           style={[
             {
@@ -54,7 +54,7 @@ export default function NewPlaylistScreen() {
           ]}
           placeholder="Title"
           autoFocus={true}
-          accessibilityHint="The title of your playlist"
+          accessibilityHint="The title of your group"
           returnKeyType="done"
           selectionColor="#7e7f81"
           placeholderTextColor="#7e7f81"

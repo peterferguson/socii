@@ -1,6 +1,6 @@
 import { TabBarIcon } from "app/navigation/tab-bar-icon"
 import EnterNavigator from "app/pages/enter"
-import PlaylistsNavigator from "app/pages/playlists"
+import GroupsNavigator from "app/pages/groups"
 import StocksNavigator from "app/pages/stocks/index"
 import React from "react"
 import tw from "../../lib/tailwind"
@@ -10,15 +10,15 @@ import { BottomTab } from "./types"
 export function BottomTabNavigator(props: NextNavigationProps) {
   return (
     <BottomTab.Navigator
-      initialRouteName="enterTab"
+      initialRouteName="enter"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#fff",
-        tabBarInactiveTintColor: "#7e7f81",
-        tabBarShowLabel: false,
+        tabBarActiveTintColor: tw`bg-brand-gray dark:bg-brand-black`.color as string,
+        tabBarInactiveTintColor: tw`bg-brand-gray dark:bg-[#7e7f81]`.color as string,
+        tabBarShowLabel: true,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          ...tw`bg-brand-black`,
+          ...tw`bg-brand-gray dark: bg-brand-black`,
           // backgroundColor: "white",
           // borderTopColor: tw.color("brand"),
           zIndex: 1,
@@ -27,21 +27,21 @@ export function BottomTabNavigator(props: NextNavigationProps) {
       }}
     >
       <BottomTab.Screen
-        name="enterTab"
+        name="enter"
         component={EnterNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="playlistsTab"
-        component={PlaylistsNavigator}
+        name="groups"
+        component={GroupsNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="disc" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="stocksTab"
+        name="stocks"
         component={StocksNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="globe" color={color} />,

@@ -2,7 +2,7 @@ import * as Linking from "expo-linking"
 import { getPathFromState, getStateFromPath } from "@react-navigation/native"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
-import { EnterStackParams, PlaylistsStackParams, StocksStackParams } from "./types"
+import { EnterStackParams, GroupsStackParams, StocksStackParams } from "./types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
@@ -10,9 +10,7 @@ function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): P
   return path
 }
 
-function makePlaylistStackPath<Path extends keyof PlaylistsStackParams>(
-  path: Path
-): Path {
+function makeGroupStackPath<Path extends keyof GroupsStackParams>(path: Path): Path {
   return path
 }
 
@@ -28,48 +26,48 @@ function makeType<T>(t: T) {
   return t
 }
 
-const playlistStackPaths = makeType({
-  playlists: makePlaylistStackPath("playlists"),
-  playlist: makePlaylistStackPath("playlist"),
-  new: makePlaylistStackPath("new"),
+const groupStackPaths = makeType({
+  groups: makeGroupStackPath("groupsScreen"),
+  group: makeGroupStackPath("groupScreen"),
+  new: makeGroupStackPath("new"),
 })
 
 const stocksStackPaths = makeType({
-  stocks: makeStockStackPath("stocks"),
-  stock: makeStockStackPath("stock"),
+  stocks: makeStockStackPath("stocksScreen"),
+  stock: makeStockStackPath("stockScreen"),
 })
 
 const enterStackPaths = makeType({
-  enter: makeEnterStackPath("enter"),
+  enter: makeEnterStackPath("enterScreen"),
 })
 
 const tabPaths = makeType({
-  enter: makeTabPath("enterTab"),
-  playlists: makeTabPath("playlistsTab"),
-  stocks: makeTabPath("stocksTab"),
+  enterTab: makeTabPath("enter"),
+  groupsTab: makeTabPath("groups"),
+  stocksTab: makeTabPath("stocks"),
 })
 
 const linking: Props = {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      [tabPaths.enter]: {
+      [tabPaths.enterTab]: {
         path: "",
         initialRouteName: enterStackPaths.enter,
         screens: {
           [enterStackPaths.enter]: "",
         },
       },
-      [tabPaths.playlists]: {
-        initialRouteName: playlistStackPaths.playlists,
-        path: "playlists",
+      [tabPaths.groupsTab]: {
+        initialRouteName: groupStackPaths.groups,
+        path: "groups",
         screens: {
-          [playlistStackPaths.playlists]: "",
-          [playlistStackPaths.playlist]: ":id",
-          [playlistStackPaths.new]: "new",
+          [groupStackPaths.groups]: "",
+          [groupStackPaths.group]: ":id",
+          [groupStackPaths.new]: "new",
         },
       },
-      [tabPaths.stocks]: {
+      [tabPaths.stocksTab]: {
         path: "stocks",
         initialRouteName: stocksStackPaths.stocks,
         screens: {

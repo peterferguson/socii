@@ -17,7 +17,8 @@ const ChartCard: React.FC<IAssetPageLineChartProps> = ({
 }) => {
   return (
     <View
-      style={tw`my-2 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-1 flex-col justify-center items-center`}
+      style={tw`my-2 mx-4 shadow-md bg-white min-h-[400px] rounded-2xl flex flex-1 
+                flex-col justify-center items-center`}
     >
       <Chart {...{ graphs, prevTab, activeTab, transition, logoColor, translation }} />
       <ChartTabRow logoColor={logoColor} activeTab={activeTab}>

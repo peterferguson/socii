@@ -18,10 +18,11 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
   const router = useRouter()
   return (
     <FlatList
-      style={tw`flex-row p-4 umami--drag--popular-stocks-card-slider`}
+      style={tw`flex-row p-4 shadow-md umami--drag--popular-stocks-card-slider`}
       data={assets}
       horizontal={true}
       keyExtractor={({ asset }) => asset.alpaca.symbol}
+      showsHorizontalScrollIndicator={false}
       renderItem={({ item: { asset, price } }) => (
         <View
           style={{
@@ -33,8 +34,6 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
         >
           <Pressable
             onPress={() => {
-              console.log("clicked pressable")
-
               return router.push({
                 pathname: `/stocks/${asset.alpaca.symbol}`,
                 query: {

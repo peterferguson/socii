@@ -69,7 +69,7 @@ const InvestButton: React.FC<any> = ({ asset, holding, logoColor }) => {
       onPress={() => {}}
       style={{
         backgroundColor: logoColor,
-        ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl`,
+        ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl shadow-md`,
       }}
     >
       <View style={tw`flex-1 flex-row justify-center items-center`}>

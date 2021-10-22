@@ -7,6 +7,8 @@ import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
 import { AuthProvider } from "../contexts/AuthProvider"
+import { useDarkMode } from "../hooks/useDarkMode"
+import tw from "../lib/tailwind"
 
 function LinkTo() {
   const linkTo = useLinkTo()
@@ -18,9 +20,7 @@ function LinkTo() {
       }
       Router.events.on("routeChangeComplete", handler)
 
-      return () => {
-        Router.events.off("routeChangeComplete", handler)
-      }
+      return () => Router.events.off("routeChangeComplete", handler)
     }
   }, [])
 
@@ -37,6 +37,8 @@ function useLinkingConfig() {
 }
 
 export function Navigation({ Component, pageProps }: NextNavigationProps) {
+  const [theme] = useDarkMode()
+  const darkMode = theme === "dark"
   const linkingConfig = useLinkingConfig()
 
   return (
@@ -44,20 +46,19 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       linking={linkingConfig.linking}
       onReady={linkingConfig.onReady}
       theme={{
-        dark: true,
+        dark: darkMode,
         colors: {
-          primary: "rgb(255, 255, 255)",
-          background: "rgb(0, 0, 0)",
-          card: "rgb(0, 0, 0)",
-          text: "rgb(255, 255, 255)",
+          primary: tw.color("brand"),
+          background: tw`bg-brand-gray dark:bg-brand-black`.color as string,
+          card: tw`bg-brand-gray dark:bg-brand-black`.color as string,
+          text: tw`text-white dark:text-black`.color as string,
           border: "rgb(39, 39, 41)",
           notification: "rgb(255, 69, 58)",
         },
       }}
       documentTitle={{
         enabled: true,
-        formatter: (options) =>
-          options?.title ? `${options.title} - Record Pool` : "Record Pool",
+        formatter: (options) => (options?.title ? `${options.title}` : "socii"),
       }}
     >
       <AuthProvider>

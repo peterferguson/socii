@@ -31,7 +31,7 @@ const HorizontalAssetCard = ({
   return (
     <View
       ref={cardRef ? cardRef : null}
-      style={tw`w-11/12 h-auto max-w-sm mx-auto my-2`}
+      style={tw`w-11/12 h-auto max-w-sm mx-auto my-2 shadow-md`}
     >
       <View
         style={tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}

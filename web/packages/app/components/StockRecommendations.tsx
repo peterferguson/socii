@@ -10,8 +10,8 @@ const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
   recommendations,
 }) => {
   return (
-    <View style={tw`w-full px-4 font-poppins-400 `}>
-      <Text style={tw`text-xl text-white pl-2`}>People also viewed</Text>
+    <View style={tw`w-full px-4 my-2 font-poppins-400 `}>
+      <Text style={tw`text-xl text-brand-black dark:text-brand-gray pl-2`}>People also viewed</Text>
       <View
         style={{
           ...tw`p-4 mt-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl flex flex-row justify-evenly items-center`,
@@ -75,7 +75,7 @@ const RecommendationItem: React.FC<{
           <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>
             <Feather
               name={pnlColor.includes("red") ? "arrow-up" : "arrow-down"}
-              color={tw`${pnlColor}`.color as string}
+              color={tw.color(pnlColor.replace("text-", ""))}
             />
             <Text style={tw`text-xs font-medium ${pnlColor}`}>
               {(regularMarketChangePercent * 100).toFixed(2)}%

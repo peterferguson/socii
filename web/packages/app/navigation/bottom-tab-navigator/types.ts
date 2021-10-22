@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
 export type BottomTabNavigatorParams = {
-  enterTab: undefined
-  playlistsTab: undefined
-  stocksTab: undefined
+  enter: undefined
+  groups: undefined
+  stocks: undefined
 }
 
 export const BottomTab = createBottomTabNavigator<BottomTabNavigatorParams>()

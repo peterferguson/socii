@@ -49,7 +49,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider style={tw`bg-gray-50 flex-1`}>
-      <StatusBar style="light" />
+      <StatusBar style="auto" />
       <Navigation />
     </SafeAreaProvider>
   )

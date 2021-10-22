@@ -1,26 +1,24 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { NextComponentType, NextPageContext } from "next"
 
-type PlaylistsStackParams = {
-  playlists: undefined
-  playlist: { id: string }
+type GroupsStackParams = {
+  groupsScreen: undefined
+  groupScreen: { id: string }
   new: undefined
 }
 type StocksStackParams = {
-  stocks: undefined
-  stock: { asset: string }
+  stocksScreen: undefined
+  stockScreen: { asset: string }
 }
 
 type EnterStackParams = {
-  enter: undefined
+  enterScreen: undefined
 }
 
-// type StackParams = ProfileStackParams & HomeStackParams & PlayListStackParams;
-
-type PlaylistsScreenProps = NativeStackScreenProps<PlaylistsStackParams, "playlists">
-type PlaylistScreenProps = NativeStackScreenProps<PlaylistsStackParams, "playlist">
-type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocks">
-type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stock">
+type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen">
+type GroupScreenProps = NativeStackScreenProps<GroupsStackParams, "groupScreen">
+type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocksScreen">
+type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stockScreen">
 
 type NextPageProps = any
 type NextNavigationProps = {
@@ -29,12 +27,12 @@ type NextNavigationProps = {
 }
 
 export type {
-  PlaylistsScreenProps,
-  PlaylistScreenProps,
+  GroupsScreenProps,
+  GroupScreenProps,
   StocksScreenProps,
   StockScreenProps,
   NextNavigationProps,
-  PlaylistsStackParams,
+  GroupsStackParams,
   EnterStackParams,
   StocksStackParams,
 }

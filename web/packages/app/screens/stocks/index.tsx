@@ -33,7 +33,7 @@ export default function StocksScreen() {
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View>
         <Title title={"Trending"} />
         <CardSlider
@@ -67,6 +67,7 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => (
     keyExtractor={(item, i) => item.alpaca.symbol}
     onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
     onEndReachedThreshold={0.5}
+    showsVerticalScrollIndicator={false}
   />
 )
 
@@ -85,6 +86,7 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
           ) : null
         }
         keyExtractor={(item) => item[0]}
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   )
@@ -92,7 +94,7 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
 
 const Title = ({ title }: { title: string }) => (
   <Text
-    style={tw`pt-6 text-3xl text-white pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
+    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
   >
     {title}
   </Text>
