@@ -32,7 +32,17 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
           }}
         >
           <Pressable
-            onPress={() => router.push(`/stocks/${asset.alpaca.symbol}`)}
+            onPress={() => {
+              console.log("clicked pressable")
+
+              return router.push({
+                pathname: `/stocks/${asset.alpaca.symbol}`,
+                query: {
+                  asset: asset.alpaca.symbol,
+                  logoColor: asset.logoColor,
+                },
+              })
+            }}
             style={tw`h-60 w-40 p-4`}
           >
             <AssetLogo

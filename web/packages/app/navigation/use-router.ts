@@ -1,54 +1,54 @@
-import { useCallback } from 'react';
-import { useRouter as useNextRouter, NextRouter } from 'next/router';
-import { useLinkTo, useNavigation } from '@react-navigation/native';
+import { useCallback } from "react"
+import { useRouter as useNextRouter, NextRouter } from "next/router"
+import { useLinkTo, useNavigation } from "@react-navigation/native"
 
 export function useRouter() {
-  const linkTo = useLinkTo();
-  const router = useNextRouter();
-  const navigation = useNavigation();
+  const linkTo = useLinkTo()
+  const router = useNextRouter()
+  const navigation = useNavigation()
 
   return {
     push: useCallback(
-      (...nextProps: Parameters<NextRouter['push']>) => {
+      (...nextProps: Parameters<NextRouter["push"]>) => {
         if (router) {
-          router.push(...nextProps);
+          router.push(...nextProps)
         } else {
-          const [url, as] = nextProps;
+          const [url, as] = nextProps
 
           const path = (from: typeof url): string => {
-            return typeof from == 'string' ? from : from.pathname;
-          };
+            return typeof from == "string" ? from : from.pathname
+          }
 
-          linkTo(as ? path(as) : path(url));
+          linkTo(as ? path(as) : path(url))
         }
       },
       [linkTo, router]
     ),
     replace: useCallback(
-      (...nextProps: Parameters<NextRouter['replace']>) => {
+      (...nextProps: Parameters<NextRouter["replace"]>) => {
         if (router) {
-          router.replace(...nextProps);
+          router.replace(...nextProps)
         } else {
-          const [url, as] = nextProps;
+          const [url, as] = nextProps
 
           const path = (from: typeof url): string => {
-            return typeof from == 'string' ? from : from.pathname;
-          };
+            return typeof from == "string" ? from : from.pathname
+          }
 
-          linkTo(as ? path(as) : path(url));
+          linkTo(as ? path(as) : path(url))
         }
       },
       [linkTo, router]
     ),
     back: useCallback(
-      (...nextProps: Parameters<NextRouter['back']>) => {
+      (...nextProps: Parameters<NextRouter["back"]>) => {
         if (router) {
-          router.back(...nextProps);
+          router.back(...nextProps)
         } else {
-          navigation.goBack();
+          navigation.goBack()
         }
       },
       [linkTo, router]
-    )
-  };
+    ),
+  }
 }

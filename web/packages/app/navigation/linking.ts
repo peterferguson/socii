@@ -1,4 +1,5 @@
 import * as Linking from "expo-linking"
+import { getPathFromState, getStateFromPath } from "@react-navigation/native"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
 import { EnterStackParams, PlaylistsStackParams, StocksStackParams } from "./types"
@@ -78,6 +79,8 @@ const linking: Props = {
       },
     },
   },
+  getPathFromState,
+  getStateFromPath,
 }
 
 export { linking }
