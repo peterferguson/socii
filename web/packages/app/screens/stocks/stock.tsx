@@ -2,18 +2,20 @@ import type { StockScreenProps } from "app/navigation/types"
 import { createParam } from "app/navigation/use-param"
 import React, { useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
-import Animated, {
+import {
   Extrapolate,
   interpolate,
   useDerivedValue,
   useSharedValue,
+  withTiming
 } from "react-native-reanimated"
-import { useVector, Vector } from "react-native-redash"
+import { useVector } from "react-native-redash"
 import ChartCard from "../../components/ChartCard/ChartCard"
 import InvestButton from "../../components/InvestButton"
 import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
 import { useAssetData } from "../../hooks/useAssetData"
+import { usePrevious } from "../../hooks/usePrevious"
 import { useRecommendations } from "../../hooks/useRecommendations"
 import { useTimeseries } from "../../hooks/useTimeseries"
 import { Asset } from "../../models/Asset"
@@ -73,6 +75,16 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const activeTab = useSharedValue<TabLabel>("1D")
   const translation = useVector()
 
+  const prevTab = usePrevious(activeTab)
+  const transition = useSharedValue(0)
+
+  const handleTabPress = (label: TabLabel) => () => {
+    prevTab.value = activeTab.value
+    transition.value = 0
+    activeTab.value = label
+    transition.value = withTiming(1)
+  }
+
   const graphData = graphs[activeTab.value].graphData
   const priceForComparison = graphs[activeTab.value].timeseries?.[0].close
 
@@ -115,8 +127,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         [0, SIZE],
         [maxPrice, minPrice],
         Extrapolate.CLAMP
-      ),
-    [translation.y.value, maxPrice, minPrice]
+      )[(translation.y.value, maxPrice, minPrice)]
   )
   const timestamp = useDerivedValue(
     () =>
@@ -125,13 +136,12 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         [0, SIZE],
         [minTimestamp, maxTimestamp],
         Extrapolate.CLAMP
-      ),
-    [translation.x.value, minTimestamp, maxTimestamp]
+      )[(translation.x.value, minTimestamp, maxTimestamp)]
   )
 
   const changePercent = useDerivedValue(
-    () => (price.value - priceForComparison) / priceForComparison,
-    [price.value, priceForComparison]
+    () => priceForComparison && (price.value - priceForComparison) / priceForComparison,
+    [(price.value, priceForComparison)]
   )
 
   useEffect(() => console.log("price", price.value), [price.value])
@@ -165,10 +175,15 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
           />
           <InvestButton logoColor={assets[symbol]?.logoColor} />
           <ChartCard
-            graphs={graphs}
-            translation={translation}
-            activeGraph={activeTab}
-            logoColor={assets[symbol]?.logoColor}
+            {...{
+              graphs,
+              translation,
+              prevTab,
+              activeTab,
+              transition,
+              logoColor: assets[symbol]?.logoColor,
+              handleTabPress,
+            }}
           />
           <StockRecommendations recommendations={recommendations} />
         </View>
