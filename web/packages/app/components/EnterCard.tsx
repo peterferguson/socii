@@ -1,31 +1,33 @@
-import Google from "./Logos/Google"
-import Logo from "./Logos/Socii"
+import Logo from "./Logos/SociiText"
 import React from "react"
 import { Pressable, Text, View } from "react-native"
 import tw from "../lib/tailwind"
+import Google from "./Logos/Google"
 
 export const EnterCard = ({ signinWith }) => (
   <View style={tw`absolute z-10 w-full max-w-md p-10 bg-white rounded-xl`}>
     <View style={tw`flex flex-col items-center justify-center text-center`}>
-      <Text style={tw`mt-6 text-4xl text-gray-900 font-poppins-500`}>Welcome to</Text>
-      <Logo style={tw`text-5xl`} />
-      <Text style={tw`mt-2 text-base text-gray-600 font-poppins-300`}>
+      <Text style={tw`mt-6 -mb-8 text-4xl text-brand-black font-poppins-500`}>
+        Welcome to
+      </Text>
+      <Logo width={120} height={120} />
+      <Text style={tw`-mt-4 mb-2 text-base text-gray-600 font-poppins-300`}>
         Please link your account with one of the following providers:
       </Text>
     </View>
     <View style={tw`flex flex-col items-center justify-center mx-auto `}>
       <Pressable
-        style={tw`w-8/12 p-1 text-xs font-thin text-black bg-white border border-gray-200 rounded-full sm:text-sm h-11`}
-        onPress={() => signinWith("")}
+        style={tw`w-8/12 p-1 bg-white border border-gray-200 rounded-full sm:text-sm`}
+        onPress={() => signinWith("stocks")}
       >
-        <Text
-          style={tw`flex items-center justify-center w-full mx-auto bg-white rounded-full h-11`}
+        <View
+          style={tw`pl-3 p-2 flex-row items-center w-full bg-white rounded-full`}
         >
-          <Google
-            style={{ ...tw` ml-1 text-white sm:w-8 sm:h-8"`, height: 16, width: 16 }}
-          />
-          <Text>Connect with Google</Text>
-        </Text>
+          <Google {...tw`-ml-1 mr-3 w-5 h-5 sm:w-8 sm:h-8"`} />
+          <Text style={tw`text-xs font-poppins-300 text-brand-black`}>
+            Connect with Google
+          </Text>
+        </View>
       </Pressable>
     </View>
   </View>

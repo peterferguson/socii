@@ -27,13 +27,13 @@ function StocksNavigator() {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
         cardOverlayEnabled: true,
-        cardStyle: tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
+        cardStyle: tw`bg-brand-gray dark:bg-brand-black opacity-100`,
         headerTintColor: tw.color("brand"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
           borderBottomWidth: 0,
-          ...tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
+          ...tw`bg-brand-gray dark:bg-brand-black opacity-100`,
         },
       }}
     >

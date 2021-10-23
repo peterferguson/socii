@@ -94,7 +94,7 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
 
 const Title = ({ title }: { title: string }) => (
   <Text
-    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-dark`}
+    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-black`}
   >
     {title}
   </Text>

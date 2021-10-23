@@ -24,7 +24,7 @@ function GroupsNavigator() {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
           borderBottomWidth: 0,
-          ...tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
+          ...tw`bg-brand-gray dark:bg-brand-black opacity-100`,
         },
       }}
     >

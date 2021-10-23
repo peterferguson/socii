@@ -53,7 +53,7 @@ import { TabBarIcon } from "../navigation/tab-bar-icon"
 //       onClick={onClick}
 //     >
 //       <Icon className="w-5 h-5 mx-auto mb-1" />
-//       <Text style={tw`text-tiny text-brand-dark text-center`}>{text}</Text>
+//       <Text style={tw`text-tiny text-brand-black text-center`}>{text}</Text>
 //     </Button>
 //   )
 // }
@@ -86,7 +86,7 @@ import { TabBarIcon } from "../navigation/tab-bar-icon"
 //     <View
 //       style={tw.style(
 //         `absolute -top-4 left-1/2 -translate-x-1/2 w-1/2 p-2 font-primary bg-white
-//          text-tiny text-brand-dark text-center  shadow-xl rounded-full flex
+//          text-tiny text-brand-black text-center  shadow-xl rounded-full flex
 //          transition duration-300 items-center justify-center
 //          umami--click--footer-logo-button-click`
 //       )}
@@ -155,7 +155,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
             </View>
             <Text
               style={{
-                ...tw`text-tiny text-brand-dark text-center`,
+                ...tw`text-tiny text-brand-black text-center`,
                 color: isFocused ? tw.color("text-brand") : "#222",
               }}
             >
