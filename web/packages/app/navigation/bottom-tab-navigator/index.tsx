@@ -3,6 +3,7 @@ import EnterNavigator from "app/pages/enter"
 import GroupsNavigator from "app/pages/groups"
 import StocksNavigator from "app/pages/stocks/index"
 import React from "react"
+import BottomTabBar from "../../components/BottomTabBar"
 import tw from "../../lib/tailwind"
 import { NextNavigationProps } from "../types"
 import { BottomTab } from "./types"
@@ -11,6 +12,7 @@ export function BottomTabNavigator(props: NextNavigationProps) {
   return (
     <BottomTab.Navigator
       initialRouteName="enter"
+      tabBar={(props) => <BottomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: tw`bg-brand-gray dark:bg-brand-black`.color as string,
