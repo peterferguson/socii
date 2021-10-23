@@ -73,13 +73,19 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const transition = useSharedValue(0)
 
   const handleTabPress = (label: TabLabel) => () => {
+    "worklet"
+    console.log("running tab press")
+    console.log(label)
+    console.log(prevTab.value)
+
     prevTab.value = activeTab.value
     transition.value = 0
     activeTab.value = label
     transition.value = withTiming(1)
+    console.log(activeTab.value)
   }
 
-  const { timeseries } = useTimeseries({
+  const { timeseries, isLoading, isError } = useTimeseries({
     assets: [symbol],
     period: PeriodEnum[activeTab.value],
     interval:
@@ -87,7 +93,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         activeTab.value === "1D"
           ? "5m"
           : activeTab.value.includes("D")
-          ? "30m"
+          ? "1H"
           : activeTab.value.includes("MAX")
           ? "1M"
           : "1D"
@@ -95,7 +101,11 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   })
 
   useEffect(() => {
-    if (timeseries.length)
+    console.log("active: ", activeTab.value)
+    console.log("isLoading: ", isLoading)
+    console.log("isError: ", isError)
+
+    if (!isLoading && !isError)
       setGraphs((prevTabs) => ({
         ...prevTabs,
         [activeTab.value]: {
@@ -105,7 +115,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
           graphData: buildGraph(timeseries),
         },
       }))
-  }, [timeseries, activeTab.value])
+  }, [timeseries, activeTab.value, isLoading, isError])
 
   return (
     <View style={{ flex: 1 }}>

@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import { fetchYahoo } from "./fetchYahoo"
+import { Platform } from "react-native"
 dayjs.extend(timezone)
 dayjs.extend(utc)
 
@@ -77,15 +78,30 @@ export const getYahooTimeseries = async ({
     // TODO: Need to handle dividends!
     if (dividends && dividends !== 0) return data
 
-    // - timestamp is in milliseconds & yahoo send nix timestamp wrt to US timezone
-    // - we need to convert it to UTC since we are using UTC timezone with IEX data
-    const timezoneDifference = dayjs().tz("America/New_York").utcOffset()
-    // console.log(dayjs(timestamp).subtract(timezoneDifference, "minute").local().format())
+    if (Platform.OS !== "android") {
+      // ! dayjs not working on android
+      // - timestamp is in milliseconds & yahoo send nix timestamp wrt to US timezone
+      // - we need to convert it to UTC since we are using UTC timezone with IEX data
+      const marketUtcOffset = dayjs().tz("America/New_York").utcOffset()
 
-    timestamp = dayjs(timestamp)
-      .subtract(timezoneDifference, "minute")
-      .local()
-      .valueOf()
+      timestamp = dayjs(timestamp).subtract(marketUtcOffset, "minute").local().valueOf()
+    } 
+    // else {
+    //   // - This is a hack to get around the fact that the timestamp is in milliseconds
+    //   // - in the local timezone rather than UTC.
+    //   const localHours = parseInt(
+    //     new Date(timestamp).toLocaleString("en-GB").split(", ").pop().split(":")[0]
+    //   )
+    //   const usHours = parseInt(
+    //     new Date(timestamp)
+    //       .toLocaleString("en-GB", { timeZone: "America/New_York" })
+    //       .split(", ")
+    //       .pop()
+    //       .split(":")[0]
+    //   )
+
+    //   timestamp = timestamp + (usHours - localHours) * 60 * 60 * 1000
+    // }
 
     if (symbol in data) data[symbol].push({ ...ohlcv, timestamp })
     else Object.assign(data, { [symbol]: [{ ...ohlcv, timestamp }] })

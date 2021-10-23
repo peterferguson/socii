@@ -14,11 +14,6 @@ export const ChartTabButton: React.FC<{
     color: label === activeTab.value ? "white" : logoColor,
   }))
 
-  React.useEffect(
-    () => console.log(label === activeTab.value),
-    [label, activeTab.value]
-  )
-
   return (
     <TouchableWithoutFeedback key={label} onPress={handlePress}>
       <Animated.View style={{ width: BUTTON_WIDTH }}>

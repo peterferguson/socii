@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react"
 import { useRouter } from "../navigation/use-router"
 import { Pressable, View, Text } from "react-native"
 import tw from "../lib/tailwind"
+import { shadowStyle } from "../utils/shadowStyle"
 
 // interface IInvestButtonProps {
 //   asset: any
@@ -69,7 +70,8 @@ const InvestButton: React.FC<any> = ({ asset, holding, logoColor }) => {
       onPress={() => {}}
       style={{
         backgroundColor: logoColor,
-        ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl shadow-md`,
+        ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl`,
+        ...shadowStyle("md"),
       }}
     >
       <View style={tw`flex-1 flex-row justify-center items-center`}>

@@ -29,8 +29,6 @@ export const Chart: React.FC<{
     }
   })
 
-  React.useEffect(() => console.log(activeTab.value), [activeTab.value])
-
   // const { minPrice, maxPrice } = graphs[activeTab.value].graphData || {}
   // const firstPrice = graphs[activeTab.value].timeseries?.[0].close || 0
   // const lastPrice = graphs[activeTab.value].timeseries?.slice().pop().close || 0
@@ -64,7 +62,6 @@ export const Chart: React.FC<{
           strokeWidth={3}
         />
       </Svg>
-
       <Cursor
         translation={translation}
         path={graphs[activeTab.value].graphData?.path}

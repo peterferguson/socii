@@ -5,6 +5,7 @@ import React from "react"
 import AssetLogo from "./AssetLogo"
 import { View, Text, Pressable } from "react-native"
 import { useRouter } from "../navigation/use-router"
+import { shadowStyle } from "../utils/shadowStyle"
 
 interface IHorizontalAssetCard {
   cardRef?: React.MutableRefObject<any>
@@ -31,10 +32,13 @@ const HorizontalAssetCard = ({
   return (
     <View
       ref={cardRef ? cardRef : null}
-      style={tw`w-11/12 h-auto max-w-sm mx-auto my-2 shadow-md`}
+      style={{ ...tw`w-11/12 h-auto max-w-sm mx-auto my-2`, ...shadowStyle("md") }}
     >
       <View
-        style={tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}
+        style={{
+          ...tw`flex flex-row h-20 p-2 overflow-hidden bg-white rounded-lg`,
+          ...shadowStyle("2xl"),
+        }}
       >
         <View style={tw`items-center justify-center flex w-20 m-auto rounded-full`}>
           <AssetLogo isin={isin} asset={symbol} height="48" width="48" />
@@ -79,10 +83,18 @@ const HorizontalAssetCard = ({
 
 export const HorizontalAssetCardSkeleton = ({}) => (
   <View style={tw.style("w-11/12 h-auto max-w-sm mx-auto my-2 ")}>
-    <View style={tw`flex h-20 p-2 overflow-hidden bg-white rounded-lg shadow-2xl`}>
+    <View
+      style={{
+        ...tw`flex h-20 p-2 overflow-hidden bg-white rounded-lg`,
+        ...shadowStyle("md"),
+      }}
+    >
       <View style={tw`items-center justify-center flex-none w-20 m-auto rounded-full`}>
         <View
-          style={tw`flex items-center justify-center font-semibold text-gray-500 rounded-full shadow-lg bg-gray-50 h-14 w-14 text-tiny `}
+          style={{
+            ...tw`flex items-center justify-center font-semibold text-gray-500 rounded-full bg-gray-50 h-14 w-14 text-tiny`,
+            ...shadowStyle("2xl"),
+          }}
         />
         <View style={tw`flex-col flex-grow my-auto`}>
           <Text

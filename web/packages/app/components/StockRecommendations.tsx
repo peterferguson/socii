@@ -4,6 +4,7 @@ import { Pressable, Text, useWindowDimensions, View } from "react-native"
 import { RecommendationData, Recommendations } from "../hooks/useRecommendations"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
+import { shadowStyle } from "../utils/shadowStyle"
 import AssetLogo from "./AssetLogo"
 
 const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
@@ -14,7 +15,8 @@ const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
       <Text style={tw`text-xl text-brand-black dark:text-brand-gray pl-2`}>People also viewed</Text>
       <View
         style={{
-          ...tw`p-4 mt-4 bg-white dark:bg-brand-black shadow-lg rounded-2xl flex flex-row justify-evenly items-center`,
+          ...tw`p-4 mt-4 bg-white dark:bg-brand-black rounded-2xl flex flex-row justify-evenly items-center`,
+          ...shadowStyle('lg'),
           minHeight: "15%",
         }}
       >

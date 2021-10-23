@@ -1,9 +1,20 @@
+/* 
+- There is a lot of redundant state on the stock screens that can be removed
+- The stock screen will not only need data on the stock, but also recommendations.
+- These require the same queries to firebase so we should try to pass this data between the screens
+- in some efficient way. Caching/Context seems like a good idea initially but this is not fully baked.
+
+- At least initially we should pass the query result for the stock to the stock screen on navigation
+- and then pass the query result for the recommendations to the recommendations screen on navigation
+*/
+
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import { StocksStackParams } from "app/navigation/types"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
+import tw from "../../lib/tailwind"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
@@ -15,6 +26,8 @@ function StocksNavigator() {
         headerShown: true,
         headerShadowVisible: false,
         headerBackTitleVisible: false,
+        cardOverlayEnabled: true,
+        cardStyle: tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
@@ -38,6 +51,7 @@ function StocksNavigator() {
           component={StockScreen}
           options={({ route }) => ({
             title: route.params.asset,
+            // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             headerTitle: () => (
               <HeaderContainer headerTitle={"Stocks"} text={route.params.asset} />
             ),
@@ -51,13 +65,3 @@ function StocksNavigator() {
 }
 
 export default StocksNavigator
-
-/* 
-- There is a lot of redundant state on the stock screens that can be removed
-- The stock screen will not only need data on the stock, but also recommendations.
-- These require the same queries to firebase so we should try to pass this data between the screens
-- in some efficient way. Caching/Context seems like a good idea initially but this is not fully baked.
-
-- At least initially we should pass the query result for the stock to the stock screen on navigation
-- and then pass the query result for the recommendations to the recommendations screen on navigation
-*/

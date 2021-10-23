@@ -14,7 +14,7 @@ const HeaderContainer = ({
   const { user, signout } = useAuth()
 
   return user ? (
-    <View style={tw`flex-1 flex-row pr-4 items-center justify-between`}>
+    <View style={tw`flex-1 bg-brand-gray dark:bg-brand-black flex-row pr-4 items-center justify-between`}>
       <HeaderText text={text} />
       <Pressable
         style={tw`flex flex-col items-center justify-center`}

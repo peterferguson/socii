@@ -6,6 +6,7 @@ import AssetLogo from "./AssetLogo"
 import { useRouter } from "../navigation/use-router"
 import { Asset } from "../models/Asset"
 import { Price } from "../models/Price"
+import { shadowStyle } from "../utils/shadowStyle"
 
 // TODO: Add a isActive state and only navigate on click of the active card
 
@@ -18,7 +19,10 @@ export default function CardSlider({ assets }: { assets: CardAsset[] }) {
   const router = useRouter()
   return (
     <FlatList
-      style={tw`flex-row p-4 shadow-md umami--drag--popular-stocks-card-slider`}
+      style={{
+        ...tw`flex-row p-4 umami--drag--popular-stocks-card-slider`,
+        ...shadowStyle("lg"),
+      }}
       data={assets}
       horizontal={true}
       keyExtractor={({ asset }) => asset.alpaca.symbol}

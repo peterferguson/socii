@@ -1,6 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import tw from "../../lib/tailwind"
+import { shadowStyle } from "../../utils/shadowStyle"
 import { Chart } from "./Chart"
 import { ChartTabButton } from "./ChartTabButton"
 import { ChartTabRow } from "./ChartTabRow"
@@ -17,8 +18,11 @@ const ChartCard: React.FC<IAssetPageLineChartProps> = ({
 }) => {
   return (
     <View
-      style={tw`my-2 mx-4 shadow-md bg-white min-h-[400px] rounded-2xl flex flex-1 
-                flex-col justify-center items-center`}
+      style={{
+        ...tw`my-2 mx-4 bg-white min-h-[400px] rounded-2xl flex flex-1 flex-col 
+              justify-center items-center`,
+        ...shadowStyle("md"),
+      }}
     >
       <Chart {...{ graphs, prevTab, activeTab, transition, logoColor, translation }} />
       <ChartTabRow logoColor={logoColor} activeTab={activeTab}>

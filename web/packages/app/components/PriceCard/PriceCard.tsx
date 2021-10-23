@@ -13,6 +13,7 @@ import Animated, {
 import { ReText, Vector } from "react-native-redash"
 import tw from "../../lib/tailwind"
 import { GraphData, SIZE } from "../../utils/buildGraph"
+import { shadowStyle } from "../../utils/shadowStyle"
 import AssetLogo from "../AssetLogo"
 import { TimeLabel } from "./TimeLabel"
 
@@ -65,7 +66,10 @@ const PriceCard: React.FC<{
 
   return (
     <View
-      style={tw`p-4 mt-4 mx-4 mb-2 bg-white shadow-lg sm:mt-2 rounded-2xl dark:bg-gray-800`}
+      style={{
+        ...tw`p-4 mt-4 mx-4 mb-2 bg-white sm:mt-2 rounded-2xl dark:bg-gray-800`,
+        ...shadowStyle("lg"),
+      }}
     >
       <View style={tw`flex-row items-center`}>
         <AssetLogo key={symbol} asset={symbol} isin={isin} height="64px" width="64px" />
@@ -90,14 +94,14 @@ const PriceCard: React.FC<{
               <Text style={tw`text-sm`}>$</Text>
             </View>
             <ReText
-              style={tw`mt-4 mb-2 text-4xl font-semibold text-left text-gray-700 dark:text-gray-100`}
+              style={tw`mt-4 mb-2 text-4xl font-poppins-500 text-left text-gray-700 dark:text-gray-100`}
               text={price || null}
             />
           </View>
-            <TimeLabel chartTimeSharedValue={time} />
+          <TimeLabel chartTimeSharedValue={time} />
         </View>
         <View style={tw`px-1 mt-[3.25rem]`}>
-          <ReText style={[tw`text-base`, pnlColorStyle]} text={changePercent} />
+          {/* <ReText style={[tw`text-base`, pnlColorStyle]} text={changePercent} /> */}
         </View>
       </View>
     </View>

@@ -48,7 +48,7 @@ function formatTimestamp(chartTimeSharedValue: Animated.SharedValue<number>) {
   if (h === 0) {
     res += " 12:"
   } else {
-    if (h < 10) {
+    if (h < 10 && date.getHours() < 12) {
       res += " 0" + h + ":"
     } else {
       res += " " + h + ":"

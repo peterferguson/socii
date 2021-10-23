@@ -33,6 +33,15 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
   const scaleX = scaleLinear().domain([minTimestamp, maxTimestamp]).range([0, SIZE])
   const scaleY = scaleLinear().domain([minPrice, maxPrice]).range([SIZE, 0])
 
+  // console.log(priceList)
+
+  console.log(
+    shape
+      .line()
+      .x(([, x]) => scaleX(x) as number)
+      .y(([y]) => scaleY(y) as number)(formattedValues) as string
+  )
+
   return {
     minTimestamp,
     maxTimestamp,

@@ -8,6 +8,7 @@ import { EnterCard } from "../components/EnterCard"
 import { useAuth } from "../hooks/useAuth"
 import { auth } from "../lib/firebase"
 import tw from "../lib/tailwind"
+import { shadowStyle } from "../utils/shadowStyle"
 
 const CLIENT_ID = Constants.manifest.extra.firebase.clientId
 
@@ -39,7 +40,10 @@ export default function EnterScreen() {
       >
         <View style={tw`absolute inset-0 z-0 bg-black/10`} />
         <View
-          style={tw`relative w-full h-full max-w-md p-40 shadow-lg -bottom-1 sm:-rotate-6 rounded-3xl`}
+          style={{
+            ...tw`relative w-full h-full max-w-md p-40 -bottom-1 sm:-rotate-6 rounded-3xl`,
+            ...shadowStyle("lg"),
+          }}
         />
         {user ? (
           <View style={tw`text-center items-center justify-center flex-1`} />
