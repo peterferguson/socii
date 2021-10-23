@@ -15,11 +15,12 @@ const EnterNavigator = () => (
       headerShown: true,
       headerShadowVisible: false,
       headerBackTitleVisible: false,
+      headerTintColor: tw.color("brand"),
       headerStyle: {
-        backgroundColor: tw`bg-brand-gray dark:bg-brand-black`.color as string,
         // Similar to `headerShadowVisible` but for web
         // @ts-ignore
         borderBottomWidth: 0,
+        ...tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
       },
     }}
   >

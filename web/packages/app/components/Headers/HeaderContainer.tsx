@@ -9,12 +9,16 @@ const HeaderContainer = ({
   text,
 }: {
   headerTitle: string
-  text: string
+  text?: string
 }) => {
   const { user, signout } = useAuth()
 
+  if (!text) text = headerTitle
+
   return user ? (
-    <View style={tw`flex-1 bg-brand-gray dark:bg-brand-black flex-row pr-4 items-center justify-between`}>
+    <View
+      style={tw`flex-1 bg-brand-gray dark:bg-brand-black flex-row pr-4 items-center justify-between`}
+    >
       <HeaderText text={text} />
       <Pressable
         style={tw`flex flex-col items-center justify-center`}
@@ -23,7 +27,7 @@ const HeaderContainer = ({
         {user?.photoUrl ? (
           <Image
             source={user?.photoUrl ? { uri: user.photoUrl } : null}
-            style={{ width: 28, height: 28, borderRadius: 14 }}
+            style={{ width: 28, height: 28, borderRadius: 14, marginRight: 8 }}
           />
         ) : (
           <HeaderText text={`${user.displayName} logout?`} />

@@ -28,10 +28,12 @@ function StocksNavigator() {
         headerBackTitleVisible: false,
         cardOverlayEnabled: true,
         cardStyle: tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
+        headerTintColor: tw.color("brand"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
           borderBottomWidth: 0,
+          ...tw`bg-brand-gray dark:bg-brand-dark opacity-100`,
         },
       }}
     >
@@ -41,9 +43,7 @@ function StocksNavigator() {
           component={StocksScreen}
           options={{
             title: "Stocks",
-            headerTitle: () => (
-              <HeaderContainer headerTitle={"Stocks"} text={"Stocks"} />
-            ),
+            headerTitle: () => <HeaderContainer headerTitle={"Stocks"} />,
           }}
         />
         <StocksStack.Screen
