@@ -76,7 +76,7 @@ export const TimeLabel = ({
 }) => {
   const formattedValue = useDerivedValue(() => formatTimestamp(chartTimeSharedValue))
   return (
-    <View>
+    <View style={tw`-mt-3 pl-1`}>
       <ReText
         style={style}
         text={(formattedValue || null) as Animated.SharedValue<string>}

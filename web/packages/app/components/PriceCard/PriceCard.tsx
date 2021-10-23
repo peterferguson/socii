@@ -90,7 +90,7 @@ const PriceCard: React.FC<{
         {/* TODO: loading skeleton */}
         <View style={tw`flex-col items-start pl-1`}>
           <View style={tw`flex-row items-center pl-1`}>
-            <View style={tw`pt-2`}>
+            <View style={tw`android:pt-2`}>
               <Text style={tw`text-sm`}>$</Text>
             </View>
             <ReText
@@ -101,7 +101,7 @@ const PriceCard: React.FC<{
           <TimeLabel chartTimeSharedValue={time} />
         </View>
         <View style={tw`px-1 mt-[3.25rem]`}>
-          {/* <ReText style={[tw`text-base`, pnlColorStyle]} text={changePercent} /> */}
+          <ReText style={pnlColorStyle} text={changePercent || null} />
         </View>
       </View>
     </View>

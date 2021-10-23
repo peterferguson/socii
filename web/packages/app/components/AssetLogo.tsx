@@ -29,7 +29,7 @@ const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) =>
     height: parseInt(height) || DEFAULT_HEIGHT_AND_WIDTH,
     ...shadowStyle("lg"),
   }
-  return logo || !isError ? (
+  return logo && !isError ? (
     <Image
       source={{ uri: logo }}
       style={logoStyle}
