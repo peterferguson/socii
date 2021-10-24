@@ -82,9 +82,9 @@ export default {
       algoliaSearchKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY,
     },
     stream: {
-      streamApiId: process.env.NEXT_PUBLIC_STREAM_API_ID,
-      streamApiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY,
-      streamApiSecret: process.env.STREAM_API_SECRET,
+      id: process.env.NEXT_PUBLIC_STREAM_API_ID,
+      key: process.env.NEXT_PUBLIC_STREAM_API_KEY,
+      secret: process.env.STREAM_API_SECRET,
     },
     alpaca: {
       alpacaKey: process.env.ALPACA_KEY,

@@ -1,6 +1,9 @@
 import { useAuth } from "../hooks/useAuth"
 import React, { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
+import Constants from "expo-constants"
+
+const streamApiKey = Constants.manifest.extra.stream.key
 
 export interface StreamClientContext {
   client: StreamChat
@@ -12,10 +15,7 @@ export const useStreamClient = (): StreamClientContext => {
   const streamClient = useRef<StreamChat | null>(null)
 
   useEffect(() => {
-    streamClient.current = StreamChat.getInstance(
-      process.env.NEXT_PUBLIC_STREAM_API_KEY,
-      { timeout: 1000 }
-    )
+    streamClient.current = StreamChat.getInstance(streamApiKey)
 
     // TODO: Refactor the data model and have a public user_portfolio collection & private user subcollection with keys for each user
     const connectStreamUser = async () => {

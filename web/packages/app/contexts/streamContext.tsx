@@ -1,10 +1,17 @@
-/// <reference path="./stream.d.ts" />
-import { useStreamClient } from "../hooks/useStreamClient"
 import React, { createContext } from "react"
 
-export const streamContext = createContext({ client: undefined }) as any
-
-export const StreamProvider: React.FC = ({ children }) => {
-  const { client } = useStreamClient()
-  return <streamContext.Provider value={{ client }}>{children}</streamContext.Provider>
-}
+export const streamContext = createContext<{
+  client: any
+  clientReady: boolean
+  channel: any
+  setChannel: React.Dispatch<React.SetStateAction<any>>
+  thread: any
+  setThread: React.Dispatch<React.SetStateAction<any>>
+}>({
+  client: undefined,
+  clientReady: false,
+  channel: undefined,
+  setChannel: undefined,
+  thread: undefined,
+  setThread: undefined,
+})

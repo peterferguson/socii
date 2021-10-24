@@ -6,8 +6,11 @@ import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
+import { OverlayProvider } from "stream-chat-expo"
 import { AuthProvider } from "../contexts/AuthProvider"
+import { StreamProvider } from "../contexts/StreamProvider"
 import { useDarkMode } from "../hooks/useDarkMode"
+import { useStreamChatTheme } from "../hooks/useStreamChatTheme"
 import tw from "../lib/tailwind"
 
 function LinkTo() {
@@ -37,9 +40,10 @@ function useLinkingConfig() {
 }
 
 export function Navigation({ Component, pageProps }: NextNavigationProps) {
-  const [theme] = useDarkMode()
-  const darkMode = theme === "dark"
+  const [themeMode] = useDarkMode()
+  const darkMode = themeMode === "dark"
   const linkingConfig = useLinkingConfig()
+  const theme = useStreamChatTheme()
 
   return (
     <NavigationContainer
@@ -62,11 +66,20 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       }}
     >
       <AuthProvider>
-        <LinkTo />
-        <BottomSheetModalProvider>
-          <BottomTabNavigator Component={Component} pageProps={pageProps} />
-        </BottomSheetModalProvider>
-        {/* <Notifications /> */}
+        <StreamProvider>
+          <OverlayProvider
+            // bottomInset={bottom}
+            // i18nInstance={streami18n}
+            value={{ style: theme }}
+            translucentStatusBar={true}
+          >
+            <LinkTo />
+            <BottomSheetModalProvider>
+              <BottomTabNavigator Component={Component} pageProps={pageProps} />
+            </BottomSheetModalProvider>
+            {/* <Notifications /> */}
+          </OverlayProvider>
+        </StreamProvider>
       </AuthProvider>
     </NavigationContainer>
   )

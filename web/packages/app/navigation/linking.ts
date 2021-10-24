@@ -2,7 +2,12 @@ import * as Linking from "expo-linking"
 import { getPathFromState, getStateFromPath } from "@react-navigation/native"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
-import { EnterStackParams, GroupsStackParams, StocksStackParams } from "./types"
+import {
+  EnterStackParams,
+  GroupsStackParams,
+  StocksStackParams,
+  ChatStackParams,
+} from "./types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
@@ -21,6 +26,9 @@ function makeStockStackPath<Path extends keyof StocksStackParams>(path: Path): P
 function makeEnterStackPath<Path extends keyof EnterStackParams>(path: Path): Path {
   return path
 }
+function makeChatStackPath<Path extends keyof ChatStackParams>(path: Path): Path {
+  return path
+}
 
 function makeType<T>(t: T) {
   return t
@@ -30,6 +38,13 @@ const groupStackPaths = makeType({
   groups: makeGroupStackPath("groupsScreen"),
   group: makeGroupStackPath("groupScreen"),
   new: makeGroupStackPath("new"),
+})
+
+const chatStackPaths = makeType({
+  channelList: makeChatStackPath("channelListScreen"),
+  channel: makeChatStackPath("channelScreen"),
+  thread: makeChatStackPath("threadScreen"),
+  // new: makeGroupStackPath("new"),
 })
 
 const stocksStackPaths = makeType({
@@ -45,6 +60,7 @@ const tabPaths = makeType({
   enterTab: makeTabPath("enter"),
   groupsTab: makeTabPath("groups"),
   stocksTab: makeTabPath("stocks"),
+  chatTab: makeTabPath("chat"),
 })
 
 const linking: Props = {
@@ -73,6 +89,16 @@ const linking: Props = {
         screens: {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":asset",
+        },
+      },
+      [tabPaths.chatTab]: {
+        path: "chat",
+        initialRouteName: chatStackPaths.channelList,
+        screens: {
+          [chatStackPaths.channelList]: "",
+          [chatStackPaths.channel]: ":channel",
+          // -> :channel:threadId not sure if this is correct
+          [chatStackPaths.thread]: ":channel:threadId",
         },
       },
     },

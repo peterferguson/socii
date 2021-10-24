@@ -1,6 +1,7 @@
 import { TabBarIcon } from "app/navigation/tab-bar-icon"
 import EnterNavigator from "app/pages/enter"
-import GroupsNavigator from "app/pages/groups"
+import GroupsNavigator from "app/pages/groups/index"
+import ChatNavigator from "app/pages/chat/index"
 import StocksNavigator from "app/pages/stocks/index"
 import React from "react"
 import BottomTabBar from "../../components/BottomTabBar"
@@ -40,6 +41,13 @@ export function BottomTabNavigator(props: NextNavigationProps) {
         component={GroupsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="chat"
+        component={ChatNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="message-circle" color={color} />,
         }}
       />
       <BottomTab.Screen
