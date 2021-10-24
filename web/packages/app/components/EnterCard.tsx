@@ -11,19 +11,17 @@ export const EnterCard = ({ signinWith }) => (
         Welcome to
       </Text>
       <Logo width={120} height={120} />
-      <Text style={tw`-mt-4 mb-2 text-base text-gray-600 font-poppins-300`}>
-        Please link your account with one of the following providers:
+      <Text style={tw`-mt-4 mb-3 text-base text-gray-600 font-poppins-300`}>
+        Please link your google account
       </Text>
     </View>
-    <View style={tw`flex flex-col items-center justify-center mx-auto `}>
+    <View style={tw`flex flex-col items-center justify-center rounded-full mx-auto`}>
       <Pressable
-        style={tw`w-8/12 p-1 bg-white border border-gray-200 rounded-full sm:text-sm`}
+        style={tw`w-8/12 p-1 border border-gray-200 rounded-full`}
         onPress={() => signinWith("stocks")}
       >
-        <View
-          style={tw`pl-3 p-2 flex-row items-center w-full bg-white rounded-full`}
-        >
-          <Google {...tw`-ml-1 mr-3 w-5 h-5 sm:w-8 sm:h-8"`} />
+        <View style={tw`pl-3 p-2 flex-row items-center w-full rounded-full`}>
+          <Google {...tw`mr-3 w-5 h-5"`} />
           <Text style={tw`text-xs font-poppins-300 text-brand-black`}>
             Connect with Google
           </Text>

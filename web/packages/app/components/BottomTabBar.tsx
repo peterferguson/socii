@@ -136,6 +136,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
 
         return (
           <TouchableOpacity
+            key={route.key}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -150,13 +151,13 @@ function BottomTabBar({ state, descriptors, navigation }) {
               <TabBarIcon
                 //@ts-ignore
                 name={iconNames[index]}
-                color={isFocused ? tw.color("text-brand") : "#222"}
+                color={isFocused ? tw.color("text-brand") : tw.color("text-brand-black")}
               />
             </View>
             <Text
               style={{
                 ...tw`text-tiny text-brand-black text-center`,
-                color: isFocused ? tw.color("text-brand") : "#222",
+                color: isFocused ? tw.color("text-brand") : tw.color("text-brand-black"),
               }}
             >
               {label}
