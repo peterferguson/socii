@@ -3,7 +3,7 @@ import { Text, ScrollView } from "react-native"
 
 import { createParam } from "app/navigation/use-param"
 import type { GroupScreenProps } from "app/navigation/types"
-import tw from "../lib/tailwind"
+import tw from "../../lib/tailwind"
 
 type Query = {
   id: string
