@@ -6,13 +6,16 @@ type GroupsStackParams = {
   groupScreen: { id: string }
   new: undefined
 }
-type StocksStackParams = { stocksScreen: undefined; stockScreen: { asset: string } }
+type StocksStackParams = {
+  stocksScreen: undefined
+  stockScreen: { assetSymbol: string }
+}
 
 type EnterStackParams = { enterScreen: undefined }
 type ChatStackParams = {
-  channelScreen: undefined
+  channelScreen: { channelId: string }
   channelListScreen: undefined
-  threadScreen: undefined
+  threadScreen: { threadId: string }
 }
 
 type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen">

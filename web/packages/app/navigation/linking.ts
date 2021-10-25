@@ -88,7 +88,7 @@ const linking: Props = {
         initialRouteName: stocksStackPaths.stocks,
         screens: {
           [stocksStackPaths.stocks]: "",
-          [stocksStackPaths.stock]: ":asset",
+          [stocksStackPaths.stock]: ":assetSymbol",
         },
       },
       [tabPaths.chatTab]: {
@@ -96,9 +96,9 @@ const linking: Props = {
         initialRouteName: chatStackPaths.channelList,
         screens: {
           [chatStackPaths.channelList]: "",
-          [chatStackPaths.channel]: ":channel",
+          [chatStackPaths.channel]: ":channelId",
           // -> :channel:threadId not sure if this is correct
-          [chatStackPaths.thread]: ":channel:threadId",
+          [chatStackPaths.thread]: "thread/:threadId",
         },
       },
     },

@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react"
+import { useHeaderHeight } from "@react-navigation/elements"
+import React, { useEffect } from "react"
 import { SafeAreaView, View } from "react-native"
-// import { useHeaderHeight } from "@react-navigation/stack"
 import {
   Channel,
   Chat,
@@ -8,37 +8,43 @@ import {
   MessageList,
   useAttachmentPickerContext,
 } from "stream-chat-expo"
+import { useStream } from "../../hooks"
+import { ChannelScreenProps } from "../../navigation/types"
+import { useRouter } from "../../navigation/use-router"
 import { streami18n } from "./ChannelList"
 
-const ChannelScreen = ({ navigation }) => {
-  // const { channel, setThread, thread } = useContext(AppContext)
-  // const headerHeight = useHeaderHeight()
+const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
+  const { channelId } = route.params
+  console.log("ChannelScreen", channelId)
+
+  const router = useRouter()
+  const { client: chatClient, channel, setThread, thread } = useStream()
+  const headerHeight = useHeaderHeight()
   const { setTopInset } = useAttachmentPickerContext()
 
-  // useEffect(() => {
-  //   setTopInset(headerHeight)
-  // }, [headerHeight])
+  useEffect(() => setTopInset(headerHeight), [headerHeight])
 
-  return null
-  // <SafeAreaView>
-  //   <Chat client={chatClient} i18nInstance={streami18n}>
-  //     <Channel
-  //       channel={channel}
-  //       keyboardVerticalOffset={headerHeight}
-  //       thread={thread}
-  //     >
-  //       <View style={{ flex: 1 }}>
-  //         <MessageList
-  //           onThreadSelect={(thread) => {
-  //             setThread(thread)
-  //             navigation.navigate("Thread")
-  //           }}
-  //         />
-  //         <MessageInput />
-  //       </View>
-  //     </Channel>
-  //   </Chat>
-  // </SafeAreaView>
+  return (
+    <SafeAreaView>
+      <Chat client={chatClient} i18nInstance={streami18n}>
+        <Channel
+          channel={channel}
+          keyboardVerticalOffset={headerHeight}
+          thread={thread}
+        >
+          <View style={{ flex: 1 }}>
+            <MessageList
+              onThreadSelect={(thread) => {
+                setThread(thread)
+                router.push(`/chat/thread/${thread.id}`)
+              }}
+            />
+            <MessageInput />
+          </View>
+        </Channel>
+      </Chat>
+    </SafeAreaView>
+  )
 }
 
 export default ChannelScreen
