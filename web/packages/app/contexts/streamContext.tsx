@@ -3,11 +3,11 @@ import { Channel, StreamChat } from "stream-chat"
 import { ThreadContextValue } from "stream-chat-expo"
 
 export const streamContext = createContext<{
-  client: StreamChat<any>
+  client: StreamChat
   clientReady: boolean
-  channel: Channel<any>
+  channel: Channel
   setChannel: React.Dispatch<React.SetStateAction<any>>
-  thread: ThreadContextValue<any>
+  thread: ThreadContextValue
   setThread: React.Dispatch<React.SetStateAction<any>>
 }>({
   client: undefined,

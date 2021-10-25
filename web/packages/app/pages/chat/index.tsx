@@ -4,7 +4,6 @@ import { ChannelListScreen } from "app/screens/chat/index"
 import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 import { useStream } from "../../hooks/useStream"
-import tw from "../../lib/tailwind"
 import { headerScreenOptions } from "../../utils/headerScreenOptions"
 
 export const ChatStack = createStackNavigator<ChatStackParams>()

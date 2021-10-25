@@ -8,6 +8,7 @@ import {
   MessageList,
   useAttachmentPickerContext,
 } from "stream-chat-expo"
+import { CustomAttachment } from "../../components/CustomAttachments"
 import { useStream } from "../../hooks"
 import { ChannelScreenProps } from "../../navigation/types"
 import { useRouter } from "../../navigation/use-router"
@@ -27,6 +28,7 @@ const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
       <Chat client={chatClient} i18nInstance={streami18n}>
         <Channel
           channel={channel}
+          Attachment={CustomAttachment}
           keyboardVerticalOffset={headerHeight}
           thread={thread}
         >
