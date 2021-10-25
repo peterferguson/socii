@@ -1,7 +1,7 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer, useLinkTo } from "@react-navigation/native"
-import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
 import { linking } from "app/navigation/linking"
+import { TopLevelNavigator } from "app/navigation/top-level-navigator"
 import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
@@ -19,7 +19,7 @@ function LinkTo() {
   useEffect(function trigger() {
     if (Platform.OS === "web" && Router) {
       const handler = (path: string) => linkTo(path)
-      
+
       Router.events.on("routeChangeComplete", handler)
 
       return () => Router.events.off("routeChangeComplete", handler)
@@ -74,7 +74,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
           >
             <LinkTo />
             <BottomSheetModalProvider>
-              <BottomTabNavigator Component={Component} pageProps={pageProps} />
+              <TopLevelNavigator Component={Component} pageProps={pageProps} />
             </BottomSheetModalProvider>
             {/* <Notifications /> */}
           </OverlayProvider>

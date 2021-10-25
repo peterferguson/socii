@@ -1,6 +1,7 @@
 import React from "react"
 import { enableScreens } from "react-native-screens"
 import { StatusBar } from "expo-status-bar"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import tw from "../app/lib/tailwind"
 import { Navigation } from "app/navigation"

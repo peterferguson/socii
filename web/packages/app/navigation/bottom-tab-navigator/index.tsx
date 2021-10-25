@@ -1,15 +1,17 @@
 import { TabBarIcon } from "app/navigation/tab-bar-icon"
+import ChatNavigator from "app/pages/chat/index"
 import EnterNavigator from "app/pages/enter"
 import GroupsNavigator from "app/pages/groups/index"
-import ChatNavigator from "app/pages/chat/index"
 import StocksNavigator from "app/pages/stocks/index"
 import React from "react"
 import BottomTabBar from "../../components/BottomTabBar"
+import { useAuth } from "../../hooks"
 import tw from "../../lib/tailwind"
 import { NextNavigationProps } from "../types"
 import { BottomTab } from "./types"
 
 export function BottomTabNavigator(props: NextNavigationProps) {
+  const { user } = useAuth()
   return (
     <BottomTab.Navigator
       initialRouteName="enter"
@@ -20,12 +22,7 @@ export function BottomTabNavigator(props: NextNavigationProps) {
         tabBarInactiveTintColor: tw`bg-brand-gray dark:bg-[#7e7f81]`.color as string,
         tabBarShowLabel: true,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: {
-          ...tw`bg-brand-gray dark: bg-brand-black`,
-          // backgroundColor: "white",
-          // borderTopColor: tw.color("brand"),
-          zIndex: 1,
-        },
+        tabBarStyle: { ...tw`bg-brand-gray dark: bg-brand-black`, zIndex: 1 },
         lazy: true,
       }}
     >
@@ -44,19 +41,23 @@ export function BottomTabNavigator(props: NextNavigationProps) {
         }}
       />
       <BottomTab.Screen
-        name="chat"
-        component={ChatNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="message-circle" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
         name="stocks"
         component={StocksNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="globe" color={color} />,
         }}
       />
+      {user?.username && (
+        <BottomTab.Screen
+          name="chat"
+          component={ChatNavigator}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="message-circle" color={color} />
+            ),
+          }}
+        />
+      )}
     </BottomTab.Navigator>
   )
 }

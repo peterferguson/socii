@@ -12,7 +12,6 @@ export const streami18n = new Streami18n({
 
 const ChannelListScreen = ({ navigation }) => {
   const { client: chatClient, setChannel } = useStream()
-  console.log("ChannelListScreen", chatClient.userID)
   const router = useRouter()
   const filters = { members: { $in: [chatClient?.userID] } }
   const options = { state: true, watch: true, presence: true, limit: 5 }
@@ -27,7 +26,7 @@ const ChannelListScreen = ({ navigation }) => {
           filters={memoizedFilters}
           onSelect={(channel) => {
             setChannel(channel)
-            router.push(`/chat/${channel.id}`)
+            router.push(`/channel/${channel.id}`)
           }}
           options={options}
           // sort={sort}

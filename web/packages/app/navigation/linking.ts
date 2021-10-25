@@ -7,6 +7,7 @@ import {
   GroupsStackParams,
   StocksStackParams,
   ChatStackParams,
+  ChannelStackParams,
 } from "./types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
@@ -29,6 +30,9 @@ function makeEnterStackPath<Path extends keyof EnterStackParams>(path: Path): Pa
 function makeChatStackPath<Path extends keyof ChatStackParams>(path: Path): Path {
   return path
 }
+function makeChannelStackPath<Path extends keyof ChannelStackParams>(path: Path): Path {
+  return path
+}
 
 function makeType<T>(t: T) {
   return t
@@ -42,9 +46,11 @@ const groupStackPaths = makeType({
 
 const chatStackPaths = makeType({
   channelList: makeChatStackPath("channelListScreen"),
-  channel: makeChatStackPath("channelScreen"),
-  thread: makeChatStackPath("threadScreen"),
   // new: makeGroupStackPath("new"),
+})
+const channelStackPaths = makeType({
+  channel: makeChannelStackPath("channelScreen"),
+  thread: makeChannelStackPath("threadScreen"),
 })
 
 const stocksStackPaths = makeType({
@@ -94,11 +100,14 @@ const linking: Props = {
       [tabPaths.chatTab]: {
         path: "chat",
         initialRouteName: chatStackPaths.channelList,
+        screens: { [chatStackPaths.channelList]: "" },
+      },
+      channel: {
+        path: "channel",
         screens: {
-          [chatStackPaths.channelList]: "",
-          [chatStackPaths.channel]: ":channelId",
+          [channelStackPaths.channel]: ":channelId",
           // -> :channel:threadId not sure if this is correct
-          [chatStackPaths.thread]: "thread/:threadId",
+          [channelStackPaths.thread]: "thread/:threadId",
         },
       },
     },

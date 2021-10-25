@@ -13,8 +13,10 @@ type StocksStackParams = {
 
 type EnterStackParams = { enterScreen: undefined }
 type ChatStackParams = {
-  channelScreen: { channelId: string }
   channelListScreen: undefined
+}
+type ChannelStackParams = {
+  channelScreen: { channelId: string }
   threadScreen: { threadId: string }
 }
 
@@ -26,8 +28,8 @@ type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
   "channelListScreen"
 >
-type ChannelScreenProps = NativeStackScreenProps<ChatStackParams, "channelScreen">
-type ThreadScreenProps = NativeStackScreenProps<ChatStackParams, "threadScreen">
+type ChannelScreenProps = NativeStackScreenProps<ChannelStackParams, "channelScreen">
+type ThreadScreenProps = NativeStackScreenProps<ChannelStackParams, "threadScreen">
 
 type NextPageProps = any
 type NextNavigationProps = {
@@ -46,6 +48,7 @@ export type {
   StocksStackParams,
   ChatStackParams,
   ChannelListScreenProps,
+  ChannelStackParams,
   ChannelScreenProps,
   ThreadScreenProps,
 }

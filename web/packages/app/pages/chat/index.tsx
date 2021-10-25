@@ -1,14 +1,13 @@
-import React from "react"
-import { Platform } from "react-native"
-
 import createStackNavigator from "app/navigation/create-stack-navigator"
-import { ChannelScreen, ChannelListScreen, ThreadScreen } from "app/screens/chat/index"
-import { ChatStackParams } from "app/navigation/types"
-import tw from "../../lib/tailwind"
+import { ChannelStackParams, ChatStackParams } from "app/navigation/types"
+import { ChannelListScreen, ChannelScreen, ThreadScreen } from "app/screens/chat/index"
+import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 import { useStream } from "../../hooks/useStream"
+import tw from "../../lib/tailwind"
 
-const ChatStack = createStackNavigator<ChatStackParams>()
+export const ChatStack = createStackNavigator<ChatStackParams>()
+export const ChannelStack = createStackNavigator<ChannelStackParams>()
 
 function ChatNavigator() {
   const { clientReady } = useStream()
@@ -38,15 +37,43 @@ function ChatNavigator() {
               headerTitle: () => <HeaderContainer headerTitle={"Chats"} />,
             }}
           />
-          <ChatStack.Screen
+        </ChatStack.Group>
+      )}
+    </ChatStack.Navigator>
+  )
+}
+
+export function ChatNavigatorNoBottomTab() {
+  const { clientReady } = useStream()
+  return (
+    <ChannelStack.Navigator
+      screenOptions={{
+        animationEnabled: true,
+        headerShown: true,
+        headerShadowVisible: false,
+        headerBackTitleVisible: true,
+        headerTintColor: tw.color("brand"),
+        headerStyle: {
+          // Similar to `headerShadowVisible` but for web
+          // @ts-ignore
+          borderBottomWidth: 0,
+          ...tw`bg-brand-gray dark:bg-brand-black opacity-100`,
+        },
+      }}
+    >
+      {clientReady && ( // TODO: Add screen for logging in users in chat navigator
+        <ChannelStack.Group>
+          <ChannelStack.Screen
             name="channelScreen"
             component={ChannelScreen}
-            options={{
-              title: "Chat",
-              headerTitle: () => <HeaderContainer headerTitle={"Chat"} />,
-            }}
+            options={({ route }) => ({
+              title: route.params.channelId,
+              headerTitle: () => (
+                <HeaderContainer headerTitle={"Chat"} text={route.params.channelId} />
+              ),
+            })}
           />
-          <ChatStack.Screen
+          <ChannelStack.Screen
             name="threadScreen"
             component={ThreadScreen}
             options={{
@@ -54,9 +81,9 @@ function ChatNavigator() {
               headerTitle: () => <HeaderContainer headerTitle={"Chat Thread"} />,
             }}
           />
-        </ChatStack.Group>
+        </ChannelStack.Group>
       )}
-    </ChatStack.Navigator>
+    </ChannelStack.Navigator>
   )
 }
 

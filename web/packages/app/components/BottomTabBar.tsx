@@ -3,12 +3,19 @@ import { Text, TouchableOpacity, View } from "react-native"
 import tw from "../lib/tailwind"
 import { TabBarIcon } from "../navigation/tab-bar-icon"
 
-const iconNames = ["home", "users", "message-circle", "globe"]
+const routeIconNames = {
+  enter: "home",
+  groups: "users",
+  chat: "message-circle",
+  stocks: "globe",
+}
 
 function BottomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={tw`flex-row bg-white ios:pb-4`}>
       {state.routes.map((route, index) => {
+        console.log(route)
+
         const { options } = descriptors[route.key]
         const label =
           options.tabBarLabel !== undefined
@@ -32,12 +39,12 @@ function BottomTabBar({ state, descriptors, navigation }) {
           }
         }
 
-        const onLongPress = () => {
-          navigation.emit({
-            type: "tabLongPress",
-            target: route.key,
-          })
-        }
+        const onLongPress = () =>
+          navigation.emit({ type: "tabLongPress", target: route.key })
+
+        const focussedColor = tw.color(
+          isFocused ? "brand" : "brand-black dark:brand-gray"
+        )
 
         return (
           <TouchableOpacity
@@ -53,21 +60,12 @@ function BottomTabBar({ state, descriptors, navigation }) {
             }`}
           >
             <View style={tw`mx-auto mb-1`}>
-              <TabBarIcon
-                //@ts-ignore
-                name={iconNames[index]}
-                color={
-                  isFocused ? tw.color("text-brand") : tw.color("text-brand-black")
-                }
-              />
+              <TabBarIcon name={routeIconNames[route.name]} color={focussedColor} />
             </View>
             <Text
-              style={{
-                ...tw`text-tiny text-brand-black text-center`,
-                color: isFocused
-                  ? tw.color("text-brand")
-                  : tw.color("text-brand-black"),
-              }}
+              style={tw.style(`text-tiny text-brand-black text-center`, {
+                color: focussedColor,
+              })}
             >
               {label}
             </Text>

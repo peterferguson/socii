@@ -15,8 +15,6 @@ import { streami18n } from "./ChannelList"
 
 const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
   const { channelId } = route.params
-  console.log("ChannelScreen", channelId)
-
   const router = useRouter()
   const { client: chatClient, channel, setThread, thread } = useStream()
   const headerHeight = useHeaderHeight()
@@ -36,7 +34,7 @@ const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
             <MessageList
               onThreadSelect={(thread) => {
                 setThread(thread)
-                router.push(`/chat/thread/${thread.id}`)
+                router.push(`/channel/thread/${thread.id}`)
               }}
             />
             <MessageInput />

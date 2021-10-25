@@ -9,9 +9,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
   const router = useRouter()
 
   const component = useCallback(
-    (props) => {
-      return <Component {...pageProps} {...props} />
-    },
+    (props) => <Component {...pageProps} {...props} />,
     [Component, pageProps]
   )
 
