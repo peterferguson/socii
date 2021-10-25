@@ -1,4 +1,4 @@
-import type { StockScreenProps } from "app/navigation/types"
+import type { CategoryScreenProps } from "app/navigation/types"
 import { createParam } from "app/navigation/use-param"
 import React, { useEffect, useRef, useState } from "react"
 import { ScrollView, View, Text } from "react-native"
@@ -14,6 +14,7 @@ import { iexQuote } from "../../utils/iexQuote"
 import HorizontalAssetCard, {
    HorizontalAssetCardSkeleton,
  } from "../../components/HorizontalAssetCard"
+ import tw from "../../lib/tailwind"
 
 interface CategoryTickerProps extends TickersProps {
   category: string
@@ -22,7 +23,9 @@ interface CategoryTickerProps extends TickersProps {
 
 // TODO: Add overall industry/category performance for comparison purposes
 // TODO: Refactor the infinite scrolling stock card loading on all pages
-export default function CategoryScreen({ navigation, route }: StockScreenProps) {
+export default function CategoryScreen({ navigation, route }: CategoryScreenProps) {
+
+  const { category: categoryName } = route.params
 
   const tickers = [
     {
@@ -143,8 +146,9 @@ export default function CategoryScreen({ navigation, route }: StockScreenProps) 
 
     <View style={{ flex: 1 }}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 24 }}>
-          <Text>Hi
+        <View style={tw`marginBottom: 24 items-center`}>
+          <Text style={tw`text-3xl text-brand-black dark:text-brand-gray tracking-tight uppercase font-poppins-500 dark:text-brand-black`}>
+            {categoryName}
           </Text>
         </View>
         

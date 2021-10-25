@@ -74,7 +74,7 @@ const linking: Props = {
         screens: {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":asset",
-          [stocksStackPaths.category]: "category",
+          [stocksStackPaths.category]: "categories/:category",
         },
       },
     },
