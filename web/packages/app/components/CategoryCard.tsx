@@ -5,7 +5,7 @@ import tw from "../lib/tailwind"
 export const CategoryCard = ({ shortName, emoji, router }) => (
   <Pressable
     key={`category-${shortName}`}
-    onPress={() => router.push(`/stocks/categories/${shortName}`)}
+    onPress={() => router.push(`/stocks/category`)}
     style={{
       ...tw`flex items-center mx-1 rounded-2xl border border-gray-300 text-gray-600 h-28 p-6 bg-white dark:bg-brand-black`,
       minHeight: 112,

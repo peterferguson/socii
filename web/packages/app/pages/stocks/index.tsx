@@ -12,6 +12,7 @@ import createStackNavigator from "app/navigation/create-stack-navigator"
 import { StocksStackParams } from "app/navigation/types"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
+import CategoryScreen from "app/screens/stocks/category"
 import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 import tw from "../../lib/tailwind"
@@ -44,6 +45,14 @@ function StocksNavigator() {
           options={{
             title: "Stocks",
             headerTitle: () => <HeaderContainer headerTitle={"Stocks"} />,
+          }}
+        />
+        <StocksStack.Screen
+          name="categoryScreen"
+          component={CategoryScreen}
+          options={{
+            title: "Category",
+            headerTitle: () => <HeaderContainer headerTitle={"Category"} />,
           }}
         />
         <StocksStack.Screen

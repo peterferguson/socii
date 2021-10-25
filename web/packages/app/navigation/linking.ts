@@ -35,6 +35,7 @@ const groupStackPaths = makeType({
 const stocksStackPaths = makeType({
   stocks: makeStockStackPath("stocksScreen"),
   stock: makeStockStackPath("stockScreen"),
+  category: makeStockStackPath("categoryScreen"),
 })
 
 const enterStackPaths = makeType({
@@ -73,6 +74,7 @@ const linking: Props = {
         screens: {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":asset",
+          [stocksStackPaths.category]: "category",
         },
       },
     },
