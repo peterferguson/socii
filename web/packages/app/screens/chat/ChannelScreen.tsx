@@ -34,7 +34,7 @@ const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
             <MessageList
               onThreadSelect={(thread) => {
                 setThread(thread)
-                router.push(`/channel/thread/${thread.id}`)
+                router.push(`/thread/${thread.id}`)
               }}
             />
             <MessageInput />

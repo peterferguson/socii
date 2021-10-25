@@ -1,7 +1,7 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer, useLinkTo } from "@react-navigation/native"
 import { linking } from "app/navigation/linking"
-import { TopLevelNavigator } from "app/navigation/top-level-navigator"
+import { MainNavigator } from "app/navigation/main-navigator"
 import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
@@ -74,7 +74,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
           >
             <LinkTo />
             <BottomSheetModalProvider>
-              <TopLevelNavigator Component={Component} pageProps={pageProps} />
+              <MainNavigator Component={Component} pageProps={pageProps} />
             </BottomSheetModalProvider>
             {/* <Notifications /> */}
           </OverlayProvider>

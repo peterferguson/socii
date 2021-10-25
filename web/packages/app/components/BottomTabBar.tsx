@@ -14,8 +14,6 @@ function BottomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={tw`flex-row bg-white ios:pb-4`}>
       {state.routes.map((route, index) => {
-        console.log(route)
-
         const { options } = descriptors[route.key]
         const label =
           options.tabBarLabel !== undefined

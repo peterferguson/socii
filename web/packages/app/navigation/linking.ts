@@ -9,9 +9,13 @@ import {
   ChatStackParams,
   ChannelStackParams,
 } from "./types"
+import { MainNavigatorParams } from "./main-navigator/types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
+function makeMainPath<Path extends keyof MainNavigatorParams>(path: Path): Path {
+  return path
+}
 function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
   return path
 }
@@ -49,8 +53,8 @@ const chatStackPaths = makeType({
   // new: makeGroupStackPath("new"),
 })
 const channelStackPaths = makeType({
-  channel: makeChannelStackPath("channelScreen"),
-  thread: makeChannelStackPath("threadScreen"),
+  channel: makeChannelStackPath("channel"),
+  thread: makeChannelStackPath("thread"),
 })
 
 const stocksStackPaths = makeType({
@@ -69,6 +73,12 @@ const tabPaths = makeType({
   chatTab: makeTabPath("chat"),
 })
 
+const mainPaths = makeType({
+  withBottomBar: makeMainPath("withBottomBar"),
+  channel: makeMainPath("channel"),
+  thread: makeMainPath("thread"),
+})
+
 const linking: Props = {
   prefixes: [Linking.makeUrl("/")],
   config: {
@@ -76,9 +86,7 @@ const linking: Props = {
       [tabPaths.enterTab]: {
         path: "",
         initialRouteName: enterStackPaths.enter,
-        screens: {
-          [enterStackPaths.enter]: "",
-        },
+        screens: { [enterStackPaths.enter]: "" },
       },
       [tabPaths.groupsTab]: {
         initialRouteName: groupStackPaths.groups,
@@ -102,13 +110,14 @@ const linking: Props = {
         initialRouteName: chatStackPaths.channelList,
         screens: { [chatStackPaths.channelList]: "" },
       },
-      channel: {
+      [mainPaths.channel]: {
         path: "channel",
-        screens: {
-          [channelStackPaths.channel]: ":channelId",
-          // -> :channel:threadId not sure if this is correct
-          [channelStackPaths.thread]: "thread/:threadId",
-        },
+        screens: { [channelStackPaths.channel]: ":channelId" },
+      },
+      [mainPaths.thread]: {
+        path: "thread",
+        // -> :channel:threadId not sure if this is correct
+        screens: { [channelStackPaths.thread]: ":threadId" },
       },
     },
   },
