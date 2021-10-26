@@ -18,11 +18,13 @@ export const useStreamChatTheme = () => {
       accent_red: "#FF3742",
       transparent: "transparent",
       black: tw`text-brand-black dark:text-brand-gray`.color as string,
+      white_snow: tw`text-brand-gray dark:text-brand-black`.color as string, // MessageList backgroundColor
+      blue_alice: tw`text-white dark:text-brand-gray`.color as string, // MessageList backgroundColor
       ...(colorScheme === "dark"
         ? {
             bg_gradient_end: "#101214",
             bg_gradient_start: "#070A0D",
-            blue_alice: "#00193D",
+            // blue_alice: "#00193D",
             border: "#141924",
             grey: "#7A7A7A",
             grey_gainsboro: "#2D2F2F",
@@ -35,12 +37,12 @@ export const useStreamChatTheme = () => {
             targetedMessageBackground: "#302D22",
             white: "#101418",
             white_smoke: "#13151B",
-            white_snow: "#070A0D",
+            // white_snow: "#070A0D",
           }
         : {
             bg_gradient_end: "#F7F7F7",
             bg_gradient_start: "#FCFCFC",
-            blue_alice: "#E9F2FF",
+            // blue_alice: "#E9F2FF",
             border: "#00000014", // 14 = 8% opacity; top: x=0, y=-1; bottom: x=0, y=1
             grey: "#7A7A7A",
             grey_gainsboro: "#DBDBDB",
@@ -53,7 +55,7 @@ export const useStreamChatTheme = () => {
             targetedMessageBackground: "#FBF4DD", // dark mode = #302D22
             white: "#FFFFFF",
             white_smoke: "#F2F2F2",
-            white_snow: "#FCFCFC",
+            // white_snow: "#FCFCFC",
           }),
     },
     imageGallery: {
