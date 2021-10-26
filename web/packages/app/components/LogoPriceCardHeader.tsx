@@ -27,9 +27,9 @@ export default function LogoPriceCardHeader({
   //   const { price: priceData } = useTickerPrice(asset)
 
   const priceData = {
-    latestPrice: 1.0,
-    iexRealtimePrice: 1.0,
-    changePercent: 1.0,
+    latestPrice: 1000.0,
+    iexRealtimePrice: 1000.0,
+    changePercent: 0.0553,
   }
 
   const currentPrice = priceData?.iexRealtimePrice || priceData?.latestPrice
@@ -49,9 +49,11 @@ export default function LogoPriceCardHeader({
           >
             {asset} &bull; ${price}
           </Text>
-          {showChange && priceChange !== null && (
-            <PercentChangeTag pctChange={priceChange} />
-          )}
+          <View style={tw`flex justify-center items-center`}>
+            {showChange && priceChange !== null && (
+              <PercentChangeTag pctChange={priceChange} />
+            )}
+          </View>
         </View>
       </View>
     </>

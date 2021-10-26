@@ -14,20 +14,16 @@ const PctChangeTag = ({
   const pnlTxtColor = pnlTextColor(pctChange).replace("200", textColorIntensity)
 
   return (
-    <>
-      {pctChange !== null && (
-        <View
-          style={tw`ml-1 ${pnlBgColor} text-xs font-semibold inline-block py-1 px-2 rounded-full uppercase mt-1`}
-        >
-          <View style={tw`flex flex-row items-center justify-between`}>
-            <PnlArrow change={pctChange} />
-            <Text style={tw`ml-0.5 ${pnlTxtColor}`}>
-              {(100 * pctChange).toFixed(2)}%
-            </Text>
-          </View>
-        </View>
-      )}
-    </>
+    pctChange !== null && (
+      <View
+        style={tw`flex-row justify-center ml-1 max-w-24 items-center ${pnlBgColor} py-1 px-2 rounded-full mt-1`}
+      >
+        <PnlArrow change={pctChange} />
+        <Text style={tw`ml-0.5 text-xs font-semibold ${pnlTxtColor}`}>
+          {(100 * pctChange).toFixed(2)}%
+        </Text>
+      </View>
+    )
   )
 }
 

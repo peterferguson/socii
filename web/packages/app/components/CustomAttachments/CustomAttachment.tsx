@@ -22,8 +22,7 @@ export default function CustomAttachment(props) {
     case "buy":
       return <TradeCommandAttachment attachment={attachment} tradeType={"buy"} />
     case "sell":
-      // return <TradeCommandAttachment attachment={attachment} tradeType={"sell"} />
-      return null
+      return <TradeCommandAttachment attachment={attachment} tradeType={"sell"} />
     default:
       break
   }

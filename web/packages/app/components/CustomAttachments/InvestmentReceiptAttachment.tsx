@@ -78,7 +78,9 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
   )
 
   return (
-    <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
+    <View
+      style={tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg shadow-lg`}
+    >
       {isLoading ? (
         <View style={tw`grid place-items-center`}>
           <LoadingIndicator color="#3fba" size={95} />
@@ -87,7 +89,8 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
         <>
           {attachment?.tickerSymbol && (
             <LogoPriceCardHeader
-              symbol={tickerSymbol.toUpperCase()}
+              asset={tickerSymbol}
+              isin=""
               cost={cost}
               purchasePrice={price}
               showChange={!isPending}
@@ -101,7 +104,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
                 isPending && "animate-pulse"
               )}
             >
-              <View style={tw`flex flex-row items-center justify-between`}>
+              <View style={tw`flex-row items-center justify-between`}>
                 <Text style={tw`text-gray-600 ml-0.5`}>order pending</Text>
               </View>
             </View>

@@ -8,7 +8,7 @@ const PnlArrow = ({ change, size }: { change: number; size?: number }) => {
     <>
       {change === 0 ? null : (
         <Feather
-          size={25}
+          size={size || 16}
           name={change > 0 ? "arrow-up" : "arrow-down"}
           color={tw.color(pnlTextColor(change).replace("text-", ""))}
         />

@@ -21,8 +21,8 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   // const groupName = channel.cid.split(":").pop()
   // const alpacaAccountId = user.alpacaAccountId
 
-  // const [action, shares] = message.text.split("to ").pop().split("shares")[0].split(" ")
-  // const cost = message.text.split("for ").pop().split(". Do")[0]
+  const [action, shares] = message.text.split("to ").pop().split("shares")[0].split(" ")
+  const cost = message.text.split("for ").pop().split(". Do")[0]
 
   const onSubmit = async (agrees: boolean) => {}
   //   // ! Trade is based on the groups selection process.
@@ -43,18 +43,22 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   // TODO: Add different views of the buy card for users who did not submit it
 
   return (
-    <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
+    <View
+      style={tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg shadow-lg`}
+    >
       <LogoPriceCardHeader asset={attachment?.tickerSymbol} isin={""} />
-      <View style={tw`flex items-center justify-center w-full mx-auto space-x-2`}>
+      <View style={tw`flex-row items-center justify-center mt-4`}>
         <MMLButton
           key={`no-button`}
-          style={tw`w-1/2 mx-2 outline-btn btn-transition hover:bg-red-400`}
+          style={tw`bg-red-200 border border-red-400`}
+          textStyle={tw`text-red-500`}
           text="No"
           onSubmit={() => onSubmit(false)}
-        />
+          />
         <MMLButton
           key={`yes-button`}
-          style={tw`w-1/2 mx-2 outline-btn btn-transition`}
+          style={tw`bg-green-200 border border-green-400`}
+          textStyle={tw`text-green-500`}
           text={"Yes"}
           onSubmit={() => onSubmit(true)}
         />

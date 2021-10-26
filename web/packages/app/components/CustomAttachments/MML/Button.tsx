@@ -1,11 +1,13 @@
 import React from "react"
 import { TouchableOpacity, Text } from "react-native"
+import tw from "../../../lib/tailwind"
 
 export type ButtonProps = {
   /** Additional button class name */
   style?: any
   /** The text to display in the button */
   text: string
+  textStyle?: any
   /** The name of the button */
   name?: string
   /** The value of the button */
@@ -19,14 +21,17 @@ export type ButtonProps = {
 /**
  * Button can be used to open a URL, submit the form or trigger a select when clicked
  */
-const Button: React.FC<ButtonProps> = ({
-  style,
-  text,
-  icon,
-  onSubmit,
-}) => (
-  <TouchableOpacity style={style || {}} onPress={onSubmit}>
-    <Text>{text ? text : null}</Text>
+const Button: React.FC<ButtonProps> = ({ style, text, textStyle, icon, onSubmit }) => (
+  <TouchableOpacity
+    style={{
+      ...tw`bg-transparent mr-auto rounded p-2 mx-2 w-16 flex-row items-center justify-center`,
+      ...style,
+    }}
+    onPress={onSubmit}
+  >
+    <Text style={{ ...tw`font-open-sans-600`, ...textStyle }}>
+      {text ? text : null}
+    </Text>
     {icon ? icon : null}
   </TouchableOpacity>
 )

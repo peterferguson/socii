@@ -10,9 +10,9 @@ const NumberInput = ({ value, onChange, name, decimals = 2 }) => {
 
   return (
     <View
-      style={tw`flex flex-row m-2 border rounded shadow group group-focus:outline-none group-focus:border-none group-focus:ring-1`}
+      style={tw`flex-row m-2 border rounded shadow group group-focus:outline-none group-focus:border-none group-focus:ring-1`}
     >
-      <View style={tw`flex items-center px-3 rounded rounded-r-none bg-grey-200`}>
+      <View style={tw`flex-row items-center px-3 rounded rounded-r-none bg-grey-200`}>
         <Text style={tw`text-sm font-poppins-500 sm:text-base text-grey-400`}>
           {name}
         </Text>
