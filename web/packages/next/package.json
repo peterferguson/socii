@@ -1,5 +1,5 @@
 {
-  "name": "@expo-next-monorepo-example/next",
+  "name": "@socii/next",
   "scripts": {
     "dev": "next",
     "build": "next build",

@@ -1,7 +1,6 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { enableScreens } from "react-native-screens"
 import { StatusBar } from "expo-status-bar"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import tw from "../app/lib/tailwind"
 import { Navigation } from "app/navigation"
@@ -29,7 +28,7 @@ import { useDeviceContext } from "twrnc"
 enableScreens(true)
 
 export default function App() {
-  const [fontIsLoaded] = useFonts({
+  const [fontIsLoaded, error] = useFonts({
     "poppins-100": Poppins_100Thin,
     "poppins-200": Poppins_200ExtraLight,
     "poppins-300": Poppins_300Light,
@@ -44,6 +43,8 @@ export default function App() {
     "open-sans-700": OpenSans_700Bold,
     "open-sans-800": OpenSans_800ExtraBold,
   })
+
+  useEffect(() => console.log(error), [error])
 
   useDeviceContext(tw)
   if (!fontIsLoaded) return <AppLoading />

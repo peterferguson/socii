@@ -1,10 +1,9 @@
 import { Attachment } from "stream-chat-expo"
-import {
-  InvestmentConfirmationAttachment,
-  InvestmentReceiptAttachment,
-  StockDisplayAttachment,
-  TradeCommandAttachment,
-} from "."
+import InvestmentConfirmationAttachment from "./InvestmentConfirmationAttachment"
+import InvestmentReceiptAttachment from "./InvestmentReceiptAttachment"
+import StockDisplayAttachment from "./StockDisplayAttachment"
+import TradeCommandAttachment from "./TradeCommandAttachment"
+
 import React from "react"
 
 export default function CustomAttachment(props) {

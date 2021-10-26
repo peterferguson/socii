@@ -25,12 +25,12 @@ const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
 
   return (
     <SafeAreaView>
-      <Chat client={chatClient} i18nInstance={streami18n}>
+      <Chat client={chatClient as any} i18nInstance={streami18n}>
         <Channel
-          channel={channel}
+          channel={channel as any}
           Attachment={CustomAttachment}
           keyboardVerticalOffset={headerHeight}
-          thread={thread}
+          thread={thread as any}
         >
           <View style={{ flex: 1 }}>
             <MessageList
