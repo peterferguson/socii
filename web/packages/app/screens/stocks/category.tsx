@@ -15,6 +15,7 @@ import HorizontalAssetCard, {
    HorizontalAssetCardSkeleton,
  } from "../../components/HorizontalAssetCard"
  import tw from "../../lib/tailwind"
+import { getCategoryData } from "../../utils/getCategoryData"
 
 interface CategoryTickerProps extends TickersProps {
   category: string
@@ -57,8 +58,19 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const moreTickers = useRef([])
   const lastTickerLoaded = useRef(null)
   const lastTickerRef = useRef(null)
-  const [ categoryProps, setCategoryProps ] = useState(null)
+  const [ initialCards, setInitialCards ] = useState<CategoryTickerProps>({} as CategoryTickerProps)
+  // const [ categoryProps, setCategoryProps ] = useState(null)
 
+ 
+  useEffect(() => {
+    getCategoryData(categoryName).then(setInitialCards)
+    setTickersToLoad(initialCards.restOfTickers)
+  } ,[])
+
+  useEffect(() => {
+    if (initialCards.restOfTickers)setTickersToLoad(initialCards.restOfTickers)
+  } ,[initialCards.restOfTickers])
+  
   const defaultPrice = {
     latestPrice: 0,
     changePercent: -0.1,
@@ -70,43 +82,45 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const entry = useIntersectionObserver(lastTickerRef, {})
   const isVisible = !!entry?.isIntersecting
 
-  interface StaticProps {
-    params: {
-      category: string
-    }
-  }
-  // TODO Move to function + consider when to call
-  const getCategoryProps = async ( category: string ) => {
-    // FIXME: Is there a way we can not call this twice and just pass the tickers?
-    const categories = await getTickerCategoryShortNames()
-    const tickers = categories[category]?.tickers
-  
-    try {
-      // - These functions take arrays of tickers
-      const { props } = await getTickersStaticProps({
-        tickerDocs: await getTickerDocs(tickers.slice(0, 10)),
-        period: null,
-        interval: null,
-      })
-  
-      return {
-        props: { category, restOfTickers: tickers.slice(10) },
-        revalidate: 8000,
-      }
-    } catch (e) {
-      return { redirect: { destination: "/404", permanent: false } }
-    }
-  }
 
-  useEffect(()=>{
-    getCategoryProps(categoryName).then((r) => {setCategoryProps(r)})
-  }, [])
+  // useEffect(()=>{
 
-  useEffect(()=>{
-    console.log(categoryProps)
-    //console.log(Object.keys(categoryProps))
-    if(categoryProps) setTickersToLoad(categoryProps.restOfTickers)
-  },[categoryProps])
+  //     // TODO Move to function + consider when to call
+  // const getCategoryProps = async ( category: string ) => {
+  //   // FIXME: Is there a way we can not call this twice and just pass the tickers?
+  //   const categories = await getTickerCategoryShortNames()
+  //   const tickers = categories[category]?.tickers
+  //   console.log("tickeers", tickers)
+  //   try {
+  //     // - These functions take arrays of tickers
+  //     const { props } = await getTickersStaticProps({
+  //       tickerDocs: await getTickerDocs(tickers.slice(0, 10)),
+  //       period: null,
+  //       interval: null,
+  //     })
+  
+  //     return {
+  //       props: { category, restOfTickers: tickers.slice(10) },
+  //       revalidate: 8000,
+  //     }
+  //   } catch (e) {
+  //     return { redirect: { destination: "/404", permanent: false } }
+  //   }
+  // }
+  //   const tmp = getCategoryProps(categoryName).then((r) => {console.log("setting cat props"),
+  //    setCategoryProps(r)})
+  // }, [])
+
+  // useEffect(()=>{
+    
+  //   //console.log(Object.keys(categoryProps))
+  //   if(categoryProps) {
+  //     console.log("cat props" , categoryProps)
+  //     console.log("is props");
+      
+  //     setTickersToLoad(categoryProps.restOfTickers)
+  //   }
+  // },[categoryProps])
 
   useEffect(() => {
     const getMoreTickers = async () => {
@@ -145,7 +159,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
       lastTickerRef.current = null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible, tickersToLoad])
+  }, [isVisible])
   //}, [isVisible, user?.token])
 
   return (
@@ -188,20 +202,36 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
         <View style={tw`marginBottom: 24 items-center`}>
           <Text style={tw`text-3xl text-brand-black dark:text-brand-gray tracking-tight uppercase font-poppins-500 dark:text-brand-black`}>
             {categoryName}
-          </Text>
+          </Text>        
         </View>
         
-        {categoryProps?.tickers?.map(({ ticker, price }) => (
-        <HorizontalAssetCard
-          key={`${ticker?.tickerSymbol}`}
-          cardRef={null}
-          isin={ticker?.ISIN}
-          symbol={ticker?.tickerSymbol}
-          shortName={ticker?.shortName}
-          logoColor={ticker?.logoColor}
-          price={defaultPrice}
-        />
-      ))}
+        {initialCards?.tickers?.map(({ ticker, price }) => (
+          <HorizontalAssetCard
+            key={`${ticker?.tickerSymbol}`}
+            cardRef={null}
+            isin={ticker?.ISIN}
+            symbol={ticker?.tickerSymbol}
+            shortName={ticker?.shortName}
+            logoColor={ticker?.logoColor}
+            price={defaultPrice}
+          />
+        ))}
+        {moreTickers.current.length > 0 &&
+        moreTickers.current.map(({ ticker, price }) => (
+          <HorizontalAssetCard
+            key={`${ticker?.tickerSymbol}`}
+            cardRef={null}
+            isin={ticker?.ISIN}
+            symbol={ticker?.tickerSymbol}
+            shortName={ticker?.shortName}
+            logoColor={ticker?.logoColor}
+            price={defaultPrice}
+          />
+        ))}
+          <HorizontalAssetCardSkeleton
+            cardRef={lastTickerRef}
+            className={loadingMoreTickers ? "block" : "invisible"}
+          />
         
       </ScrollView>
     </View>
