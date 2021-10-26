@@ -1,13 +1,14 @@
 import { useAuth } from "../hooks/useAuth"
 import React, { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
+import type { StreamChat as Stream } from "stream-chat"
 import Constants from "expo-constants"
 
 const streamApiKey = Constants.manifest.extra.stream.key
 const DEVELOPMENT = Constants.manifest.extra.STAGE === "development"
 
 export interface StreamClientContext {
-  client: StreamChat
+  client: Stream
 }
 
 export const useStreamClient = (): StreamClientContext => {
