@@ -3,7 +3,7 @@ import { OHLCTimeseries } from "../models/OHLCTimseries"
 import { Price } from "../models/Price"
 import { getTickerProps } from "./getTickerProps"
 import { IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
-const { Client } = require("iexjs")
+// const { Client } = require("iexjs")
 
 interface ITickersStaticProps {
   tickerDocs: DocumentData[]
@@ -26,7 +26,13 @@ export interface TickersProps {
 interface ITickersStaticPropsResult {
   props: TickersProps
 }
-
+const defaultPrice = {
+  latestPrice: 0,
+  changePercent: -0.1,
+  iexRealtimePrice: 0,
+  latestUpdate: "9999-12-31",
+  currency: "USD",
+}
 // TODO: Remove the timeseries query so we can pull it separately and load other data first
 // TODO: Allow a query list to filter the return in the ticker data
 
@@ -36,8 +42,8 @@ export const getTickersStaticProps = async ({
   interval = IntervalEnum["1m"],
   subQueryField = "",
 }: ITickersStaticProps): Promise<ITickersStaticPropsResult> => {
-  const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
-  console.log(`Loading ${tickerDocs.length} tickers`)
+  // const iexClient = new Client({ api_token: process.env.IEX_TOKEN, version: "stable" })
+  // console.log(`Loading ${tickerDocs.length} tickers`)
 
   return {
     props: {
@@ -67,9 +73,10 @@ export const getTickersStaticProps = async ({
           // !
           // !
           try {
-            price = await iexClient.quote(ticker.tickerSymbol, {
-              filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
-            })
+            price = defaultPrice
+            // price = await iexClient.quote(ticker.tickerSymbol, {
+            //   filter: "latestPrice,changePercent,iexRealtimePrice,latestUpdate",
+            // })
           } catch (error) {
             console.log(error)
           }

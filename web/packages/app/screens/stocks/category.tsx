@@ -6,10 +6,10 @@ import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver"
 import { getTickerDocs } from "../../lib/firebase/client/db/getTickerDocs"
 import { Price } from "../../models/Price"
-// import { getTickerCategoryShortNames } from "@utils/getTickerCategoryShortNames"
+import { getTickerCategoryShortNames } from "../../utils/getTickerCategoryShortNames"
 import { getTickerProps } from "../../utils/getTickerProps"
 import { getTickersStaticProps, TickersProps } from "../../utils/getTickersStaticProps"
-import { iexQuote } from "../../utils/iexQuote"
+//import { iexQuote } from "../../utils/iexQuote"
 // import { GetStaticPaths, GetStaticProps } from "next"
 import HorizontalAssetCard, {
    HorizontalAssetCardSkeleton,
@@ -27,7 +27,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
 
   const { category: categoryName } = route.params
 
-  const tickers = [
+  const testTickers = [
     {
     ticker : {
       tickerSymbol: "T",
@@ -52,11 +52,12 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   // - For infinite scroll
   // FIXME: Could be refactored as a hook
 
-  const [tickersToLoad, setTickersToLoad] = useState(tickers)
+  const [tickersToLoad, setTickersToLoad] = useState(null)
   const [loadingMoreTickers, setLoadingMoreTickers] = useState(false)
   const moreTickers = useRef([])
   const lastTickerLoaded = useRef(null)
   const lastTickerRef = useRef(null)
+  const [ categoryProps, setCategoryProps ] = useState(null)
 
   const defaultPrice = {
     latestPrice: 0,
@@ -69,12 +70,50 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const entry = useIntersectionObserver(lastTickerRef, {})
   const isVisible = !!entry?.isIntersecting
 
+  interface StaticProps {
+    params: {
+      category: string
+    }
+  }
+  // TODO Move to function + consider when to call
+  const getCategoryProps = async ( category: string ) => {
+    // FIXME: Is there a way we can not call this twice and just pass the tickers?
+    const categories = await getTickerCategoryShortNames()
+    const tickers = categories[category]?.tickers
+  
+    try {
+      // - These functions take arrays of tickers
+      const { props } = await getTickersStaticProps({
+        tickerDocs: await getTickerDocs(tickers.slice(0, 10)),
+        period: null,
+        interval: null,
+      })
+  
+      return {
+        props: { category, restOfTickers: tickers.slice(10) },
+        revalidate: 8000,
+      }
+    } catch (e) {
+      return { redirect: { destination: "/404", permanent: false } }
+    }
+  }
+
+  useEffect(()=>{
+    getCategoryProps(categoryName).then((r) => {setCategoryProps(r)})
+  }, [])
+
+  useEffect(()=>{
+    console.log(categoryProps)
+    //console.log(Object.keys(categoryProps))
+    if(categoryProps) setTickersToLoad(categoryProps.restOfTickers)
+  },[categoryProps])
+
   useEffect(() => {
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
       const nextTickers = tickersToLoad.slice(0, 5)
       setTickersToLoad(tickersToLoad.slice(5))
-      const tickerDocs = await getTickerDocs(["T", "TSLA"])
+      const tickerDocs = await getTickerDocs(nextTickers)
 
       lastTickerLoaded.current = tickerDocs?.slice().pop()
 
@@ -106,7 +145,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
       lastTickerRef.current = null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible])
+  }, [isVisible, tickersToLoad])
   //}, [isVisible, user?.token])
 
   return (
@@ -152,7 +191,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
           </Text>
         </View>
         
-        {tickers.map(({ ticker, price }) => (
+        {categoryProps?.tickers?.map(({ ticker, price }) => (
         <HorizontalAssetCard
           key={`${ticker?.tickerSymbol}`}
           cardRef={null}
@@ -170,35 +209,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   )
 }
 
-// interface StaticProps {
-//   params: {
-//     category: string
-//   }
-// }
 
-// export const getStaticProps: GetStaticProps = async ({
-//   params: { category },
-// }: StaticProps) => {
-//   // FIXME: Is there a way we can not call this twice and just pass the tickers?
-//   const categories = await getTickerCategoryShortNames()
-//   const tickers = categories[category]?.tickers
-
-//   try {
-//     // - These functions take arrays of tickers
-//     const { props } = await getTickersStaticProps({
-//       tickerDocs: await getTickerDocs(tickers.slice(0, 10)),
-//       period: null,
-//       interval: null,
-//     })
-
-//     return {
-//       props: { ...props, category, restOfTickers: tickers.slice(10) },
-//       revalidate: 8000,
-//     }
-//   } catch (e) {
-//     return { redirect: { destination: "/404", permanent: false } }
-//   }
-// }
 
 // // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
 // export const getStaticPaths: GetStaticPaths = async () => {
