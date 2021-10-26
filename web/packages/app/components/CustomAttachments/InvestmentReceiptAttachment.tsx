@@ -86,8 +86,8 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
       }}
     >
       {isLoading ? (
-        <View style={tw`grid place-items-center`}>
-          <LoadingIndicator color="#3fba" size={95} />
+        <View style={tw`flex items-center justify-center`}>
+          {/* <LoadingIndicator color="#3fba" size={95} /> */}
         </View>
       ) : (
         <>
@@ -103,7 +103,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
           {isPending && (
             <View
               style={tw.style(
-                "ml-1 text-xs grid place-items-center bg-gray-200 font-semibold py-1",
+                "ml-1 text-xs flex items-center justify-center bg-gray-200 font-semibold py-1",
                 "px-2 rounded-full uppercase mt-1",
                 isPending && "animate-pulse"
               )}
