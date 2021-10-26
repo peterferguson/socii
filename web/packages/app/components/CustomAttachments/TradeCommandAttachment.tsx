@@ -11,6 +11,7 @@ import tw from "../../lib/tailwind"
 import { View } from "react-native"
 import { useStream } from "../../hooks"
 import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
+import { ephemeralStatuses } from "../../lib/constants"
 
 const TradeCommandAttachment = ({ attachment, tradeType }) => {
   // const mounted = useUnmountPromise()
@@ -26,7 +27,6 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   // const { price } = useTickerPrice(tickerSymbol.current)
   const price = { iexRealtimePrice: 0.0, latestPrice: 0 }
   const [amount, setAmount] = useState(price?.iexRealtimePrice || price?.latestPrice)
-  const handleAmountChange = () => {}
 
   const alpacaAccountId = user.alpacaAccountId
 
@@ -35,7 +35,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   //   !isin && mounted(getISIN())
   // }, [isin, mounted])
 
-  // if (ephemeralStatuses.includes(message.status)) return null
+  if (ephemeralStatuses.includes(message.status)) return null
 
   const groupName = channel.cid.split(":").pop()
 
@@ -85,7 +85,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   return tickerSymbol.current ? (
     <AttachmentCardWithLogo assetSymbol={tickerSymbol.current} isin={isin}>
       <View style={tw`flex-col`}>
-        <MMLNumberInput name={"Amount"} onChange={handleAmountChange} value={amount} />
+        <MMLNumberInput name={"Amount"} onChange={setAmount} value={amount} />
         <View style={tw`flex-row items-center justify-center mt-1`}>
           <MMLButton
             style={tw`bg-red-200 border border-red-400 w-24`}

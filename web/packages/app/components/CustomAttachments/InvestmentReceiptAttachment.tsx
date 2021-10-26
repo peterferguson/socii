@@ -9,6 +9,7 @@ import tw from "../../lib/tailwind"
 import { useEffect, useState } from "react"
 import { LoadingIndicator, useMessageContext } from "stream-chat-expo"
 import { View, Text } from "react-native"
+import { shadowStyle } from "../../utils/shadowStyle"
 
 // TODO: Convert state to a state machine
 const InvestmentReceiptAttachment = ({ attachment }) => {
@@ -79,7 +80,10 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
 
   return (
     <View
-      style={tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg shadow-lg`}
+      style={{
+        ...tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg`,
+        ...shadowStyle("lg"),
+      }}
     >
       {isLoading ? (
         <View style={tw`grid place-items-center`}>

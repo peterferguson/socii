@@ -2,6 +2,7 @@ import { uncamelCase } from "../../utils/uncamelCase"
 import { useRouter } from "../../navigation/use-router"
 import { View, Text, Pressable, Image } from "react-native"
 import tw from "../../lib/tailwind"
+import { shadowStyle } from "../../utils/shadowStyle"
 
 const StockDisplayAttachment = ({ attachment }) => {
   const tickerSymbol = attachment?.name
@@ -9,11 +10,14 @@ const StockDisplayAttachment = ({ attachment }) => {
   const router = useRouter()
   return (
     <Pressable
-      style={tw`p-4 bg-white rounded-lg shadow-lg cursor-pointer`}
+      style={{
+        ...tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg`,
+        ...shadowStyle("lg"),
+      }}
       onPress={() => router.push(attachment?.url)}
     >
       <Image
-        style={tw`h-auto mx-auto rounded-full shadow-lg w-14`}
+        style={{ ...tw`h-auto mx-auto rounded-full w-14`, ...shadowStyle("lg") }}
         source={{ uri: attachment?.image }}
       />
       <View style={tw`w-auto h-auto p-1`}>

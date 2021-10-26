@@ -1,10 +1,10 @@
-import LogoPriceCardHeader from "../LogoPriceCardHeader"
-import { usePositions } from "../../hooks/usePositions"
-import { Position } from "../../models/alpaca/Position"
-import React, { useEffect, useRef, useState } from "react"
-import MMLButton from "./MML/Button"
+import React, { useRef, useState } from "react"
 import { View } from "react-native"
+import { usePositions } from "../../hooks/usePositions"
 import tw from "../../lib/tailwind"
+import { Position } from "../../models/alpaca/Position"
+import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
+import MMLButton from "./MML/Button"
 
 const InvestCommandAttachment = ({ attachment }) => {
   const symbol = useRef(attachment?.tickerSymbol?.toUpperCase())
@@ -21,8 +21,7 @@ const InvestCommandAttachment = ({ attachment }) => {
   // }, [positions])
 
   return (
-    <View style={tw`py-4 pl-4 bg-white rounded-lg shadow-lg`}>
-      <LogoPriceCardHeader asset={symbol.current} isin={""} />
+    <AttachmentCardWithLogo assetSymbol={symbol.current} isin={""}>
       <View style={tw`flex-col`}>
         <View style={tw`flex-row`}>
           {holding && (
@@ -40,7 +39,7 @@ const InvestCommandAttachment = ({ attachment }) => {
           text="Cancel"
         />
       </View>
-    </View>
+    </AttachmentCardWithLogo>
   )
 }
 
