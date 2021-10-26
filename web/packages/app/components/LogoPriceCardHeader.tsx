@@ -41,7 +41,7 @@ export default function LogoPriceCardHeader({
 
   return (
     <>
-      <AssetLogo asset={asset} isin={isin} />
+      <AssetLogo asset={asset} isin={isin} height="48" width="48" />
       <View style={style}>
         <View style={tw`w-full h-auto p-1 rounded-full px-2 mx-1 mt-1`}>
           <Text

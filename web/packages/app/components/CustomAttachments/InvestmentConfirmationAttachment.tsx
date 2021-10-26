@@ -43,7 +43,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   // TODO: Add different views of the buy card for users who did not submit it
 
   return (
-    <div className="p-4 mb-2 bg-white rounded-lg shadow-lg">
+    <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
       <LogoPriceCardHeader asset={attachment?.tickerSymbol} isin={""} />
       <View style={tw`flex items-center justify-center w-full mx-auto space-x-2`}>
         <MMLButton
@@ -59,7 +59,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
           onSubmit={() => onSubmit(true)}
         />
       </View>
-    </div>
+    </View>
   )
 }
 

@@ -2,7 +2,6 @@
 // import { getTickerISIN } from "../../lib/firebase/client/db/getTickerISIN"
 // import { tradeSubmission } from "../lib/firebase/client/functions"
 import { useAuth } from "../../hooks/useAuth"
-import dynamic from "next/dynamic"
 import React, { useEffect, useRef, useState } from "react"
 // import { useUnmountPromise } from "react-use"
 import { useChatContext, useMessageContext } from "stream-chat-expo"
@@ -11,8 +10,7 @@ import MMLNumberInput from "./MML/NumberInput"
 import tw from "../../lib/tailwind"
 import { View } from "react-native"
 import { useStream } from "../../hooks"
-
-const LogoPriceCardHeader = dynamic(() => import("../LogoPriceCardHeader"))
+import LogoPriceCardHeader from "../LogoPriceCardHeader"
 
 const TradeCommandAttachment = ({ attachment, tradeType }) => {
   // const mounted = useUnmountPromise()
@@ -84,12 +82,10 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   //   }
   // }
 
-  return (
-    <>
-      {isin && (
-        <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
-          <LogoPriceCardHeader asset={tickerSymbol.current} isin={isin} />
-          <View style={tw`flex flex-col`}>
+  return isin ? (
+    <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
+      <LogoPriceCardHeader asset={tickerSymbol.current} isin={isin} />
+      <View style={tw`flex flex-col`}>
             <MMLNumberInput
               name={"Amount"}
               onChange={handleAmountChange}
@@ -97,23 +93,19 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
             />
             <View style={tw`flex flex-row mt-1`}>
               <MMLButton
-                name="cancel"
                 style={tw`flex-grow mx-2 btn-transition hover:bg-red-400`}
                 text="Cancel"
                 onSubmit={() => onSubmit({ amount, option: "cancel" })}
               />
               <MMLButton
-                name={tradeType}
                 style={tw`flex-grow mx-2 btn-transition`}
                 text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
                 onSubmit={() => onSubmit({ amount, option: tradeType })}
               />
             </View>
           </View>
-        </View>
-      )}
-    </>
-  )
+    </View>
+  ) : null
 }
 
 export default React.memo(TradeCommandAttachment)

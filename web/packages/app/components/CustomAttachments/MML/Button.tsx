@@ -1,5 +1,5 @@
 import React from "react"
-import { TouchableOpacity } from "react-native"
+import { TouchableOpacity, Text } from "react-native"
 
 export type ButtonProps = {
   /** Additional button class name */
@@ -22,13 +22,11 @@ export type ButtonProps = {
 const Button: React.FC<ButtonProps> = ({
   style,
   text,
-  name,
-  value,
   icon,
   onSubmit,
 }) => (
   <TouchableOpacity style={style || {}} onPress={onSubmit}>
-    {text ? text : null}
+    <Text>{text ? text : null}</Text>
     {icon ? icon : null}
   </TouchableOpacity>
 )
