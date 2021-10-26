@@ -23,24 +23,20 @@ const InvestCommandAttachment = ({ attachment }) => {
   return (
     <View style={tw`py-4 pl-4 bg-white rounded-lg shadow-lg`}>
       <LogoPriceCardHeader asset={symbol.current} isin={""} />
-      <View style={tw`flex flex-col space-y-4`}>
-        <View style={tw`flex flex-row`}>
+      <View style={tw`flex-col`}>
+        <View style={tw`flex-row`}>
           {holding && (
-            <MMLButton
-              key={`sell-button`}
-              style={tw`w-24 mx-2 outline-btn btn-transition`}
-              text="Sell"
-            />
+            <MMLButton key={`sell-button`} style={tw`w-24 mx-2`} text="Sell" />
           )}
           <MMLButton
             key={`buy-button`}
-            style={tw`mx-2 outline-btn btn-transition ${holding ? "w-24" : "w-52"}`}
+            style={tw`mx-2 ${holding ? "w-24" : "w-52"}`}
             text={"Buy"}
           />
         </View>
         <MMLButton
           key={`cancel-button`}
-          style={tw`mx-2 w-52 outline-btn btn-transition hover:bg-red-400`}
+          style={tw`mx-2 w-52 hover:bg-red-400`}
           text="Cancel"
         />
       </View>

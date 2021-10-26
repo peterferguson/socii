@@ -10,7 +10,7 @@ import MMLNumberInput from "./MML/NumberInput"
 import tw from "../../lib/tailwind"
 import { View } from "react-native"
 import { useStream } from "../../hooks"
-import LogoPriceCardHeader from "../LogoPriceCardHeader"
+import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
 
 const TradeCommandAttachment = ({ attachment, tradeType }) => {
   // const mounted = useUnmountPromise()
@@ -26,7 +26,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   // const { price } = useTickerPrice(tickerSymbol.current)
   const price = { iexRealtimePrice: 0.0, latestPrice: 0 }
   const [amount, setAmount] = useState(price?.iexRealtimePrice || price?.latestPrice)
-  const handleAmountChange = (e) => setAmount(e.target.value)
+  const handleAmountChange = () => {}
 
   const alpacaAccountId = user.alpacaAccountId
 
@@ -82,29 +82,26 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
   //   }
   // }
 
-  return isin ? (
-    <View style={tw`p-4 mb-2 bg-white rounded-lg shadow-lg`}>
-      <LogoPriceCardHeader asset={tickerSymbol.current} isin={isin} />
-      <View style={tw`flex flex-col`}>
-            <MMLNumberInput
-              name={"Amount"}
-              onChange={handleAmountChange}
-              value={amount}
-            />
-            <View style={tw`flex flex-row mt-1`}>
-              <MMLButton
-                style={tw`flex-grow mx-2 btn-transition hover:bg-red-400`}
-                text="Cancel"
-                onSubmit={() => onSubmit({ amount, option: "cancel" })}
-              />
-              <MMLButton
-                style={tw`flex-grow mx-2 btn-transition`}
-                text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
-                onSubmit={() => onSubmit({ amount, option: tradeType })}
-              />
-            </View>
-          </View>
-    </View>
+  return tickerSymbol.current ? (
+    <AttachmentCardWithLogo assetSymbol={tickerSymbol.current} isin={isin}>
+      <View style={tw`flex-col`}>
+        <MMLNumberInput name={"Amount"} onChange={handleAmountChange} value={amount} />
+        <View style={tw`flex-row items-center justify-center mt-1`}>
+          <MMLButton
+            style={tw`bg-red-200 border border-red-400 w-24`}
+            textStyle={tw`text-red-500`}
+            text="Cancel"
+            onSubmit={() => onSubmit({ amount, option: "cancel" })}
+          />
+          <MMLButton
+            style={tw`bg-green-200 border border-green-400 w-24`}
+            textStyle={tw`text-green-500`}
+            text={tradeType.charAt(0)?.toUpperCase() + tradeType.slice(1)}
+            onSubmit={() => onSubmit({ amount, option: tradeType })}
+          />
+        </View>
+      </View>
+    </AttachmentCardWithLogo>
   ) : null
 }
 

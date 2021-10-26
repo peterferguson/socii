@@ -11,6 +11,7 @@ import toast from "react-hot-toast"
 import tw from "../../lib/tailwind"
 import { useStream } from "../../hooks/useStream"
 import { View } from "react-native"
+import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
   const { user } = useAuth()
@@ -43,10 +44,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
   // TODO: Add different views of the buy card for users who did not submit it
 
   return (
-    <View
-      style={tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg shadow-lg`}
-    >
-      <LogoPriceCardHeader asset={attachment?.tickerSymbol} isin={""} />
+    <AttachmentCardWithLogo assetSymbol={attachment?.tickerSymbol} isin={""}>
       <View style={tw`flex-row items-center justify-center mt-4`}>
         <MMLButton
           key={`no-button`}
@@ -54,7 +52,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
           textStyle={tw`text-red-500`}
           text="No"
           onSubmit={() => onSubmit(false)}
-          />
+        />
         <MMLButton
           key={`yes-button`}
           style={tw`bg-green-200 border border-green-400`}
@@ -63,7 +61,7 @@ const InvestmentConfirmationAttachment = ({ attachment }) => {
           onSubmit={() => onSubmit(true)}
         />
       </View>
-    </View>
+    </AttachmentCardWithLogo>
   )
 }
 

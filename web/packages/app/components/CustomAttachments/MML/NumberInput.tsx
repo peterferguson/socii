@@ -16,19 +16,21 @@ const NumberInput = ({ value, onChange, name, decimals = 2 }) => {
         <Text style={tw`text-sm font-poppins-500 sm:text-base text-grey-400`}>
           {name}
         </Text>
-        <Feather name="dollar-sign" style={tw`ml-2 mb-0.5`} />
+        <Feather name="dollar-sign" style={tw`ml-2`} />
       </View>
-      <TextInput
-        style={tw`w-full py-2 text-sm font-semibold text-right border-none rounded sm:text-base`}
-        keyboardType="numeric"
-        onChangeText={(text) =>
-          setInputValue(
-            text.replace(RegExp(`[0-9]+([.,][0-9]+)?{,${decimals}}`, "g"), "")
-          )
-        }
-        value={inputValue}
-        maxLength={10}
-      />
+      <View style={tw`py-2 w-24 mr-2`}>
+        <TextInput
+          style={tw`text-sm text-right border-none rounded sm:text-base font-poppins-500`}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            setInputValue(
+              text.replace(RegExp(`[0-9]+([.,][0-9]+)?{,${decimals}}`, "g"), "")
+            )
+          }
+          value={inputValue}
+          maxLength={10}
+        />
+      </View>
     </View>
   )
 }

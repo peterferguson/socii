@@ -28,7 +28,7 @@ import { useDeviceContext } from "twrnc"
 enableScreens(true)
 
 export default function App() {
-  const [fontIsLoaded, error] = useFonts({
+  const [fontIsLoaded] = useFonts({
     "poppins-100": Poppins_100Thin,
     "poppins-200": Poppins_200ExtraLight,
     "poppins-300": Poppins_300Light,
@@ -43,8 +43,6 @@ export default function App() {
     "open-sans-700": OpenSans_700Bold,
     "open-sans-800": OpenSans_800ExtraBold,
   })
-
-  useEffect(() => console.log(error), [error])
 
   useDeviceContext(tw)
   if (!fontIsLoaded) return <AppLoading />
