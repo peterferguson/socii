@@ -1,15 +1,17 @@
-import LogoPriceCardHeader from "../LogoPriceCardHeader"
-// import { subscribeToTrade } from "../../lib/firebase/client/db/subscribeToTrade"
-import { alpacaPendingStatuses } from "../../lib/constants"
+import { useEffect, useState } from "react"
+import { Text, View } from "react-native"
+import { useMessageContext } from "stream-chat-expo"
 import { useAuth } from "../../hooks/useAuth"
 import { useMarketClock } from "../../hooks/useMarketClock"
 import { usePollTradeUpdates } from "../../hooks/usePollTradeUpdates"
-import { fetchWithToken } from "../../utils/fetchWithToken"
+import { useTickerPrice } from "../../hooks/useTickerPrice"
+// import { subscribeToTrade } from "../../lib/firebase/client/db/subscribeToTrade"
+import { alpacaPendingStatuses } from "../../lib/constants"
+import { subscribeToTrade } from "../../lib/firebase/client/db"
 import tw from "../../lib/tailwind"
-import { useEffect, useState } from "react"
-import { LoadingIndicator, useMessageContext } from "stream-chat-expo"
-import { View, Text } from "react-native"
+import { fetchWithToken } from "../../utils/fetchWithToken"
 import { shadowStyle } from "../../utils/shadowStyle"
+import LogoPriceCardHeader from "../LogoPriceCardHeader"
 
 // TODO: Convert state to a state machine
 const InvestmentReceiptAttachment = ({ attachment }) => {
@@ -19,59 +21,61 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
 
   const { cid } = message
   const groupName = cid.split(":").pop()
-  const { tradeId, orderStatus, tickerSymbol, price, cost } = attachment
+  const { tradeId, orderStatus, symbol, isin, price, cost } = attachment
   const [orderExecutionStatus, setOrderExecutionStatus] = useState("")
   const [isPending, setIsPending] = useState(
     alpacaPendingStatuses.includes(orderStatus)
   )
 
+  const { price: priceData } = useTickerPrice(symbol)
+
   // - Poll for trade updates every 10 seconds until the market closes or the trade is settled
-  // usePollTradeUpdates(isMarketOpen && isPending ? 10 * 1000 : null)
+  usePollTradeUpdates(isMarketOpen && isPending ? 10 * 1000 : null)
 
-  // useEffect(() => {
-  //   !isPending &&
-  //     orderStatus &&
-  //     fetchWithToken("/api/stream/updateReceiptOrderStatus", user?.token, {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         messageUpdate: {
-  //           ...message,
-  //           text: message.text.replace("IS PENDING", ""),
-  //           attachments: message.attachments.map((attached) =>
-  //             attached.type === "receipt"
-  //               ? { ...attached, orderStatus: orderExecutionStatus }
-  //               : attached
-  //           ),
-  //         },
-  //       }),
-  //     })
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isPending, orderExecutionStatus])
+  useEffect(() => {
+    !isPending &&
+      orderStatus &&
+      fetchWithToken("/api/stream/updateReceiptOrderStatus", user?.token, {
+        method: "POST",
+        body: JSON.stringify({
+          messageUpdate: {
+            ...message,
+            text: message.text.replace("IS PENDING", ""),
+            attachments: message.attachments.map((attached) =>
+              attached.type === "receipt"
+                ? { ...attached, orderStatus: orderExecutionStatus }
+                : attached
+            ),
+          },
+        }),
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending, orderExecutionStatus])
 
-  // useEffect(() => {
-  //   let unsubscribe
-  //   if (tradeId && isPending) {
-  //     unsubscribe = subscribeToTrade(groupName, tradeId, (snapshot) => {
-  //       const tradeData = snapshot.data()
-  //       if (tradeData) {
-  //         const { executionStatus } = tradeData
-  //         if (executionStatus) {
-  //           setOrderExecutionStatus(executionStatus)
-  //           setIsPending(alpacaPendingStatuses.includes(executionStatus))
-  //         }
-  //         switch (executionStatus) {
-  //           case "filled":
-  //             unsubscribe()
-  //             break
-  //           default:
-  //             break
-  //         }
-  //       }
-  //     })
-  //   }
+  useEffect(() => {
+    let unsubscribe
+    if (tradeId && isPending) {
+      unsubscribe = subscribeToTrade(groupName, tradeId, (snapshot) => {
+        const tradeData = snapshot.data()
+        if (tradeData) {
+          const { executionStatus } = tradeData
+          if (executionStatus) {
+            setOrderExecutionStatus(executionStatus)
+            setIsPending(alpacaPendingStatuses.includes(executionStatus))
+          }
+          switch (executionStatus) {
+            case "filled":
+              unsubscribe()
+              break
+            default:
+              break
+          }
+        }
+      })
+    }
 
-  //   return () => unsubscribe?.()
-  // })
+    return () => unsubscribe?.()
+  })
 
   useEffect(
     () => setIsPending(alpacaPendingStatuses.includes(orderStatus)),
@@ -91,10 +95,11 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
         </View>
       ) : (
         <>
-          {attachment?.tickerSymbol && (
+          {attachment?.symbol && (
             <LogoPriceCardHeader
-              asset={tickerSymbol}
-              isin=""
+              asset={symbol}
+              isin={isin}
+              currentPriceData={priceData}
               cost={cost}
               purchasePrice={price}
               showChange={!isPending}
