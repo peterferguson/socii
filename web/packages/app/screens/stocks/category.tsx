@@ -1,7 +1,7 @@
 import type { CategoryScreenProps } from "app/navigation/types"
 import { createParam } from "app/navigation/use-param"
 import React, { useEffect, useRef, useState } from "react"
-import { ScrollView, View, Text } from "react-native"
+import { ScrollView, View, Text, Button, Pressable } from "react-native"
 import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver"
 import { getTickerDocs } from "../../lib/firebase/client/db/getTickerDocs"
@@ -16,6 +16,7 @@ import HorizontalAssetCard, {
  } from "../../components/HorizontalAssetCard"
  import tw from "../../lib/tailwind"
 import { getCategoryData } from "../../utils/getCategoryData"
+import { shadowStyle } from "../../utils/shadowStyle"
 
 interface CategoryTickerProps extends TickersProps {
   category: string
@@ -59,6 +60,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const lastTickerLoaded = useRef(null)
   const lastTickerRef = useRef(null)
   const [ initialCards, setInitialCards ] = useState<CategoryTickerProps>({} as CategoryTickerProps)
+  const [ isVisible, setIsVisible ] = useState(false)
   // const [ categoryProps, setCategoryProps ] = useState(null)
 
  
@@ -68,7 +70,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   } ,[])
 
   useEffect(() => {
-    if (initialCards.restOfTickers)setTickersToLoad(initialCards.restOfTickers)
+    if (initialCards.restOfTickers) setTickersToLoad(initialCards.restOfTickers)
   } ,[initialCards.restOfTickers])
   
   const defaultPrice = {
@@ -80,49 +82,14 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   }
 
   const entry = useIntersectionObserver(lastTickerRef, {})
-  const isVisible = !!entry?.isIntersecting
+  //const isVisible = !!entry?.isIntersecting
 
 
-  // useEffect(()=>{
 
-  //     // TODO Move to function + consider when to call
-  // const getCategoryProps = async ( category: string ) => {
-  //   // FIXME: Is there a way we can not call this twice and just pass the tickers?
-  //   const categories = await getTickerCategoryShortNames()
-  //   const tickers = categories[category]?.tickers
-  //   console.log("tickeers", tickers)
-  //   try {
-  //     // - These functions take arrays of tickers
-  //     const { props } = await getTickersStaticProps({
-  //       tickerDocs: await getTickerDocs(tickers.slice(0, 10)),
-  //       period: null,
-  //       interval: null,
-  //     })
-  
-  //     return {
-  //       props: { category, restOfTickers: tickers.slice(10) },
-  //       revalidate: 8000,
-  //     }
-  //   } catch (e) {
-  //     return { redirect: { destination: "/404", permanent: false } }
-  //   }
-  // }
-  //   const tmp = getCategoryProps(categoryName).then((r) => {console.log("setting cat props"),
-  //    setCategoryProps(r)})
-  // }, [])
 
-  // useEffect(()=>{
-    
-  //   //console.log(Object.keys(categoryProps))
-  //   if(categoryProps) {
-  //     console.log("cat props" , categoryProps)
-  //     console.log("is props");
-      
-  //     setTickersToLoad(categoryProps.restOfTickers)
-  //   }
-  // },[categoryProps])
 
   useEffect(() => {
+    if (isVisible) {
     const getMoreTickers = async () => {
       // - Next 5 alpaca stocks
       const nextTickers = tickersToLoad.slice(0, 5)
@@ -157,54 +124,18 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
       setLoadingMoreTickers(true)
       getMoreTickers()
       lastTickerRef.current = null
+      setIsVisible(false)
     }
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible])
   //}, [isVisible, user?.token])
 
   return (
-    // <div className="relative flex flex-col items-center justify-center">
-    //   {/* <div className="absolute inset-0 rounded-full opacity-50 h-72 w-72 bg-brand-lightTeal mix-blend-multiply filter blur-xl" /> */}
-    //   <div className="my-8 text-2xl tracking-wider uppercase h-1/2 font-primary">
-    //     <span>{category} stocks</span>
-    //   </div>
-    //   {/* {tickers.map(({ ticker, price }) => (
-    //     <HorizontalAssetCard
-    //       key={`${ticker?.tickerSymbol}`}
-    //       cardRef={null}
-    //       isin={ticker?.ISIN}
-    //       tickerSymbol={ticker?.tickerSymbol}
-    //       shortName={ticker?.shortName}
-    //       logoColor={ticker?.logoColor}
-    //       price={price}
-    //     />
-    //   ))} */}
-    //   {/* {moreTickers.current.length > 0 &&
-    //     moreTickers.current.map(({ ticker, price }) => (
-    //       <HorizontalAssetCard
-    //         key={`${ticker?.tickerSymbol}`}
-    //         cardRef={null}
-    //         isin={ticker?.ISIN}
-    //         tickerSymbol={ticker?.tickerSymbol}
-    //         shortName={ticker?.shortName}
-    //         logoColor={ticker?.logoColor}
-    //         price={price}
-    //       />
-    //     ))} */}
-    //   <HorizontalAssetCardSkeleton
-    //     cardRef={lastTickerRef}
-    //     className={loadingMoreTickers ? "block" : "invisible"}
-    //   />
-    // </div>
+    
 
     <View style={{ flex: 1 }}>
-      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
-        <View style={tw`marginBottom: 24 items-center`}>
-          <Text style={tw`text-3xl text-brand-black dark:text-brand-gray tracking-tight uppercase font-poppins-500 dark:text-brand-black`}>
-            {categoryName}
-          </Text>        
-        </View>
-        
+      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>      
         {initialCards?.tickers?.map(({ ticker, price }) => (
           <HorizontalAssetCard
             key={`${ticker?.tickerSymbol}`}
@@ -228,24 +159,23 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
             price={defaultPrice}
           />
         ))}
-          <HorizontalAssetCardSkeleton
+          {/* <HorizontalAssetCardSkeleton
             cardRef={lastTickerRef}
             className={loadingMoreTickers ? "block" : "invisible"}
-          />
-        
+          /> */}
+        <View style ={tw`items-center`}>
+        <Pressable
+          onPress={()=>{setIsVisible(true)}}
+          style={{          
+            ...tw`bg-blue-300 my-2 mx-4 w-1/2 flex flex-col justify-center items-center rounded-2xl sm:rounded-xl`,
+            ...shadowStyle("md"),
+          }}
+          >   
+          <Text style={{ ...tw`text-lg text-white` }}>Load More...  </Text>
+          </Pressable>
+          </View>
       </ScrollView>
     </View>
 
   )
 }
-
-
-
-// // TODO also add in the small letter versions of each the pages maybe a mapping of some kind so a page is not rendered for each
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const categories = await getTickerCategoryShortNames()
-//   const paths = Object.keys(categories).map((shortName) => ({
-//     params: { category: shortName },
-//   }))
-//   return { paths, fallback: "blocking" }
-// }
