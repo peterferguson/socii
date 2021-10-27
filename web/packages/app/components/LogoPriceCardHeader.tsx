@@ -3,11 +3,13 @@ import PercentChangeTag from "./PercentChangeTag"
 import AssetLogo from "./AssetLogo"
 import tw from "../lib/tailwind"
 import { View, Text } from "react-native"
+import { Price } from "../models/Price"
 
 interface ILogoHeader {
   asset: string
   isin: string
   cost?: number
+  currentPriceData?: Price
   purchasePrice?: number
   style?: any
   showChange?: boolean
@@ -20,24 +22,18 @@ export default function LogoPriceCardHeader({
   asset,
   isin,
   cost,
+  currentPriceData,
   purchasePrice,
   style = {},
   showChange = true,
 }: ILogoHeader) {
-  //   const { price: priceData } = useTickerPrice(asset)
-
-  const priceData = {
-    latestPrice: 1000.0,
-    iexRealtimePrice: 1000.0,
-    changePercent: 0.0553,
-  }
-
-  const currentPrice = priceData?.iexRealtimePrice || priceData?.latestPrice
+  const currentPrice =
+    currentPriceData?.iexRealtimePrice || currentPriceData?.latestPrice
   const price = cost ? cost : currentPrice
 
   const priceChange = purchasePrice
     ? (currentPrice - purchasePrice) / purchasePrice
-    : priceData?.changePercent
+    : currentPriceData?.changePercent
 
   return (
     <>

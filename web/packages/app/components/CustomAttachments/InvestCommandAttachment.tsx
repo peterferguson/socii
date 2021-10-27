@@ -1,27 +1,30 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { View } from "react-native"
 import { usePositions } from "../../hooks/usePositions"
+import { getTickerISIN } from "../../lib/firebase/client/db/getTickerISIN"
 import tw from "../../lib/tailwind"
 import { Position } from "../../models/alpaca/Position"
 import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
 import MMLButton from "./MML/Button"
 
 const InvestCommandAttachment = ({ attachment }) => {
-  const symbol = useRef(attachment?.tickerSymbol?.toUpperCase())
+  const symbol = attachment?.tickerSymbol?.toUpperCase()
   const [holding, setHolding] = useState<Position>(null)
   const [isin, setISIN] = useState<string>("")
 
   const { positions, error } = usePositions()
 
-  // useEffect(() => {
-  //   const position = positions
-  //     ?.filter((position) => position.symbol === tickerSymbol.current)
-  //     .pop()
-  //   if (position) setHolding(position)
-  // }, [positions])
+  useEffect(() => {
+    if (symbol) getTickerISIN(symbol).then(setISIN).catch(console.error)
+  }, [symbol])
+
+  useEffect(() => {
+    const position = positions?.filter((position) => position.symbol === symbol).pop()
+    if (position) setHolding(position)
+  }, [positions])
 
   return (
-    <AttachmentCardWithLogo assetSymbol={symbol.current} isin={""}>
+    <AttachmentCardWithLogo assetSymbol={symbol} isin={isin}>
       <View style={tw`flex-col`}>
         <View style={tw`flex-row`}>
           {holding && (
