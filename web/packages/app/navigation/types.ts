@@ -10,6 +10,7 @@ type GroupsStackParams = {
 type StocksStackParams = {
   stocksScreen: undefined
   stockScreen: { assetSymbol: string }
+  categoryScreen: { category: string }
 }
 
 type EnterStackParams = { enterScreen: undefined }
@@ -23,13 +24,15 @@ type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen
 type GroupScreenProps = NativeStackScreenProps<GroupsStackParams, "groupScreen">
 type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocksScreen">
 type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stockScreen">
+
 type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
   "channelListScreen"
 >
-
 type ChannelScreenProps = NativeStackScreenProps<MainNavigatorParams, "channel">
 type ThreadScreenProps = NativeStackScreenProps<MainNavigatorParams, "thread">
+type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
+
 
 type NextPageProps = any
 type NextNavigationProps = {
@@ -46,9 +49,11 @@ export type {
   GroupsStackParams,
   EnterStackParams,
   StocksStackParams,
+
   ChatStackParams,
   ChannelListScreenProps,
   ChannelStackParams,
   ChannelScreenProps,
   ThreadScreenProps,
+  CategoryScreenProps,
 }

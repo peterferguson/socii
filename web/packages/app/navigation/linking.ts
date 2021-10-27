@@ -60,6 +60,7 @@ const channelStackPaths = makeType({
 const stocksStackPaths = makeType({
   stocks: makeStockStackPath("stocksScreen"),
   stock: makeStockStackPath("stockScreen"),
+  category: makeStockStackPath("categoryScreen"),
 })
 
 const enterStackPaths = makeType({
@@ -103,6 +104,8 @@ const linking: Props = {
         screens: {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":assetSymbol",
+          [stocksStackPaths.category]: "categories/:category",
+
         },
       },
       [tabPaths.chatTab]: {
