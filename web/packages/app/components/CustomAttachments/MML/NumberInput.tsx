@@ -20,7 +20,7 @@ const NumberInput = ({ value, onChange, name, decimals = 2 }: INumberInputProps)
     <View
       style={{
         ...tw`flex-row m-2 border rounded`,
-        ...shadowStyle(null),
+        ...shadowStyle(""),
       }}
     >
       <View style={tw`flex-row items-center px-3 rounded rounded-r-none`}>
