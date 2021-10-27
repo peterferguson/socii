@@ -1,12 +1,12 @@
 import { useAuth } from "../hooks/useAuth"
 import { Position } from "../models/alpaca"
 import { fetcher } from "../utils/fetcher"
-import useSWR from "swr"
+import useSWRNative from "@nandorojo/swr-react-native"
 
 export const usePositions = () => {
   const { user } = useAuth()
 
-  const { data: positions, error } = useSWR<Position[]>(
+  const { data: positions, error } = useSWRNative<Position[]>(
     user?.token && user?.alpacaAccountId
       ? ["/api/alpaca/positions", user.token, user.alpacaAccountId]
       : null,

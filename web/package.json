@@ -1,8 +1,7 @@
 {
-  "name": "expo-next-monorepo-example",
+  "name": "socii",
   "private": true,
   "devDependencies": {
-    "expo-yarn-workspaces": "^1.5.1",
     "patch-package": "^6.4.7"
   },
   "workspaces": [
@@ -12,8 +11,8 @@
     "packages/next"
   ],
   "scripts": {
-    "start": "cd packages/expo && yarn start:expo",
-    "dev": "cd packages/next && yarn dev",
+    "dev:expo": "yarn workspace @socii/expo dev",
+    "dev:next": "yarn workspace @socii/next dev",
     "build": "cd packages/next && yarn build",
     "deploy": "vercel --prod --no-clipboard",
     "postinstall": "patch-package"
@@ -21,5 +20,8 @@
   "dependencies": {
     "sentry-expo": "^4.0.3",
     "tailwindcss": "^2.2.16"
+  },
+  "resolutions": {
+    "babel-preset-expo": "^8.5.1"
   }
 }

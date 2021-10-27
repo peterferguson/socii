@@ -1,7 +1,7 @@
 import React from "react"
 import { Pressable, Button } from "react-native"
 import { Text } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "../../lib/tailwind"
 
 import { useRouter } from "app/navigation/use-router"
 

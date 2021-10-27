@@ -45,7 +45,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   //   navigation.setParams({ headerTitle: asset })
   // }, [])
 
-  const { asset: symbol } = route.params
+  const { assetSymbol: symbol } = route.params
 
   const asset = useAssetData([symbol])
   const { recommendations } = useRecommendations(symbol)

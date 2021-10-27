@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { enableScreens } from "react-native-screens"
 import { StatusBar } from "expo-status-bar"
 import { SafeAreaProvider } from "react-native-safe-area-context"

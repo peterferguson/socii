@@ -1,13 +1,16 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer, useLinkTo } from "@react-navigation/native"
-import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
 import { linking } from "app/navigation/linking"
+import { MainNavigator } from "app/navigation/main-navigator"
 import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
+import { OverlayProvider } from "stream-chat-expo"
 import { AuthProvider } from "../contexts/AuthProvider"
+import { StreamProvider } from "../contexts/StreamProvider"
 import { useDarkMode } from "../hooks/useDarkMode"
+import { useStreamChatTheme } from "../hooks/useStreamChatTheme"
 import tw from "../lib/tailwind"
 
 function LinkTo() {
@@ -15,9 +18,8 @@ function LinkTo() {
 
   useEffect(function trigger() {
     if (Platform.OS === "web" && Router) {
-      const handler = (path: string) => {
-        linkTo(path)
-      }
+      const handler = (path: string) => linkTo(path)
+
       Router.events.on("routeChangeComplete", handler)
 
       return () => Router.events.off("routeChangeComplete", handler)
@@ -37,9 +39,10 @@ function useLinkingConfig() {
 }
 
 export function Navigation({ Component, pageProps }: NextNavigationProps) {
-  const [theme] = useDarkMode()
-  const darkMode = theme === "dark"
+  const [themeMode] = useDarkMode()
+  const darkMode = themeMode === "dark"
   const linkingConfig = useLinkingConfig()
+  const theme = useStreamChatTheme()
 
   return (
     <NavigationContainer
@@ -62,11 +65,20 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       }}
     >
       <AuthProvider>
-        <LinkTo />
-        <BottomSheetModalProvider>
-          <BottomTabNavigator Component={Component} pageProps={pageProps} />
-        </BottomSheetModalProvider>
-        {/* <Notifications /> */}
+        <StreamProvider>
+          <OverlayProvider
+            // bottomInset={bottom}
+            // i18nInstance={streami18n}
+            value={{ style: theme }}
+            translucentStatusBar={true}
+          >
+            <LinkTo />
+            <BottomSheetModalProvider>
+              <MainNavigator Component={Component} pageProps={pageProps} />
+            </BottomSheetModalProvider>
+            {/* <Notifications /> */}
+          </OverlayProvider>
+        </StreamProvider>
       </AuthProvider>
     </NavigationContainer>
   )

@@ -1,10 +1,31 @@
 import fetch from "isomorphic-unfetch"
+import { Platform } from "react-native"
+import Constants from "expo-constants"
+
+const development = Constants.manifest.extra.STAGE === "development"
+
+// - use for adding localhost to the url
+const local = Constants.manifest.extra.LOCAL_DEVELOPMENT === "true"
 
 export async function fetcher<JSON = any>(
   url: string,
   options?: object
 ): Promise<JSON> {
-  const res = await fetch(url, options)
+  let endpointPrefix
+
+  endpointPrefix = Platform.select({
+    web: "/",
+    default: local
+      ? "http://localhost:3000/" // ! For now running localhost from app folder instead of the next folder
+      : development
+      ? "https://development.socii.app/"
+      : "https://socii.app/",
+  })
+
+  const endpoint = url.startsWith("/") ? url.replace("/", endpointPrefix) : url
+
+  console.log(`Fetching ${endpoint}`)
+  const res = await fetch(endpoint, options)
 
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.

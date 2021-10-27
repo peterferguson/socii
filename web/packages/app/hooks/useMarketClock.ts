@@ -1,6 +1,6 @@
 import { cameliseKeys } from "../utils/cameliseKeys"
 import { fetcher } from "../utils/fetcher"
-import useSWR from "swr"
+import { default as useSWR } from "@nandorojo/swr-react-native"
 
 interface MarketClock {
   timestamp: string

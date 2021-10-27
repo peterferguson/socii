@@ -1,4 +1,4 @@
-import { useInterval } from "../hooks/useAuth"
+import { useInterval } from "../hooks/"
 import { updateTradeEvents } from "../utils/updateTradeEvents"
 import { useMarketClock } from "./useMarketClock"
 

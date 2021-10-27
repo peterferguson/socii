@@ -2,10 +2,20 @@ import * as Linking from "expo-linking"
 import { getPathFromState, getStateFromPath } from "@react-navigation/native"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
-import { EnterStackParams, GroupsStackParams, StocksStackParams } from "./types"
+import {
+  EnterStackParams,
+  GroupsStackParams,
+  StocksStackParams,
+  ChatStackParams,
+  ChannelStackParams,
+} from "./types"
+import { MainNavigatorParams } from "./main-navigator/types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
+function makeMainPath<Path extends keyof MainNavigatorParams>(path: Path): Path {
+  return path
+}
 function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
   return path
 }
@@ -21,6 +31,12 @@ function makeStockStackPath<Path extends keyof StocksStackParams>(path: Path): P
 function makeEnterStackPath<Path extends keyof EnterStackParams>(path: Path): Path {
   return path
 }
+function makeChatStackPath<Path extends keyof ChatStackParams>(path: Path): Path {
+  return path
+}
+function makeChannelStackPath<Path extends keyof ChannelStackParams>(path: Path): Path {
+  return path
+}
 
 function makeType<T>(t: T) {
   return t
@@ -30,6 +46,15 @@ const groupStackPaths = makeType({
   groups: makeGroupStackPath("groupsScreen"),
   group: makeGroupStackPath("groupScreen"),
   new: makeGroupStackPath("new"),
+})
+
+const chatStackPaths = makeType({
+  channelList: makeChatStackPath("channelListScreen"),
+  // new: makeGroupStackPath("new"),
+})
+const channelStackPaths = makeType({
+  channel: makeChannelStackPath("channel"),
+  thread: makeChannelStackPath("thread"),
 })
 
 const stocksStackPaths = makeType({
@@ -46,6 +71,13 @@ const tabPaths = makeType({
   enterTab: makeTabPath("enter"),
   groupsTab: makeTabPath("groups"),
   stocksTab: makeTabPath("stocks"),
+  chatTab: makeTabPath("chat"),
+})
+
+const mainPaths = makeType({
+  withBottomBar: makeMainPath("withBottomBar"),
+  channel: makeMainPath("channel"),
+  thread: makeMainPath("thread"),
 })
 
 const linking: Props = {
@@ -55,9 +87,7 @@ const linking: Props = {
       [tabPaths.enterTab]: {
         path: "",
         initialRouteName: enterStackPaths.enter,
-        screens: {
-          [enterStackPaths.enter]: "",
-        },
+        screens: { [enterStackPaths.enter]: "" },
       },
       [tabPaths.groupsTab]: {
         initialRouteName: groupStackPaths.groups,
@@ -73,9 +103,24 @@ const linking: Props = {
         initialRouteName: stocksStackPaths.stocks,
         screens: {
           [stocksStackPaths.stocks]: "",
-          [stocksStackPaths.stock]: ":asset",
+          [stocksStackPaths.stock]: ":assetSymbol",
           [stocksStackPaths.category]: "categories/:category",
+
         },
+      },
+      [tabPaths.chatTab]: {
+        path: "chat",
+        initialRouteName: chatStackPaths.channelList,
+        screens: { [chatStackPaths.channelList]: "" },
+      },
+      [mainPaths.channel]: {
+        path: "channel",
+        screens: { [channelStackPaths.channel]: ":channelId" },
+      },
+      [mainPaths.thread]: {
+        path: "thread",
+        // -> :channel:threadId not sure if this is correct
+        screens: { [channelStackPaths.thread]: ":threadId" },
       },
     },
   },

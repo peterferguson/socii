@@ -11,7 +11,7 @@ interface IAssetLogoProps {
   height?: string
 }
 
-const DEFAULT_HEIGHT_AND_WIDTH = "56px"
+const DEFAULT_HEIGHT_AND_WIDTH = "56"
 
 const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) => {
   const [logo, setLogo] = useState<string>("")

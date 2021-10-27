@@ -9,15 +9,13 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
   const router = useRouter()
 
   const component = useCallback(
-    (props) => {
-      return <Component {...pageProps} {...props} />
-    },
+    (props) => <Component {...pageProps} {...props} />,
     [Component, pageProps]
   )
 
   return (
     <BottomTab.Navigator
-      initialRouteName="groupsTab"
+      initialRouteName="groups"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#fff",
@@ -33,7 +31,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       }}
     >
       <BottomTab.Screen
-        name="enterTab"
+        name="enter"
         listeners={{
           tabPress: (e) => {
             e.preventDefault()
@@ -47,7 +45,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
         {component}
       </BottomTab.Screen>
       <BottomTab.Screen
-        name="groupsTab"
+        name="groups"
         listeners={{
           tabPress: (e) => {
             e.preventDefault()
@@ -61,7 +59,21 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
         {component}
       </BottomTab.Screen>
       <BottomTab.Screen
-        name="stocksTab"
+        name="chat"
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault()
+            router.push("/chat")
+          },
+        }}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="message-circle" color={color} />,
+        }}
+      >
+        {component}
+      </BottomTab.Screen>
+      <BottomTab.Screen
+        name="stocks"
         listeners={{
           tabPress: (e) => {
             e.preventDefault()
