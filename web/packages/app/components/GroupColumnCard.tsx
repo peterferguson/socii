@@ -1,6 +1,6 @@
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
-import { FlatList, View } from "react-native"
+import { FlatList, View, Text } from "react-native"
 import { useAuth } from "../hooks"
 import { getGroupCashBalance } from "../lib/firebase/client/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/client/db/getHoldingData"
@@ -115,7 +115,10 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
       updateDonutSectors(currentPriceKeysNotInDonutSectors)
   }, [currentPrices, holdingInfo, mounted])
 
-  useEffect(() => console.log(donutSectors), [donutSectors])
+  useEffect(() => console.log(tw`mt-36`), [])
+
+  const donutRadius = 80
+  const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string
 
   return (
     <View style={tw`flex-col mb-4`}>
@@ -134,10 +137,35 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           cashBalance={cashBalance}
         />
         {donutSectors?.length === holdings?.length && (
-          <Donut
-            sectors={donutSectors}
-            textColor={tw`text-brand-black dark:text-brand-gray`.color as string}
-          />
+          <View style={tw`p-2`}>
+            <Donut sectors={donutSectors} textColor={donutTextColor} />
+            <View
+              style={[
+                tw.style(`flex-col items-center -mt-36 mb-12`, {
+                  fontSize: donutRadius / 4,
+                  color: donutTextColor,
+                }),
+              ]}
+            >
+              <Text style={tw`text-center text-tiny mt-1 font-poppins-200 uppercase`}>
+                portfolio
+              </Text>
+              <Text style={tw`text-center text-lg`}>{`$${donutSectors
+                .reduce((acc, sector) => acc + sector.value, 0)
+                .toFixed(2)}`}</Text>
+              <View
+                style={tw.style(`bg-brand-black my-3 w-8/12`, {
+                  borderBottomWidth: 0.25,
+                })}
+              />
+              <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>
+                cash
+              </Text>
+              <Text style={tw`text-center text-lg `}>{`$${cashBalance.toFixed(
+                2
+              )}`}</Text>
+            </View>
+          </View>
         )}
         <TextDivider lineStyles={undefined}>
           {holdings?.length > 0
