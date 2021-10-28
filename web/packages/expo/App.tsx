@@ -25,9 +25,12 @@ import {
 } from "@expo-google-fonts/open-sans"
 import { useDeviceContext } from "twrnc"
 
+import { LogBox } from "react-native"
+
 enableScreens(true)
 
 export default function App() {
+  LogBox.ignoreLogs(["Setting a timer"])
   const [fontIsLoaded] = useFonts({
     "poppins-100": Poppins_100Thin,
     "poppins-200": Poppins_200ExtraLight,
