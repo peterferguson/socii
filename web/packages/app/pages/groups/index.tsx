@@ -8,7 +8,7 @@ import tw from "../../lib/tailwind"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 
 const GroupsStack = createStackNavigator<GroupsStackParams>()
-
+ 
 function GroupsNavigator() {
   return (
     <GroupsStack.Navigator

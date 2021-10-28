@@ -1,4 +1,5 @@
 import { ChannelScreen, ThreadScreen } from "app/screens/chat/index"
+import { SettingsScreen } from "app/screens/settings/index"
 import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 import { useStream } from "../../hooks"
@@ -41,6 +42,14 @@ export const MainNavigator = (props: NextNavigationProps) => {
           />
         </MainStack.Group>
       )}
+        <MainStack.Screen
+            name="settings"
+            component={SettingsScreen}
+            options={{
+              title: "Settings",
+              headerTitle: () => <HeaderContainer headerTitle={"Settings"} />,
+            }}
+          />
     </MainStack.Navigator>
   )
 }

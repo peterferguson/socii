@@ -27,7 +27,7 @@ const HeaderContainer = ({
       <HeaderText text={text} />
       <TouchableOpacity
         style={tw`flex flex-col items-center justify-center`}
-        onPress={() => signout("", false)}
+        onPress={() => {router.push("/settings/")}}
       >
         {user?.photoUrl ? (
           <Image

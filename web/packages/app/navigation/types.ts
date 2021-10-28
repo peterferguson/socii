@@ -20,10 +20,15 @@ type ChannelStackParams = {
   thread: { threadId: string }
 }
 
+type SettingsStackParams = {
+  settingsScreen: undefined 
+}
+
 type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen">
 type GroupScreenProps = NativeStackScreenProps<GroupsStackParams, "groupScreen">
 type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocksScreen">
 type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stockScreen">
+type SettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "settingsScreen">
 
 type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
@@ -56,4 +61,7 @@ export type {
   ChannelScreenProps,
   ThreadScreenProps,
   CategoryScreenProps,
+
+  SettingsScreenProps,
+  SettingsStackParams,
 }
