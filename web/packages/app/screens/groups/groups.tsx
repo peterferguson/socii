@@ -1,33 +1,26 @@
 import React from "react"
-import { Pressable, Button } from "react-native"
-import { Text } from "react-native"
 import tw from "../../lib/tailwind"
+import { View, FlatList, Text } from "react-native"
+import GroupColumn from "../../components/GroupColumnCard"
+// import { PieCardSkeleton } from "../../components/PieCard"
+import { useAuth } from "../../hooks/useAuth"
 
-import { useRouter } from "app/navigation/use-router"
-
-export default function GroupsScreen() {
-  const router = useRouter()
-
+const GroupPortfolios = (): JSX.Element => {
+  const { user } = useAuth()
   return (
-    <>
-      <Button
-        onPress={() => {
-          router.push("/groups/new")
-        }}
-        title="New group"
-      />
-
-      {[1, 2, 3, 4, 5].map((_, index) => (
-        <Pressable
-          key={index}
-          onPress={() => {
-            router.push(`/groups/${index + 1}`)
-          }}
-          style={tw`mt-4 flex items-center justify-center`}
-        >
-          <Text style={tw`text-brand-black dark:text-brand-gray`}>{`Group ${index + 1}`}</Text>
-        </Pressable>
-      ))}
-    </>
+    <View
+      style={tw`flex-col items-center justify-center mx-4 my-8 sm:my-0 min-h-[500px]`}
+    >
+      <View style={tw`flex-col sm:flex-row w-full items-center justify-center`}>
+        <FlatList
+          data={user?.groups}
+          keyExtractor={(groupName) => groupName}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item: groupName }) => <GroupColumn groupName={groupName} />}
+        />
+      </View>
+    </View>
   )
 }
+
+export default GroupPortfolios

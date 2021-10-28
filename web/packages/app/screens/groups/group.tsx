@@ -59,7 +59,6 @@ export default function GroupScreen({ navigation, route }: GroupScreenProps) {
       <Text
         style={tw`p-4 font-open-sans-300 text-brand-black dark:text-brand-gray text-2xl`}
       >
-        {" "}
         Light
       </Text>
       <Text
@@ -75,7 +74,6 @@ export default function GroupScreen({ navigation, route }: GroupScreenProps) {
       <Text
         style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-open-sans-700`}
       >
-        {" "}
         Bold
       </Text>
       <Text
