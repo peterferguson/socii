@@ -141,66 +141,15 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           borderTopRightRadius: 16,
         })}
       >
-        <View
-          style={tw.style(
-            "w-88 sm:w-full items-center justify-center flex-col m-0 sm:m-4 mb-2 sm:mb-4",
-            style
-          )}
-        >
-          <Pressable onPress={() => router.push(`/groups/${groupName}`)}>
-            <Text
-              style={tw.style(
-                "text-4xl text-center text-brand-black z-10 top-2 font-poppins-600",
-                "umami--click--group-pie-chart-title"
-              )}
-            >
-              {groupName}
-            </Text>
-          </Pressable>
-        </View>
-        {donutSectors?.length === holdings?.length ? (
-          <View style={tw`p-2`}>
-            <Donut sectors={donutSectors} textColor={donutTextColor} />
-            <View
-              style={[
-                tw.style(`flex-col items-center -mt-36 mb-12`, {
-                  fontSize: donutRadius / 4,
-                  color: donutTextColor,
-                }),
-              ]}
-            >
-              <Text style={tw`text-center text-tiny mt-1 font-poppins-200 uppercase`}>
-                portfolio
-              </Text>
-              <Text style={tw`text-center text-lg`}>{`$${donutSectors
-                .reduce((acc, sector) => acc + sector.value, 0)
-                .toFixed(2)}`}</Text>
-              <Text
-                style={tw.style(
-                  `text-center text-tiniest font-poppins-200 uppercase`,
-                  gain > 0 ? "text-teal-500" : gain < 0 ? "text-red-500" : "bg-brand"
-                )}
-              >
-                {gain.toFixed(2)}%
-              </Text>
-              <View
-                style={tw.style(`bg-brand-black my-2 w-8/12`, {
-                  borderBottomWidth: 0.25,
-                })}
-              />
-              <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>
-                cash
-              </Text>
-              <Text style={tw`text-center text-lg `}>{`$${cashBalance.toFixed(
-                2
-              )}`}</Text>
-            </View>
-          </View>
-        ) : (
-          <View style={tw`my-4`}>
-            <SkeletonCircle radius={80} />
-          </View>
-        )}
+        <CardTitle title={groupName} style={style} />
+        <CardDonutChart
+          holdings={holdings}
+          sectors={donutSectors}
+          radius={donutRadius}
+          textColor={donutTextColor}
+          gain={gain}
+          cashBalance={cashBalance}
+        />
         <TextDivider lineStyles={undefined}>
           {holdings?.length > 0
             ? `${holdings?.length} Investments`
@@ -223,3 +172,66 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
     </View>
   )
 }
+
+const CardTitle = ({ title, style }) => {
+  const router = useRouter()
+  return (
+    <View
+      style={tw.style(
+        "w-88 sm:w-full items-center justify-center flex-col m-0 sm:m-4 mb-2 sm:mb-4",
+        style
+      )}
+    >
+      <Pressable onPress={() => router.push(`/groups/${title}`)}>
+        <Text
+          style={tw.style(
+            "text-4xl text-center text-brand-black z-10 top-2 font-poppins-600",
+            "umami--click--group-pie-chart-title"
+          )}
+        >
+          {title}
+        </Text>
+      </Pressable>
+    </View>
+  )
+}
+const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalance }) =>
+  sectors?.length === holdings?.length ? (
+    <View style={tw`p-2`}>
+      <Donut sectors={sectors} textColor={textColor} />
+      <View
+        style={[
+          tw.style(`flex-col items-center -mt-36 mb-12`, {
+            fontSize: radius / 4,
+            color: textColor,
+          }),
+        ]}
+      >
+        <Text style={tw`text-center text-tiny mt-1 font-poppins-200 uppercase`}>
+          portfolio
+        </Text>
+        <Text style={tw`text-center text-lg`}>{`$${sectors
+          .reduce((acc, sector) => acc + sector.value, 0)
+          .toFixed(2)}`}</Text>
+        <Text
+          style={tw.style(
+            `text-center text-tiniest font-poppins-200 uppercase`,
+            gain > 0 ? "text-teal-500" : gain < 0 ? "text-red-500" : "bg-brand"
+          )}
+        >
+          {gain.toFixed(2)}%
+        </Text>
+        <View
+          style={tw.style(`bg-brand-black my-2 w-8/12`, {
+            borderBottomWidth: 0.25,
+          })}
+        />
+        <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>cash</Text>
+        <Text style={tw`text-center text-lg `}>{`$${cashBalance.toFixed(2)}`}</Text>
+      </View>
+    </View>
+  ) : (
+    <View style={tw`my-4`}>
+      <SkeletonCircle radius={80} />
+    </View>
+  )
