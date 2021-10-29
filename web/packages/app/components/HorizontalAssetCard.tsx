@@ -15,11 +15,6 @@ interface IHorizontalAssetCard {
   shortName: string
   price: Price
 }
-interface IHorizontalAssetCardSkeleton {
-  cardRef?: React.MutableRefObject<any>
-  className: string
-}
-
 const HorizontalAssetCard = ({
   cardRef,
   isin,
@@ -85,7 +80,7 @@ const HorizontalAssetCard = ({
   )
 }
 
-export const HorizontalAssetCardSkeleton = ({}: IHorizontalAssetCardSkeleton) => (
+export const HorizontalAssetCardSkeleton = () => (
   <View style={tw.style("w-11/12 h-auto max-w-sm mx-auto my-2 ")}>
     <View
       style={{

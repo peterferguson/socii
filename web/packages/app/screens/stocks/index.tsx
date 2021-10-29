@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react"
 import { FlatList, ScrollView, Text, View } from "react-native"
 import { CategoryCard } from "../../components/CategoryCard"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
-import CardSlider from "../../components/OverlappingCardSlider"
+import CardSlider from "../../components/CardSlider"
 import { useYahooTrending } from "../../hooks/useYahooTrending"
 import tw from "../../lib/tailwind"
 import { Asset } from "../../models/Asset"
 import { AssetCategories } from "../../models/AssetCategories"
 import { useRouter } from "../../navigation/use-router"
 import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
+import { Price } from "../../models/Price"
 
-const defaultPrice = {
+const defaultPrice: Price = {
   latestPrice: 0,
   changePercent: -0.1,
   iexRealtimePrice: 0,
@@ -23,7 +24,7 @@ export default function StocksScreen() {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
-  const { trending } = useYahooTrending()
+  const { trending, isLoading } = useYahooTrending()
   // TODO: This recalls the api every time the screen is loaded leading to bad UX
   // ? Maybe use a cache to store the data and only call the api when the user refreshes the screen
 
@@ -33,10 +34,11 @@ export default function StocksScreen() {
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={tw`-mt-4`}>
       <View>
         <Title title={"Trending"} />
         <CardSlider
+          isLoading={isLoading}
           assets={Object.values(trending).map((asset) => ({
             asset: asset,
             price: defaultPrice,

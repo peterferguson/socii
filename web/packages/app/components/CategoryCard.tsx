@@ -15,7 +15,9 @@ export const CategoryCard = ({ shortName, emoji, router }) => {
     >
       <View style={tw`flex-1 flex-col items-center justify-center w-10`}>
         <View style={tw`rounded-full`}>
-          <Text style={tw`text-center text-lg ${isLongShortName ? "mb-4" :"mb-8"}`}>{emoji}</Text>
+          <Text style={tw`text-center text-lg ${isLongShortName ? "mb-4" : "mb-8"}`}>
+            {emoji}
+          </Text>
         </View>
         <>
           {isLongShortName ? (
