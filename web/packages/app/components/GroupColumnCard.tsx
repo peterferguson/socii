@@ -4,8 +4,8 @@ import { FlatList, View, Text } from "react-native"
 import { useAuth } from "../hooks"
 import { getGroupCashBalance } from "../lib/firebase/client/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/client/db/getHoldingData"
-import { getLogoColor } from "../lib/firebase/client/db/getLogoColor"
 import tw from "../lib/tailwind"
+import { Skeleton } from "@motify/skeleton"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
 import { ChatWithGroupFooter } from "./ChatWithGroupFooter"
@@ -136,7 +136,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           currentPrices={currentPrices}
           cashBalance={cashBalance}
         />
-        {donutSectors?.length === holdings?.length && (
+        {donutSectors?.length === holdings?.length ? (
           <View style={tw`p-2`}>
             <Donut sectors={donutSectors} textColor={donutTextColor} />
             <View
@@ -166,13 +166,22 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
               )}`}</Text>
             </View>
           </View>
+        ) : (
+          <View style={tw`my-4`}>
+            <Skeleton
+              colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
+              radius="round"
+              height={160}
+              width={160}
+            />
+          </View>
         )}
         <TextDivider lineStyles={undefined}>
           {holdings?.length > 0
             ? `${holdings?.length} Investments`
             : "No Investments Yet"}
         </TextDivider>
-        <View style={tw`w-11/12`}>
+        <View style={tw`w-11/12 my-2`}>
           <FlatList
             data={holdingInfo}
             keyExtractor={(item) => item.symbol}
