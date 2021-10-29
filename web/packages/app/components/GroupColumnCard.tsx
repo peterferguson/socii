@@ -1,6 +1,6 @@
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
-import { FlatList, View, Text } from "react-native"
+import { FlatList, View, Text, Pressable } from "react-native"
 import { useAuth } from "../hooks"
 import { getGroupCashBalance } from "../lib/firebase/client/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/client/db/getHoldingData"
@@ -10,9 +10,10 @@ import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
 import { ChatWithGroupFooter } from "./ChatWithGroupFooter"
 import Donut, { DonutSector } from "./DonutChart"
-import GroupPieChart from "./GroupPieChart"
+
 import StockCard from "./StockCard"
 import TextDivider from "./TextDivider"
+import { useRouter } from "../navigation/use-router"
 
 export interface IGroupColumnCard {
   groupName: string
@@ -30,6 +31,7 @@ export interface Holding {
 
 export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) {
   const { user } = useAuth()
+  const router = useRouter()
 
   const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
@@ -115,7 +117,17 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
       updateDonutSectors(currentPriceKeysNotInDonutSectors)
   }, [currentPrices, holdingInfo, mounted])
 
-  useEffect(() => console.log(tw`mt-36`), [])
+  const portfolioValue = holdingInfo
+    ?.map(({ symbol, qty }) => currentPrices?.[symbol] * qty)
+    .reduce((a, b) => a + b, 0)
+
+  const gain =
+    ((portfolioValue -
+      holdingInfo
+        ?.map(({ avgPrice, qty }) => avgPrice * qty)
+        .reduce((a, b) => a + b, 0)) *
+      100) /
+    portfolioValue
 
   const donutRadius = 80
   const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string
@@ -130,12 +142,23 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           borderTopRightRadius: 16,
         })}
       >
-        <GroupPieChart
-          groupName={groupName}
-          holdingData={holdingInfo}
-          currentPrices={currentPrices}
-          cashBalance={cashBalance}
-        />
+        <View
+          style={tw.style(
+            "w-88 sm:w-full items-center justify-center flex-col m-0 sm:m-4 mb-2 sm:mb-4",
+            style
+          )}
+        >
+          <Pressable onPress={() => router.push(`/groups/${groupName}`)}>
+            <Text
+              style={tw.style(
+                "text-4xl text-center text-brand-black z-10 top-2 font-poppins-600",
+                "umami--click--group-pie-chart-title"
+              )}
+            >
+              {groupName}
+            </Text>
+          </Pressable>
+        </View>
         {donutSectors?.length === holdings?.length ? (
           <View style={tw`p-2`}>
             <Donut sectors={donutSectors} textColor={donutTextColor} />
@@ -153,8 +176,16 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
               <Text style={tw`text-center text-lg`}>{`$${donutSectors
                 .reduce((acc, sector) => acc + sector.value, 0)
                 .toFixed(2)}`}</Text>
+              <Text
+                style={tw.style(
+                  `text-center text-tiniest font-poppins-200 uppercase`,
+                  gain > 0 ? "text-teal-500" : gain < 0 ? "text-red-500" : "bg-brand"
+                )}
+              >
+                {gain.toFixed(2)}%
+              </Text>
               <View
-                style={tw.style(`bg-brand-black my-3 w-8/12`, {
+                style={tw.style(`bg-brand-black my-2 w-8/12`, {
                   borderBottomWidth: 0.25,
                 })}
               />
