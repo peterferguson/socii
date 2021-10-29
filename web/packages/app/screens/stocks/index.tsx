@@ -1,7 +1,7 @@
 // import { useAuth } from "@hooks/useAuth"
 import React, { useEffect, useState } from "react"
 import { FlatList, ScrollView, Text, View } from "react-native"
-import { CategoryCard } from "../../components/CategoryCard"
+import { CategoryCard, CategoryCardSkeleton } from "../../components/CategoryCard"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import CardSlider from "../../components/CardSlider"
 import { useYahooTrending } from "../../hooks/useYahooTrending"
@@ -11,6 +11,7 @@ import { AssetCategories } from "../../models/AssetCategories"
 import { useRouter } from "../../navigation/use-router"
 import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
 import { Price } from "../../models/Price"
+import { shadowStyle } from "../../utils/shadowStyle"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -73,24 +74,89 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => (
   />
 )
 
+// const Categories = ({ categories }: { categories: AssetCategories }) => {
+//   const router = useRouter()
+//   return (
+//     <View
+//       style={tw.style("flex p-4", "umami--drag--popular-stocks-category-card-slider")}
+//     >
+//       <FlatList
+//         data={Object.entries(categories).sort(() => 0.5 - Math.random())}
+//         horizontal={true}
+//         renderItem={({ item: [shortName, { emoji }] }) =>
+//           emoji ? (
+//             <CategoryCard shortName={shortName} emoji={emoji} router={router} />
+//           ) : (
+//             <CategoryCardSkeleton />
+//           )
+//         }
+//         keyExtractor={(item) => item[0]}
+//         showsHorizontalScrollIndicator={false}
+//       />
+//     </View>
+//   )
+// }
+
+// - copilot generated
+const fakeCategories = {
+  Technology: {
+    emoji: "💻",
+    category_names: ["Technology", "Computer", "Software"],
+    assets: ["AAPL", "GOOG", "MSFT"],
+  },
+  Healthcare: {
+    emoji: "💊",
+    category_names: ["Healthcare", "Medical"],
+    assets: ["AMZN", "GOOGL", "MSFT"],
+  },
+  Financial: {
+    emoji: "💸",
+    category_names: ["Financial", "Banking", "Finance"],
+    assets: ["AAPL", "GOOG", "MSFT"],
+  },
+  Energy: {
+    emoji: "🔥",
+    category_names: ["Energy", "Oil", "Gas"],
+    assets: ["AAPL", "GOOG", "MSFT"],
+  },
+  Materials: {
+    emoji: "🔧",
+    category_names: ["Materials", "Steel", "Iron"],
+    assets: ["AAPL", "GOOG", "MSFT"],
+  },
+}
+
 const Categories = ({ categories }: { categories: AssetCategories }) => {
-  const router = useRouter()
+  const isLoading = Object.keys(categories)?.length === 0
+
+  const [initialCategories, setInitialCategories] = useState(
+    Object.entries(fakeCategories)
+  )
+
+  useEffect(() => {
+    if (!isLoading) {
+      // - update previous display categories to avoid unmounting
+      setInitialCategories(Object.entries(categories).slice(0, 5))
+    }
+  }, [])
+
   return (
-    <View
+    <ScrollView
       style={tw.style("flex p-4", "umami--drag--popular-stocks-category-card-slider")}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      scrollEnabled={!isLoading}
     >
-      <FlatList
-        data={Object.entries(categories).sort(() => 0.5 - Math.random())}
-        horizontal={true}
-        renderItem={({ item: [shortName, { emoji }] }) =>
-          emoji ? (
-            <CategoryCard shortName={shortName} emoji={emoji} router={router} />
-          ) : null
-        }
-        keyExtractor={(item) => item[0]}
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
+      <View style={tw`flex-row`}>
+        {initialCategories
+          .concat(Object.entries(categories).slice(5))
+          .map(([shortName, { emoji }]) =>
+            emoji ? (
+              <CategoryCard shortName={shortName} emoji={emoji} isLoading={isLoading} />
+            ) : null
+          )}
+      </View>
+    </ScrollView>
   )
 }
 

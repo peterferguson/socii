@@ -24,31 +24,6 @@ interface CardAsset {
   price: Price
 }
 
-// const CardSlider = ({
-//   assets,
-//   isLoading,
-// }: {
-//   assets: CardAsset[]
-//   isLoading: boolean
-// }) => (
-//   <FlatList
-//     style={{
-//       ...tw`flex-row p-4 umami--drag--popular-stocks-card-slider`,
-//       ...shadowStyle("lg"),
-//     }}
-//     data={!isLoading ? assets : fakeAssets}
-//     horizontal={true}
-//     keyExtractor={({ asset }) => asset.alpaca.symbol}
-//     showsHorizontalScrollIndicator={false}
-//     renderItem={({ item: { asset, price } }) => (
-//       <AnimatePresence>
-//         {!isLoading && <MemoizedSliderCard {...{ asset, price }} />}
-//         {isLoading && <MemoizedSliderCardSkeleton />}
-//       </AnimatePresence>
-//     )}
-//   />
-// )
-
 const CardSlider = ({
   assets,
   isLoading,
@@ -67,10 +42,10 @@ const CardSlider = ({
 
   return (
     <ScrollView
-      style={{
-        ...tw`flex-row p-4 umami--drag--popular-stocks-card-slider`,
-        ...shadowStyle("lg"),
-      }}
+      style={tw.style(
+        `flex-row p-4 umami--drag--popular-stocks-card-slider`,
+        shadowStyle("lg") as any
+      )}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       scrollEnabled={!isLoading}
@@ -153,7 +128,7 @@ export const SliderCard = ({
 
 const SliderCardImage = ({ symbol, isin, isImageLoading }) =>
   isImageLoading ? (
-    <SkeletonCircle height={52} width={52} />
+    <SkeletonCircle radius={26} />
   ) : (
     <AssetLogo asset={symbol} isin={isin} height="52" width="52" />
   )
@@ -220,7 +195,7 @@ const SliderCardPrice = ({
 export const SliderCardSkeleton = () => (
   <View style={tw`mx-2 bg-white flex-grow flex-1 rounded-2xl border-l-4`}>
     <View style={tw`h-60 w-40 p-4`}>
-      <SkeletonCircle height={52} width={52} />
+      <SkeletonCircle radius={26} />
       <View style={{ ...tw`flex-col py-8 px-2 flex-1` }}>
         <VerticalSpacer height={8} />
         <SkeletonText width={60} height={24} />

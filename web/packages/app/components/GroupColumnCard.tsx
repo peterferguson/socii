@@ -198,7 +198,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           </View>
         ) : (
           <View style={tw`my-4`}>
-            <SkeletonCircle height={160} width={160} />
+            <SkeletonCircle radius={80} />
           </View>
         )}
         <TextDivider lineStyles={undefined}>

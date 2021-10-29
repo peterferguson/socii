@@ -67,7 +67,7 @@ const PriceWithChangeTagSkeleton = () => (
 
 const AssetLogoWithNameAndSymbolSkeleton = () => (
   <View style={tw.style("flex-row items-center m-1 bg-white")}>
-    <SkeletonCircle width={40} height={40} />
+    <SkeletonCircle radius={20} />
     <View style={tw`items-start my-1 pl-2 pr-4 min-w-[70px]`}>
       <SkeletonText
         width={tw`w-20`.width as number}

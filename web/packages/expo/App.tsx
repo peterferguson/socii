@@ -30,7 +30,7 @@ import { LogBox } from "react-native"
 enableScreens(true)
 
 export default function App() {
-  LogBox.ignoreLogs(["Setting a timer"])
+  LogBox.ignoreLogs(["Setting a timer", "umami--"])
   const [fontIsLoaded] = useFonts({
     "poppins-100": Poppins_100Thin,
     "poppins-200": Poppins_200ExtraLight,
