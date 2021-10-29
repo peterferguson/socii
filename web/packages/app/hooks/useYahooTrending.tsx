@@ -1,5 +1,4 @@
-import React, { useMemo, useEffect } from "react"
-import { Asset } from "../models/Asset"
+import { useMemo } from "react"
 import { AssetsObject, useAssetData } from "./useAssetData"
 import { useYahoo } from "./useYahoo"
 
@@ -16,6 +15,8 @@ export const useYahooTrending = (): {
   )
 
   const trending = useAssetData(symbols)
+
+  // TODO: update endpoint to return the price also!
 
   return {
     trending: trending ? trending : ({} as AssetsObject),

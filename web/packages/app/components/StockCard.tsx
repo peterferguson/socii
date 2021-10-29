@@ -1,10 +1,11 @@
-import { Skeleton } from "@motify/skeleton"
 import React, { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import AssetLogo from "./AssetLogo"
 import { Holding } from "./GroupColumnCard"
+import SkeletonCircle from "./SkeletonCircle"
+import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
 
 interface IStockCard {
@@ -58,37 +59,22 @@ const PriceWithChangeTag = ({ latestPrice, qty, pnl }) => (
 
 const PriceWithChangeTagSkeleton = () => (
   <>
-    <Skeleton
-      colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
-      width={tw`w-20`.width as number}
-      height={tw`h-3`.height as number}
-    />
+    <SkeletonText width={tw`w-20`.width as number} height={tw`h-3`.height as number} />
     <VerticalSpacer height={8} />
-    <Skeleton
-      colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
-      width={tw`w-20`.width as number}
-      height={tw`h-3`.height as number}
-    />
+    <SkeletonText width={tw`w-20`.width as number} height={tw`h-3`.height as number} />
   </>
 )
 
 const AssetLogoWithNameAndSymbolSkeleton = () => (
   <View style={tw.style("flex-row items-center m-1 bg-white")}>
-    <Skeleton
-      colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
-      radius={"round"}
-      width={40}
-      height={40}
-    />
+    <SkeletonCircle width={40} height={40} />
     <View style={tw`items-start my-1 pl-2 pr-4 min-w-[70px]`}>
-      <Skeleton
-        colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
+      <SkeletonText
         width={tw`w-20`.width as number}
         height={tw`h-3`.height as number}
       />
       <VerticalSpacer height={8} />
-      <Skeleton
-        colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
+      <SkeletonText
         width={tw`w-20`.width as number}
         height={tw`h-3`.height as number}
       />

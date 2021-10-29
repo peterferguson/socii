@@ -1,19 +1,18 @@
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
-import { FlatList, View, Text, Pressable } from "react-native"
+import { FlatList, Pressable, Text, View } from "react-native"
 import { useAuth } from "../hooks"
 import { getGroupCashBalance } from "../lib/firebase/client/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/client/db/getHoldingData"
 import tw from "../lib/tailwind"
-import { Skeleton } from "@motify/skeleton"
+import { useRouter } from "../navigation/use-router"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
 import { ChatWithGroupFooter } from "./ChatWithGroupFooter"
 import Donut, { DonutSector } from "./DonutChart"
-
+import SkeletonCircle from "./SkeletonCircle"
 import StockCard from "./StockCard"
 import TextDivider from "./TextDivider"
-import { useRouter } from "../navigation/use-router"
 
 export interface IGroupColumnCard {
   groupName: string
@@ -199,12 +198,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           </View>
         ) : (
           <View style={tw`my-4`}>
-            <Skeleton
-              colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
-              radius="round"
-              height={160}
-              width={160}
-            />
+            <SkeletonCircle height={160} width={160} />
           </View>
         )}
         <TextDivider lineStyles={undefined}>
