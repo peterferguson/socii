@@ -6,8 +6,8 @@ import tw from "../../lib/tailwind"
 
 const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()
-
-  const data = [...user?.groups, ...user?.groups]
+  const groups = user?.groups || []
+  const data = [...groups, ...groups]
 
   return (
     <View style={tw`flex-col items-center justify-center mx-4 mt-4`}>
