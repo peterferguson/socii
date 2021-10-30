@@ -46,10 +46,7 @@ export const MainNavigator = (props: NextNavigationProps) => {
         <MainStack.Screen
             name="settings"
             component={SettingsNavigator}
-            options={{
-              title: "Settings",
-              headerTitle: () => <HeaderContainer headerTitle={"Settings"} />,
-            }}
+            options={{ headerShown: false }}
           />
     </MainStack.Navigator>
   )

@@ -1,18 +1,17 @@
 import React from "react"
-
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import {SettingsScreen} from "app/screens/settings/index"
 import {ProfileSettingsScreen} from "app/screens/settings/index"
-import { MainNavigatorParams } from "../../navigation/main-navigator/types"
-import { SettingsStackParams } from "../../navigation/types"
+import { NextNavigationProps, SettingsStackParams } from "../../navigation/types"
 import tw from "../../lib/tailwind"
+import HeaderContainer from "../../components/Headers/HeaderContainer"
 
-//const SettingsStack = createStackNavigator<MainNavigatorParams>()
 const SettingsStack = createStackNavigator<SettingsStackParams>()
 
-function SettingsNavigator() {
+function SettingsNavigator(props: NextNavigationProps) {
   return (
     <SettingsStack.Navigator
+      initialRouteName="settingsScreen"
       screenOptions={{
         headerShown: true,
         headerShadowVisible: false,
@@ -26,11 +25,15 @@ function SettingsNavigator() {
         },
       }}
     >
-     
         <SettingsStack.Screen
           name="settingsScreen"
           component={SettingsScreen}
-          options={{ title: "Y", headerTitle: "Y" }}
+          options={{
+            title: "Settings",
+            headerTitle: () => (
+              <HeaderContainer headerTitle="Settings" text="Settings" />
+            ),
+          }}
         /> 
         <SettingsStack.Screen
           name="profileSettings"
