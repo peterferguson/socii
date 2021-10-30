@@ -34,10 +34,8 @@ const CardSlider = ({
   const [initialAssets, setInitialAssets] = useState(fakeAssets)
 
   useEffect(() => {
-    if (!isLoading && assets.length > 0) {
-      // - update previous display assets to avoid unmounting
-      setInitialAssets(assets.slice(0, 3))
-    }
+    // - update previous display assets to avoid unmounting
+    if (!isLoading && assets.length > 0) setInitialAssets(assets.slice(0, 3))
   }, [isLoading, assets])
 
   return (

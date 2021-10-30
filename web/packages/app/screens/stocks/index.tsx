@@ -1,17 +1,15 @@
 // import { useAuth } from "@hooks/useAuth"
 import React, { useEffect, useState } from "react"
 import { FlatList, ScrollView, Text, View } from "react-native"
-import { CategoryCard, CategoryCardSkeleton } from "../../components/CategoryCard"
-import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import CardSlider from "../../components/CardSlider"
+import { CategoryCard } from "../../components/CategoryCard"
+import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import { useYahooTrending } from "../../hooks/useYahooTrending"
 import tw from "../../lib/tailwind"
 import { Asset } from "../../models/Asset"
 import { AssetCategories } from "../../models/AssetCategories"
-import { useRouter } from "../../navigation/use-router"
-import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
 import { Price } from "../../models/Price"
-import { shadowStyle } from "../../utils/shadowStyle"
+import { getAssetCategoryShortNames } from "../../utils/getAssetCategoryShortNames"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -66,11 +64,9 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => {
   const [initialAssets, setInitialAssets] = useState(fakeAssets)
 
   useEffect(() => {
-    if (!isLoading) {
-      // - update previous display categories to avoid unmounting
-      setInitialAssets(assets.slice(0, 3))
-    }
-  }, [])
+    // - update previous display categories to avoid unmounting
+    if (!isLoading) setInitialAssets(assets.slice(0, 3))
+  }, [assets.length])
   return (
     <FlatList
       data={initialAssets.concat(assets.slice(3))}
@@ -84,62 +80,39 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => {
           price={defaultPrice}
         />
       )}
-      keyExtractor={(item,i) => `asset-card-${i}-${item.alpaca.symbol}`}
+      keyExtractor={(item, i) => `asset-card-${i}-${item.alpaca.symbol}`}
       onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
       onEndReachedThreshold={0.5}
       showsVerticalScrollIndicator={false}
     />
   )
 }
-// const Categories = ({ categories }: { categories: AssetCategories }) => {
-//   const router = useRouter()
-//   return (
-//     <View
-//       style={tw.style("flex p-4", "umami--drag--popular-stocks-category-card-slider")}
-//     >
-//       <FlatList
-//         data={Object.entries(categories).sort(() => 0.5 - Math.random())}
-//         horizontal={true}
-//         renderItem={({ item: [shortName, { emoji }] }) =>
-//           emoji ? (
-//             <CategoryCard shortName={shortName} emoji={emoji} router={router} />
-//           ) : (
-//             <CategoryCardSkeleton />
-//           )
-//         }
-//         keyExtractor={(item) => item[0]}
-//         showsHorizontalScrollIndicator={false}
-//       />
-//     </View>
-//   )
-// }
 
-// - copilot generated
 const fakeCategories = {
-  Technology: {
-    emoji: "💻",
-    category_names: ["Technology", "Computer", "Software"],
-    assets: ["AAPL", "GOOG", "MSFT"],
+  1: {
+    emoji: " ",
+    category_names: [],
+    assets: [],
   },
-  Healthcare: {
-    emoji: "💊",
-    category_names: ["Healthcare", "Medical"],
-    assets: ["AMZN", "GOOGL", "MSFT"],
+  2: {
+    emoji: " ",
+    category_names: [],
+    assets: [],
   },
-  Financial: {
-    emoji: "💸",
-    category_names: ["Financial", "Banking", "Finance"],
-    assets: ["AAPL", "GOOG", "MSFT"],
+  3: {
+    emoji: " ",
+    category_names: [],
+    assets: [],
   },
-  Energy: {
-    emoji: "🔥",
-    category_names: ["Energy", "Oil", "Gas"],
-    assets: ["AAPL", "GOOG", "MSFT"],
+  4: {
+    emoji: " ",
+    category_names: [],
+    assets: [],
   },
-  Materials: {
-    emoji: "🔧",
-    category_names: ["Materials", "Steel", "Iron"],
-    assets: ["AAPL", "GOOG", "MSFT"],
+  5: {
+    emoji: " ",
+    category_names: [],
+    assets: [],
   },
 }
 
@@ -151,11 +124,9 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
   )
 
   useEffect(() => {
-    if (!isLoading) {
-      // - update previous display categories to avoid unmounting
-      setInitialCategories(Object.entries(categories).slice(0, 5))
-    }
-  }, [])
+    // - update previous display categories to avoid unmounting
+    if (!isLoading) setInitialCategories(Object.entries(categories).slice(0, 5))
+  }, [Object.entries(categories).length])
 
   return (
     <ScrollView
@@ -167,9 +138,14 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
       <View style={tw`flex-row`}>
         {initialCategories
           .concat(Object.entries(categories).slice(5))
-          .map(([shortName, { emoji }]) =>
+          .map(([shortName, { emoji }], i) =>
             emoji ? (
-              <CategoryCard shortName={shortName} emoji={emoji} isLoading={isLoading} />
+              <CategoryCard
+                key={`category-${i}-${shortName}`}
+                shortName={shortName}
+                emoji={emoji}
+                isLoading={isLoading}
+              />
             ) : null
           )}
       </View>
@@ -179,7 +155,8 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
 
 const Title = ({ title }: { title: string }) => (
   <Text
-    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 tracking-tight uppercase font-poppins-500 dark:text-brand-black`}
+    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 
+              tracking-tight uppercase font-poppins-500 dark:text-brand-black`}
   >
     {title}
   </Text>

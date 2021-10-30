@@ -48,10 +48,10 @@ function StocksNavigator() {
         <StocksStack.Screen
           name="categoryScreen"
           component={CategoryScreen}
-          options={{
-            title: "Category",
-            headerTitle: () => <HeaderContainer headerTitle={"Category"} />,
-          }}
+          options={({ route }) => ({
+            title: route.params.category,
+            headerTitle: () => <HeaderContainer headerTitle={`${route.params.category} Stocks`} />,
+          })}
         />
         <StocksStack.Screen
           name="stockScreen"
