@@ -30,7 +30,6 @@ export interface Holding {
 
 export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) {
   const { user } = useAuth()
-  const router = useRouter()
 
   const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
@@ -127,6 +126,8 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
         .reduce((a, b) => a + b, 0)) *
       100) /
     portfolioValue
+
+  useEffect(() => console.log(donutSectors), [donutSectors])
 
   const donutRadius = 80
   const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string

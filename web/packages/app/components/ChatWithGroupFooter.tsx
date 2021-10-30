@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
-import { useStream } from "../hooks";
-import tw from "../lib/tailwind";
-import { useRouter } from "../navigation/use-router";
-import { GroupMemberProfilePhotos } from "./GroupMemberProfilePhotos";
+import React, { useEffect } from "react"
+import { Text, View, TouchableOpacity } from "react-native"
+import { useStream } from "../hooks"
+import tw from "../lib/tailwind"
+import { useRouter } from "../navigation/use-router"
+import { GroupMemberProfilePhotos } from "./GroupMemberProfilePhotos"
 
-export const ChatWithGroupFooter = ({ groupName }: { groupName: string; }) => {
-  const router = useRouter();
-  const { client: chatClient, setChannel } = useStream();
+export const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
+  const router = useRouter()
+  const { client: chatClient, setChannel } = useStream()
   useEffect(
-    () => setChannel(chatClient.channel("group", groupName)),
-    [setChannel, groupName]
-  );
+    () => chatClient?.user && setChannel(chatClient.channel("group", groupName)),
+    [setChannel, groupName, chatClient?.user]
+  )
 
   return (
     <TouchableOpacity
@@ -29,8 +29,9 @@ export const ChatWithGroupFooter = ({ groupName }: { groupName: string; }) => {
       <View style={tw`flex-row items-center justify-center p-1`}>
         <GroupMemberProfilePhotos
           groupName={groupName}
-          photoStyles={tw`w-6 h-6 rounded-full mx-0.5 my-2 border border-white`} />
+          photoStyles={tw`w-6 h-6 rounded-full mx-0.5 my-2 border border-white`}
+        />
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
