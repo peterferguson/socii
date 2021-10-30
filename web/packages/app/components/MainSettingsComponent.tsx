@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import { Z_FULL_FLUSH } from 'zlib';
 import tw from '../lib/tailwind';
+import { useRouter } from '../navigation/use-router';
 // import AppModal from '../common/AppModal';
 // import Icon from '../common/Icon';
 
@@ -11,6 +11,8 @@ const MainSettingsComponent = ({
   setModalVisible,
   settingsOptions,
 }) => {
+  const router = useRouter()
+  
   return (
     <View style={tw.style(`h-11/12 bg-brand-gray-lightest dark:bg-brand-black rounded-tr-lg rounded-tl-lg`)}>
       {/* <AppModal
@@ -41,8 +43,10 @@ const MainSettingsComponent = ({
         setModalVisible={setModalVisible}
       /> */}
       <ScrollView >
-        {settingsOptions.map(({title, subTitle, onPress}, index) => (
-          <TouchableOpacity key={title} onPress={onPress}>
+        {settingsOptions.map(({title, subTitle, onPress}, index) => ( 
+          <TouchableOpacity key={title} onPress={() => 
+            router.push("/settings/profileSettings")
+          }>
             <View
               style={{
                 paddingHorizontal: 20, 

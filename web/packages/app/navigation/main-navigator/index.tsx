@@ -1,8 +1,9 @@
 import { ChannelScreen, ThreadScreen } from "app/screens/chat/index"
-import { SettingsScreen } from "app/screens/settings/index"
+import { ProfileSettingsScreen, SettingsScreen } from "app/screens/settings/index"
 import React from "react"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
 import { useStream } from "../../hooks"
+import SettingsNavigator from "../../pages/settings"
 import { headerScreenOptions } from "../../utils/headerScreenOptions"
 import { BottomTabNavigator } from "../bottom-tab-navigator"
 import { NextNavigationProps } from "../types"
@@ -44,7 +45,7 @@ export const MainNavigator = (props: NextNavigationProps) => {
       )}
         <MainStack.Screen
             name="settings"
-            component={SettingsScreen}
+            component={SettingsNavigator}
             options={{
               title: "Settings",
               headerTitle: () => <HeaderContainer headerTitle={"Settings"} />,

@@ -86,7 +86,8 @@ const mainPaths = makeType({
 })
 
 const settingsStackPaths = makeType({
-  settings: makeSettingsPath("settingsScreen")
+  settingsScreen: makeSettingsPath("settingsScreen"), 
+  profileSettings: makeSettingsPath("profileSettings")
 })
 
 const linking: Props = {
@@ -133,9 +134,18 @@ const linking: Props = {
       },
       [mainPaths.settings]: {
         path: "settings",
-        initialRouteName: settingsStackPaths.settings,
-        screens: { [settingsStackPaths.settings]: "" },
+        screens: { 
+          [settingsStackPaths.settingsScreen]: "settingsScreen",  
+          [settingsStackPaths.profileSettings]: "profileSettings",  
+        },
       }, 
+      // [settingsStackPaths.settings]: {
+      //   path: "settings",
+      //   initialRouteName: mainPaths.settings,
+      //   screens: { 
+      //     [mainPaths.settings]: "",  
+      //   },
+      // }, 
     },
   },
   getPathFromState,
