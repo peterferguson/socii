@@ -23,6 +23,9 @@ type ChannelStackParams = {
 type SettingsStackParams = {
   settingsScreen: undefined
   profileSettings: undefined 
+  personalSettings: undefined 
+  notificationSettings: undefined 
+  FAQSettings: undefined
 }
 
 type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen">
@@ -32,8 +35,11 @@ type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocksScreen
 type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stockScreen">
 type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
 
-type SettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "profileSettings">
-type ProfileSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "settingsScreen">
+type SettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "settingsScreen">
+type ProfileSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "profileSettings">
+type PersonalSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "personalSettings">
+type NotificationSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "notificationSettings">
+type FAQSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "FAQSettings">
 
 type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
@@ -70,4 +76,7 @@ export type {
   SettingsScreenProps,
   ProfileSettingsScreenProps,
   SettingsStackParams,
+  NotificationSettingsScreenProps,
+  PersonalSettingsScreenProps,
+  FAQSettingsScreenProps,
 }

@@ -5,13 +5,16 @@ import {ProfileSettingsScreen} from "app/screens/settings/index"
 import { NextNavigationProps, SettingsStackParams } from "../../navigation/types"
 import tw from "../../lib/tailwind"
 import HeaderContainer from "../../components/Headers/HeaderContainer"
+import FAQSettingsScreen from "../../screens/settings/FAQSettings"
+import PersonalSettingsScreen from "../../screens/settings/personalSettings"
+import NotificationSettingsScreen from "../../screens/settings/notificationSettings"
 
 const SettingsStack = createStackNavigator<SettingsStackParams>()
 
 function SettingsNavigator(props: NextNavigationProps) {
   return (
     <SettingsStack.Navigator
-      initialRouteName="settingsScreen"
+      
       screenOptions={{
         headerShown: true,
         headerShadowVisible: false,
@@ -38,7 +41,41 @@ function SettingsNavigator(props: NextNavigationProps) {
         <SettingsStack.Screen
           name="profileSettings"
           component={ProfileSettingsScreen}
-          options={{ title: "Your Profile", headerTitle: "Your Profile" }}
+          options={{ 
+            title: "Your Profile", 
+            headerTitle: "Your Profile"
+          
+          }}
+        />
+        <SettingsStack.Screen
+          name="personalSettings"
+          component={PersonalSettingsScreen}
+          options={{ 
+            title: "Personal Settings", 
+            headerTitle: () => (
+              <HeaderContainer headerTitle="Personal Settings" text="Personal Settings" />
+            ),
+        }}
+        />
+        <SettingsStack.Screen
+          name="notificationSettings"
+          component={NotificationSettingsScreen}
+          options={{ 
+            title: "Notifications", 
+            headerTitle: () => (
+              <HeaderContainer headerTitle="Notifications" text="Notifications" />
+            ),
+        }}
+        />
+        <SettingsStack.Screen
+          name="FAQSettings"
+          component={FAQSettingsScreen}
+          options={{ 
+            title: "FAQ", 
+            headerTitle: () => (
+              <HeaderContainer headerTitle="FAQSettings" text="FAQ's" />
+            ),
+        }}
         />
     
     </SettingsStack.Navigator>

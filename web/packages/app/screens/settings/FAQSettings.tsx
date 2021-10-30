@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import tw from '../../lib/tailwind';
 
 
-const ProfileSettingsScreen = () => {
+const FAQSettingsScreen = () => {
   const [email, setEmail] = useState(null);
   const { user, signout } = useAuth()
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -22,7 +22,7 @@ const ProfileSettingsScreen = () => {
 
 
           <Text style={tw`text-black text-lg`}>
-            profile
+            FAQ
           </Text>
     
 
@@ -30,4 +30,4 @@ const ProfileSettingsScreen = () => {
   );
 };
 
-export default ProfileSettingsScreen;
+export default FAQSettingsScreen;

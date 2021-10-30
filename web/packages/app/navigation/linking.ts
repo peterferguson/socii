@@ -87,7 +87,10 @@ const mainPaths = makeType({
 
 const settingsStackPaths = makeType({
   settingsScreen: makeSettingsPath("settingsScreen"), 
-  profileSettings: makeSettingsPath("profileSettings")
+  profileSettings: makeSettingsPath("profileSettings"),
+  personalSettings: makeSettingsPath("personalSettings"),
+  notificationSettings: makeSettingsPath("notificationSettings"),
+  FAQSettings: makeSettingsPath("FAQSettings")
 })
 
 const linking: Props = {
@@ -137,6 +140,9 @@ const linking: Props = {
         screens: { 
           [settingsStackPaths.settingsScreen]: "settingsScreen",  
           [settingsStackPaths.profileSettings]: "profileSettings",  
+          [settingsStackPaths.personalSettings]: "personalSettings",  
+          [settingsStackPaths.notificationSettings]: "notificationSettings",  
+          [settingsStackPaths.FAQSettings]: "FAQSettings",  
         },
       }, 
       // [settingsStackPaths.settings]: {

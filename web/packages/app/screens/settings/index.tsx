@@ -1,2 +1,5 @@
 export { default as SettingsScreen } from "./settings"
 export { default as ProfileSettingsScreen } from "./profileSettings"
+export { default as PersonalSettingsScreen } from "./personalSettings"
+export { default as NotificationSettingsScreen } from "./notificationSettings"
+export { default as FAQSettingsScreen } from "./FAQSettings"
