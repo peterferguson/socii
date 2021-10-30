@@ -4,6 +4,7 @@ import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import AssetLogo from "./AssetLogo"
 import { Holding } from "./GroupColumnCard"
+import { PriceWithChangeTag, PriceWithChangeTagSkeleton } from "./PriceWithChangeTag"
 import SkeletonCircle from "./SkeletonCircle"
 import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
@@ -37,33 +38,6 @@ export default function StockCard({ holding, latestPrice }: IStockCard) {
     </View>
   )
 }
-
-const PriceWithChangeTag = ({ latestPrice, qty, pnl }) => (
-  <>
-    <Text
-      style={tw`overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis`}
-    >
-      ${(latestPrice * qty).toFixed(2)}
-    </Text>
-    <View
-      style={tw`px-2 rounded-full w-full ${
-        pnl > 0 ? "bg-teal-200" : pnl < 0 ? "bg-red-200" : "bg-brand"
-      }`}
-    >
-      <Text style={tw`text-gray-700 text-tiny sm:text-xs font-poppins-500 text-center`}>
-        {pnl.toFixed(2)}%
-      </Text>
-    </View>
-  </>
-)
-
-const PriceWithChangeTagSkeleton = () => (
-  <>
-    <SkeletonText width={tw`w-20`.width as number} height={tw`h-3`.height as number} />
-    <VerticalSpacer height={8} />
-    <SkeletonText width={tw`w-20`.width as number} height={tw`h-3`.height as number} />
-  </>
-)
 
 const AssetLogoWithNameAndSymbolSkeleton = () => (
   <View style={tw.style("flex-row items-center m-1 bg-white")}>
