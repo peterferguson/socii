@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Pressable, Text, View } from "react-native"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
@@ -17,8 +17,6 @@ interface IStockCard {
 export default function StockCard({ holding, latestPrice }: IStockCard) {
   const { symbol, shortName, qty, logoColor, ISIN } = holding
   const pnl = (100 * (latestPrice - holding.avgPrice)) / latestPrice
-
-  useEffect(() => console.log({ condition: ISIN && shortName, ISIN, shortName }), [])
 
   // TODO: Remove the hard coding of this card width
   return (

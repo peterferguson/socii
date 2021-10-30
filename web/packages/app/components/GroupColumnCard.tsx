@@ -71,6 +71,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
   useEffect(() => {
     const updatePriceState = async () => {
       holdingInfo &&
+        user?.token &&
         Promise.all(
           holdingInfo?.map(async ({ symbol }) => {
             try {
@@ -126,8 +127,6 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
         .reduce((a, b) => a + b, 0)) *
       100) /
     portfolioValue
-
-  useEffect(() => console.log(donutSectors), [donutSectors])
 
   const donutRadius = 80
   const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string
