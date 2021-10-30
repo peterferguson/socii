@@ -1,5 +1,5 @@
 import React from "react"
-import { Text, View, Pressable } from "react-native"
+import { Pressable, Text, View } from "react-native"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import SkeletonCircle from "./SkeletonCircle"

@@ -54,26 +54,43 @@ export default function StocksScreen() {
   )
 }
 
-const AssetCards = ({ assets }: { assets: Asset[] }) => (
-  <FlatList
-    data={assets}
-    renderItem={({ item: asset }) => (
-      <HorizontalAssetCard
-        key={`${asset?.alpaca.symbol}`}
-        isin={asset?.ISIN}
-        symbol={asset?.alpaca.symbol}
-        shortName={asset?.shortName}
-        logoColor={asset?.logoColor}
-        price={defaultPrice}
-      />
-    )}
-    keyExtractor={(item, i) => item.alpaca.symbol}
-    onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
-    onEndReachedThreshold={0.5}
-    showsVerticalScrollIndicator={false}
-  />
-)
+const fakeAssets = [
+  { ISIN: "", alpaca: { symbol: "" }, shortName: "", logoColor: "" },
+  { ISIN: "", alpaca: { symbol: "" }, shortName: "", logoColor: "" },
+  { ISIN: "", alpaca: { symbol: "" }, shortName: "", logoColor: "" },
+] as Asset[]
 
+const AssetCards = ({ assets }: { assets: Asset[] }) => {
+  const isLoading = assets?.length === 0
+
+  const [initialAssets, setInitialAssets] = useState(fakeAssets)
+
+  useEffect(() => {
+    if (!isLoading) {
+      // - update previous display categories to avoid unmounting
+      setInitialAssets(assets.slice(0, 3))
+    }
+  }, [])
+  return (
+    <FlatList
+      data={initialAssets.concat(assets.slice(3))}
+      renderItem={({ item: asset }) => (
+        <HorizontalAssetCard
+          key={`${asset?.alpaca.symbol}`}
+          isin={asset?.ISIN}
+          symbol={asset?.alpaca.symbol}
+          shortName={asset?.shortName}
+          logoColor={asset?.logoColor}
+          price={defaultPrice}
+        />
+      )}
+      keyExtractor={(item,i) => `asset-card-${i}-${item.alpaca.symbol}`}
+      onEndReached={() => {}} // TODO: Add infinite scroll data fetching here!
+      onEndReachedThreshold={0.5}
+      showsVerticalScrollIndicator={false}
+    />
+  )
+}
 // const Categories = ({ categories }: { categories: AssetCategories }) => {
 //   const router = useRouter()
 //   return (

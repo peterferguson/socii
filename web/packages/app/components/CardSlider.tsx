@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import { Pressable, ScrollView, Text, View } from "react-native"
 import tw from "../lib/tailwind"
 import { Asset } from "../models/Asset"
