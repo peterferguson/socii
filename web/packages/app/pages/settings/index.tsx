@@ -13,8 +13,7 @@ const SettingsStack = createStackNavigator<SettingsStackParams>()
 
 function SettingsNavigator(props: NextNavigationProps) {
   return (
-    <SettingsStack.Navigator
-      
+    <SettingsStack.Navigator     
       screenOptions={{
         headerShown: true,
         headerShadowVisible: false,
@@ -43,7 +42,7 @@ function SettingsNavigator(props: NextNavigationProps) {
           component={ProfileSettingsScreen}
           options={{ 
             title: "Your Profile", 
-            headerTitle: "Your Profile"
+            headerTitle: "Profile"
           
           }}
         />
@@ -53,7 +52,7 @@ function SettingsNavigator(props: NextNavigationProps) {
           options={{ 
             title: "Personal Settings", 
             headerTitle: () => (
-              <HeaderContainer headerTitle="Personal Settings" text="Personal Settings" />
+              <HeaderContainer headerTitle="Personal Info" text="Personal Info" />
             ),
         }}
         />

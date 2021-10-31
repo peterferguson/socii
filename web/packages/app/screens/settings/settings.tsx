@@ -24,10 +24,9 @@ const SettingsScreen = () => {
   ];
 
   return (
-    <View style={tw`flex-1 flex-col items-center justify-between bg-blue-600`}>
+    <View style={tw`flex-1 flex-col items-center justify-between rounded-tr-lg rounded-tl-lg`}>
       
-        <View style={tw`flex-col items-center`}>
-        
+        <View style={tw`flex-col items-center text-brand-black`}>
           {/* TODO: fully center image.. future TODO: make logo spin */}
           <ImageBackground 
             source = {require('../../../expo/assets/favicon-196x196.png')} 
@@ -42,15 +41,14 @@ const SettingsScreen = () => {
             ) : (
               <Text>TMP No Image</Text>
             )}
-           
           </ImageBackground>
        
-          <Text style={tw`text-white text-lg`}>
-            {user?.username}
+          <Text style={tw`text-brand-black font-semibold text-2xl`}>
+            {user?.displayName}
           </Text>
         </View>
 
-        <View  style={tw`flex flex-col items-center justify-end w-full`}>
+        <View  style={tw`flex flex-col items-center justify-end`}>
           <MainSettingsComponent
             settingsOptions={settingsOptions}
           /> 
