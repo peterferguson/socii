@@ -15,11 +15,11 @@ const SettingsScreen = () => {
 
   // correct signout
   const settingsOptions = [
-    {title: 'Profile', subTitle: 'Setup your profile picture, username etc.', onPress: () => {router.push("/settings/profileSettings")}},
-    {title: 'Personal Info', subTitle: 'Update yourr personal details and contact info.', onPress: () => {router.push("/settings/personalSettings")}},
-    {title: 'Notifications', subTitle: "Decide which communications you'd like to receieve and how.", onPress: () => {router.push("/settings/notificationSettings")}},
-    {title: 'FAQ', subTitle: "FAQ and help.", onPress: () => {router.push("/settings/FAQSettings")}},
-    {title: 'Log Out', subTitle: "Leave this session.", onPress: () => {signout("/enter/", false)}},
+    {title: 'Profile', subTitle: 'Setup your profile picture, username etc.', onPress: () => {router.push("/settings/profileSettings")}, icon: "newspaper-outline"},
+    {title: 'Personal Info', subTitle: 'Update your personal details and contact info', onPress: () => {router.push("/settings/personalSettings")}, icon: "person-outline"},
+    {title: 'Notifications', subTitle: "Decide what you want to hear about", onPress: () => {router.push("/settings/notificationSettings")}, icon: "notifications-outline"},
+    {title: 'FAQ', subTitle: "FAQ and help", onPress: () => {router.push("/settings/FAQSettings")}, icon: "help-outline"},
+    {title: 'Log Out', subTitle: "Leave this session", onPress: () => {signout("/enter/", false)}, icon: "exit-outline"},
     //{title: 'Delete Account', subTitle: "PERMANTLY DELETE ACCOUT", onPress: () => {}},
   ];
 
