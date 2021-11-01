@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { View, TouchableOpacity, Text, Dimensions } from "react-native"
+import { View, ScrollView, TouchableOpacity, Text, Dimensions } from "react-native"
 import GroupColumn from "../../components/GroupColumnCard"
 import tw from "../../lib/tailwind"
 import { createParam } from "../../navigation/use-param"
 import Feather from "@expo/vector-icons/build/Feather"
+import { ChatWithGroupButton } from "../../components/ChatWithGroup"
 
 type Query = {
   id: string
@@ -39,8 +40,11 @@ export default () => {
 
   return (
     <View style={tw`flex-col m-4`}>
-      <GroupColumn groupName={groupName} />
-      <Tabs tabs={tabs} />
+      <ScrollView>
+        <GroupColumn groupName={groupName} />
+        <ChatWithGroupButton groupName={groupName} />
+        <Tabs tabs={tabs} />
+      </ScrollView>
     </View>
   )
 }
@@ -54,10 +58,30 @@ interface Tab {
 const Tabs = ({ tabs }: { tabs: Tab[] }) => {
   const [index, setIndex] = useState(0)
   return (
-    <View style={tw`flex-col mx-4`}>
+    <View style={tw`flex-col`}>
       <TabHeader {...{ index, setIndex }} />
+      <TabPanelContainer panelBgColor="white">
+        {tabs.map(
+          (tab, i) =>
+            i === index && <TabPanel key={i} {...{ tab, i, index, setIndex }} />
+        )}
+      </TabPanelContainer>
     </View>
   )
+}
+
+const TabPanel = ({ tab }: { tab: Tab }) => {
+  return <Text>{tab.name}</Text>
+}
+
+const TabPanelContainer = ({
+  panelBgColor,
+  children,
+}: {
+  panelBgColor: string
+  children: React.ReactNode
+}) => {
+  return <View style={tw`p-3 bg-${panelBgColor} rounded-2xl `}>{children}</View>
 }
 
 const Tab = ({
@@ -88,7 +112,9 @@ const Tab = ({
       <Text
         numberOfLines={1}
         adjustsFontSizeToFit={true}
-        style={selected ? tw`text-brand` : tw`text-brand-black/50`}
+        style={tw.style(
+          `${selected ? "text-brand" : "text-brand-black/50"} font-poppins-400`
+        )}
       >
         {name}
       </Text>
@@ -98,7 +124,7 @@ const Tab = ({
 
 const TabHeaderContainer = ({ children }: { children: React.ReactNode }) => {
   return (
-    <View style={tw`flex-row justify-between bg-gray-300/20 p-1 rounded-2xl`}>
+    <View style={tw`flex-row justify-between bg-gray-300/20 p-1 my-2 rounded-2xl`}>
       {children}
     </View>
   )
