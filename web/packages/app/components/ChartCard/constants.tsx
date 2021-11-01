@@ -1,18 +1,5 @@
-import { PeriodEnum } from "../../utils/getYahooTimeseries"
 import { Dimensions } from "react-native"
-import { Graphs } from "../../screens/stocks/stock"
-import { Vector } from "react-native-redash"
-import Animated from "react-native-reanimated"
-
-export interface IAssetPageLineChartProps {
-  logoColor: string
-  translation: Vector<Animated.SharedValue<number>>
-  graphs: Graphs
-  prevTab: Animated.SharedValue<TabLabel>
-  activeTab: Animated.SharedValue<TabLabel>
-  transition: Animated.SharedValue<number>
-  handleTabPress: (tab: TabLabel) => () => void
-}
+import { PeriodEnum } from "../../utils/getYahooTimeseries"
 
 export type TabLabel = keyof typeof PeriodEnum
 

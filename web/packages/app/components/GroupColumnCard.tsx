@@ -43,30 +43,32 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getGroupCashBalance(groupName, setCashBalance)
-    return () => unsubscribe
+    return () => unsubscribe()
   }, [groupName])
 
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getHoldingData(groupName, setHoldings)
-    return () => unsubscribe
+    return () => unsubscribe()
   }, [groupName])
 
-  useEffect(() => {
-    setHoldingInfo(
-      holdings?.map((doc): Holding => {
-        const { symbol, assetRef, shortName, avgPrice, qty, logoColor } = doc.data()
-        return {
-          ISIN: assetRef?.id || assetRef.split("/").pop(),
-          symbol,
-          shortName,
-          avgPrice,
-          qty,
-          logoColor,
-        }
-      })
-    )
-  }, [holdings])
+  useEffect(
+    () =>
+      setHoldingInfo(
+        holdings?.map((doc): Holding => {
+          const { symbol, assetRef, shortName, avgPrice, qty, logoColor } = doc.data()
+          return {
+            ISIN: assetRef?.id || assetRef.split("/").pop(),
+            symbol,
+            shortName,
+            avgPrice,
+            qty,
+            logoColor,
+          }
+        })
+      ),
+    [holdings]
+  )
 
   useEffect(() => {
     const updatePriceState = async () => {
@@ -79,12 +81,11 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
                 symbol,
                 user?.token
               )
-              if (iexRealtimePrice || latestPrice) {
+              if (iexRealtimePrice || latestPrice)
                 setCurrentPrices((previousState) => ({
                   ...previousState,
                   [symbol]: iexRealtimePrice || latestPrice,
                 }))
-              }
             } catch (e) {
               console.error(e)
             }

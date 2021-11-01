@@ -33,7 +33,6 @@ type ChannelScreenProps = NativeStackScreenProps<MainNavigatorParams, "channel">
 type ThreadScreenProps = NativeStackScreenProps<MainNavigatorParams, "thread">
 type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
 
-
 type NextPageProps = any
 type NextNavigationProps = {
   Component?: NextComponentType<NextPageContext, null, NextPageProps>
@@ -49,7 +48,6 @@ export type {
   GroupsStackParams,
   EnterStackParams,
   StocksStackParams,
-
   ChatStackParams,
   ChannelListScreenProps,
   ChannelStackParams,
