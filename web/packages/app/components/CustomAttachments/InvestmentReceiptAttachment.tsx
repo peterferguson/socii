@@ -65,7 +65,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
           }
           switch (executionStatus) {
             case "filled":
-              unsubscribe()
+              unsubscribe?.()
               break
             default:
               break

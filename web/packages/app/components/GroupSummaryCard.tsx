@@ -8,7 +8,7 @@ import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
-import { ChatWithGroupFooter } from "./ChatWithGroupFooter"
+import { ChatWithGroupFooter } from "./ChatWithGroup"
 import Donut, { DonutSector } from "./DonutChart"
 import SkeletonCircle from "./SkeletonCircle"
 import StockCard from "./StockCard"
@@ -43,13 +43,13 @@ export default ({ groupName, style }: IGroupColumnCard) => {
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getGroupCashBalance(groupName, setCashBalance)
-    return () => unsubscribe()
+    return () => unsubscribe?.()
   }, [groupName])
 
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getHoldingData(groupName, setHoldings)
-    return () => unsubscribe()
+    return () => unsubscribe?.()
   }, [groupName])
 
   useEffect(

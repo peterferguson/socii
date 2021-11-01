@@ -8,7 +8,7 @@ import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
-import { ChatWithGroupFooter } from "./ChatWithGroupFooter"
+import { ChatWithGroupButton } from "./ChatWithGroup"
 import Donut, { DonutSector } from "./DonutChart"
 import SkeletonCircle from "./SkeletonCircle"
 import StockCard from "./StockCard"
@@ -43,13 +43,13 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getGroupCashBalance(groupName, setCashBalance)
-    return () => unsubscribe()
+    return () => unsubscribe?.()
   }, [groupName])
 
   useEffect(() => {
     let unsubscribe
     if (groupName) unsubscribe = getHoldingData(groupName, setHoldings)
-    return () => unsubscribe()
+    return () => unsubscribe?.()
   }, [groupName])
 
   useEffect(
@@ -134,12 +134,11 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
 
   return (
     <View style={tw`flex-col mb-4`}>
+      <ChatWithGroupButton groupName={groupName} />
       <View
-        style={tw.style("flex-col items-center p-4 bg-white rounded-t-2xl min-h-max", {
+        style={tw.style("flex-col items-center p-4 bg-white rounded-2xl min-h-max", {
           ...shadowStyle("lg"),
           ...style,
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
         })}
       >
         <CardTitle title={groupName} style={style} />
@@ -169,7 +168,6 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           />
         </View>
       </View>
-      <ChatWithGroupFooter groupName={groupName} />
     </View>
   )
 }
