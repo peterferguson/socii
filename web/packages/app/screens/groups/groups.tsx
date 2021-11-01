@@ -1,6 +1,6 @@
 import React from "react"
 import { FlatList, View } from "react-native"
-import GroupColumn from "../../components/GroupColumnCard"
+import GroupSummaryCard from "../../components/GroupSummaryCard"
 import { useAuth } from "../../hooks/useAuth"
 import tw from "../../lib/tailwind"
 
@@ -17,7 +17,9 @@ const GroupPortfolios = (): JSX.Element => {
           keyExtractor={(groupName, index) => `group-${index}-${groupName}`}
           showsVerticalScrollIndicator={false}
           scrollEnabled={data.length > 1}
-          renderItem={({ item: groupName }) => <GroupColumn groupName={groupName} />}
+          renderItem={({ item: groupName }) => (
+            <GroupSummaryCard groupName={groupName} />
+          )}
         />
       </View>
     </View>
