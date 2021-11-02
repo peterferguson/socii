@@ -1,5 +1,6 @@
+import GroupActivities from "../../components/GroupActivities/GroupActivities"
 import React from "react"
-import { ScrollView, View } from "react-native"
+import { ScrollView, View, Text } from "react-native"
 import { ChatWithGroupButton } from "../../components/ChatWithGroup"
 import GroupColumn from "../../components/GroupColumnCard"
 import { Tabs } from "../../components/Tabs/Tabs"
@@ -29,7 +30,8 @@ export default () => {
       <ScrollView>
         <GroupColumn groupName={groupName} />
         <ChatWithGroupButton groupName={groupName} />
-        <Tabs tabs={tabs} />
+        <GroupActivities groupName={groupName} />
+        {/* <Tabs tabs={tabs} PanelComponents={null} /> */}
       </ScrollView>
     </View>
   )
