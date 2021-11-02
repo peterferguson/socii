@@ -2,11 +2,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import debounce from "lodash/debounce"
 import {View, Text, Image, TextInput, Pressable, ScrollView, KeyboardAvoidingView} from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
-import { displayNameExists } from '../../lib/firebase/client/db/displayNameExists'
 import tw from '../../lib/tailwind';
 import { shadowStyle } from '../../utils/shadowStyle';
-import { Ionicons } from '@expo/vector-icons'
 import { updateUserData } from '../../lib/firebase/client/functions';
+import { GoogleAuthProvider, signInWithCredential, signInWithPopup, signInWithRedirect} from "firebase/auth"
+import { auth, db} from "../../lib/firebase/index"
 //import nativeToast from 'native-toast'
 
 // TODO 
@@ -23,6 +23,24 @@ const PersonalSettingsScreen = () => {
   const [loading, setLoading] = useState(false)
   const [retrieveEmail, setRetrieveEmail] = useState(null)
 
+
+  useEffect(()=>{
+    if (retrieveEmail){
+      console.log("retreiving");
+      
+      var provider = new GoogleAuthProvider()
+      provider.setCustomParameters({
+        prompt: "select_account"
+      });
+      
+      const getEmail= async () => {
+        const { user: rawUser } = await signInWithPopup(auth, new GoogleAuthProvider())
+        setEmail(user.email)
+      }
+      getEmail()
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[retrieveEmail])
 
   const runUpdateDisplayName = async (user, displayName) => {
     updateUserData({uid: user.uid, updateData: {displayName: displayName}}).then((r)=>console.log("update:", r))
@@ -42,10 +60,13 @@ const PersonalSettingsScreen = () => {
           You can update your email for now.. the other options will come soon - keep an eye on our social media for future releases!
         </Text>
 
-        <ScrollView style={tw`h-11/12 p-2`}>
+        <ScrollView style={{
+          ...tw`p-2`,
+          ...{flexGrow: 1, paddingVertical:100, padding:40} 
+          }}>
           <KeyboardAvoidingView
             behavior="padding"
-            keyboardVerticalOffset={100}
+            keyboardVerticalOffset={100}              
           >
             {/* // First and Second Names */}
             <View style={tw`flex flex-row`}>
@@ -53,7 +74,7 @@ const PersonalSettingsScreen = () => {
                 <Text style={tw`text-brand-black text-lg dark:text-white pb-1`}> First Name </Text>
                   <TextInput
                     style={tw`h-10 rounded-lg border-colour-black border-2 p-2`}
-                    defaultValue={user?.displayName}
+                    defaultValue={user?.displayName.split(" ")[0]}
                     onChangeText={()=>{console.log("hi");
                     }}
                   />           
@@ -62,7 +83,7 @@ const PersonalSettingsScreen = () => {
                 <Text style={tw`text-brand-black text-lg dark:text-white pb-1`}> Second Name </Text>             
                   <TextInput
                     style={tw`h-10 rounded-lg border-colour-black border-2 p-2`}
-                    defaultValue={user?.displayName}
+                    defaultValue={user?.displayName.split(" ")[1]}
                     onChangeText={()=>{console.log("hi");
                     }}
                   />              
@@ -72,10 +93,16 @@ const PersonalSettingsScreen = () => {
             {/* // Email */}
             <Text style={tw`text-brand-black text-lg dark:text-white pb-1 pt-2`}> Email </Text>
             <View style={tw`flex flex-row `}>
-              <TextInput
-                style={tw`flex h-10 w-full rounded-lg border-colour-gray-500 border-2 p-2`}
-                defaultValue={"www.example.com"}
-                />
+            <Pressable 
+              style= {tw`bg-brand py-1 px-2 gradient-flow text-white text-xs rounded-2xl border-1 border-black`}
+              onPress={async (e) => {
+              setRetrieveEmail(true)
+              }}
+            >
+              <Text style={tw`text-white text-sm`}>
+                Change Email
+              </Text>
+              </Pressable>
             </View>
 
             {/* // Mobile */}
@@ -92,11 +119,11 @@ const PersonalSettingsScreen = () => {
             <View style={tw`flex flex-row `}>
               <TextInput
                 style={tw`flex h-10 w-full rounded-lg border-colour-gray-500 border-2 p-2`}
-                defaultValue={"Tell everyone about yourself"}
+                defaultValue={"Address line 1"}
                 />
             </View>
 
-            {/* // First and Second Names */}
+            {/* // Postcode and City */}
             <View style={tw`flex flex-row`}>
               <View style={tw`w-1/3`}>
                 <Text style={tw`text-brand-black text-lg dark:text-white pb-1`}> Postcode </Text>
@@ -112,6 +139,28 @@ const PersonalSettingsScreen = () => {
                   <TextInput
                     style={tw`h-10 rounded-lg border-colour-black border-2 p-2`}
                     defaultValue={"city"}
+                    onChangeText={()=>{console.log("hi");
+                    }}
+                  />              
+              </View>
+            </View>
+
+            {/* // Country and Region */}
+            <View style={tw`flex flex-row`}>
+              <View style={tw`w-1/2`}>
+                <Text style={tw`text-brand-black text-lg dark:text-white pb-1`}> Country </Text>
+                  <TextInput
+                    style={tw`h-10 rounded-lg border-colour-black border-2 p-2`}
+                    defaultValue={"country"}
+                    onChangeText={()=>{console.log("hi");
+                    }}
+                  />           
+              </View>
+              <View style={tw`w-1/2 pl-3`}>
+                <Text style={tw`text-brand-black text-lg dark:text-white pb-1`}> Region </Text>             
+                  <TextInput
+                    style={tw`h-10 rounded-lg border-colour-black border-2 p-2`}
+                    defaultValue={"region"}
                     onChangeText={()=>{console.log("hi");
                     }}
                   />              
