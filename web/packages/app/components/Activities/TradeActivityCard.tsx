@@ -66,7 +66,7 @@ export const TradeActivityCard: React.FC<{
       <AssetLogo asset={symbol} isin={isin} width="48" height="48" />
       <View style={tw`ml-4`}>
         <Text style={tw`font-medium text-gray-500 text-tiniest leading-5`}>
-          {qty} shares
+          {qty.toFixed(9)} shares
         </Text>
         <Text style={tw`text-sm font-medium uppercase font-poppins-300 leading-5`}>
           {side} {symbol}
