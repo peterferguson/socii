@@ -35,8 +35,6 @@ export const useProvideAuth = () => {
     return formattedUser
   }
 
-
-
   const signinWithProvider = async (provider: AuthProvider, redirect: string = "") => {
     setLoading(true)
     console.log("signinWithProvider provider", provider)
@@ -82,7 +80,7 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, handleUser)
-    return () => unsubscribe()
+    return () => unsubscribe?.()
   }, [])
 
   useEffect(() => {

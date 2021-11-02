@@ -1,9 +1,15 @@
+import LoadingIndicator from "../../components/LoadingIndicator"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
-import { Text, ScrollView } from "react-native"
-
-import { createParam } from "app/navigation/use-param"
-import type { GroupScreenProps } from "app/navigation/types"
+import { ScrollView, Text, View } from "react-native"
+import Button from "../../components/Button"
+import { ChatWithGroupButton } from "../../components/ChatWithGroup"
+import GroupActivities from "../../components/GroupActivities/GroupActivities"
+import GroupColumn from "../../components/GroupColumnCard"
+import Modal from "../../components/Modal"
+import { useModal } from "../../hooks/useModal"
 import tw from "../../lib/tailwind"
+import { createParam } from "../../navigation/use-param"
 
 type Query = {
   id: string
@@ -11,78 +17,27 @@ type Query = {
 
 const { useParam } = createParam<Query>()
 
-export default function GroupScreen({ navigation, route }: GroupScreenProps) {
-  const [id, setId] = useParam("id")
+export default () => {
+  const [groupName] = useParam("id")
+
+  const modalRef = React.useRef<BottomSheetModal>(null)
+
+  const { handlePresent } = useModal(modalRef)
 
   return (
-    <ScrollView style={tw`flex-1`}>
-      <Text
-        style={tw`p-4 font-poppins-100 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Poppins Thin
-      </Text>
-      <Text
-        style={tw`p-4 font-poppins-200 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Poppins Extra Light
-      </Text>
-      <Text
-        style={tw`p-4 font-poppins-300 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Poppins Light
-      </Text>
-      <Text
-        style={tw`p-4 font-poppins-400 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Poppins Regular
-      </Text>
-      <Text
-        style={tw`p-4 font-poppins-500 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Poppins Medium
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-poppins-600`}
-      >
-        Poppins Semi Bold
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-poppins-700`}
-      >
-        Poppins Bold
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-poppins-800`}
-      >
-        Poppins Extra Bold
-      </Text>
-      <Text
-        style={tw`p-4 font-open-sans-300 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        {" "}
-        Light
-      </Text>
-      <Text
-        style={tw`p-4 font-open-sans-400 text-brand-black dark:text-brand-gray text-2xl`}
-      >
-        Open Sans Regular
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-open-sans-600`}
-      >
-        Open Sans Semi Bold
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-open-sans-700`}
-      >
-        {" "}
-        Bold
-      </Text>
-      <Text
-        style={tw`p-4 text-brand-black dark:text-brand-gray text-2xl font-open-sans-800`}
-      >
-        Open Sans Extra Bold
-      </Text>
-    </ScrollView>
+    <View style={tw`flex-col m-4`}>
+      <ScrollView>
+        <GroupColumn groupName={groupName} />
+        <Button label={"Add a friend"} onPress={handlePresent} />
+        <ChatWithGroupButton groupName={groupName} />
+        <GroupActivities groupName={groupName} />
+        <Modal modalRef={modalRef} detach>
+          <View style={tw`flex-1 items-center`}>
+            <Text>Awesome 🎉</Text>
+            <LoadingIndicator color={tw.color("brand")} size={50} />
+          </View>
+        </Modal>
+      </ScrollView>
+    </View>
   )
 }

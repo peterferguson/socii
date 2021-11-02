@@ -1,20 +1,34 @@
 import React from "react"
 import { View } from "react-native"
+import Animated from "react-native-reanimated"
+import { Vector } from "react-native-redash"
+import { Graph } from "../../hooks/useGraph"
 import tw from "../../lib/tailwind"
 import { shadowStyle } from "../../utils/shadowStyle"
 import { Chart } from "./Chart"
 import { ChartTabButton } from "./ChartTabButton"
 import { ChartTabRow } from "./ChartTabRow"
-import { IAssetPageLineChartProps, TabLabel } from "./constants"
+import { TabLabel, tabs } from "./constants"
+export interface IAssetPageLineChartProps {
+  logoColor: string
+  translation: Vector<Animated.SharedValue<number>>
+  fetchingGraph: boolean
+  lastGraph: Graph
+  currentGraph: Graph
+  prevTab: Animated.SharedValue<TabLabel>
+  activeTab: Animated.SharedValue<TabLabel>
+  transition: Animated.SharedValue<number>
+}
 
 const ChartCard: React.FC<IAssetPageLineChartProps> = ({
   logoColor,
   translation,
-  graphs,
+  fetchingGraph,
+  lastGraph,
+  currentGraph,
   prevTab,
   activeTab,
   transition,
-  handleTabPress,
 }) => {
   return (
     <View
@@ -24,12 +38,27 @@ const ChartCard: React.FC<IAssetPageLineChartProps> = ({
         ...shadowStyle("md"),
       }}
     >
-      <Chart {...{ graphs, prevTab, activeTab, transition, logoColor, translation }} />
+      <Chart
+        {...{
+          lastGraph,
+          currentGraph,
+          fetchingGraph,
+          transition,
+          logoColor,
+          translation,
+        }}
+      />
       <ChartTabRow logoColor={logoColor} activeTab={activeTab}>
-        {(Object.keys(graphs) as TabLabel[]).map((label) => (
+        {tabs.map((tabLabel) => (
           <ChartTabButton
-            key={label}
-            {...{ label, activeTab, logoColor, handlePress: handleTabPress(label) }}
+            {...{
+              prevTab,
+              activeTab,
+              transition,
+              logoColor,
+              label: tabLabel,
+              key: tabLabel,
+            }}
           />
         ))}
       </ChartTabRow>

@@ -90,6 +90,8 @@ const upsertHolding = async ({
   const holding = await holdingDocRef.get()
   const outputData = { type: "", holdingData: {}, pnlPercentage: {} }
 
+  const logoColor = await getLogoColor(assetRef)
+
   if (holding.exists) {
     // - Trade already exists in holding ... do nothing
     if (holding.trades?.includes(messageId)) return outputData
@@ -122,6 +124,7 @@ const upsertHolding = async ({
       assetRef,
       symbol,
       shortName,
+      logoColor,
       trades: [messageId],
       avgPrice: String(stockPrice),
       qty: increment(sharesIncrement),
@@ -129,4 +132,9 @@ const upsertHolding = async ({
     }
   }
   return outputData
+}
+
+const getLogoColor = async (assetRef: string) => {
+  const assetData = await firestore.doc(assetRef).get()
+  return assetData.get("logoColor")
 }
