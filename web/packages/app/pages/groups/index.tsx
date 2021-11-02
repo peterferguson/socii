@@ -17,7 +17,7 @@ function GroupsNavigator() {
         headerShown: true,
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        headerTintColor: tw.color("brand"),
+        headerTintColor: tw.color("brand-black"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore

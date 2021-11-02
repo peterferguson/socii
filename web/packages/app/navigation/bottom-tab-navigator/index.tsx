@@ -18,6 +18,7 @@ export function BottomTabNavigator(props: NextNavigationProps) {
       tabBar={(props) => <BottomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
+        headerTintColor: tw`bg-brand-black dark:bg-brand-gray`.color as string,
         tabBarActiveTintColor: tw`bg-brand-gray dark:bg-brand-black`.color as string,
         tabBarInactiveTintColor: tw`bg-brand-gray dark:bg-[#7e7f81]`.color as string,
         tabBarShowLabel: true,
