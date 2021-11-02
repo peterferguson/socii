@@ -139,7 +139,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           ...style,
         })}
       >
-        <CardTitle title={groupName} style={style} />
+        {/* <CardTitle title={groupName} style={style} /> */}
         <CardDonutChart
           holdings={holdings}
           sectors={donutSectors}

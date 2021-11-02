@@ -38,10 +38,10 @@ function GroupsNavigator() {
         <GroupsStack.Screen
           name="groupScreen"
           component={GroupScreen}
-          options={{
+          options={({ route }) => ({
             title: "Group",
-            headerTitle: () => <HeaderContainer headerTitle={"Group"} />,
-          }}
+            headerTitle: () => <HeaderContainer headerTitle={route.params.id} />,
+          })}
         />
       </GroupsStack.Group>
       <GroupsStack.Group
