@@ -38,8 +38,6 @@ export default ({ groupName }: { groupName: string }) => {
       setPanelData((prev) => {
         const filtered = Object.keys(prev).reduce((acc, label) => {
           activities.filter((activity) => {
-            console.log(activity)
-
             if (
               activityTypeMapping[label].includes(activity.executionStatus) &&
               !prev[label].activities

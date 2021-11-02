@@ -1,12 +1,11 @@
-import React, { useEffect } from "react"
-import { enableScreens } from "react-native-screens"
-import { StatusBar } from "expo-status-bar"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-import tw from "../app/lib/tailwind"
-import { Navigation } from "app/navigation"
-import AppLoading from "expo-app-loading"
 import {
-  useFonts,
+  OpenSans_300Light,
+  OpenSans_400Regular,
+  OpenSans_600SemiBold,
+  OpenSans_700Bold,
+  OpenSans_800ExtraBold,
+} from "@expo-google-fonts/open-sans"
+import {
   Poppins_100Thin,
   Poppins_200ExtraLight,
   Poppins_300Light,
@@ -15,17 +14,18 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
   Poppins_800ExtraBold,
+  useFonts,
 } from "@expo-google-fonts/poppins"
-import {
-  OpenSans_300Light,
-  OpenSans_400Regular,
-  OpenSans_600SemiBold,
-  OpenSans_700Bold,
-  OpenSans_800ExtraBold,
-} from "@expo-google-fonts/open-sans"
-import { useDeviceContext } from "twrnc"
-
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { Navigation } from "app/navigation"
+import AppLoading from "expo-app-loading"
+import { StatusBar } from "expo-status-bar"
+import React from "react"
 import { LogBox } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { enableScreens } from "react-native-screens"
+import { useDeviceContext } from "twrnc"
+import tw from "../app/lib/tailwind"
 
 enableScreens(true)
 
@@ -53,7 +53,9 @@ export default function App() {
   return (
     <SafeAreaProvider style={tw`bg-gray-50 flex-1`}>
       <StatusBar style="auto" />
-      <Navigation />
+      <BottomSheetModalProvider>
+        <Navigation />
+      </BottomSheetModalProvider>
     </SafeAreaProvider>
   )
 }
