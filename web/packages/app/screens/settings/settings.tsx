@@ -1,25 +1,21 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {View, Text, Image, ImageBackground} from 'react-native';
+import React from 'react';
+import { View, Text, Image, ImageBackground } from 'react-native';
 import MainSettingsComponent from '../../components/MainSettingsComponent';
 import { useAuth } from '../../hooks/useAuth';
 import tw from '../../lib/tailwind';
 import { useRouter } from '../../navigation/use-router';
 
-
 const SettingsScreen = () => {
-  const [email, setEmail] = useState(null);
   const { user, signout } = useAuth()
-  const [modalVisible, setModalVisible] = React.useState(false);
   const router = useRouter()
 
-  // correct signout
+  // // correct signout
   const settingsOptions = [
     {title: 'Profile', subTitle: 'Setup your profile picture, username etc.', onPress: () => {router.push("/settings/profileSettings")}, icon: "newspaper-outline"},
     {title: 'Personal Info', subTitle: 'Update your personal details and contact info', onPress: () => {router.push("/settings/personalSettings")}, icon: "person-outline"},
     {title: 'Notifications', subTitle: "Decide what you want to hear about", onPress: () => {router.push("/settings/notificationSettings")}, icon: "notifications-outline"},
     {title: 'FAQ', subTitle: "FAQ and help", onPress: () => {router.push("/settings/FAQSettings")}, icon: "help-outline"},
-    {title: 'Log Out', subTitle: "Leave this session", onPress: () => {signout("/enter/", false)}, icon: "exit-outline"},
+    {title: 'Log Out', subTitle: "Leave this session", onPress: () => {signout("/enter", false)}, icon: "exit-outline"},
     //{title: 'Delete Account', subTitle: "PERMANTLY DELETE ACCOUT", onPress: () => {}},
   ];
 

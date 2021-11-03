@@ -57,16 +57,17 @@ const PersonalSettingsScreen = () => {
           Enter you personal and contact details here.
         </Text>
         <Text style={tw`text-center text-pink-400 pb-3`} >
-          You can update your email for now.. the other options will come soon - keep an eye on our social media for future releases!
+          These options will come soon - keep an eye on our social media for future releases!
         </Text>
 
         <ScrollView style={{
           ...tw`p-2`,
-          ...{flexGrow: 1, paddingVertical:100, padding:40} 
+          ...{flexGrow: 1 } 
           }}>
           <KeyboardAvoidingView
             behavior="padding"
-            keyboardVerticalOffset={100}              
+            keyboardVerticalOffset={100}  
+            style={{flexGrow: 1}}             
           >
             {/* // First and Second Names */}
             <View style={tw`flex flex-row`}>
@@ -95,9 +96,9 @@ const PersonalSettingsScreen = () => {
             <View style={tw`flex flex-row `}>
             <Pressable 
               style= {tw`bg-brand py-1 px-2 gradient-flow text-white text-xs rounded-2xl border-1 border-black`}
-              onPress={async (e) => {
-              setRetrieveEmail(true)
-              }}
+              // onPress={async (e) => {
+              // setRetrieveEmail(true)
+              // }}
             >
               <Text style={tw`text-white text-sm`}>
                 Change Email

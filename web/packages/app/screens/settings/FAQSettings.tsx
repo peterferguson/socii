@@ -1,32 +1,39 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {View, Text, Image} from 'react-native';
-import MainSettingsComponent from '../../components/MainSettingsComponent';
-import { useAuth } from '../../hooks/useAuth';
-import tw from '../../lib/tailwind';
+import React from 'react';
+import {View, Text, Image, TextInput, Pressable, ScrollView, KeyboardAvoidingView} from 'react-native';
 
+import tw from '../../lib/tailwind';
+import { shadowStyle } from '../../utils/shadowStyle';
+//import nativeToast from 'native-toast'
+
+// TODO 
+// - Add FAQ docs and link
 
 const FAQSettingsScreen = () => {
-  const [email, setEmail] = useState(null);
-  const { user, signout } = useAuth()
-  const [modalVisible, setModalVisible] = React.useState(false);
 
-  const settingsOptions = [
-    {title: 'Profile', subTitle: 'Setup your profile picture, username etc.', onPress: () => {}},
-    {title: 'Personal Info', subTitle: 'Update yourr personal details and contact info.', onPress: () => {}},
 
-    //{title: 'Delete Account', subTitle: "PERMANTLY DELETE ACCOUT", onPress: () => {}},
-  ];
 
   return (
+    <View style={tw`flex flex-row justify-center`}>
+      <View style={{
+        ...tw`h-full w-95%  dark:bg-brand-black rounded-tr-xl rounded-tl-xl p-3`,
+        ...shadowStyle("xl")}}
+      >
+        {/* // header info text */}
+        <Text style={tw`text-center text-lg text-brand-black pb-3`} >
+          FAQ and articles to help you understand the app.
+        </Text>
+        <Text style={tw`text-center text-pink-400 pb-3`} >
+          This will be added soon - keep an eye on our social media for future releases!
+        </Text>
 
-
-          <Text style={tw`text-black text-lg`}>
-            FAQ
-          </Text>
-    
-
-
+        <ScrollView style={{
+          ...tw`p-2 h-full`,
+          ...{flexGrow: 1 } 
+          }}>
+          
+        </ScrollView>
+      </View>
+    </View>
   );
 };
 
