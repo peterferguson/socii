@@ -8,7 +8,7 @@ export const useModal = (bottomSheetRef: React.MutableRefObject<BottomSheetModal
   const handleCollapsePress = useCallback(() => {
     bottomSheetRef.current?.collapse()
   }, [])
-  const handleClosePress = useCallback(() => {
+  const handleDismiss = useCallback(() => {
     bottomSheetRef.current?.close()
   }, [])
   const handlePresent = useCallback(() => {
@@ -21,7 +21,7 @@ export const useModal = (bottomSheetRef: React.MutableRefObject<BottomSheetModal
   return {
     handleSnapPress,
     handleCollapsePress,
-    handleClosePress,
+    handleDismiss,
     handlePresent,
   }
 }
