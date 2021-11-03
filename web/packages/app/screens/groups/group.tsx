@@ -1,4 +1,6 @@
+import { UserSearch } from "../../components/UserSearch"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useAuth } from "../../hooks/useAuth"
 import { Add } from "iconsax-react-native"
 import React, { useCallback, useState } from "react"
 import { Pressable, ScrollView, Text, View } from "react-native"
@@ -6,7 +8,7 @@ import Button from "../../components/Button"
 import { ChatWithGroupButton } from "../../components/ChatWithGroup"
 import GroupActivities from "../../components/GroupActivities/GroupActivities"
 import GroupColumn from "../../components/GroupColumnCard"
-import LoadingIndicator from "../../components/LoadingIndicator"
+
 import Modal from "../../components/Modal"
 import { useModal } from "../../hooks/useModal"
 import tw from "../../lib/tailwind"
@@ -60,7 +62,7 @@ const AddGroupMemberModal = ({ modalRef }) => {
             height: scrollPositions[modalPosition],
           })}
         >
-          <LoadingIndicator color={tw.color("brand")} size={50} />
+          <UserSearch />
         </View>
       </View>
     </Modal>

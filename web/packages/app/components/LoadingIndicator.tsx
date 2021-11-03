@@ -3,7 +3,7 @@ import { WaveIndicator } from "react-native-indicators"
 import tw from "../lib/tailwind"
 import { CenteredRow } from "./Centered"
 
-export default ({ color, isInteraction = false, size = 25, ...props }) => {
+export default ({ color = "", isInteraction = false, size = 25, ...props }) => {
   return (
     <CenteredRow style={{ width: size, height: size }} {...props}>
       <WaveIndicator
