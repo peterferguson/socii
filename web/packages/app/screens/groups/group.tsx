@@ -1,16 +1,16 @@
-import LoadingIndicator from "../../components/LoadingIndicator"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React from "react"
-import { ScrollView, Text, View, Pressable } from "react-native"
+import { Add } from "iconsax-react-native"
+import React, { useCallback, useState } from "react"
+import { Pressable, ScrollView, Text, View } from "react-native"
 import Button from "../../components/Button"
 import { ChatWithGroupButton } from "../../components/ChatWithGroup"
 import GroupActivities from "../../components/GroupActivities/GroupActivities"
 import GroupColumn from "../../components/GroupColumnCard"
+import LoadingIndicator from "../../components/LoadingIndicator"
 import Modal from "../../components/Modal"
 import { useModal } from "../../hooks/useModal"
 import tw from "../../lib/tailwind"
 import { createParam } from "../../navigation/use-param"
-import { Add } from "iconsax-react-native"
 
 type Query = {
   id: string
@@ -39,11 +39,29 @@ export default () => {
 }
 
 const AddGroupMemberModal = ({ modalRef }) => {
+  const [modalPosition, setModalPosition] = useState(1)
+  const scrollPositions = ["25%", "50%", "90%"]
+
+  const handleSheetChanges = useCallback((index: number) => setModalPosition(index), [])
+
+  // TODO: Animate the change in position of the loading indicator in line with the snap
+  // TODO: position of the modal. Probably easiest to do this with moti
   return (
-    <Modal modalRef={modalRef} detach>
+    <Modal
+      modalRef={modalRef}
+      snapToPositions={scrollPositions}
+      detach
+      onChange={handleSheetChanges}
+    >
       <View style={tw`flex-1 items-center pt-2`}>
         <ModalHeader modalRef={modalRef} label={"Add a new member 🥳"} />
-        <LoadingIndicator color={tw.color("brand")} size={50} />
+        <View
+          style={tw.style(`flex-col w-full items-center justify-center`, {
+            height: scrollPositions[modalPosition],
+          })}
+        >
+          <LoadingIndicator color={tw.color("brand")} size={50} />
+        </View>
       </View>
     </Modal>
   )
@@ -58,7 +76,11 @@ const ModalHeader = ({ modalRef, label }) => {
           {label}
         </Text>
         <Pressable onPress={handleDismiss}>
-          <Add size="24" color={tw.color("brand-black")} style={{ transform: [{ rotate: "45deg" }] }} />
+          <Add
+            size="24"
+            color={tw.color("brand-black")}
+            style={{ transform: [{ rotate: "45deg" }] }}
+          />
         </Pressable>
       </View>
       <View

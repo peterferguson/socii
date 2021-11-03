@@ -14,7 +14,7 @@ export default ({
   children: React.ReactNode
   modalRef: React.RefObject<BottomSheetModal>
   detach?: boolean
-  onChange?: () => void
+  onChange?: (index: number) => void
   snapToPositions?: string[]
 }) => {
   const snapPoints = useMemo(() => snapToPositions, [])
