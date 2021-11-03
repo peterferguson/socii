@@ -73,7 +73,8 @@ export function usePaginatedUsers(): PaginatedUsers {
 
   const toggleUser = (user: UserResponse) => {
     if (!user.id) return
-    if (selectedUserIds.indexOf(user.id) > -1) return
+    if (selectedUserIds.indexOf(user.id) > -1)
+      removeUser(selectedUserIds.indexOf(user.id))
     else addUser(user)
   }
 

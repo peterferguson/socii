@@ -208,6 +208,7 @@ export const UserSearchInput = ({ onSubmit, ...props }) => {
         placeholder=""
         placeholderTextColor={tw.color("brand-black")}
         returnKeyType="search"
+        value={searchText}
         style={tw`rounded-full border border-brand-black/30 p-4 w-full h-12`}
       />
     </CenteredRow>
@@ -223,8 +224,8 @@ export const UserSearch = () => {
       {user?.streamToken ? (
         <Chat client={chatClient}>
           <SearchUsersProvider>
-            <UserSearchInput onSubmit={() => {}} />
             <SelectedUsers />
+            <UserSearchInput onSubmit={() => {}} />
             <UserSearchResults groupedAlphabetically={false} />
           </SearchUsersProvider>
         </Chat>
@@ -236,7 +237,7 @@ export const UserSearch = () => {
 }
 
 const SelectedUsers: React.FC = () => {
-  const { selectedUsers, removeUser } = useSearchUsersContext()
+  const { selectedUsers, toggleUser } = useSearchUsersContext()
   return (
     <CenteredColumn style={tw`items-start w-full`}>
       {selectedUsers.map((user) => (
@@ -245,7 +246,7 @@ const SelectedUsers: React.FC = () => {
           style={tw`items-center justify-between px-4 py-2 w-full`}
         >
           <UserResult user={user} />
-          <TouchableOpacity onPress={() => removeUser(user.id)}>
+          <TouchableOpacity onPress={() => toggleUser(user)}>
             <CloseIcon size={24} color={tw.color("red-500")} />
           </TouchableOpacity>
         </CenteredRow>
