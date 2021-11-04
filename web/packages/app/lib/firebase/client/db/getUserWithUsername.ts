@@ -7,9 +7,9 @@ import { db } from "../.."
  */
 
 export async function getUserWithUsername(username: string) {
-  const usersRef = collection(db, "users")
-  const userQuery = query(usersRef, where("username", "==", username), limit(1))
-  const querySnapshot = await getDocs(userQuery)
-  const userDoc = querySnapshot.docs?.pop()
-  return userDoc
+  return (
+    await getDocs(
+      query(collection(db, "users"), where("username", "==", username), limit(1))
+    )
+  ).docs?.pop()
 }

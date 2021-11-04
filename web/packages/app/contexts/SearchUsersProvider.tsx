@@ -1,8 +1,8 @@
 import { usePaginatedUsers } from "../hooks/usePaginatedUsers"
-import { SearchUsersContext, SearchUsersContextValue } from "./searchUsersContext"
+import { SearchUsersContext } from "./searchUsersContext"
 
 export const SearchUsersProvider: React.FC<{
-  value?: SearchUsersContextValue
+  value?: SearchUsersContext
 }> = ({ children, value }) => {
   const paginatedUsers = usePaginatedUsers()
 
@@ -11,7 +11,7 @@ export const SearchUsersProvider: React.FC<{
     ...value,
   }
   return (
-    <SearchUsersContext.Provider value={searchContext as SearchUsersContextValue}>
+    <SearchUsersContext.Provider value={searchContext as SearchUsersContext}>
       {children}
     </SearchUsersContext.Provider>
   )

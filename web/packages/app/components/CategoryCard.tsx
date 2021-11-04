@@ -6,7 +6,7 @@ import SkeletonCircle from "./SkeletonCircle"
 import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
 
-export const CategoryCard = ({ shortName, emoji, isLoading }) => {
+const CategoryCard = ({ shortName, emoji, isLoading }) => {
   const router = useRouter()
   const isLongShortName = shortName.includes(" ") && !shortName.includes("&")
   return (
@@ -89,3 +89,5 @@ export const CategoryCardSkeleton = () => (
     </View>
   </View>
 )
+
+export default CategoryCard

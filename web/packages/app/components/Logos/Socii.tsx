@@ -9,7 +9,7 @@ import Svg, {
   ClipPath,
 } from "react-native-svg"
 
-function SvgComponent(props: SvgProps) {
+function Socii(props: SvgProps) {
   return (
     <Svg width="1em" height="1em" viewBox="0 0 164 164" fill="none" {...props}>
       <G clipPath="url(#prefix__clip0_1:22)">
@@ -72,5 +72,5 @@ function SvgComponent(props: SvgProps) {
   )
 }
 
-const MemoSvgComponent = React.memo(SvgComponent)
-export default MemoSvgComponent
+const MemoSocii = React.memo(Socii)
+export default MemoSocii

@@ -4,11 +4,10 @@ import * as WebBrowser from "expo-web-browser"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import React from "react"
 import { SafeAreaView, View } from "react-native"
-import { EnterCard } from "../components/EnterCard"
+import { EnterCard } from "../components"
 import { useAuth } from "../hooks/useAuth"
 import { auth } from "../lib/firebase"
 import tw from "../lib/tailwind"
-import { shadowStyle } from "../utils/shadowStyle"
 
 const CLIENT_ID = Constants.manifest.extra.firebase.clientId
 

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { FlatList, ScrollView, Text, View } from "react-native"
 import CardSlider from "../../components/CardSlider"
-import { CategoryCard } from "../../components/CategoryCard"
+import CategoryCard from "../../components/CategoryCard"
 import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import { useYahooTrending } from "../../hooks/useYahooTrending"
 import tw from "../../lib/tailwind"

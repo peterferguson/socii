@@ -50,7 +50,9 @@ function StocksNavigator() {
           component={CategoryScreen}
           options={({ route }) => ({
             title: route.params.category,
-            headerTitle: () => <HeaderContainer headerTitle={`${route.params.category} Stocks`} />,
+            headerTitle: () => (
+              <HeaderContainer headerTitle={`${route.params.category} Stocks`} />
+            ),
           })}
         />
         <StocksStack.Screen

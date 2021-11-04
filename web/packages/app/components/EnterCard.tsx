@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native"
 import tw from "../lib/tailwind"
 import Google from "./Logos/Google"
 
-export const EnterCard = ({ signinWith }) => (
+const EnterCard = ({ signinWith }) => (
   <View style={tw`absolute z-10 w-full max-w-md p-10 bg-white rounded-xl`}>
     <View style={tw`flex flex-col items-center justify-center text-center`}>
       <Text style={tw`mt-6 -mb-8 text-4xl text-brand-black font-poppins-500`}>
@@ -30,3 +30,5 @@ export const EnterCard = ({ signinWith }) => (
     </View>
   </View>
 )
+
+export default EnterCard

@@ -4,7 +4,7 @@ import tw from "../lib/tailwind"
 import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
 
-export const PriceWithChangeTag = ({ latestPrice, qty, pnl }) => (
+const PriceWithChangeTag = ({ latestPrice, qty, pnl }) => (
   <>
     <Text
       style={tw`overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis`}
@@ -30,3 +30,5 @@ export const PriceWithChangeTagSkeleton = () => (
     <SkeletonText width={tw`w-20`.width as number} height={tw`h-3`.height as number} />
   </>
 )
+
+export default PriceWithChangeTag
