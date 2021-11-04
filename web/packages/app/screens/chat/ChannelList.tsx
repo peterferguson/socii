@@ -24,7 +24,7 @@ const ChannelListScreen = ({ navigation }) => {
       <View style={tw`h-full bg-brand-gray dark:bg-brand-black`}>
         <ChannelList
           filters={memoizedFilters}
-          onSelect={(channel) => {
+          onSelect={channel => {
             setChannel(channel)
             router.push(`/channel/${channel.id}`)
           }}

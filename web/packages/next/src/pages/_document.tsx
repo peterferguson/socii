@@ -1,11 +1,11 @@
-import { getInitialProps } from '@expo/next-adapter/document';
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
-import React from 'react';
+import { getInitialProps } from "@expo/next-adapter/document"
+import NextDocument, { Html, Head, Main, NextScript } from "next/document"
+import React from "react"
 
 class Document extends NextDocument {
   render() {
     return (
-      <Html lang="en" style={{ background: 'black' }}>
+      <Html lang="en" style={{ background: "black" }}>
         <Head>
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -15,10 +15,10 @@ class Document extends NextDocument {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-Document.getInitialProps = getInitialProps;
+Document.getInitialProps = getInitialProps
 
-export default Document;
+export default Document

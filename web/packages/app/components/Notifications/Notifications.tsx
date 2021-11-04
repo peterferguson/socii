@@ -15,7 +15,7 @@ const Notifications = () => {
         right: 0,
       }}
     >
-      {toasts.map((t) => (
+      {toasts.map(t => (
         <Toast
           key={t.id}
           t={t}

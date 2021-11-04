@@ -10,7 +10,7 @@ const SelectedUsers: React.FC = () => {
   const { selectedUsers, toggleUser } = useSearchUsers()
   return (
     <CenteredColumn style={tw`items-start w-full`}>
-      {selectedUsers.map((user) => (
+      {selectedUsers.map(user => (
         <CenteredRow
           key={`selected-user-${user.id}`}
           style={tw`items-center justify-between px-4 py-2 w-full`}

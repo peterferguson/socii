@@ -6,7 +6,7 @@ import { getGroupCashBalance } from "../lib/firebase/client/db/getGroupCashBalan
 import { getHoldingData } from "../lib/firebase/client/db/getHoldingData"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
-import { iexQuote } from "../utils/iexQuote"
+import { useIexPrices } from "../hooks/useIexPrice"
 import { shadowStyle } from "../utils/shadowStyle"
 import { CardDonutChart, ChatWithGroupFooter, DonutSector } from "./"
 import { Holding, IGroupColumnCard } from "./GroupColumnCard"
@@ -17,7 +17,6 @@ export default ({ groupName, style }: IGroupColumnCard) => {
   const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
-  const [currentPrices, setCurrentPrices] = useState({})
   const [mounted, setMounted] = useState(false)
   const [donutSectors, setDonutSectors] = useState<DonutSector[]>([])
 
@@ -54,34 +53,11 @@ export default ({ groupName, style }: IGroupColumnCard) => {
     [holdings]
   )
 
-  useEffect(() => {
-    const updatePriceState = async () => {
-      holdingInfo &&
-        user?.token &&
-        Promise.all(
-          holdingInfo?.map(async ({ symbol }) => {
-            try {
-              const { iexRealtimePrice = null, latestPrice = null } = await iexQuote(
-                symbol,
-                user?.token
-              )
-              if (iexRealtimePrice || latestPrice)
-                setCurrentPrices((previousState) => ({
-                  ...previousState,
-                  [symbol]: iexRealtimePrice || latestPrice,
-                }))
-            } catch (e) {
-              console.error(e)
-            }
-          })
-        )
-    }
-    mounted && updatePriceState()
-  }, [holdingInfo, mounted, user?.token])
+  const { prices: currentPrices } = useIexPrices(holdingInfo.map(h => h.symbol))
 
   useEffect(() => {
     // - update donutSectors when a new price is available
-    const updateDonutSectors = (newPriceKeys) => {
+    const updateDonutSectors = newPriceKeys => {
       const sectors = holdingInfo
         .filter(({ symbol }) => newPriceKeys.includes(symbol))
         ?.map(({ symbol, qty, logoColor }) => {
@@ -91,10 +67,10 @@ export default ({ groupName, style }: IGroupColumnCard) => {
             value: currentPrices[symbol] * qty,
           }
         })
-      setDonutSectors((s) => [...s, ...sectors])
+      setDonutSectors(s => [...s, ...sectors])
     }
     const currentPriceKeysNotInDonutSectors = Object.keys(currentPrices).filter(
-      (key) => !donutSectors.some((s) => s.symbol === key)
+      key => !donutSectors.some(s => s.symbol === key)
     )
     mounted &&
       currentPriceKeysNotInDonutSectors.length &&

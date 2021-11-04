@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "./useAuth"
 import { useEffect, useState, useRef } from "react"
 
 export const useTradeEvents = () => {
@@ -16,10 +16,10 @@ export const useTradeEvents = () => {
       ws.current.onopen = () => setListening(true)
       ws.current.onclose = () => setListening(false)
 
-      ws.current.onmessage = (e) => {
+      ws.current.onmessage = e => {
         try {
           const data = JSON.parse(e.data)
-          setTradeEvents((prev) => {
+          setTradeEvents(prev => {
             return [...prev, data]
           })
         } catch (error) {

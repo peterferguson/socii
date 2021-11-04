@@ -1,6 +1,6 @@
-
-export type IEXMarketList = "mostactive" |
-  "gainers" |
-  "losers" |
-  "iexvolume" |
-  "iexpercent";
+export type IEXMarketList =
+  | "mostactive"
+  | "gainers"
+  | "losers"
+  | "iexvolume"
+  | "iexpercent"

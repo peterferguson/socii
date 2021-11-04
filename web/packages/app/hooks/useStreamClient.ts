@@ -32,7 +32,7 @@ export const useStreamClient = (): StreamClientContext => {
 
     DEVELOPMENT
       ? setStreamToken(user?.streamToken)
-      : generateToken().then((token) => setStreamToken(token))
+      : generateToken().then(token => setStreamToken(token))
   }, [username, user?.streamToken])
 
   useEffect(() => {

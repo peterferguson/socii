@@ -14,7 +14,7 @@ const GroupMemberProfilePhotos = ({
 
   useEffect(() => {
     groupName &&
-      getGroupMemberPhotos(groupName).then((photoUrls) => setMemberPhotos(photoUrls))
+      getGroupMemberPhotos(groupName).then(photoUrls => setMemberPhotos(photoUrls))
   }, [])
 
   return (

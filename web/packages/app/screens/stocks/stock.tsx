@@ -44,7 +44,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const [assets, setAssets] = useState<AssetData>({ ...asset, ...recommendations })
 
   useEffect(
-    () => setAssets((a) => ({ ...a, ...asset, ...recommendations })),
+    () => setAssets(a => ({ ...a, ...asset, ...recommendations })),
     [asset, recommendations, asset[symbol]]
   )
 

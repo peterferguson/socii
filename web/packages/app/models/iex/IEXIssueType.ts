@@ -11,4 +11,4 @@
  * (blank) = Not Available, i.e., Warrant, Note, or (non-filing) Closed Ended Funds
  */
 
-export type IEXIssueType = "ad" | "re" | "ce" | "si" | "lp" | "cs" | "et" | "";
+export type IEXIssueType = "ad" | "re" | "ce" | "si" | "lp" | "cs" | "et" | ""

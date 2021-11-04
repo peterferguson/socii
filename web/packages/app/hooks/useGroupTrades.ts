@@ -12,13 +12,13 @@ export const useGroupTrades = (groupName: string) => {
 
   useEffect(() => {
     getGroupTradeHistory(groupName)
-      .then((trades) => {
+      .then(trades => {
         if (trades.length > 0) {
           setGroupTrades(trades)
           setLoading(false)
         }
       })
-      .catch((e) => {
+      .catch(e => {
         console.log("error fetching trades from firebase", e)
         setDbFetchError(true)
       })

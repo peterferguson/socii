@@ -18,7 +18,7 @@ export const lastMarketDay = async () => {
 
     const calendar = await calendarClient.calendarGet(startDateStr, todayDateStr)
 
-    lastDay = calendar.filter((day) => day.date !== todayDateStr).pop()
+    lastDay = calendar.filter(day => day.date !== todayDateStr).pop()
 
     await setMarketDay(lastDay)
   }

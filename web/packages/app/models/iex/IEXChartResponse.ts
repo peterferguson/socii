@@ -1,5 +1,4 @@
-import { IEXOneDayChartItem } from "./IEXOneDayChartItem";
-import { IEXMultiDayChartItem } from "./IEXMultiDayChartItem";
+import { IEXOneDayChartItem } from "./IEXOneDayChartItem"
+import { IEXMultiDayChartItem } from "./IEXMultiDayChartItem"
 
-
-export type IEXChartResponse = IEXOneDayChartItem[] | IEXMultiDayChartItem[];
+export type IEXChartResponse = IEXOneDayChartItem[] | IEXMultiDayChartItem[]

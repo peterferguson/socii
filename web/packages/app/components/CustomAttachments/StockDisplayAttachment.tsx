@@ -30,7 +30,7 @@ const StockDisplayAttachment = ({ attachment }) => {
       </View>
       <View style={tw`flex flex-col`}>
         {asset &&
-          Object.keys(asset).map((key) => {
+          Object.keys(asset).map(key => {
             return (
               <View key={key} style={tw`w-full mt-2 ml-2 sm:mt-4`}>
                 <Text

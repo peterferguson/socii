@@ -47,7 +47,7 @@ export function usePaginatedUsers(): PaginatedUsers {
 
   const addUser = (user: UserResponse) => {
     setSelectedUsers([...selectedUsers, user])
-    setSelectedUserIds((prevSelectedUserIds) => {
+    setSelectedUserIds(prevSelectedUserIds => {
       prevSelectedUserIds.push(user.id)
       return prevSelectedUserIds
     })
@@ -58,13 +58,13 @@ export function usePaginatedUsers(): PaginatedUsers {
   const removeUser = (index: number) => {
     if (index < 0) return
 
-    setSelectedUserIds((prevSelectedUserIds) => {
+    setSelectedUserIds(prevSelectedUserIds => {
       const newSelectedUserIds = prevSelectedUserIds.slice()
       newSelectedUserIds.splice(index, 1)
       return newSelectedUserIds
     })
 
-    setSelectedUsers((prevSelectedUsers) => {
+    setSelectedUsers(prevSelectedUsers => {
       const newSelectedUsers = prevSelectedUsers.slice()
       newSelectedUsers.splice(index, 1)
       return newSelectedUsers
@@ -141,13 +141,13 @@ export function usePaginatedUsers(): PaginatedUsers {
       // Dumb check to avoid duplicates
       if (
         query === searchText &&
-        results.findIndex((r) => res?.users[0].id === r.id) > -1
+        results.findIndex(r => res?.users[0].id === r.id) > -1
       ) {
         queryInProgress.current = false
         return
       }
 
-      setResults((r) => {
+      setResults(r => {
         if (query !== searchText) {
           return res?.users
         }

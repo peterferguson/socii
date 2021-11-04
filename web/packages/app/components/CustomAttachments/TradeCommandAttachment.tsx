@@ -54,7 +54,7 @@ const TradeCommandAttachment = ({ attachment, tradeType }) => {
 
   const groupName = channel.cid.split(":").pop()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     const tradeArgs = {
       username,
       alpacaAccountId,

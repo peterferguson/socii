@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "./useAuth"
 import { AccountExtended } from "alpaca/models/AccountExtended"
 import { TradingAccount } from "alpaca/models/TradingAccount"
 import { fetcher } from "../utils/fetcher"

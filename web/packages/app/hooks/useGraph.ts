@@ -40,7 +40,7 @@ export const useGraph = (
 
   useEffect(() => {
     if (!isTimeseriesLoading && !isError) {
-      setGraphs((prevTabs) => ({
+      setGraphs(prevTabs => ({
         ...prevTabs,
         [period]: {
           timeseries,

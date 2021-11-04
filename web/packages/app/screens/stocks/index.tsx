@@ -38,7 +38,7 @@ export default function StocksScreen() {
         <Title title={"Trending"} />
         <CardSlider
           isLoading={isLoading}
-          assets={Object.values(trending).map((asset) => ({
+          assets={Object.values(trending).map(asset => ({
             asset: asset,
             price: defaultPrice,
           }))}

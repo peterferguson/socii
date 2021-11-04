@@ -20,7 +20,7 @@ export const getLeaderBoardProps = async () => {
   const groupHoldings: {
     [groupName: string]: { holdings: [{ asset: string; qty: number }] }
   } = snapshot.docs
-    .map((doc) => ({
+    .map(doc => ({
       groupName: doc.ref.path.split("/")[1],
       holdings: doc.data(),
     }))
@@ -36,7 +36,7 @@ export const getLeaderBoardProps = async () => {
   const assets: string[] = [
     ...new Set(
       Object.values(groupHoldings)
-        .map(({ holdings }) => [...holdings.map((holding) => holding.asset)])
+        .map(({ holdings }) => [...holdings.map(holding => holding.asset)])
         .flat(1)
     ),
   ]

@@ -8,7 +8,7 @@ interface Config {
 export const registerValidSW = (swUrl: string, config: Config) => {
   navigator.serviceWorker
     .register(swUrl)
-    .then((registration) => {
+    .then(registration => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing
         if (installingWorker == null) return
@@ -37,7 +37,7 @@ export const registerValidSW = (swUrl: string, config: Config) => {
         }
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error("Error during service worker registration:", error)
     })
 }

@@ -35,9 +35,9 @@ export default ({ groupName }: { groupName: string }) => {
 
   useEffect(() => {
     activities.length &&
-      setPanelData((prev) => {
+      setPanelData(prev => {
         const filtered = Object.keys(prev).reduce((acc, label) => {
-          activities.filter((activity) => {
+          activities.filter(activity => {
             if (
               activityTypeMapping[label].includes(activity.executionStatus) &&
               !prev[label].activities
@@ -79,7 +79,7 @@ const GroupActivityPanel = ({
   return activities?.length ? (
     <FlatList
       data={activities}
-      keyExtractor={(activity) => activity.messageId}
+      keyExtractor={activity => activity.messageId}
       renderItem={({ item: activity }) => (
         <PanelActivityCard activity={activity} label={label} />
       )}

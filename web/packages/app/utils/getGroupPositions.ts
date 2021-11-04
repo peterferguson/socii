@@ -25,19 +25,19 @@ export const getGroupPositions = async (groupName: string) => {
     return { marketValue, unrealizedPl }
   }
 
-  const positions = holdings.docs.map((doc) => {
+  const positions = holdings.docs.map(doc => {
     const { asset, qty, avgPrice } = doc.data()
     return { asset, qty, avgPrice }
   })
 
   const priceData = await getYahooTimeseries({
-    assets: positions.map((pos) => pos.asset),
+    assets: positions.map(pos => pos.asset),
     period: PeriodEnum["1D"],
     interval: IntervalEnum["1D"],
   })
 
   return {
-    positions: positions.map((pos) => {
+    positions: positions.map(pos => {
       const marketPrice = priceData[pos.asset]?.pop().close
 
       const { marketValue, unrealizedPl } = marketCalculations(

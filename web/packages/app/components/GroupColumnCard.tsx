@@ -77,7 +77,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
                 user?.token
               )
               if (iexRealtimePrice || latestPrice)
-                setCurrentPrices((previousState) => ({
+                setCurrentPrices(previousState => ({
                   ...previousState,
                   [symbol]: iexRealtimePrice || latestPrice,
                 }))
@@ -92,7 +92,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
 
   useEffect(() => {
     // - update donutSectors when a new price is available
-    const updateDonutSectors = (newPriceKeys) => {
+    const updateDonutSectors = newPriceKeys => {
       const sectors = holdingInfo
         .filter(({ symbol }) => newPriceKeys.includes(symbol))
         ?.map(({ symbol, qty, logoColor }) => {
@@ -102,10 +102,10 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
             value: currentPrices[symbol] * qty,
           }
         })
-      setDonutSectors((s) => [...s, ...sectors])
+      setDonutSectors(s => [...s, ...sectors])
     }
     const currentPriceKeysNotInDonutSectors = Object.keys(currentPrices).filter(
-      (key) => !donutSectors.some((s) => s.symbol === key)
+      key => !donutSectors.some(s => s.symbol === key)
     )
     mounted &&
       currentPriceKeysNotInDonutSectors.length &&
@@ -152,7 +152,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
         <View style={tw`w-11/12 my-2`}>
           <FlatList
             data={holdingInfo}
-            keyExtractor={(item) => item.symbol}
+            keyExtractor={item => item.symbol}
             renderItem={({ item: holding }) => (
               <StockCard
                 holding={holding}

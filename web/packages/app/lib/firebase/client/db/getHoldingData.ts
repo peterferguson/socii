@@ -21,7 +21,7 @@ export const getHoldingData = (
     collection(db, `groups/${groupName}/holdings`),
     where("qty", "!=", 0)
   )
-  const unsubscribe = onSnapshot(holdingsRef, (snap) => setHoldings(snap.docs))
+  const unsubscribe = onSnapshot(holdingsRef, snap => setHoldings(snap.docs))
 
   return unsubscribe
 }

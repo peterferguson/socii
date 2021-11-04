@@ -1,6 +1,5 @@
-import { StreamChat } from "stream-chat";
-
+import { StreamChat } from "stream-chat"
 
 export interface Stream {
-  client: StreamChat;
+  client: StreamChat
 }

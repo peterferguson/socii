@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "./useAuth"
 import { OrderObject } from "../models/alpaca"
 import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"

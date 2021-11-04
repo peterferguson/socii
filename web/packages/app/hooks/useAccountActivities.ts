@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "./useAuth"
 import { ActivityItem, ActivityType } from "alpaca"
 import { fetcher } from "../utils/fetcher"
 import useSWR from "swr"

@@ -41,7 +41,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
           messageUpdate: {
             ...message,
             text: message.text.replace("IS PENDING", ""),
-            attachments: message.attachments.map((attached) =>
+            attachments: message.attachments.map(attached =>
               attached.type === "receipt"
                 ? { ...attached, orderStatus: orderExecutionStatus }
                 : attached
@@ -55,7 +55,7 @@ const InvestmentReceiptAttachment = ({ attachment }) => {
   useEffect(() => {
     let unsubscribe
     if (tradeId && isPending) {
-      unsubscribe = subscribeToTrade(groupName, tradeId, (snapshot) => {
+      unsubscribe = subscribeToTrade(groupName, tradeId, snapshot => {
         const tradeData = snapshot.data()
         if (tradeData) {
           const { executionStatus } = tradeData

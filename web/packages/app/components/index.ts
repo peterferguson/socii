@@ -34,7 +34,7 @@ export { default as PnlArrow } from "./PnlArrow"
 export { default as PriceCard } from "./PriceCard"
 export {
   default as PriceWithChangeTag,
-  PriceWithChangeTagSkeleton
+  PriceWithChangeTagSkeleton,
 } from "./PriceWithChangeTag"
 export { default as SkeletonCircle } from "./SkeletonCircle"
 export { default as SkeletonText } from "./SkeletonText"

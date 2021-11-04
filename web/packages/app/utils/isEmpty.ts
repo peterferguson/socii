@@ -1,6 +1,4 @@
-
-export const isEmpty = (obj) => {
-  for (let key in obj)
-    return false;
-  return true;
-};
+export const isEmpty = obj => {
+  for (let key in obj) return false
+  return true
+}

@@ -28,7 +28,12 @@ export const CenteredRow = ({
     {children}
   </Centered>
 )
-export const CenteredColumn = ({ children, style, ...props }:{  children: React.ReactNode
+export const CenteredColumn = ({
+  children,
+  style,
+  ...props
+}: {
+  children: React.ReactNode
   style?: any
 }) => (
   <Centered direction={"col"} style={style} {...props}>

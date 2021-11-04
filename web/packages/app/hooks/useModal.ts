@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 
 export const useModal = (bottomSheetRef: React.MutableRefObject<BottomSheetModal>) => {
-  const handleSnapPress = useCallback((index) => {
+  const handleSnapPress = useCallback(index => {
     bottomSheetRef.current?.snapToIndex(index)
   }, [])
   const handleCollapsePress = useCallback(() => {
