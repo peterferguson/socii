@@ -9,8 +9,7 @@
     "packages/alpaca",
     "packages/expo",
     "packages/next",
-    "packages/functions",
-    "packages/server",
+    "packages/firebase-cloud-functions",
     "packages/workers"
   ],
   "scripts": {

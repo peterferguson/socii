@@ -1,7 +1,7 @@
 {
-  "name": "socii getstream commands cloudflare worker",
+  "name": "@socii/workers",
   "version": "1.0.0",
-  "description": "",
+  "description": "Cloudflare workers for socii",
   "main": "dist/worker.js",
   "scripts": {
     "build": "webpack",

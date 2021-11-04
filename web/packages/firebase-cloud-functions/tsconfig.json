@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "module": "commonjs",
+    "target": "esnext",
+    "outDir": "lib",
+    "sourceMap": true,
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "isolatedModules": false,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["firebase", "shared", "accounts"],
+  "exclude": ["node_modules", "firebase/lib"]
+}
