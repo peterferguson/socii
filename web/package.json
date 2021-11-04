@@ -8,7 +8,10 @@
     "packages/app",
     "packages/alpaca",
     "packages/expo",
-    "packages/next"
+    "packages/next",
+    "packages/functions",
+    "packages/server",
+    "packages/workers"
   ],
   "scripts": {
     "dev:expo": "yarn workspace @socii/expo dev",
@@ -18,8 +21,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "sentry-expo": "^4.0.3",
-    "tailwindcss": "^2.2.16"
+    "sentry-expo": "^4.0.3"
   },
   "resolutions": {
     "babel-preset-expo": "^8.5.1"
