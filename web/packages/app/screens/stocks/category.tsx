@@ -1,22 +1,17 @@
 import type { CategoryScreenProps } from "app/navigation/types"
-import { createParam } from "app/navigation/use-param"
 import React, { useEffect, useRef, useState } from "react"
 import { ScrollView, View, Text, Button, Pressable } from "react-native"
-import { useSharedValue, withTiming } from "react-native-reanimated"
+//import { iexQuote } from "../../utils/iexQuote"
+// import { GetStaticPaths, GetStaticProps } from "next"
+import HorizontalAssetCard from "../../components/HorizontalAssetCard"
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver"
 import { getTickerDocs } from "../../lib/firebase/client/db/getTickerDocs"
 import { Price } from "../../models/Price"
-import { getTickerCategoryShortNames } from "../../utils/getTickerCategoryShortNames"
-import { getTickerProps } from "../../utils/getTickerProps"
-import { getTickersStaticProps, TickersProps } from "../../utils/getTickersStaticProps"
-//import { iexQuote } from "../../utils/iexQuote"
-// import { GetStaticPaths, GetStaticProps } from "next"
-import HorizontalAssetCard, {
-   HorizontalAssetCardSkeleton,
- } from "../../components/HorizontalAssetCard"
- import tw from "../../lib/tailwind"
 import { getCategoryData } from "../../utils/getCategoryData"
 import { shadowStyle } from "../../utils/shadowStyle"
+import { getTickerProps } from "../../utils/getTickerProps"
+import { TickersProps } from "../../utils/getTickersStaticProps"
+import tw from "../../lib/tailwind"
 
 interface CategoryTickerProps extends TickersProps {
   category: string
@@ -26,31 +21,8 @@ interface CategoryTickerProps extends TickersProps {
 // TODO: Add overall industry/category performance for comparison purposes
 // TODO: Refactor the infinite scrolling stock card loading on all pages
 export default function CategoryScreen({ navigation, route }: CategoryScreenProps) {
-
   const { category: categoryName } = route.params
 
-  const testTickers = [
-    {
-    ticker : {
-      tickerSymbol: "T",
-      ISIN: "US00206R1023",
-      logoColor: "#04ace4",
-      shortName: "ATnT",
-    },
-    price: "100"
-    },
-    {
-    ticker : {
-      tickerSymbol: "TSLA",
-      ISIN: "US88160R1014",
-      logoColor: "#cc0404",
-      shortName: "Tsla motors",
-    },
-    price: "100"
-    }
-    
-  ]
-  
   // - For infinite scroll
   // FIXME: Could be refactored as a hook
 
@@ -63,16 +35,15 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const [ isVisible, setIsVisible ] = useState(false)
   // const [ categoryProps, setCategoryProps ] = useState(null)
 
- 
   useEffect(() => {
     getCategoryData(categoryName).then(setInitialCards)
     setTickersToLoad(initialCards.restOfTickers)
-  } ,[])
+  }, [])
 
   useEffect(() => {
     if (initialCards.restOfTickers) setTickersToLoad(initialCards.restOfTickers)
-  } ,[initialCards.restOfTickers])
-  
+  }, [initialCards.restOfTickers])
+
   const defaultPrice = {
     latestPrice: 0,
     changePercent: -0.1,
@@ -83,10 +54,6 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
 
   const entry = useIntersectionObserver(lastTickerRef, {})
   //const isVisible = !!entry?.isIntersecting
-
-
-
-
 
   useEffect(() => {
     if (isVisible) {
@@ -131,11 +98,10 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   }, [isVisible])
   //}, [isVisible, user?.token])
 
+  // TODO: Convert to a flatlist with a onEndReached prop
   return (
-    
-
     <View style={{ flex: 1 }}>
-      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>      
+      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
         {initialCards?.tickers?.map(({ ticker, price }) => (
           <HorizontalAssetCard
             key={`${ticker?.tickerSymbol}`}
@@ -176,6 +142,5 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
           </View>
       </ScrollView>
     </View>
-
   )
 }

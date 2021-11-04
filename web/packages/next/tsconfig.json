@@ -13,19 +13,9 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "isolatedModules": true,
-    "baseUrl": "../../",
-    "paths": {
-      "@lib/*": ["packages/app/lib/*"],
-      "@api/*": ["packages/app/pages/api/*"],
-      "@hooks/*": ["packages/app/hooks/*"],
-      "@components/*": ["packages/app/components/*"],
-      "@utils/*": ["packages/app/utils/*"],
-      "@pages/*": ["packages/app/pages/*"],
-      "@public/*": ["packages/app/public/*"]
-    }
+    "isolatedModules": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "extends": "expo/tsconfig.base"
+  "extends": "../../tsconfig.json"
 }

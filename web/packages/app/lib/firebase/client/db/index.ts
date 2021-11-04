@@ -1,6 +1,7 @@
 // process.env.NODE_ENV === "development" &&
 //   connectFirestoreEmulator(firestore, "localhost", 8080)
 
+export { Timestamp } from "firebase/firestore"
 export { setAgreesToTrade } from "./setAgreesToTrade"
 export { getAssetCategories } from "./getAssetCategories"
 export { getAssetData } from "./getAssetData"

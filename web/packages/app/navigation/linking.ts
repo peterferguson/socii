@@ -118,7 +118,6 @@ const linking: Props = {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":assetSymbol",
           [stocksStackPaths.category]: "categories/:category",
-
         },
       },
       [tabPaths.chatTab]: {

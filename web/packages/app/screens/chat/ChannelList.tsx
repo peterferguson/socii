@@ -20,7 +20,7 @@ const ChannelListScreen = ({ navigation }) => {
   const memoizedFilters = useMemo(() => filters, [])
 
   return (
-    <Chat client={chatClient} i18nInstance={streami18n}>
+    <Chat client={chatClient as any} i18nInstance={streami18n}>
       <View style={tw`h-full bg-brand-gray dark:bg-brand-black`}>
         <ChannelList
           filters={memoizedFilters}

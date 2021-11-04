@@ -29,7 +29,7 @@ function StocksNavigator() {
         headerBackTitleVisible: false,
         cardOverlayEnabled: true,
         cardStyle: tw`bg-brand-gray dark:bg-brand-black opacity-100`,
-        headerTintColor: tw.color("brand"),
+        headerTintColor: tw.color("brand-black"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
@@ -42,17 +42,15 @@ function StocksNavigator() {
         <StocksStack.Screen
           name="stocksScreen"
           component={StocksScreen}
-          options={{
-            title: "Stocks",
-            headerTitle: () => <HeaderContainer headerTitle={"Stocks"} />,
-          }}
+          options={{ title: "" }}
+          // TODO: Update this to use the last on-screen subtitle on scroll
         />
         <StocksStack.Screen
           name="categoryScreen"
           component={CategoryScreen}
           options={({ route }) => ({
-            title: "Category",
-            headerTitle: () => <HeaderContainer headerTitle={route.params.category} />,
+            title: route.params.category,
+            headerTitle: () => <HeaderContainer headerTitle={`${route.params.category} Stocks`} />,
           })}
         />
         <StocksStack.Screen
@@ -63,7 +61,6 @@ function StocksNavigator() {
             headerTitle: () => (
               <HeaderContainer headerTitle={"Stocks"} text={route.params.assetSymbol} />
             ),
-
           })}
           // TODO: Add asset as the title of the screen the transition to price on scroll
           // TODO: a la coinbase blog https://blog.coinbase.com/coinbases-animated-tabbar-in-react-native-4b3fdd4473e

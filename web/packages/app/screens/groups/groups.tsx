@@ -1,48 +1,29 @@
 import React from "react"
-import { Pressable, Button, View } from "react-native"
-import { Text } from "react-native"
+import { FlatList, View } from "react-native"
+import GroupSummaryCard from "../../components/GroupSummaryCard"
+import { useAuth } from "../../hooks/useAuth"
 import tw from "../../lib/tailwind"
 
-import { useRouter } from "app/navigation/use-router"
-import { shadowStyle } from "../../utils/shadowStyle"
-
-export default function GroupsScreen() {
-  const router = useRouter()
+const GroupPortfolios = (): JSX.Element => {
+  const { user } = useAuth()
+  const groups = user?.groups || []
+  const data = [...groups, ...groups]
 
   return (
-    <>
-      <Button
-        onPress={() => {
-          router.push("/groups/new")
-        }}
-        title="New group"
-      />
-
-      {[1, 2, 3, 4, 5].map((_, index) => (
-        <Pressable
-          key={index}
-          onPress={() => {
-            router.push(`/groups/${index + 1}`)
-          }}
-          style={tw`mt-4 flex items-center justify-center`}
-        >
-          <Text style={tw`text-brand-black dark:text-brand-gray`}>{`Group ${index + 1}`}</Text>
-        </Pressable> 
-      ))}
-
-      <View style ={tw`items-center`}>
-        <Pressable
-          onPress={()=>{
-           router.push(`/settings/`)
-          }}
-          style={{          
-            ...tw`bg-blue-300 my-2 mx-4 w-1/2 flex flex-col justify-center items-center rounded-2xl sm:rounded-xl`,
-            ...shadowStyle("md"),
-          }}
-          >   
-          <Text style={{ ...tw`text-lg text-white` }}>Settings </Text>
-          </Pressable>
-        </View>
-    </>
+    <View style={tw`flex-col items-center justify-center mx-4 mt-4`}>
+      <View style={tw`flex-col sm:flex-row w-full items-center justify-center`}>
+        <FlatList
+          data={data}
+          keyExtractor={(groupName, index) => `group-${index}-${groupName}`}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={data.length > 1}
+          renderItem={({ item: groupName }) => (
+            <GroupSummaryCard groupName={groupName} />
+          )}
+        />
+      </View>
+    </View>
   )
 }
+
+export default GroupPortfolios

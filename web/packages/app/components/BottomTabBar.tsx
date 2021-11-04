@@ -12,7 +12,7 @@ const routeIconNames = {
 
 function BottomTabBar({ state, descriptors, navigation }) {
   return (
-    <View style={tw`flex-row bg-white ios:pb-4`}>
+    <View style={tw`flex-row bg-white ios:pb-4 rounded-2xl`}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const label =
