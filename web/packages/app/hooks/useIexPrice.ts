@@ -7,7 +7,7 @@ interface CurrentPrices {
   [assetSymbol: string]: number | null
 }
 
-export const useIexPrices = (
+export const useIexPrice = (
   assets: string[],
   config?: SWRConfiguration
 ): {

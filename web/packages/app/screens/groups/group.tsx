@@ -1,6 +1,6 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React, { useCallback, useState } from "react"
-import { ScrollView, View } from "react-native"
+import React, { useCallback, useState, useEffect } from "react"
+import { Keyboard, ScrollView, View } from "react-native"
 import type { UserResponse } from "stream-chat"
 import { Chat } from "stream-chat-expo"
 import {
@@ -15,6 +15,7 @@ import {
   UserSearchInput,
   UserSearchResults,
 } from "../../components"
+import ModalHeader from "../../components/ModalHeader"
 import { SearchUsersProvider } from "../../contexts"
 import { useAuth, useSearchUsers, useStream } from "../../hooks"
 import { useModal } from "../../hooks/useModal"
@@ -24,7 +25,6 @@ import {
 } from "../../lib/firebase/client/db"
 import tw from "../../lib/tailwind"
 import { createParam } from "../../navigation/use-param"
-import ModalHeader from "../../components/ModalHeader"
 
 type Query = {
   id: string
@@ -77,14 +77,17 @@ const AddGroupMemberModal: React.FC<{
             height: scrollPositions[modalPosition],
           })}
         >
-          <UserSearch groupName={groupName} />
+          <UserSearch groupName={groupName} modalRef={modalRef} />
         </CenteredColumn>
       </View>
     </Modal>
   )
 }
 
-const UserSearch: React.FC<{ groupName: string }> = ({ groupName }) => {
+const UserSearch: React.FC<{
+  groupName: string
+  modalRef: React.MutableRefObject<BottomSheetModal>
+}> = ({ groupName, modalRef, ...props }) => {
   const { user } = useAuth()
   const { client: chatClient } = useStream()
 
@@ -94,7 +97,7 @@ const UserSearch: React.FC<{ groupName: string }> = ({ groupName }) => {
         // @ts-ignore
         <Chat client={chatClient}>
           <SearchUsersProvider>
-            <AddSelectedMembersToGroup groupName={groupName} />
+            <AddSelectedMembersToGroup groupName={groupName} modalRef={modalRef} />
             <UserSearchInput onSubmit={() => {}} />
             <UserSearchResults />
           </SearchUsersProvider>
@@ -106,13 +109,28 @@ const UserSearch: React.FC<{ groupName: string }> = ({ groupName }) => {
   )
 }
 
-const AddSelectedMembersToGroup: React.FC<{ groupName: string }> = ({ groupName }) => {
-  const { selectedUsers } = useSearchUsers()
+const AddSelectedMembersToGroup: React.FC<{
+  groupName: string
+  modalRef: React.MutableRefObject<BottomSheetModal>
+}> = ({ groupName, modalRef }) => {
+  const { selectedUsers, reset } = useSearchUsers()
 
-  const handlePress = useCallback(
-    () => addMembersToGroup(groupName, selectedUsers),
-    [groupName]
-  )
+  const { handleDismiss, handleExpand } = useModal(modalRef)
+
+  // - iOS keyboard opening doesnt move the modal to the top ... so handling this manually
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener("keyboardDidShow", _keyboardDidShow)
+    return () => keyboardListener.remove()
+  }, [])
+
+  const _keyboardDidShow = handleExpand
+
+  const handlePress = useCallback(() => {
+    addMembersToGroup(groupName, selectedUsers)
+    reset()
+    Keyboard.dismiss()
+    handleDismiss()
+  }, [groupName, selectedUsers, reset])
 
   return (
     <CenteredColumn style={tw`items-center pt-2`}>
@@ -125,11 +143,16 @@ const AddSelectedMembersToGroup: React.FC<{ groupName: string }> = ({ groupName 
 }
 
 const addMembersToGroup = async (groupName: string, users: UserResponse[]) => {
+  console.log("Adding members to group", groupName, users)
+
   // ! The id will come from stream and should be the username
   users.map(async ({ id: username }: { id: string }) => {
     const userDetails = await getUserWithUsername(username)
     const { uid, groups, alpacaAccountId } = userDetails.data()
-    if (groups.includes(groupName)) return
+    if (groups.includes(groupName)) {
+      console.log("User already in group", username)
+      return
+    }
 
     // - Add user to group awaiting approval of invite
     inviteInvestorToGroup(groupName, username, uid, alpacaAccountId)

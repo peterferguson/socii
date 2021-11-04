@@ -1,4 +1,4 @@
-import { doc, updateDoc, serverTimestamp } from "firebase/firestore"
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 import { db } from "../.."
 
 /*
@@ -15,7 +15,7 @@ export const inviteInvestorToGroup = async (
   alpacaAccountId: string
 ) => {
   const investorsRef = doc(db, `groups/${groupName}/investors/${username}`)
-  await updateDoc(investorsRef, {
+  await setDoc(investorsRef, {
     isFounder: false,
     joinDate: serverTimestamp(),
     uid: uid,

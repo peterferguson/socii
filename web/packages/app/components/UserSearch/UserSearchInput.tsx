@@ -9,6 +9,8 @@ const UserSearchInput = ({ onSubmit, ...props }) => {
   const [isFocused, setIsFocused] = useState(false)
   const { clearText, searchText, onFocusInput, onChangeSearchText } = useSearchUsers()
 
+  const { onFocus = null, onBlur = null } = props
+
   return (
     <CenteredRow style={tw`w-11/12 px-1 py-3`}>
       {(!isFocused || searchText === "") && (
@@ -22,10 +24,14 @@ const UserSearchInput = ({ onSubmit, ...props }) => {
         autoFocus={false}
         onFocus={() => {
           onFocusInput()
+          onFocus && onFocus()
           setIsFocused(true)
         }}
         onChangeText={onChangeSearchText}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          onBlur && onBlur()
+          setIsFocused(false)
+        }}
         onSubmitEditing={() => {
           onSubmit(searchText)
           clearText()
