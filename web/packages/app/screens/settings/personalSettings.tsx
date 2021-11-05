@@ -10,7 +10,7 @@ import { auth, db} from "../../lib/firebase/index"
 //import nativeToast from 'native-toast'
 
 // TODO 
-// - Batch update all items in one fb call. Currently only displayname works
+// - Batch update all items in one fb call. 
 // - Fix scroll to keep box in view with Keyboard
 // - Add toasts - attempted nativeToast but failed
 
@@ -18,11 +18,7 @@ const PersonalSettingsScreen = () => {
   const [email, setEmail] = useState(null);
   const { user, signout } = useAuth()
   const [displayName, setDisplayName] = useState(user?.displayName || "")
-  const [initialDisplayName, setInitialDisplayName] = useState(user?.displayName || "")
-  const [isValidDisplayName, setisValidUsername] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [retrieveEmail, setRetrieveEmail] = useState(null)
-
 
   useEffect(()=>{
     if (retrieveEmail){
@@ -46,6 +42,8 @@ const PersonalSettingsScreen = () => {
     updateUserData({uid: user.uid, updateData: {displayName: displayName}}).then((r)=>console.log("update:", r))
   }
 
+  // TODO BUG fix scroll so it automatically scrolls when entered 
+  //          currently you need to click into text input first
   return (
     <View style={tw`flex flex-row justify-center`}>
       <View style={{

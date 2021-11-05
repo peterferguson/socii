@@ -1,15 +1,66 @@
-import React from 'react';
-import { View, Text, Image, ImageBackground } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Platform, View, Text, Image, ImageBackground, Button, Pressable } from 'react-native';
 import MainSettingsComponent from '../../components/MainSettingsComponent';
 import { useAuth } from '../../hooks/useAuth';
 import tw from '../../lib/tailwind';
 import { useRouter } from '../../navigation/use-router';
+// import * as ImagePicker from 'expo-image-picker';
+// import {
+//   UserSearch as UserSearchIcon,
+//   CloseCircle as CloseIcon,
+// } from "iconsax-react-native"
+// import storage from '@react-native-firebase/storage'
 
 const SettingsScreen = () => {
   const { user, signout } = useAuth()
   const router = useRouter()
+  const [image, setImage] = useState(null);
 
-  // // correct signout
+  // useEffect(() => {
+  //   (async () => {
+  //     if (Platform.OS !== 'web') {
+  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== 'granted') {
+  //         alert('Sorry, we need camera roll permissions to make this work!');
+  //       }
+  //     }
+  //   })();
+  // }, []);
+// **** WARNING - there was a problem with result from image picker. It did not return
+//              - uri so a change was made to node module.
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     quality: 1,
+  //   });
+  //   const {uri} = result
+  //   console.log(uri);
+
+  //   if (!result.cancelled) {
+  //     setImage(uri);
+  //   }
+  // };
+
+  // useEffect(()=>{
+  //   const submitPost = async () =>{
+      
+  //     let storageref = await storage.ref().child('profile-pictures')
+  //     console.log("storageref", storageref);
+      
+  //     let filename = image.substring(image.lastIndexOf('/')+1)
+  //     try{
+  //       await storageref.put(filename)
+  //     } catch {
+  //       console.log("erorr");
+        
+  //     }
+  //   }
+  //   submitPost()
+  // },[image])
+
+  // // TODO correct signout route
   const settingsOptions = [
     {title: 'Profile', subTitle: 'Setup your profile picture, username etc.', onPress: () => {router.push("/settings/profileSettings")}, icon: "newspaper-outline"},
     {title: 'Personal Info', subTitle: 'Update your personal details and contact info', onPress: () => {router.push("/settings/personalSettings")}, icon: "person-outline"},
@@ -29,20 +80,33 @@ const SettingsScreen = () => {
             resizeMode = 'cover' 
             style= {tw`justify-center items-center w-50 h-50`}
           >
-            {user?.photoUrl ? (
-              <Image
-                source={user?.photoUrl ? { uri: user.photoUrl } : null}
-                style={{ width: 100, height: 100, borderRadius: 50}}
-              />
-            ) : (
-              <Text>TMP No Image</Text>
-            )}
-          </ImageBackground>
-       
+            <Pressable>
+              {user?.photoUrl ? (
+                <ImageBackground
+                  source={user?.photoUrl ? { uri: user.photoUrl } : null}
+                  resizeMode = 'cover'
+                  imageStyle={{ borderRadius: 100}}
+                  style= {tw`relative justify-center items-center w-25 h-25`}
+                >                 
+                  {/* <UserSearchIcon
+                    size="20"
+                    color={tw.color("white")}
+                    style={tw`absolute inset-y-0`}
+                  />                  */}
+                </ImageBackground> 
+              ) : (
+                <Text>No Image</Text>
+              )}
+            </Pressable>            
+          </ImageBackground>     
           <Text style={tw`text-brand-black font-semibold text-2xl`}>
             {user?.displayName}
           </Text>
         </View>
+      
+      
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+     
 
         <View  style={tw`flex flex-col items-center justify-end`}>
           <MainSettingsComponent
