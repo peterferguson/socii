@@ -1,4 +1,4 @@
-import { PortfolioHistory } from "alpaca/models/PortfolioHistory"
+import { PortfolioHistory } from "@socii/alpaca/models/PortfolioHistory"
 import { useAuth } from "../hooks/useAuth"
 import { PortfolioHistoryTimeseries } from "../models/PortfolioHistoryTimeseries"
 import { fetcher } from "../utils/fetcher"
