@@ -12,7 +12,7 @@ export const getGroupCashBalance = async (
   groupName: string,
   setCashBalance: React.Dispatch<React.SetStateAction<number>>
 ) => {
-  return onSnapshot(doc(db, `groups/${groupName}`), (snap) => {
+  return onSnapshot(doc(db, `groups/${groupName}`), snap => {
     setCashBalance(snap.data()?.cashBalance)
   })
 }

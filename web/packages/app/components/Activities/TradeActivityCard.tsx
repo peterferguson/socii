@@ -29,7 +29,7 @@ dayjs.updateLocale("en", {
 // - Add live update for change on each trade
 // - Tidy + add group trade specific items to the cards
 
-export const TradeActivityCard: React.FC<{
+const TradeActivityCard: React.FC<{
   symbol: string
   isin: string
   messageId: string
@@ -95,3 +95,5 @@ export const TradeActivityCard: React.FC<{
     </TouchableOpacity>
   )
 }
+
+export default TradeActivityCard

@@ -7,7 +7,7 @@ import { useVector } from "react-native-redash"
 import ChartCard from "../../components/ChartCard/ChartCard"
 import { TabLabel } from "../../components/ChartCard/constants"
 import InvestButton from "../../components/InvestButton"
-import PriceCard from "../../components/PriceCard/PriceCard"
+import PriceCard from "../../components/PriceCard"
 import StockRecommendations from "../../components/StockRecommendations"
 import { useAssetData } from "../../hooks/useAssetData"
 import { useGraph } from "../../hooks/useGraph"
@@ -44,7 +44,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const [assets, setAssets] = useState<AssetData>({ ...asset, ...recommendations })
 
   useEffect(
-    () => setAssets((a) => ({ ...a, ...asset, ...recommendations })),
+    () => setAssets(a => ({ ...a, ...asset, ...recommendations })),
     [asset, recommendations, asset[symbol]]
   )
 

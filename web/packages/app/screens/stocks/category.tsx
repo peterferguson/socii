@@ -64,7 +64,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
       lastTickerLoaded.current = tickerDocs?.slice().pop()
 
       const tickers = await Promise.all(
-        tickerDocs?.map(async (tickerDoc) => {
+        tickerDocs?.map(async tickerDoc => {
           const { tickerSymbol } = tickerDoc.data()
           const props = await getTickerProps(tickerDoc, null, null)
 
@@ -82,7 +82,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
         })
       )
 
-      moreTickers.current.push(...tickers.filter((ticker) => !!ticker))
+      moreTickers.current.push(...tickers.filter(ticker => !!ticker))
       setLoadingMoreTickers(false)
     }
     if (isVisible) {

@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "sociiinvest",
+    "dev": "socii-development"
+  }
+}

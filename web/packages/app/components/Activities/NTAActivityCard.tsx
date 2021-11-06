@@ -32,7 +32,7 @@ const NTAActivityMapping: { [key: string]: string } = {
   SSP: "Stock split",
 }
 
-export const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
+const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
   <View
     key={activity.id}
     style={tw`relative flex items-center p-3 rounded-xl hover:bg-gray-5`}
@@ -75,3 +75,5 @@ export const NTAActivityCard = ({ activity }: { activity: ActivityItem }) => (
     </Text>
   </View>
 )
+
+export default NTAActivityCard

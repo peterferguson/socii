@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "esnext",
+    "lib": ["esnext", "webworker"],
+    "allowJs": true,
+    "strict": false,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["@cloudflare/workers-types", "@types/jest", "@types/service-worker-mock"]
+  },
+  "include": ["src", "index.ts", "router.ts"],
+  "exclude": ["node_modules", "dist", "test"]
+}

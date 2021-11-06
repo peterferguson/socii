@@ -1,3 +1,3 @@
 export interface IEXLogoResponse {
-  url: string;
+  url: string
 }

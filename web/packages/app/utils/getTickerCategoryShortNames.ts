@@ -16,7 +16,7 @@ export interface TickerCategoryShortNames {
 export const getTickerCategoryShortNames =
   async (): Promise<TickerCategoryShortNames> => {
     const categorySnapshot = await getTickerCategories()
-    const categories = categorySnapshot.docs.map((doc) => ({
+    const categories = categorySnapshot.docs.map(doc => ({
       category_name: doc.id.replace(/-/g, " "),
       data: doc.data(),
     }))

@@ -1,0 +1,1 @@
+{"version":3,"file":"exception.js","sourceRoot":"","sources":["../../../../shared/alpaca/apis/exception.ts"],"names":[],"mappings":";;;AAAA;;;;;;;;GAQG;AACH,MAAa,YAAgB,SAAQ,KAAK;IACd;IAAqB;IAA/C,YAA0B,IAAY,EAAS,IAAO;QACpD,KAAK,CAAC,aAAa,GAAG,IAAI,GAAG,aAAa,GAAG,IAAI,CAAC,SAAS,CAAC,IAAI,CAAC,CAAC,CAAA;QAD1C,SAAI,GAAJ,IAAI,CAAQ;QAAS,SAAI,GAAJ,IAAI,CAAG;IAEtD,CAAC;CACF;AAJD,oCAIC"}

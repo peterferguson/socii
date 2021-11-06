@@ -85,7 +85,7 @@ export const getYahooTimeseries = async ({
       const marketUtcOffset = dayjs().tz("America/New_York").utcOffset()
 
       timestamp = dayjs(timestamp).subtract(marketUtcOffset, "minute").local().valueOf()
-    } 
+    }
     // else {
     //   // - This is a hack to get around the fact that the timestamp is in milliseconds
     //   // - in the local timezone rather than UTC.

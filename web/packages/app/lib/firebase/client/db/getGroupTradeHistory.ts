@@ -36,5 +36,5 @@ export const getGroupTradeHistory = async (groupName: string) => {
   let tradesQuery
   tradesQuery = query(collection(db, `groups/${groupName}/trades`))
 
-  return (await getDocs(tradesQuery)).docs?.map((doc) => doc.data() as GroupTradeItem)
+  return (await getDocs(tradesQuery)).docs?.map(doc => doc.data() as GroupTradeItem)
 }

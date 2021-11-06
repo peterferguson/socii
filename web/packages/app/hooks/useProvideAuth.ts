@@ -86,12 +86,12 @@ export const useProvideAuth = () => {
   useEffect(() => {
     let unsubscribe
     if (user?.uid && !user?.username && !user?.isInvited) {
-      getUsernameWithEmail(user?.email).then((usersUsername) => {
-        setUser((prevUser) => ({ ...prevUser, username: usersUsername }))
+      getUsernameWithEmail(user?.email).then(usersUsername => {
+        setUser(prevUser => ({ ...prevUser, username: usersUsername }))
         // - Dont check for invite if user has username
         if (usersUsername) return
         checkAlreadyOnWaitlist(user.email).then(({ isOnWaitlist, isInvited }) =>
-          setUser((prevUser) => ({
+          setUser(prevUser => ({
             ...prevUser,
             isOnWaitlist,
             isInvited,

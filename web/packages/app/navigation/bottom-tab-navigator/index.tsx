@@ -15,7 +15,7 @@ export function BottomTabNavigator(props: NextNavigationProps) {
   return (
     <BottomTab.Navigator
       initialRouteName="enter"
-      tabBar={(props) => <BottomTabBar {...props} />}
+      tabBar={props => <BottomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
         headerTintColor: tw`bg-brand-black dark:bg-brand-gray`.color as string,

@@ -1,0 +1,10 @@
+**/node_modules
+**/.next
+**/.expo
+**/.expo-shared
+**/.expo-shared
+**/android
+**/ios
+**/package-lock.json
+**/public
+**/alpaca

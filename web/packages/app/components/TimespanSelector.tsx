@@ -116,10 +116,10 @@ const TimespanSelector = ({
         {items.map((item, index) => (
           <Pressable
             style={tw`rounded-full p-2 px-3 mx-6`}
-            onLayout={(event) => {
+            onLayout={event => {
               handleItemLayout(event, index)
             }}
-            onPress={(event) => handleItemPress(event, index)}
+            onPress={event => handleItemPress(event, index)}
             key={index}
           >
             <Text

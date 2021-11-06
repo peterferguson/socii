@@ -6,5 +6,3 @@ export const joinWaitlist = async (email: string) =>
     },
     body: JSON.stringify({ email }),
   })
-
-

@@ -29,11 +29,11 @@ export const buildGraph = (timeseries: OHLCTimeseries): GraphData => {
   }
   // const priceList = timeseries?.slice(0, POINTS)
   const formattedValues = priceList.map(
-    (ohlc) => [ohlc.close, ohlc.timestamp / 1000] as [number, number]
+    ohlc => [ohlc.close, ohlc.timestamp / 1000] as [number, number]
   )
 
-  const prices = formattedValues.map((value) => value[0])
-  const dates = formattedValues.map((value) => value[1])
+  const prices = formattedValues.map(value => value[0])
+  const dates = formattedValues.map(value => value[1])
 
   const minTimestamp = Math.min(...dates)
   const maxTimestamp = Math.max(...dates)

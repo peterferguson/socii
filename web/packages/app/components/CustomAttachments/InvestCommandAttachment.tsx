@@ -19,7 +19,7 @@ const InvestCommandAttachment = ({ attachment }) => {
   }, [symbol])
 
   useEffect(() => {
-    const position = positions?.filter((position) => position.symbol === symbol).pop()
+    const position = positions?.filter(position => position.symbol === symbol).pop()
     if (position) setHolding(position)
   }, [positions])
 

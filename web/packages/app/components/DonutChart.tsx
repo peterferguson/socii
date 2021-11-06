@@ -138,7 +138,7 @@ const colors = [
   "#3fbaeb", // - brand color
 ]
 
-const getInwardAlternatingColors = (index) => {
+const getInwardAlternatingColors = index => {
   // * 0, -1, 1, -2, 2, ...
   const ordinal = 0.25 * (-1 + (1 - 2 * (index + 1)) * (-1) ** (index + 1))
   return colors.slice(ordinal)[0]

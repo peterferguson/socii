@@ -29,7 +29,7 @@ const EnterNavigator = () => (
       component={EnterScreen}
       // options={{ title: "Enter", headerTitle: "Login" }}
       options={{
-        headerTitle: (props) => <Header {...props} headerTitle={"Login"} />,
+        headerTitle: props => <Header {...props} headerTitle={"Login"} />,
       }}
     />
   </EnterStack.Navigator>

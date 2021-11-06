@@ -15,7 +15,7 @@ export const fetchYahoo = async (
 
   if (!body)
     body = {
-      tickerSymbol: assets.map((asset) => asset.split(".")[0]).join(" "),
+      tickerSymbol: assets.map(asset => asset.split(".")[0]).join(" "),
     }
 
   console.log(`Fetching ${assets.length} assets data from endpoint ${functionUrl}`)
@@ -29,7 +29,7 @@ export const fetchYahoo = async (
         mode: "cors",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(body),
-      }).catch((e) => e.message)
+      }).catch(e => e.message)
     case "GET":
       return await fetcher(functionUrl, {
         method: "GET",

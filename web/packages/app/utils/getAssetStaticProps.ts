@@ -42,7 +42,7 @@ export const getAssetStaticProps = async ({
   return {
     props: {
       assets: await Promise.all(
-        assetDocs?.map(async (assetDoc) => {
+        assetDocs?.map(async assetDoc => {
           let asset, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
             const assetProps = await getAssetProps(

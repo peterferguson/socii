@@ -2,7 +2,7 @@ import React, { createContext } from "react"
 import { Channel, StreamChat } from "stream-chat"
 import { ThreadContextValue } from "stream-chat-expo"
 
-export const streamContext = createContext<{
+export const StreamContext = createContext<{
   client: StreamChat
   clientReady: boolean
   channel: Channel

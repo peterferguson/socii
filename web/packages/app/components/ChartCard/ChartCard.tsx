@@ -49,7 +49,7 @@ const ChartCard: React.FC<IAssetPageLineChartProps> = ({
         }}
       />
       <ChartTabRow logoColor={logoColor} activeTab={activeTab}>
-        {tabs.map((tabLabel) => (
+        {tabs.map(tabLabel => (
           <ChartTabButton
             {...{
               prevTab,

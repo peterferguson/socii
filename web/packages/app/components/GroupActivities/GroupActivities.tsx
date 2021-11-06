@@ -1,10 +1,10 @@
 // import { NTAActivityCard } from "@components/Activities/NTAActivityCard"
 import React, { useEffect, useMemo } from "react"
-import { FlatList, Text, View } from "react-native"
-import { TradeActivityCard } from "../../components/Activities/TradeActivityCard"
+import { FlatList } from "react-native"
+import TradeActivityCard from "../../components/Activities/TradeActivityCard"
 import { useGroupTrades } from "../../hooks/useGroupTrades"
 import { GroupTradeItem } from "../../lib/firebase/client/db/getGroupTradeHistory"
-import tw from "../../lib/tailwind"
+import NothingToShow from "../NothingToShow"
 import { Panels, Tabs } from "../Tabs/Tabs"
 import { activityTypeMapping } from "./constants"
 
@@ -35,9 +35,9 @@ export default ({ groupName }: { groupName: string }) => {
 
   useEffect(() => {
     activities.length &&
-      setPanelData((prev) => {
+      setPanelData(prev => {
         const filtered = Object.keys(prev).reduce((acc, label) => {
-          activities.filter((activity) => {
+          activities.filter(activity => {
             if (
               activityTypeMapping[label].includes(activity.executionStatus) &&
               !prev[label].activities
@@ -79,7 +79,7 @@ const GroupActivityPanel = ({
   return activities?.length ? (
     <FlatList
       data={activities}
-      keyExtractor={(activity) => activity.messageId}
+      keyExtractor={activity => activity.messageId}
       renderItem={({ item: activity }) => (
         <PanelActivityCard activity={activity} label={label} />
       )}
@@ -112,9 +112,3 @@ const PanelActivityCard: React.FC<{ activity: GroupTradeItem; label: string }> =
   //   <NTAActivityCard activity={activity} />
   // )
 }
-
-const NothingToShow: React.FC = () => (
-  <View style={tw`flex-1 items-center justify-center p-3 rounded-xl`}>
-    <Text style={tw`text-center `}>Nothing to show here yet</Text>
-  </View>
-)

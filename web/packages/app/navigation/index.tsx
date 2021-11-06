@@ -61,7 +61,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       }}
       documentTitle={{
         enabled: true,
-        formatter: (options) => (options?.title ? `${options.title}` : "socii"),
+        formatter: options => (options?.title ? `${options.title}` : "socii"),
       }}
     >
       <AuthProvider>

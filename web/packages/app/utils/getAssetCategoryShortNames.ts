@@ -9,7 +9,7 @@ export interface AssetCategory {
 
 export const getAssetCategoryShortNames = async (): Promise<AssetCategories> => {
   const categorySnapshot = await getAssetCategories()
-  const categories = categorySnapshot.docs.map((doc) => ({
+  const categories = categorySnapshot.docs.map(doc => ({
     category_name: doc.id.replace(/-/g, " "),
     data: doc.data(),
   }))

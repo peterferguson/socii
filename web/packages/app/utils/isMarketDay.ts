@@ -22,7 +22,6 @@ export const isMarketDay = async (date: Date | string | number) => {
   const calendar = await calendarClient.calendarGet(timestampDateStr, endDateStr)
 
   return (
-    calendar.filter((day) => day.date === timestamp.toISOString().slice(0, 10)).length >
-    0
+    calendar.filter(day => day.date === timestamp.toISOString().slice(0, 10)).length > 0
   )
 }

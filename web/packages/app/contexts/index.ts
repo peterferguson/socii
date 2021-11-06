@@ -1,3 +1,6 @@
-export { authContext } from "./authContext"
+export { AuthContext } from "./authContext"
 export { AuthProvider } from "./AuthProvider"
-
+export { StreamContext } from "./streamContext"
+export { StreamProvider } from "./StreamProvider"
+export { SearchUsersContext } from "./searchUsersContext"
+export { SearchUsersProvider } from "./SearchUsersProvider"

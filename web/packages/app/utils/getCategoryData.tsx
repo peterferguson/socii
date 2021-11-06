@@ -9,9 +9,8 @@ interface CategoryTickerProps extends TickersProps {
 }
 
 export const getCategoryData = async (
-  category:string
+  category: string
 ): Promise<CategoryTickerProps> => {
-
   const categories = await getTickerCategoryShortNames()
   const tickers = categories[category]?.tickers
 
