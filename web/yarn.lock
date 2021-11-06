@@ -15356,13 +15356,11 @@ react-native-markdown-package@1.8.1:
     prop-types "^15.6.0"
     react-native-lightbox "^0.7.0"
     simple-markdown "^0.7.1"
-
 react-native-permissions@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.1.0.tgz#4cff584e0cc567aefe7c10b0d4f74f00950a68dd"
   integrity sha512-Y/kAU8cUTNhX5CLxfAG96ItEjjmwvyqnVBie38Gj8HoomXQcKM+ToFmq/rPt+DOziCq7YFKinn9AIlnLBiV3AQ==
-
-react-native-reanimated@^2.0.0-alpha.5, react-native-reanimated@~2.2.0:
+react-native-reanimated@^2.0.0-alpha.5, react-native-reanimated@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.2.3.tgz#edecfe477ad9efac6f006f7e1194e8c9aa4fc6d5"
   integrity sha512-d+BV39Jp4Om0ZkgVjop672/004ytlTfDT01EloO3HFZs9wR2QTuCjekq8yi3xl0G2xGZKd4DXhvqabIa7OnMYA==
