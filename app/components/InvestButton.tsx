@@ -51,7 +51,7 @@ export const InvestButton: React.FC<IInvestButtonProps> = ({
   // TODO: Ensure this works on transitions of dynamic routes
   // TODO: If not may need to add usePrevious hook?
   useEffect(() => {
-    send("RESET")
+    send("RESET") 
   }, [router.asPath, send])
 
   useEffect(() => {
