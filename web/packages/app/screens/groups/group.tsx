@@ -22,7 +22,7 @@ import { useModal } from "../../hooks/useModal"
 import {
   getUserWithUsername,
   inviteInvestorToGroup,
-} from "../../lib/firebase/client/db"
+} from "../../lib/firebase/db"
 import tw from "../../lib/tailwind"
 import { createParam } from "../../navigation/use-param"
 

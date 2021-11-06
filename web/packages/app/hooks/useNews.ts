@@ -1,8 +1,8 @@
 import { getNewsArticles, RapidApiNewsItem } from "../utils/getNewsArticles"
-import { getNewsArticles as getNewsArticlesFromFirebase } from "../lib/firebase/client/db/getNewsArticles"
+import { getNewsArticles as getNewsArticlesFromFirebase } from "../lib/firebase/db/getNewsArticles"
 
 import { useEffect, useState } from "react"
-import { storeNewsArticles } from "../lib/firebase/client/db/storeNewsArticles"
+import { storeNewsArticles } from "../lib/firebase/db/storeNewsArticles"
 import { usePrevious } from "./usePrevious"
 
 export const useStockNews = (query: string, asset: string) => {

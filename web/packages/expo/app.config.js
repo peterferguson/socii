@@ -46,6 +46,9 @@ export default {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: config.backgroundColor,
     },
+    googleServicesFile: "./google-services.json",
+    permissions: ["NOTIFICATIONS"],
+    useNextNotificationsApi: true,
     jsEngine: "hermes",
   },
   androidNavigationBar: {

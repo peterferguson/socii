@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAssetDocs } from "../lib/firebase/client/db/getAssetDocs"
+import { getAssetDocs } from "../lib/firebase/db/getAssetDocs"
 import { Asset } from "../models/Asset"
 import { getYahooPrice } from "../utils/getYahooPrice"
 import { getYahooRecommendations } from "../utils/getYahooRecommendations"
