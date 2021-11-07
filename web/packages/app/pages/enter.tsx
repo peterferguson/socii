@@ -1,11 +1,9 @@
-import React from "react"
-
 import createStackNavigator from "app/navigation/create-stack-navigator"
-import OnboardingScreen from "../screens/onboarding"
-import EnterScreen from "../screens/enter"
 import { EnterStackParams } from "app/navigation/types"
+import React from "react"
 import Header from "../components/Headers/EnterHeader"
 import tw from "../lib/tailwind"
+import EnterScreen from "../screens/enter"
 
 const EnterStack = createStackNavigator<EnterStackParams>()
 
@@ -32,11 +30,6 @@ const EnterNavigator = () => (
       options={{
         headerTitle: props => <Header {...props} headerTitle={"Login"} />,
       }}
-    />
-    <EnterStack.Screen
-      name="onboardingScreen"
-      component={OnboardingScreen}
-      options={{ headerShown: false }}
     />
   </EnterStack.Navigator>
 )

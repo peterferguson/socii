@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { NextComponentType, NextPageContext } from "next"
-import { RootNavigatorParams } from "./main-navigator/types"
+import { RootNavigatorParams } from "./root-navigator/types"
 
 type GroupsStackParams = {
   groupsScreen: undefined
@@ -13,7 +13,8 @@ type StocksStackParams = {
   categoryScreen: { category: string }
 }
 
-type EnterStackParams = { enterScreen: undefined; onboardingScreen: undefined }
+type OnboardingStackParams = { onboarding: undefined }
+type EnterStackParams = { enterScreen: undefined }
 type ChatStackParams = { channelListScreen: undefined }
 type ChannelStackParams = {
   channel: { channelId: string }
@@ -54,4 +55,5 @@ export type {
   ChannelScreenProps,
   ThreadScreenProps,
   CategoryScreenProps,
+  OnboardingStackParams,
 }

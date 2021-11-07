@@ -1,8 +1,8 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import createStackNavigator from "../create-stack-navigator"
 
 export type RootNavigatorParams = {
   withBottomBar: undefined
+  onboarding: undefined
   channel: { channelId: string }
   thread: { threadId: string }
 }

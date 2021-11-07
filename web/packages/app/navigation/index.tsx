@@ -1,7 +1,7 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer, useLinkTo } from "@react-navigation/native"
 import { linking } from "app/navigation/linking"
-import { RootNavigator } from "app/navigation/main-navigator"
+import { RootNavigator } from "app/navigation/root-navigator"
 import type { NextNavigationProps } from "app/navigation/types"
 import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
