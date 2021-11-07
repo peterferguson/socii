@@ -1,7 +1,7 @@
-import FirebaseUser from "../../../../models/FirebaseUser"
+import FirebaseUser from "../../../models/FirebaseUser"
 import { doc, onSnapshot } from "firebase/firestore"
 import React from "react"
-import { db } from "../../index"
+import { db } from "../index"
 import { getUserStreamToken } from "./getUserStreamToken"
 
 /*

@@ -1,4 +1,4 @@
-import { ClockResponse } from "@socii/shared/alpaca/models/ClockResponse"
+import { ClockResponse } from "@socii/alpaca/models/ClockResponse"
 import { fetcher } from "./fetcher"
 
 export const isMarketOpen = async (): Promise<boolean> => {

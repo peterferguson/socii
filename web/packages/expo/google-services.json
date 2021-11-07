@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1030307422946",
+    "project_id": "socii-development",
+    "storage_bucket": "socii-development.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030307422946:android:b0431ba1d63637f106f4bb",
+        "android_client_info": {
+          "package_name": "app.socii.development"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030307422946-eme82u4pdavkg065cakupdqujn4ln683.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUutGIums0pMuQdaX5oYFKb9kg3bq-5Rg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030307422946-eme82u4pdavkg065cakupdqujn4ln683.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1030307422946-gm13oe6nbdjvsefavo92u2259krbce56.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.socii.development"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

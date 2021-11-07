@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
 /*
  * Gets a users stream token from users/{uid}/stream subcollection

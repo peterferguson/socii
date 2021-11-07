@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
 /*
  * Gets a ticker/{isin} document ISIN by querying the ticker

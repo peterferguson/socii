@@ -1,6 +1,6 @@
 import { OAuthCredential } from "@firebase/auth"
 import { doc, serverTimestamp, setDoc } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
 /*
  * Create failedLogin document at failedLogins/{email}.

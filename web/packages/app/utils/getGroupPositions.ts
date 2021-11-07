@@ -1,4 +1,4 @@
-import { firestore } from "@lib/firebase/client/db/index"
+import { firestore } from "@lib/firebase/db/index"
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 

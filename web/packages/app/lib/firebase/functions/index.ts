@@ -1,4 +1,4 @@
-import { functions } from "../.."
+import { functions } from ".."
 import { httpsCallable } from "firebase/functions"
 
 // process.env.NODE_ENV === "development" &&
