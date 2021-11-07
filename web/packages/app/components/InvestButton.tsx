@@ -10,6 +10,7 @@ import {
   SelectGroupModal,
   SelectInvestActionModal,
   SelectOrderTypeModal,
+  ReturnToLastScreenModal,
 } from "./InvestButtonModals/index"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
@@ -42,11 +43,11 @@ interface IInvestButtonProps {
 }
 
 const Modals = {
-  // returnToLastScreen: { Component: ReturnToLastScreenModalDynamic },
+  returnToLastScreen: { Component: ReturnToLastScreenModal, Header:"You're back!" },
   // shareInformation: { Component: StockSharingModalDynamic },
-  chooseGroup: { Component: SelectGroupModal },
-  investAction: { Component: SelectInvestActionModal },
-  orderType: { Component: SelectOrderTypeModal },
+  chooseGroup: { Component: SelectGroupModal, Header:"Select a group to invest with:" },
+  investAction: { Component: SelectInvestActionModal, Header:"Select an action:" },
+  orderType: { Component: SelectOrderTypeModal, Header:"Select an order type:" },
   // limitOrder: { Component: OrderModalDynamic },
   // shareOrder: { Component: OrderModalDynamic },
   // cashOrder: { Component: OrderModalDynamic },
@@ -78,6 +79,16 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
       send("RESET")
     }, [symbol, send])
 
+    // TODO BUG Modal flickers when closed!
+    useEffect(()=>{
+      if(modalPosition ==-1 && open ) {
+        send("CLOSE") 
+        setOpen(false)
+        console.log("-----pos,", modalPosition);
+        
+      }
+    },[modalPosition])
+
     useEffect(() => {
       setOpen(
         Object.keys(Modals).includes(
@@ -93,8 +104,10 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
     const ModalContents =
       Modals[
         String(typeof state.value === "object" ? state.value["active"] : state.value)
-      ]?.Component
-
+      ]
+    const ModalComponent = ModalContents?.Component
+    const ModalLabel = ModalContents?.Header
+    
   // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
     <View>
@@ -111,26 +124,32 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
         </View>
       </Pressable>
 
-      <Modal  
-        modalRef={modalRef}
-        snapToPositions={scrollPositions}
-        detach
-        onChange={handleSheetChanges}
-      >
-        <View style={tw`flex-1 items-center overflow-y-scroll`}>
-          <ModalHeader modalRef={modalRef} label={symbol} />
-          <CenteredColumn
-            style={tw.style(`bg-white w-full`, {
-              height: scrollPositions[modalPosition],
-            })}
-          >
-            <ModalContents state={state} send={send} />
-          </CenteredColumn>
-        </View>
-      </Modal>
+      {open && (
+        ModalComponent ? (
+        <Modal  
+          modalRef={modalRef}
+          snapToPositions={scrollPositions}
+          detach
+          onChange={handleSheetChanges}
+        >
+          <View style={tw`flex-1 items-center overflow-y-scroll`}>
+            <ModalHeader modalRef={modalRef} label={ModalLabel} />
+            <CenteredColumn
+              style={tw.style(`bg-white w-full pt-5`, {
+                height: scrollPositions[modalPosition],
+              })}
+            >
+              <ModalComponent symbol={symbol} state={state} send={send} />
+            </CenteredColumn>
+          </View>
+        </Modal>
+        ) : (
+          null
+        )
+      )}
     </View>
   )
-}
+}  
 // FIXME
 // ! Cannot get the text center alignment to work when using poppins fonts
 

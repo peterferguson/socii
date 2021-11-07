@@ -9,7 +9,7 @@ const ModalHeader = ({ modalRef, label }) => {
   return (
     <>
       <View style={tw`flex-row items-center justify-between w-11/12`}>
-        <Text style={tw`font-poppins-600 text-brand-black dark:text-brand-gray`}>
+        <Text style={tw`font-poppins-600 text-lg text-brand-black dark:text-brand-gray`}>
           {label}
         </Text>
         <Pressable onPress={handleDismiss}>
