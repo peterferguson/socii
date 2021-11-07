@@ -1,12 +1,15 @@
 import { useAuth } from "@hooks/useAuth"
-// import { stockInvestButtonMachine } from "@lib/machines/stockInvestButtonMachine"
+import { stockInvestButtonMachine } from "../lib/machines/stockInvestButtonMachine"
 import { Position } from "../../alpaca/models/Position"
-// import { useMachine } from "@xstate/react"
+import { useMachine } from "@xstate/react"
 import React, { useEffect, useState, useCallback } from "react"
 // import { InvestButtonModalContainerDynamic } from "./InvestButtonModalContainer"
 // import { OrderModalDynamic } from "./OrderModal"
 // import { ReturnToLastScreenModalDynamic } from "./ReturnToLastScreenModal"
-import { SelectGroupModalNative } from "./SelectGroupModal"
+import { 
+  SelectGroupModal,
+  SelectInvestActionModal,
+} from "./InvestButtonModals/index"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
 // import { StockSharingModalDynamic } from "./StockSharingModal"
@@ -15,7 +18,7 @@ import { Pressable, View, Text } from "react-native"
 import { shadowStyle } from "../utils/shadowStyle"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { ModalHeader } from "./index"
-import { useModal } from "../hooks/useModal"
+import { useModal } from "../hooks/useModal" 
 import tw from "../lib/tailwind"
 import { createParam } from "../navigation/use-param"
 import {
@@ -40,8 +43,8 @@ interface IInvestButtonProps {
 const Modals = {
   // returnToLastScreen: { Component: ReturnToLastScreenModalDynamic },
   // shareInformation: { Component: StockSharingModalDynamic },
-  chooseGroup: { Component: SelectGroupModalNative },
-  // investAction: { Component: SelectInvestActionModalDynamic },
+  chooseGroup: { Component: SelectGroupModal },
+  investAction: { Component: SelectInvestActionModal },
   // orderType: { Component: SelectOrderTypeModalDynamic },
   // limitOrder: { Component: OrderModalDynamic },
   // shareOrder: { Component: OrderModalDynamic },
@@ -53,7 +56,7 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
   //   const username = user ? user.username : ""
 
   // - State machine for the invest button
-  //   const [state, send] = useMachine(stockInvestButtonMachine)
+  const [state, send] = useMachine(stockInvestButtonMachine)
   const [open, setOpen] = useState(false)
 
   const scrollPositions = ["25%", "50%", "90%"]
@@ -70,32 +73,35 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
   // - When the user navigates away from the page, we want to reset the state machine
   // TODO: Ensure this works on transitions of dynamic routes
   // TODO: If not may need to add usePrevious hook?
-  //   useEffect(() => {
-  //     send("RESET")
-  //   }, [router.asPath, send])
+    useEffect(() => {
+      send("RESET")
+    }, [symbol, send])
 
-  //   useEffect(() => {
-  //     setOpen(
-  //       Object.keys(Modals).includes(
-  //         String(typeof state.value === "object" ? state.value["active"] : state.value)
-  //       )
-  //     )
-  //   }, [state.value])
+    useEffect(() => {
+      setOpen(
+        Object.keys(Modals).includes(
+          String(typeof state.value === "object" ? state.value["active"] : state.value)
+        )
+      )
+    }, [state.value])
 
-    const ModalContents =
-      Modals[
-        "chooseGroup"
-      ]?.Component
     // const ModalContents =
     //   Modals[
-    //     String(typeof state.value === "object" ? state.value["active"] : state.value)
+    //     "investAction"
     //   ]?.Component
+    const ModalContents =
+      Modals[
+        String(typeof state.value === "object" ? state.value["active"] : state.value)
+      ]?.Component
+console.log("modcont -----", ModalContents);
+console.log("state -----", state);
+console.log("state val -----", state.value); 
 
   // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
     <View>
       <Pressable
-        onPress={handlePresent}
+        onPress={send("CLICK") && handlePresent}
         style={{
           backgroundColor: logoColor,
           ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl`,
@@ -107,7 +113,7 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
         </View>
       </Pressable>
 
-      <Modal
+      <Modal  
         modalRef={modalRef}
         snapToPositions={scrollPositions}
         detach
@@ -120,7 +126,7 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
               height: scrollPositions[modalPosition],
             })}
           >
-            <ModalContents  />
+            <ModalContents state={state} send={send} />
           </CenteredColumn>
         </View>
       </Modal>
