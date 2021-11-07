@@ -5,23 +5,23 @@ import { useStream } from "../../hooks"
 import { headerScreenOptions } from "../../utils/headerScreenOptions"
 import { BottomTabNavigator } from "../bottom-tab-navigator"
 import { NextNavigationProps } from "../types"
-import { MainStack } from "./types"
+import { RootStack } from "./types"
 
-export const MainNavigator = (props: NextNavigationProps) => {
+export const RootNavigator = (props: NextNavigationProps) => {
   const { clientReady } = useStream()
   return (
-    <MainStack.Navigator
+    <RootStack.Navigator
       initialRouteName="withBottomBar"
       screenOptions={{ headerShown: false, ...headerScreenOptions }}
     >
-      <MainStack.Screen
+      <RootStack.Screen
         name="withBottomBar"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
       {clientReady && ( // TODO: Add screen for logging in users in chat navigator
-        <MainStack.Group>
-          <MainStack.Screen
+        <RootStack.Group>
+          <RootStack.Screen
             name="channel"
             component={ChannelScreen}
             options={({ route }) => ({
@@ -31,7 +31,7 @@ export const MainNavigator = (props: NextNavigationProps) => {
               ),
             })}
           />
-          <MainStack.Screen
+          <RootStack.Screen
             name="thread"
             component={ThreadScreen}
             options={{
@@ -39,8 +39,8 @@ export const MainNavigator = (props: NextNavigationProps) => {
               headerTitle: () => <HeaderContainer headerTitle={"Chat Thread"} />,
             }}
           />
-        </MainStack.Group>
+        </RootStack.Group>
       )}
-    </MainStack.Navigator>
+    </RootStack.Navigator>
   )
 }

@@ -9,11 +9,11 @@ import {
   ChatStackParams,
   ChannelStackParams,
 } from "./types"
-import { MainNavigatorParams } from "./main-navigator/types"
+import { RootNavigatorParams } from "./main-navigator/types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
-function makeMainPath<Path extends keyof MainNavigatorParams>(path: Path): Path {
+function makeRootPath<Path extends keyof RootNavigatorParams>(path: Path): Path {
   return path
 }
 function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
@@ -75,9 +75,9 @@ const tabPaths = makeType({
 })
 
 const mainPaths = makeType({
-  withBottomBar: makeMainPath("withBottomBar"),
-  channel: makeMainPath("channel"),
-  thread: makeMainPath("thread"),
+  withBottomBar: makeRootPath("withBottomBar"),
+  channel: makeRootPath("channel"),
+  thread: makeRootPath("thread"),
 })
 
 const linking: Props = {
@@ -105,7 +105,6 @@ const linking: Props = {
           [stocksStackPaths.stocks]: "",
           [stocksStackPaths.stock]: ":assetSymbol",
           [stocksStackPaths.category]: "categories/:category",
-
         },
       },
       [tabPaths.chatTab]: {
