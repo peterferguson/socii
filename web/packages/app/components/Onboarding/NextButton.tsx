@@ -12,7 +12,13 @@ const center = BUTTON_SIZE / 2
 const radius = center - strokeWidth / 2
 const circumference = 2 * Math.PI * radius
 
-const NextButton = ({ progress }: { progress: Animated.SharedValue<number> }) => {
+const NextButton = ({
+  progress,
+  scrollToNext,
+}: {
+  progress: Animated.SharedValue<number>
+  scrollToNext: () => void
+}) => {
   const progressAnimation = useAnimatedProps(() => ({
     strokeDashoffset: circumference - (circumference * progress.value) / 100,
   }))
@@ -38,7 +44,11 @@ const NextButton = ({ progress }: { progress: Animated.SharedValue<number> }) =>
           />
         </G>
       </Svg>
-      <TouchableOpacity style={tw`absolute p-4`} onPress={() => {}} activeOpacity={0.6}>
+      <TouchableOpacity
+        style={tw`absolute p-4`}
+        onPress={scrollToNext}
+        activeOpacity={0.6}
+      >
         <ArrowRight size="32" color={tw.color("brand")} />
       </TouchableOpacity>
     </View>

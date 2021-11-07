@@ -1,6 +1,6 @@
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import { FlatList, Text, useWindowDimensions, View } from "react-native"
 import Animated, {
   useAnimatedScrollHandler,
@@ -91,7 +91,21 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 
 const Onboarding = () => {
   const { width } = useWindowDimensions()
-  const slidesRef = useRef()
+  const slidesRef = useRef<FlatList>()
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => console.log(currentIndex), [currentIndex])
+
+  const viewabilityConfigCallbackPairs = useRef([
+    {
+      viewabiliyConfig: { viewAreaCoveragePercentThreshold: 50 },
+      onViewableItemsChanged: ({ viewableItems, changed }) => {
+        console.log("Visible items are", viewableItems)
+        console.log("Changed in this iteration", changed)
+        setCurrentIndex(viewableItems[0].index)
+      },
+    },
+  ])
 
   const scrollX = useSharedValue(0)
 
@@ -103,6 +117,12 @@ const Onboarding = () => {
     () => ((scrollX.value / width) * 100) / (onboardingData.length - 1),
     [scrollX]
   )
+
+  const scrollToNext = useCallback(() => {
+    currentIndex < onboardingData.length - 1
+      ? slidesRef.current.scrollToIndex({ index: currentIndex + 1 })
+      : console.log("done")
+  }, [currentIndex])
 
   return (
     <CenteredColumn
@@ -125,12 +145,11 @@ const Onboarding = () => {
           )}
           bounces={false}
           ref={slidesRef}
-          //   onViewableItemsChanged={onViewableItemsChanged}
           scrollEventThrottle={32}
-          viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
+          viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         />
         <CenteredRow style={tw.style(`mx-8 mb-8 justify-end`, { flex: 1 })}>
-          <NextButton progress={progress} />
+          <NextButton progress={progress} scrollToNext={scrollToNext} />
         </CenteredRow>
       </View>
     </CenteredColumn>
