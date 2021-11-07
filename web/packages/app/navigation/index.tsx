@@ -51,7 +51,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       theme={{
         dark: darkMode,
         colors: {
-          primary: tw.color("brand"),
+          primary: tw.color("brand-black"),
           background: tw`bg-brand-gray dark:bg-brand-black`.color as string,
           card: tw`bg-brand-gray dark:bg-brand-black`.color as string,
           text: tw`text-white dark:text-black`.color as string,
@@ -61,7 +61,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       }}
       documentTitle={{
         enabled: true,
-        formatter: (options) => (options?.title ? `${options.title}` : "socii"),
+        formatter: options => (options?.title ? `${options.title}` : "socii"),
       }}
     >
       <AuthProvider>

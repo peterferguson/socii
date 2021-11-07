@@ -36,7 +36,7 @@ export const useRecommendations = (asset: string) => {
     if (asset) {
       previousAsset !== asset && setRecommendationList([])
 
-      getYahooRecommendations({ assets: [asset] }).then((data) => {
+      getYahooRecommendations({ assets: [asset] }).then(data => {
         setRecommendationList(Array.from(new Set(data)))
       })
     }
@@ -48,7 +48,7 @@ export const useRecommendations = (asset: string) => {
         const price = await getYahooPrice(recommendationList, [
           "regularMarketChangePercent",
         ])
-        const data = (await getAssetDocs(recommendationList))?.map((doc) => doc.data())
+        const data = (await getAssetDocs(recommendationList))?.map(doc => doc.data())
 
         setRecommendationData(
           data.reduce((acc, datum) => {

@@ -17,7 +17,7 @@ function GroupsNavigator() {
         headerShown: true,
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        headerTintColor: tw.color("brand"),
+        headerTintColor: tw.color("brand-black"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
           // @ts-ignore
@@ -38,10 +38,10 @@ function GroupsNavigator() {
         <GroupsStack.Screen
           name="groupScreen"
           component={GroupScreen}
-          options={{
+          options={({ route }) => ({
             title: "Group",
-            headerTitle: () => <HeaderContainer headerTitle={"Group"} />,
-          }}
+            headerTitle: () => <HeaderContainer headerTitle={route.params.id} />,
+          })}
         />
       </GroupsStack.Group>
       <GroupsStack.Group

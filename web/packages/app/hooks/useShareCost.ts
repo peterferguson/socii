@@ -7,7 +7,7 @@ export const useShareCost = (costPerShare: number) => {
   const toShares = (cost: number) => cost / costPerShare
   const toCost = (shares: number) => costPerShare * shares
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
 
     const input = parseFloat(value)

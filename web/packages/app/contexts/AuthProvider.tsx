@@ -1,8 +1,8 @@
 import React from "react"
 import { useProvideAuth } from "../hooks/useProvideAuth"
-import { authContext } from "./authContext"
+import { AuthContext } from "./authContext"
 
 export function AuthProvider({ children }) {
   const auth = useProvideAuth()
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }

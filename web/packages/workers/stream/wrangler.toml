@@ -1,0 +1,17 @@
+name = "stream-local"
+type = "javascript"
+account_id = "698a8e362072714aa001c96068fa6abf"
+webpack_config = "webpack.config.js"
+
+[env.dev]
+name = "stream-dev"
+workers_dev = true
+
+[env.prod]
+name = "stream"
+workers_dev = true
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"

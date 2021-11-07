@@ -17,12 +17,12 @@ export const useAssetData = (assets: string[]): AssetsObject => {
       let filtered = assets
 
       if (assets?.length) {
-        if (data) filtered = assets?.filter((asset) => !(asset in data))
+        if (data) filtered = assets?.filter(asset => !(asset in data))
 
-        const assetData = (await getAssetDocs(filtered))?.map((doc) => doc.data())
+        const assetData = (await getAssetDocs(filtered))?.map(doc => doc.data())
 
         if (JSON.stringify(assets) !== JSON.stringify(prevAssets)) {
-          setData((prev) =>
+          setData(prev =>
             assetData?.reduce(
               (acc, doc) => ({ ...acc, [doc.alpaca.symbol]: doc }),
               prev

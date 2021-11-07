@@ -1,7 +1,7 @@
 import User from "../models/User"
 import { createContext } from "react"
 
-export const authContext = createContext({
+export const AuthContext = createContext({
   user: null,
   loading: false,
   // signinWithEmail,

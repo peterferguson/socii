@@ -48,7 +48,7 @@ export const getTickersStaticProps = async ({
   return {
     props: {
       tickers: await Promise.all(
-        tickerDocs?.map(async (tickerDoc) => {
+        tickerDocs?.map(async tickerDoc => {
           let ticker, timeseries: OHLCTimeseries, dataQuery, price: Price
           try {
             const tickerProps = await getTickerProps(

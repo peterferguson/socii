@@ -37,7 +37,7 @@ export const Toast = ({ t, updateHeight, offset }) => {
       }}
     >
       <View
-        onLayout={(event) => updateHeight(t.id, event.nativeEvent.layout.height)}
+        onLayout={event => updateHeight(t.id, event.nativeEvent.layout.height)}
         style={{
           margin: Constants.statusBarHeight + 10,
           backgroundColor: "#000",

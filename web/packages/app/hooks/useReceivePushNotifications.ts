@@ -9,9 +9,9 @@ const useReceivePushNotifications = () => {
   useEffect(() => {
     let unsub
     if (isBrowser) {
-      messagingPromise.then((messaging) => {
+      messagingPromise.then(messaging => {
         if (messaging) {
-          unsub = onMessage(messaging, (payload) => {
+          unsub = onMessage(messaging, payload => {
             console.log(payload)
 
             const {

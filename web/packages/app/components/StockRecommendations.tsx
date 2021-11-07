@@ -12,11 +12,13 @@ const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
 }) => {
   return (
     <View style={tw`w-full px-4 my-2 font-poppins-400 `}>
-      <Text style={tw`text-xl text-brand-black dark:text-brand-gray pl-2`}>People also viewed</Text>
+      <Text style={tw`text-xl text-brand-black dark:text-brand-gray pl-2`}>
+        People also viewed
+      </Text>
       <View
         style={{
           ...tw`p-4 mt-4 bg-white dark:bg-brand-black rounded-2xl flex flex-row justify-evenly items-center`,
-          ...shadowStyle('lg'),
+          ...shadowStyle("lg"),
           minHeight: "15%",
         }}
       >

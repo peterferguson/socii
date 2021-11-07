@@ -27,7 +27,7 @@ export default {
   description: "Invest With Friends",
   slug: "socii-development",
   scheme: "socii",
-  owner: "peterferguson",
+  owner: "socii",
   icon: config.icon,
   version: "0.0.1",
   splash: {

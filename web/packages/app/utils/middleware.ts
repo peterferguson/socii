@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "development") allowedOrigins.push(/\.localhost:300
 export default function initMiddleware(middleware) {
   return (req, res) =>
     new Promise((resolve, reject) => {
-      middleware(req, res, (result) => {
+      middleware(req, res, result => {
         if (result instanceof Error) {
           return reject(result)
         }
@@ -34,13 +34,13 @@ export const cors = initMiddleware(
   })
 )
 
-export const withCORS = (handler) => async (req, res) => {
+export const withCORS = handler => async (req, res) => {
   await cors(req, res)
   return handler(req, res)
 }
 
 // Verify the firebase auth token on the server-side (in vercel functions)
-export const withAuth = (handler) => async (req, res) => {
+export const withAuth = handler => async (req, res) => {
   const authHeader = req.headers.authorization
   if (!authHeader) res.status(401).end("Not authenticated. No Auth header")
   const token = authHeader?.split(" ")?.pop()

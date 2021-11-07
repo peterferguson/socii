@@ -9,7 +9,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
   const router = useRouter()
 
   const component = useCallback(
-    (props) => <Component {...pageProps} {...props} />,
+    props => <Component {...pageProps} {...props} />,
     [Component, pageProps]
   )
 
@@ -33,7 +33,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       <BottomTab.Screen
         name="enter"
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault()
             router.push("/")
           },
@@ -47,7 +47,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       <BottomTab.Screen
         name="groups"
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault()
             router.push("/groups")
           },
@@ -61,7 +61,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       <BottomTab.Screen
         name="chat"
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault()
             router.push("/chat")
           },
@@ -75,7 +75,7 @@ export function BottomTabNavigator({ Component, pageProps }: NextNavigationProps
       <BottomTab.Screen
         name="stocks"
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault()
             router.push("/stocks")
           },

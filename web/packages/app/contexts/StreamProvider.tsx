@@ -1,7 +1,6 @@
-/// <reference path="./stream.d.ts" />
 import React, { useState, useEffect } from "react"
 import { useStreamClient } from "../hooks/useStreamClient"
-import { streamContext } from "./streamContext"
+import { StreamContext } from "./streamContext"
 
 export const StreamProvider: React.FC = ({ children }) => {
   const { client } = useStreamClient()
@@ -16,10 +15,10 @@ export const StreamProvider: React.FC = ({ children }) => {
   }, [client])
 
   return (
-    <streamContext.Provider
+    <StreamContext.Provider
       value={{ client, clientReady, channel, setChannel, thread, setThread }}
     >
       {children}
-    </streamContext.Provider>
+    </StreamContext.Provider>
   )
 }

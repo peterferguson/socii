@@ -32,7 +32,7 @@ const NumberInput = ({ value, onChange, name, decimals = 2 }: INumberInputProps)
           style={tw`text-sm text-right rounded sm:text-base font-poppins-500`}
           keyboardType="numeric"
           defaultValue={value?.toFixed(decimals) || "0.00"}
-          onChangeText={(text) =>
+          onChangeText={text =>
             setInputValue(
               parseFloat(
                 text.replace(RegExp(`[0-9]+([.,][0-9]+)?{,${decimals}}`, "g"), "")

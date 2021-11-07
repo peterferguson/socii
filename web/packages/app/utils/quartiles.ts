@@ -16,4 +16,4 @@ export const median = (arr: number[]) => quantile(arr, 0.5)
 export const upperQuartile = (arr: number[]) => quantile(arr, 0.75)
 
 export const getQuartiles = (array: number[]) =>
-  [0, 0.25, 0.5, 0.75, 1].map((percentile) => quantile(array, percentile))
+  [0, 0.25, 0.5, 0.75, 1].map(percentile => quantile(array, percentile))

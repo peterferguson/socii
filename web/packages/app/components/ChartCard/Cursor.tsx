@@ -25,7 +25,7 @@ const Cursor = ({ path, translation, logoColor }: CursorProps) => {
     onStart: () => {
       isActive.value = true
     },
-    onActive: (event) => {
+    onActive: event => {
       if (event.x <= 0) {
         translation.x.value = 0
         translation.y.value = previousY.current
