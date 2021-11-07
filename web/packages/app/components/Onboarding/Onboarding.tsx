@@ -1,16 +1,26 @@
-import { Dimensions, FlatList, Image, View, Text } from "react-native"
+import tw from "app/lib/tailwind"
+import Constants from "expo-constants"
+import { useRef, useState, useEffect } from "react"
+import { FlatList, Text, useWindowDimensions, View } from "react-native"
+import Animated, {
+  useAnimatedScrollHandler,
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
 import { SvgProps } from "react-native-svg"
-import { Socii } from ".."
-import tw from "../../lib/tailwind"
+import { CenteredRow, Socii } from ".."
 import { CenteredColumn } from "../Centered"
 import HeaderText from "../Text/HeaderText"
 import {
-  PeopleSearch,
-  PublicDiscussion,
   AddFriends,
   ManageChats,
+  PeopleSearch,
+  PublicDiscussion,
   Revenue,
 } from "./assets"
+import NextButton from "./NextButton"
+import Paginator from "./Paginator"
 
 interface OnboardingItemData {
   id: string
@@ -23,7 +33,7 @@ interface OnboardingItemData {
 const onboardingData: OnboardingItemData[] = [
   {
     id: "onboarding-screen-0",
-    title: "Welcome to the socii!",
+    title: "Welcome to Roundtable!",
     description: "A totally new social investing experience!",
     Component: props => <Socii {...props} height={200} width={200} />,
   },
@@ -47,7 +57,7 @@ const onboardingData: OnboardingItemData[] = [
   },
   {
     id: "onboarding-screen-4",
-    title: "Welcome to the socii!",
+    title: "Welcome to socii!",
     description: "A totally new social investing experience!",
     Component: props => <ManageChats {...props} />,
   },
@@ -59,11 +69,10 @@ const onboardingData: OnboardingItemData[] = [
   },
 ]
 
-const width = Dimensions.get("window").width
-
 const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
+  const { width } = useWindowDimensions()
   return (
-    <CenteredColumn style={tw.style(`-mt-32`, { flex: 1, width })}>
+    <CenteredColumn style={tw.style(``, { flex: 1, width })}>
       {item.Component && <item.Component height={width} width={width * 0.9} />}
       <CenteredColumn style={tw`mt-12`}>
         <HeaderText
@@ -81,17 +90,49 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 }
 
 const Onboarding = () => {
+  const { width } = useWindowDimensions()
+  const slidesRef = useRef()
+
+  const scrollX = useSharedValue(0)
+
+  const scrollHandler = useAnimatedScrollHandler(e => {
+    scrollX.value = withSpring(e.contentOffset.x)
+  })
+
+  const progress = useDerivedValue(
+    () => ((scrollX.value / width) * 100) / (onboardingData.length - 1),
+    [scrollX]
+  )
+
   return (
-    <CenteredColumn style={tw`flex-1 bg-white dark:bg-brand-black`}>
-      <FlatList
-        data={onboardingData}
-        renderItem={OnboardingItem}
-        keyExtractor={item => item.id}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-      />
+    <CenteredColumn
+      style={tw.style(`bg-white dark:bg-brand-black`, {
+        flex: 1,
+        paddingTop: Constants.statusBarHeight,
+      })}
+    >
+      <View style={{ flex: 3 }}>
+        <Paginator data={onboardingData} scrollX={scrollX} />
+        <FlatList
+          data={onboardingData}
+          renderItem={({ item }) => <OnboardingItem item={item} />}
+          keyExtractor={item => item.id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          renderScrollComponent={props => (
+            <Animated.ScrollView {...props} onScroll={scrollHandler} />
+          )}
+          bounces={false}
+          ref={slidesRef}
+          //   onViewableItemsChanged={onViewableItemsChanged}
+          scrollEventThrottle={32}
+          viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
+        />
+        <CenteredRow style={tw.style(`mx-8 mb-8 justify-end`, { flex: 1 })}>
+          <NextButton progress={progress} />
+        </CenteredRow>
+      </View>
     </CenteredColumn>
   )
 }
