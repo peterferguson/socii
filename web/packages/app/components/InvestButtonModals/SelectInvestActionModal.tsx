@@ -6,15 +6,22 @@ import { Actions } from "./Actions"
 
 import tw from "../../lib/tailwind"
 
-const SelectInvestActionModal = () => {
+const SelectInvestActionModal = ({ state, send }) => {
   console.log("in select actionnnnnnnnn");
 
   const [actionSelected, setActionSelected] = useState(null)
 
-  // const setSelectedAction = (action: { name: string; actionName: string }) => {
-  //   send(action.actionName)
-  //   setActionSelected(action.name)
-  // }
+  const setSelectedAction = (action) => {
+    console.log("settingssss,", action);
+    console.log("settingssss,", action.name);
+    console.log("settingssss,", action.actionName);
+  
+    
+    setActionSelected(action.name)
+    send("CHOOSE_BUY")
+  }
+
+  
   // const setSelectedGroup = (group) => {
   //   console.log(("sendinggroup"));
   //   setGroupSelected(group.name)
@@ -30,7 +37,7 @@ const SelectInvestActionModal = () => {
         {Actions("T")?.map((action)=>(
           <Pressable 
             style={tw`inline-block w-4/5 max-w-lg p-2 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
-            onPress={()=>{console.log("hi")}}
+            onPress={setSelectedAction}
           >
                       
               <Text style={tw`text-xl leading-none text-brand-black`}>{action.name}</Text>

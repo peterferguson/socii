@@ -9,6 +9,7 @@ import React, { useEffect, useState, useCallback } from "react"
 import { 
   SelectGroupModal,
   SelectInvestActionModal,
+  SelectOrderTypeModal,
 } from "./InvestButtonModals/index"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
@@ -45,7 +46,7 @@ const Modals = {
   // shareInformation: { Component: StockSharingModalDynamic },
   chooseGroup: { Component: SelectGroupModal },
   investAction: { Component: SelectInvestActionModal },
-  // orderType: { Component: SelectOrderTypeModalDynamic },
+  orderType: { Component: SelectOrderTypeModal },
   // limitOrder: { Component: OrderModalDynamic },
   // shareOrder: { Component: OrderModalDynamic },
   // cashOrder: { Component: OrderModalDynamic },
@@ -93,9 +94,6 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
       Modals[
         String(typeof state.value === "object" ? state.value["active"] : state.value)
       ]?.Component
-console.log("modcont -----", ModalContents);
-console.log("state -----", state);
-console.log("state val -----", state.value); 
 
   // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
