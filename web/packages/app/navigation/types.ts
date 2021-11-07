@@ -13,7 +13,7 @@ type StocksStackParams = {
   categoryScreen: { category: string }
 }
 
-type EnterStackParams = { enterScreen: undefined }
+type EnterStackParams = { enterScreen: undefined; onboardingScreen: undefined }
 type ChatStackParams = { channelListScreen: undefined }
 type ChannelStackParams = {
   channel: { channelId: string }

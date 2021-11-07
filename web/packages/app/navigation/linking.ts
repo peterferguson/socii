@@ -65,6 +65,7 @@ const stocksStackPaths = makeType({
 
 const enterStackPaths = makeType({
   enter: makeEnterStackPath("enterScreen"),
+  onboarding: makeEnterStackPath("onboardingScreen"),
 })
 
 const tabPaths = makeType({
@@ -86,8 +87,8 @@ const linking: Props = {
     screens: {
       [tabPaths.enterTab]: {
         path: "",
-        initialRouteName: enterStackPaths.enter,
-        screens: { [enterStackPaths.enter]: "" },
+        initialRouteName: enterStackPaths.onboarding,
+        screens: { [enterStackPaths.enter]: "enter", [enterStackPaths.onboarding]: "" },
       },
       [tabPaths.groupsTab]: {
         initialRouteName: groupStackPaths.groups,
