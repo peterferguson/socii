@@ -11,6 +11,7 @@ import {
   SelectInvestActionModal,
   SelectOrderTypeModal,
   ReturnToLastScreenModal,
+  StockSharingModal,
 } from "./InvestButtonModals/index"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
@@ -44,7 +45,7 @@ interface IInvestButtonProps {
 
 const Modals = {
   returnToLastScreen: { Component: ReturnToLastScreenModal, Header:"You're back!" },
-  // shareInformation: { Component: StockSharingModalDynamic },
+  shareInformation: { Component: StockSharingModal, Header:"What would you like to share?" },
   chooseGroup: { Component: SelectGroupModal, Header:"Select a group to invest with:" },
   investAction: { Component: SelectInvestActionModal, Header:"Select an action:" },
   orderType: { Component: SelectOrderTypeModal, Header:"Select an order type:" },
@@ -99,8 +100,8 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
 
     // const ModalContents =
     //   Modals[
-    //     "investAction"
-    //   ]?.Component
+    //     "shareInformation"
+    //   ]
     const ModalContents =
       Modals[
         String(typeof state.value === "object" ? state.value["active"] : state.value)

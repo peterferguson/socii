@@ -6,20 +6,15 @@ import { Actions } from "./Actions"
 
 import tw from "../../lib/tailwind"
 
-const SelectInvestActionModal = ({ state, send }) => {
+const SelectInvestActionModal = ({ symbol, state, send }) => {
   console.log("in select actionnnnnnnnn");
 
   const [actionSelected, setActionSelected] = useState(null)
 
   const setSelectedAction = (action) => {
-    console.log("settingssss,", action);
-    console.log("settingssss,", action.name);
-    console.log("settingssss,", action.actionName);
-  
-    
-    setActionSelected(action.name)
-    send("CHOOSE_BUY")
-  }
+    setActionSelected(`Share ${symbol} with a group`)
+    send("CHOOSE_SHARE")
+  } 
 
   
   // const setSelectedGroup = (group) => {
@@ -31,15 +26,15 @@ const SelectInvestActionModal = ({ state, send }) => {
 
   return (
     <View style={tw`inline-block w-full overflow-y-scroll align-middle`}>
-      <Text style={tw`text-lg text-center font-bold text-brand pb-2`}>Select an action:</Text>
-      <View style={tw`items-center`}>
+      <View style={tw`items-center`}> 
         {/** TODO Add a loader here  */}
-        {Actions("T")?.map((action)=>(
+        {Actions(symbol)?.map((action)=>(
+          
           <Pressable 
             style={tw`inline-block w-4/5 max-w-lg p-2 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
             onPress={setSelectedAction}
           >
-                      
+                    
               <Text style={tw`text-xl leading-none text-brand-black`}>{action.name}</Text>
               <Text  style={tw`text-sm leading-none text-gray-500`}>{action.description}</Text>            
             

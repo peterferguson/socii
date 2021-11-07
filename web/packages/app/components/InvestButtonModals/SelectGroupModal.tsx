@@ -39,13 +39,12 @@ const SelectGroupModal = ({ state, send }) => {
   }, [userGroups])
 
   return (
-    <View style={tw`inline-block w-full overflow-y-scroll align-middle`}>
-      <Text style={tw`text-lg text-center font-bold text-brand pb-2`}>Select a group to invest with:</Text>
+    <View style={tw`w-full overflow-y-scroll align-middle`}>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
         {groups?.map((group)=>(
           <Pressable 
-            style={tw`inline-block w-4/5 max-w-lg p-4 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
+            style={tw`w-4/5 p-4 my-2 overflow-y-scroll text-left bg-white shadow-md  transform rounded-2xl`}
             onPress={setSelectedGroup}
           >
             <View >           

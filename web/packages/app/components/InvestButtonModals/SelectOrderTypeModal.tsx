@@ -5,8 +5,7 @@ import { View, Text, Pressable } from "react-native"
 import tw from "../../lib/tailwind"
 import { OrderTypes } from "./OrderTypes"
 
-const SelectOrderTypeModal = ({ state, send }) => {
-  console.log("in select ordertyeeeeee");
+const SelectOrderTypeModal = ({ symbol, state, send }) => {
 
   const [orderTypeSelected, setOrderTypeSelected] = useState(null)
 
@@ -17,10 +16,9 @@ const SelectOrderTypeModal = ({ state, send }) => {
 
   return (
     <View style={tw`inline-block w-full overflow-y-scroll align-middle`}>
-      <Text style={tw`text-lg text-center font-bold text-brand pb-2`}>Select an order type:</Text>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
-        {OrderTypes("T", state.context.side)?.map((orderType)=>(
+        {OrderTypes(symbol, state.context.side)?.map((orderType)=>(
           <Pressable 
             style={tw`inline-block w-4/5 max-w-lg p-4 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
             onPress={setSelectedOrderType}
