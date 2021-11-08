@@ -1,6 +1,6 @@
 import { ChannelScreen, ThreadScreen } from "app/screens/chat/index"
-// import OnboardingScreen from "app/screens/onboarding"
-import PinAuthenticationScreen from "app/screens/pin"
+import OnboardingScreen from "app/screens/onboarding"
+// import PinAuthenticationScreen from "app/screens/pin"
 import React from "react"
 import HeaderContainer from "app/components/Headers/HeaderContainer"
 import { useStream } from "app/hooks"
@@ -20,7 +20,7 @@ export const RootNavigator = (props: NextNavigationProps) => {
       {!onboardingComplete ? (
         <RootStack.Screen
           name="onboarding"
-          component={PinAuthenticationScreen}
+          component={OnboardingScreen}
           options={{ headerShown: false }}
         />
       ) : (
