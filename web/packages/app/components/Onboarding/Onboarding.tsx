@@ -94,15 +94,7 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
   const { width } = useWindowDimensions()
   return (
     <CenteredColumn style={tw.style(``, { flex: 1, width })}>
-      {item.Component && (
-        <>
-          {item.id.includes("onboarding-logo-screen") ? (
-            <item.Component height={width} width={width * 0.9} />
-          ) : (
-            <item.Component height={width} width={width * 0.9} />
-          )}
-        </>
-      )}
+      {item.Component && <item.Component height={width} width={width * 0.9} />}
       <CenteredColumn style={tw`mt-12`}>
         <HeaderText
           text={item.title}
@@ -121,20 +113,6 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 const Onboarding = () => {
   const { width } = useWindowDimensions()
   const slidesRef = useRef<FlatList>()
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  useEffect(() => console.log(currentIndex), [currentIndex])
-
-  const viewabilityConfigCallbackPairs = useRef([
-    {
-      viewabiliyConfig: { viewAreaCoveragePercentThreshold: 50 },
-      onViewableItemsChanged: ({ viewableItems, changed }) => {
-        console.log("Visible items are", viewableItems)
-        console.log("Changed in this iteration", changed)
-        setCurrentIndex(viewableItems[0].index)
-      },
-    },
-  ])
 
   const scrollX = useSharedValue(0)
 
@@ -142,16 +120,18 @@ const Onboarding = () => {
     scrollX.value = withSpring(e.contentOffset.x)
   })
 
+  const currentIndex = useDerivedValue(() => scrollX.value / width, [scrollX])
+
   const progress = useDerivedValue(
-    () => ((scrollX.value / width) * 100) / (onboardingData.length - 1),
-    [scrollX]
+    () => (currentIndex.value * 100) / (onboardingData.length - 1),
+    [currentIndex]
   )
 
   const scrollToNext = useCallback(() => {
-    currentIndex < onboardingData.length - 1
-      ? slidesRef.current.scrollToIndex({ index: currentIndex + 1 })
+    currentIndex.value < onboardingData.length - 1
+      ? slidesRef.current.scrollToIndex({ index: Math.floor(currentIndex.value) + 1 })
       : console.log("done")
-  }, [currentIndex])
+  }, [currentIndex.value])
 
   return (
     <CenteredColumn
@@ -175,7 +155,6 @@ const Onboarding = () => {
           bounces={false}
           ref={slidesRef}
           scrollEventThrottle={32}
-          viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         />
         <CenteredRow style={tw.style(`mx-8 mb-8 justify-end`, { flex: 1 })}>
           <NextButton progress={progress} scrollToNext={scrollToNext} />
