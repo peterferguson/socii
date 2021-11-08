@@ -1,15 +1,17 @@
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
-import { useRef, useState, useCallback, useEffect } from "react"
+import * as Updates from "expo-updates"
+import { useCallback, useRef, useState } from "react"
 import {
   FlatList,
+  Platform,
+  Pressable,
   Text,
   useWindowDimensions,
   View,
-  Pressable,
-  Platform,
 } from "react-native"
 import Animated, {
+  runOnJS,
   useAnimatedScrollHandler,
   useDerivedValue,
   useSharedValue,
@@ -19,14 +21,7 @@ import { SvgProps } from "react-native-svg"
 import { CenteredRow, Socii } from ".."
 import { CenteredColumn } from "../Centered"
 import HeaderText from "../Text/HeaderText"
-import * as Updates from "expo-updates"
-import {
-  AddFriends,
-  ManageChats,
-  PeopleSearch,
-  PublicDiscussion,
-  Revenue,
-} from "./assets"
+import { AddFriends, PublicDiscussion, Revenue } from "./assets"
 import NextButton from "./NextButton"
 import Paginator from "./Paginator"
 
@@ -59,35 +54,35 @@ const onboardingData: OnboardingItemData[] = [
     },
   },
   {
-    id: "onboarding-screen-1",
-    title: "A new way to learn investing!",
-    description: "A totally new social investing experience!",
-    Component: props => <Revenue {...props} />,
-  },
-  {
-    id: "onboarding-screen-2",
-    title: "",
-    description: "This is a description of the onboarding screen.",
-    Component: props => <PublicDiscussion {...props} />,
-  },
-  {
-    id: "onboarding-screen-3",
-    title: "Welcome to the app!",
-    description: "This is a description of the onboarding screen.",
-    Component: props => <PeopleSearch {...props} />,
-  },
-  {
-    id: "onboarding-screen-4",
-    title: "Welcome to socii!",
-    description: "A totally new social investing experience!",
-    Component: props => <ManageChats {...props} />,
-  },
-  {
     id: "onboarding-screen-5",
     title: "Add Friends",
     description: "Create a group by simply adding friends to a chat!",
     Component: props => <AddFriends {...props} />,
   },
+  {
+    id: "onboarding-screen-2",
+    title: "Discuss hot stocks & crypto",
+    description: "This is a description of the onboarding screen.",
+    Component: props => <PublicDiscussion {...props} />,
+  },
+  {
+    id: "onboarding-screen-1",
+    title: "A new way to learn investing!",
+    description: "A totally new social investing experience!",
+    Component: props => <Revenue {...props} />,
+  },
+  // {
+  //   id: "onboarding-screen-3",
+  //   title: "Welcome to the app!",
+  //   description: "This is a description of the onboarding screen.",
+  //   Component: props => <PeopleSearch {...props} />,
+  // },
+  // {
+  //   id: "onboarding-screen-4",
+  //   title: "Welcome to socii!",
+  //   description: "A totally new social investing experience!",
+  //   Component: props => <ManageChats {...props} />,
+  // },
 ]
 
 const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
@@ -115,6 +110,7 @@ const Onboarding = () => {
   const slidesRef = useRef<FlatList>()
 
   const scrollX = useSharedValue(0)
+  const [progressAnimationComplete, setProgressAnimationComplete] = useState(false)
 
   const scrollHandler = useAnimatedScrollHandler(e => {
     scrollX.value = withSpring(e.contentOffset.x)
@@ -122,8 +118,25 @@ const Onboarding = () => {
 
   const currentIndex = useDerivedValue(() => scrollX.value / width, [scrollX])
 
+  const progressAnimationCompleted = useCallback(
+    () => setProgressAnimationComplete(true),
+    []
+  )
+  const progressAnimationNotCompleted = useCallback(
+    () => setProgressAnimationComplete(false),
+    []
+  )
+
   const progress = useDerivedValue(
-    () => (currentIndex.value * 100) / (onboardingData.length - 1),
+    () =>
+      withSpring(
+        (currentIndex.value * 100) / (onboardingData.length - 1),
+        {},
+        isFinished =>
+          isFinished && currentIndex.value === onboardingData.length - 1
+            ? runOnJS(progressAnimationCompleted)()
+            : runOnJS(progressAnimationNotCompleted)()
+      ),
     [currentIndex]
   )
 
@@ -157,7 +170,11 @@ const Onboarding = () => {
           scrollEventThrottle={32}
         />
         <CenteredRow style={tw.style(`mx-8 mb-8 justify-end`, { flex: 1 })}>
-          <NextButton progress={progress} scrollToNext={scrollToNext} />
+          <NextButton
+            progress={progress}
+            progressAnimationComplete={progressAnimationComplete}
+            scrollToNext={scrollToNext}
+          />
         </CenteredRow>
       </View>
     </CenteredColumn>

@@ -1,8 +1,12 @@
+import LoginWithApple from "app/components/LoginWithApple"
+import { LoginWithGoogle } from "app/components/LoginWithGoogle"
 import tw from "app/lib/tailwind"
-import { View, TouchableOpacity } from "react-native"
-import Animated, { useAnimatedProps } from "react-native-reanimated"
 import { ArrowRight } from "iconsax-react-native"
-import { Svg, G, Circle } from "react-native-svg"
+import { MotiView } from "moti"
+import React from "react"
+import { TouchableOpacity, View } from "react-native"
+import Animated, { useAnimatedProps } from "react-native-reanimated"
+import { Circle, G, Svg } from "react-native-svg"
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
@@ -14,15 +18,18 @@ const circumference = 2 * Math.PI * radius
 
 const NextButton = ({
   progress,
+  progressAnimationComplete,
   scrollToNext,
 }: {
   progress: Animated.SharedValue<number>
+  progressAnimationComplete: boolean
   scrollToNext: () => void
 }) => {
   const progressAnimation = useAnimatedProps(() => ({
     strokeDashoffset: circumference - (circumference * progress.value) / 100,
   }))
-  return (
+
+  return !progressAnimationComplete ? (
     <View>
       <Svg width={BUTTON_SIZE} height={BUTTON_SIZE}>
         <G rotation={"-90"} origin={center}>
@@ -52,6 +59,14 @@ const NextButton = ({
         <ArrowRight size="32" color={tw.color("brand")} />
       </TouchableOpacity>
     </View>
+  ) : (
+    <MotiView
+      style={tw`flex flex-col w-full items-center justify-center rounded-full mx-auto`}
+      from={{ opacity: 0, width: 0, translateX: "100%" }}
+      animate={{ opacity: 1, width: "100%", translateX: "0%" }}
+    >
+      {LoginWithApple ? <LoginWithApple /> : <LoginWithGoogle />}
+    </MotiView>
   )
 }
 

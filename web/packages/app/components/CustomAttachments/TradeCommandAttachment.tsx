@@ -1,5 +1,5 @@
 import { useTickerPrice } from "../../hooks/useTickerPrice"
-import { tradeSubmission } from "../../lib/firebase/functions"
+import { tradeSubmission } from "../../lib/firebase/function"
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { useChatContext, useMessageContext } from "stream-chat-expo"
