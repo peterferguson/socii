@@ -12,6 +12,7 @@ import {
   SelectOrderTypeModal,
   ReturnToLastScreenModal,
   StockSharingModal,
+  OrderModal,
 } from "./InvestButtonModals/index"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
@@ -49,7 +50,7 @@ const Modals = {
   chooseGroup: { Component: SelectGroupModal, Header:"Select a group to invest with:" },
   investAction: { Component: SelectInvestActionModal, Header:"Select an action:" },
   orderType: { Component: SelectOrderTypeModal, Header:"Select an order type:" },
-  // limitOrder: { Component: OrderModalDynamic },
+  limitOrder: { Component: OrderModal, Header:"Place your order:" },
   // shareOrder: { Component: OrderModalDynamic },
   // cashOrder: { Component: OrderModalDynamic },
 }
@@ -100,7 +101,7 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
 
     // const ModalContents =
     //   Modals[
-    //     "shareInformation"
+    //     "limitOrder"
     //   ]
     const ModalContents =
       Modals[
