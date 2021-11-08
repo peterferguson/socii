@@ -1,7 +1,14 @@
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
 import { useRef, useState, useCallback, useEffect } from "react"
-import { FlatList, Text, useWindowDimensions, View } from "react-native"
+import {
+  FlatList,
+  Text,
+  useWindowDimensions,
+  View,
+  Pressable,
+  Platform,
+} from "react-native"
 import Animated, {
   useAnimatedScrollHandler,
   useDerivedValue,
@@ -12,6 +19,7 @@ import { SvgProps } from "react-native-svg"
 import { CenteredRow, Socii } from ".."
 import { CenteredColumn } from "../Centered"
 import HeaderText from "../Text/HeaderText"
+import * as Updates from "expo-updates"
 import {
   AddFriends,
   ManageChats,
@@ -32,10 +40,23 @@ interface OnboardingItemData {
 
 const onboardingData: OnboardingItemData[] = [
   {
-    id: "onboarding-screen-0",
+    id: "onboarding-logo-screen",
     title: "Welcome to Roundtable!",
     description: "A totally new social investing experience!",
-    Component: props => <Socii {...props} height={200} width={200} />,
+    Component: props => {
+      function onReloadPress() {
+        if (Platform.OS === "web") {
+          location.reload()
+        } else {
+          Updates.reloadAsync()
+        }
+      }
+      return (
+        <Pressable onPress={onReloadPress}>
+          <Socii {...props} height={155} width={155} />
+        </Pressable>
+      )
+    },
   },
   {
     id: "onboarding-screen-1",
@@ -73,7 +94,15 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
   const { width } = useWindowDimensions()
   return (
     <CenteredColumn style={tw.style(``, { flex: 1, width })}>
-      {item.Component && <item.Component height={width} width={width * 0.9} />}
+      {item.Component && (
+        <>
+          {item.id.includes("onboarding-logo-screen") ? (
+            <item.Component height={width} width={width * 0.9} />
+          ) : (
+            <item.Component height={width} width={width * 0.9} />
+          )}
+        </>
+      )}
       <CenteredColumn style={tw`mt-12`}>
         <HeaderText
           text={item.title}
