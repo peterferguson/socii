@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import type { UserFilters, UserResponse } from "stream-chat"
-import { useStream } from "."
+import { useStream } from "./useStream"
 
 export type PaginatedUsers = {
   clearText: () => void

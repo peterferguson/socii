@@ -14,7 +14,8 @@ import { ReText, Vector } from "react-native-redash"
 import tw from "../lib/tailwind"
 import { GraphData, SIZE } from "../utils/buildGraph"
 import { shadowStyle } from "../utils/shadowStyle"
-import { AssetLogo, TimeLabel } from "./"
+import AssetLogo from "./AssetLogo"
+import TimeLabel from "./TimeLabel"
 
 // dayjs.extend(calendar)
 

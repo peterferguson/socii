@@ -8,7 +8,9 @@ import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import { useIexPrice } from "../hooks/useIexPrice"
 import { shadowStyle } from "../utils/shadowStyle"
-import { CardDonutChart, ChatWithGroupFooter, DonutSector } from "./"
+import { ChatWithGroupFooter } from "./ChatWithGroup"
+import { DonutSector } from "./DonutChart"
+import CardDonutChart from "./CardDonutChart"
 import { Holding, IGroupColumnCard } from "./GroupColumnCard"
 
 export default ({ groupName, style }: IGroupColumnCard) => {

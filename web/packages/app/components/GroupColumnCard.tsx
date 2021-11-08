@@ -7,7 +7,10 @@ import { getHoldingData } from "../lib/firebase/db/getHoldingData"
 import tw from "../lib/tailwind"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
-import { CardDonutChart, DonutSector, StockCard, TextDivider } from "./"
+import CardDonutChart from "./CardDonutChart"
+import { DonutSector } from "./DonutChart"
+import StockCard from "./StockCard"
+import TextDivider from "./TextDivider"
 export interface IGroupColumnCard {
   groupName: string
   style?: any

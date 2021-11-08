@@ -1,5 +1,5 @@
 import { usePaginatedUsers } from "../hooks/usePaginatedUsers"
-import { SearchUsersContext } from "./searchUsersContext"
+import { SearchUsersContext } from "./SearchUsersContext"
 
 export const SearchUsersProvider: React.FC<{
   value?: SearchUsersContext
