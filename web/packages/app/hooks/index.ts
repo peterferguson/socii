@@ -1,5 +1,7 @@
 export { useAssetPrice } from "./useAssetPrice"
 export { useAuth } from "./useAuth"
+export { useBlockBackButton } from "./useBlockBackButton"
+export { useDimensions } from "./useDimensions"
 export { useElementSize } from "./useElementSize"
 export { useEventListener } from "./useEventListener"
 export { useHasMounted } from "./useHasMounted"

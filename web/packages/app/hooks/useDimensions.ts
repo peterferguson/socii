@@ -15,7 +15,7 @@ const deviceDimensions = {
   },
 }
 
-export default function useDimensions() {
+export const useDimensions = () => {
   const { height, scale, width } = useWindowDimensions()
   return {
     height,

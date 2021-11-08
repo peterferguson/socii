@@ -1,2 +1,2 @@
-export * from "./HeaderText"
-export * from "./TruncatedText"
+export { default as HeaderText } from "./HeaderText"
+export { default as TruncatedText } from "./TruncatedText"

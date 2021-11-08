@@ -1,12 +1,16 @@
 // ! Taken directly from https://github.com/rainbow-me/rainbow/blob/733373ff33975fc0d2e2ad00db6d3b868da4ff4b/src/handlers/localstorage/common.js
-/*global storage*/
-import { toLower } from "lodash"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import Storage from "react-native-storage"
 import logger from "../../utils/logger"
 
-const defaultVersion = "0.1.0"
+const storage = new Storage({
+  defaultExpires: null,
+  // enableCache: ReactNative.Platform.OS === "ios",
+  size: 10000,
+  storageBackend: AsyncStorage,
+})
 
-export const getKey = (prefix, accountAddress, network) =>
-  `${prefix}-${toLower(accountAddress)}-${toLower(network)}`
+const defaultVersion = "0.1.0"
 
 /**
  * @desc save to storage
@@ -17,13 +21,10 @@ export const getKey = (prefix, accountAddress, network) =>
 export const saveLocal = async (key = "", data = {}, version = defaultVersion) => {
   try {
     data.storageVersion = version
-    await storage.save({
-      data,
-      expires: null,
-      key,
-    })
+    console.log("saveLocal", key, data)
+    await storage.save({ data, expires: null, key })
   } catch (error) {
-    logger.log("Storage: error saving to local for key", key)
+    logger.log("Storage: error saving", data, "to local for key", key)
   }
 }
 
@@ -34,11 +35,7 @@ export const saveLocal = async (key = "", data = {}, version = defaultVersion) =
  */
 export const getLocal = async (key = "", version = defaultVersion) => {
   try {
-    const result = await storage.load({
-      autoSync: false,
-      key,
-      syncInBackground: false,
-    })
+    const result = await storage.load({ autoSync: false, key, syncInBackground: false })
     if (result && result.storageVersion === version) {
       return result
     }
@@ -73,28 +70,3 @@ export const getGlobal = async (key, emptyState = [], version = defaultVersion) 
 
 export const saveGlobal = (key, data, version = defaultVersion) =>
   saveLocal(key, { data }, version)
-
-export const getAccountLocal = async (
-  prefix,
-  accountAddress,
-  network,
-  emptyState = [],
-  version = defaultVersion
-) => {
-  const key = getKey(prefix, accountAddress, network)
-  const result = await getLocal(key, version)
-  return result ? result.data : emptyState
-}
-
-export const saveAccountLocal = (
-  prefix,
-  data,
-  accountAddress,
-  network,
-  version = defaultVersion
-) => saveLocal(getKey(prefix, accountAddress, network), { data }, version)
-
-export const removeAccountLocal = (prefix, accountAddress, network) => {
-  const key = getKey(prefix, accountAddress, network)
-  removeLocal(key)
-}
