@@ -18,9 +18,7 @@ const KeyboardButton = ({ children, ...props }) => {
       //   scaleTo={1.6}
       //   transformOrigin={[0.5, 0.5 + 8 / keyHeight]}
     >
-      <CenteredRow style={{ height: keyHeight, transform: { scale: 0.5 }, width: 80 }}>
-        {children}
-      </CenteredRow>
+      <CenteredRow style={{ height: keyHeight, width: 80 }}>{children}</CenteredRow>
     </TouchableOpacity>
   )
 }
