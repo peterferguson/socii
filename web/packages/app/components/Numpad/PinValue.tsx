@@ -17,11 +17,13 @@ const FilledValue = ({ children = null, ...props }) => (
   </View>
 )
 
+const fillColor = tw.color("brand")
+
 const EmptyValue = ({ active, children = null, ...props }) => (
   <View
     style={{
       borderWidth: 2,
-      borderColor: active ? tw.color("brand") : tw.color("gray-300"),
+      borderColor: active ? fillColor : tw.color("gray-300"),
       ...pinValueBaseStyle,
     }}
     {...props}
@@ -31,38 +33,27 @@ const EmptyValue = ({ active, children = null, ...props }) => (
 )
 
 const PinValue = ({ translateX, value, ...props }) => {
-  const filledColor = tw.color("brand")
   return (
     <View {...props}>
       <Animated.View
         style={{
           flexDirection: "row",
-          transform: [{ translateX }],
+          transform: [{ translateX: translateX ? translateX : 0 }],
         }}
       >
-        {value && value.length ? (
-          <FilledValue backgroundColor={filledColor} />
-        ) : (
-          <EmptyValue active={value.length === 0} />
-        )}
-        {value && value.length > 1 ? (
-          <FilledValue backgroundColor={filledColor} />
-        ) : (
-          <EmptyValue active={value.length === 1} />
-        )}
-        {value && value.length > 2 ? (
-          <FilledValue backgroundColor={filledColor} />
-        ) : (
-          <EmptyValue active={value.length === 2} />
-        )}
-        {value && value.length > 3 ? (
-          <FilledValue backgroundColor={filledColor} />
-        ) : (
-          <EmptyValue active={value.length === 3} />
-        )}
+        {[0, 1, 2, 3].map(i => (
+          <PinDot key={i} index={i} value={value} />
+        ))}
       </Animated.View>
     </View>
   )
 }
+
+const PinDot = ({ value, index }) =>
+  value && value.length > index ? (
+    <FilledValue backgroundColor={fillColor} />
+  ) : (
+    <EmptyValue active={value.length === index} />
+  )
 
 export default React.memo(PinValue)

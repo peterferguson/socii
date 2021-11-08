@@ -20,8 +20,7 @@ const defaultVersion = "0.1.0"
  */
 export const saveLocal = async (key = "", data = {}, version = defaultVersion) => {
   try {
-    data.storageVersion = version
-    console.log("saveLocal", key, data)
+    data["storageVersion"] = version
     await storage.save({ data, expires: null, key })
   } catch (error) {
     logger.log("Storage: error saving", data, "to local for key", key)
@@ -36,9 +35,8 @@ export const saveLocal = async (key = "", data = {}, version = defaultVersion) =
 export const getLocal = async (key = "", version = defaultVersion) => {
   try {
     const result = await storage.load({ autoSync: false, key, syncInBackground: false })
-    if (result && result.storageVersion === version) {
-      return result
-    }
+    if (result && result.storageVersion === version) return result
+
     if (result) {
       removeLocal(key)
       return null

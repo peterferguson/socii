@@ -15,7 +15,7 @@
     "module": "esnext",
     "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "handlers/localstorage/globalSettings.hs", "handlers/localstorage/globalSettings.js", "handlers/localstorage/common.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.json"
 }
