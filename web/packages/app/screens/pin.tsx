@@ -15,8 +15,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Alert, View } from "react-native"
 import Animated from "react-native-reanimated"
 
-import AsyncStorage from "@react-native-async-storage/async-storage"
-
 const MAX_ATTEMPTS = 10
 const TIMELOCK_INTERVAL_MINUTES = 5
 
@@ -160,17 +158,6 @@ const PinAuthenticationScreen = ({ navigation, route }) => {
     },
     [actionType, attemptsLeft, goBack, initialPin, onShake]
   )
-
-  useEffect(() => {
-    AsyncStorage.getAllKeys((_, keys) => {
-      AsyncStorage.multiGet(keys, (_, stores) => {
-        stores.map((_, i, store) => {
-          console.log({ [store[i][0]]: store[i][1] })
-          return true
-        })
-      })
-    })
-  }, [])
 
   return (
     <CenteredColumn

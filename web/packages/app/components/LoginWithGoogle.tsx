@@ -1,23 +1,56 @@
 import { useGoogleSignInPopUp } from "app/hooks/useGoogleSignInPopUp"
 import React from "react"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, Text } from "react-native"
 import tw from "../lib/tailwind"
+import { CenteredRow } from "./Centered"
 import Google from "./Logos/Google"
 
-export const LoginWithGoogle = () => {
+export enum GoogleButtonType {
+  /**
+   * "Sign in with Google"
+   */
+  SIGN_IN = 0,
+  /**
+   * "Continue with Google"
+   */
+  CONTINUE = 1,
+  /**
+   * "Sign up with Google"
+   */
+  SIGN_UP = 2,
+}
+
+const buttonTypeToText = (buttonType: GoogleButtonType) => {
+  switch (buttonType) {
+    case GoogleButtonType.SIGN_IN:
+      return "Sign in with Google"
+    case GoogleButtonType.CONTINUE:
+      return "Continue with Google"
+    case GoogleButtonType.SIGN_UP:
+      return "Sign up with Google"
+  }
+}
+
+export const LoginWithGoogle: React.FC<{ buttonType: GoogleButtonType }> = ({
+  buttonType,
+}) => {
   const signinWithGoogle = useGoogleSignInPopUp()
 
   return (
     <Pressable
-      style={tw`w-8/12 p-1 border border-gray-200 rounded-full`}
+      style={tw.style(`w-11/12 p-0.5 px-6 border border-black rounded-full`, {
+        borderWidth: 0.5,
+        width: 250,
+        height: 50,
+      })}
       onPress={() => signinWithGoogle()}
     >
-      <View style={tw`pl-3 p-2 flex-row items-center w-full rounded-full`}>
-        <Google {...tw`mr-3 w-5 h-5"`} />
-        <Text style={tw`text-xs font-poppins-300 text-brand-black`}>
-          Connect with Google
+      <CenteredRow style={tw`py-2 px-2`}>
+        <Google {...tw`mr-2 w-3 h-3"`} />
+        <Text style={tw`text-lg font-poppins-500 text-brand-black`}>
+          {buttonTypeToText(buttonType)}
         </Text>
-      </View>
+      </CenteredRow>
     </Pressable>
   )
 }

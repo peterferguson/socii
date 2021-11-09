@@ -1,17 +1,21 @@
 import { ChannelScreen, ThreadScreen } from "app/screens/chat/index"
-// import OnboardingScreen from "app/screens/onboarding"
-import PinAuthenticationScreen from "app/screens/pin"
-import React from "react"
+import OnboardingScreen from "app/screens/onboarding"
+// import PinAuthenticationScreen from "app/screens/pin"
+import { useState, useEffect } from "react"
 import HeaderContainer from "app/components/Headers/HeaderContainer"
 import { useStream } from "app/hooks"
 import { headerScreenOptions } from "app/utils/headerScreenOptions"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
 import { NextNavigationProps } from "../types"
 import { RootStack } from "./types"
+import { getOnboardingComplete } from "app/handlers/localstorage/onboarding"
 
 export const RootNavigator = (props: NextNavigationProps) => {
   const { clientReady } = useStream()
-  const [onboardingComplete, setOnboardingComplete] = React.useState(false)
+  const [onboardingComplete, setOnboardingComplete] = useState(true)
+  useEffect(() => {
+    getOnboardingComplete().then(setOnboardingComplete)
+  }, [])
   return (
     <RootStack.Navigator
       initialRouteName={onboardingComplete ? "withBottomBar" : "onboarding"}
@@ -20,8 +24,8 @@ export const RootNavigator = (props: NextNavigationProps) => {
       {!onboardingComplete ? (
         <RootStack.Screen
           name="onboarding"
-          component={PinAuthenticationScreen}
-          // component={OnboardingScreen}
+          // component={PinAuthenticationScreen}
+          component={OnboardingScreen}
           options={{ headerShown: false }}
         />
       ) : (

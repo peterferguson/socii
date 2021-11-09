@@ -1,7 +1,9 @@
+import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
 import * as Updates from "expo-updates"
-import { useCallback, useRef, useState } from "react"
+import { saveOnboardingComplete } from "app/handlers/localstorage/onboarding"
+import { useCallback, useRef, useState, useEffect } from "react"
 import {
   FlatList,
   Platform,
@@ -24,6 +26,7 @@ import HeaderText from "../Text/HeaderText"
 import { AddFriends, PublicDiscussion, Revenue } from "./assets"
 import NextButton from "./NextButton"
 import Paginator from "./Paginator"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 interface OnboardingItemData {
   id: string
@@ -68,7 +71,7 @@ const onboardingData: OnboardingItemData[] = [
   {
     id: "onboarding-screen-1",
     title: "A new way to learn investing!",
-    description: "A totally new social investing experience!",
+    description: "",
     Component: props => <Revenue {...props} />,
   },
   // {
@@ -106,6 +109,7 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 }
 
 const Onboarding = () => {
+  const { user } = useAuth()
   const { width } = useWindowDimensions()
   const slidesRef = useRef<FlatList>()
 
@@ -132,19 +136,23 @@ const Onboarding = () => {
       withSpring(
         (currentIndex.value * 100) / (onboardingData.length - 1),
         {},
-        isFinished =>
+        isFinished => {
           isFinished && currentIndex.value === onboardingData.length - 1
             ? runOnJS(progressAnimationCompleted)()
             : runOnJS(progressAnimationNotCompleted)()
+        }
       ),
     [currentIndex]
   )
 
   const scrollToNext = useCallback(() => {
-    currentIndex.value < onboardingData.length - 1
-      ? slidesRef.current.scrollToIndex({ index: Math.floor(currentIndex.value) + 1 })
-      : console.log("done")
+    currentIndex.value < onboardingData.length - 1 &&
+      slidesRef.current.scrollToIndex({ index: Math.floor(currentIndex.value) + 1 })
   }, [currentIndex.value])
+
+  useEffect(() => {
+    user?.email ? saveOnboardingComplete(!!user?.email) : saveOnboardingComplete(false)
+  }, [user?.email])
 
   return (
     <CenteredColumn

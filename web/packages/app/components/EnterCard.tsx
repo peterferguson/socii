@@ -1,10 +1,9 @@
-import Logo from "./Logos/SociiText"
 import React from "react"
 import { Text, View } from "react-native"
 import tw from "../lib/tailwind"
-import { LoginWithGoogle } from "./LoginWithGoogle"
 import { CenteredColumn } from "./Centered"
-import LoginWithApple from "./LoginWithApple"
+import { LoginOptions, LoginOptionsButtonType } from "./LoginOptions"
+import Logo from "./Logos/SociiText"
 
 const EnterCard = () => (
   <View style={tw`absolute z-10 w-full max-w-md p-10 bg-white rounded-xl`}>
@@ -17,9 +16,7 @@ const EnterCard = () => (
         Please link your google account
       </Text>
     </CenteredColumn>
-    <CenteredColumn style={tw`rounded-full mx-auto`}>
-      {LoginWithApple ? <LoginWithApple /> : <LoginWithGoogle />}
-    </CenteredColumn>
+    <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
   </View>
 )
 

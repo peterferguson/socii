@@ -1,5 +1,4 @@
-import LoginWithApple from "app/components/LoginWithApple"
-import { LoginWithGoogle } from "app/components/LoginWithGoogle"
+import { LoginOptions, LoginOptionsButtonType } from "app/components/LoginOptions"
 import tw from "app/lib/tailwind"
 import { ArrowRight } from "iconsax-react-native"
 import { MotiView } from "moti"
@@ -61,11 +60,11 @@ const NextButton = ({
     </View>
   ) : (
     <MotiView
-      style={tw`flex flex-col w-full items-center justify-center rounded-full mx-auto`}
+      style={tw`flex flex-col w-full -mt-6 items-center justify-center rounded-full mx-auto`}
       from={{ opacity: 0, width: 0, translateX: "100%" }}
       animate={{ opacity: 1, width: "100%", translateX: "0%" }}
     >
-      {LoginWithApple ? <LoginWithApple /> : <LoginWithGoogle />}
+      <LoginOptions buttonType={LoginOptionsButtonType.SIGN_UP} />
     </MotiView>
   )
 }
