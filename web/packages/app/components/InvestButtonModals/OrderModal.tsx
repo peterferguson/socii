@@ -1,15 +1,14 @@
-import { useTickerPrice } from "../../hooks/useTickerPrice"
-import { useAuth } from "../../hooks/useAuth"
-import { tradeSubmission } from "../../lib/firebase/client/functions"
-import { Price } from "../../models/Price"
-import { dateAsNumeric } from "../../utils/dateAsNumeric"
-import tw from "../../lib/tailwind"
 import router from "next/router"
-import React, { useState, useEffect } from "react"
-import { View, Text } from "react-native"
+import React, { useEffect, useState } from "react"
+import { Text, View } from "react-native"
+import { useAuth } from "../../hooks/useAuth"
+import { useTickerPrice } from "../../hooks/useTickerPrice"
+import { getTickerISIN } from "../../lib/firebase/db"
+import { tradeSubmission } from "../../lib/firebase/function"
+import tw from "../../lib/tailwind"
+import { Price } from "../../models/Price"
 import { LargeNumberInput } from "../LargeNumberInput"
 import PriceHeading from "../PriceHeading"
-import { getTickerISIN } from "../../lib/firebase/client/db"
 import TickerLogo from "../TickerLogo"
 
 const OrderModal = ({ symbol, state, send }) => {
@@ -20,9 +19,9 @@ const OrderModal = ({ symbol, state, send }) => {
 
   const [isin, setIsin] = useState(null)
 
-  useEffect(()=>{
-    getTickerISIN(symbol).then((r)=>setIsin(r))
-  },[])
+  useEffect(() => {
+    getTickerISIN(symbol).then(r => setIsin(r))
+  }, [])
 
   const handleSubmission = async () => {
     const tradeArgs = {
@@ -42,7 +41,7 @@ const OrderModal = ({ symbol, state, send }) => {
       submittedFromCallable: true,
     }
     // await toast.promise(
-      tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side }),
+    tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side }),
       {
         loading: "submitting...",
         success: () => {
@@ -54,15 +53,11 @@ const OrderModal = ({ symbol, state, send }) => {
     // )
   }
   return (
-    <View style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl`}>
+    <View
+      style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl`}
+    >
+      <PriceHeader isin={isin} symbol={symbol} shortName={"shortName"} price={price} />
 
-        <PriceHeader
-          isin={isin}
-          symbol={symbol}
-          shortName={"shortName"}
-          price={price}
-        />
-     
       <LargeNumberInput
         amount={amount}
         orderType={state.context.orderType}
@@ -70,7 +65,9 @@ const OrderModal = ({ symbol, state, send }) => {
         side={state.context.side}
         symbol={symbol}
       />
-      <View style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}>
+      <View
+        style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}
+      >
         {/* <button
           type="button"
           className={tw(
@@ -103,17 +100,19 @@ const PriceHeader = ({
 }) => (
   <View style={tw`items-center inline-block w-full overflow-y-scroll `}>
     <View style={tw`flex items-center justify-center `}>
-    <TickerLogo height="64" width="64" isin={isin} tickerSymbol={symbol} /> 
-    <View style={tw`flex flex-col text-center`}>
-      <Text style={tw`mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white`}>
-        {shortName}
-      </Text>
-      <PriceHeading
-        tickerSymbol={symbol}
-        className="mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white"
-        initialPrice={price}
-      />
-    </View>
+      <TickerLogo height="64" width="64" isin={isin} tickerSymbol={symbol} />
+      <View style={tw`flex flex-col text-center`}>
+        <Text
+          style={tw`mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white`}
+        >
+          {shortName}
+        </Text>
+        <PriceHeading
+          tickerSymbol={symbol}
+          className="mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white"
+          initialPrice={price}
+        />
+      </View>
     </View>
   </View>
 )

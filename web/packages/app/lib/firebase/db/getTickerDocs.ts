@@ -6,7 +6,7 @@ import {
   QueryDocumentSnapshot,
   where,
 } from "firebase/firestore"
-import { db } from "../../."
+import { db } from ".."
 
 export const getTickerDocs = async (
   tickers: string[]

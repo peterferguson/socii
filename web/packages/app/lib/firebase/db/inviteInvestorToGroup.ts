@@ -1,5 +1,5 @@
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
-import { db } from "../.."
+import { db } from ".."
 
 /*
  * Add a user with `uid` to a group with name `groupName` in the `investors` subcollection.

@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
 export const getGroupDocsByName = async (groupNames: string[]) =>
   await getDocs(

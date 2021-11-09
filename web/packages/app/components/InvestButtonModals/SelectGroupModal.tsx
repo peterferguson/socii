@@ -2,7 +2,7 @@
 import { useAuth } from "../../hooks/useAuth"
 import React, { useState, useEffect } from "react"
 import { View, Text, Pressable } from "react-native"
-import { getGroupDocsByName } from "../../lib/firebase/client/db/getGroupDocsByName"
+import { getGroupDocsByName } from "../../lib/firebase/db/getGroupDocsByName"
 import tw from "../../lib/tailwind"
 
 const SelectGroupModal = ({ state, send }) => {

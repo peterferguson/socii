@@ -1,7 +1,7 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
-interface AssetData {
+interface TickerData {
   ISIN: string
   alpaca: {
     class: string
@@ -14,7 +14,7 @@ interface AssetData {
     name: string
     shortable: boolean
     status: string
-    asset: string
+    symbol: string
     tradable: boolean
     assetType: string
   }
@@ -36,17 +36,17 @@ interface AssetData {
 }
 
 /*
- * Gets the data from asset/{isin} document by querying the `tickerSymbol`
+ * Gets the data from ticker/{isin} document by querying the `tickerSymbol`
  * @param  {string} tickerSymbol
  */
 
-export const getAssetData = async (tickerSymbol: string): Promise<AssetData> => {
-  const assetQuery = query(
+export const getTickerData = async (tickerSymbol: string): Promise<TickerData> => {
+  const tickerQuery = query(
     collection(db, "tickers"),
     where("alpaca.symbol", "==", tickerSymbol),
     limit(1)
   )
-  const assetDoc = (await getDocs(assetQuery)).docs?.pop()
-  // TODO: Create a model of the asset data
-  return { ...assetDoc?.data(), ISIN: assetDoc?.id } as AssetData
+  const tickerDoc = (await getDocs(tickerQuery)).docs?.pop()
+  // TODO: Create a model of the ticker data
+  return { ...tickerDoc?.data(), ISIN: tickerDoc?.id } as TickerData
 }

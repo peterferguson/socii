@@ -6,7 +6,7 @@ import {
   where,
 } from "firebase/firestore"
 import React from "react"
-import { db } from "../.."
+import { db } from ".."
 
 /*
  * Gets all data for `auth` object from users/{uid}

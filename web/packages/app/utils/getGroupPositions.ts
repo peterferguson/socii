@@ -1,4 +1,4 @@
-import { firestore } from "@lib/firebase/client/db/index"
+import { db } from "app/lib/firebase/index"
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "./getYahooTimeseries"
 
@@ -12,7 +12,7 @@ interface Position {
 
 export const getGroupPositions = async (groupName: string) => {
   const holdingsRef = query(
-    collection(firestore, `groups/${groupName}/holdings`),
+    collection(db, `groups/${groupName}/holdings`),
     where("qty", "!=", 0)
   )
   const holdings = await getDocs(holdingsRef)

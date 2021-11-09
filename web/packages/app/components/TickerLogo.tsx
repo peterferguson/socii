@@ -1,5 +1,5 @@
 import { usePrevious } from "../hooks/usePrevious"
-import { getTickerData } from "../lib/firebase/client/db/getTickerData"
+import { getTickerData } from "../lib/firebase/db/getTickerData"
 import { logoUrl } from "../utils/logoUrl"
 import Link from "next/link"
 import router from "next/router"

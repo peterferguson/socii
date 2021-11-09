@@ -1,5 +1,5 @@
 import { doc, DocumentData, DocumentSnapshot, onSnapshot } from "firebase/firestore"
-import { db } from "../.."
+import { db } from ".."
 
 // TODO: Create typing for Trade object
 export const subscribeToTrade = (

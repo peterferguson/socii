@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../../hooks/useAuth"
-import { getTickerISIN, setAgreesToTrade } from "../../lib/firebase/client/db"
+import { getTickerISIN, setAgreesToTrade } from "../../lib/firebase/db"
 import MMLButton from "./MML/Button"
 import {
   // useChannelStateContext,
