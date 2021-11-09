@@ -1,16 +1,15 @@
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
-import { Pressable, Text, View } from "react-native"
-import { useAuth } from "../hooks"
+import { Dimensions, Pressable, Text, View } from "react-native"
+import { useIexPrice } from "../hooks/useIexPrice"
 import { getGroupCashBalance } from "../lib/firebase/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/db/getHoldingData"
 import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
-import { useIexPrice } from "../hooks/useIexPrice"
 import { shadowStyle } from "../utils/shadowStyle"
+import CardDonutChart from "./CardDonutChart"
 import { ChatWithGroupFooter } from "./ChatWithGroup"
 import { DonutSector } from "./DonutChart"
-import CardDonutChart from "./CardDonutChart"
 import { Holding, IGroupColumnCard } from "./GroupColumnCard"
 
 export default ({ groupName, style }: IGroupColumnCard) => {
@@ -95,7 +94,7 @@ export default ({ groupName, style }: IGroupColumnCard) => {
   return (
     <View style={tw`flex-col mb-4`}>
       <View
-        style={tw.style("flex-col items-center p-4 bg-white rounded-t-2xl min-h-max", {
+        style={tw.style("flex-col items-center p-4 bg-white rounded-t-2xl", {
           ...shadowStyle("lg"),
           ...style,
           borderTopLeftRadius: 16,
@@ -123,14 +122,18 @@ export default ({ groupName, style }: IGroupColumnCard) => {
   )
 }
 
+const { width: WINDOW_WIDTH } = Dimensions.get("window")
+
+const CARD_WIDTH = WINDOW_WIDTH - 64
+
 const CardTitle = ({ title, style }) => {
   const router = useRouter()
   return (
     <View
-      style={tw.style(
-        "w-88 sm:w-full items-center justify-center flex-col m-0 sm:m-4 mb-2 sm:mb-4",
-        style
-      )}
+      style={tw.style("items-center justify-center flex-col m-0 sm:m-4 mb-2 sm:mb-4", {
+        ...style,
+        width: CARD_WIDTH,
+      })}
     >
       <Pressable onPress={() => router.push(`/groups/${title}`)}>
         <Text
