@@ -19,10 +19,7 @@ import ModalHeader from "../../components/ModalHeader"
 import { SearchUsersProvider } from "../../contexts"
 import { useAuth, useSearchUsers, useStream } from "../../hooks"
 import { useModal } from "../../hooks/useModal"
-import {
-  getUserWithUsername,
-  inviteInvestorToGroup,
-} from "../../lib/firebase/db"
+import { getUserWithUsername, inviteInvestorToGroup } from "../../lib/firebase/db"
 import tw from "../../lib/tailwind"
 import { createParam } from "../../navigation/use-param"
 
@@ -127,8 +124,8 @@ const AddSelectedMembersToGroup: React.FC<{
 
   const handlePress = useCallback(() => {
     addMembersToGroup(groupName, selectedUsers)
-    reset()
     Keyboard.dismiss()
+    reset()
     handleDismiss()
   }, [groupName, selectedUsers, reset])
 

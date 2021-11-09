@@ -95,10 +95,10 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
       <CenteredColumn style={tw`mt-12`}>
         <HeaderText
           text={item.title}
-          style={tw`font-poppins-700 text-3xl text-center text-brand-black dark:text-brand-white`}
+          style={tw`font-poppins-700 text-3xl text-center text-brand-black dark:text-white`}
         />
         <Text
-          style={tw`font-poppins-300 mt-2 text-center text-brand-black dark:text-brand-white`}
+          style={tw`font-poppins-300 mt-2 text-center text-brand-black dark:text-white`}
         >
           {item.description}
         </Text>

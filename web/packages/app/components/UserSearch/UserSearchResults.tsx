@@ -10,7 +10,7 @@ const UserSearchResults: React.FC = () => {
   const { loading, loadMore, searchText, results } = useSearchUsers()
 
   return (
-    <View style={tw`bg-brand-white dark:bg-brand-black w-full flex-1`}>
+    <View style={tw`bg-white dark:bg-brand-black w-full flex-1`}>
       {loading && (!results || results.length === 0) && searchText === "" ? (
         <CenteredColumn>
           <LoadingIndicator />

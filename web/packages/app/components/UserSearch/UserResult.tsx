@@ -16,7 +16,7 @@ const UserResult: React.FC<{ user: UserResponse }> = ({ user }) => {
       />
       <CenteredColumn style={tw`items-start`}>
         <Text
-          style={tw`pl-4 text-brand-black dark:text-brand-white capitalize font-poppins-600`}
+          style={tw`pl-4 text-brand-black dark:text-white capitalize font-poppins-600`}
         >
           {user.name}
         </Text>

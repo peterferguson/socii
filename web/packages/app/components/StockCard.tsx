@@ -4,7 +4,7 @@ import tw from "../lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import AssetLogo from "./AssetLogo"
 import { Holding } from "./GroupColumnCard"
-import { PriceWithChangeTag, PriceWithChangeTagSkeleton } from "./PriceWithChangeTag"
+import PriceWithChangeTag, { PriceWithChangeTagSkeleton } from "./PriceWithChangeTag"
 import SkeletonCircle from "./SkeletonCircle"
 import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
@@ -53,6 +53,7 @@ const AssetLogoWithNameAndSymbolSkeleton = () => (
     </View>
   </View>
 )
+
 const AssetLogoWithNameAndSymbol = ({ symbol, isin, logoColor, shortName }) => {
   const router = useRouter()
   return (
@@ -60,13 +61,14 @@ const AssetLogoWithNameAndSymbol = ({ symbol, isin, logoColor, shortName }) => {
       style={tw.style(
         "flex-row items-center m-1 bg-white",
         "umami--click--stock-card",
-        `umami--click--${symbol}-stock-card`
+        `umami--click--${symbol}-stock-card`,
+        { flex: 4 }
       )}
     >
-      <Pressable onPress={() => router.push(`/stocks/${symbol}`)}>
+      <Pressable onPress={() => router.push(`/stocks/${symbol}`)} style={tw`p-1`}>
         <AssetLogo asset={symbol} isin={isin} height="40" width="40" />
       </Pressable>
-      <View style={tw`items-start my-1 pl-2 pr-4 min-w-[70px]`}>
+      <View style={tw`items-start my-1 pl-2`}>
         <Text
           style={tw.style(`text-base tracking-wider uppercase font-poppins-400`, {
             color: logoColor,
@@ -75,7 +77,9 @@ const AssetLogoWithNameAndSymbol = ({ symbol, isin, logoColor, shortName }) => {
           {symbol}
         </Text>
         <Text
-          style={tw`overflow-hidden font-poppins-200 tracking-wider uppercase text-brand-shade-darkest text-tiny`}
+          style={tw`font-poppins-200 tracking-wider uppercase text-brand-shade-darkest text-tiny`}
+          adjustsFontSizeToFit
+          numberOfLines={1}
         >
           {shortName}
         </Text>

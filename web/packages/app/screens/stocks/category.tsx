@@ -44,8 +44,8 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   }, [initialCards.restOfTickers])
 
   const defaultPrice = {
-    latestPrice: 0,
-    changePercent: -0.1,
+    latestPrice: 1110.1,
+    changePercent: -10.1,
     iexRealtimePrice: 0,
     latestUpdate: "9999-12-31",
     currency: "USD",
