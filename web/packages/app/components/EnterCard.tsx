@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { CenteredColumn } from "./Centered"
 import { LoginOptions, LoginOptionsButtonType } from "./LoginOptions"
 import Logo from "./Logos/SociiText"

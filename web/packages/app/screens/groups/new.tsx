@@ -1,7 +1,7 @@
 import React from "react"
 import { Platform, Button, Pressable, useWindowDimensions } from "react-native"
 import { View, Text, TextInput } from "react-native"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { useRouter } from "app/navigation/use-router"
 
 export default function NewGroupScreen() {

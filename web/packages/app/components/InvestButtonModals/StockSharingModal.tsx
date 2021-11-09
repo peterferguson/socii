@@ -1,11 +1,10 @@
-import { useStream } from "../../hooks/useStream"
-import { StreamClientContext } from "../../hooks/useStreamClient"
-import { alphaVantageQueryOptions } from "../../lib/constants"
-import { alphaVantageQuery } from "../../lib/firebase/client/functions/index"
-import tw from "../../lib/tailwind"
+import { useStream } from "app/hooks/useStream"
+import { StreamClientContext } from "app/hooks/useStreamClient"
+import { alphaVantageQuery } from "app/lib/firebase/function"
+import tw from "app/lib/tailwind"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
-import { View, Text, TextInput } from "react-native"
+import { Text, TextInput, View } from "react-native"
 // import MultiSelect from "../MultiSelect"
 import PriceInput from "../PriceInput"
 
@@ -66,7 +65,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
     }
   }
 
-  const sendMessageClickHandler = (_) => {
+  const sendMessageClickHandler = _ => {
     // toast.promise(sendStockInfo(), {
     //   loading: "sending...",
     //   success: () => {
@@ -76,26 +75,30 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
     //   },
     //   error: <b>Could not send info.</b>,
     // })
-    console.log("message click handler");
-    
+    console.log("message click handler")
   }
-console.log("tpppppp", targetPrice);
+  console.log("tpppppp", targetPrice)
 
   return (
     // TODO create style sheet for nicer code
-    <View style={tw`w-full p-4 overflow-scroll bg-white transition-all transform rounded-2xl`}>
+    <View
+      style={tw`w-full p-4 overflow-scroll bg-white transition-all transform rounded-2xl`}
+    >
       <View style={tw`text-lg py-1 font-medium text-gray-900 font-primary leading-6`}>
         {/* TODO fix this.. surely better way to style text */}
-        <Text style={tw`text-lg font-medium text-gray-900 font-primary leading-6`}>Tell 
-          <Text style={tw`font-bold text-brand`}> {selectedGroup || "Test"} </Text> 
-          <Text> about </Text> 
-          <Text style={tw`font-bold text-teal-300`}> {symbol}</Text> 
-        </Text>  
+        <Text style={tw`text-lg font-medium text-gray-900 font-primary leading-6`}>
+          Tell
+          <Text style={tw`font-bold text-brand`}> {selectedGroup || "Test"} </Text>
+          <Text> about </Text>
+          <Text style={tw`font-bold text-teal-300`}> {symbol}</Text>
+        </Text>
       </View>
 
       <View style={tw`mt-2`}>
         <View style={tw`text-sm text-gray-500 font-primary`}>
-          <Text style={tw`text-sm text-gray-500 font-primary`}>Select some data to tell your friends about!</Text>
+          <Text style={tw`text-sm text-gray-500 font-primary`}>
+            Select some data to tell your friends about!
+          </Text>
         </View>
         {/* <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
           items={alphaVantageQueryOptions}
@@ -104,7 +107,9 @@ console.log("tpppppp", targetPrice);
         /> */}
 
         <View>
-          <Text style={tw`text-sm text-gray-500 font-primary`}>Got a price in mind?</Text>
+          <Text style={tw`text-sm text-gray-500 font-primary`}>
+            Got a price in mind?
+          </Text>
         </View>
         <View style={tw`pb-2`}>
           <PriceInput
@@ -114,8 +119,10 @@ console.log("tpppppp", targetPrice);
           />
         </View>
 
-        <View >
-          <Text style={tw`text-sm py-1 text-gray-500 font-primary`}>Tell them your thoughts!</Text>
+        <View>
+          <Text style={tw`text-sm py-1 text-gray-500 font-primary`}>
+            Tell them your thoughts!
+          </Text>
         </View>
         <View style={tw`pt-2 mb-3`}>
           <TextInput
@@ -123,8 +130,7 @@ console.log("tpppppp", targetPrice);
             placeholder="I'm liking the look of..."
             style={tw`rounded-md border border-brand-black/30 p-4 w-full h-30`}
             textAlignVertical={"top"}
-          >
-          </TextInput>
+          ></TextInput>
           {/* <textarea
             style={tw(
               "relative w-full px-3 py-4 text-sm text-gray-600 placeholder-gray-300",

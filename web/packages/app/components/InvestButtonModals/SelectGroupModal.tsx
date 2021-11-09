@@ -1,21 +1,20 @@
-
-import { useAuth } from "../../hooks/useAuth"
+import { useAuth } from "app/hooks/useAuth"
 import React, { useState, useEffect } from "react"
 import { View, Text, Pressable } from "react-native"
-import { getGroupDocsByName } from "../../lib/firebase/db/getGroupDocsByName"
-import tw from "../../lib/tailwind"
+import { getGroupDocsByName } from "app/lib/firebase/db/getGroupDocsByName"
+import tw from "app/lib/tailwind"
 
 const SelectGroupModal = ({ state, send }) => {
-  console.log("in select groupppppp");
-  
+  console.log("in select groupppppp")
+
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
   const [groupSelected, setGroupSelected] = useState(null)
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = (group) => {
-    console.log(("sendinggroup"));
+  const setSelectedGroup = group => {
+    console.log("sendinggroup")
     setGroupSelected(group.name)
     send("SELECT_GROUP", { groupName: group.name })
   }
@@ -23,7 +22,7 @@ const SelectGroupModal = ({ state, send }) => {
   useEffect(() => {
     const getGroupData = async () => {
       setGroups(
-        (await getGroupDocsByName(userGroups)).docs.map((doc) => {
+        (await getGroupDocsByName(userGroups)).docs.map(doc => {
           const { groupName, groupType, privacyOption, groupDescription } = doc.data()
           return {
             name: groupName,
@@ -42,18 +41,17 @@ const SelectGroupModal = ({ state, send }) => {
     <View style={tw`w-full overflow-y-scroll align-middle`}>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
-        {groups?.map((group)=>(
-          <Pressable 
+        {groups?.map(group => (
+          <Pressable
             style={tw`w-4/5 p-4 my-2 overflow-y-scroll text-left bg-white shadow-md  transform rounded-2xl`}
             onPress={setSelectedGroup}
           >
-            <View >           
+            <View>
               <Text style={tw`text-xl`}>{group.name}</Text>
-              <Text>{group.groupType}</Text>            
+              <Text>{group.groupType}</Text>
             </View>
           </Pressable>
         ))}
-        
       </View>
     </View>
   )

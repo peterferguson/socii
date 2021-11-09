@@ -1,6 +1,6 @@
 import * as AppleAuthentication from "expo-apple-authentication"
 import React from "react"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { CenteredColumn } from "./Centered"
 import LoginWithApple from "./LoginWithApple"
 import { GoogleButtonType, LoginWithGoogle } from "./LoginWithGoogle"

@@ -1,4 +1,4 @@
-import { getTickerCategories } from "../lib/firebase/db/getTickerCategories"
+import { getTickerCategories } from "app/lib/firebase/db/getTickerCategories"
 
 export interface TickerCategory {
   shortName: string

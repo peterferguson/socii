@@ -1,6 +1,6 @@
 import React from "react"
 import { WaveIndicator } from "react-native-indicators"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { CenteredRow } from "./Centered"
 
 export default ({ color = "", isInteraction = false, size = 25, ...props }) => {

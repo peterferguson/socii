@@ -1,7 +1,7 @@
 import React from "react"
 import Feather from "@expo/vector-icons/build/Feather"
 import { pnlTextColor } from "../utils"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 const PnlArrow = ({ change, size }: { change: number; size?: number }) => {
   return (

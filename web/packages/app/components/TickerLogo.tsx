@@ -1,11 +1,11 @@
 import { usePrevious } from "../hooks/usePrevious"
-import { getTickerData } from "../lib/firebase/db/getTickerData"
+import { getTickerData } from "app/lib/firebase/db/getTickerData"
 import { logoUrl } from "../utils/logoUrl"
 import Link from "next/link"
 import router from "next/router"
 import React, { useEffect, useState } from "react"
 import { View, Text, Image } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 interface ITickerLogoProps {
   tickerSymbol: string
@@ -52,30 +52,29 @@ const TickerLogo: React.FC<ITickerLogoProps> = ({
     //     className={`relative flex items-center justify-center rounded-full ${className}`}
     //   >
     <View>
-        {logoSrc && !isError ? (
-          // <Image
-          //   source={logoSrc}
-          //   // style={tw`rounded-full`}
-          //   height={height || DEFAULT_HEIGHT_AND_WIDTH}
-          //   width={width || DEFAULT_HEIGHT_AND_WIDTH}
-          //   alt={`${tickerSymbol} logo`}
-          //   onClick={() => router.push(`/stocks/${tickerSymbol}`)}
-          //   onError={() => setIsError(true)}
-          // />
-          <View
+      {logoSrc && !isError ? (
+        // <Image
+        //   source={logoSrc}
+        //   // style={tw`rounded-full`}
+        //   height={height || DEFAULT_HEIGHT_AND_WIDTH}
+        //   width={width || DEFAULT_HEIGHT_AND_WIDTH}
+        //   alt={`${tickerSymbol} logo`}
+        //   onClick={() => router.push(`/stocks/${tickerSymbol}`)}
+        //   onError={() => setIsError(true)}
+        // />
+        <View
           style={tw`flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
         >
           <Text>{tickerSymbol} </Text>
         </View>
-        ) : (
-          <View
-            style={tw`flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
-          >
-            <Text>{tickerSymbol} </Text>
-          </View>
-        )}
-      </View>
-
+      ) : (
+        <View
+          style={tw`flex items-center justify-center font-semibold text-gray-500 bg-gray-50 rounded-full shadow-lg h-14 w-14 text-tiny ${className}`}
+        >
+          <Text>{tickerSymbol} </Text>
+        </View>
+      )}
+    </View>
   )
 }
 

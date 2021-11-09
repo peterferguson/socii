@@ -2,7 +2,7 @@ import React from "react"
 import { View } from "react-native"
 import Animated, { useDerivedValue } from "react-native-reanimated"
 import { ReText } from "react-native-redash"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 // - Modified from here ↓↓↓
 //  - https://github.com/rainbow-me/rainbow/blob/733373ff33975fc0d2e2ad00db6d3b868da4ff4b/src/components/expanded-state/chart/chart-data-labels/ChartDateLabel.js

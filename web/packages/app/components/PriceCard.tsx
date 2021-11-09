@@ -11,7 +11,7 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated"
 import { ReText, Vector } from "react-native-redash"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { GraphData, SIZE } from "../utils/buildGraph"
 import { shadowStyle } from "../utils/shadowStyle"
 import AssetLogo from "./AssetLogo"

@@ -2,7 +2,7 @@ import createStackNavigator from "app/navigation/create-stack-navigator"
 import { EnterStackParams } from "app/navigation/types"
 import React from "react"
 import Header from "../components/Headers/EnterHeader"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import EnterScreen from "../screens/enter"
 
 const EnterStack = createStackNavigator<EnterStackParams>()

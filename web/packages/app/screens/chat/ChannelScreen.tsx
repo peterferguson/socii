@@ -8,10 +8,10 @@ import {
   MessageList,
   useAttachmentPickerContext,
 } from "stream-chat-expo"
-import { CustomAttachment } from "../../components/CustomAttachments"
-import { useStream } from "../../hooks"
-import { ChannelScreenProps } from "../../navigation/types"
-import { useRouter } from "../../navigation/use-router"
+import { CustomAttachment } from "app/components/CustomAttachments"
+import { useStream } from "app/hooks"
+import { ChannelScreenProps } from "app/navigation/types"
+import { useRouter } from "app/navigation/use-router"
 import { streami18n } from "./ChannelList"
 
 const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {

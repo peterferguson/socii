@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react"
 import { getTickersStaticProps, TickersProps } from "../utils/getTickersStaticProps"
-import { getTickerDocs } from "../lib/firebase/db/getTickerDocs"
+import { getTickerDocs } from "app/lib/firebase/db/getTickerDocs"
 import { getTickerCategoryShortNames } from "../utils/getTickerCategoryShortNames"
 
 interface CategoryTickerProps extends TickersProps {

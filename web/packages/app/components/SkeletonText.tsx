@@ -1,5 +1,5 @@
 import { Skeleton } from "@motify/skeleton"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 const SkeletonText = ({ height, width }: { height: number; width: number }) => (
   <Skeleton

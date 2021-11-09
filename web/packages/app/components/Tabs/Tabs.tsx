@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { View, Dimensions } from "react-native"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { Tab } from "./Tab"
 import { TabHeader } from "./TabHeader"
 import { TabPanels } from "./TabPanels"

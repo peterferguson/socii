@@ -11,7 +11,7 @@ import { AuthProvider } from "../contexts/AuthProvider"
 import { StreamProvider } from "../contexts/StreamProvider"
 import { useDarkMode } from "../hooks/useDarkMode"
 import { useStreamChatTheme } from "../hooks/useStreamChatTheme"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 function LinkTo() {
   const linkTo = useLinkTo()

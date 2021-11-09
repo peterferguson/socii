@@ -1,7 +1,7 @@
 import { useGoogleSignInPopUp } from "app/hooks/useGoogleSignInPopUp"
 import React from "react"
 import { Pressable, Text } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { CenteredRow } from "./Centered"
 import Google from "./Logos/Google"
 

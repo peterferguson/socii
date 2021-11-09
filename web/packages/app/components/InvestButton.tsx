@@ -1,42 +1,28 @@
-import { useAuth } from "@hooks/useAuth"
-import { stockInvestButtonMachine } from "../lib/machines/stockInvestButtonMachine"
-import { Position } from "../../alpaca/models/Position"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useMachine } from "@xstate/react"
-import React, { useEffect, useState, useCallback } from "react"
-// import { InvestButtonModalContainerDynamic } from "./InvestButtonModalContainer"
-// import { OrderModalDynamic } from "./OrderModal"
-// import { ReturnToLastScreenModalDynamic } from "./ReturnToLastScreenModal"
-import { 
-  SelectGroupModal,
-  SelectInvestActionModal,
-  SelectOrderTypeModal,
-  ReturnToLastScreenModal,
-  StockSharingModal,
-  OrderModal,
-} from "./InvestButtonModals/index"
+import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
+import tw from "app/lib/tailwind"
+import React, { useCallback, useEffect, useState } from "react"
+import { Pressable, Text, View } from "react-native"
+import {
+  CenteredColumn, Modal
+} from "."
+import { Position } from "../../alpaca/models/Position"
+import { useModal } from "../hooks/useModal"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
 // import { SelectOrderTypeModalDynamic } from "./SelectOrderTypeModal"
 // import { StockSharingModalDynamic } from "./StockSharingModal"
 import { useRouter } from "../navigation/use-router"
-import { Pressable, View, Text } from "react-native"
 import { shadowStyle } from "../utils/shadowStyle"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { ModalHeader } from "./index"
-import { useModal } from "../hooks/useModal" 
-import tw from "../lib/tailwind"
-import { createParam } from "../navigation/use-param"
+// import { InvestButtonModalContainerDynamic } from "./InvestButtonModalContainer"
+// import { OrderModalDynamic } from "./OrderModal"
+// import { ReturnToLastScreenModalDynamic } from "./ReturnToLastScreenModal"
 import {
-  Button,
-  CenteredColumn,
-  ChatWithGroupButton,
-  GroupActivities,
-  GroupColumnCard,
-  LoadingIndicator,
-  Modal,
-  SelectedUsers,
-  UserSearchInput,
-  UserSearchResults,
-} from "."
+  OrderModal, ReturnToLastScreenModal, SelectGroupModal,
+  SelectInvestActionModal,
+  SelectOrderTypeModal, StockSharingModal
+} from "./InvestButtonModals/index"
 
 interface IInvestButtonProps {
   asset: any
@@ -45,17 +31,23 @@ interface IInvestButtonProps {
 }
 
 const Modals = {
-  returnToLastScreen: { Component: ReturnToLastScreenModal, Header:"You're back!" },
-  shareInformation: { Component: StockSharingModal, Header:"What would you like to share?" },
-  chooseGroup: { Component: SelectGroupModal, Header:"Select a group to invest with:" },
-  investAction: { Component: SelectInvestActionModal, Header:"Select an action:" },
-  orderType: { Component: SelectOrderTypeModal, Header:"Select an order type:" },
-  limitOrder: { Component: OrderModal, Header:"Place your order:" },
+  returnToLastScreen: { Component: ReturnToLastScreenModal, Header: "You're back!" },
+  shareInformation: {
+    Component: StockSharingModal,
+    Header: "What would you like to share?",
+  },
+  chooseGroup: {
+    Component: SelectGroupModal,
+    Header: "Select a group to invest with:",
+  },
+  investAction: { Component: SelectInvestActionModal, Header: "Select an action:" },
+  orderType: { Component: SelectOrderTypeModal, Header: "Select an order type:" },
+  limitOrder: { Component: OrderModal, Header: "Place your order:" },
   // shareOrder: { Component: OrderModalDynamic },
   // cashOrder: { Component: OrderModalDynamic },
 }
 
-const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
+const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
   const router = useRouter()
   //   const username = user ? user.username : ""
 
@@ -77,39 +69,38 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
   // - When the user navigates away from the page, we want to reset the state machine
   // TODO: Ensure this works on transitions of dynamic routes
   // TODO: If not may need to add usePrevious hook?
-    useEffect(() => {
-      send("RESET")
-    }, [symbol, send])
+  useEffect(() => {
+    send("RESET")
+  }, [symbol, send])
 
-    // TODO BUG Modal flickers when closed!
-    useEffect(()=>{
-      if(modalPosition ==-1 && open ) {
-        send("CLOSE") 
-        setOpen(false)
-        console.log("-----pos,", modalPosition);
-        
-      }
-    },[modalPosition])
+  // TODO BUG Modal flickers when closed!
+  useEffect(() => {
+    if (modalPosition == -1 && open) {
+      send("CLOSE")
+      setOpen(false)
+      console.log("-----pos,", modalPosition)
+    }
+  }, [modalPosition])
 
-    useEffect(() => {
-      setOpen(
-        Object.keys(Modals).includes(
-          String(typeof state.value === "object" ? state.value["active"] : state.value)
-        )
-      )
-    }, [state.value])
-
-    // const ModalContents =
-    //   Modals[
-    //     "limitOrder"
-    //   ]
-    const ModalContents =
-      Modals[
+  useEffect(() => {
+    setOpen(
+      Object.keys(Modals).includes(
         String(typeof state.value === "object" ? state.value["active"] : state.value)
-      ]
-    const ModalComponent = ModalContents?.Component
-    const ModalLabel = ModalContents?.Header
-    
+      )
+    )
+  }, [state.value])
+
+  // const ModalContents =
+  //   Modals[
+  //     "limitOrder"
+  //   ]
+  const ModalContents =
+    Modals[
+      String(typeof state.value === "object" ? state.value["active"] : state.value)
+    ]
+  const ModalComponent = ModalContents?.Component
+  const ModalLabel = ModalContents?.Header
+
   // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
     <View>
@@ -122,36 +113,33 @@ const InvestButton: React.FC<any> = ({logoColor, symbol }) => {
         }}
       >
         <View style={tw`flex-1 flex-row justify-center items-center`}>
-          <Text style={{ ...tw`text-4xl text-white` }}>Invest</Text> 
+          <Text style={{ ...tw`text-4xl text-white` }}>Invest</Text>
         </View>
       </Pressable>
 
-      {open && (
-        ModalComponent ? (
-        <Modal  
-          modalRef={modalRef}
-          snapToPositions={scrollPositions}
-          detach
-          onChange={handleSheetChanges}
-        >
-          <View style={tw`flex-1 items-center overflow-y-scroll`}>
-            <ModalHeader modalRef={modalRef} label={ModalLabel} />
-            <CenteredColumn
-              style={tw.style(`bg-white w-full pt-5`, {
-                height: scrollPositions[modalPosition],
-              })}
-            >
-              <ModalComponent symbol={symbol} state={state} send={send} />
-            </CenteredColumn>
-          </View>
-        </Modal>
-        ) : (
-          null
-        )
-      )}
+      {open &&
+        (ModalComponent ? (
+          <Modal
+            modalRef={modalRef}
+            snapToPositions={scrollPositions}
+            detach
+            onChange={handleSheetChanges}
+          >
+            <View style={tw`flex-1 items-center overflow-y-scroll`}>
+              <ModalHeader modalRef={modalRef} label={ModalLabel} />
+              <CenteredColumn
+                style={tw.style(`bg-white w-full pt-5`, {
+                  height: scrollPositions[modalPosition],
+                })}
+              >
+                <ModalComponent symbol={symbol} state={state} send={send} />
+              </CenteredColumn>
+            </View>
+          </Modal>
+        ) : null)}
     </View>
   )
-}  
+}
 // FIXME
 // ! Cannot get the text center alignment to work when using poppins fonts
 

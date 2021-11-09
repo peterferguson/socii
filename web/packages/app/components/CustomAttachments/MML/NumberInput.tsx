@@ -1,8 +1,8 @@
-import tw from "../../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { Text, View, TextInput } from "react-native"
 import React, { useEffect, useState } from "react"
 import Feather from "@expo/vector-icons/build/Feather"
-import { shadowStyle } from "../../../utils/shadowStyle"
+import { shadowStyle } from "app/utils/shadowStyle"
 
 interface INumberInputProps {
   value: number

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { View } from "react-native"
 import Svg, { G, Path } from "react-native-svg"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export interface DonutSector {
   symbol: string

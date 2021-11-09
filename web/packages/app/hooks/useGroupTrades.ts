@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import {
   getGroupTradeHistory,
   GroupTradeItem,
-} from "../lib/firebase/db/getGroupTradeHistory"
+} from "app/lib/firebase/db/getGroupTradeHistory"
 
 export const useGroupTrades = (groupName: string) => {
   const [groupTrades, setGroupTrades] = useState<GroupTradeItem[]>([])

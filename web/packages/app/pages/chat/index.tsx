@@ -2,9 +2,9 @@ import createStackNavigator from "app/navigation/create-stack-navigator"
 import { ChatStackParams } from "app/navigation/types"
 import { ChannelListScreen } from "app/screens/chat/index"
 import React from "react"
-import HeaderContainer from "../../components/Headers/HeaderContainer"
-import { useStream } from "../../hooks/useStream"
-import { headerScreenOptions } from "../../utils/headerScreenOptions"
+import HeaderContainer from "app/components/Headers/HeaderContainer"
+import { useStream } from "app/hooks/useStream"
+import { headerScreenOptions } from "app/utils/headerScreenOptions"
 
 export const ChatStack = createStackNavigator<ChatStackParams>()
 

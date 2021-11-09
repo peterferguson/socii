@@ -2,7 +2,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import Storage from "react-native-storage"
 import { Platform } from "react-native"
-import logger from "../../utils/logger"
+import logger from "app/utils/logger"
 import { DeviceEventEmitter } from "react-native"
 
 const storage = new Storage({

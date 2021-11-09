@@ -1,4 +1,4 @@
-import FirebaseUser from "../../../models/FirebaseUser"
+import FirebaseUser from "app/models/FirebaseUser"
 import { doc, onSnapshot } from "firebase/firestore"
 import React from "react"
 import { db } from "../index"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Image, Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { logoUrl } from "../utils/logoUrl"
 import { shadowStyle } from "../utils/shadowStyle"
 

@@ -2,7 +2,7 @@ import React from "react"
 import { Text, View } from "react-native"
 import { UserResponse } from "stream-chat"
 import { Avatar } from "stream-chat-expo"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { CenteredColumn } from "../Centered"
 
 const UserResult: React.FC<{ user: UserResponse }> = ({ user }) => {

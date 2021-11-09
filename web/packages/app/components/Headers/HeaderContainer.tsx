@@ -1,7 +1,7 @@
 import React from "react"
 import { Image, TouchableOpacity, View } from "react-native"
-import { useAuth } from "../../hooks/useAuth"
-import tw from "../../lib/tailwind"
+import { useAuth } from "app/hooks/useAuth"
+import tw from "app/lib/tailwind"
 import HeaderText from "../Text/HeaderText"
 
 const HeaderContainer = ({

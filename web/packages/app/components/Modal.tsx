@@ -1,7 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
 import { View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 // - This is intended to wrap a react navigation Navigator.
 export default ({

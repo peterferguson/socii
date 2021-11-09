@@ -1,8 +1,8 @@
-import { uncamelCase } from "../../utils/uncamelCase"
-import { useRouter } from "../../navigation/use-router"
+import { uncamelCase } from "app/utils/uncamelCase"
+import { useRouter } from "app/navigation/use-router"
 import { View, Text, Pressable, Image } from "react-native"
-import tw from "../../lib/tailwind"
-import { shadowStyle } from "../../utils/shadowStyle"
+import tw from "app/lib/tailwind"
+import { shadowStyle } from "app/utils/shadowStyle"
 
 const StockDisplayAttachment = ({ attachment }) => {
   const tickerSymbol = attachment?.name

@@ -4,7 +4,7 @@ import get from "lodash/get"
 import Animated, { spring } from "react-native-reanimated"
 import { useValues } from "react-native-redash/src/v1"
 import useDimensions from "../hooks/useDimensions"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import magicMemo from "../utils/magicMemo"
 
 const springTo = (node, toValue) =>

@@ -14,14 +14,14 @@ import {
   SelectedUsers,
   UserSearchInput,
   UserSearchResults,
-} from "../../components"
-import ModalHeader from "../../components/ModalHeader"
-import { SearchUsersProvider } from "../../contexts"
-import { useAuth, useSearchUsers, useStream } from "../../hooks"
-import { useModal } from "../../hooks/useModal"
-import { getUserWithUsername, inviteInvestorToGroup } from "../../lib/firebase/db"
-import tw from "../../lib/tailwind"
-import { createParam } from "../../navigation/use-param"
+} from "app/components"
+import ModalHeader from "app/components/ModalHeader"
+import { SearchUsersProvider } from "app/contexts"
+import { useAuth, useSearchUsers, useStream } from "app/hooks"
+import { useModal } from "app/hooks/useModal"
+import { getUserWithUsername, inviteInvestorToGroup } from "app/lib/firebase/db"
+import tw from "app/lib/tailwind"
+import { createParam } from "app/navigation/use-param"
 
 type Query = {
   id: string

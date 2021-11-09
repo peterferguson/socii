@@ -1,6 +1,6 @@
 import React from "react"
-import { useAuth } from "../../hooks/useAuth"
-import { userFirstName } from "../../utils/userFirstName"
+import { useAuth } from "app/hooks/useAuth"
+import { userFirstName } from "app/utils/userFirstName"
 import HeaderContainer from "./HeaderContainer"
 
 const EnterHeader = ({ headerTitle }: { headerTitle: string }) => {

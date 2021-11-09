@@ -1,5 +1,5 @@
 import { Dimensions } from "react-native"
-import { PeriodEnum } from "../../utils/getYahooTimeseries"
+import { PeriodEnum } from "app/utils/getYahooTimeseries"
 
 export type TabLabel = keyof typeof PeriodEnum
 

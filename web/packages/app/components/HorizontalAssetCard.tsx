@@ -1,6 +1,6 @@
 import { Price } from "../models/Price"
 import { pnlBackgroundColor } from "../utils/pnlBackgroundColor"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import React from "react"
 import AssetLogo from "./AssetLogo"
 import { View, Text, Pressable } from "react-native"

@@ -3,7 +3,7 @@ import Constants from "expo-constants"
 import * as WebBrowser from "expo-web-browser"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import React from "react"
-import { auth } from "../lib/firebase"
+import { auth } from "app/lib/firebase"
 
 // - The unauthenticated user flow is handled differently than before.
 // - We will now have a separate stack navigator for the unauthenticated user flow.

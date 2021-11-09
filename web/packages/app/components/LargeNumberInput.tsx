@@ -1,6 +1,6 @@
 import React from "react"
 import { View, TextInput, Text } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export const LargeNumberInput = ({ amount, orderType, setAmount, side, symbol }) => {
   const inputTextSize =
@@ -25,7 +25,9 @@ export const LargeNumberInput = ({ amount, orderType, setAmount, side, symbol })
     <View style={tw`umami--click--invest-button-order-modal-large-number-input`}>
       <View style={tw`relative flex items-center justify-center mt-1 rounded-md`}>
         {orderType !== "shares" && (
-          <View style={tw`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none`}>
+          <View
+            style={tw`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none`}
+          >
             <Text style={tw`text-3xl text-brand animate-none`}>$</Text>
           </View>
         )}
@@ -34,8 +36,7 @@ export const LargeNumberInput = ({ amount, orderType, setAmount, side, symbol })
             !amount ? "focus:animate-pulse" : ""
           } focus:appearance-none focus:border-none focus:ring-0`}
           placeholder="0"
-          // onChange={(e) => setAmount(parseFloat(e.target.value))}        
-          
+          // onChange={(e) => setAmount(parseFloat(e.target.value))}
         />
         {orderType === "limit" && (
           <View style={tw`absolute text-sm text-gray-400 bottom-1 front-primary`}>
@@ -43,7 +44,9 @@ export const LargeNumberInput = ({ amount, orderType, setAmount, side, symbol })
           </View>
         )}
         {orderType === "shares" && (
-          <View style={tw`absolute flex items-center pointer-events-none bottom-12 thin:inset-y-0 thin:-right-4`}>
+          <View
+            style={tw`absolute flex items-center pointer-events-none bottom-12 thin:inset-y-0 thin:-right-4`}
+          >
             {/* <Text style={tw`text-4xl text-brand`}>{symbol}</Text> */}
             <Text style={tw`${stockLabelSize} text-brand`}>{symbol}</Text>
           </View>

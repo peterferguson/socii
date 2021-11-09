@@ -2,7 +2,7 @@ import React from "react"
 import { SafeAreaView, View, Image, StyleSheet } from "react-native"
 import { EnterCard } from "../components"
 import { useAuth } from "../hooks/useAuth"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export default function EnterScreen() {
   const { user } = useAuth()

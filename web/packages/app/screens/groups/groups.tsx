@@ -1,8 +1,8 @@
 import React from "react"
 import { FlatList, View } from "react-native"
-import GroupSummaryCard from "../../components/GroupSummaryCard"
-import { useAuth } from "../../hooks/useAuth"
-import tw from "../../lib/tailwind"
+import GroupSummaryCard from "app/components/GroupSummaryCard"
+import { useAuth } from "app/hooks/useAuth"
+import tw from "app/lib/tailwind"
 
 const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()

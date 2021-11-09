@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
-import { useStream } from "../../hooks"
-import tw from "../../lib/tailwind"
-import { useRouter } from "../../navigation/use-router"
+import { useStream } from "app/hooks"
+import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
 import { GroupMemberProfilePhotos } from "../GroupMemberProfilePhotos"
 
 const ChatWithGroupHeader = ({ groupName }: { groupName: string }) => {

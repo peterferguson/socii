@@ -1,6 +1,6 @@
 import AttachmentCardContainer from "./AttachmentCardContainer"
 import LogoPriceCardHeader from "../LogoPriceCardHeader"
-import { Price } from "../../models/Price"
+import { Price } from "app/models/Price"
 
 interface IAttachmentCardWithLogoProps {
   assetSymbol: string

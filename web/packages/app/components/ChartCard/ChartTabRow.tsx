@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { BUTTON_WIDTH, TabLabel, tabs, WIDTH } from "./constants"
 
 export const ChartTabRow: React.FC<{

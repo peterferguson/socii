@@ -2,9 +2,9 @@ import React from "react"
 import { View } from "react-native"
 import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 import { HiShare } from "react-icons/hi"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 
-export const Actions = (tickerSymbol) => [
+export const Actions = tickerSymbol => [
   {
     icon: () => (
       <View style={tw`rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2`}>
@@ -33,7 +33,7 @@ export const Actions = (tickerSymbol) => [
   {
     icon: () => (
       <View style={tw`rounded-full bg-brand-light-secondary mr-1.5 sm:mr-2`}>
-        <HiShare style={tw`w-6 h-6 text-brand`}/>
+        <HiShare style={tw`w-6 h-6 text-brand`} />
       </View>
     ),
     name: `Share ${tickerSymbol} with a group`,

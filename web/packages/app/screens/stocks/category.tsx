@@ -1,15 +1,15 @@
 import type { CategoryScreenProps } from "app/navigation/types"
 import React, { useEffect, useRef, useState } from "react"
 import { ScrollView, View } from "react-native"
-//import { iexQuote } from "../../utils/iexQuote"
+//import { iexQuote } from "app/utils/iexQuote"
 // import { GetStaticPaths, GetStaticProps } from "next"
-import HorizontalAssetCard from "../../components/HorizontalAssetCard"
-import { useIntersectionObserver } from "../../hooks/useIntersectionObserver"
-import { getTickerDocs } from "../../lib/firebase/db/getTickerDocs"
-import { Price } from "../../models/Price"
-import { getCategoryData } from "../../utils/getCategoryData"
-import { getTickerProps } from "../../utils/getTickerProps"
-import { TickersProps } from "../../utils/getTickersStaticProps"
+import HorizontalAssetCard from "app/components/HorizontalAssetCard"
+import { useIntersectionObserver } from "app/hooks/useIntersectionObserver"
+import { getTickerDocs } from "app/lib/firebase/db/getTickerDocs"
+import { Price } from "app/models/Price"
+import { getCategoryData } from "app/utils/getCategoryData"
+import { getTickerProps } from "app/utils/getTickerProps"
+import { TickersProps } from "app/utils/getTickersStaticProps"
 
 interface CategoryTickerProps extends TickersProps {
   category: string

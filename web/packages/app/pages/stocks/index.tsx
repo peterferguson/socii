@@ -14,8 +14,8 @@ import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import CategoryScreen from "app/screens/stocks/category"
 import React from "react"
-import HeaderContainer from "../../components/Headers/HeaderContainer"
-import tw from "../../lib/tailwind"
+import HeaderContainer from "app/components/Headers/HeaderContainer"
+import tw from "app/lib/tailwind"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
