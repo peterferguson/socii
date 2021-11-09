@@ -140,14 +140,10 @@ const Onboarding = () => {
       withSpring(
         (currentIndex.value * 100) / (onboardingData.length - 1),
         {},
-        isFinished => {
-          console.log("isFinished", isFinished)
-          console.log("progressAnimationComplete", progressAnimationComplete)
-          console.log("condition", currentIndex.value)
+        isFinished =>
           isFinished && currentIndex.value === onboardingData.length - 1
             ? runOnJS(progressAnimationCompleted)()
             : runOnJS(progressAnimationNotCompleted)()
-        }
       ),
     [currentIndex]
   )

@@ -22,23 +22,19 @@ export const RootNavigator = (props: NextNavigationProps) => {
 
   useEffect(() => {
     let timer
+
     const checkIfOnboardingComplete = async ([isCompleted]) => {
-      console.log("checking if onboarding complete", isCompleted)
       setOnboardingComplete(isCompleted ?? false)
-      if (onboardingCompleted) {
-        timer = setTimeout(() => router.push("/stocks"), 500)
-      } else {
-        timer = setTimeout(() => router.push("/onboarding"), 500)
-      }
+      timer = setTimeout(
+        () => router.push(onboardingCompleted ? "/stocks" : "/onboarding"),
+        500
+      )
     }
 
     const onboardingListener = onboardingCompletedListener(checkIfOnboardingComplete)
+
     return () => {
-      try {
-        clearTimeout(timer)
-      } catch (e) {
-        console.log(e)
-      }
+      clearTimeout(timer)
       onboardingListener.remove()
     }
   }, [])
@@ -51,7 +47,6 @@ export const RootNavigator = (props: NextNavigationProps) => {
       {!onboardingCompleted ? (
         <RootStack.Screen
           name="onboarding"
-          // component={PinAuthenticationScreen}
           component={OnboardingScreen}
           options={{ headerShown: false }}
         />

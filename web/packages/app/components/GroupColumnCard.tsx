@@ -5,6 +5,7 @@ import { useAuth } from "../hooks"
 import { getGroupCashBalance } from "../lib/firebase/db/getGroupCashBalance"
 import { getHoldingData } from "../lib/firebase/db/getHoldingData"
 import tw from "../lib/tailwind"
+import logger from "../utils/logger"
 import { iexQuote } from "../utils/iexQuote"
 import { shadowStyle } from "../utils/shadowStyle"
 import CardDonutChart from "./CardDonutChart"
@@ -85,7 +86,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
                   [symbol]: iexRealtimePrice || latestPrice,
                 }))
             } catch (e) {
-              console.error(e)
+              logger.error(e)
             }
           })
         )

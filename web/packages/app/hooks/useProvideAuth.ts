@@ -37,8 +37,6 @@ export const useProvideAuth = () => {
 
   const signinWithProvider = async (provider: AuthProvider, redirect: string = "") => {
     setLoading(true)
-    console.log("signinWithProvider provider", provider)
-    console.log("signinWithProvider redirect", redirect)
     try {
       const { user: rawUser } = await signInWithPopup(auth, provider)
       handleUser(rawUser)
@@ -70,7 +68,6 @@ export const useProvideAuth = () => {
 
   const signout = async (redirect: string = "/", showToast: boolean = true) => {
     await signOut(auth)
-    console.log("signed out")
     const firstname = userFirstName(user?.displayName)
     // toast.dismiss()
     // showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
