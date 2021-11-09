@@ -1,9 +1,10 @@
+import { saveOnboardingComplete } from "app/handlers/localstorage/onboarding"
 import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
 import * as Updates from "expo-updates"
-import { saveOnboardingComplete } from "app/handlers/localstorage/onboarding"
-import { useCallback, useRef, useState, useEffect } from "react"
+import { useRouter } from "app/navigation/use-router"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   FlatList,
   Platform,
@@ -26,7 +27,6 @@ import HeaderText from "../Text/HeaderText"
 import { AddFriends, PublicDiscussion, Revenue } from "./assets"
 import NextButton from "./NextButton"
 import Paginator from "./Paginator"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 
 interface OnboardingItemData {
   id: string
@@ -110,6 +110,7 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 
 const Onboarding = () => {
   const { user } = useAuth()
+  const router = useRouter()
   const { width } = useWindowDimensions()
   const slidesRef = useRef<FlatList>()
 
@@ -120,7 +121,10 @@ const Onboarding = () => {
     scrollX.value = withSpring(e.contentOffset.x)
   })
 
-  const currentIndex = useDerivedValue(() => scrollX.value / width, [scrollX])
+  const currentIndex = useDerivedValue(
+    () => Math.round(scrollX.value / width),
+    [scrollX]
+  )
 
   const progressAnimationCompleted = useCallback(
     () => setProgressAnimationComplete(true),
@@ -137,6 +141,9 @@ const Onboarding = () => {
         (currentIndex.value * 100) / (onboardingData.length - 1),
         {},
         isFinished => {
+          console.log("isFinished", isFinished)
+          console.log("progressAnimationComplete", progressAnimationComplete)
+          console.log("condition", currentIndex.value)
           isFinished && currentIndex.value === onboardingData.length - 1
             ? runOnJS(progressAnimationCompleted)()
             : runOnJS(progressAnimationNotCompleted)()
@@ -147,11 +154,14 @@ const Onboarding = () => {
 
   const scrollToNext = useCallback(() => {
     currentIndex.value < onboardingData.length - 1 &&
-      slidesRef.current.scrollToIndex({ index: Math.floor(currentIndex.value) + 1 })
+      slidesRef.current.scrollToIndex({ index: currentIndex.value + 1 })
   }, [currentIndex.value])
 
   useEffect(() => {
-    user?.email ? saveOnboardingComplete(!!user?.email) : saveOnboardingComplete(false)
+    if (user?.email) {
+      saveOnboardingComplete(!!user?.email)
+      router.push("/stocks")
+    } else saveOnboardingComplete(false)
   }, [user?.email])
 
   return (

@@ -2,6 +2,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import Storage from "react-native-storage"
 import logger from "../../utils/logger"
+import { DeviceEventEmitter } from "react-native"
 
 const storage = new Storage({
   defaultExpires: null,
@@ -22,6 +23,8 @@ export const saveLocal = async (key = "", data = {}, version = defaultVersion) =
   try {
     data["storageVersion"] = version
     await storage.save({ data, expires: null, key })
+    // - Emit event
+    DeviceEventEmitter.emit(`localstorage.${key}`, [data])
   } catch (error) {
     logger.log("Storage: error saving", data, "to local for key", key)
   }

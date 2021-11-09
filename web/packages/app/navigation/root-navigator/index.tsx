@@ -8,20 +8,47 @@ import { headerScreenOptions } from "app/utils/headerScreenOptions"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
 import { NextNavigationProps } from "../types"
 import { RootStack } from "./types"
-import { getOnboardingComplete } from "app/handlers/localstorage/onboarding"
+import {
+  getOnboardingComplete,
+  onboardingCompletedListener,
+} from "app/handlers/localstorage/onboarding"
+import { DeviceEventEmitter } from "react-native"
+import { useRouter } from "../use-router"
 
 export const RootNavigator = (props: NextNavigationProps) => {
   const { clientReady } = useStream()
-  const [onboardingComplete, setOnboardingComplete] = useState(true)
+  const router = useRouter()
+  const [onboardingCompleted, setOnboardingComplete] = useState(false)
+
   useEffect(() => {
-    getOnboardingComplete().then(setOnboardingComplete)
+    let timer
+    const checkIfOnboardingComplete = async ([isCompleted]) => {
+      console.log("checking if onboarding complete", isCompleted)
+      setOnboardingComplete(isCompleted ?? false)
+      if (onboardingCompleted) {
+        timer = setTimeout(() => router.push("/stocks"), 500)
+      } else {
+        timer = setTimeout(() => router.push("/onboarding"), 500)
+      }
+    }
+
+    const onboardingListener = onboardingCompletedListener(checkIfOnboardingComplete)
+    return () => {
+      try {
+        clearTimeout(timer)
+      } catch (e) {
+        console.log(e)
+      }
+      onboardingListener.remove()
+    }
   }, [])
+
   return (
     <RootStack.Navigator
-      initialRouteName={onboardingComplete ? "withBottomBar" : "onboarding"}
+      initialRouteName={onboardingCompleted ? "withBottomBar" : "onboarding"}
       screenOptions={{ headerShown: false, ...headerScreenOptions }}
     >
-      {!onboardingComplete ? (
+      {!onboardingCompleted ? (
         <RootStack.Screen
           name="onboarding"
           // component={PinAuthenticationScreen}
