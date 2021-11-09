@@ -1,7 +1,7 @@
 import { Add } from "iconsax-react-native"
 import React from "react"
 import { Pressable, Text, View } from "react-native"
-import { useModal } from "../hooks/useModal"
+import { useModal } from "app/hooks/useModal"
 import tw from "app/lib/tailwind"
 
 const ModalHeader = ({ modalRef, label }) => {

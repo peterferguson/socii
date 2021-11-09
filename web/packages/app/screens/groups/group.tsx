@@ -15,7 +15,7 @@ import {
   UserSearchInput,
   UserSearchResults,
 } from "app/components"
-import ModalHeader from "app/components/ModalHeader"
+import { ModalHeader } from "app/components/Modal"
 import { SearchUsersProvider } from "app/contexts"
 import { useAuth, useSearchUsers, useStream } from "app/hooks"
 import { useModal } from "app/hooks/useModal"
@@ -64,7 +64,6 @@ const AddGroupMemberModal: React.FC<{
     <Modal
       modalRef={modalRef}
       snapToPositions={scrollPositions}
-      detach
       onChange={handleSheetChanges}
     >
       <View style={tw`flex-1 items-center pt-2`}>

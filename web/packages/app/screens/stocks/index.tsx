@@ -1,6 +1,6 @@
 // import { useAuth } from "@hooks/useAuth"
 import React, { useEffect, useState } from "react"
-import { FlatList, ScrollView, Text, View } from "react-native"
+import { FlatList, ScrollView, Text, View, Pressable } from "react-native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
@@ -10,6 +10,10 @@ import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
+import Search from "app/components/Search/Search"
+
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useModal } from "app/hooks/useModal"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -32,9 +36,20 @@ export default function StocksScreen() {
   // @ts-ignore
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
 
+  const modalRef = React.useRef<BottomSheetModal>(null)
+
+  const { handlePresent } = useModal(modalRef)
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={tw`-mt-4`}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View>
+        <Pressable
+          onPress={() => handlePresent()}
+          style={tw`w-10/12 border mx-auto items-center justify-center rounded`}
+        >
+          <Text style={tw`font-poppins-400 text-3xl p-2`}>Search</Text>
+        </Pressable>
+        {Search && <Search modalRef={modalRef} />}
         <Title title={"Trending"} />
         <CardSlider
           isLoading={isLoading}

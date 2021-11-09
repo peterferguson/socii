@@ -23,12 +23,9 @@ function StocksNavigator() {
   return (
     <StocksStack.Navigator
       screenOptions={{
-        animationEnabled: true,
         headerShown: true,
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        cardOverlayEnabled: true,
-        cardStyle: tw`bg-brand-gray dark:bg-brand-black opacity-100`,
         headerTintColor: tw.color("brand-black"),
         headerStyle: {
           // Similar to `headerShadowVisible` but for web
