@@ -1,5 +1,6 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import AnimatedAppLoader from "app/components/AnimatedAppLoader"
+import { AppContextProvider } from "app/contexts/AppContextProvider"
 import { Navigation } from "app/navigation"
 import { Subscription } from "expo-modules-core"
 import * as Notifications from "expo-notifications"
@@ -60,12 +61,14 @@ export default function App() {
   useDeviceContext(tw)
   return (
     <SafeAreaProvider style={tw`bg-gray-50 flex-1`}>
-      <AnimatedAppLoader>
-        <StatusBar style="auto" />
-        <BottomSheetModalProvider>
-          <Navigation />
-        </BottomSheetModalProvider>
-      </AnimatedAppLoader>
+      <AppContextProvider>
+        <AnimatedAppLoader>
+          <StatusBar style="auto" />
+          <BottomSheetModalProvider>
+            <Navigation />
+          </BottomSheetModalProvider>
+        </AnimatedAppLoader>
+      </AppContextProvider>
     </SafeAreaProvider>
   )
 }

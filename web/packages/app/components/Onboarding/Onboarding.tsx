@@ -1,9 +1,8 @@
-import { saveOnboardingComplete } from "app/handlers/localstorage/onboarding"
+import { saveOnboardingCompleted } from "app/handlers/localstorage/onboarding"
 import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
 import Constants from "expo-constants"
 import * as Updates from "expo-updates"
-import { useRouter } from "app/navigation/use-router"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
   FlatList,
@@ -110,7 +109,6 @@ const OnboardingItem = ({ item }: { item: OnboardingItemData }) => {
 
 const Onboarding = () => {
   const { user } = useAuth()
-  const router = useRouter()
   const { width } = useWindowDimensions()
   const slidesRef = useRef<FlatList>()
 
@@ -154,10 +152,7 @@ const Onboarding = () => {
   }, [currentIndex.value])
 
   useEffect(() => {
-    if (user?.email) {
-      saveOnboardingComplete(!!user?.email)
-      router.push("/stocks")
-    } else saveOnboardingComplete(false)
+    user?.email && saveOnboardingCompleted(true)
   }, [user?.email])
 
   return (

@@ -16,16 +16,17 @@ import {
   Poppins_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/poppins"
+import { useAppContext } from "app/hooks/useAppContext"
 import tw from "app/lib/tailwind"
 import AppLoading from "expo-app-loading"
 import Constants from "expo-constants"
 import * as SplashScreen from "expo-splash-screen"
 import { AnimatePresence, MotiView } from "moti"
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { View } from "react-native"
 import { Socii } from "."
 
-export default function AnimatedAppLoader({ children }) {
+export default function AnimatedAppLoader({ children = null }) {
   const [fontIsLoaded] = useFonts({
     "poppins-100": Poppins_100Thin,
     "poppins-200": Poppins_200ExtraLight,
@@ -42,7 +43,10 @@ export default function AnimatedAppLoader({ children }) {
     "open-sans-800": OpenSans_800ExtraBold,
   })
 
-  if (!fontIsLoaded) return <AppLoading autoHideSplash={false} />
+  const { onboardingCompleted } = useAppContext()
+
+  if (!fontIsLoaded && onboardingCompleted !== null)
+    return <AppLoading autoHideSplash={false} />
 
   return (
     <AnimatedSplashScreen isAppReady={fontIsLoaded}>{children}</AnimatedSplashScreen>

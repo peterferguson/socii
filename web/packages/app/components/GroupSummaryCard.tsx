@@ -14,8 +14,6 @@ import CardDonutChart from "./CardDonutChart"
 import { Holding, IGroupColumnCard } from "./GroupColumnCard"
 
 export default ({ groupName, style }: IGroupColumnCard) => {
-  const { user } = useAuth()
-
   const [cashBalance, setCashBalance] = useState<number>(undefined)
   const [holdings, setHoldings] = useState<QueryDocumentSnapshot[]>(undefined)
   const [holdingInfo, setHoldingInfo] = useState([])
