@@ -109,7 +109,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             translation={translation}
             priceForComparison={graphs[period.value]?.timeseries?.[0].close}
           />
-          <InvestButton logoColor={assets[symbol]?.logoColor} />
+          <InvestButton logoColor={assets[symbol]?.logoColor} symbol={symbol} />
           <ChartCard
             {...{
               lastGraph: graphs[prevPeriod.value],
