@@ -1,11 +1,12 @@
 // import Highlight from "./Highlight"
 import algoliasearch from "algoliasearch"
 import Constants from "expo-constants"
-import { Dimensions } from "react-native"
-import React from "react"
+import { Dimensions, Keyboard } from "react-native"
+import React, { useEffect } from "react"
 import { InstantSearch } from "react-instantsearch-native"
 import { Modal, ModalBackdrop, ModalHeader } from ".."
 import InfiniteHits from "./Hits"
+import SearchInput from "./SearchInput"
 
 const { algoliaId, algoliaSearchKey } = Constants.manifest.extra.algolia
 const algoliaClient = algoliasearch(algoliaId, algoliaSearchKey)
@@ -40,8 +41,26 @@ const algoliaClient = algoliasearch(algoliaId, algoliaSearchKey)
 
 const { height: WINDOW_HEIGHT } = Dimensions.get("window")
 
+const searchTypeCollectionMapping = {
+  tickers: "Stocks",
+  users: "People",
+  // events: "Events",
+}
+
 const Search = ({ modalRef, searchCollection = "tickers" }) => {
   const scrollPositions = ["20%", "80%"]
+  const [insetHeight, setInsetHeight] = React.useState(WINDOW_HEIGHT * 0.15)
+
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener("keyboardDidShow", e => {
+      setInsetHeight(e.endCoordinates.height)
+    })
+
+    return () => {
+      setInsetHeight(WINDOW_HEIGHT * 0.15)
+      keyboardListener.remove()
+    }
+  })
 
   // TODO: Animate the change in position of the loading indicator in line with the snap
   // TODO: position of the modal. Probably easiest to do this with moti
@@ -50,20 +69,24 @@ const Search = ({ modalRef, searchCollection = "tickers" }) => {
       modalRef={modalRef}
       snapToPositions={scrollPositions}
       detach={true}
-      bottomInset={WINDOW_HEIGHT * 0.15}
-      defaultPositionIndex={0}
+      bottomInset={insetHeight}
+      defaultPositionIndex={1}
       backdropComponent={ModalBackdrop}
-      modalStyle={{
-        marginHorizontal: 24,
-        paddingHorizontal: 12,
-      }}
+      modalStyle={{ marginHorizontal: 24, paddingHorizontal: 12 }}
     >
       <InstantSearch searchClient={algoliaClient} indexName={searchCollection}>
-        <ModalHeader modalRef={modalRef} label={"Search box Placeholder"} />
+        <ModalHeader
+          modalRef={modalRef}
+          label={`Search ${searchTypeCollectionMapping[searchCollection]}`}
+        />
+        <SearchInput />
+        <SearchTypes />
         <InfiniteHits />
       </InstantSearch>
     </Modal>
   )
 }
+
+const SearchTypes = () => <></>
 
 export default Search

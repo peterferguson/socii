@@ -11,9 +11,12 @@ import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
 import Search from "app/components/Search/Search"
+import { SearchNormal1 } from "iconsax-react-native"
+import { useFocusEffect } from "@react-navigation/native"
 
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useModal } from "app/hooks/useModal"
+import { CenteredRow } from "app/components/Centered"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -38,19 +41,27 @@ export default function StocksScreen() {
 
   const modalRef = React.useRef<BottomSheetModal>(null)
 
-  const { handlePresent } = useModal(modalRef)
+  const { handlePresent, handleDismiss } = useModal(modalRef)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => handleDismiss()
+    }, [])
+  )
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View>
-        <Pressable
-          onPress={() => handlePresent()}
-          style={tw`w-10/12 border mx-auto items-center justify-center rounded`}
-        >
-          <Text style={tw`font-poppins-400 text-3xl p-2`}>Search</Text>
-        </Pressable>
-        {Search && <Search modalRef={modalRef} />}
-        <Title title={"Trending"} />
+        <CenteredRow style={tw`justify-between`}>
+          <Title title={"Trending"} />
+          <Pressable style={tw`pr-4 pt-4`} onPress={() => handlePresent()}>
+            <SearchNormal1
+              size="24"
+              variant="Bulk"
+              color={tw`text-brand-black dark:text-brand-gray`.color as string}
+            />
+          </Pressable>
+        </CenteredRow>
         <CardSlider
           isLoading={isLoading}
           assets={Object.values(trending).map(asset => ({
@@ -62,6 +73,7 @@ export default function StocksScreen() {
         <Categories categories={categories} />
         <Title title={"All"} />
         <AssetCards assets={Object.values(trending)} />
+        {Search && <Search modalRef={modalRef} />}
       </View>
     </ScrollView>
   )
@@ -170,7 +182,7 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
 
 const Title = ({ title }: { title: string }) => (
   <Text
-    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 
+    style={tw`pt-4 text-3xl text-brand-black dark:text-brand-gray pl-4 
               tracking-tight uppercase font-poppins-500 dark:text-brand-black`}
   >
     {title}
