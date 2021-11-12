@@ -22,12 +22,12 @@ const SelectInvestActionModal = ({ symbol, state, send }) => {
   // }
 
   return (
-    <View style={tw`inline-block w-full overflow-y-scroll align-middle`}>
+    <View style={tw`inline-block w-full  align-middle`}>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
         {Actions(symbol)?.map(action => (
           <Pressable
-            style={tw`inline-block w-4/5 max-w-lg p-2 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
+            style={tw`inline-block w-4/5 max-w-lg p-2 my-2  text-left align-middle bg-white shadow-md  transform rounded-2xl`}
             onPress={setSelectedAction}
           >
             <Text style={tw`text-xl leading-none text-brand-black`}>{action.name}</Text>

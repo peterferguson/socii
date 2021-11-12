@@ -4,9 +4,7 @@ import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMach
 import tw from "app/lib/tailwind"
 import React, { useCallback, useEffect, useState } from "react"
 import { Pressable, Text, View } from "react-native"
-import {
-  CenteredColumn, Modal
-} from "."
+import { CenteredColumn, Modal } from "."
 import { Position } from "../../alpaca/models/Position"
 import { useModal } from "../hooks/useModal"
 // import { SelectInvestActionModalDynamic } from "./SelectInvestActionModal"
@@ -19,9 +17,12 @@ import { ModalHeader } from "./index"
 // import { OrderModalDynamic } from "./OrderModal"
 // import { ReturnToLastScreenModalDynamic } from "./ReturnToLastScreenModal"
 import {
-  OrderModal, ReturnToLastScreenModal, SelectGroupModal,
+  OrderModal,
+  ReturnToLastScreenModal,
+  SelectGroupModal,
   SelectInvestActionModal,
-  SelectOrderTypeModal, StockSharingModal
+  SelectOrderTypeModal,
+  StockSharingModal,
 } from "./InvestButtonModals/index"
 
 interface IInvestButtonProps {
@@ -125,7 +126,7 @@ const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
             detach
             onChange={handleSheetChanges}
           >
-            <View style={tw`flex-1 items-center overflow-y-scroll`}>
+            <View style={tw`flex-1 items-center `}>
               <ModalHeader modalRef={modalRef} label={ModalLabel} />
               <CenteredColumn
                 style={tw.style(`bg-white w-full pt-5`, {

@@ -98,7 +98,7 @@ const PriceHeader = ({
   shortName: string
   price: Price
 }) => (
-  <View style={tw`items-center inline-block w-full overflow-y-scroll `}>
+  <View style={tw`items-center inline-block w-full  `}>
     <View style={tw`flex items-center justify-center `}>
       <TickerLogo height="64" width="64" isin={isin} tickerSymbol={symbol} />
       <View style={tw`flex flex-col text-center`}>
