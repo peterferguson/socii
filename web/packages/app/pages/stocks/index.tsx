@@ -8,18 +8,18 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
+import HeaderTitle from "app/components/Headers/HeaderTitle"
+import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import { StocksStackParams } from "app/navigation/types"
+import CategoryScreen from "app/screens/stocks/category"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
-import CategoryScreen from "app/screens/stocks/category"
 import React from "react"
-import HeaderContainer from "app/components/Headers/HeaderContainer"
-import tw from "app/lib/tailwind"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
-function StocksNavigator() {
+const StocksNavigator = () => {
   return (
     <StocksStack.Navigator
       screenOptions={{
@@ -39,7 +39,10 @@ function StocksNavigator() {
         <StocksStack.Screen
           name="stocksScreen"
           component={StocksScreen}
-          options={{ title: "" }}
+          options={{
+            title: "",
+            headerTitle: () => <HeaderTitle headerTitle="Stocks" />,
+          }}
           // TODO: Update this to use the last on-screen subtitle on scroll
         />
         <StocksStack.Screen
@@ -48,7 +51,7 @@ function StocksNavigator() {
           options={({ route }) => ({
             title: route.params.category,
             headerTitle: () => (
-              <HeaderContainer headerTitle={`${route.params.category} Stocks`} />
+              <HeaderTitle headerTitle={`${route.params.category} Stocks`} />
             ),
           })}
         />
@@ -58,7 +61,7 @@ function StocksNavigator() {
           options={({ route }) => ({
             title: route.params.assetSymbol,
             headerTitle: () => (
-              <HeaderContainer headerTitle={"Stocks"} text={route.params.assetSymbol} />
+              <HeaderTitle headerTitle={"Stocks"} text={route.params.assetSymbol} />
             ),
           })}
           // TODO: Add asset as the title of the screen the transition to price on scroll
