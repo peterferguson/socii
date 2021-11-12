@@ -9,7 +9,7 @@ import tw from "app/lib/tailwind"
 import { Price } from "app/models/Price"
 import { LargeNumberInput } from "../LargeNumberInput"
 import PriceHeading from "../PriceHeading"
-import TickerLogo from "../TickerLogo"
+import AssetLogo from "../AssetLogo"
 
 const OrderModal = ({ symbol, state, send }) => {
   const { user } = useAuth()
@@ -98,9 +98,9 @@ const PriceHeader = ({
   shortName: string
   price: Price
 }) => (
-  <View style={tw`items-center inline-block w-full  `}>
-    <View style={tw`flex items-center justify-center `}>
-      <TickerLogo height="64" width="64" isin={isin} tickerSymbol={symbol} />
+  <View style={tw`items-center inline-block w-full`}>
+    <View style={tw`flex items-center justify-center`}>
+      <AssetLogo height="64" width="64" isin={isin} asset={symbol} />
       <View style={tw`flex flex-col text-center`}>
         <Text
           style={tw`mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white`}

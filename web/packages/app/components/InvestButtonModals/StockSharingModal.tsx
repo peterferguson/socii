@@ -81,9 +81,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
 
   return (
     // TODO create style sheet for nicer code
-    <View
-      style={tw`w-full p-4 overflow-scroll bg-white transition-all transform rounded-2xl`}
-    >
+    <View style={tw`w-full p-4 bg-white transition-all transform rounded-2xl`}>
       <View style={tw`text-lg py-1 font-medium text-gray-900 font-primary leading-6`}>
         {/* TODO fix this.. surely better way to style text */}
         <Text style={tw`text-lg font-medium text-gray-900 font-primary leading-6`}>
