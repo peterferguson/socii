@@ -10,15 +10,12 @@ const SelectGroupModal = ({ state, send }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
-  const [groupSelected, setGroupSelected] = useState(null)
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = group => {
-    console.log("sendinggroup")
-    setGroupSelected(group.name)
-    send("SELECT_GROUP", { groupName: group.name })
+  const setSelectedGroup = (groupName) => {
+    send("SELECT_GROUP", { groupName: groupName })
   }
-
+   
   useEffect(() => {
     const getGroupData = async () => {
       setGroups(
@@ -44,7 +41,7 @@ const SelectGroupModal = ({ state, send }) => {
         {groups?.map(group => (
           <Pressable
             style={tw`w-4/5 p-4 my-2 overflow-y-scroll text-left bg-white shadow-md  transform rounded-2xl`}
-            onPress={setSelectedGroup}
+            onPress={()=>{setSelectedGroup(group.name)}}
           >
             <View>
               <Text style={tw`text-xl`}>{group.name}</Text>
