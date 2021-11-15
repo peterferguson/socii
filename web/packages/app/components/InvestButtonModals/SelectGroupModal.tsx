@@ -35,8 +35,8 @@ const SelectGroupModal = ({ state, send }) => {
   }, [userGroups])
 
   return (
-    <View style={tw`w-full overflow-y-scroll align-middle`}>
-      <View style={tw`items-center`}>
+    <View style={tw`w-full align-middle`}>
+      <View style={tw`items-center h-full`}>
         {/** TODO Add a loader here  */}
         {groups?.map(group => (
           <Pressable
