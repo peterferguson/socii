@@ -1,22 +1,59 @@
+// TODO: REFACTOR back into section list as this page is really just a list of sections
+// - This allows us to avoid the nested scroll view problems
+// - The follow is a nice logical way to lay out the component
+/*
+ *   <SectionList
+ *     sections={[
+ *       {type: 'MAP', data: [{}]}, // Static sections.
+ *       {type: 'PROFILE', data: [{}]},
+ *       {type: 'POSTS', data: posts} // Dynamic section data replaces the FlatList.
+ *     ]}
+ *     keyExtractor={(item, index) => index}
+ *     renderItem={({item, section}) => {
+ *       switch (section.type) {
+ *         // Different components for each section type.
+ *         case 'MAP':
+ *           return <MapView />;
+ *         case 'PROFILE':
+ *           return <Profile />;
+ *         case 'POSTS':
+ *           return <Post item={item} />;
+ *         default:
+ *           return null;
+ *       }
+ *     }}
+ *     ItemSeparatorComponent={() => <Separator />}
+ *     ListFooterComponent={() => <>{empty && <EmptyList />}</>}
+ *   />
+ */
+
 // import { useAuth } from "@hooks/useAuth"
-import React, { useEffect, useState } from "react"
-import { FlatList, ScrollView, Text, View, Pressable } from "react-native"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
+import { CenteredRow } from "app/components/Centered"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
+import Search from "app/components/Search/Search"
+import { useModal } from "app/hooks/useModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
 import tw from "app/lib/tailwind"
 import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
-import Search from "app/components/Search/Search"
 import { SearchNormal1 } from "iconsax-react-native"
-import { useFocusEffect } from "@react-navigation/native"
-
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useModal } from "app/hooks/useModal"
-import { CenteredRow } from "app/components/Centered"
+import React, { useEffect, useState } from "react"
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native"
+import Animated, { useAnimatedScrollHandler } from "react-native-reanimated"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -26,7 +63,14 @@ const defaultPrice: Price = {
   currency: "USD",
 }
 
-export default function StocksScreen() {
+type OnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+
+const StocksScreenWithMemo: React.FC<{
+  navigation: any
+  route: any
+  scrollY: Animated.SharedValue<number>
+  scrollHandler: OnScroll
+}> = ({ scrollY, scrollHandler }) => {
   // TODO: large screen vertical cards - small horizontal cards
   // TODO: Add skeleton loaders for chart cards on infinite scroll
 
@@ -43,14 +87,16 @@ export default function StocksScreen() {
 
   const { handlePresent, handleDismiss } = useModal(modalRef)
 
-  useFocusEffect(
-    React.useCallback(() => {
-      return () => handleDismiss()
-    }, [])
-  )
+  useFocusEffect(React.useCallback(() => () => handleDismiss(), []))
+
+  React.useEffect(() => console.log("screen scrollY", scrollY.value), [scrollY.value])
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <Animated.ScrollView
+      showsVerticalScrollIndicator={false}
+      onScroll={scrollHandler}
+      scrollEventThrottle={32}
+    >
       <View>
         <CenteredRow style={tw`justify-between`}>
           <Title title={"Trending"} />
@@ -75,7 +121,7 @@ export default function StocksScreen() {
         <AssetCards assets={Object.values(trending)} />
         {Search && <Search modalRef={modalRef} />}
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   )
 }
 
@@ -188,3 +234,5 @@ const Title = ({ title }: { title: string }) => (
     {title}
   </Text>
 )
+
+export default React.memo(StocksScreenWithMemo)

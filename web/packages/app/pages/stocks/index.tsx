@@ -8,6 +8,8 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
+import { AnimatedNavBar } from "app/components/AnimatedNavBar"
+import { AnimatedHeader } from "app/components/Headers/AnimatedHeader"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -16,10 +18,17 @@ import CategoryScreen from "app/screens/stocks/category"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import React from "react"
+import { Text } from "react-native"
+import { useSharedValue, useAnimatedScrollHandler } from "react-native-reanimated"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
 const StocksNavigator = () => {
+  const scrollY = useSharedValue(0)
+  const scrollHandler = useAnimatedScrollHandler(e => {
+    scrollY.value = e.contentOffset.y
+  })
+
   return (
     <StocksStack.Navigator
       screenOptions={{
@@ -38,13 +47,23 @@ const StocksNavigator = () => {
       <StocksStack.Group>
         <StocksStack.Screen
           name="stocksScreen"
-          component={StocksScreen}
           options={{
-            title: "",
-            headerTitle: () => <HeaderTitle headerTitle="Stocks" />,
+            headerTitle: props => (
+              <>
+                {/* <AnimatedNavBar>
+                  <Text>New Title</Text>
+                </AnimatedNavBar> */}
+                <AnimatedHeader scrollY={scrollY} {...props}>
+                  <HeaderTitle headerTitle="Stonks" textStyle={tw`text-center`} />
+                </AnimatedHeader>
+              </>
+            ),
           }}
-          // TODO: Update this to use the last on-screen subtitle on scroll
-        />
+        >
+          {props => (
+            <StocksScreen scrollY={scrollY} scrollHandler={scrollHandler} {...props} />
+          )}
+        </StocksStack.Screen>
         <StocksStack.Screen
           name="categoryScreen"
           component={CategoryScreen}
