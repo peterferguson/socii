@@ -1,10 +1,11 @@
 import tw from "app/lib/tailwind"
-import React, { FC } from "react"
-import { ViewProps, View } from "react-native"
+import React, { FC, useState } from "react"
+import { ViewProps } from "react-native"
 import Animated, {
   Extrapolate,
   interpolate,
   withTiming,
+  runOnJS,
   useAnimatedStyle,
 } from "react-native-reanimated"
 import { HEADER_HEIGHT, HEADER_OFFSET } from "./constants"
@@ -12,14 +13,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export interface AnimatedHeaderProps extends Omit<ViewProps, "style"> {
   scrollY: Animated.SharedValue<number>
+  showHeader: boolean
 }
+
+const height = HEADER_HEIGHT
 
 export const AnimatedHeader: FC<AnimatedHeaderProps> = ({
   scrollY,
   children,
-  ...otherProps
+  showHeader,
+  ...props
 }) => {
   const { top: marginTop } = useSafeAreaInsets()
+
   const animatedStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
       scrollY.value,
@@ -37,17 +43,14 @@ export const AnimatedHeader: FC<AnimatedHeaderProps> = ({
     )
     return { transform: [{ translateY }], opacity }
   })
+
   return (
     <Animated.View
       style={[
-        tw.style(`w-full -ml-3 justify-center`, {
-          zIndex: 2,
-          marginTop,
-          height: HEADER_HEIGHT,
-        }),
+        tw.style(`w-full absolute top-0`, { zIndex: 2, marginTop, height }),
         animatedStyle,
       ]}
-      {...otherProps}
+      {...props}
     >
       {children}
     </Animated.View>

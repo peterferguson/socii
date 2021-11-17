@@ -89,8 +89,6 @@ const StocksScreenWithMemo: React.FC<{
 
   useFocusEffect(React.useCallback(() => () => handleDismiss(), []))
 
-  React.useEffect(() => console.log("screen scrollY", scrollY.value), [scrollY.value])
-
   return (
     <Animated.ScrollView
       showsVerticalScrollIndicator={false}

@@ -8,6 +8,7 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
+import { CenteredColumn } from "app/components/Centered"
 import { AnimatedNavBar } from "app/components/AnimatedNavBar"
 import { AnimatedHeader } from "app/components/Headers/AnimatedHeader"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
@@ -49,14 +50,23 @@ const StocksNavigator = () => {
           name="stocksScreen"
           options={{
             headerTitle: props => (
-              <>
-                {/* <AnimatedNavBar>
-                  <Text>New Title</Text>
-                </AnimatedNavBar> */}
-                <AnimatedHeader scrollY={scrollY} {...props}>
-                  <HeaderTitle headerTitle="Stonks" textStyle={tw`text-center`} />
-                </AnimatedHeader>
-              </>
+              <CenteredColumn>
+                <AnimatedNavBar
+                  scrollY={scrollY}
+                  PreAnimationComponent={() => (
+                    <HeaderTitle
+                      headerTitle="Stonks"
+                      textStyle={tw`w-full text-center`}
+                    />
+                  )}
+                  PostAnimationComponent={() => (
+                    <HeaderTitle
+                      headerTitle="Trending Stonks"
+                      textStyle={tw`w-full text-center`}
+                    />
+                  )}
+                />
+              </CenteredColumn>
             ),
           }}
         >
