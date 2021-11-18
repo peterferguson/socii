@@ -31,7 +31,7 @@ export default ({
   const snapPoints = useMemo(() => snapToPositions, [])
 
   return (
-    <View style={[tw`flex-1 p-6`, containerStyle]}>
+    <View style={[tw`absolute bottom-0 flex-1 p-6`, containerStyle]}>
       <BottomSheetModal
         ref={modalRef}
         backdropComponent={backdropComponent}

@@ -91,10 +91,6 @@ const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
     )
   }, [state.value])
 
-  // const ModalContents =
-  //   Modals[
-  //     "limitOrder"
-  //   ]
   const ModalContents =
     Modals[
       String(typeof state.value === "object" ? state.value["active"] : state.value)
@@ -145,35 +141,3 @@ const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
 // ! Cannot get the text center alignment to work when using poppins fonts
 
 export default InvestButton
-
-const AddGroupMemberModal: React.FC<{
-  symbol: string
-  modalRef: React.MutableRefObject<BottomSheetModal>
-}> = ({ modalRef, symbol }) => {
-  const [modalPosition, setModalPosition] = useState(1)
-  const scrollPositions = ["25%", "50%", "90%"]
-
-  const handleSheetChanges = useCallback((index: number) => setModalPosition(index), [])
-
-  // TODO: Animate the change in position of the loading indicator in line with the snap
-  // TODO: position of the modal. Probably easiest to do this with moti
-  return (
-    <Modal
-      modalRef={modalRef}
-      snapToPositions={scrollPositions}
-      detach
-      onChange={handleSheetChanges}
-    >
-      <View style={tw`flex-1 items-center pt-2`}>
-        <ModalHeader modalRef={modalRef} label={symbol} />
-        <CenteredColumn
-          style={tw.style(`bg-white w-full`, {
-            height: scrollPositions[modalPosition],
-          })}
-        >
-          <Text> HI </Text>
-        </CenteredColumn>
-      </View>
-    </Modal>
-  )
-}
