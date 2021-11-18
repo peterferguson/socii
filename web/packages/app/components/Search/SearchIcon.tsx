@@ -1,15 +1,15 @@
-import { SearchNormal1 } from "iconsax-react-native"
-import { Pressable, ViewProps } from "react-native"
-import tw from "app/lib/tailwind"
-import React from "react"
 import { useSearchModal } from "app/hooks/useSearchModal"
+import tw from "app/lib/tailwind"
+import { SearchNormal1 } from "iconsax-react-native"
+import React from "react"
+import { Pressable, ViewProps } from "react-native"
 
 interface SearchIconProps {
   overrideOnPress?: () => void
+  containerStyle?: ViewProps
   iconVariant?: "Bulk" | "Linear" | "Outline" | "Broken" | "Bold" | "TwoTone"
   iconSize?: string
   iconColor?: string
-  containerStyle?: ViewProps
 }
 
 export const SearchIcon: React.FC<SearchIconProps> = ({

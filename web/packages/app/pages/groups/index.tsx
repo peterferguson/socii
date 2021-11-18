@@ -5,7 +5,7 @@ import createStackNavigator from "app/navigation/create-stack-navigator"
 import { GroupsScreen, NewGroupScreen, GroupScreen } from "app/screens/groups"
 import { GroupsStackParams } from "app/navigation/types"
 import tw from "app/lib/tailwind"
-import HeaderContainer from "app/components/Headers/HeaderContainer"
+import HeaderTitle from "app/components/Headers/HeaderTitle"
 
 const GroupsStack = createStackNavigator<GroupsStackParams>()
 
@@ -13,7 +13,6 @@ function GroupsNavigator() {
   return (
     <GroupsStack.Navigator
       screenOptions={{
-        animationEnabled: true,
         headerShown: true,
         headerShadowVisible: false,
         headerBackTitleVisible: false,
@@ -31,16 +30,14 @@ function GroupsNavigator() {
           name="groupsScreen"
           component={GroupsScreen}
           options={{
-            title: "Groups",
-            headerTitle: () => <HeaderContainer headerTitle={"Groups"} />,
+            headerTitle: () => <HeaderTitle headerTitle={"Groups"} />,
           }}
         />
         <GroupsStack.Screen
           name="groupScreen"
           component={GroupScreen}
           options={({ route }) => ({
-            title: "Group",
-            headerTitle: () => <HeaderContainer headerTitle={route.params.id} />,
+            headerTitle: () => <HeaderTitle headerTitle={route.params.id} />,
           })}
         />
       </GroupsStack.Group>
