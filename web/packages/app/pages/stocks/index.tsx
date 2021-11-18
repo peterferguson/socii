@@ -8,9 +8,8 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
-import { CenteredColumn } from "app/components/Centered"
 import { AnimatedNavBar } from "app/components/AnimatedNavBar"
-import { AnimatedHeader } from "app/components/Headers/AnimatedHeader"
+import { CenteredColumn, CenteredRow } from "app/components/Centered"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -19,8 +18,7 @@ import CategoryScreen from "app/screens/stocks/category"
 import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import React from "react"
-import { Text } from "react-native"
-import { useSharedValue, useAnimatedScrollHandler } from "react-native-reanimated"
+import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
@@ -60,19 +58,19 @@ const StocksNavigator = () => {
                     />
                   )}
                   PostAnimationComponent={() => (
-                    <HeaderTitle
-                      headerTitle="Trending Stonks"
-                      textStyle={tw`w-full text-center`}
-                    />
+                    <CenteredRow>
+                      <HeaderTitle
+                        headerTitle="Trending Stonks"
+                        textStyle={tw`w-full text-center`}
+                      />
+                    </CenteredRow>
                   )}
                 />
               </CenteredColumn>
             ),
           }}
         >
-          {props => (
-            <StocksScreen scrollY={scrollY} scrollHandler={scrollHandler} {...props} />
-          )}
+          {props => <StocksScreen scrollHandler={scrollHandler} {...props} />}
         </StocksStack.Screen>
         <StocksStack.Screen
           name="categoryScreen"

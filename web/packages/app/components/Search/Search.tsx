@@ -7,6 +7,8 @@ import { InstantSearch } from "react-instantsearch-native"
 import { Modal, ModalBackdrop, ModalHeader } from ".."
 import InfiniteHits from "./Hits"
 import SearchInput from "./SearchInput"
+import { useSearch } from "app/hooks/useSearch"
+import { useRouter } from "app/navigation/use-router"
 
 const { algoliaId, algoliaSearchKey } = Constants.manifest.extra.algolia
 const algoliaClient = algoliasearch(algoliaId, algoliaSearchKey)
@@ -47,14 +49,16 @@ const searchTypeCollectionMapping = {
   // events: "Events",
 }
 
-const Search = ({ modalRef, searchCollection = "tickers" }) => {
+const Search = ({ searchCollection = "tickers" }) => {
+  const { searchModalRef } = useSearch()
+  const router = useRouter()
   const scrollPositions = ["20%", "80%"]
   const [insetHeight, setInsetHeight] = React.useState(WINDOW_HEIGHT * 0.15)
 
   useEffect(() => {
-    const keyboardListener = Keyboard.addListener("keyboardDidShow", e => {
+    const keyboardListener = Keyboard.addListener("keyboardDidShow", e =>
       setInsetHeight(e.endCoordinates.height)
-    })
+    )
 
     return () => {
       setInsetHeight(WINDOW_HEIGHT * 0.15)
@@ -66,7 +70,7 @@ const Search = ({ modalRef, searchCollection = "tickers" }) => {
   // TODO: position of the modal. Probably easiest to do this with moti
   return (
     <Modal
-      modalRef={modalRef}
+      modalRef={searchModalRef}
       snapToPositions={scrollPositions}
       detach={true}
       bottomInset={insetHeight}
@@ -76,12 +80,12 @@ const Search = ({ modalRef, searchCollection = "tickers" }) => {
     >
       <InstantSearch searchClient={algoliaClient} indexName={searchCollection}>
         <ModalHeader
-          modalRef={modalRef}
+          modalRef={searchModalRef}
           label={`Search ${searchTypeCollectionMapping[searchCollection]}`}
         />
         <SearchInput />
         <SearchTypes />
-        <InfiniteHits />
+        <InfiniteHits router={router}/>
       </InstantSearch>
     </Modal>
   )

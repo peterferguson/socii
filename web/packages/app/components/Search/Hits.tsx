@@ -1,17 +1,14 @@
-import React, { useCallback, useState } from "react"
+import { useRouter } from "app/navigation/use-router"
+import React from "react"
 import { connectInfiniteHits } from "react-instantsearch-native"
 import { Dimensions, FlatList, Text } from "react-native"
-import tw from "app/lib/tailwind"
-import { CenteredColumn, Modal, VerticalSpacer } from ".."
+import { CenteredColumn } from ".."
 import Highlight from "./Highlight"
-// import Highlight from "./Highlight"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useModal } from "app/hooks/useModal"
 
 const { width: WINDOW_WIDTH } = Dimensions.get("window")
 const HIT_WIDTH = WINDOW_WIDTH - 64
 
-const InfiniteHits = ({ hits, hasMore, refineNext }) => (
+const InfiniteHits = ({ hits, hasMore, refineNext, router }) => (
   <FlatList
     data={hits}
     keyExtractor={item => item.objectID}
@@ -22,7 +19,7 @@ const InfiniteHits = ({ hits, hasMore, refineNext }) => (
       <CenteredColumn
       //   style={tw.style(`border rounded-full`, { width: HIT_WIDTH })}
       >
-        <Highlight attribute="name" hit={item} />
+        <Highlight attribute="name" hit={item} router={router} />
       </CenteredColumn>
     )}
   />

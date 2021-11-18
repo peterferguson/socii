@@ -1,5 +1,5 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer, useLinkTo } from "@react-navigation/native"
+import tw from "app/lib/tailwind"
 import { linking } from "app/navigation/linking"
 import { RootNavigator } from "app/navigation/root-navigator"
 import type { NextNavigationProps } from "app/navigation/types"
@@ -8,10 +8,10 @@ import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
 import { OverlayProvider } from "stream-chat-expo"
 import { AuthProvider } from "../contexts/AuthProvider"
+import { SearchProvider } from "../contexts/SearchProvider"
 import { StreamProvider } from "../contexts/StreamProvider"
 import { useDarkMode } from "../hooks/useDarkMode"
 import { useStreamChatTheme } from "../hooks/useStreamChatTheme"
-import tw from "app/lib/tailwind"
 
 function LinkTo() {
   const linkTo = useLinkTo()
@@ -66,18 +66,18 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
     >
       <AuthProvider>
         <StreamProvider>
-          <OverlayProvider
-            // bottomInset={bottom}
-            // i18nInstance={streami18n}
-            value={{ style: theme }}
-            translucentStatusBar={true}
-          >
-            <LinkTo />
-            <BottomSheetModalProvider>
+          <SearchProvider>
+            <OverlayProvider
+              // bottomInset={bottom}
+              // i18nInstance={streami18n}
+              value={{ style: theme }}
+              translucentStatusBar={true}
+            >
+              <LinkTo />
               <RootNavigator Component={Component} pageProps={pageProps} />
-            </BottomSheetModalProvider>
-            {/* <Notifications /> */}
-          </OverlayProvider>
+              {/* <Notifications /> */}
+            </OverlayProvider>
+          </SearchProvider>
         </StreamProvider>
       </AuthProvider>
     </NavigationContainer>

@@ -1,9 +1,7 @@
-import { Price } from "app/models/Price"
 import tw from "app/lib/tailwind"
-import React from "react"
-import { View, Pressable } from "react-native"
 import { useRouter } from "app/navigation/use-router"
-import { shadowStyle } from "app/utils/shadowStyle"
+import React from "react"
+import { Pressable, View } from "react-native"
 import { AssetCardLogo } from "../AssetCardLogo"
 import { AssetCardName } from "../AssetCardName"
 
@@ -12,9 +10,12 @@ interface IAssetHit {
   isin: string
   symbol: string
   shortName: string
+  router: any
 }
-const AssetHit = ({ isin, symbol, logoColor, shortName }: IAssetHit) => {
-  const router = useRouter()
+// TODO: Remove router from being passed in.
+// ! This is a hack to get around the component apparently not being in a navigator.
+
+const AssetHit = ({ isin, symbol, logoColor, shortName, router }: IAssetHit) => {
   const isLoading = !isin
 
   return (

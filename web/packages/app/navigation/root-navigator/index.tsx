@@ -17,7 +17,6 @@ export const RootNavigator = (props: NextNavigationProps) => {
       initialRouteName={onboardingCompleted ? "withBottomBar" : "onboarding"}
       screenOptions={{ headerShown: false, ...headerScreenOptions }}
     >
-      {/* {onboardingCompleted === false ? ( */}
       {!onboardingCompleted ? (
         <RootStack.Screen
           name="onboarding"

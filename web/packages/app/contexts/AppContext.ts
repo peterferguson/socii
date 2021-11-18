@@ -4,6 +4,4 @@ export interface AppContext {
   onboardingCompleted: boolean
 }
 
-export const AppContext = createContext({
-  onboardingCompleted: undefined,
-} as AppContext)
+export const AppContext = createContext({} as AppContext)

@@ -28,14 +28,13 @@
  */
 
 // import { useAuth } from "@hooks/useAuth"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
 import { CenteredRow } from "app/components/Centered"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
 import Search from "app/components/Search/Search"
-import { useModal } from "app/hooks/useModal"
+import { useSearchModal } from "app/hooks/useSearchModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
 import tw from "app/lib/tailwind"
 import { Asset } from "app/models/Asset"
@@ -46,14 +45,14 @@ import { SearchNormal1 } from "iconsax-react-native"
 import React, { useEffect, useState } from "react"
 import {
   FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   ScrollView,
   Text,
   View,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from "react-native"
-import Animated, { useAnimatedScrollHandler } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -68,11 +67,9 @@ type OnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => void
 const StocksScreenWithMemo: React.FC<{
   navigation: any
   route: any
-  scrollY: Animated.SharedValue<number>
   scrollHandler: OnScroll
-}> = ({ scrollY, scrollHandler }) => {
+}> = ({ scrollHandler }) => {
   // TODO: large screen vertical cards - small horizontal cards
-  // TODO: Add skeleton loaders for chart cards on infinite scroll
 
   const { trending, isLoading } = useYahooTrending()
   // TODO: This recalls the api every time the screen is loaded leading to bad UX
@@ -82,11 +79,7 @@ const StocksScreenWithMemo: React.FC<{
 
   // @ts-ignore
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
-
-  const modalRef = React.useRef<BottomSheetModal>(null)
-
-  const { handlePresent, handleDismiss } = useModal(modalRef)
-
+  const { handlePresent, handleDismiss } = useSearchModal()
   useFocusEffect(React.useCallback(() => () => handleDismiss(), []))
 
   return (
@@ -117,7 +110,7 @@ const StocksScreenWithMemo: React.FC<{
         <Categories categories={categories} />
         <Title title={"All"} />
         <AssetCards assets={Object.values(trending)} />
-        {Search && <Search modalRef={modalRef} />}
+        {Search && <Search />}
       </View>
     </Animated.ScrollView>
   )
