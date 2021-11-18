@@ -28,6 +28,7 @@
  */
 
 // import { useAuth } from "@hooks/useAuth"
+import { SearchIcon } from "app/components/Search/SearchIcon"
 import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
@@ -91,13 +92,7 @@ const StocksScreenWithMemo: React.FC<{
       <View>
         <CenteredRow style={tw`justify-between`}>
           <Title title={"Trending"} />
-          <Pressable style={tw`pr-4 pt-4`} onPress={() => handlePresent()}>
-            <SearchNormal1
-              size="24"
-              variant="Bulk"
-              color={tw`text-brand-black dark:text-brand-gray`.color as string}
-            />
-          </Pressable>
+          <SearchIcon />
         </CenteredRow>
         <CardSlider
           isLoading={isLoading}

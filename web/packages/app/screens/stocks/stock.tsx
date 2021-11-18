@@ -90,8 +90,6 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   // - This is a hack to force the re-render of the page
   useDerivedValue(() => {
-    console.log("prevTab", prevTab.value, "activeTab", activeTab.value)
-
     if (currentTab !== activeTab.value) runOnJS(setCurrentTab)(activeTab.value)
     return prevTab.value !== activeTab.value
   })

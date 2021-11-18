@@ -5,9 +5,9 @@ import Animated, {
   withTiming,
   runOnJS,
 } from "react-native-reanimated"
-import { HEADER_HEIGHT, HEADER_OFFSET } from "./Headers/constants"
+import { HEADER_HEIGHT, HEADER_OFFSET } from "./constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { AnimatedHeader } from "./Headers/AnimatedHeader"
+import { AnimatedHeader } from "./AnimatedHeader"
 
 export interface AnimatedNavBarProps {
   scrollY: Animated.SharedValue<number>
@@ -41,7 +41,7 @@ export const AnimatedNavBar: FunctionComponent<AnimatedNavBarProps> = ({
       <AnimatedHeader scrollY={scrollY} showHeader={!postAnimation} {...props}>
         <PreAnimationComponent />
       </AnimatedHeader>
-      <Animated.View style={[tw.style(`justify-center`), animateOpacity]}>
+      <Animated.View style={[tw.style(`w-full justify-center items-center flex-1`), animateOpacity]}>
         <PostAnimationComponent />
       </Animated.View>
     </>

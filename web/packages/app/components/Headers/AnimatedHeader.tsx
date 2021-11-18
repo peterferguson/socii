@@ -47,7 +47,11 @@ export const AnimatedHeader: FC<AnimatedHeaderProps> = ({
   return (
     <Animated.View
       style={[
-        tw.style(`w-full absolute top-0`, { zIndex: 2, marginTop, height }),
+        tw.style(`w-full absolute top-0`, {
+          zIndex: 2,
+          marginTop,
+          height,
+        }),
         animatedStyle,
       ]}
       {...props}
