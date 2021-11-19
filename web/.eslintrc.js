@@ -1,10 +1,5 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-    jest: true,
-  },
+  env: { browser: true, es2021: true, node: true, jest: true },
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
@@ -13,22 +8,12 @@ module.exports = {
     "plugin:tailwind/recommended",
     // "plugin:tailwindcss/recommended",
   ],
-  globals: {
-    React: true,
-    JSX: true,
-  },
+  globals: { React: true, JSX: true },
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 12,
-    sourceType: "module",
-  },
+  parserOptions: { ecmaFeatures: { jsx: true }, ecmaVersion: 12, sourceType: "module" },
   plugins: [
     "react",
-    "@typescript-eslint",
-    // "tailwindcss"
+    "@typescript-eslint", // "tailwindcss"
   ],
   rules: {
     "react/prop-types": 0,
@@ -39,9 +24,5 @@ module.exports = {
     "react/jsx-no-target-blank": 0,
     "@typescript-eslint/no-unused-vars": 0,
   },
-  settings: {
-    react: {
-      version: "detect",
-    },
-  },
+  settings: { react: { version: "detect" } },
 }

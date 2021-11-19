@@ -71,6 +71,9 @@ export default function Donut({
   )
 }
 
+// TODO Maybe we could fetch the iex price in a more specialised Arc component using swr.
+// - Then the individual stock will have its price cached for use elsewhere.
+
 const CircleArc = ({
   origin,
   prevAngleInRadians,

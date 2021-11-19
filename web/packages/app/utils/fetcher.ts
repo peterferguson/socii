@@ -1,6 +1,7 @@
 import fetch from "isomorphic-unfetch"
 import { Platform } from "react-native"
 import Constants from "expo-constants"
+import * as DeviceInfo from "expo-device"
 
 const development = Constants.manifest.extra.STAGE === "development"
 
@@ -15,11 +16,12 @@ export async function fetcher<JSON = any>(
 
   endpointPrefix = Platform.select({
     web: "/",
-    default: local
-      ? "http://localhost:3000/" // ! For now running localhost from app folder instead of the next folder
-      : development
-      ? "https://development.socii.app/"
-      : "https://socii.app/",
+    default:
+      local && !DeviceInfo.isDevice
+        ? "http://localhost:3000/" // ! For now running localhost from app folder instead of the next folder
+        : development
+        ? "https://development.socii.app/"
+        : "https://socii.app/",
   })
 
   const endpoint = url.startsWith("/") ? url.replace("/", endpointPrefix) : url

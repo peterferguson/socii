@@ -4,8 +4,8 @@ import tw from "app/lib/tailwind"
 import Donut from "./DonutChart"
 import SkeletonCircle from "./SkeletonCircle"
 
-const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalance }) =>
-  sectors?.length === holdings?.length ? (
+const CardDonutChart = ({ sectors, radius, textColor, gain, cashBalance }) => {
+  return sectors?.length > 0 ? (
     <View style={tw`p-2`}>
       <Donut sectors={sectors} textColor={textColor} />
       <View
@@ -36,7 +36,7 @@ const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalanc
           })}
         />
         <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>cash</Text>
-        <Text style={tw`text-center text-lg `}>{`$${cashBalance?.toFixed(2)}`}</Text>
+        <Text style={tw`text-center text-lg`}>{`$${cashBalance?.toFixed(2)}`}</Text>
       </View>
     </View>
   ) : (
@@ -44,5 +44,6 @@ const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalanc
       <SkeletonCircle radius={80} />
     </View>
   )
+}
 
 export default CardDonutChart
