@@ -17,8 +17,7 @@ import {
 } from "app/components"
 import { ModalHeader } from "app/components/Modal"
 import { SearchUsersProvider } from "app/contexts"
-import { useAuth, useSearchUsers, useStream } from "app/hooks"
-import { useModal } from "app/hooks/useModal"
+import { useAuth, useSearchUsers, useStream, useModal } from "app/hooks"
 import { getUserWithUsername, inviteInvestorToGroup } from "app/lib/firebase/db"
 import tw from "app/lib/tailwind"
 import { createParam } from "app/navigation/use-param"
@@ -57,9 +56,6 @@ const AddGroupMemberModal: React.FC<{
   const scrollPositions = ["25%", "50%", "90%"]
 
   const handleSheetChanges = useCallback((index: number) => setModalPosition(index), [])
-
-  // TODO: Animate the change in position of the loading indicator in line with the snap
-  // TODO: position of the modal. Probably easiest to do this with moti
   return (
     <Modal
       modalRef={modalRef}
@@ -80,18 +76,34 @@ const AddGroupMemberModal: React.FC<{
   )
 }
 
+/* 
+TODO 
+TODO 
+TODO 
+TODO 
+TODO 
+ We need to fix the contexts no longer working in the UserSearch component.
+ ? They seem to work fine in the parent components & the providers are parents.
+TODO 
+TODO 
+TODO 
+TODO 
+TODO 
+*/
+
 const UserSearch: React.FC<{
   groupName: string
   modalRef: React.MutableRefObject<BottomSheetModal>
 }> = ({ groupName, modalRef, ...props }) => {
-  const { user } = useAuth()
-  const { client: chatClient } = useStream()
-
+  const { client } = useStream()
+  useEffect(() => console.log("client", client), [client])
+  // TODO: Animate the change in position of the loading indicator in line with the snap
+  // TODO: position of the modal. Probably easiest to do this with moti
   return (
     <>
-      {user?.streamToken ? (
+      {client?.user ? (
         // @ts-ignore
-        <Chat client={chatClient}>
+        <Chat client={client}>
           <SearchUsersProvider>
             <AddSelectedMembersToGroup groupName={groupName} modalRef={modalRef} />
             <UserSearchInput onSubmit={() => {}} />
