@@ -42,6 +42,7 @@ export default ({ groupName, style }: IGroupColumnCard) => {
           textColor={donutTextColor}
           gain={gain}
           cashBalance={cashBalance}
+          linkTo={groupName}
         />
         {/* TODO: Show top gainer after divider */}
         {/* <TextDivider lineStyles={undefined}>
