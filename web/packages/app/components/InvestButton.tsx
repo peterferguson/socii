@@ -32,18 +32,30 @@ interface IInvestButtonProps {
 }
 
 const Modals = {
-  returnToLastScreen: { Component: ReturnToLastScreenModal, Header: "You're back!" },
+  returnToLastScreen: { 
+    Component: ReturnToLastScreenModal, 
+    Header: "You're back!" 
+  },
   shareInformation: {
     Component: StockSharingModal,
-    Header: "What would you like to share?",
+    Header: "What would you like to share?"
   },
   chooseGroup: {
     Component: SelectGroupModal,
-    Header: "Select a group to invest with:",
+    Header: "Select a group to invest with:"
   },
-  investAction: { Component: SelectInvestActionModal, Header: "Select an action:" },
-  orderType: { Component: SelectOrderTypeModal, Header: "Select an order type:" },
-  limitOrder: { Component: OrderModal, Header: "Place your order:" },
+  investAction: { 
+    Component: SelectInvestActionModal, 
+    Header: "Select an action:" 
+  },
+  orderType: { 
+    Component: SelectOrderTypeModal, 
+    Header: "Select an order type:" 
+  },
+  limitOrder: { 
+    Component: OrderModal, 
+    Header: "Place your order:" 
+  },
   // shareOrder: { Component: OrderModalDynamic },
   // cashOrder: { Component: OrderModalDynamic },
 }

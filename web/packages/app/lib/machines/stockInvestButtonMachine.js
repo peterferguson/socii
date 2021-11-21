@@ -30,7 +30,7 @@ const initialContext = {
 // - updates to state context
 const selectShare = assign({ wantsToShare: true })
 const selectGroup = assign({ group: (_ctx, e) => e.groupName })
-const resetChoices = assign({ group: "", side: "", orderType: "" })
+const resetChoices = assign({ group: "", side: "", orderType: "", wantsToShare: false, historyStack: [] })
 const updateHolding = assign({ hasHolding: (_ctx, e) => !!e.holding })
 const setOrderType = (order) => assign({ orderType: order })
 const updateHistoryStack = (thisState) =>

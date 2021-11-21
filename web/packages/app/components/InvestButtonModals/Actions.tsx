@@ -1,45 +1,38 @@
 import React from "react"
 import { View } from "react-native"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
-import { HiShare } from "react-icons/hi"
+import { Share, MoneySend, ArrowCircleDown2 } from "iconsax-react-native"
 import tw from "app/lib/tailwind"
 
 export const Actions = tickerSymbol => [
   {
     icon: () => (
-      <View style={tw`rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2`}>
-        <FaArrowUp style={tw`w-6 h-6 text-teal-400`} />
+      <View style={tw`rounded-full bg-brand-lightTeal p-2`}>
+        <ArrowCircleDown2 size={25} variant="Outline" />
       </View>
     ),
     name: `Buy ${tickerSymbol}`,
-    description: `
-    Buy as little as $1 of ${tickerSymbol} shares
-    `,
+    description: `Buy as little as $1 of ${tickerSymbol} shares`,
     actionName: "CHOOSE_BUY",
   },
   {
     icon: () => (
-      <View style={tw`rounded-full bg-brand/30 mr-1.5 sm:mr-2`}>
-        <FaArrowDown style={tw`w-6 h-6 text-brand-cyan-vivid`} />
+      <View style={tw`rounded-full bg-red-300 p-2`}>
+        <MoneySend size={25} variant="Outline" />
       </View>
     ),
 
     name: `Sell ${tickerSymbol}`,
-    description: `
-    Sell as little as 0.000000001 ${tickerSymbol} shares
-    `,
+    description: `Sell as little as 0.000000001 ${tickerSymbol} shares`,
     actionName: "CHOOSE_SELL",
   },
   {
     icon: () => (
-      <View style={tw`rounded-full bg-brand-light-secondary mr-1.5 sm:mr-2`}>
-        <HiShare style={tw`w-6 h-6 text-brand`} />
+      <View style={tw`rounded-full bg-blue-300 p-2`}>
+        <Share size={25} variant="Bold"/>
       </View>
     ),
     name: `Share ${tickerSymbol} with a group`,
-    description: `
-    Tell your friends about ${tickerSymbol}
-    `,
+    description: `Tell your friends about ${tickerSymbol}`,
     actionName: "CHOOSE_SHARE",
   },
 ]

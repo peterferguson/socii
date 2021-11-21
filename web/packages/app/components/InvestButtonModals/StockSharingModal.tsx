@@ -1,11 +1,12 @@
 import { useStream } from "app/hooks/useStream"
 import { StreamClientContext } from "app/hooks/useStreamClient"
 import { alphaVantageQuery } from "app/lib/firebase/function"
+import { alphaVantageQueryOptions } from "../../lib/constants"
 import tw from "app/lib/tailwind"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { Text, TextInput, View } from "react-native"
-// import MultiSelect from "../MultiSelect"
+import MultiSelect from "../MultiSelect"
 import PriceInput from "../PriceInput"
 
 const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) => {
@@ -55,13 +56,13 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
         // attachments,
         skip_push: true,
       })
-      const _threadMessage = await channel.sendMessage({
-        text: "",
-        attachments,
-        parent_id: mainMessage.message.id,
-        show_in_channel: false,
-        skip_push: true,
-      })
+      // const _threadMessage = await channel.sendMessage({
+      //   text: "",
+      //   attachments,
+      //   parent_id: mainMessage.message.id,
+      //   show_in_channel: false,
+      //   skip_push: true,
+      // })
     }
   }
 
@@ -98,11 +99,13 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
             Select some data to tell your friends about!
           </Text>
         </View>
-        {/* <MultiSelect // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd
+        {/* // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd */}
+        <MultiSelect 
           items={alphaVantageQueryOptions}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
-        /> */}
+        />
+
 
         <View>
           <Text style={tw`text-sm text-gray-500 font-primary`}>

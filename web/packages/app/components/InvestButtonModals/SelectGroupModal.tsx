@@ -10,15 +10,12 @@ const SelectGroupModal = ({ state, send }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
-  const [groupSelected, setGroupSelected] = useState(null)
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = group => {
-    console.log("sendinggroup")
-    setGroupSelected(group.name)
-    send("SELECT_GROUP", { groupName: group.name })
+  const setSelectedGroup = (groupName) => {
+    send("SELECT_GROUP", { groupName: groupName })
   }
-
+   
   useEffect(() => {
     const getGroupData = async () => {
       setGroups(
