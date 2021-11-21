@@ -1,5 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { Button, CenteredColumn, SelectedUsers } from "app/components"
+import { CenteredColumn } from "app/components/Centered"
+import SelectedUsers from "app/components/UserSearch/SelectedUsers"
+import Button from "app/components/Button"
 import { useModal, useSearchUsers } from "app/hooks"
 import tw from "app/lib/tailwind"
 import React, { useCallback, useEffect } from "react"

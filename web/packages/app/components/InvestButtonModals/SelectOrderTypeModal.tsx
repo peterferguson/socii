@@ -7,12 +7,12 @@ const SelectOrderTypeModal = ({ symbol, state, send }) => {
   const setSelectedOrderType = order => send(order.actionName)
 
   return (
-    <View style={tw`inline-block w-full align-middle`}>
+    <View style={tw`inline-block w-full`}>
       <View style={tw`items-center h-full`}>
         {/** TODO Add a loader here  */}
         {OrderTypes(symbol, state.context.side)?.map(order => (
           <Pressable
-            style={tw`inline-block w-4/5 max-w-lg p-4 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
+            style={tw`inline-block w-4/5 max-w-lg p-4 my-2 overflow-y-scroll text-left bg-white shadow-md  transform rounded-2xl`}
             onPress={() => setSelectedOrderType(order)}
           >
             <View style={tw`flex flex-row`}>

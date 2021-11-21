@@ -4,7 +4,7 @@ import tw from "app/lib/tailwind"
 import { ArrowRotateRight, DocumentForward } from "iconsax-react-native"
 
 const ReturnToLastScreenModal = ({ send }) => (
-  <View style={tw`inline-block w-full align-middle h-full`}>
+  <View style={tw`inline-block w-full h-full`}>
     <View style={tw`flex items-center justify-center `}>
       <Pressable
         style={tw`w-4/5 p-4 my-2 bg-white shadow-md transform rounded-2xl`}

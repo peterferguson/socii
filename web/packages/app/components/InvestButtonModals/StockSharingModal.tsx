@@ -1,5 +1,5 @@
 import { useStream } from "app/hooks/useStream"
-import { StreamClientContext } from "app/hooks/useStreamClient"
+import { StreamClientContext } from "app/hooks/useCreateStreamClient"
 import { alphaVantageQuery } from "app/lib/firebase/function"
 import { alphaVantageQueryOptions } from "../../lib/constants"
 import tw from "app/lib/tailwind"

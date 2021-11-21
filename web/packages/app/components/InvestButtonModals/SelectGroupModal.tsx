@@ -31,7 +31,7 @@ const SelectGroupModal = ({ state, send }) => {
   }, [userGroups])
 
   return (
-    <View style={tw`w-full  align-middle`}>
+    <View style={tw`w-full `}>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
         {groups?.map(group => (

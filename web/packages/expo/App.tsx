@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import AnimatedAppLoader from "app/components/AnimatedAppLoader"
 import { AppContextProvider } from "app/contexts/AppContextProvider"
 import { Navigation } from "app/navigation"
@@ -10,7 +9,6 @@ import React, { useEffect, useRef, useState } from "react"
 import { LogBox } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
-import StreamChatProvider from "app/components/StreamChatProvider"
 import { useDeviceContext } from "twrnc"
 import { registerForExpoNotifications } from "../app/lib/firebase/messaging"
 import tw from "../app/lib/tailwind"
@@ -65,11 +63,7 @@ export default function App() {
       <AppContextProvider>
         <AnimatedAppLoader>
           <StatusBar style="auto" />
-          <BottomSheetModalProvider>
-            <StreamChatProvider>
-              <Navigation />
-            </StreamChatProvider>
-          </BottomSheetModalProvider>
+          <Navigation />
         </AnimatedAppLoader>
       </AppContextProvider>
     </SafeAreaProvider>

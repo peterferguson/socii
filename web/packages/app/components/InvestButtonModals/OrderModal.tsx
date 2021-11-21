@@ -54,7 +54,7 @@ const OrderModal = ({ symbol, state, send }) => {
   }
   return (
     <View
-      style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl`}
+      style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left bg-white shadow-xl transition-all transform rounded-2xl`}
     >
       <PriceHeader isin={isin} symbol={symbol} shortName={"shortName"} price={price} />
 

@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth"
+import { useAuth } from "./useAuth"
 import React, { useEffect, useRef } from "react"
 import { StreamChat } from "stream-chat"
 import type { StreamChat as Stream } from "stream-chat"
@@ -11,7 +11,7 @@ export interface StreamClientContext {
   client: Stream
 }
 
-export const useStreamClient = (): StreamClientContext => {
+export const useCreateStreamClient = (): StreamClientContext => {
   const { user } = useAuth()
   const username = user ? user.username : ""
   const streamClient = useRef<StreamChat | null>(null)

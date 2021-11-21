@@ -12,12 +12,12 @@ const SelectInvestActionModal = ({ symbol, state, send }) => {
   )
 
   return (
-    <View style={tw`inline-block w-full align-middle`}>
+    <View style={tw`inline-block w-full`}>
       <View style={tw`items-center h-full`}>
         {/** TODO Add a loader here  */}
         {actions?.map(action => (
           <Pressable
-            style={tw`inline-block w-10/12 max-w-lg p-2 my-2 align-middle bg-white shadow-md transform rounded-2xl`}
+            style={tw`inline-block w-10/12 max-w-lg p-2 my-2 bg-white shadow-md transform rounded-2xl`}
             onPress={() => setSelectedAction(action)}
           >
             <View style={tw`flex flex-row`}>

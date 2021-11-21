@@ -1,7 +1,6 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CenteredColumn, Modal } from "app/components"
 import { ModalHeader } from "app/components/Modal"
-import { useStream } from "app/hooks"
 import tw from "app/lib/tailwind"
 import React, { useCallback, useState } from "react"
 import { View } from "react-native"
@@ -13,7 +12,6 @@ export const AddGroupMemberModal: React.FC<{
 }> = ({ modalRef, groupName }) => {
   const [modalPosition, setModalPosition] = useState(1)
   const scrollPositions = ["25%", "50%", "90%"]
-  const { client } = useStream()
 
   const handleSheetChanges = useCallback((index: number) => setModalPosition(index), [])
   return (
@@ -29,7 +27,7 @@ export const AddGroupMemberModal: React.FC<{
             height: scrollPositions[modalPosition],
           })}
         >
-          <UserSearch groupName={groupName} modalRef={modalRef} client={client} />
+          <UserSearch groupName={groupName} modalRef={modalRef} />
         </CenteredColumn>
       </View>
     </Modal>
