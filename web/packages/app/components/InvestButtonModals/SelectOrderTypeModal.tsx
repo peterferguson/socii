@@ -1,12 +1,10 @@
-import React from "react"
-import { View, Text, Pressable } from "react-native"
 import tw from "app/lib/tailwind"
+import React from "react"
+import { Pressable, Text, View } from "react-native"
 import { OrderTypes } from "./OrderTypes"
 
 const SelectOrderTypeModal = ({ symbol, state, send }) => {
-  const setSelectedOrderType = order => {
-    send(order.actionName)
-  }
+  const setSelectedOrderType = order => send(order.actionName)
 
   return (
     <View style={tw`inline-block w-full align-middle`}>
@@ -15,9 +13,7 @@ const SelectOrderTypeModal = ({ symbol, state, send }) => {
         {OrderTypes(symbol, state.context.side)?.map(order => (
           <Pressable
             style={tw`inline-block w-4/5 max-w-lg p-4 my-2 overflow-y-scroll text-left align-middle bg-white shadow-md  transform rounded-2xl`}
-            onPress={() => {
-              setSelectedOrderType(order)
-            }}
+            onPress={() => setSelectedOrderType(order)}
           >
             <View style={tw`flex flex-row`}>
               <View style={tw`flex justify-center`}>

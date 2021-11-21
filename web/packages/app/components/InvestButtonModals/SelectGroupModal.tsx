@@ -5,17 +5,13 @@ import { getGroupDocsByName } from "app/lib/firebase/db/getGroupDocsByName"
 import tw from "app/lib/tailwind"
 
 const SelectGroupModal = ({ state, send }) => {
-  console.log("in select groupppppp")
-
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = (groupName) => {
-    send("SELECT_GROUP", { groupName: groupName })
-  }
-   
+  const setSelectedGroup = groupName => send("SELECT_GROUP", { groupName: groupName })
+
   useEffect(() => {
     const getGroupData = async () => {
       setGroups(

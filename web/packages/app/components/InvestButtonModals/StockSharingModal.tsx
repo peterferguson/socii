@@ -78,7 +78,6 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
     // })
     console.log("message click handler")
   }
-  console.log("tpppppp", targetPrice)
 
   return (
     // TODO create style sheet for nicer code
@@ -100,12 +99,11 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
           </Text>
         </View>
         {/* // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd */}
-        <MultiSelect 
+        <MultiSelect
           items={alphaVantageQueryOptions}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
         />
-
 
         <View>
           <Text style={tw`text-sm text-gray-500 font-primary`}>

@@ -12,14 +12,14 @@ const ReturnToLastScreenModal = ({ send }) => (
       >
         <View style={tw`flex flex-row`}>
           <View style={tw`flex justify-center p-2 rounded-full bg-pink-200`}>
-            <ArrowRotateRight size={25} variant="Outline"/>
-          </View>  
-          <View  style={tw`flex flex-col justify-center pl-2 w-11/12`} >                
+            <ArrowRotateRight size={25} variant="Outline" />
+          </View>
+          <View style={tw`flex flex-col justify-center pl-2 w-11/12`}>
             <Text style={tw`flex flex-wrap text-lg leading-none text-brand-black`}>
               No, start over!
             </Text>
           </View>
-        </View> 
+        </View>
       </Pressable>
       <Pressable
         style={tw`inline-block w-4/5 p-4 my-2 bg-white shadow-md transform rounded-2xl`}
@@ -27,14 +27,14 @@ const ReturnToLastScreenModal = ({ send }) => (
       >
         <View style={tw`flex flex-row`}>
           <View style={tw`flex justify-center p-2 rounded-full bg-brand-lightTeal`}>
-            <DocumentForward size={25} variant="Outline"/>
-          </View>  
-          <View  style={tw`flex flex-col justify-center pl-2 w-11/12`} >                
+            <DocumentForward size={25} variant="Outline" />
+          </View>
+          <View style={tw`flex flex-col justify-center pl-2 w-11/12`}>
             <Text style={tw`flex flex-wrap text-lg leading-none text-brand-black`}>
               Yes, continue
             </Text>
           </View>
-        </View> 
+        </View>
       </Pressable>
     </View>
   </View>
