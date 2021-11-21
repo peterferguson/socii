@@ -1,8 +1,4 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React, { useCallback, useState, useEffect } from "react"
-import { Keyboard, ScrollView, View } from "react-native"
-import type { UserResponse } from "stream-chat"
-import { Chat } from "stream-chat-expo"
 import {
   Button,
   CenteredColumn,
@@ -17,10 +13,13 @@ import {
 } from "app/components"
 import { ModalHeader } from "app/components/Modal"
 import { SearchUsersProvider } from "app/contexts"
-import { useAuth, useSearchUsers, useStream, useModal } from "app/hooks"
+import { useModal, useSearchUsers, useStream } from "app/hooks"
 import { getUserWithUsername, inviteInvestorToGroup } from "app/lib/firebase/db"
 import tw from "app/lib/tailwind"
 import { createParam } from "app/navigation/use-param"
+import React, { useCallback, useEffect, useState } from "react"
+import { Keyboard, ScrollView, View } from "react-native"
+import type { StreamChat, UserResponse } from "stream-chat"
 
 type Query = {
   id: string
@@ -54,6 +53,7 @@ const AddGroupMemberModal: React.FC<{
 }> = ({ modalRef, groupName }) => {
   const [modalPosition, setModalPosition] = useState(1)
   const scrollPositions = ["25%", "50%", "90%"]
+  const { client } = useStream()
 
   const handleSheetChanges = useCallback((index: number) => setModalPosition(index), [])
   return (
@@ -69,47 +69,30 @@ const AddGroupMemberModal: React.FC<{
             height: scrollPositions[modalPosition],
           })}
         >
-          <UserSearch groupName={groupName} modalRef={modalRef} />
+          <UserSearch groupName={groupName} modalRef={modalRef} client={client} />
         </CenteredColumn>
       </View>
     </Modal>
   )
 }
 
-/* 
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
- We need to fix the contexts no longer working in the UserSearch component.
- ? They seem to work fine in the parent components & the providers are parents.
-TODO 
-TODO 
-TODO 
-TODO 
-TODO 
-*/
-
 const UserSearch: React.FC<{
   groupName: string
   modalRef: React.MutableRefObject<BottomSheetModal>
-}> = ({ groupName, modalRef, ...props }) => {
-  const { client } = useStream()
-  useEffect(() => console.log("client", client), [client])
+  // TODO We need to fix the contexts no longer working in the UserSearch component.
+  // ? They seem to work fine in the parent components & the providers are parents.
+  client: StreamChat
+}> = ({ groupName, modalRef, client, ...props }) => {
   // TODO: Animate the change in position of the loading indicator in line with the snap
   // TODO: position of the modal. Probably easiest to do this with moti
   return (
     <>
       {client?.user ? (
-        // @ts-ignore
-        <Chat client={client}>
-          <SearchUsersProvider>
-            <AddSelectedMembersToGroup groupName={groupName} modalRef={modalRef} />
-            <UserSearchInput onSubmit={() => {}} />
-            <UserSearchResults />
-          </SearchUsersProvider>
-        </Chat>
+        <SearchUsersProvider>
+          <AddSelectedMembersToGroup groupName={groupName} modalRef={modalRef} />
+          <UserSearchInput onSubmit={() => {}} />
+          <UserSearchResults />
+        </SearchUsersProvider>
       ) : (
         <LoadingIndicator color={tw.color("brand")} size={50} />
       )}
