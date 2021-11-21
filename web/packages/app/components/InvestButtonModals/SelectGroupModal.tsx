@@ -4,7 +4,7 @@ import { View, Text, Pressable } from "react-native"
 import { getGroupDocsByName } from "app/lib/firebase/db/getGroupDocsByName"
 import tw from "app/lib/tailwind"
 
-const SelectGroupModal = ({ state, send }) => {
+const SelectGroupModal = ({ send }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
@@ -31,12 +31,12 @@ const SelectGroupModal = ({ state, send }) => {
   }, [userGroups])
 
   return (
-    <View style={tw`w-full `}>
+    <View style={tw`w-full`}>
       <View style={tw`items-center`}>
         {/** TODO Add a loader here  */}
         {groups?.map(group => (
           <Pressable
-            style={tw`w-4/5 p-4 my-2  text-left bg-white shadow-md  transform rounded-2xl`}
+            style={tw`w-4/5 p-4 text-left bg-white shadow-md transform rounded-2xl`}
             onPress={setSelectedGroup}
           >
             <View>
