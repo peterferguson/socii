@@ -1,35 +1,17 @@
-import { SignUpFirstModal } from "app/components/SignUpFirstModal"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useMachine } from "@xstate/react"
-import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
+import { useModal } from "app/hooks/"
 import tw from "app/lib/tailwind"
-import React, { useEffect } from "react"
+import React from "react"
 import { Pressable, Text, View } from "react-native"
-import { useAuth, useModal } from "app/hooks/"
 import { shadowStyle } from "../utils/shadowStyle"
-import { InvestButtonModal } from "./InvestButtonModals/InvestButtonModal"
 
-const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
-  const { user } = useAuth()
-  // - State machine for the invest button
-  const [state, send] = useMachine(stockInvestButtonMachine)
-  const modalRef = React.useRef<BottomSheetModal>(null)
-
-  const { handlePresent } = useModal(modalRef)
-  // - When the user navigates away from the page, we want to reset the state machine
-  // TODO: Ensure this works on transitions of dynamic routes
-  // TODO: If not may need to add usePrevious hook?
-  useEffect(() => {
-    send("RESET")
-  }, [symbol, send])
-
+const InvestButton: React.FC<any> = ({ backgroundColor, onPress }) => {
   // TODO: On user not logged in show login modal instead of redirecting to login page
   return (
     <View>
       <Pressable
-        onPress={send("CLICK") && handlePresent}
+        onPress={onPress}
         style={{
-          backgroundColor: logoColor,
+          backgroundColor,
           ...tw`h-14 my-2 mx-4 rounded-2xl sm:rounded-xl`,
           ...shadowStyle("md"),
         }}
@@ -38,16 +20,6 @@ const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
           <Text style={{ ...tw`text-4xl text-white` }}>Invest</Text>
         </View>
       </Pressable>
-      {user ? (
-        <InvestButtonModal
-          modalRef={modalRef}
-          state={state}
-          send={send}
-          symbol={symbol}
-        />
-      ) : (
-        <SignUpFirstModal modalRef={modalRef} />
-      )}
     </View>
   )
 }

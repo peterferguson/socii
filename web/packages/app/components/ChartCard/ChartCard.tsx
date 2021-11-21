@@ -5,9 +5,9 @@ import { Vector } from "react-native-redash"
 import { Graph } from "app/hooks/useGraph"
 import tw from "app/lib/tailwind"
 import { shadowStyle } from "app/utils/shadowStyle"
-import { Chart } from "./Chart"
-import { ChartTabButton } from "./ChartTabButton"
-import { ChartTabRow } from "./ChartTabRow"
+import Chart from "./Chart"
+import ChartTabButton from "./ChartTabButton"
+import ChartTabRow from "./ChartTabRow"
 import { TabLabel, tabs } from "./constants"
 export interface IAssetPageLineChartProps {
   logoColor: string

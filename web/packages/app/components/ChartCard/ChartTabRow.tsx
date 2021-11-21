@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import tw from "app/lib/tailwind"
 import { BUTTON_WIDTH, TabLabel, tabs, WIDTH } from "./constants"
 
-export const ChartTabRow: React.FC<{
+const ChartTabRow: React.FC<{
   logoColor: string
   activeTab: Animated.SharedValue<TabLabel>
 }> = ({ children, logoColor, activeTab }) => {
@@ -37,3 +37,5 @@ export const ChartTabRow: React.FC<{
     </View>
   )
 }
+
+export default ChartTabRow

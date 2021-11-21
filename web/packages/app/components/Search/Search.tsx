@@ -74,8 +74,8 @@ const Search = ({ searchCollection = "tickers" }) => {
       snapToPositions={scrollPositions}
       detach={true}
       bottomInset={insetHeight}
-      defaultPositionIndex={1}
       backdropComponent={ModalBackdrop}
+      defaultPositionIndex={1}
       modalStyle={{ marginHorizontal: 24, paddingHorizontal: 12 }}
     >
       <InstantSearch searchClient={algoliaClient} indexName={searchCollection}>
@@ -85,7 +85,7 @@ const Search = ({ searchCollection = "tickers" }) => {
         />
         <SearchInput />
         <SearchTypes />
-        <InfiniteHits router={router}/>
+        <InfiniteHits router={router} />
       </InstantSearch>
     </Modal>
   )

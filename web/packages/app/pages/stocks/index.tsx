@@ -8,7 +8,7 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
-import HeaderTitle from "app/components/Headers/HeaderTitle"
+import HeaderTitle from "../../components/Headers/HeaderTitle"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import { StocksStackParams } from "app/navigation/types"
@@ -17,7 +17,7 @@ import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import React from "react"
 import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { AnimatedStocksHeader } from "app/components/Headers/AnimatedStocksHeader"
+import { AnimatedStocksHeader } from "../../components/Headers/AnimatedStocksHeader"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 

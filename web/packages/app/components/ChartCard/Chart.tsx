@@ -10,7 +10,7 @@ import Cursor from "./Cursor"
 
 export const AnimatedPath = Animated.createAnimatedComponent(Path)
 
-export const Chart: React.FC<{
+const Chart: React.FC<{
   currentGraph: Graph
   fetchingGraph: boolean
   lastGraph: Graph
@@ -107,3 +107,5 @@ const FixedAxisEndpointLabels = ({
     ))}
   </>
 )
+
+export default Chart

@@ -1,20 +1,32 @@
-import type { StockScreenProps } from "app/navigation/types"
-import { createParam } from "app/navigation/use-param"
-import React, { useEffect, useRef, useState } from "react"
-import { ScrollView, View } from "react-native"
-import { runOnJS, useDerivedValue, useSharedValue } from "react-native-reanimated"
-import { useVector } from "react-native-redash"
-import ChartCard from "app/components/ChartCard/ChartCard"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useMachine } from "@xstate/react"
+import {
+  ChartCard,
+  InvestButton,
+  PriceCard,
+  SignUpFirstModal,
+  StockRecommendations,
+} from "app/components"
 import { TabLabel } from "app/components/ChartCard/constants"
-import InvestButton from "app/components/InvestButton"
-import PriceCard from "app/components/PriceCard"
-import StockRecommendations from "app/components/StockRecommendations"
+import { InvestButtonModal } from "app/components/InvestButtonModals/InvestButtonModal"
+import { useAuth, useModal } from "app/hooks/"
 import { useAssetData } from "app/hooks/useAssetData"
 import { useGraph } from "app/hooks/useGraph"
 import { usePrevious } from "app/hooks/usePrevious"
 import { useRecommendations } from "app/hooks/useRecommendations"
+import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
 import { Asset } from "app/models/Asset"
+import type { StockScreenProps } from "app/navigation/types"
+import { createParam } from "app/navigation/use-param"
 import { IntervalEnum, PeriodEnum } from "app/utils/getYahooTimeseries"
+import React, { useEffect, useRef, useState } from "react"
+import { ScrollView, View } from "react-native"
+import Animated, {
+  runOnJS,
+  useDerivedValue,
+  useSharedValue,
+} from "react-native-reanimated"
+import { useVector } from "react-native-redash"
 
 type Query = { asset: string }
 
@@ -94,8 +106,22 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
     return prevTab.value !== activeTab.value
   })
 
+  const { user } = useAuth()
+  // - State machine for the invest button
+  const [state, send] = useMachine(stockInvestButtonMachine)
+  const modalRef = React.useRef<BottomSheetModal>(null)
+
+  const { handlePresent } = useModal(modalRef)
+
+  // - When the user navigates away from the page, we want to reset the state machine
+  // TODO: Ensure this works on transitions of dynamic routes
+  // TODO: If not may need to add usePrevious hook?
+  useEffect(() => {
+    send("RESET")
+  }, [symbol, send])
+
   return (
-    <View style={{ flex: 1 }}>
+    <Animated.View style={{ flex: 1 }}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false} ref={scrollRef}>
         <View style={{ marginBottom: 24 }}>
           <PriceCard
@@ -107,7 +133,10 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             translation={translation}
             priceForComparison={graphs[period.value]?.timeseries?.[0].close}
           />
-          <InvestButton logoColor={assets[symbol]?.logoColor} symbol={symbol} />
+          <InvestButton
+            backgroundColor={assets[symbol]?.logoColor}
+            onPress={send("CLICK") && handlePresent}
+          />
           <ChartCard
             {...{
               lastGraph: graphs[prevPeriod.value],
@@ -124,6 +153,16 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
           <StockRecommendations recommendations={recommendations} />
         </View>
       </ScrollView>
-    </View>
+      {user ? (
+        <InvestButtonModal
+          modalRef={modalRef}
+          state={state}
+          send={send}
+          symbol={symbol}
+        />
+      ) : (
+        <SignUpFirstModal modalRef={modalRef} />
+      )}
+    </Animated.View>
   )
 }
