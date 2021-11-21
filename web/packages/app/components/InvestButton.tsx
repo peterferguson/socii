@@ -1,14 +1,16 @@
+import { SignUpFirstModal } from "app/components/SignUpFirstModal"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useMachine } from "@xstate/react"
 import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
 import tw from "app/lib/tailwind"
 import React, { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
-import { useModal } from "../hooks/useModal"
+import { useAuth, useModal } from "app/hooks/"
 import { shadowStyle } from "../utils/shadowStyle"
 import { InvestButtonModal } from "./InvestButtonModals/InvestButtonModal"
 
 const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
+  const { user } = useAuth()
   // - State machine for the invest button
   const [state, send] = useMachine(stockInvestButtonMachine)
   const modalRef = React.useRef<BottomSheetModal>(null)
@@ -36,12 +38,16 @@ const InvestButton: React.FC<any> = ({ logoColor, symbol }) => {
           <Text style={{ ...tw`text-4xl text-white` }}>Invest</Text>
         </View>
       </Pressable>
-      <InvestButtonModal
-        modalRef={modalRef}
-        state={state}
-        send={send}
-        symbol={symbol}
-      />
+      {user ? (
+        <InvestButtonModal
+          modalRef={modalRef}
+          state={state}
+          send={send}
+          symbol={symbol}
+        />
+      ) : (
+        <SignUpFirstModal modalRef={modalRef} />
+      )}
     </View>
   )
 }
