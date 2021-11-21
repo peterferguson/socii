@@ -10,8 +10,6 @@ const UserSearchInput = ({ onSubmit, ...props }) => {
   const { clearText, searchText, onFocusInput, onChangeSearchText } = useSearchUsers()
 
   const { onFocus = null, onBlur = null } = props
-  React.useEffect(() => console.log("onFocus", onFocus), [onFocus])
-  React.useEffect(() => console.log("isFocused", isFocused), [isFocused])
 
   return (
     <CenteredRow style={tw`w-11/12 px-1 py-3`}>
