@@ -1,3 +1,4 @@
+export { useAssets } from "./useAssets"
 export { useAssetData } from "./useAssetData"
 export { useAssetPrice } from "./useAssetPrice"
 export { useAuth } from "./useAuth"

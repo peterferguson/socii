@@ -1,8 +1,8 @@
+import { useModal } from "app/hooks/useModal"
+import tw from "app/lib/tailwind"
 import { Add } from "iconsax-react-native"
 import React from "react"
 import { Pressable, Text, View } from "react-native"
-import { useModal } from "app/hooks/useModal"
-import tw from "app/lib/tailwind"
 
 const ModalHeader = ({ modalRef, label = null, LabelComponent = null }) => {
   const { handleDismiss } = useModal(modalRef)
