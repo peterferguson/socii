@@ -51,7 +51,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   const { assetSymbol: symbol } = route.params
 
-  const scrollRef = useRef()
+  const scrollRef = useRef<ScrollView>()
   const prevSymbol = usePrevious(symbol)
 
   const asset = useAssetData([symbol])
@@ -91,12 +91,9 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   const { graphs, fetchingGraph } = useGraph(symbol, period.value, interval.value)
 
-  useEffect(
-    () =>
-      // @ts-ignore
-      prevSymbol !== symbol && scrollRef.current?.scrollTo({ y: 0, animated: true }),
-    []
-  )
+  useEffect(() => {
+    prevSymbol !== symbol && scrollRef.current.scrollTo({ y: 0, animated: true })
+  }, [])
 
   // - The shared value will not trigger a re-render ... we need the page to re-render
   // - when the period changes so we can get the latest data. Using some state to force
@@ -113,11 +110,11 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const { user } = useAuth()
   // - State machine for the invest button
   const [state, send] = useMachine<InvestButtonContext, InvestButtonEvent>(
-    stockInvestButtonMachine as any // TODO: fix this
+    stockInvestButtonMachine as any // TODO: fix this typing
   )
   const modalRef = React.useRef<BottomSheetModal>(null)
 
-  React.useEffect(() => console.log({ state }), [state])
+  // React.useEffect(() => console.log({ state }), [state])
 
   const { handlePresent } = useModal(modalRef)
 

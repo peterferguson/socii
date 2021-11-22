@@ -5,10 +5,10 @@ import { alphaVantageQueryOptions } from "app/lib/constants"
 import { alphaVantageQuery } from "app/lib/firebase/function"
 import tw from "app/lib/tailwind"
 import { ArrowRight2 } from "iconsax-react-native"
-import { useRouter } from "next/router"
+import { useRouter } from "app/navigation/use-router"
 import React, { useState } from "react"
 import { Dimensions, Pressable, Text, TextInput, View } from "react-native"
-import { CenteredColumn, CenteredRow } from ".."
+import { CenteredColumn, CenteredRow } from "../Centered"
 import PriceInput from "../PriceInput"
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
@@ -17,7 +17,13 @@ const DROPDOWN_ITEMS_CONTAINER_HEIGHT = SCREEN_HEIGHT
 
 const REQUIRED_QUERY_FIELDS = ["name", "industry", "exchange"]
 
-const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) => {
+const StockSharingModal = ({
+  symbol,
+  state,
+  send,
+  handleClose,
+  pricePlaceholder = "0.00",
+}) => {
   const router = useRouter()
   const { client } = useStream() as StreamClientContext
   const [message, setMessage] = useState("")
@@ -61,7 +67,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
 
       const mainMessage = await channel.sendMessage({
         text: message || `Hey I think we should check out ${symbol}!`,
-        // attachments,
+        attachments,
         skip_push: true,
       })
       // const _threadMessage = await channel.sendMessage({
@@ -74,7 +80,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
     }
   }
 
-  const sendMessageClickHandler = _ => {
+  const sendMessageClickHandler = () => {
     // toast.promise(sendStockInfo(), {
     //   loading: "sending...",
     //   success: () => {
@@ -86,6 +92,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
     // })
 
     sendStockInfo()
+    handleClose()
     router.push(`/channel/${selectedGroup}`)
   }
 
@@ -95,8 +102,6 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
         <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
           Select some data to tell your friends about!
         </Text>
-
-        {/* // TODO: Replace multiselect with https://codesandbox.io/s/react-hook-form-v7-customise-controller-return-value-wuhrd */}
         <MultiSelect
           items={alphaVantageQueryOptions}
           selectedItems={selectedItems}

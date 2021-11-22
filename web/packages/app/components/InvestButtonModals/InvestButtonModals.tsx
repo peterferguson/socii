@@ -1,9 +1,10 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import type { State, Interpreter } from "xstate"
+import { useModal } from "app/hooks/useModal"
+import { InvestButtonContext, InvestButtonEvent } from "app/lib/machines/constants"
 import tw from "app/lib/tailwind"
-import React, { useCallback, useEffect, useState } from "react"
-import { View, Text } from "react-native"
-import { CenteredColumn } from "../Centered"
+import React, { useCallback } from "react"
+import { Text, View } from "react-native"
+import type { Interpreter, State } from "xstate"
 import {
   OrderModal,
   ReturnToLastScreenModal,
@@ -12,8 +13,98 @@ import {
   SelectOrderTypeModal,
   StockSharingModal,
 } from "."
+import { CenteredColumn } from "../Centered"
 import { Modal, ModalHeader } from "../Modal"
-import { InvestButtonContext, InvestButtonEvent } from "@lib/machines/constants"
+
+export const InvestButtonModals: React.FC<{
+  modalRef: React.MutableRefObject<BottomSheetModal>
+  symbol: string
+  state: State<InvestButtonContext, InvestButtonEvent>
+  send: Interpreter<InvestButtonContext, any, InvestButtonEvent>["send"]
+}> = ({ modalRef, symbol, state, send }) => {
+  const activeStateName = String(
+    typeof state.value === "object" ? state.value["active"] : state.value
+  )
+  const scrollPositions = ["25%", "50%", "65%", "89%"]
+
+  const { handleClose, handleSnapPress } = useModal(modalRef)
+
+  // TODO: Refactor out all individualised effects & changes into the modals themselves
+  // ! Probably need to move away from just changing content in the modals for this
+  React.useEffect(() => {
+    handleSnapPress(modalDefaultSnapPosition(activeStateName))
+  }, [state.value])
+
+  const handleSheetChanges = useCallback((index: number) => {
+    index === -1 && send("CLOSE")
+  }, [])
+
+  // const groupName = state.context.group
+  const groupName = "Founders"
+
+  const ModalContents = Modals[activeStateName]
+  const ModalComponent = ModalContents?.Component
+  const ModalLabel = ModalContents?.Header
+
+  if (!ModalComponent) return null
+
+  return (
+    <Modal
+      modalRef={modalRef}
+      snapToPositions={scrollPositions}
+      onChange={handleSheetChanges}
+      defaultPositionIndex={modalDefaultSnapPosition(activeStateName)}
+    >
+      <View style={tw`flex-1 items-center`}>
+        {/* TODO: This needs refactored to allow custom headers for all modals */}
+        {activeStateName === "shareInformation" ? (
+          <ModalHeader
+            modalRef={modalRef}
+            LabelComponent={() => <ShareInformationHeader {...{ groupName, symbol }} />}
+          />
+        ) : (
+          <ModalHeader modalRef={modalRef} label={ModalLabel} />
+        )}
+        <CenteredColumn style={tw.style(`bg-white w-full h-full`)}>
+          <ModalComponent
+            symbol={symbol}
+            state={state}
+            send={send}
+            handleClose={handleClose}
+          />
+        </CenteredColumn>
+      </View>
+    </Modal>
+  )
+}
+
+const ShareInformationHeader = ({ groupName, symbol }) => (
+  <Text style={tw`text-lg font-medium text-gray-900 font-poppins-400`}>
+    Tell
+    <Text style={tw`font-bold text-brand`}> {groupName} </Text>
+    <Text>about</Text>
+    <Text style={tw`font-bold text-teal-300`}> {symbol}</Text>
+  </Text>
+)
+
+const modalDefaultSnapPosition = (activeStateName: string) => {
+  switch (activeStateName) {
+    case "chooseGroup":
+      return 0
+    case "orderType":
+      return 2
+    case "shareInformation":
+      return 2
+    case "limitOrder":
+      return 3
+    case "cashOrder":
+      return 3
+    case "shareOrder":
+      return 3
+    default:
+      return 1
+  }
+}
 
 export const Modals = {
   returnToLastScreen: {
@@ -38,62 +129,8 @@ export const Modals = {
   },
   limitOrder: {
     Component: OrderModal,
-    Header: "Place your order:",
+    Header: "Place limit order:",
   },
-  // shareOrder: { Component: OrderModalDynamic },
-  // cashOrder: { Component: OrderModalDynamic },
-}
-
-export const InvestButtonModals: React.FC<{
-  modalRef: React.MutableRefObject<BottomSheetModal>
-  symbol: string
-  state: State<InvestButtonContext, InvestButtonEvent>
-  send: Interpreter<InvestButtonContext, any, InvestButtonEvent>["send"]
-}> = ({ modalRef, symbol, state, send }) => {
-  const scrollPositions = ["50%", "75%", "90%"]
-
-  const handleSheetChanges = useCallback(
-    (index: number) => index === -1 && send("CLOSE"),
-    []
-  )
-  // const groupName = state.context.group
-  const groupName = "Founders"
-
-  const activeStateName = String(
-    typeof state.value === "object" ? state.value["active"] : state.value
-  )
-  const ModalContents = Modals[activeStateName]
-  const ModalComponent = ModalContents?.Component
-  const ModalLabel = ModalContents?.Header
-
-  if (!ModalComponent) return null
-  return (
-    <Modal
-      modalRef={modalRef}
-      snapToPositions={scrollPositions}
-      onChange={handleSheetChanges}
-    >
-      <View style={tw`flex-1 items-center`}>
-        {/* TODO: This needs refactored to allow custom headers for all modals */}
-        {activeStateName === "shareInformation" ? (
-          <ModalHeader
-            modalRef={modalRef}
-            LabelComponent={() => (
-              <Text style={tw`text-lg font-medium text-gray-900 font-poppins-400`}>
-                Tell
-                <Text style={tw`font-bold text-brand`}> {groupName} </Text>
-                <Text>about</Text>
-                <Text style={tw`font-bold text-teal-300`}> {symbol}</Text>
-              </Text>
-            )}
-          />
-        ) : (
-          <ModalHeader modalRef={modalRef} label={ModalLabel} />
-        )}
-        <CenteredColumn style={tw.style(`bg-white w-full h-full`)}>
-          <ModalComponent symbol={symbol} state={state} send={send} />
-        </CenteredColumn>
-      </View>
-    </Modal>
-  )
+  shareOrder: { Component: OrderModal, Header: "Place share order:" },
+  cashOrder: { Component: OrderModal, Header: "Place cash order:" },
 }

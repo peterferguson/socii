@@ -13,7 +13,7 @@ const SelectInvestActionModal = ({ symbol, state, send }) => {
   )
 
   return (
-    <CenteredColumn style={tw`h-full justify-start pt-12`}>
+    <CenteredColumn style={tw`justify-evenly w-full p-4 absolute top-0`}>
       {/** TODO Add a loader here  */}
       {actions?.map(action => (
         <ModalSelectButton
