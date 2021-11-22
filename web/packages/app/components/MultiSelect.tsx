@@ -61,16 +61,20 @@ interface MultiSelectProps
   setSelectedItems: React.Dispatch<React.SetStateAction<ValueType | ValueType[] | null>>
 }
 
+const DEFAULT_PROPS = {
+  searchPlaceholder: "Search",
+  searchable: true,
+  itemSeparator: true,
+  itemSeparatorStyle: { backgroundColor: "#e0e0e0" },
+  multiple: true,
+  min: 0,
+  showBadgeDot: true,
+}
+
 const Multiselect: React.FC<MultiSelectProps> = ({
   items,
   selectedItems,
   setSelectedItems,
-  dropDownContainerStyle = null,
-  dropDownDirection = "TOP",
-  searchPlaceholder = "Search",
-  searchable = true,
-  itemSeparator = true,
-  itemSeparatorStyle = { backgroundColor: "#e0e0e0" },
   ...props
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -78,26 +82,15 @@ const Multiselect: React.FC<MultiSelectProps> = ({
 
   return (
     <DropDownPicker
-      itemSeparator={itemSeparator}
-      itemSeparatorStyle={{
-        backgroundColor: "#e0e0e0",
-      }}
       open={dropdownOpen}
       value={selectedItems}
       items={dropdownItems}
       setOpen={setDropdownOpen}
       setValue={setSelectedItems}
       setItems={setDropdownItems}
-      searchPlaceholder={searchPlaceholder}
-      multiple={true}
-      min={0}
-      max={10}
-      dropDownDirection="TOP"
-      dropDownContainerStyle={dropDownContainerStyle}
-      searchable={true}
-      showBadgeDot={true}
       badgeColors={BADGE_COLORS}
       badgeDotColors={BADGE_DOT_COLORS}
+      {...DEFAULT_PROPS}
       {...props}
     />
   )

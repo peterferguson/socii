@@ -4,16 +4,20 @@ import { Pressable, Text, View } from "react-native"
 import { useModal } from "app/hooks/useModal"
 import tw from "app/lib/tailwind"
 
-const ModalHeader = ({ modalRef, label }) => {
+const ModalHeader = ({ modalRef, label = null, LabelComponent = null }) => {
   const { handleDismiss } = useModal(modalRef)
   return (
     <>
       <View style={tw`flex-row items-center justify-between w-11/12`}>
-        <Text
-          style={tw`font-poppins-600 text-lg text-brand-black dark:text-brand-gray`}
-        >
-          {label}
-        </Text>
+        {LabelComponent ? (
+          <LabelComponent />
+        ) : (
+          <Text
+            style={tw`font-poppins-600 text-lg text-brand-black dark:text-brand-gray`}
+          >
+            {label}
+          </Text>
+        )}
         <Pressable onPress={handleDismiss}>
           <Add
             size="24"

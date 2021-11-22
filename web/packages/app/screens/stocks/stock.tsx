@@ -9,7 +9,7 @@ import {
   StockRecommendations,
 } from "app/components"
 import { TabLabel } from "app/components/ChartCard/constants"
-import { InvestButtonModal } from "app/components/InvestButtonModals/InvestButtonModal"
+import { InvestButtonModals } from "app/components/InvestButtonModals/InvestButtonModals"
 import {
   useAssetData,
   useAuth,
@@ -113,7 +113,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const { user } = useAuth()
   // - State machine for the invest button
   const [state, send] = useMachine<InvestButtonContext, InvestButtonEvent>(
-    stockInvestButtonMachine
+    stockInvestButtonMachine as any // TODO: fix this
   )
   const modalRef = React.useRef<BottomSheetModal>(null)
 
@@ -162,7 +162,7 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
         </View>
       </ScrollView>
       {user ? (
-        <InvestButtonModal
+        <InvestButtonModals
           modalRef={modalRef}
           state={state}
           send={send}
