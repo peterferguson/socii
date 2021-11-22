@@ -54,7 +54,7 @@ const OrderModal = ({ symbol, state, send }) => {
   }
   return (
     <View
-      style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left bg-white shadow-xl transition-all transform rounded-2xl`}
+      style={tw`w-full max-w-md p-6 my-8 overflow-hidden text-left bg-white shadow-xl transition-all transform rounded-2xl`}
     >
       <PriceHeader isin={isin} symbol={symbol} shortName={"shortName"} price={price} />
 
@@ -98,7 +98,7 @@ const PriceHeader = ({
   shortName: string
   price: Price
 }) => (
-  <View style={tw`items-center inline-block w-full`}>
+  <View style={tw`items-center w-full`}>
     <View style={tw`flex items-center justify-center`}>
       <AssetLogo height="64" width="64" isin={isin} asset={symbol} />
       <View style={tw`flex flex-col text-center`}>

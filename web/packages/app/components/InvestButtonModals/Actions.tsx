@@ -5,7 +5,7 @@ import tw from "app/lib/tailwind"
 
 export const Actions = tickerSymbol => [
   {
-    icon: () => (
+    Icon: () => (
       <View style={tw`rounded-full bg-brand-lightTeal p-2`}>
         <ArrowCircleDown2 size={25} variant="Outline" />
       </View>
@@ -15,7 +15,7 @@ export const Actions = tickerSymbol => [
     actionName: "CHOOSE_BUY",
   },
   {
-    icon: () => (
+    Icon: () => (
       <View style={tw`rounded-full bg-red-300 p-2`}>
         <MoneySend size={25} variant="Outline" />
       </View>
@@ -26,9 +26,9 @@ export const Actions = tickerSymbol => [
     actionName: "CHOOSE_SELL",
   },
   {
-    icon: () => (
+    Icon: () => (
       <View style={tw`rounded-full bg-blue-300 p-2`}>
-        <Share size={25} variant="Bold"/>
+        <Share size={25} variant="Bold" />
       </View>
     ),
     name: `Share ${tickerSymbol} with a group`,
