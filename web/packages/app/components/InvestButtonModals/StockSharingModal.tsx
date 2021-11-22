@@ -1,22 +1,24 @@
+import { alphaVantageQueryOptions } from "app/lib/constants"
+import type { StreamClientContext } from "app/hooks/useCreateStreamClient"
 import { useStream } from "app/hooks/useStream"
-import { StreamClientContext } from "app/hooks/useCreateStreamClient"
 import { alphaVantageQuery } from "app/lib/firebase/function"
-import { alphaVantageQueryOptions } from "../../lib/constants"
 import tw from "app/lib/tailwind"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { Text, TextInput, View } from "react-native"
-import MultiSelect from "../MultiSelect"
 import PriceInput from "../PriceInput"
+import MultiSelect from "app/components/MultiSelect"
 
 const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) => {
   const router = useRouter()
   const { client } = useStream() as StreamClientContext
   const [message, setMessage] = useState("")
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
-  const [selectedItems, setSelectedItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState(null)
   const [sendClicked, setSendClicked] = useState(false)
-  const { group: selectedGroup } = state.context
+  // const { group: selectedGroup } = state.context
+  const selectedGroup = "Founders"
+
   // const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
   const requiredQueryFields = ["name", "industry", "exchange"]
@@ -80,21 +82,19 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
   }
 
   return (
-    // TODO create style sheet for nicer code
-    <View style={tw`w-full p-4 bg-white transition-all transform rounded-2xl`}>
-      <View style={tw`text-lg py-1 font-medium text-gray-900 font-primary leading-6`}>
-        {/* TODO fix this.. surely better way to style text */}
-        <Text style={tw`text-lg font-medium text-gray-900 font-primary leading-6`}>
+    <View style={tw`w-full p-4 absolute top-2`}>
+      <View style={tw`py-1`}>
+        <Text style={tw`text-lg font-medium text-gray-900 font-poppins-400`}>
           Tell
           <Text style={tw`font-bold text-brand`}> {selectedGroup || "Test"} </Text>
-          <Text> about </Text>
+          <Text>about</Text>
           <Text style={tw`font-bold text-teal-300`}> {symbol}</Text>
         </Text>
       </View>
 
       <View style={tw`mt-2`}>
-        <View style={tw`text-sm text-gray-500 font-primary`}>
-          <Text style={tw`text-sm text-gray-500 font-primary`}>
+        <View style={tw`text-sm text-gray-500 font-poppins-400`}>
+          <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
             Select some data to tell your friends about!
           </Text>
         </View>
@@ -106,7 +106,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
         />
 
         <View>
-          <Text style={tw`text-sm text-gray-500 font-primary`}>
+          <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
             Got a price in mind?
           </Text>
         </View>
@@ -119,7 +119,7 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
         </View>
 
         <View>
-          <Text style={tw`text-sm py-1 text-gray-500 font-primary`}>
+          <Text style={tw`text-sm py-1 text-gray-500 font-poppins-400`}>
             Tell them your thoughts!
           </Text>
         </View>

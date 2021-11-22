@@ -1,4 +1,5 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import type { State, Interpreter } from "xstate"
 import tw from "app/lib/tailwind"
 import React, { useCallback, useEffect, useState } from "react"
 import { View } from "react-native"
@@ -12,6 +13,7 @@ import {
   StockSharingModal,
 } from "."
 import { Modal, ModalHeader } from "../Modal"
+import { InvestButtonContext, InvestButtonEvent } from "@lib/machines/constants"
 
 export const Modals = {
   returnToLastScreen: {
@@ -45,8 +47,8 @@ export const Modals = {
 export const InvestButtonModal: React.FC<{
   modalRef: React.MutableRefObject<BottomSheetModal>
   symbol: string
-  state: any
-  send: (event: string) => void
+  state: State<InvestButtonContext, InvestButtonEvent>
+  send: Interpreter<InvestButtonContext, any, InvestButtonEvent>["send"]
 }> = ({ modalRef, symbol, state, send }) => {
   const [open, setOpen] = useState(false)
 

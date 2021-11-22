@@ -15,7 +15,7 @@
     "module": "esnext",
     "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/machines/stockInvestButtonMachine.js"],
   "exclude": ["node_modules"],
   "extends": "../../tsconfig.json"
 }

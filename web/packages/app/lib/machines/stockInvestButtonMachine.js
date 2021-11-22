@@ -1,46 +1,51 @@
 import { createMachine, assign } from "xstate"
 
 // - helper functions
-const lastActiveState = (ctx) => {
+const lastActiveState = ctx => {
   const filteredStack = dirtyActiveStates(ctx).filter(
-    (state) => state !== ctx.currentStateName
+    state => state !== ctx.currentStateName
   )
   return filteredStack[filteredStack.length - 1]
 }
 
-const dirtyActiveStates = (ctx) => {
+const dirtyActiveStates = ctx => {
   return ctx.historyStack.filter(
-    (k) => !["inactive", "idle", "returnToLastScreen"].includes(k)
+    k => !["inactive", "idle", "returnToLastScreen"].includes(k)
   )
 }
 
 const wasOnState = (ctx, stateName) => lastActiveState(ctx) === stateName
 
 const initialContext = {
+  currentStateName: "idle",
   hasHolding: false,
   wantsToShare: false,
-  group: "",
-  side: "",
-  orderType: "",
-  // - The following context is used to keep track of the state history
-  currentStateName: "idle",
-  historyStack: [],
+  group: undefined,
+  side: undefined,
+  orderType: undefined,
+  historyStack: [], // - Used to keep track of the state history
 }
 
 // - updates to state context
 const selectShare = assign({ wantsToShare: true })
 const selectGroup = assign({ group: (_ctx, e) => e.groupName })
-const resetChoices = assign({ group: "", side: "", orderType: "", wantsToShare: false, historyStack: [] })
+const resetChoices = assign({
+  wantsToShare: false,
+  group: "",
+  side: undefined,
+  orderType: undefined,
+  historyStack: [],
+})
 const updateHolding = assign({ hasHolding: (_ctx, e) => !!e.holding })
-const setOrderType = (order) => assign({ orderType: order })
-const updateHistoryStack = (thisState) =>
+const setOrderType = order => assign({ orderType: order })
+const updateHistoryStack = thisState =>
   assign({
     currentStateName: thisState,
-    historyStack: (ctx) => ctx.historyStack.concat(ctx.currentStateName),
+    historyStack: ctx => ctx.historyStack.concat(ctx.currentStateName),
   })
 const reinstatePreviousState = assign({
-  historyStack: (ctx) => ctx.historyStack.concat(ctx.currentStateName),
-  currentStateName: (ctx) => lastActiveState(ctx),
+  historyStack: ctx => ctx.historyStack.concat(ctx.currentStateName),
+  currentStateName: ctx => lastActiveState(ctx),
 })
 
 // TODO: Remove the returnToLastPage Question if they only got one page in!
@@ -53,7 +58,7 @@ export const stockInvestButtonMachine = createMachine(
     on: {
       RESET: {
         target: ".idle",
-        actions: assign((context) => initialContext),
+        actions: assign(context => initialContext),
       },
     },
     states: {
@@ -215,12 +220,12 @@ export const stockInvestButtonMachine = createMachine(
   },
   {
     guards: {
-      onlyEnteredFirstPage: (ctx) => new Set(dirtyActiveStates(ctx)).size === 1,
-      previouslyChooseGroup: (ctx) => !!ctx.group,
-      hasHolding: (ctx) => ctx.hasHolding,
-      wantsToShare: (ctx) => wasOnState(ctx, "investAction") && ctx.wantsToShare,
-      previouslyOnInvestAction: (ctx) => wasOnState(ctx, "investAction") && ctx.side,
-      previouslyIdleOrInactive: (ctx) => {
+      onlyEnteredFirstPage: ctx => new Set(dirtyActiveStates(ctx)).size === 1,
+      previouslyChooseGroup: ctx => !!ctx.group,
+      hasHolding: ctx => ctx.hasHolding,
+      wantsToShare: ctx => wasOnState(ctx, "investAction") && ctx.wantsToShare,
+      previouslyOnInvestAction: ctx => wasOnState(ctx, "investAction") && ctx.side,
+      previouslyIdleOrInactive: ctx => {
         return ["idle", "inactive", "returnToLastScreen"].includes(
           ctx.historyStack[ctx.historyStack.length - 1]
         )

@@ -1,4 +1,5 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { InvestButtonContext, InvestButtonEvent } from "app/lib/machines/constants"
 import { useMachine } from "@xstate/react"
 import {
   ChartCard,
@@ -9,11 +10,14 @@ import {
 } from "app/components"
 import { TabLabel } from "app/components/ChartCard/constants"
 import { InvestButtonModal } from "app/components/InvestButtonModals/InvestButtonModal"
-import { useAuth, useModal } from "app/hooks/"
-import { useAssetData } from "app/hooks/useAssetData"
-import { useGraph } from "app/hooks/useGraph"
-import { usePrevious } from "app/hooks/usePrevious"
-import { useRecommendations } from "app/hooks/useRecommendations"
+import {
+  useAssetData,
+  useAuth,
+  useGraph,
+  useModal,
+  usePrevious,
+  useRecommendations,
+} from "app/hooks"
 import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
 import { Asset } from "app/models/Asset"
 import type { StockScreenProps } from "app/navigation/types"
@@ -108,8 +112,12 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
 
   const { user } = useAuth()
   // - State machine for the invest button
-  const [state, send] = useMachine(stockInvestButtonMachine)
+  const [state, send] = useMachine<InvestButtonContext, InvestButtonEvent>(
+    stockInvestButtonMachine
+  )
   const modalRef = React.useRef<BottomSheetModal>(null)
+
+  React.useEffect(() => console.log({ state }), [state])
 
   const { handlePresent } = useModal(modalRef)
 
