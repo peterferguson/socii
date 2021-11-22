@@ -1,4 +1,5 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useAssets } from "app/hooks/useAssets"
 import { useModal } from "app/hooks/useModal"
 import { InvestButtonContext, InvestButtonEvent } from "app/lib/machines/constants"
 import tw from "app/lib/tailwind"
@@ -25,9 +26,9 @@ export const InvestButtonModals: React.FC<{
   const activeStateName = String(
     typeof state.value === "object" ? state.value["active"] : state.value
   )
-  const scrollPositions = ["25%", "50%", "65%", "89%"]
 
-  const { handleClose, handleSnapPress } = useModal(modalRef)
+  const { FULL_HEIGHT_SNAP_POINT, handleClose, handleSnapPress } = useModal(modalRef)
+  const scrollPositions = ["25%", "50%", "65%", "89%", FULL_HEIGHT_SNAP_POINT]
 
   // TODO: Refactor out all individualised effects & changes into the modals themselves
   // ! Probably need to move away from just changing content in the modals for this
@@ -41,6 +42,8 @@ export const InvestButtonModals: React.FC<{
 
   // const groupName = state.context.group
   const groupName = "Founders"
+
+  const asset = useAssets()[symbol]
 
   const ModalContents = Modals[activeStateName]
   const ModalComponent = ModalContents?.Component
@@ -60,7 +63,11 @@ export const InvestButtonModals: React.FC<{
         {activeStateName === "shareInformation" ? (
           <ModalHeader
             modalRef={modalRef}
-            LabelComponent={() => <ShareInformationHeader {...{ groupName, symbol }} />}
+            LabelComponent={() => (
+              <ShareInformationHeader
+                {...{ groupName, symbol, logoColor: asset.logoColor }}
+              />
+            )}
           />
         ) : (
           <ModalHeader modalRef={modalRef} label={ModalLabel} />
@@ -68,6 +75,8 @@ export const InvestButtonModals: React.FC<{
         <CenteredColumn style={tw.style(`bg-white w-full h-full`)}>
           <ModalComponent
             symbol={symbol}
+            modalRef={modalRef}
+            asset={asset}
             state={state}
             send={send}
             handleClose={handleClose}
@@ -78,14 +87,16 @@ export const InvestButtonModals: React.FC<{
   )
 }
 
-const ShareInformationHeader = ({ groupName, symbol }) => (
-  <Text style={tw`text-lg font-medium text-gray-900 font-poppins-400`}>
-    Tell
-    <Text style={tw`font-bold text-brand`}> {groupName} </Text>
-    <Text>about</Text>
-    <Text style={tw`font-bold text-teal-300`}> {symbol}</Text>
-  </Text>
-)
+const ShareInformationHeader = ({ groupName, symbol, logoColor }) => {
+  return (
+    <Text style={tw`text-lg font-medium text-gray-900 font-poppins-400`}>
+      Tell
+      <Text style={tw`font-bold text-brand`}> {groupName} </Text>
+      <Text>about</Text>
+      <Text style={tw.style(`font-bold`, { color: logoColor })}> {symbol}</Text>
+    </Text>
+  )
+}
 
 const modalDefaultSnapPosition = (activeStateName: string) => {
   switch (activeStateName) {
@@ -96,11 +107,11 @@ const modalDefaultSnapPosition = (activeStateName: string) => {
     case "shareInformation":
       return 2
     case "limitOrder":
-      return 3
+      return 4
     case "cashOrder":
-      return 3
+      return 4
     case "shareOrder":
-      return 3
+      return 4
     default:
       return 1
   }

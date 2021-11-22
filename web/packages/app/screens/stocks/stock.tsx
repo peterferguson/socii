@@ -11,6 +11,7 @@ import {
 import { TabLabel } from "app/components/ChartCard/constants"
 import { InvestButtonModals } from "app/components/InvestButtonModals/InvestButtonModals"
 import {
+  useAssets,
   useAssetData,
   useAuth,
   useGraph,
@@ -30,6 +31,7 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated"
+import { AssetsProvider } from "app/contexts/AssetsProvider"
 import { useVector } from "react-native-redash"
 
 type Query = { asset: string }
@@ -54,7 +56,10 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   const scrollRef = useRef<ScrollView>()
   const prevSymbol = usePrevious(symbol)
 
-  const asset = useAssetData([symbol])
+  const asset = useAssets()
+
+  React.useEffect(() => console.log("asset", asset), [asset])
+
   const { recommendations } = useRecommendations(symbol)
 
   const [assets, setAssets] = useState<AssetData>({ ...asset, ...recommendations })
@@ -114,16 +119,12 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   )
   const modalRef = React.useRef<BottomSheetModal>(null)
 
-  // React.useEffect(() => console.log({ state }), [state])
-
   const { handlePresent } = useModal(modalRef)
 
   // - When the user navigates away from the page, we want to reset the state machine
-  // TODO: Ensure this works on transitions of dynamic routes
-  // TODO: If not may need to add usePrevious hook?
   useEffect(() => {
     send("RESET")
-  }, [symbol, send])
+  }, [route.path])
 
   return (
     <Animated.View style={{ flex: 1 }}>

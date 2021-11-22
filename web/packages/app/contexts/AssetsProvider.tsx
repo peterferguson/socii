@@ -1,7 +1,7 @@
-import { useAssetData } from "@hooks/useAssetData"
+import { useAssetData } from "app/hooks/useAssetData"
 import { AssetsContext } from "./AssetsContext"
 
-export function AuthProvider({ children, assetSymbols }) {
+export function AssetsProvider({ children, assetSymbols }) {
   const assets = useAssetData(assetSymbols)
   return <AssetsContext.Provider value={assets}>{children}</AssetsContext.Provider>
 }

@@ -27,14 +27,13 @@
  *   />
  */
 
-// import { useAuth } from "@hooks/useAuth"
-import { SearchIcon } from "app/components/Search/SearchIcon"
 import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
 import { CenteredRow } from "app/components/Centered"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
 import Search from "app/components/Search/Search"
+import { SearchIcon } from "app/components/Search/SearchIcon"
 import { useSearchModal } from "app/hooks/useSearchModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
 import tw from "app/lib/tailwind"
@@ -42,13 +41,11 @@ import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
-import { SearchNormal1 } from "iconsax-react-native"
 import React, { useEffect, useState } from "react"
 import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Pressable,
   ScrollView,
   Text,
   View,

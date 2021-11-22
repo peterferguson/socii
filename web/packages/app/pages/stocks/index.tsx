@@ -8,7 +8,7 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
-import HeaderTitle from "../../components/Headers/HeaderTitle"
+import { AssetsProvider } from "app/contexts/AssetsProvider"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import { StocksStackParams } from "app/navigation/types"
@@ -18,6 +18,7 @@ import StockScreen from "app/screens/stocks/stock"
 import React from "react"
 import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { AnimatedStocksHeader } from "../../components/Headers/AnimatedStocksHeader"
+import HeaderTitle from "../../components/Headers/HeaderTitle"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
@@ -63,19 +64,35 @@ const StocksNavigator = () => {
         />
         <StocksStack.Screen
           name="stockScreen"
-          component={StockScreen}
           options={({ route }) => ({
-            title: route.params.assetSymbol,
             headerTitle: () => (
-              <HeaderTitle headerTitle={"Stocks"} text={route.params.assetSymbol} />
+              <AssetsProvider assetSymbols={[route.params.assetSymbol]}>
+                <HeaderTitle headerTitle={route.params.assetSymbol} />
+              </AssetsProvider>
             ),
           })}
           // TODO: Add asset as the title of the screen the transition to price on scroll
           // TODO: a la coinbase blog https://blog.coinbase.com/coinbases-animated-tabbar-in-react-native-4b3fdd4473e
-        />
+        >
+          {props => (
+            <AssetsProvider assetSymbols={[props.route.params.assetSymbol]}>
+              <StockScreen {...props} />
+            </AssetsProvider>
+          )}
+        </StocksStack.Screen>
       </StocksStack.Group>
     </StocksStack.Navigator>
   )
 }
 
 export default StocksNavigator
+
+// const StockScreenHeader = ({ symbol }) => {
+//   const asset = useAssets()[symbol]
+//   return (
+//     <CenteredRow>
+//       {asset?.ISIN && <AssetLogo asset={symbol} isin={asset?.ISIN} />}
+//       <HeaderText text={symbol} />
+//     </CenteredRow>
+//   )
+// }

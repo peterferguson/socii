@@ -4,12 +4,12 @@ import { useStream } from "app/hooks/useStream"
 import { alphaVantageQueryOptions } from "app/lib/constants"
 import { alphaVantageQuery } from "app/lib/firebase/function"
 import tw from "app/lib/tailwind"
-import { ArrowRight2 } from "iconsax-react-native"
 import { useRouter } from "app/navigation/use-router"
 import React, { useState } from "react"
-import { Dimensions, Pressable, Text, TextInput, View } from "react-native"
+import { Dimensions, Text, TextInput, View } from "react-native"
 import { CenteredColumn, CenteredRow } from "../Centered"
 import PriceInput from "../PriceInput"
+import { RoundButton } from "../RoundButton"
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window")
 const BUTTON_WIDTH = SCREEN_WIDTH - 32
@@ -143,18 +143,5 @@ const StockSharingModal = ({
     </CenteredColumn>
   )
 }
-
-// TODO: Generalise this to be a reusable component
-const RoundButton = ({ onPress, label }) => (
-  <Pressable
-    style={tw`justify-center w-full px-4 py-2 bg-teal-200 border border-transparent rounded-full`}
-    onPress={onPress}
-  >
-    <Text style={tw`text-lg text-center font-medium text-teal-700`}>{label}</Text>
-    <View style={tw`absolute right-4`}>
-      <ArrowRight2 size="20" color={tw`text-teal-700`.color as string} />
-    </View>
-  </Pressable>
-)
 
 export default React.memo(StockSharingModal)
