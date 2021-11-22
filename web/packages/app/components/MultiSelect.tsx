@@ -1,7 +1,11 @@
 import React, { useState } from "react"
-import DropDownPicker from "react-native-dropdown-picker"
+import DropDownPicker, {
+  DropDownPickerProps,
+  ValueType,
+} from "react-native-dropdown-picker"
 
 DropDownPicker.setMode("BADGE")
+// DropDownPicker.setTheme("DARK")
 
 // - copilot generated ... obviously not matching any design system
 const BADGE_DOT_COLORS = [
@@ -48,25 +52,53 @@ const BADGE_COLORS = [
   "#607D8B73",
 ]
 
-const Multiselect = ({ items, selectedItems, setSelectedItems }) => {
+interface MultiSelectProps
+  extends Omit<
+    DropDownPickerProps,
+    "value" | "setValue" | "setItems" | "open" | "setOpen"
+  > {
+  selectedItems: ValueType | ValueType[] | null
+  setSelectedItems: React.Dispatch<React.SetStateAction<ValueType | ValueType[] | null>>
+}
+
+const Multiselect: React.FC<MultiSelectProps> = ({
+  items,
+  selectedItems,
+  setSelectedItems,
+  dropDownContainerStyle = null,
+  dropDownDirection = "TOP",
+  searchPlaceholder = "Search",
+  searchable = true,
+  itemSeparator = true,
+  itemSeparatorStyle = { backgroundColor: "#e0e0e0" },
+  ...props
+}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [dropdownItems, setDropdownItems] = useState(items)
 
   return (
     <DropDownPicker
+      itemSeparator={itemSeparator}
+      itemSeparatorStyle={{
+        backgroundColor: "#e0e0e0",
+      }}
       open={dropdownOpen}
       value={selectedItems}
       items={dropdownItems}
       setOpen={setDropdownOpen}
       setValue={setSelectedItems}
       setItems={setDropdownItems}
+      searchPlaceholder={searchPlaceholder}
       multiple={true}
       min={0}
       max={10}
+      dropDownDirection="TOP"
+      dropDownContainerStyle={dropDownContainerStyle}
       searchable={true}
       showBadgeDot={true}
       badgeColors={BADGE_COLORS}
       badgeDotColors={BADGE_DOT_COLORS}
+      {...props}
     />
   )
 }

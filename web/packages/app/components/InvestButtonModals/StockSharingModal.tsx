@@ -103,6 +103,12 @@ const StockSharingModal = ({ symbol, state, send, pricePlaceholder = "0.00" }) =
           items={alphaVantageQueryOptions}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
+          multiple={true}
+          min={0}
+          max={10}
+          dropDownDirection="TOP"
+          searchable={true}
+          showBadgeDot={true}
         />
 
         <View>
