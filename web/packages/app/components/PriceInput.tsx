@@ -12,6 +12,7 @@ const PriceInput = ({ setPrice, pricePlaceholder = "0.00" }) => (
         placeholder={pricePlaceholder}
         keyboardType={"decimal-pad"}
         onChange={e => setPrice(e.target)}
+        returnKeyType="done"
       />
     </CenteredRow>
   </View>

@@ -53,6 +53,7 @@ export const LargeNumberInput = ({
         onSubmitEditing={() => {}}
         onEndEditing={() => {}}
         multiline={false}
+        returnKeyType="done"
       />
       {orderType === "limit" && (
         <View style={tw`absolute bottom-1`}>
