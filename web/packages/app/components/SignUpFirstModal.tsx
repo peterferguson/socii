@@ -3,6 +3,7 @@ import tw from "app/lib/tailwind"
 import React from "react"
 import { View } from "react-native"
 import { CenteredColumn } from "./Centered"
+import { useAuth, useModal } from "app/hooks"
 import { LoginOptions, LoginOptionsButtonType } from "./LoginOptions"
 import { Modal, ModalBackdrop, ModalHeader } from "./Modal"
 
@@ -10,6 +11,10 @@ export const SignUpFirstModal: React.FC<{
   modalRef: React.MutableRefObject<BottomSheetModal>
 }> = ({ modalRef }) => {
   const scrollPositions = ["35%"]
+  const { user } = useAuth()
+  const { handleClose } = useModal(modalRef)
+
+  React.useEffect(() => user && handleClose(), [user, handleClose])
 
   return (
     <Modal
