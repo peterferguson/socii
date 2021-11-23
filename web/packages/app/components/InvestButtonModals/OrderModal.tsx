@@ -72,7 +72,12 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
         />
       </View>
       <View style={tw`w-full flex-1`}>
-        <RoundButton onPress={undefined} label={`${state.context.side} ${symbol}`} />
+        <RoundButton
+          onPress={undefined}
+          label={`${state.context.side} ${symbol}`}
+          labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+          gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
+        />
       </View>
       {/* <View
         style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}
