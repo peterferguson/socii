@@ -26,7 +26,7 @@ export default ({ groupName, style }: IGroupColumnCard) => {
     (portfolioValue * 0.01)
 
   return (
-    <View style={tw`flex-col mb-4`}>
+    <View style={tw`flex-col mb-6 mr-2`}>
       <View
         style={tw.style("flex-col items-center p-4 bg-white rounded-t-2xl", {
           ...shadowStyle("lg"),
@@ -58,7 +58,7 @@ export default ({ groupName, style }: IGroupColumnCard) => {
 
 const { width: WINDOW_WIDTH } = Dimensions.get("window")
 
-const CARD_WIDTH = WINDOW_WIDTH - 64
+export const CARD_WIDTH = WINDOW_WIDTH - 80
 
 const CardTitle = ({ title, style }) => {
   const router = useRouter()

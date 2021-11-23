@@ -42,11 +42,19 @@ function GroupsNavigator() {
       </GroupsStack.Group>
       <GroupsStack.Group
         screenOptions={{
-          headerShown: false,
-          presentation: Platform.OS === "ios" ? "formSheet" : "transparentModal",
+          headerShown: true,
+          // - This gives a nice effect where the modal presentation also shrinks the previous screen
+          // headerShown: false,
+          // presentation: Platform.OS === "ios" ? "formSheet" : "transparentModal",
         }}
       >
-        <GroupsStack.Screen name="new" component={NewGroupScreen} />
+        <GroupsStack.Screen
+          name="new"
+          component={NewGroupScreen}
+          options={({ route }) => ({
+            headerTitle: () => <HeaderWithPhoto title={"Create a group"} />,
+          })}
+        />
       </GroupsStack.Group>
     </GroupsStack.Navigator>
   )
