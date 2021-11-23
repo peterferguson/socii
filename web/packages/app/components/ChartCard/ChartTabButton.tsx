@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, withTiming, Easing } from "react-native-rea
 import tw from "app/lib/tailwind"
 import { BUTTON_WIDTH, TabLabel } from "./constants"
 
-export const ChartTabButton: React.FC<{
+const ChartTabButton: React.FC<{
   label: TabLabel
   prevTab: Animated.SharedValue<TabLabel>
   activeTab: Animated.SharedValue<TabLabel>
@@ -37,3 +37,5 @@ export const ChartTabButton: React.FC<{
     </TouchableWithoutFeedback>
   )
 }
+
+export default ChartTabButton

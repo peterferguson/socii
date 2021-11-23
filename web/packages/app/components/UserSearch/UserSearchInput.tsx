@@ -13,7 +13,7 @@ const UserSearchInput = ({ onSubmit, ...props }) => {
 
   return (
     <CenteredRow style={tw`w-11/12 px-1 py-3`}>
-      {(!isFocused || searchText === "") && (
+      {!isFocused && searchText === "" && (
         <UserSearchIcon
           size="24"
           color={tw.color("brand-black/20")}

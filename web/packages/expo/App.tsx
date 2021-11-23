@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import AnimatedAppLoader from "app/components/AnimatedAppLoader"
 import { AppContextProvider } from "app/contexts/AppContextProvider"
 import { Navigation } from "app/navigation"
@@ -64,9 +63,7 @@ export default function App() {
       <AppContextProvider>
         <AnimatedAppLoader>
           <StatusBar style="auto" />
-          <BottomSheetModalProvider>
-            <Navigation />
-          </BottomSheetModalProvider>
+          <Navigation />
         </AnimatedAppLoader>
       </AppContextProvider>
     </SafeAreaProvider>

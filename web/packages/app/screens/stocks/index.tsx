@@ -1,15 +1,56 @@
-// import { useAuth } from "@hooks/useAuth"
-import React, { useEffect, useState } from "react"
-import { FlatList, ScrollView, Text, View } from "react-native"
+// TODO: REFACTOR back into section list as this page is really just a list of sections
+// - This allows us to avoid the nested scroll view problems
+// - The follow is a nice logical way to lay out the component
+/*
+ *   <SectionList
+ *     sections={[
+ *       {type: 'MAP', data: [{}]}, // Static sections.
+ *       {type: 'PROFILE', data: [{}]},
+ *       {type: 'POSTS', data: posts} // Dynamic section data replaces the FlatList.
+ *     ]}
+ *     keyExtractor={(item, index) => index}
+ *     renderItem={({item, section}) => {
+ *       switch (section.type) {
+ *         // Different components for each section type.
+ *         case 'MAP':
+ *           return <MapView />;
+ *         case 'PROFILE':
+ *           return <Profile />;
+ *         case 'POSTS':
+ *           return <Post item={item} />;
+ *         default:
+ *           return null;
+ *       }
+ *     }}
+ *     ItemSeparatorComponent={() => <Separator />}
+ *     ListFooterComponent={() => <>{empty && <EmptyList />}</>}
+ *   />
+ */
+
+import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
+import { CenteredRow } from "app/components/Centered"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
+import Search from "app/components/Search/Search"
+import { SearchIcon } from "app/components/Search/SearchIcon"
+import { useSearchModal } from "app/hooks/useSearchModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
 import tw from "app/lib/tailwind"
 import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
+import React, { useEffect, useState } from "react"
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  Text,
+  View,
+} from "react-native"
+import Animated from "react-native-reanimated"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -19,9 +60,14 @@ const defaultPrice: Price = {
   currency: "USD",
 }
 
-export default function StocksScreen() {
+type OnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+
+const StocksScreenWithMemo: React.FC<{
+  navigation: any
+  route: any
+  scrollHandler: OnScroll
+}> = ({ scrollHandler }) => {
   // TODO: large screen vertical cards - small horizontal cards
-  // TODO: Add skeleton loaders for chart cards on infinite scroll
 
   const { trending, isLoading } = useYahooTrending()
   // TODO: This recalls the api every time the screen is loaded leading to bad UX
@@ -31,11 +77,20 @@ export default function StocksScreen() {
 
   // @ts-ignore
   useEffect(() => getAssetCategoryShortNames().then(setCategories), [])
+  const { handlePresent, handleDismiss } = useSearchModal()
+  useFocusEffect(React.useCallback(() => () => handleDismiss(), []))
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={tw`-mt-4`}>
+    <Animated.ScrollView
+      showsVerticalScrollIndicator={false}
+      onScroll={scrollHandler}
+      scrollEventThrottle={32}
+    >
       <View>
-        <Title title={"Trending"} />
+        <CenteredRow style={tw`justify-between`}>
+          <Title title={"Trending"} />
+          <SearchIcon />
+        </CenteredRow>
         <CardSlider
           isLoading={isLoading}
           assets={Object.values(trending).map(asset => ({
@@ -47,8 +102,9 @@ export default function StocksScreen() {
         <Categories categories={categories} />
         <Title title={"All"} />
         <AssetCards assets={Object.values(trending)} />
+        {Search && <Search />}
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   )
 }
 
@@ -155,9 +211,11 @@ const Categories = ({ categories }: { categories: AssetCategories }) => {
 
 const Title = ({ title }: { title: string }) => (
   <Text
-    style={tw`pt-6 text-3xl text-brand-black dark:text-brand-gray pl-4 
+    style={tw`pt-4 text-3xl text-brand-black dark:text-brand-gray pl-4 
               tracking-tight uppercase font-poppins-500 dark:text-brand-black`}
   >
     {title}
   </Text>
 )
+
+export default React.memo(StocksScreenWithMemo)

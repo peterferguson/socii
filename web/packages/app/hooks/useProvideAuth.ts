@@ -82,6 +82,7 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
+    // TODO: Fix memory leak here with getUsernameWithEmail
     if (user?.uid && !user?.username && !user?.isInvited) {
       getUsernameWithEmail(user?.email).then(usersUsername => {
         setUser(prevUser => ({ ...prevUser, username: usersUsername }))

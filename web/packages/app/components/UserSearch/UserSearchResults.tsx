@@ -12,8 +12,8 @@ const UserSearchResults: React.FC = () => {
   return (
     <View style={tw`bg-white dark:bg-brand-black w-full flex-1`}>
       {loading && (!results || results.length === 0) && searchText === "" ? (
-        <CenteredColumn>
-          <LoadingIndicator />
+        <CenteredColumn style={tw`h-full pb-16`}>
+          <Text style={tw`font-poppins-500 text-gray-500`}>Search for users</Text>
         </CenteredColumn>
       ) : (
         <FlatList
@@ -23,7 +23,7 @@ const UserSearchResults: React.FC = () => {
           ListEmptyComponent={() => (
             <CenteredColumn style={tw`items-center justify-center p-6`}>
               <Text style={tw`font-poppins-500 text-gray-500`}>
-                {loading ? "Loading..." : "No user matches these keywords..."}
+                {loading ? <LoadingIndicator /> : "No users found..."}
               </Text>
             </CenteredColumn>
           )}

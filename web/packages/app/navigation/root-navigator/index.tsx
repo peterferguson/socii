@@ -1,4 +1,4 @@
-import HeaderContainer from "app/components/Headers/HeaderContainer"
+import HeaderTitle from "app/components/Headers/HeaderTitle"
 import { useStream } from "app/hooks"
 import { useAppContext } from "app/hooks/useAppContext"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
@@ -17,7 +17,6 @@ export const RootNavigator = (props: NextNavigationProps) => {
       initialRouteName={onboardingCompleted ? "withBottomBar" : "onboarding"}
       screenOptions={{ headerShown: false, ...headerScreenOptions }}
     >
-      {/* {onboardingCompleted === false ? ( */}
       {!onboardingCompleted ? (
         <RootStack.Screen
           name="onboarding"
@@ -37,11 +36,11 @@ export const RootNavigator = (props: NextNavigationProps) => {
                 name="channel"
                 component={ChannelScreen}
                 options={({ route }) => ({
-                  title: route.params.channelId,
                   headerTitle: () => (
-                    <HeaderContainer
-                      headerTitle={"Chat"}
-                      text={route.params.channelId}
+                    <HeaderTitle
+                      headerTitle={
+                        route.params.channelId ? route.params.channelId : "Chat"
+                      }
                     />
                   ),
                 })}
@@ -51,7 +50,7 @@ export const RootNavigator = (props: NextNavigationProps) => {
                 component={ThreadScreen}
                 options={{
                   title: "Chat Thread",
-                  headerTitle: () => <HeaderContainer headerTitle={"Chat Thread"} />,
+                  headerTitle: () => <HeaderTitle headerTitle={"Chat Thread"} />,
                 }}
               />
             </RootStack.Group>

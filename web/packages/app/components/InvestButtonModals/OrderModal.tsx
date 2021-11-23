@@ -1,34 +1,33 @@
 import router from "next/router"
-import React, { useEffect, useState } from "react"
-import { Text, View } from "react-native"
+import React, { useState } from "react"
+import { Text, View, Pressable } from "react-native"
 import { useAuth } from "app/hooks/useAuth"
 import { useTickerPrice } from "app/hooks/useTickerPrice"
-import { getTickerISIN } from "app/lib/firebase/db"
 import { tradeSubmission } from "app/lib/firebase/function"
 import tw from "app/lib/tailwind"
 import { Price } from "app/models/Price"
 import { LargeNumberInput } from "../LargeNumberInput"
 import PriceHeading from "../PriceHeading"
-import TickerLogo from "../TickerLogo"
+import AssetLogo from "../AssetLogo"
+import { CenteredColumn, CenteredRow } from ".."
+import { RoundButton } from "app/components/RoundButton"
+import { useModal } from "app/hooks/useModal"
 
-const OrderModal = ({ symbol, state, send }) => {
+const OrderModal = ({ asset, state, send, modalRef }) => {
   const { user } = useAuth()
   const username = user ? user.username : ""
+  const symbol = asset.alpaca.symbol
   const { price } = useTickerPrice(symbol)
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState(null)
 
-  const [isin, setIsin] = useState(null)
-
-  useEffect(() => {
-    getTickerISIN(symbol).then(r => setIsin(r))
-  }, [])
+  const { handleExpand } = useModal(modalRef)
 
   const handleSubmission = async () => {
     const tradeArgs = {
       username,
       alpacaAccountId: user.alpacaAccountId,
       groupName: state.context.group,
-      assetRef: `tickers/${isin}`,
+      assetRef: `tickers/${asset.ISIN}`,
       messageId: `${username}-${state.context.side}-${symbol}-${Math.floor(
         new Date().getTime() / 1000
       )}`,
@@ -53,37 +52,46 @@ const OrderModal = ({ symbol, state, send }) => {
     // )
   }
   return (
-    <View
-      style={tw`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl`}
-    >
-      <PriceHeader isin={isin} symbol={symbol} shortName={"shortName"} price={price} />
-
-      <LargeNumberInput
-        amount={amount}
-        orderType={state.context.orderType}
-        setAmount={setAmount}
-        side={state.context.side}
-        symbol={symbol}
-      />
-      <View
+    <CenteredColumn style={tw`w-full p-4 absolute top-0`}>
+      <View style={tw`w-full flex-1`}>
+        <PriceHeader
+          isin={asset?.ISIN}
+          symbol={symbol}
+          shortName={asset.shortName}
+          price={price}
+        />
+      </View>
+      <View style={tw`w-full flex-3`}>
+        <LargeNumberInput
+          amount={amount}
+          orderType={state.context.orderType}
+          setAmount={setAmount}
+          side={state.context.side}
+          symbol={symbol}
+          onFocus={handleExpand}
+        />
+      </View>
+      <View style={tw`w-full flex-1`}>
+        <RoundButton onPress={undefined} label={`${state.context.side} ${symbol}`} />
+      </View>
+      {/* <View
         style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}
       >
-        {/* <button
-          type="button"
-          className={tw(
-            "inline-flex items-center justify-center w-full h-12 px-4 py-2 mx-2",
-            "font-semibold tracking-wider uppercase border border-transparent",
-            "text-palette-darkest bg-palette-lightest sm:mx-8 rounded-md",
-            "hover:bg-green-200 hover:text-green-600 focus:outline-none",
-            "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500",
-            `umami--click--invest-button-order-modal-${state.context.side}-button`
+        <Pressable
+          style={tw.style(
+            "items-center justify-center w-full h-12 px-4 py-2 mx-2",
+            " border border-transparent",
+            "  bg-palette-lightest sm:mx-8 rounded-md"
           )}
-          onClick={handleSubmission}
+          onPress={handleSubmission}
         >
-          {state.context.side} {ticker.tickerSymbol}
-        </button> */}
-      </View>
-    </View>
+          <Text style={tw`text-palette-darkest font-poppins-500 uppercase`}>
+            
+          </Text>
+        </Pressable>
+      </View> */}
+      {/* <Numpad onPress={undefined} width={undefined} /> */}
+    </CenteredColumn>
   )
 }
 
@@ -98,23 +106,24 @@ const PriceHeader = ({
   shortName: string
   price: Price
 }) => (
-  <View style={tw`items-center inline-block w-full overflow-y-scroll `}>
-    <View style={tw`flex items-center justify-center `}>
-      <TickerLogo height="64" width="64" isin={isin} tickerSymbol={symbol} />
-      <View style={tw`flex flex-col text-center`}>
-        <Text
-          style={tw`mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white`}
-        >
-          {shortName}
-        </Text>
-        <PriceHeading
-          tickerSymbol={symbol}
-          className="mt-2 ml-2 text-lg font-semibold tracking-wider text-gray-500 uppercase dark:text-white"
-          initialPrice={price}
-        />
-      </View>
-    </View>
-  </View>
+  <CenteredRow style={tw`justify-between`}>
+    <CenteredColumn>
+      <AssetLogo height="52" width="52" isin={isin} asset={symbol} />
+      <Text
+        style={tw`text-center mt-2 font-poppins-600 text-gray-500 uppercase dark:text-white`}
+      >
+        {shortName}
+      </Text>
+    </CenteredColumn>
+    <CenteredColumn>
+      <PriceHeading
+        vertical
+        tickerSymbol={symbol}
+        className="ml-2 font-poppins-600 text-gray-500 uppercase dark:text-white"
+        initialPrice={price}
+      />
+    </CenteredColumn>
+  </CenteredRow>
 )
 
 export default OrderModal

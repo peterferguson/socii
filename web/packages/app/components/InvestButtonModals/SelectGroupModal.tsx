@@ -1,21 +1,18 @@
 import { useAuth } from "app/hooks/useAuth"
-import React, { useState, useEffect } from "react"
-import { View, Text, Pressable } from "react-native"
 import { getGroupDocsByName } from "app/lib/firebase/db/getGroupDocsByName"
 import tw from "app/lib/tailwind"
+import React, { useEffect, useState } from "react"
+import { CenteredColumn } from "../Centered"
+import ModalSelectButton from "./ModalSelectButton"
 
-const SelectGroupModal = ({ state, send }) => {
-  console.log("in select groupppppp")
-
+const SelectGroupModal = ({ send }) => {
   const { user } = useAuth()
   const userGroups = user && user.groups ? user.groups : []
 
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = (groupName) => {
-    send("SELECT_GROUP", { groupName: groupName })
-  }
-   
+  const setSelectedGroup = groupName => send("SELECT_GROUP", { groupName: groupName })
+
   useEffect(() => {
     const getGroupData = async () => {
       setGroups(
@@ -35,22 +32,18 @@ const SelectGroupModal = ({ state, send }) => {
   }, [userGroups])
 
   return (
-    <View style={tw`w-full align-middle`}>
-      <View style={tw`items-center h-full`}>
-        {/** TODO Add a loader here  */}
-        {groups?.map(group => (
-          <Pressable
-            style={tw`w-4/5 p-4 my-2 overflow-y-scroll text-left bg-white shadow-md  transform rounded-2xl`}
-            onPress={()=>{setSelectedGroup(group.name)}}
-          >
-            <View>
-              <Text style={tw`text-xl`}>{group.name}</Text>
-              <Text>{group.groupType}</Text>
-            </View>
-          </Pressable>
-        ))}
-      </View>
-    </View>
+    <CenteredColumn style={tw`justify-evenly w-full p-4 absolute top-0`}>
+      {/** TODO Add a loader here  */}
+      {groups?.map(group => (
+        <ModalSelectButton
+          onPress={setSelectedGroup}
+          Icon={null} // TODO Add an icon for the group
+          title={group.name}
+          key={group.name}
+          description={group.groupType}
+        />
+      ))}
+    </CenteredColumn>
   )
 }
 

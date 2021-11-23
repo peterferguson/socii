@@ -1,25 +1,19 @@
 import tw from "app/lib/tailwind"
 import React from "react"
 import { View, TextInput, Text } from "react-native"
+import { CenteredRow } from "."
 
-const PriceInput = ({ setPrice, pricePlaceholder = "0.00", showPrice = true }) => (
-  <View style={tw`text-gray-500`}>
-    {showPrice && (
-      // <label htmlFor="price" className={`block ${textStyling}`}>
-      <Text>Price</Text>
-      // </label>
-    )}
-    <View style={tw`flex flex-row mt-1 rounded-md shadow-sm`}>
-      <View style={tw`flex pl-3 h-10`}>
-        <Text style={tw`pt-2 text-gray-500 sm:text-sm`}>$</Text>
-      </View>
+const PriceInput = ({ setPrice, pricePlaceholder = "0.00" }) => (
+  <View style={tw`flex-row mt-1 border-brand-black/30 border rounded-md shadow-sm`}>
+    <CenteredRow style={tw`pl-3 h-11`}>
+      <Text style={tw`text-center text-gray-500`}>$</Text>
       <TextInput
-        style={tw`flex items-center pl-1  pointer-events-none`}
+        style={tw`w-full items-start pl-1`}
         placeholder={pricePlaceholder}
         keyboardType={"decimal-pad"}
         onChange={e => setPrice(e.target)}
       />
-    </View>
+    </CenteredRow>
   </View>
 )
 

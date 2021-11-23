@@ -1,20 +1,23 @@
 import React from "react"
-import { Text, View } from "react-native"
+import { Pressable, Text, View } from "react-native"
 import tw from "app/lib/tailwind"
 import Donut from "./DonutChart"
 import SkeletonCircle from "./SkeletonCircle"
+import { useRouter } from "../navigation/use-router"
 
-const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalance }) =>
-  sectors?.length === holdings?.length ? (
+const CardDonutChart = ({ sectors, radius, textColor, gain, cashBalance, linkTo }) => {
+  const router = useRouter()
+  return sectors?.length > 0 ? (
     <View style={tw`p-2`}>
       <Donut sectors={sectors} textColor={textColor} />
-      <View
+      <Pressable
         style={[
           tw.style(`flex-col items-center -mt-36 mb-12`, {
             fontSize: radius / 4,
             color: textColor,
           }),
         ]}
+        onPress={() => router.push(`/groups/${linkTo}`)}
       >
         <Text style={tw`text-center text-tiny mt-1 font-poppins-200 uppercase`}>
           portfolio
@@ -36,13 +39,14 @@ const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalanc
           })}
         />
         <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>cash</Text>
-        <Text style={tw`text-center text-lg `}>{`$${cashBalance?.toFixed(2)}`}</Text>
-      </View>
+        <Text style={tw`text-center text-lg`}>{`$${cashBalance?.toFixed(2)}`}</Text>
+      </Pressable>
     </View>
   ) : (
     <View style={tw`my-4`}>
       <SkeletonCircle radius={80} />
     </View>
   )
+}
 
 export default CardDonutChart

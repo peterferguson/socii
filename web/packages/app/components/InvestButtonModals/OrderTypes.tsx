@@ -7,8 +7,8 @@ export const OrderTypes = (tickerSymbol, side) => {
   const capitalSide = side === "buy" ? "Buy" : "Sell"
   return [
     {
-      icon: () => (
-        <View style ={tw`p-2 rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2`}>
+      Icon: () => (
+        <View style={tw`p-2 rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2`}>
           <DollarCircle size={25} variant="Outline" />
         </View>
       ),
@@ -17,8 +17,8 @@ export const OrderTypes = (tickerSymbol, side) => {
       actionName: "SELECT_CASH_ORDER",
     },
     {
-      icon: () => (
-        <View style ={tw`p-2 rounded-full bg-brand/30 mr-1.5 sm:mr-2`}>
+      Icon: () => (
+        <View style={tw`p-2 rounded-full bg-brand/30 mr-1.5 sm:mr-2`}>
           <Hashtag size={25} variant="Outline" />
         </View>
       ),
@@ -27,16 +27,13 @@ export const OrderTypes = (tickerSymbol, side) => {
       actionName: "SELECT_SHARE_ORDER",
     },
     {
-      icon: () => (
-        <View style ={tw`p-2 bg-pink-200 rounded-full mr-1.5 sm:mr-2`}>
+      Icon: () => (
+        <View style={tw`p-2 bg-pink-200 rounded-full mr-1.5 sm:mr-2`}>
           <ArrowDown size={25} variant="Outline" />
         </View>
       ),
-      name: `${capitalSide} if ${tickerSymbol} reaches a specified price or lower`,
-      description: `
-    ${capitalSide} ${tickerSymbol} using a limit order.
-    No fractionals and at least 1 share
-    `,
+      name: `${capitalSide} if ${tickerSymbol} reaches a certain price or lower`,
+      description: `${capitalSide} ${tickerSymbol} using a limit order. No fractionals and at least 1 share`,
       actionName: "SELECT_LIMIT_ORDER",
     },
   ]

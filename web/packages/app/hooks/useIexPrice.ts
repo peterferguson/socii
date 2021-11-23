@@ -1,9 +1,10 @@
 import useSWRNative from "@nandorojo/swr-react-native"
-import { iexQuote } from "../utils/iexQuote"
-import { useAuth } from "./useAuth"
 import { SWRConfiguration } from "swr"
+import { getIexPrices } from "../utils/getIexPrices"
+import { useAuth } from "./useAuth"
+import React from "react"
 
-interface CurrentPrices {
+export interface CurrentPrices {
   [assetSymbol: string]: number | null
 }
 
@@ -17,7 +18,7 @@ export const useIexPrice = (
 } => {
   const { user } = useAuth()
   const { data: currentPrices, error } = useSWRNative<CurrentPrices, Error>(
-    user?.token && assets ? [assets.join("-"), user?.token] : null,
+    user?.token && assets?.length > 0 ? [assets.join("-"), user?.token] : null,
     (assets, token) => getIexPrices({ assets: assets.split("-"), token }),
     config
   )
@@ -27,27 +28,4 @@ export const useIexPrice = (
     isLoading: !currentPrices && !error,
     error: error,
   }
-}
-
-const getIexPrices = async ({
-  assets,
-  token,
-}: {
-  assets: string[]
-  token: string
-}): Promise<CurrentPrices> => {
-  const prices: CurrentPrices = {}
-
-  assets?.forEach(async symbol => {
-    try {
-      const quote = await iexQuote(symbol, token)
-      const price = quote?.iexRealtimePrice || quote?.latestPrice
-      prices[symbol] = price
-    } catch (e) {
-      console.error(e)
-      prices[symbol] = null
-    }
-  })
-
-  return prices
 }

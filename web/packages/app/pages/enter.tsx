@@ -10,7 +10,6 @@ const EnterStack = createStackNavigator<EnterStackParams>()
 const EnterNavigator = () => (
   <EnterStack.Navigator
     screenOptions={{
-      animationEnabled: true,
       headerShown: true,
       headerShadowVisible: false,
       headerBackTitleVisible: false,
