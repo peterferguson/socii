@@ -1,27 +1,32 @@
 import tw from "app/lib/tailwind"
 import React from "react"
-import { View, useWindowDimensions } from "react-native"
+import { useWindowDimensions } from "react-native"
 import Animated, {
-  interpolate,
   Extrapolate,
+  interpolate,
+  interpolateColor,
   useAnimatedStyle,
 } from "react-native-reanimated"
-import { CenteredRow } from ".."
+import { CenteredRow } from "."
 
 const DOT_WIDTH = 10
 const DOT_HEIGHT = 10
 
 export default ({
-  data,
+  numPages,
   scrollX,
+  activeColor = "brand",
+  inactiveColor = "gray-300",
 }: {
-  data: any[]
+  numPages: number
   scrollX: Animated.SharedValue<number>
+  activeColor?: string
+  inactiveColor?: string
 }) => {
   const { width } = useWindowDimensions()
   return (
     <CenteredRow style={tw.style(`h-16`, { flex: 1 })}>
-      {data.map((_, i) => {
+      {[...Array(numPages).keys()].map((_, i) => {
         const fluidDotStyle = useAnimatedStyle(() => {
           const inputRange = [(i - 1) * width, i * width, (i + 1) * width]
           const dotWidth = interpolate(
@@ -30,13 +35,18 @@ export default ({
             [DOT_WIDTH, 2 * DOT_WIDTH, DOT_WIDTH],
             Extrapolate.CLAMP
           )
+          // const backgroundColor = interpolateColor(scrollX.value, inputRange, [
+          //   inactiveColor,
+          //   activeColor,
+          // ])
           return { width: dotWidth }
         })
         return (
           <Animated.View
             style={[
-              tw.style(`rounded-full bg-[#3fbaeb] mx-2`, {
+              tw.style(`rounded-full mx-2`, {
                 height: DOT_HEIGHT,
+                backgroundColor: tw.color(activeColor),
               }),
               fluidDotStyle,
             ]}

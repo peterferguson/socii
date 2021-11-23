@@ -1,21 +1,17 @@
-import { AnimatedNavBar } from "./AnimatedNavBar"
 import { CenteredColumn, CenteredRow } from "app/components/Centered"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
+import { UserPhoto } from "app/components/UserPhoto"
 import tw from "app/lib/tailwind"
 import React from "react"
 import { SearchIcon } from "../Search/SearchIcon"
-import { UserPhoto } from "app/components/UserPhoto"
+import { AnimatedNavBar } from "./AnimatedNavBar"
+import HeaderWithPhoto from "./HeaderWithPhoto"
 
 export const AnimatedStocksHeader = ({ scrollY }) => (
   <CenteredColumn>
     <AnimatedNavBar
       scrollY={scrollY}
-      PreAnimationComponent={() => (
-        <CenteredRow style={tw`mx-2 w-full justify-between`}>
-          <HeaderTitle headerTitle="Stonks" textStyle={tw`text-base text-center`} />
-          <UserPhoto containerStyle={tw`mr-4`} />
-        </CenteredRow>
-      )}
+      PreAnimationComponent={() => <HeaderWithPhoto title="Stonks" />}
       PostAnimationComponent={() => (
         <CenteredRow style={tw`mx-2`}>
           <CenteredRow style={tw`justify-between`}>

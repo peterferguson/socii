@@ -1,11 +1,10 @@
+import HeaderWithPhoto from "app/components/Headers/HeaderWithPhoto"
+import tw from "app/lib/tailwind"
+import createStackNavigator from "app/navigation/create-stack-navigator"
+import { GroupsStackParams } from "app/navigation/types"
+import { GroupScreen, GroupsScreen, NewGroupScreen } from "app/screens/groups"
 import React from "react"
 import { Platform } from "react-native"
-
-import createStackNavigator from "app/navigation/create-stack-navigator"
-import { GroupsScreen, NewGroupScreen, GroupScreen } from "app/screens/groups"
-import { GroupsStackParams } from "app/navigation/types"
-import tw from "app/lib/tailwind"
-import HeaderTitle from "app/components/Headers/HeaderTitle"
 
 const GroupsStack = createStackNavigator<GroupsStackParams>()
 
@@ -30,14 +29,14 @@ function GroupsNavigator() {
           name="groupsScreen"
           component={GroupsScreen}
           options={{
-            headerTitle: () => <HeaderTitle headerTitle={"Groups"} />,
+            headerTitle: () => <HeaderWithPhoto title={"Groups"} />,
           }}
         />
         <GroupsStack.Screen
           name="groupScreen"
           component={GroupScreen}
           options={({ route }) => ({
-            headerTitle: () => <HeaderTitle headerTitle={route.params.id} />,
+            headerTitle: () => <HeaderWithPhoto title={route.params.id} />,
           })}
         />
       </GroupsStack.Group>
