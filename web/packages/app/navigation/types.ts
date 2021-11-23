@@ -1,4 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NavigatorScreenParams } from "@react-navigation/native"
 import type { NextComponentType, NextPageContext } from "next"
 import { RootNavigatorParams } from "./root-navigator/types"
 
@@ -40,6 +41,20 @@ type NextNavigationProps = {
   pageProps?: NextPageProps
 }
 
+type DrawerNavigatorParams = {
+  groups: NavigatorScreenParams<GroupsStackParams>
+  chat: NavigatorScreenParams<ChatStackParams>
+  stocks: NavigatorScreenParams<StocksStackParams>
+  enter: NavigatorScreenParams<EnterStackParams>
+  // profileTab: NavigatorScreenParams<ProfileStackParams>
+}
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends DrawerNavigatorParams {}
+  }
+}
+
 export type {
   GroupsScreenProps,
   GroupScreenProps,
@@ -56,4 +71,5 @@ export type {
   ThreadScreenProps,
   CategoryScreenProps,
   OnboardingStackParams,
+  DrawerNavigatorParams,
 }
