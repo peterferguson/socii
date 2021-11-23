@@ -14,7 +14,7 @@ import {
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg"
 import type { UserResponse } from "stream-chat"
 import { Avatar, Chat, vw } from "stream-chat-expo"
-import { useSearchUsersContext } from "../contexts/searchUsersContext"
+import { useSearchUsersContext } from "../contexts/SearchUsersContext"
 import { SearchUsersProvider } from "../contexts/SearchUsersProvider"
 import { useAuth } from "../hooks/useAuth"
 import { useStream } from "../hooks/useStream"

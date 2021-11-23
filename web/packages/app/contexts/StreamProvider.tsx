@@ -1,7 +1,7 @@
 /// <reference path="./stream.d.ts" />
 import React, { useState, useEffect } from "react"
 import { useStreamClient } from "../hooks/useStreamClient"
-import { streamContext } from "./streamContext"
+import { streamContext } from "./StreamContext"
 
 export const StreamProvider: React.FC = ({ children }) => {
   const { client } = useStreamClient()
