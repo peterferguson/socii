@@ -1,3 +1,4 @@
+import HeaderTitle from "app/components/Headers/HeaderTitle"
 import HeaderWithPhoto from "app/components/Headers/HeaderWithPhoto"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -52,7 +53,7 @@ function GroupsNavigator() {
           name="new"
           component={NewGroupScreen}
           options={({ route }) => ({
-            headerTitle: () => <HeaderWithPhoto title={"Create a group"} />,
+            headerTitle: () => <HeaderTitle headerTitle={"Create a group"} />,
           })}
         />
       </GroupsStack.Group>

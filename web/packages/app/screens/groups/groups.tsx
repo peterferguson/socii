@@ -1,22 +1,22 @@
-import React from "react"
-import { FlatList, View, Text } from "react-native"
 import {
+  CenteredColumn,
   GroupSummaryCard,
   Paginator,
-  CenteredColumn,
   RoundButton,
 } from "app/components"
+import { CardFooterButton } from "app/components/CardFooterButton"
+import { CARD_WIDTH } from "app/components/GroupSummaryCard"
 import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
+import { shadowStyle } from "app/utils/shadowStyle"
+import React from "react"
+import { FlatList, Text } from "react-native"
 import Animated, {
+  useAnimatedScrollHandler,
   useSharedValue,
   withSpring,
-  useAnimatedScrollHandler,
 } from "react-native-reanimated"
-import { useRouter } from "app/navigation/use-router"
-import { CARD_WIDTH } from "app/components/GroupSummaryCard"
-import { shadowStyle } from "app/utils/shadowStyle"
-import { CardFooterButton } from "app/components/CardFooterButton"
 
 const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()

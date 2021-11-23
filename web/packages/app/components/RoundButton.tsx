@@ -11,7 +11,9 @@ export const RoundButton = ({
   onPress,
   label,
   gradientColors = [],
-  labelStyle = LABEL_STYLE,
+  textColor = null,
+  labelStyle = null,
+  showArrow = true,
 }) =>
   gradientColors && gradientColors.length > 0 ? (
     <View style={tw`rounded-full overflow-hidden`}>
@@ -21,19 +23,31 @@ export const RoundButton = ({
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
       >
-        <Button label={label} labelStyle={labelStyle} onPress={onPress} />
+        <Button
+          label={label}
+          labelStyle={[LABEL_STYLE, labelStyle]}
+          onPress={onPress}
+          textColor={textColor}
+          showArrow={showArrow}
+        />
       </LinearGradient>
     </View>
   ) : (
-    <Button label={label} labelStyle={labelStyle} onPress={onPress} />
+    <Button
+      textColor={textColor}
+      label={label}
+      labelStyle={[LABEL_STYLE, labelStyle]}
+      onPress={onPress}
+      showArrow={showArrow}
+    />
   )
 
-const Button = ({ label, labelStyle, onPress }) => {
+const Button = ({ label, labelStyle, textColor, onPress, showArrow }) => {
   return (
     <Pressable style={tw`justify-center w-full px-4 py-2`} onPress={onPress}>
-      <Text style={labelStyle}>{label}</Text>
+      <Text style={[LABEL_STYLE, labelStyle, { color: textColor }]}>{label}</Text>
       <View style={tw`absolute -right-1`}>
-        <ArrowRight2 size="20" color={tw`text-teal-700`.color as string} />
+        {showArrow ? <ArrowRight2 size="20" color={textColor} /> : null}
       </View>
     </Pressable>
   )
