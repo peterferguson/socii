@@ -6,7 +6,7 @@ import {
   QueryDocumentSnapshot,
   where,
 } from "firebase/firestore"
-import { db } from "../../index"
+import { db } from "../index"
 
 export const getAssetDocs = async (
   assets: string[]

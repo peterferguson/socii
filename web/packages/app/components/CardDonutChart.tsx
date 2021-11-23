@@ -36,7 +36,7 @@ const CardDonutChart = ({ holdings, sectors, radius, textColor, gain, cashBalanc
           })}
         />
         <Text style={tw`text-center text-tiny font-poppins-200 uppercase`}>cash</Text>
-        <Text style={tw`text-center text-lg `}>{`$${cashBalance.toFixed(2)}`}</Text>
+        <Text style={tw`text-center text-lg `}>{`$${cashBalance?.toFixed(2)}`}</Text>
       </View>
     </View>
   ) : (

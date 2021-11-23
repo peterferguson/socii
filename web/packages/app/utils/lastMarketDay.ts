@@ -1,6 +1,6 @@
-import { config, CalendarApi, MarketDay } from "@socii/shared/alpaca/index"
-import { setMarketDay } from "@lib/firebase/client/db/setMarketDay"
-import { getLastMarketDay } from "@lib/firebase/client/db/getLastMarketDay"
+import { config, CalendarApi, MarketDay } from "@socii/alpaca/index"
+import { setMarketDay } from "../lib/firebase/db/setMarketDay"
+import { getLastMarketDay } from "../lib/firebase/db/getLastMarketDay"
 
 export const lastMarketDay = async () => {
   let lastDay = (await getLastMarketDay()) as MarketDay

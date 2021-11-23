@@ -1,4 +1,4 @@
-import { getAssetCategories } from "../lib/firebase/client/db/getAssetCategories"
+import { getAssetCategories } from "../lib/firebase/db/getAssetCategories"
 import { AssetCategories } from "../models/AssetCategories"
 
 export interface AssetCategory {

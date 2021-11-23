@@ -1,5 +1,5 @@
 import { useAuth } from "./useAuth"
-import { getGroupData } from "../lib/firebase/client/db/getGroupData"
+import { getGroupData } from "../lib/firebase/db/getGroupData"
 import { useEffect, useState } from "react"
 
 export const useGroups = () => {

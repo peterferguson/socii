@@ -1,5 +1,5 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore"
-import { db } from "../.."
+import { db } from ".."
 
 /*
  * Check if user with `uid` has agreed to trade with `messageId` in group with `groupName`

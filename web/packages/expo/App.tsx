@@ -19,13 +19,25 @@ import {
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { Navigation } from "app/navigation"
 import AppLoading from "expo-app-loading"
+import { Subscription } from "expo-modules-core"
+import * as Notifications from "expo-notifications"
 import { StatusBar } from "expo-status-bar"
-import React from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { LogBox } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import { useDeviceContext } from "twrnc"
 import tw from "../app/lib/tailwind"
+import logger from "../app/utils/logger"
+import { registerForExpoNotifications } from "../app/lib/firebase/messaging"
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+})
 
 enableScreens(true)
 
@@ -46,6 +58,31 @@ export default function App() {
     "open-sans-700": OpenSans_700Bold,
     "open-sans-800": OpenSans_800ExtraBold,
   })
+
+  const [notification, setNotification] = useState<Notifications.Notification>()
+  const notificationListener = useRef<Subscription>()
+  const responseListener = useRef<Subscription>()
+
+  useEffect(() => {
+    registerForExpoNotifications()
+
+    // - This listener is fired whenever a notification is received while the app
+    // - is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      notification => setNotification(notification)
+    )
+
+    // - This listener is fired whenever a user taps on or interacts with a notification
+    // - (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      response => logger.log(response)
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current)
+      Notifications.removeNotificationSubscription(responseListener.current)
+    }
+  }, [])
 
   useDeviceContext(tw)
   if (!fontIsLoaded) return <AppLoading />

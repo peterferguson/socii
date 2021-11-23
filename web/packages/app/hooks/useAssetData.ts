@@ -1,4 +1,4 @@
-import { getAssetDocs } from "../lib/firebase/client/db/getAssetDocs"
+import { getAssetDocs } from "../lib/firebase/db/getAssetDocs"
 import { useEffect, useState } from "react"
 import { Asset } from "../models/Asset"
 import { usePrevious } from "./usePrevious"

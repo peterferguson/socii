@@ -1,5 +1,5 @@
 import { collection, getDocs, query, Timestamp } from "firebase/firestore"
-import { db } from "../.."
+import { db } from ".."
 
 export interface GroupTradeItem {
   agreesToTrade: string[]

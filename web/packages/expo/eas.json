@@ -26,5 +26,8 @@
         "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii-development"
       }
     }
+  },
+  "cli": {
+    "version": ">= 0.34.1"
   }
 }
