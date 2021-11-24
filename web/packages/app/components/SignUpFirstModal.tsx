@@ -24,7 +24,7 @@ export const SignUpFirstModal: React.FC<{
       defaultPositionIndex={0}
     >
       <View style={tw`flex-1 items-center pt-2`}>
-        <ModalHeader modalRef={modalRef} label={"Please sign up first 😏"} />
+        <ModalHeader modalRef={modalRef} label={"Please sign up first 🥳"} />
         <CenteredColumn style={tw`h-full pb-14`}>
           <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
         </CenteredColumn>

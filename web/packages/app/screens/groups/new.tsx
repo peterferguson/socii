@@ -2,8 +2,10 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import {
   CenteredColumn,
   CenteredRow,
+  CreateUsernameModal,
   RoundButton,
   SignUpFirstModal,
+  TextInputWithCharacterCounter,
 } from "app/components"
 import SelectorModal, { SelectorOption } from "app/components/SelectorModal"
 import { useAuth, useModal } from "app/hooks"
@@ -11,17 +13,8 @@ import { checkGroupNameExists, createGroup } from "app/lib/firebase/db"
 import tw from "app/lib/tailwind"
 import { ArrowSquareDown, Lock, ProfileCircle } from "iconsax-react-native"
 import debounce from "lodash/debounce"
-import React, { useCallback, useEffect, useState, useMemo } from "react"
-import {
-  Dimensions,
-  Pressable,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
-  Switch,
-} from "react-native"
-
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { Dimensions, Pressable, Switch, Text, TextInputProps, View } from "react-native"
 import { MaskedTextInput } from "react-native-mask-text"
 
 const GROUPNAME_REGEX = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
@@ -55,17 +48,23 @@ export default function NewGroupScreen() {
 
   const { user } = useAuth()
   const modalRef = React.useRef<BottomSheetModal>(null)
+  const usernameCreationModalRef = React.useRef<BottomSheetModal>(null)
   const groupTypeModalRef = React.useRef<BottomSheetModal>(null)
   const { handlePresent: openGroupTypeModal, handleClose: closeGroupTypeModal } =
     useModal(groupTypeModalRef)
   const { handlePresent: openSignInModal } = useModal(modalRef)
+  const { handlePresent: openUsernameModal } = useModal(usernameCreationModalRef)
 
   const handlePress = React.useCallback(() => {
+    if (user?.username) {
+      openUsernameModal()
+      return
+    }
     if (!user?.username) {
       openSignInModal()
       return
     }
-    if (isValidGroupName && !groupNameTaken)
+    if (groupName && isValidGroupName && !groupNameTaken)
       createGroup(user, groupName, groupType, initialDeposit, monthlySubscription)
   }, [
     user?.username,
@@ -123,6 +122,7 @@ export default function NewGroupScreen() {
         </View>
       </CenteredColumn>
       <SignUpFirstModal modalRef={modalRef} />
+      <CreateUsernameModal modalRef={usernameCreationModalRef} />
       <SelectorModal
         modalRef={groupTypeModalRef}
         title={"Group type"}
@@ -253,21 +253,10 @@ const SelectGroupName = ({
           numbers, periods and underscores.
         </Text>
       ) : null}
-      {groupNameTaken && groupName && !GROUPNAME_REGEX.test(groupName) ? (
+      {groupNameTaken && groupName && GROUPNAME_REGEX.test(groupName) ? (
         <Text style={tw`text-red-400 text-xs`}>{`Sorry ${groupName} is taken.`}</Text>
       ) : null}
     </>
-  )
-}
-
-const TextInputWithCharacterCounter: React.FC<TextInputProps> = ({ ...props }) => {
-  return (
-    <CenteredRow style={tw`w-full bg-gray-200 justify-between px-2 rounded-lg my-2`}>
-      <TextInput {...props} />
-      <Text style={tw`text-xs text-gray-600`}>
-        {props.maxLength - props.value.length}
-      </Text>
-    </CenteredRow>
   )
 }
 

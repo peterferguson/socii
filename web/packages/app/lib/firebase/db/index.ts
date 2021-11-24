@@ -2,6 +2,7 @@
 //   connectFirestoreEmulator(firestore, "localhost", 8080)
 
 export { Timestamp } from "firebase/firestore"
+export { checkUsernameExists } from "./checkUsernameExists"
 export { checkGroupNameExists } from "./checkGroupNameExists"
 export { createGroup } from "./createGroup"
 export { getAssetCategories } from "./getAssetCategories"
