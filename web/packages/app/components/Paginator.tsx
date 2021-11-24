@@ -4,10 +4,9 @@ import { useWindowDimensions } from "react-native"
 import Animated, {
   Extrapolate,
   interpolate,
-  interpolateColor,
   useAnimatedStyle,
 } from "react-native-reanimated"
-import { CenteredRow } from "."
+import { CenteredRow } from "./Centered"
 
 const DOT_WIDTH = 10
 const DOT_HEIGHT = 10

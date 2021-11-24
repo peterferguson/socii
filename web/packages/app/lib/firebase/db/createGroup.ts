@@ -17,30 +17,29 @@ import { db } from ".."
 
 export async function createGroup(
   user: FirebaseUser,
-  username: string,
   groupName: string,
-  privacyOption: { name: string; description: string },
-  depositOption: { amount: number },
-  lumpSumOption: { amount: number },
-  groupDescription: string
+  groupType: { label: string; description: string },
+  initialDeposit: number,
+  monthlySubscription,
+  groupDescription: string = ""
 ) {
   const userGroupRef = doc(db, `users/${user.uid}`)
   const groupRef = doc(db, `groups/${groupName}`)
-  const investorsRef = doc(db, `groups/${groupName}/investors/${username}`)
+  const investorsRef = doc(db, `groups/${groupName}/investors/${user?.username}`)
 
   const batch = writeBatch(db)
   batch.update(userGroupRef, { groups: arrayUnion(groupName) })
   batch.set(groupRef, {
     groupDescription,
     groupName,
-    privacyOption: privacyOption.name.toLowerCase(),
-    groupType: "",
-    cashBalance: depositOption.amount + lumpSumOption.amount,
-    initialDeposit: lumpSumOption.amount,
-    subscriptionAmount: depositOption.amount,
+    initialDeposit,
+    privacyOption: groupType.label.toLowerCase(),
+    groupType: "", // TODO: change this to groupTags: DeFi, growth, dividend, etc
+    cashBalance: initialDeposit + monthlySubscription,
+    subscriptionAmount: monthlySubscription,
     startDate: serverTimestamp(),
-    investorCount: 1, // TODO: Increment this on addition of new investors
-    investors: [username],
+    investorCount: 1,
+    investors: [user?.username],
   })
   batch.set(investorsRef, {
     isFounder: true,

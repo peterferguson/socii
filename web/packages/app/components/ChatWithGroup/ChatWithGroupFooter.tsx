@@ -4,7 +4,7 @@ import { useStream } from "app/hooks"
 import tw from "app/lib/tailwind"
 import { useRouter } from "app/navigation/use-router"
 import GroupMemberProfilePhotos from "../GroupMemberProfilePhotos"
-import { CardFooterButton } from "../CardFooterButton"
+import { CardButton } from "../CardButton"
 
 const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
   const router = useRouter()
@@ -15,7 +15,10 @@ const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
   )
 
   return (
-    <CardFooterButton onPress={() => router.push(`/channel/${groupName}`)}>
+    <CardButton
+      onPress={() => router.push(`/channel/${groupName}`)}
+      buttonType="BOTTOM"
+    >
       <Text
         style={tw`text-left p-3 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`}
       >
@@ -27,7 +30,7 @@ const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
           photoStyles={tw`w-6 h-6 rounded-full mx-0.5 my-2 border border-white`}
         />
       </View>
-    </CardFooterButton>
+    </CardButton>
   )
 }
 

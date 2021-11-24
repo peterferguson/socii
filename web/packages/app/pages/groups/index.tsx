@@ -37,7 +37,7 @@ function GroupsNavigator() {
           name="groupScreen"
           component={GroupScreen}
           options={({ route }) => ({
-            headerTitle: () => <HeaderWithPhoto title={route.params.id} />,
+            headerTitle: () => <HeaderTitle headerTitle={route.params.id} />,
           })}
         />
       </GroupsStack.Group>

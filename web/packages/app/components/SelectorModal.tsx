@@ -1,9 +1,9 @@
-import React from "react"
-import { Text, View, Pressable } from "react-native"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import tw from "app/lib/tailwind"
+import React from "react"
+import { Pressable, Text, View } from "react-native"
 import { CenteredColumn, CenteredRow, Modal } from "."
 import HeaderTitle from "./Headers/HeaderTitle"
-import tw from "app/lib/tailwind"
 
 export interface SelectorOption {
   label: string
@@ -35,8 +35,12 @@ const SelectorModal: React.FC<SelectorModalProps> = ({
       <CenteredColumn style={tw`m-2`}>
         <HeaderTitle headerTitle={title} />
         {options.map((option, index) => (
-          <Pressable onPress={() => onOptionPress(option)}>
-            <CenteredRow key={`selector-option-${index}`} style={tw`items-start p-4`}>
+          <Pressable
+            key={`selector-option-${index}`}
+            style={tw`items-start p-4`}
+            onPress={() => onOptionPress(option)}
+          >
+            <CenteredRow>
               <View style={tw`ml-6 p-4 items-start`}>
                 <option.icon />
               </View>

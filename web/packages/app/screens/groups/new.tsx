@@ -7,12 +7,22 @@ import {
 } from "app/components"
 import SelectorModal, { SelectorOption } from "app/components/SelectorModal"
 import { useAuth, useModal } from "app/hooks"
-import { checkGroupNameExists } from "app/lib/firebase/db"
+import { checkGroupNameExists, createGroup } from "app/lib/firebase/db"
 import tw from "app/lib/tailwind"
 import { ArrowSquareDown, Lock, ProfileCircle } from "iconsax-react-native"
 import debounce from "lodash/debounce"
-import React, { useCallback, useEffect, useState } from "react"
-import { Pressable, Text, TextInput, TextInputProps, View } from "react-native"
+import React, { useCallback, useEffect, useState, useMemo } from "react"
+import {
+  Dimensions,
+  Pressable,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+  Switch,
+} from "react-native"
+
+import { MaskedTextInput } from "react-native-mask-text"
 
 const GROUPNAME_REGEX = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/
 
@@ -35,6 +45,14 @@ export const GROUP_PRIVACY_OPTIONS = [
 ] as SelectorOption[]
 
 export default function NewGroupScreen() {
+  const [groupName, setGroupName] = useState("")
+  const [monthlySubscription, setMonthlySubscription] = useState(0)
+  const [initialDeposit, setInitialDeposit] = useState(0)
+  const [groupType, setGroupType] = useState(GROUP_PRIVACY_OPTIONS[0])
+  const [isValidGroupName, setisValidGroupName] = useState(false)
+  const [groupNameTaken, setGroupNameTaken] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const { user } = useAuth()
   const modalRef = React.useRef<BottomSheetModal>(null)
   const groupTypeModalRef = React.useRef<BottomSheetModal>(null)
@@ -43,16 +61,21 @@ export default function NewGroupScreen() {
   const { handlePresent: openSignInModal } = useModal(modalRef)
 
   const handlePress = React.useCallback(() => {
-    // user?.username ? createGroup() : handlePresent()
-    // tODO: reinstate above
-    openSignInModal()
-  }, [user?.username])
-
-  const [groupName, setGroupName] = useState("")
-  const [groupType, setGroupType] = useState(GROUP_PRIVACY_OPTIONS[0])
-  const [isValidGroupName, setisValidGroupName] = useState(false)
-  const [groupNameTaken, setGroupNameTaken] = useState(false)
-  const [loading, setLoading] = useState(false)
+    if (!user?.username) {
+      openSignInModal()
+      return
+    }
+    if (isValidGroupName && !groupNameTaken)
+      createGroup(user, groupName, groupType, initialDeposit, monthlySubscription)
+  }, [
+    user?.username,
+    isValidGroupName,
+    groupNameTaken,
+    groupName,
+    groupType,
+    initialDeposit,
+    monthlySubscription,
+  ])
 
   return (
     <>
@@ -72,8 +95,14 @@ export default function NewGroupScreen() {
           groupType={groupType}
           openGroupTypeModal={openGroupTypeModal}
         />
-        <Text style={tw`font-poppins-400 text-sm`}>Initial deposit</Text>
-        <Text style={tw`font-poppins-400 text-sm`}>Monthly payment</Text>
+        <SelectInitialDeposit
+          initialDeposit={initialDeposit}
+          setInitialDeposit={setInitialDeposit}
+        />
+        <SelectMonthlySubscription
+          monthlySubscription={monthlySubscription}
+          setMonthlySubscription={setMonthlySubscription}
+        />
         <View style={tw`w-full mt-4`}>
           <RoundButton
             label={"Create group"}
@@ -104,6 +133,79 @@ export default function NewGroupScreen() {
         }}
       />
     </>
+  )
+}
+
+const SelectInitialDeposit = ({ initialDeposit, setInitialDeposit }) => {
+  const [isEnabled, setIsEnabled] = useState(false)
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState)
+
+  return (
+    <CenteredColumn>
+      <CenteredRow style={tw`justify-between w-full my-2`}>
+        <CenteredColumn style={tw`items-start flex-5`}>
+          <Text style={tw`font-poppins-400 text-sm`}>Initial deposit</Text>
+          <Text
+            style={tw`font-poppins-400 text-tiny mx-2 mb-2`}
+            numberOfLines={2}
+            adjustsFontSizeToFit
+          >
+            A sum of money that each member will need when joining the group
+          </Text>
+        </CenteredColumn>
+        <Switch
+          style={tw`flex-1`}
+          trackColor={{ false: "#767577", true: tw.color("brand") }}
+          thumbColor={isEnabled ? "#f3f3f4" : "#f4f3f4"}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </CenteredRow>
+      {isEnabled && (
+        <PriceRadioButtonsWithCustomInput
+          maximumValue={1000}
+          value={initialDeposit}
+          onValueChange={value => setInitialDeposit(value)}
+        />
+      )}
+    </CenteredColumn>
+  )
+}
+
+const SelectMonthlySubscription = ({ monthlySubscription, setMonthlySubscription }) => {
+  const [isEnabled, setIsEnabled] = useState(false)
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState)
+
+  return (
+    <CenteredColumn>
+      <CenteredRow style={tw`justify-between w-full my-2`}>
+        <CenteredColumn style={tw`items-start flex-5`}>
+          <Text style={tw`font-poppins-400 text-sm`}>Monthly payment</Text>
+          <Text
+            style={tw`font-poppins-400 text-tiny mx-2 mb-2`}
+            numberOfLines={2}
+            adjustsFontSizeToFit
+          >
+            Set up a monthly subscription that your group will be investing with each
+            month
+          </Text>
+        </CenteredColumn>
+        <Switch
+          style={tw`flex-1`}
+          trackColor={{ false: "#767577", true: tw.color("brand") }}
+          thumbColor={isEnabled ? "#f3f3f4" : "#f4f3f4"}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </CenteredRow>
+      {isEnabled && (
+        <PriceRadioButtonsWithCustomInput
+          maximumValue={100}
+          value={monthlySubscription}
+          onValueChange={value => setMonthlySubscription(value)}
+        />
+      )}
+    </CenteredColumn>
   )
 }
 
@@ -215,13 +317,84 @@ const GroupNameTextInput: React.FC<GroupNameTextInputProps> = ({
 
   return (
     <TextInputWithCharacterCounter
-      style={tw`h-12`}
+      style={tw`h-12 w-full -mr-12`}
       value={groupName}
       onChangeText={onChangeText}
       maxLength={15}
+      autoCorrect={false}
+      autoCapitalize="none"
       placeholder={"groupname"}
       returnKeyType="done"
       {...props}
     />
+  )
+}
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window")
+const RADIO_BUTTON_WIDTH = (SCREEN_WIDTH - 64) / 5
+const RADIO_BUTTON_HEIGHT = 40
+
+const PriceRadioButtonsWithCustomInput = ({ maximumValue, value, onValueChange }) => {
+  const range = useMemo(() => [10, 5, 4, 2].map(v => maximumValue / v), [maximumValue])
+
+  const [selected, setSelected] = useState(0)
+  const [maskedText, setMaskedText] = useState(null)
+
+  useEffect(() => selected !== 4 && setMaskedText(null), [selected])
+
+  return (
+    <CenteredRow style={tw`w-full justify-evenly px-2 my-0.5 rounded-lg`}>
+      {range.map((v, i) => (
+        <Pressable
+          key={v}
+          style={tw.style(
+            `items-center ${v >= 100 ? "mx-5" : "mx-4"} h-10 rounded-lg`,
+            {
+              backgroundColor:
+                selected === i ? tw.color("brand/70") : tw.color("gray-200"),
+              width: RADIO_BUTTON_WIDTH,
+              height: RADIO_BUTTON_HEIGHT,
+            }
+          )}
+          onPress={() => {
+            setSelected(i)
+            onValueChange(v)
+          }}
+        >
+          <Text
+            style={tw.style(`text-gray-500 ${v >= 100 ? "text-xs py-3 px-2" : "p-3"}`, {
+              color: selected === i ? tw.color("white") : tw.color("black"),
+            })}
+          >
+            ${v}
+          </Text>
+        </Pressable>
+      ))}
+      <MaskedTextInput
+        style={tw.style(
+          `items-center justify-center text-center rounded-lg  ${
+            value >= 100 || selected !== 4 ? "text-xs mx-5 pb-1" : "mx-4"
+          } `,
+          {
+            backgroundColor:
+              selected === 4 ? tw.color("brand/70") : tw.color("gray-200"),
+            color: selected === 4 ? tw.color("white") : tw.color("black"),
+            width: RADIO_BUTTON_WIDTH,
+            height: RADIO_BUTTON_HEIGHT,
+          }
+        )}
+        placeholder={"Custom"}
+        value={selected === 4 ? maskedText : null}
+        onFocus={() => setSelected(4)}
+        mask="$99999"
+        onChangeText={(text, rawText) => {
+          onValueChange(rawText)
+          setMaskedText(text)
+        }}
+        keyboardType="decimal-pad"
+        returnKeyType="done"
+        maxLength={5}
+      />
+    </CenteredRow>
   )
 }

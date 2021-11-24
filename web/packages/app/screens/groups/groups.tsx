@@ -4,19 +4,17 @@ import {
   Paginator,
   RoundButton,
 } from "app/components"
-import { CardFooterButton } from "app/components/CardFooterButton"
-import { CARD_WIDTH } from "app/components/GroupSummaryCard"
 import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
 import { useRouter } from "app/navigation/use-router"
-import { shadowStyle } from "app/utils/shadowStyle"
 import React from "react"
-import { FlatList, Text } from "react-native"
+import { FlatList, Text, View } from "react-native"
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated"
+import { CreateNewGroupCard } from "../../components/CreateNewGroupCard"
 
 const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()
@@ -55,10 +53,16 @@ const GroupPortfolios = (): JSX.Element => {
     <CenteredColumn style={tw`h-full justify-start`}>
       <CenteredColumn style={tw`h-1/5 w-2/3 my-2`}>
         <Text style={tw`font-poppins-600 text-2xl mb-2`}>No groups yet?</Text>
-        <RoundButton
-          onPress={() => router.push(`/groups/new`)}
-          label={"Get started here!"}
-        />
+        <View style={tw`w-full mt-4`}>
+          <RoundButton
+            onPress={() => router.push(`/groups/new`)}
+            label={"Get started here!"}
+            gradientColors={[tw.color("gray-300"), tw.color("gray-300/70")]}
+            labelStyle={tw`capitalize`}
+            textColor={tw.color("black")}
+            showArrow={false}
+          />
+        </View>
       </CenteredColumn>
     </CenteredColumn>
   )
@@ -66,33 +70,4 @@ const GroupPortfolios = (): JSX.Element => {
 
 export default GroupPortfolios
 
-const CreateNewGroupCard: React.FC = () => {
-  const router = useRouter()
-  return (
-    <CenteredColumn style={tw`mb-6`}>
-      <CenteredColumn
-        style={tw.style(`bg-white rounded`, {
-          height: CARD_WIDTH - 10,
-          width: CARD_WIDTH,
-          ...shadowStyle("lg"),
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
-        })}
-      >
-        <Text style={tw`text-xl font-poppins-600`}>Want to create a</Text>
-        <Text style={tw`text-xl font-poppins-600`}>new group?</Text>
-        <Text style={tw`text-3xl`}>👇 </Text>
-      </CenteredColumn>
-      <CardFooterButton onPress={() => router.push("/groups/new")}>
-        <Text
-          style={tw.style(
-            `text-center p-4 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`,
-            { width: CARD_WIDTH }
-          )}
-        >
-          Invite your friends ✌
-        </Text>
-      </CardFooterButton>
-    </CenteredColumn>
-  )
-}
+
