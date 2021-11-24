@@ -11,7 +11,7 @@ export const CardButton: React.FC<{
 }> = ({
   children,
   onPress,
-  style = tw`bg-brand-black flex-row items-center justify-between`,
+  style = tw`bg-brand-black flex-row items-center justify-center`,
   width,
   height,
   buttonType = "BOTTOM",

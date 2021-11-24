@@ -18,6 +18,7 @@ const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
     <CardButton
       onPress={() => router.push(`/channel/${groupName}`)}
       buttonType="BOTTOM"
+      style={tw`bg-brand-black flex-row items-center justify-between`}
     >
       <Text
         style={tw`text-left p-3 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`}

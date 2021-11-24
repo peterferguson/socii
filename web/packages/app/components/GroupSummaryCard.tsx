@@ -2,7 +2,7 @@ import { useGroupCashBalance, useDonutSectors, useGroupHoldings } from "app/hook
 import tw from "app/lib/tailwind"
 import React from "react"
 import { Dimensions, Pressable, Text, View } from "react-native"
-import { GetStartedCard } from "."
+import { GetStartedCard } from "./GetStartedCard"
 import { useRouter } from "../navigation/use-router"
 import { shadowStyle } from "../utils/shadowStyle"
 import CardDonutChart from "./CardDonutChart"

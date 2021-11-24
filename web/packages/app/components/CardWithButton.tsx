@@ -1,4 +1,4 @@
-import { CenteredColumn } from "app/components"
+import { CenteredColumn } from "app/components/Centered"
 import { CardButton } from "app/components/CardButton"
 import tw from "app/lib/tailwind"
 import { shadowStyle } from "app/utils/shadowStyle"

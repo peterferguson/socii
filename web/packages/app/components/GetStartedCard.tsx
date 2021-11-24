@@ -53,8 +53,7 @@ const MainContent: React.FC<{
 const ButtonContent = () => (
   <Text
     style={tw.style(
-      `text-center p-4 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`,
-      { width: CARD_WIDTH }
+      `text-center p-4 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`
     )}
   >
     Get started ✌
