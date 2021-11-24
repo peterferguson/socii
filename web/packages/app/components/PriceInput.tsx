@@ -11,7 +11,7 @@ const PriceInput = ({ setPrice, pricePlaceholder = "0.00" }) => (
         style={tw`w-full items-start pl-1`}
         placeholder={pricePlaceholder}
         keyboardType={"decimal-pad"}
-        onChange={e => setPrice(e.target)}
+        onChangeText={setPrice}
       />
     </CenteredRow>
   </View>

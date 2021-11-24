@@ -44,12 +44,18 @@ const StockSharingModal = ({
         selectedGroup?.replace(/\s/g, "-"),
         {}
       )
+      
+      const queryFields = selectedItems ? (
+        [...new Set([...REQUIRED_QUERY_FIELDS, ...selectedItems])]
+      ):(
+        [...new Set([...REQUIRED_QUERY_FIELDS])]
+      )
 
       // - This being a client-side function call is slowing the UX down
       // TODO: Query Firebase here & if not found then run this function!
       const asset = await alphaVantageQuery({
-        symbol,
-        queryFields: [...new Set([...REQUIRED_QUERY_FIELDS, ...selectedItems])],
+        tickerSymbol: symbol,
+        queryFields: queryFields,
       })
 
       const attachments = [
@@ -70,13 +76,13 @@ const StockSharingModal = ({
         attachments,
         skip_push: true,
       })
-      // const _threadMessage = await channel.sendMessage({
-      //   text: "",
-      //   attachments,
-      //   parent_id: mainMessage.message.id,
-      //   show_in_channel: false,
-      //   skip_push: true,
-      // })
+      const _threadMessage = await channel.sendMessage({
+        text: "",
+        attachments,
+        parent_id: mainMessage.message.id,
+        show_in_channel: false,
+        skip_push: true,
+      })
     }
   }
 
