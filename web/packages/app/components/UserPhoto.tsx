@@ -1,14 +1,16 @@
 import { useAuth } from "app/hooks/useAuth"
 import React from "react"
-import { ViewStyle, TouchableOpacity, Image } from "react-native"
+import { ViewStyle, ImageStyle, TouchableOpacity, Image } from "react-native"
 import tw from "app/lib/tailwind"
 
 export const UserPhoto: React.FC<{
   containerStyle?: ViewStyle
+  imageStyle?: ImageStyle
   overrideOnPress?: () => void
 }> = ({
   overrideOnPress = undefined,
   containerStyle = tw`flex-1 items-center justify-center`,
+  imageStyle = tw`w-7 h-7 rounded-full mr-2`,
 }) => {
   const { user, signout } = useAuth()
 
@@ -22,7 +24,7 @@ export const UserPhoto: React.FC<{
       {user?.photoUrl && (
         <Image
           source={user?.photoUrl ? { uri: user.photoUrl } : null}
-          style={{ width: 28, height: 28, borderRadius: 14, marginRight: 8 }}
+          style={imageStyle}
         />
       )}
     </TouchableOpacity>
