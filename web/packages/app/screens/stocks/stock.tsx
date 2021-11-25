@@ -18,6 +18,8 @@ import {
   useModal,
   usePrevious,
   useRecommendations,
+  usePositions,
+  useTickerPrice,
 } from "app/hooks"
 import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
 import { Asset } from "app/models/Asset"
@@ -33,6 +35,8 @@ import Animated, {
 } from "react-native-reanimated"
 import { AssetsProvider } from "app/contexts/AssetsProvider"
 import { useVector } from "react-native-redash"
+import TickerHoldingCard from "app/components/TickerHoldingCard"
+import { Position } from "@models/alpaca/Position"
 
 type Query = { asset: string }
 
@@ -52,6 +56,17 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
   // }, [])
 
   const { assetSymbol: symbol } = route.params
+  // const { positions, error } = usePositions()
+  // const [holding, setHolding] = useState<Position>(null)
+
+  // // TODO: Add back buttons to modals
+  // useEffect(() => {
+  //   const position = positions
+  //     ?.filter((position) => position.symbol === symbol)
+  //     .pop()
+  //   if (position) {console.log("POSSSSSSSSS::" , position);
+  //    setHolding(position)}
+  // }, [positions, symbol])
 
   const scrollRef = useRef<ScrollView>()
   const prevSymbol = usePrevious(symbol)
@@ -139,6 +154,14 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             translation={translation}
             priceForComparison={graphs[period.value]?.timeseries?.[0].close}
           />
+          {/* {true && (
+            <TickerHoldingCard
+              holding={holding}
+              tickerSymbol={symbol}
+              price={100}
+              isPriceLoading={true}
+            />
+          )} */}
           <InvestButton
             backgroundColor={assets[symbol]?.logoColor}
             onPress={send("CLICK") && handlePresent}
