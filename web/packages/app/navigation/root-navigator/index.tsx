@@ -1,6 +1,8 @@
-import { useAppContext } from "app/hooks/useAppContext"
+import { useAppContext, useStream } from "app/hooks/"
 import OnboardingScreen from "app/screens/onboarding"
 import { headerScreenOptions } from "app/utils/headerScreenOptions"
+import React from "react"
+import { Chat } from "stream-chat-expo"
 import { DrawerNavigator } from "../drawer-navigator"
 import { NextNavigationProps } from "../types"
 import { RootStack } from "./types"
@@ -22,10 +24,20 @@ export const RootNavigator = (props: NextNavigationProps) => {
       ) : (
         <RootStack.Screen
           name="drawer"
-          component={DrawerNavigator}
+          component={ChatWrappedDrawerNavigator}
           options={{ headerShown: false }}
         />
       )}
     </RootStack.Navigator>
   )
 }
+
+const ChatWrappedDrawerNavigator = React.memo((props: NextNavigationProps) => {
+  const { client } = useStream()
+
+  return (
+    <Chat client={client as any}>
+      <DrawerNavigator {...props} />
+    </Chat>
+  )
+})
