@@ -3,8 +3,10 @@ import DropDownPicker, {
   DropDownPickerProps,
   ValueType,
 } from "react-native-dropdown-picker"
+import { Platform } from "react-native"
 
 DropDownPicker.setMode("BADGE")
+Platform.OS == "android" ? DropDownPicker.setListMode("MODAL") : null
 // DropDownPicker.setTheme("DARK")
 
 // - copilot generated ... obviously not matching any design system

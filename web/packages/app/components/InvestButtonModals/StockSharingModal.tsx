@@ -31,10 +31,8 @@ const StockSharingModal = ({
   const [targetPrice, setTargetPrice] = useState(parseFloat(pricePlaceholder))
   const [selectedItems, setSelectedItems] = useState(null)
   const [sendClicked, setSendClicked] = useState(false)
-  // const { group: selectedGroup } = state.context
-  const selectedGroup = "Founders"
+  const { group: selectedGroup } = state.context
   const isin = useISIN(symbol)
-  // const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
   const sendStockInfo = async () => {
     setSendClicked(true)
@@ -118,7 +116,7 @@ const StockSharingModal = ({
           containerStyle={tw`my-2`}
           dropDownContainerStyle={tw.style(`border-brand-black/30`, {
             height: DROPDOWN_ITEMS_CONTAINER_HEIGHT,
-          })}
+          })} 
           searchContainerStyle={tw`border-brand-black/30`}
           max={7} // - 10 with 3 required fields (TODO add these as initial values)
         />
