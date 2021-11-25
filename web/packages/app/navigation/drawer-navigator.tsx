@@ -39,7 +39,8 @@ export function DrawerNavigator({ pageProps, Component }: NextNavigationProps) {
 
 // type Props = DrawerContentComponentProps<DrawerNavigationProp>
 
-export function DrawerContent(props) {
+function DrawerContent(props) {
+  React.useEffect(() => console.log("DrawerContent", props), [])
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>

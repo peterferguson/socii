@@ -62,7 +62,7 @@ function GroupsNavigator() {
             name="groupSettingsScreen"
             component={GroupSettingsScreen}
             options={({ route }) => ({
-              headerTitle: () => <HeaderTitle headerTitle="Group Settings" />,
+              headerTitle: () => <HeaderTitle headerTitle="Group settings" />,
             })}
           />
         </GroupsStack.Group>

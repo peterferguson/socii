@@ -13,7 +13,7 @@ import type {
   UserType,
 } from "app/models/stream/types"
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { RectButton } from "react-native-gesture-handler"
 import Swipeable from "react-native-gesture-handler/Swipeable"
 import {
@@ -54,7 +54,7 @@ export const ChannelPreview: React.FC<
 > = props => {
   const { channel } = props
 
-  const { client, setChannel, setThread, thread } = useStream()
+  const { client } = useStream()
   const {
     theme: {
       colors: { accent_red, white_smoke },

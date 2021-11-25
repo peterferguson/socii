@@ -17,8 +17,6 @@ export const getChannelPreviewDisplayAvatar = <
   const channelName = channelData?.name
   const channelImage = channelData?.image
 
-  console.log({ channelImage, channelName, channelData, currentUserId })
-
   if (channelImage) {
     return {
       image: channelImage,
@@ -26,7 +24,6 @@ export const getChannelPreviewDisplayAvatar = <
     }
   } else if (currentUserId && channel?.state) {
     const members = Object.values(channel.state?.members)
-    console.log({ members })
     const otherMembers = members.filter(member => member.user?.id !== currentUserId)
 
     if (otherMembers.length === 1) {
@@ -35,10 +32,6 @@ export const getChannelPreviewDisplayAvatar = <
         name: channelName || otherMembers[0].user?.name,
       }
     }
-    console.log({
-      images: otherMembers.slice(0, 4).map(member => member.user?.image || ""),
-      names: otherMembers.slice(0, 4).map(member => member.user?.name || ""),
-    })
     return {
       images: otherMembers.slice(0, 4).map(member => member.user?.image || ""),
       names: otherMembers.slice(0, 4).map(member => member.user?.name || ""),

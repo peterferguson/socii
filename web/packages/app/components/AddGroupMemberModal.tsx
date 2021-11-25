@@ -1,5 +1,6 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { CenteredColumn, Modal } from "app/components"
+import { CenteredColumn } from "app/components/Centered"
+import { Modal } from "app/components/Modal"
 import { ModalHeader } from "app/components/Modal"
 import tw from "app/lib/tailwind"
 import React from "react"
