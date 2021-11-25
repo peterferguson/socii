@@ -1,6 +1,7 @@
 import MultiSelect from "app/components/MultiSelect"
 import type { StreamClientContext } from "app/hooks/useCreateStreamClient"
 import { useStream } from "app/hooks/useStream"
+import { useISIN } from "app/hooks/useISIN"
 import { alphaVantageQueryOptions } from "app/lib/constants"
 import { alphaVantageQuery } from "app/lib/firebase/function"
 import tw from "app/lib/tailwind"
@@ -32,7 +33,7 @@ const StockSharingModal = ({
   const [sendClicked, setSendClicked] = useState(false)
   // const { group: selectedGroup } = state.context
   const selectedGroup = "Founders"
-
+  const isin = useISIN(symbol)
   // const { logoUrl: tickerLogoUrl, tickerSymbol } = ticker
 
   const sendStockInfo = async () => {
@@ -66,6 +67,7 @@ const StockSharingModal = ({
           url: `/stocks/${symbol}`,
           targetPrice,
           asset: asset.data,
+          isin: isin.isin,
         },
       ]
 
