@@ -1,11 +1,11 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { NavigatorScreenParams } from "@react-navigation/native"
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { NextComponentType, NextPageContext } from "next"
-import { RootNavigatorParams } from "./root-navigator/types"
 
 type GroupsStackParams = {
   groupsScreen: undefined
   groupScreen: { id: string }
+  groupSettingsScreen: { id: string }
   new: undefined
 }
 type StocksStackParams = {
@@ -31,8 +31,8 @@ type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
   "channelListScreen"
 >
-type ChannelScreenProps = NativeStackScreenProps<RootNavigatorParams, "channel">
-type ThreadScreenProps = NativeStackScreenProps<RootNavigatorParams, "thread">
+type ChannelScreenProps = NativeStackScreenProps<ChannelStackParams, "channel">
+type ThreadScreenProps = NativeStackScreenProps<ChannelStackParams, "thread">
 type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
 
 type NextPageProps = any
@@ -41,17 +41,20 @@ type NextNavigationProps = {
   pageProps?: NextPageProps
 }
 
-type DrawerNavigatorParams = {
+type MainNavigatorParams = {
   groups: NavigatorScreenParams<GroupsStackParams>
   chat: NavigatorScreenParams<ChatStackParams>
   stocks: NavigatorScreenParams<StocksStackParams>
+  onboarding: NavigatorScreenParams<OnboardingStackParams>
   enter: NavigatorScreenParams<EnterStackParams>
+  channel: NavigatorScreenParams<ChannelStackParams>
+  thread: NavigatorScreenParams<ChannelStackParams>
   // profileTab: NavigatorScreenParams<ProfileStackParams>
 }
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends DrawerNavigatorParams {}
+    interface RootParamList extends MainNavigatorParams {}
   }
 }
 
@@ -71,5 +74,5 @@ export type {
   ThreadScreenProps,
   CategoryScreenProps,
   OnboardingStackParams,
-  DrawerNavigatorParams,
+  MainNavigatorParams,
 }

@@ -9,8 +9,8 @@ export const UserPhoto: React.FC<{
   overrideOnPress?: () => void
 }> = ({
   overrideOnPress = undefined,
-  containerStyle = tw`flex-1 items-center justify-center`,
-  imageStyle = tw`w-7 h-7 rounded-full mr-2`,
+  containerStyle = tw`items-center justify-center`,
+  imageStyle = tw`w-7 h-7 rounded-full`,
 }) => {
   const { user, signout } = useAuth()
 

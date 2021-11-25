@@ -7,8 +7,12 @@ import React from "react"
 const HeaderWithPhoto = ({ title }) => {
   return (
     <CenteredRow style={tw`w-full`}>
-      <HeaderTitle headerTitle={title} textStyle={tw`text-center`} />
-      <UserPhoto containerStyle={tw`absolute right-4`} />
+      <CenteredRow style={tw`-mt-2`}>
+        <HeaderTitle headerTitle={title} textStyle={tw`text-center`} />
+      </CenteredRow>
+      <CenteredRow style={tw`absolute right-6 bottom-1`}>
+        <UserPhoto />
+      </CenteredRow>
     </CenteredRow>
   )
 }

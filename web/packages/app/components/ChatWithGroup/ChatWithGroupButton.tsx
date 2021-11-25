@@ -16,7 +16,7 @@ const ChatWithGroupButton = ({ groupName }: { groupName: string }) => {
   return (
     <TouchableOpacity
       onPress={() => router.push(`/channel/${groupName}`)}
-      style={tw.style(`bg-brand-black flex-row items-center justify-between my-4 p-1`, {
+      style={tw.style(`bg-brand-black flex-row items-center justify-between my-2 p-1`, {
         borderRadius: 16,
       })}
     >
