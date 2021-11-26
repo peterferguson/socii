@@ -144,7 +144,7 @@ const StockSharingModal = ({
       </View>
 
       <CenteredRow style={tw.style(`mt-4 flex-1`, { width: BUTTON_WIDTH })}>
-        <RoundButton onPress={sendMessageClickHandler} label={"To the moon 🌕"} />
+        <RoundButton onPress={sendMessageClickHandler} label={"To the moon 🌕"} color1={"teal-200"} color2={"teal-500"}/>
       </CenteredRow>
     </CenteredColumn>
   )

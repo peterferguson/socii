@@ -12,6 +12,7 @@ import AssetLogo from "../AssetLogo"
 import { CenteredColumn, CenteredRow } from ".."
 import { RoundButton } from "app/components/RoundButton"
 import { useModal } from "app/hooks/useModal"
+import { useRouter } from "app/navigation/use-router"
 
 const OrderModal = ({ asset, state, send, modalRef }) => {
   const { user } = useAuth()
@@ -19,14 +20,17 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
   const symbol = asset.alpaca.symbol
   const { price } = useTickerPrice(symbol)
   const [amount, setAmount] = useState(null)
+  const group =  state.context.group
+  const router = useRouter()
+  const [error, setError] = useState(null)
 
-  const { handleExpand } = useModal(modalRef)
+  const { handleExpand, handleClose } = useModal(modalRef)
 
   const handleSubmission = async () => {
     const tradeArgs = {
       username,
       alpacaAccountId: user.alpacaAccountId,
-      groupName: state.context.group,
+      groupName: group,
       assetRef: `tickers/${asset.ISIN}`,
       messageId: `${username}-${state.context.side}-${symbol}-${Math.floor(
         new Date().getTime() / 1000
@@ -39,17 +43,15 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
       timeInForce: "day",
       submittedFromCallable: true,
     }
-    // await toast.promise(
-    tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side }),
-      {
-        loading: "submitting...",
-        success: () => {
-          router.push(`/chat?cid=${state.context.group}`)
-          return <b>Trade Submitted!</b>
-        },
-        error: <b>Could not submit trade.</b>,
-      }
-    // )
+
+    tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side })
+      .then((r)=> {
+        router.push(`/channel/${group}`)         
+      }, (e) => {
+        //console.log("FAILED with error:", e);
+        setError(true)   
+      })
+
   }
   return (
     <CenteredColumn style={tw`w-full p-4 absolute top-0`}>
@@ -72,7 +74,11 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
         />
       </View>
       <View style={tw`w-full flex-1`}>
-        <RoundButton onPress={undefined} label={`${state.context.side} ${symbol}`} />
+      {error ? (
+        <RoundButton onPress={handleClose} label={`Sorry! Something went wrong`}  color1={"red-200"} color2={"red-500"} />
+        ):(
+        <RoundButton onPress={handleSubmission} label={`${state.context.side} ${symbol}`} color1={"teal-200"} color2={"teal-500"} />
+        )}
       </View>
       {/* <View
         style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}
