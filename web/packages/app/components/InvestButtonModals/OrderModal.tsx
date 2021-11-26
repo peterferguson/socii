@@ -47,11 +47,11 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
     tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side })
       .then((r)=> {
         router.push(`/channel/${group}`)         
+        send("CLOSE")
       }, (e) => {
         //console.log("FAILED with error:", e);
         setError(true)   
       })
-
   }
   return (
     <CenteredColumn style={tw`w-full p-4 absolute top-0`}>
