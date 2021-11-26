@@ -40,7 +40,9 @@ export const LargeNumberInput = ({
         </View>
       )}
       <TextInput
-        style={tw`h-16
+        //textAlignVertical: "center" attempted to add to below, but android text cut off
+        // working soln to just increase width of box - check in ios
+        style={tw`h-40
           w-full text-center text-brand font-poppins-400 ${inputTextSize(amount)}`}
         placeholder="0.00"
         placeholderTextColor={tw.color("brand")}
@@ -48,7 +50,7 @@ export const LargeNumberInput = ({
         keyboardType={"decimal-pad"}
         // TODO: Animate text opacity to pulse when editing and remove cursor
         // caretHidden={true}
-        onChange={e => setAmount(e.target)}
+        onChangeText={setAmount}
         onFocus={onFocus}
         onSubmitEditing={() => {}}
         onEndEditing={() => {}}
