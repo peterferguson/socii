@@ -11,7 +11,7 @@ const SelectGroupModal = ({ send }) => {
 
   const [groups, setGroups] = useState(undefined)
 
-  const setSelectedGroup = groupName => send("SELECT_GROUP", { groupName: groupName })
+  const setSelectedGroup = (group) => send("SELECT_GROUP", { groupName: group })
 
   useEffect(() => {
     const getGroupData = async () => {
@@ -36,7 +36,7 @@ const SelectGroupModal = ({ send }) => {
       {/** TODO Add a loader here  */}
       {groups?.map(group => (
         <ModalSelectButton
-          onPress={setSelectedGroup}
+          onPress={()=>setSelectedGroup(group.name)}
           Icon={null} // TODO Add an icon for the group
           title={group.name}
           key={group.name}

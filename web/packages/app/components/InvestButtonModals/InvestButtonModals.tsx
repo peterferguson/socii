@@ -40,9 +40,7 @@ export const InvestButtonModals: React.FC<{
     index === -1 && send("CLOSE")
   }, [])
 
-  // const groupName = state.context.group
-  const groupName = "Founders"
-
+  const groupName = state.context.group
   const asset = useAssets()[symbol]
 
   const ModalContents = Modals[activeStateName]
