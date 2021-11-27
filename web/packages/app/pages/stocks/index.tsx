@@ -47,7 +47,8 @@ const StocksNavigator = () => {
         <StocksStack.Screen
           name="stocksScreen"
           options={{
-            headerTitle: props => <AnimatedStocksHeader scrollY={scrollY} />,
+            headerTitle: props => <HeaderTitle headerTitle={`Stocks`} />,
+            // headerTitle: props => <AnimatedStocksHeader scrollY={scrollY} />,
           }}
         >
           {props => <StocksScreen scrollHandler={scrollHandler} {...props} />}

@@ -27,6 +27,7 @@
  *   />
  */
 
+import { AssetsObject } from "@hooks/useAssetData"
 import { useFocusEffect } from "@react-navigation/native"
 import CardSlider from "app/components/CardSlider"
 import CategoryCard from "app/components/CategoryCard"
@@ -41,7 +42,7 @@ import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
 import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import {
   FlatList,
   NativeScrollEvent,
@@ -51,6 +52,8 @@ import {
   View,
 } from "react-native"
 import Animated from "react-native-reanimated"
+import { NewsItem, NewsItemSkeleton } from "app/components/NewsItem"
+import { Panels, Tabs } from "../../components/Tabs/Tabs"
 
 const defaultPrice: Price = {
   latestPrice: 0,
@@ -60,6 +63,8 @@ const defaultPrice: Price = {
   currency: "USD",
 }
 
+const tabs = [{ label: "Stocks" }, { label: "News" }]
+
 type OnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => void
 
 const StocksScreenWithMemo: React.FC<{
@@ -68,6 +73,11 @@ const StocksScreenWithMemo: React.FC<{
   scrollHandler: OnScroll
 }> = ({ scrollHandler }) => {
   // TODO: large screen vertical cards - small horizontal cards
+
+  const tabPanels = {
+    "Stocks": ()=> <StockPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
+    "News": ()=> <NewsPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
+  }
 
   const { trending, isLoading } = useYahooTrending()
   // TODO: This recalls the api every time the screen is loaded leading to bad UX
@@ -80,31 +90,23 @@ const StocksScreenWithMemo: React.FC<{
   const { handlePresent, handleDismiss } = useSearchModal()
   useFocusEffect(React.useCallback(() => () => handleDismiss(), []))
 
-  return (
-    <Animated.ScrollView
-      showsVerticalScrollIndicator={false}
-      onScroll={scrollHandler}
-      scrollEventThrottle={32}
-    >
-      <View>
-        <CenteredRow style={tw`justify-between`}>
-          <Title title={"Trending"} />
-          <SearchIcon />
-        </CenteredRow>
-        <CardSlider
-          isLoading={isLoading}
-          assets={Object.values(trending).map(asset => ({
-            asset: asset,
-            price: defaultPrice,
-          }))}
-        />
-        <Title title={"Categories"} />
-        <Categories categories={categories} />
-        <Title title={"All"} />
-        <AssetCards assets={Object.values(trending)} />
-        {Search && <Search />}
-      </View>
-    </Animated.ScrollView>
+  // TODO: Maybe better dep here.. isLoading would give blank
+  const panelComponents = useMemo<Panels>(
+    () =>
+      Object.entries(tabPanels).reduce(
+        (acc, [label, screen ]) => ({
+          ...acc,
+          [label]: tabPanels[label],
+        }),
+        {}
+      ),
+    [trending]
+  )
+
+  return ( 
+    <ScrollView>
+      <Tabs tabs={tabs} panelComponents={panelComponents} />
+    </ScrollView> 
   )
 }
 
@@ -216,6 +218,71 @@ const Title = ({ title }: { title: string }) => (
   >
     {title}
   </Text>
+)
+
+const StockPanel: React.FC<{
+  scrollHandler: OnScroll
+  isLoading: boolean
+  trending: AssetsObject
+  categories: AssetCategories
+}> = ({ scrollHandler, isLoading, trending, categories }) => ( 
+  <Animated.ScrollView
+  showsVerticalScrollIndicator={false}
+  onScroll={scrollHandler}
+  scrollEventThrottle={32}
+>
+  <View>
+    <CenteredRow style={tw`justify-between`}>
+      <Title title={"Trending"} />
+      <SearchIcon />
+    </CenteredRow>
+    <CardSlider
+      isLoading={isLoading}
+      assets={Object.values(trending).map(asset => ({
+        asset: asset,
+        price: defaultPrice,
+      }))}
+    />
+    <Title title={"Categories"} />
+    <Categories categories={categories} />
+    <Title title={"All"} />
+    <AssetCards assets={Object.values(trending)} />
+    {Search && <Search />}
+  </View>
+</Animated.ScrollView>
+)
+
+const NewsPanel: React.FC<{
+  scrollHandler: OnScroll
+  isLoading: boolean
+  trending: AssetsObject
+  categories: AssetCategories
+}> = ({ scrollHandler, isLoading, trending, categories }) => ( 
+//   <Animated.ScrollView
+//   showsVerticalScrollIndicator={false}
+//   onScroll={scrollHandler}
+//   scrollEventThrottle={32}
+// >
+//   <View>
+//     <CenteredRow style={tw`justify-between`}>
+//       <Title title={"Trending"} />
+//       <SearchIcon />
+//     </CenteredRow>
+//     <CardSlider
+//       isLoading={isLoading}
+//       assets={Object.values(trending).map(asset => ({
+//         asset: asset,
+//         price: defaultPrice,
+//       }))}
+//     />
+//     <Title title={"Categories"} />
+//     <Categories categories={categories} />
+//     <Title title={"All"} />
+//     <AssetCards assets={Object.values(trending)} />
+//     {Search && <Search />}
+//   </View>
+// </Animated.ScrollView>
+<NewsItemSkeleton/>
 )
 
 export default React.memo(StocksScreenWithMemo)
