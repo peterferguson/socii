@@ -49,6 +49,7 @@ function makeType<T>(t: T) {
 }
 
 const groupStackPaths = makeType({
+  groupSettings: makeGroupStackPath("groupSettingsScreen"),
   groups: makeGroupStackPath("groupsScreen"),
   group: makeGroupStackPath("groupScreen"),
   new: makeGroupStackPath("new"),
@@ -105,6 +106,7 @@ const linking: Props = {
         path: "groups",
         screens: {
           [groupStackPaths.groups]: "",
+          [groupStackPaths.groupSettings]: ":id/settings",
           [groupStackPaths.group]: ":id",
           [groupStackPaths.new]: "new",
         },

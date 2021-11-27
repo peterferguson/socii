@@ -1,14 +1,20 @@
 import { getUserWithUsername, inviteInvestorToGroup } from "app/lib/firebase/db"
+import { Channel } from "app/models/stream/types"
 import { UserResponse } from "stream-chat"
 
-export const addMembersToGroup = async (groupName: string, users: UserResponse[]) => {
+export const addMembersToGroup = async (
+  groupName: string,
+  users: UserResponse[],
+  channel: Channel
+) => {
   console.log("Adding members to group", groupName, users)
 
   // ! The id will come from stream and should be the username
   users.map(async ({ id: username }: { id: string }) => {
     const userDetails = await getUserWithUsername(username)
+    if (!userDetails) return
     const { uid, groups, alpacaAccountId } = userDetails.data()
-    if (groups.includes(groupName)) {
+    if (groups && groups.includes(groupName)) {
       console.log("User already in group", username)
       return
     }
@@ -24,5 +30,8 @@ export const addMembersToGroup = async (groupName: string, users: UserResponse[]
     //     uid: uid,
     //     updateData: { groups: [...groups, groupName] },
     //   })
+
+    // - Invite users to chat
+    const invite = await channel.inviteMembers(users.map(user => user.id))
   })
 }

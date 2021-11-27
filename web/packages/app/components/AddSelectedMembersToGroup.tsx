@@ -2,7 +2,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CenteredColumn } from "app/components/Centered"
 import SelectedUsers from "app/components/UserSearch/SelectedUsers"
 import Button from "app/components/Button"
-import { useModal, useSearchUsers } from "app/hooks"
+import { useModal, useSearchUsers, useGroupChatChannel } from "app/hooks"
 import tw from "app/lib/tailwind"
 import React, { useCallback, useEffect } from "react"
 import { Keyboard } from "react-native"
@@ -13,6 +13,7 @@ export const AddSelectedMembersToGroup: React.FC<{
   modalRef: React.MutableRefObject<BottomSheetModal>
 }> = ({ groupName, modalRef }) => {
   const { selectedUsers, reset } = useSearchUsers()
+  const channel = useGroupChatChannel(groupName)
 
   const { handleDismiss, handleExpand } = useModal(modalRef)
 
@@ -25,7 +26,7 @@ export const AddSelectedMembersToGroup: React.FC<{
   const _keyboardDidShow = handleExpand
 
   const handlePress = useCallback(() => {
-    addMembersToGroup(groupName, selectedUsers)
+    addMembersToGroup(groupName, selectedUsers, channel)
     Keyboard.dismiss()
     reset()
     handleDismiss()

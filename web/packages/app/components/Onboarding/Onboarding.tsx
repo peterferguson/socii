@@ -25,7 +25,7 @@ import { CenteredColumn } from "../Centered"
 import HeaderText from "../Text/HeaderText"
 import { AddFriends, PublicDiscussion, Revenue } from "./assets"
 import NextButton from "./NextButton"
-import Paginator from "./Paginator"
+import Paginator from "../Paginator"
 
 interface OnboardingItemData {
   id: string
@@ -163,7 +163,7 @@ const Onboarding = () => {
       })}
     >
       <View style={{ flex: 3 }}>
-        <Paginator data={onboardingData} scrollX={scrollX} />
+        <Paginator numPages={onboardingData.length} scrollX={scrollX} />
         <FlatList
           data={onboardingData}
           renderItem={({ item }) => <OnboardingItem item={item} />}

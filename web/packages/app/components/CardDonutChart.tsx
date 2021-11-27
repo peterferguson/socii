@@ -44,7 +44,7 @@ const CardDonutChart = ({ sectors, radius, textColor, gain, cashBalance, linkTo 
     </View>
   ) : (
     <View style={tw`my-4`}>
-      <SkeletonCircle radius={80} />
+      <SkeletonCircle radius={86.5} />
     </View>
   )
 }

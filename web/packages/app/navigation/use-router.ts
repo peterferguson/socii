@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useRouter as useNextRouter, NextRouter } from "next/router"
-import { useLinkTo, useNavigation } from "@react-navigation/native"
+import { useLinkTo, useNavigation, useNavigationState } from "@react-navigation/native"
 
 export function useRouter() {
   const linkTo = useLinkTo()

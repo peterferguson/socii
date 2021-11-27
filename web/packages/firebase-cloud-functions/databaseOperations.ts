@@ -23,33 +23,22 @@ export const incrementInvestors = async (
   change: functions.Change<functions.firestore.DocumentSnapshot>,
   context: functions.EventContext
 ) => {
-  const { groupName, investorUsername } = context.params
+  const { groupName } = context.params
   const { acceptedInvite = null } = change.before?.data() || {}
+  const { acceptedInvite: updatedInvite = null } = change.before?.data() || {}
 
-  if (!change.before.exists) {
-    // New document Created : add one to count
-    if (acceptedInvite)
-      firestore.doc(`groups/${groupName}`).update({ investorCount: increment(1) })
-  } else if (change.before.exists && change.after.exists) {
-    // Updating existing document: Update chat members
-    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
+  // New document Created : add one to count if acceptedInvite is true
+  // Document Changed:
+  if (
+    (!change.before.exists && acceptedInvite) ||
+    (change.before.exists && change.after.exists && updatedInvite)
+  )
+    firestore.doc(`groups/${groupName}`).update({ investorCount: increment(1) })
 
-    try {
-      await channel.addMembers([investorUsername])
-    } catch (err) {
-      logger.error(err)
-    }
-  } else if (!change.after.exists) {
+  if (!change.after.exists && acceptedInvite)
     // Deleting document: subtract one from count
     firestore.doc(`groups/${groupName}`).update({ investorCount: increment(-1) })
-    const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 
-    try {
-      await channel.removeMembers([investorUsername])
-    } catch (err) {
-      logger.error(err)
-    }
-  }
   return
 }
 
@@ -70,13 +59,17 @@ export const updateGroupChatOnInvestorChange = async (
   context: functions.EventContext
 ) => {
   const { groupName, investorUsername } = context.params
-  const { acceptedInvite = null } = change.before?.data() || {}
+  const { acceptedInvite = null } = change.after?.data() || {}
+  logger.log(
+    `groupname: ${groupName} username:${investorUsername} invite: ${acceptedInvite}`
+  )
   const channel = streamClient.channel("group", groupName.replace(/\s/g, "-"))
 
   try {
     if (change.before.exists && change.after.exists) {
       // Updating existing document: Add chat member
       if (!acceptedInvite) return
+      logger.log(`Adding ${investorUsername} to ${groupName}`)
       await channel.addMembers([investorUsername])
     } else if (!change.after.exists) {
       // Updating existing document: remove chat member

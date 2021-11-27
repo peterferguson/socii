@@ -75,9 +75,21 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
       </View>
       <View style={tw`w-full flex-1`}>
       {error ? (
-        <RoundButton onPress={handleClose} label={`Sorry! Something went wrong`}  color1={"red-200"} color2={"red-500"} />
+        <RoundButton
+          onPress={handleClose}
+          label={`Sorry! Something went wrong`}
+          labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+          gradientColors={[tw.color("red-200"), tw.color("red-500")]}
+          textColor={tw.color("red-500")}
+        />
         ):(
-        <RoundButton onPress={handleSubmission} label={`${state.context.side} ${symbol}`} color1={"teal-200"} color2={"teal-500"} />
+        <RoundButton
+          onPress={handleSubmission}
+          label={`${state.context.side} ${symbol}`}
+          labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+          gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
+          textColor={tw.color("teal-500")}
+        />
         )}
       </View>
       {/* <View

@@ -2,6 +2,7 @@ import { useGroupCashBalance, useDonutSectors, useGroupHoldings } from "app/hook
 import tw from "app/lib/tailwind"
 import React from "react"
 import { Dimensions, Pressable, Text, View } from "react-native"
+import { GetStartedCard } from "./GetStartedCard"
 import { useRouter } from "../navigation/use-router"
 import { shadowStyle } from "../utils/shadowStyle"
 import CardDonutChart from "./CardDonutChart"
@@ -9,6 +10,7 @@ import { ChatWithGroupFooter } from "./ChatWithGroup"
 import { IGroupColumnCard } from "./GroupColumnCard"
 
 export default ({ groupName, style }: IGroupColumnCard) => {
+  const router = useRouter()
   const cashBalance = useGroupCashBalance(groupName)
   const { data: holdingInfo, prices } = useGroupHoldings(groupName)
   const donutSectors = useDonutSectors(holdingInfo, prices)
@@ -25,8 +27,8 @@ export default ({ groupName, style }: IGroupColumnCard) => {
       prices?.map(({ avgPrice, qty }) => avgPrice * qty).reduce((a, b) => a + b, 0)) /
     (portfolioValue * 0.01)
 
-  return (
-    <View style={tw`flex-col mb-4`}>
+  return !holdingInfo || holdingInfo.length > 0 ? (
+    <View style={tw`flex-col mb-6 mr-2`}>
       <View
         style={tw.style("flex-col items-center p-4 bg-white rounded-t-2xl", {
           ...shadowStyle("lg"),
@@ -46,19 +48,27 @@ export default ({ groupName, style }: IGroupColumnCard) => {
         />
         {/* TODO: Show top gainer after divider */}
         {/* <TextDivider lineStyles={undefined}>
-          {holdings?.length > 0
-            ? `${holdings?.length} Investments`
-            : "No Investments Yet"}
-        </TextDivider> */}
+      {holdings?.length > 0
+        ? `${holdings?.length} Investments`
+        : "No Investments Yet"}
+      </TextDivider> */}
       </View>
       <ChatWithGroupFooter groupName={groupName} />
     </View>
+  ) : (
+    <GetStartedCard
+      title={groupName}
+      buttonType="BOTTOM"
+      width={CARD_WIDTH}
+      height={CARD_WIDTH - 10}
+      onTitlePress={() => router.push(`/groups/${groupName}`)}
+    />
   )
 }
 
 const { width: WINDOW_WIDTH } = Dimensions.get("window")
 
-const CARD_WIDTH = WINDOW_WIDTH - 64
+export const CARD_WIDTH = WINDOW_WIDTH - 80
 
 const CardTitle = ({ title, style }) => {
   const router = useRouter()

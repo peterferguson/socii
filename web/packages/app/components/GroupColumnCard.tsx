@@ -4,6 +4,7 @@ import React from "react"
 import { FlatList, View } from "react-native"
 import { shadowStyle } from "../utils/shadowStyle"
 import CardDonutChart from "./CardDonutChart"
+import { GetStartedCard } from "./GetStartedCard"
 import StockCard from "./StockCard"
 import TextDivider from "./TextDivider"
 export interface IGroupColumnCard {
@@ -29,6 +30,8 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
   const donutRadius = 80
   const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string
 
+  React.useEffect(() => console.log({ holdingsInfo }), [holdingsInfo])
+
   const portfolioValue = prices
     ?.map(({ currentPrice, qty }) => currentPrice * qty)
     .reduce((a, b) => a + b, 0)
@@ -38,7 +41,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
       prices?.map(({ avgPrice, qty }) => avgPrice * qty).reduce((a, b) => a + b, 0)) /
     (portfolioValue * 0.01)
 
-  return (
+  return holdingsInfo?.length > 0 ? (
     <View style={tw`flex-col mb-4`}>
       <View
         style={tw.style("flex-col items-center p-4 bg-white rounded-2xl min-h-max", {
@@ -46,18 +49,16 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
           ...style,
         })}
       >
-        {/* <CardTitle title={groupName} style={style} /> */}
         <CardDonutChart
           sectors={donutSectors}
           radius={donutRadius}
           textColor={donutTextColor}
           gain={gain}
           cashBalance={cashBalance}
+          linkTo={groupName}
         />
         <TextDivider lineStyles={undefined}>
-          {holdingsInfo?.length > 0
-            ? `${holdingsInfo?.length} Investments`
-            : "No Investments Yet"}
+          {`${holdingsInfo?.length} Investments`}
         </TextDivider>
         <View style={tw`w-11/12 my-2`}>
           <FlatList
@@ -68,5 +69,7 @@ export default function GroupColumnCard({ groupName, style }: IGroupColumnCard) 
         </View>
       </View>
     </View>
+  ) : (
+    <GetStartedCard buttonType="TOP" containerStyle={tw`mb-6`} />
   )
 }

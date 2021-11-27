@@ -27,10 +27,10 @@ export default () => {
 
   return (
     <View style={tw`flex-col m-4`}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <GroupColumnCard groupName={groupName} />
-        <Button label={"Add a friend"} onPress={handlePresent} />
         <ChatWithGroupButton groupName={groupName} />
+        <Button label={"Add a friend"} onPress={handlePresent} />
         <GroupActivities groupName={groupName} />
         <AddGroupMemberModal modalRef={modalRef} groupName={groupName} />
       </ScrollView>
