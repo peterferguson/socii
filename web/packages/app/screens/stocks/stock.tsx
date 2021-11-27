@@ -37,6 +37,7 @@ import { AssetsProvider } from "app/contexts/AssetsProvider"
 import { useVector } from "react-native-redash"
 import TickerHoldingCard from "app/components/TickerHoldingCard"
 import { Position } from "@models/alpaca/Position"
+import  StockNews  from "app/components/StockNews"
 
 type Query = { asset: string }
 
@@ -180,6 +181,12 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
             }}
           />
           <StockRecommendations recommendations={recommendations} />
+          <StockNews
+            exchange={assets[symbol]?.exchangeAbbreviation || assets[symbol]?.alpaca?.exchange}
+            symbol={symbol}
+            shortName={assets[symbol]?.shortName}
+            logoColor={assets[symbol]?.logoColor}
+          />
         </View>
       </ScrollView>
       {user ? (
