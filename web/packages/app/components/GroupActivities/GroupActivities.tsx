@@ -6,6 +6,7 @@ import { useGroupTrades } from "app/hooks/useGroupTrades"
 import { GroupTradeItem } from "app/lib/firebase/db/getGroupTradeHistory"
 import NothingToShow from "../NothingToShow"
 import { Panels, Tabs } from "../Tabs/Tabs"
+import tw from "app/lib/tailwind"
 import { activityTypeMapping } from "./constants"
 
 interface PanelData {

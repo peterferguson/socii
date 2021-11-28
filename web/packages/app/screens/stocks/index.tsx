@@ -27,31 +27,19 @@
  *   />
  */
 
-import { AssetsObject } from "@hooks/useAssetData"
 import { useFocusEffect } from "@react-navigation/native"
+import StockNews from "app/components/StockNews"
+import StockPanel from "app/components/StockPanel"
+
 import { useSearchModal } from "app/hooks/useSearchModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
 import { AssetCategories } from "app/models/AssetCategories"
-import { Price } from "app/models/Price"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
-import React, { useEffect, useState, useMemo } from "react"
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-} from "react-native"
-import { NewsItem, NewsItemSkeleton } from "app/components/NewsItem"
-import  StockNews  from "app/components/StockNews"
-import  StockPanel  from "app/components/StockPanel"
+import React, { useEffect, useMemo, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
+import Animated from "react-native-reanimated"
 import { Panels, Tabs } from "../../components/Tabs/Tabs"
-
-const defaultPrice: Price = {
-  latestPrice: 0,
-  changePercent: -0.1,
-  iexRealtimePrice: 0,
-  latestUpdate: "9999-12-31",
-  currency: "USD",
-}
+import tw from "app/lib/tailwind"
 
 const tabs = [{ label: "Stocks" }, { label: "News" }]
 
@@ -65,8 +53,10 @@ const StocksScreenWithMemo: React.FC<{
   // TODO: large screen vertical cards - small horizontal cards
 
   const tabPanels = {
-    "Stocks": ()=> <StockPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
-    "News": ()=> <NewsPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
+    Stocks: () => (
+      <StockPanel isLoading={isLoading} trending={trending} categories={categories} />
+    ),
+    News: () => <NewsPanel />,
   }
 
   const { trending, isLoading } = useYahooTrending()
@@ -84,53 +74,31 @@ const StocksScreenWithMemo: React.FC<{
   const panelComponents = useMemo<Panels>(
     () =>
       Object.entries(tabPanels).reduce(
-        (acc, [label, screen ]) => ({
-          ...acc,
-          [label]: tabPanels[label],
-        }),
+        (acc, [label, screen]) => ({ ...acc, [label]: tabPanels[label] }),
         {}
       ),
     [trending]
   )
 
-  return ( 
-    <ScrollView>
-      <Tabs tabs={tabs} panelComponents={panelComponents} />
-    </ScrollView> 
+  return (
+    <Animated.ScrollView
+      showsVerticalScrollIndicator={false}
+      onScroll={scrollHandler}
+      scrollEventThrottle={32}
+      style={tw`flex-1`}
+    >
+      <Tabs
+        tabs={tabs}
+        panelComponents={panelComponents}
+        panelBgColor="transparent"
+        containerStyle={tw`flex-1 items-center`}
+      />
+    </Animated.ScrollView>
   )
 }
 
-const NewsPanel: React.FC<{
-  scrollHandler: OnScroll
-  isLoading: boolean
-  trending: AssetsObject
-  categories: AssetCategories
-}> = ({ scrollHandler, isLoading, trending, categories }) => ( 
-//   <Animated.ScrollView
-//   showsVerticalScrollIndicator={false}
-//   onScroll={scrollHandler}
-//   scrollEventThrottle={32}
-// >
-//   <View>
-//     <CenteredRow style={tw`justify-between`}>
-//       <Title title={"Trending"} />
-//       <SearchIcon />
-//     </CenteredRow>
-//     <CardSlider
-//       isLoading={isLoading}
-//       assets={Object.values(trending).map(asset => ({
-//         asset: asset,
-//         price: defaultPrice,
-//       }))}
-//     />
-//     <Title title={"Categories"} />
-//     <Categories categories={categories} />
-//     <Title title={"All"} />
-//     <AssetCards assets={Object.values(trending)} />
-//     {Search && <Search />}
-//   </View>
-// </Animated.ScrollView>
-  <StockNews 
+const NewsPanel: React.FC<{}> = ({}) => (
+  <StockNews
     exchange={"NYSE"}
     symbol={"TSLA"}
     shortName={"TSLA Inc."}

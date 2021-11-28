@@ -9,12 +9,17 @@ import CardDonutChart from "./CardDonutChart"
 import { ChatWithGroupFooter } from "./ChatWithGroup"
 import { IGroupColumnCard } from "./GroupColumnCard"
 
+const { width: SCREEN_WIDTH } = Dimensions.get("window")
+console.log("SCREEN_WIDTH", SCREEN_WIDTH)
+
+
 export default ({ groupName, style }: IGroupColumnCard) => {
   const router = useRouter()
   const cashBalance = useGroupCashBalance(groupName)
   const { data: holdingInfo, prices } = useGroupHoldings(groupName)
   const donutSectors = useDonutSectors(holdingInfo, prices)
 
+  // tODO: Base on size of screen
   const donutRadius = 80
   const donutTextColor = tw`text-brand-black dark:text-brand-gray`.color as string
 

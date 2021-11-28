@@ -9,5 +9,5 @@ export const TabPanelContainer = ({
   panelBgColor: string
   children: React.ReactNode
 }) => {
-  return <View style={tw`p-3 bg-${panelBgColor} rounded-2xl `}>{children}</View>
+  return <View style={tw`p-3 bg-${panelBgColor} rounded-2xl w-full`}>{children}</View>
 }

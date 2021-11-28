@@ -30,7 +30,7 @@ const ModalSelectButton = ({ onPress, Icon, title, description }) => (
             {title}
           </Text>
         )}
-        {description && (
+        {description ? (
           <Text
             style={tw`font-poppins-400 text-xs text-gray-400`}
             // numberOfLines={2}
@@ -38,7 +38,7 @@ const ModalSelectButton = ({ onPress, Icon, title, description }) => (
           >
             {description}
           </Text>
-        )}
+        ) : null}
       </CenteredColumn>
     </View>
   </Pressable>

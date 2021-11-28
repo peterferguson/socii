@@ -9,14 +9,16 @@ export const TabPanels = ({
   index,
   setIndex,
   panelComponents,
+  panelBgColor,
 }: {
   tabs: Tab[]
   index: number
   setIndex: React.Dispatch<React.SetStateAction<number>>
   panelComponents: Panels
+  panelBgColor?: string
 }) => {
   return (
-    <TabPanelContainer panelBgColor="white">
+    <TabPanelContainer panelBgColor={panelBgColor || "white"}>
       {tabs.map(
         (tab, i) =>
           i === index && (
