@@ -1,5 +1,4 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { InvestButtonContext, InvestButtonEvent } from "app/lib/machines/constants"
 import { useMachine } from "@xstate/react"
 import {
   ChartCard,
@@ -10,17 +9,16 @@ import {
 } from "app/components"
 import { TabLabel } from "app/components/ChartCard/constants"
 import { InvestButtonModals } from "app/components/InvestButtonModals/InvestButtonModals"
+import StockNews from "app/components/StockNews"
 import {
   useAssets,
-  useAssetData,
   useAuth,
   useGraph,
   useModal,
   usePrevious,
   useRecommendations,
-  usePositions,
-  useTickerPrice,
 } from "app/hooks"
+import { InvestButtonContext, InvestButtonEvent } from "app/lib/machines/constants"
 import { stockInvestButtonMachine } from "app/lib/machines/stockInvestButtonMachine"
 import { Asset } from "app/models/Asset"
 import type { StockScreenProps } from "app/navigation/types"
@@ -33,11 +31,7 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated"
-import { AssetsProvider } from "app/contexts/AssetsProvider"
 import { useVector } from "react-native-redash"
-import TickerHoldingCard from "app/components/TickerHoldingCard"
-import { Position } from "@models/alpaca/Position"
-import  StockNews  from "app/components/StockNews"
 
 type Query = { asset: string }
 
@@ -182,7 +176,9 @@ export default function StockScreen({ navigation, route }: StockScreenProps) {
           />
           <StockRecommendations recommendations={recommendations} />
           <StockNews
-            exchange={assets[symbol]?.exchangeAbbreviation || assets[symbol]?.alpaca?.exchange}
+            exchange={
+              assets[symbol]?.exchangeAbbreviation || assets[symbol]?.alpaca?.exchange
+            }
             symbol={symbol}
             shortName={assets[symbol]?.shortName}
             logoColor={assets[symbol]?.logoColor}

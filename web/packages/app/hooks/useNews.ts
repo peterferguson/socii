@@ -1,11 +1,9 @@
-import { getNewsArticles, RapidApiNewsItem } from "../utils/getNewsArticles"
-import { getNewsArticles as getNewsArticlesFromFirebase } from "app/lib/firebase/db/getNewsArticles"
-
-import { useEffect, useState } from "react"
 import { storeNewsArticles } from "app/lib/firebase/db/storeNewsArticles"
+import { useEffect, useState } from "react"
+import { getNewsArticles, RapidApiNewsItem } from "../utils/getNewsArticles"
 import { usePrevious } from "./usePrevious"
 
-export const useStockNews = (query: string, asset: string) => {
+export const useNews = (query: string, asset: string) => {
   const [news, setNews] = useState<RapidApiNewsItem[]>([])
   const [dbFetchError, setDbFetchError] = useState(false)
   const [loading, setLoading] = useState(true)
