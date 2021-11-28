@@ -9,7 +9,7 @@ export const OrderTypes = (tickerSymbol, side) => {
     {
       Icon: () => (
         <View style={tw`p-2 rounded-full bg-brand-lightTeal mr-1.5 sm:mr-2`}>
-          <DollarCircle size={25} variant="Outline" />
+          <DollarCircle size={25} variant="Outline"  color={tw.color(`teal-700`)}/>
         </View>
       ),
       name: `${capitalSide} specific cash amount`,
@@ -19,7 +19,7 @@ export const OrderTypes = (tickerSymbol, side) => {
     {
       Icon: () => (
         <View style={tw`p-2 rounded-full bg-brand/30 mr-1.5 sm:mr-2`}>
-          <Hashtag size={25} variant="Outline" />
+          <Hashtag size={25} variant="Outline" color={tw.color(`blue-700`)} />
         </View>
       ),
       name: `${capitalSide} specific amount of shares`,
@@ -29,7 +29,7 @@ export const OrderTypes = (tickerSymbol, side) => {
     {
       Icon: () => (
         <View style={tw`p-2 bg-pink-200 rounded-full mr-1.5 sm:mr-2`}>
-          <ArrowDown size={25} variant="Outline" />
+          <ArrowDown size={25} variant="Outline" color={tw.color(`pink-700`)} />
         </View>
       ),
       name: `${capitalSide} if ${tickerSymbol} reaches a certain price or lower`,

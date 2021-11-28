@@ -11,7 +11,7 @@ const returnActions = send => [
     label: "Continue where you left off?",
     Icon: () => (
       <View style={tw`flex justify-center p-2 rounded-full bg-pink-200`}>
-        <ArrowRotateRight size={25} variant="Outline" />
+        <ArrowRotateRight size={25} variant="Outline" color={tw.color(`pink-700`)} />
       </View>
     ),
     description: "Returns you to the last section you got to.",
@@ -21,7 +21,7 @@ const returnActions = send => [
     label: "No, start over!",
     Icon: () => (
       <View style={tw`flex justify-center p-2 rounded-full bg-brand-lightTeal`}>
-        <DocumentForward size={25} variant="Outline" />
+        <DocumentForward size={25} variant="Outline" color={tw.color(`teal-700`)} />
       </View>
     ),
     description: "Begin with a new form",
