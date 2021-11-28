@@ -3,28 +3,36 @@ import { Tab } from "./Tab"
 import { TabPanel } from "./TabPanel"
 import { TabPanelContainer } from "./TabPanelContainer"
 import { Panels } from "./Tabs"
+import { AnimatePresence } from "moti"
 
 export const TabPanels = ({
   tabs,
   index,
-  setIndex,
   panelComponents,
   panelBgColor,
+  activePanelDirection,
 }: {
   tabs: Tab[]
   index: number
-  setIndex: React.Dispatch<React.SetStateAction<number>>
   panelComponents: Panels
   panelBgColor?: string
+  activePanelDirection?: "left" | "right" | null
 }) => {
   return (
     <TabPanelContainer panelBgColor={panelBgColor || "white"}>
-      {tabs.map(
-        (tab, i) =>
-          i === index && (
-            <TabPanel key={i} {...{ tab, i, index, setIndex, panelComponents }} />
-          )
-      )}
+      <AnimatePresence>
+        {tabs.map(
+          (tab, i) =>
+            i === index && (
+              <TabPanel
+                key={i}
+                tab={tab}
+                panelComponents={panelComponents}
+                activePanelDirection={activePanelDirection}
+              />
+            )
+        )}
+      </AnimatePresence>
     </TabPanelContainer>
   )
 }

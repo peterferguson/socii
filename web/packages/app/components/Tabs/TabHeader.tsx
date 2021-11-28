@@ -6,12 +6,12 @@ export const TabHeader = ({
   tabs,
   index,
   width,
-  setIndex,
+  handleTabPress,
 }: {
   tabs: Tab[]
   index: number
   width: number
-  setIndex: React.Dispatch<React.SetStateAction<number>>
+  handleTabPress: React.Dispatch<React.SetStateAction<number>>
 }) => (
   <TabHeaderContainer>
     {tabs.map((tab, i) => (
@@ -20,7 +20,7 @@ export const TabHeader = ({
         tab={tab}
         index={i}
         selected={index === i}
-        setIndex={setIndex}
+        setIndex={handleTabPress}
         width={width}
       />
     ))}

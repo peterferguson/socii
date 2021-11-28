@@ -25,11 +25,30 @@ export const Tabs = ({
   containerStyle?: ViewProps
 }) => {
   const [index, setIndex] = useState(0)
+  const [activePanelDirection, setActivePanelDirection] = React.useState<
+    "left" | "right" | null
+  >(null)
+
   const TAB_WIDTH = (WIDTH - 64 - 12) / tabs.length
+
+  const handleTabPress = (activeIndex: number) =>
+    setIndex((prevIndex: number) => {
+      if (activeIndex === prevIndex) {
+        setActivePanelDirection(null)
+      } else if (activeIndex < prevIndex) {
+        setActivePanelDirection("left")
+      } else {
+        setActivePanelDirection("right")
+      }
+      return activeIndex
+    })
+
   return (
     <CenteredColumn style={tw.style(``, containerStyle)}>
-      <TabHeader {...{ tabs, index, setIndex, width: TAB_WIDTH }} />
-      <TabPanels {...{ tabs, index, setIndex, panelComponents, panelBgColor }} />
+      <TabHeader {...{ tabs, index, handleTabPress, width: TAB_WIDTH }} />
+      <TabPanels
+        {...{ tabs, index, panelComponents, panelBgColor, activePanelDirection }}
+      />
     </CenteredColumn>
   )
 }
