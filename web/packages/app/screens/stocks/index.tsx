@@ -40,8 +40,7 @@ import {
   NativeSyntheticEvent,
   ScrollView,
 } from "react-native"
-import { NewsItem, NewsItemSkeleton } from "app/components/NewsItem"
-import  StockNews  from "app/components/StockNews"
+import  GeneralStockNews  from "app/components/GeneralStockNews"
 import  StockPanel  from "app/components/StockPanel"
 import { Panels, Tabs } from "../../components/Tabs/Tabs"
 
@@ -66,7 +65,7 @@ const StocksScreenWithMemo: React.FC<{
 
   const tabPanels = {
     "Stocks": ()=> <StockPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
-    "News": ()=> <NewsPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
+    "News": ()=> <GeneralStockNews />,
   }
 
   const { trending, isLoading } = useYahooTrending()
@@ -100,42 +99,5 @@ const StocksScreenWithMemo: React.FC<{
   )
 }
 
-const NewsPanel: React.FC<{
-  scrollHandler: OnScroll
-  isLoading: boolean
-  trending: AssetsObject
-  categories: AssetCategories
-}> = ({ scrollHandler, isLoading, trending, categories }) => ( 
-//   <Animated.ScrollView
-//   showsVerticalScrollIndicator={false}
-//   onScroll={scrollHandler}
-//   scrollEventThrottle={32}
-// >
-//   <View>
-//     <CenteredRow style={tw`justify-between`}>
-//       <Title title={"Trending"} />
-//       <SearchIcon />
-//     </CenteredRow>
-//     <CardSlider
-//       isLoading={isLoading}
-//       assets={Object.values(trending).map(asset => ({
-//         asset: asset,
-//         price: defaultPrice,
-//       }))}
-//     />
-//     <Title title={"Categories"} />
-//     <Categories categories={categories} />
-//     <Title title={"All"} />
-//     <AssetCards assets={Object.values(trending)} />
-//     {Search && <Search />}
-//   </View>
-// </Animated.ScrollView>
-  <StockNews 
-    exchange={"NYSE"}
-    symbol={"TSLA"}
-    shortName={"TSLA Inc."}
-    logoColor={"#e82127"}
-  />
-)
 
 export default React.memo(StocksScreenWithMemo)
