@@ -1,12 +1,12 @@
 import { Timestamp } from "@firebase/firestore"
-import { pnlTextColor } from "../../utils/pnlTextColor"
+import { pnlTextColor } from "app/utils/pnlTextColor"
 import dayjs from "dayjs"
 import calendar from "dayjs/plugin/calendar"
 import updateLocale from "dayjs/plugin/updateLocale"
 import React, { useMemo } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
-import { useTickerPrice } from "../../hooks/useTickerPrice"
-import tw from "../../lib/tailwind"
+import { useTickerPrice } from "app/hooks/useTickerPrice"
+import tw from "app/lib/tailwind"
 import AssetLogo from "../AssetLogo"
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)

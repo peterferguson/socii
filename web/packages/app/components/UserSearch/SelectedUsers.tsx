@@ -1,8 +1,8 @@
 import { CloseCircle as CloseIcon } from "iconsax-react-native"
 import React from "react"
 import { TouchableOpacity } from "react-native"
-import { useSearchUsers } from "../../hooks"
-import tw from "../../lib/tailwind"
+import { useSearchUsers } from "app/hooks"
+import tw from "app/lib/tailwind"
 import { CenteredColumn, CenteredRow } from "../Centered"
 import UserResult from "./UserResult"
 

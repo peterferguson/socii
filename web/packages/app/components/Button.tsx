@@ -1,6 +1,6 @@
 import React from "react"
 import { ViewStyle, TextStyle, Text, TouchableOpacity } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 interface ButtonProps {
   label: string

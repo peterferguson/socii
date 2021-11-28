@@ -1,7 +1,7 @@
 import React from "react"
 import { FlatList, Text, View } from "react-native"
-import { useSearchUsers } from "../../hooks"
-import tw from "../../lib/tailwind"
+import { useSearchUsers } from "app/hooks"
+import tw from "app/lib/tailwind"
 import { CenteredColumn } from "../Centered"
 import LoadingIndicator from "../LoadingIndicator"
 import UserSearchResultItem from "./UserSearchResultItem"
@@ -10,10 +10,10 @@ const UserSearchResults: React.FC = () => {
   const { loading, loadMore, searchText, results } = useSearchUsers()
 
   return (
-    <View style={tw`bg-brand-white dark:bg-brand-black w-full flex-1`}>
+    <View style={tw`bg-white dark:bg-brand-black w-full flex-1`}>
       {loading && (!results || results.length === 0) && searchText === "" ? (
-        <CenteredColumn>
-          <LoadingIndicator />
+        <CenteredColumn style={tw`h-full pb-16`}>
+          <Text style={tw`font-poppins-500 text-gray-500`}>Search for users</Text>
         </CenteredColumn>
       ) : (
         <FlatList
@@ -23,7 +23,7 @@ const UserSearchResults: React.FC = () => {
           ListEmptyComponent={() => (
             <CenteredColumn style={tw`items-center justify-center p-6`}>
               <Text style={tw`font-poppins-500 text-gray-500`}>
-                {loading ? "Loading..." : "No user matches these keywords..."}
+                {loading ? <LoadingIndicator /> : "No users found..."}
               </Text>
             </CenteredColumn>
           )}

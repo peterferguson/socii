@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Pressable, ScrollView, Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { Asset } from "../models/Asset"
 import { Price } from "../models/Price"
 import { useRouter } from "../navigation/use-router"

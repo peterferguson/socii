@@ -5,17 +5,14 @@ const STAGE = process.env.STAGE
 const envConfig = {
   development: {
     scheme: "app.socii.development",
-    icon: "./assets/icon.development.png",
     backgroundColor: "#FF0000",
   },
   staging: {
     scheme: "app.socii.staging",
-    icon: "./assets/icon.staging.png",
     backgroundColor: "#8000FF",
   },
   production: {
     scheme: "app.socii",
-    icon: "./assets/icon.png",
     backgroundColor: "#1610FF",
   },
 }
@@ -28,12 +25,12 @@ export default {
   slug: "socii-development",
   scheme: "socii",
   owner: "socii",
-  icon: config.icon,
+  icon: "./assets/icon.png",
   version: "0.0.1",
   splash: {
     image: "./assets/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#000000",
+    backgroundColor: "#37373d",
   },
   ios: {
     bundleIdentifier: config.scheme,

@@ -1,6 +1,6 @@
 import { View } from "react-native"
-import tw from "../../lib/tailwind"
-import { shadowStyle } from "../../utils/shadowStyle"
+import tw from "app/lib/tailwind"
+import { shadowStyle } from "app/utils/shadowStyle"
 
 const AttachmentCardContainer = ({ children }) => (
   <View

@@ -1,15 +1,15 @@
 import React from "react"
 import { Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import SkeletonText from "./SkeletonText"
 import VerticalSpacer from "./VerticalSpacer"
 
-const PriceWithChangeTag = ({ latestPrice, qty, pnl }) => (
+const PriceWithChangeTag = ({ price, qty, pnl }) => (
   <>
     <Text
-      style={tw`overflow-hidden text-base font-semibold tracking-wider text-black uppercase overflow-ellipsis`}
+      style={tw`overflow-hidden text-base font-semibold tracking-wider text-black uppercase`}
     >
-      ${(latestPrice * qty).toFixed(2)}
+      ${(price * qty).toFixed(2)}
     </Text>
     <View
       style={tw`px-2 rounded-full w-full ${

@@ -1,10 +1,11 @@
+import { NavigatorScreenParams } from "@react-navigation/native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import type { NextComponentType, NextPageContext } from "next"
-import { MainNavigatorParams } from "./main-navigator/types"
 
 type GroupsStackParams = {
   groupsScreen: undefined
   groupScreen: { id: string }
+  groupSettingsScreen: { id: string }
   new: undefined
 }
 type StocksStackParams = {
@@ -13,6 +14,7 @@ type StocksStackParams = {
   categoryScreen: { category: string }
 }
 
+type OnboardingStackParams = { onboarding: undefined }
 type EnterStackParams = { enterScreen: undefined }
 type ChatStackParams = { channelListScreen: undefined }
 type ChannelStackParams = {
@@ -29,14 +31,31 @@ type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
   "channelListScreen"
 >
-type ChannelScreenProps = NativeStackScreenProps<MainNavigatorParams, "channel">
-type ThreadScreenProps = NativeStackScreenProps<MainNavigatorParams, "thread">
+type ChannelScreenProps = NativeStackScreenProps<ChannelStackParams, "channel">
+type ThreadScreenProps = NativeStackScreenProps<ChannelStackParams, "thread">
 type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
 
 type NextPageProps = any
 type NextNavigationProps = {
   Component?: NextComponentType<NextPageContext, null, NextPageProps>
   pageProps?: NextPageProps
+}
+
+type MainNavigatorParams = {
+  groups: NavigatorScreenParams<GroupsStackParams>
+  chat: NavigatorScreenParams<ChatStackParams>
+  stocks: NavigatorScreenParams<StocksStackParams>
+  onboarding: NavigatorScreenParams<OnboardingStackParams>
+  enter: NavigatorScreenParams<EnterStackParams>
+  channel: NavigatorScreenParams<ChannelStackParams>
+  thread: NavigatorScreenParams<ChannelStackParams>
+  // profileTab: NavigatorScreenParams<ProfileStackParams>
+}
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends MainNavigatorParams {}
+  }
 }
 
 export type {
@@ -54,4 +73,6 @@ export type {
   ChannelScreenProps,
   ThreadScreenProps,
   CategoryScreenProps,
+  OnboardingStackParams,
+  MainNavigatorParams,
 }

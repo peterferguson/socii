@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from "react"
 import { View } from "react-native"
-import { usePositions } from "../../hooks/usePositions"
-import { getTickerISIN } from "../../lib/firebase/db/getTickerISIN"
-import tw from "../../lib/tailwind"
-import { Position } from "../../models/alpaca/Position"
+import { usePositions } from "app/hooks/usePositions"
+import { getTickerISIN } from "app/lib/firebase/db/getTickerISIN"
+import tw from "app/lib/tailwind"
+import { Position } from "app/models/alpaca/Position"
 import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
 import MMLButton from "./MML/Button"
 

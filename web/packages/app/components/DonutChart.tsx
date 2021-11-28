@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { View } from "react-native"
 import Svg, { G, Path } from "react-native-svg"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export interface DonutSector {
   symbol: string
@@ -70,6 +70,9 @@ export default function Donut({
     </View>
   )
 }
+
+// TODO Maybe we could fetch the iex price in a more specialised Arc component using swr.
+// - Then the individual stock will have its price cached for use elsewhere.
 
 const CircleArc = ({
   origin,

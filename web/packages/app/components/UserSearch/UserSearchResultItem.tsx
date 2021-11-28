@@ -1,8 +1,8 @@
 import React from "react"
 import { TouchableOpacity } from "react-native"
 import { UserResponse } from "stream-chat"
-import { useSearchUsers } from "../../hooks"
-import tw from "../../lib/tailwind"
+import { useSearchUsers } from "app/hooks"
+import tw from "app/lib/tailwind"
 import UserResult from "./UserResult"
 
 const UserSearchResultItem: React.FC<{ user: UserResponse }> = ({ user }) => {

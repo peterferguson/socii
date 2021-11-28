@@ -3,14 +3,14 @@ import { Text, View } from "react-native"
 import Animated, { useAnimatedProps, withSpring } from "react-native-reanimated"
 import { mixPath, Vector } from "react-native-redash"
 import Svg, { Path } from "react-native-svg"
-import tw from "../../lib/tailwind"
-import { Graph } from "../../hooks/useGraph"
+import tw from "app/lib/tailwind"
+import { Graph } from "app/hooks/useGraph"
 import { WIDTH } from "./constants"
 import Cursor from "./Cursor"
 
 export const AnimatedPath = Animated.createAnimatedComponent(Path)
 
-export const Chart: React.FC<{
+const Chart: React.FC<{
   currentGraph: Graph
   fetchingGraph: boolean
   lastGraph: Graph
@@ -107,3 +107,5 @@ const FixedAxisEndpointLabels = ({
     ))}
   </>
 )
+
+export default Chart

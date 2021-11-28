@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, TouchableOpacity, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { TabBarIcon } from "../navigation/tab-bar-icon"
 
 const routeIconNames = {

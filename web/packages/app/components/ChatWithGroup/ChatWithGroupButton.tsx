@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
-import { useStream } from "../../hooks"
-import tw from "../../lib/tailwind"
-import { useRouter } from "../../navigation/use-router"
+import { useStream } from "app/hooks"
+import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
 import GroupMemberProfilePhotos from "../GroupMemberProfilePhotos"
 
 const ChatWithGroupButton = ({ groupName }: { groupName: string }) => {
@@ -16,7 +16,7 @@ const ChatWithGroupButton = ({ groupName }: { groupName: string }) => {
   return (
     <TouchableOpacity
       onPress={() => router.push(`/channel/${groupName}`)}
-      style={tw.style(`bg-brand-black flex-row items-center justify-between my-4 p-1`, {
+      style={tw.style(`bg-brand-black flex-row items-center justify-between my-2 p-1`, {
         borderRadius: 16,
       })}
     >

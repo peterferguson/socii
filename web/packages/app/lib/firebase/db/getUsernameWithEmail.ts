@@ -7,9 +7,9 @@ import { db } from "../index"
  */
 
 export async function getUsernameWithEmail(email: string): Promise<string> {
-  const usersRef = collection(db, "users")
-  const userQuery = query(usersRef, where("email", "==", email), limit(1))
-  const querySnapshot = await getDocs(userQuery)
-  const userDoc = querySnapshot.docs?.pop()
-  return userDoc?.data().username
+  return await (
+    await getDocs(query(collection(db, "users"), where("email", "==", email), limit(1)))
+  ).docs
+    ?.pop()
+    ?.data().username
 }

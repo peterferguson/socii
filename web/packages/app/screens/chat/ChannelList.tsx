@@ -2,9 +2,10 @@ import React, { useMemo } from "react"
 import { View } from "react-native"
 import "react-native-gesture-handler"
 import { ChannelList, Chat, Streami18n } from "stream-chat-expo"
-import { useStream } from "../../hooks/useStream"
-import tw from "../../lib/tailwind"
-import { useRouter } from "../../navigation/use-router"
+import { useStream } from "app/hooks/useStream"
+import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
+import { ChannelPreview } from "app/components/Chat/ChannelPreview"
 
 export const streami18n = new Streami18n({
   language: "en",
@@ -29,6 +30,7 @@ const ChannelListScreen = ({ navigation }) => {
             router.push(`/channel/${channel.id}`)
           }}
           options={options}
+          Preview={ChannelPreview}
           // sort={sort}
         />
       </View>

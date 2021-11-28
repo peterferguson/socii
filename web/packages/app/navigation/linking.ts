@@ -3,17 +3,18 @@ import { getPathFromState, getStateFromPath } from "@react-navigation/native"
 import type { NavigationContainer } from "@react-navigation/native"
 import type { BottomTabNavigatorParams } from "./bottom-tab-navigator/types"
 import {
+  OnboardingStackParams,
   EnterStackParams,
   GroupsStackParams,
   StocksStackParams,
   ChatStackParams,
   ChannelStackParams,
 } from "./types"
-import { MainNavigatorParams } from "./main-navigator/types"
+import { RootNavigatorParams } from "./root-navigator/types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 
-function makeMainPath<Path extends keyof MainNavigatorParams>(path: Path): Path {
+function makeRootPath<Path extends keyof RootNavigatorParams>(path: Path): Path {
   return path
 }
 function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
@@ -28,6 +29,11 @@ function makeStockStackPath<Path extends keyof StocksStackParams>(path: Path): P
   return path
 }
 
+function makeOnboardingStackPath<Path extends keyof OnboardingStackParams>(
+  path: Path
+): Path {
+  return path
+}
 function makeEnterStackPath<Path extends keyof EnterStackParams>(path: Path): Path {
   return path
 }
@@ -43,6 +49,7 @@ function makeType<T>(t: T) {
 }
 
 const groupStackPaths = makeType({
+  groupSettings: makeGroupStackPath("groupSettingsScreen"),
   groups: makeGroupStackPath("groupsScreen"),
   group: makeGroupStackPath("groupScreen"),
   new: makeGroupStackPath("new"),
@@ -67,6 +74,10 @@ const enterStackPaths = makeType({
   enter: makeEnterStackPath("enterScreen"),
 })
 
+const onboardingStackPaths = makeType({
+  onboarding: makeOnboardingStackPath("onboarding"),
+})
+
 const tabPaths = makeType({
   enterTab: makeTabPath("enter"),
   groupsTab: makeTabPath("groups"),
@@ -75,9 +86,10 @@ const tabPaths = makeType({
 })
 
 const mainPaths = makeType({
-  withBottomBar: makeMainPath("withBottomBar"),
-  channel: makeMainPath("channel"),
-  thread: makeMainPath("thread"),
+  withBottomBar: makeRootPath("withBottomBar"),
+  onboarding: makeRootPath("onboarding"),
+  channel: makeRootPath("channel"),
+  thread: makeRootPath("thread"),
 })
 
 const linking: Props = {
@@ -87,13 +99,14 @@ const linking: Props = {
       [tabPaths.enterTab]: {
         path: "",
         initialRouteName: enterStackPaths.enter,
-        screens: { [enterStackPaths.enter]: "" },
+        screens: { [enterStackPaths.enter]: "enter" },
       },
       [tabPaths.groupsTab]: {
         initialRouteName: groupStackPaths.groups,
         path: "groups",
         screens: {
           [groupStackPaths.groups]: "",
+          [groupStackPaths.groupSettings]: ":id/settings",
           [groupStackPaths.group]: ":id",
           [groupStackPaths.new]: "new",
         },
@@ -111,6 +124,10 @@ const linking: Props = {
         path: "chat",
         initialRouteName: chatStackPaths.channelList,
         screens: { [chatStackPaths.channelList]: "" },
+      },
+      [mainPaths.onboarding]: {
+        path: "onboarding",
+        screens: { [onboardingStackPaths.onboarding]: "onboarding" },
       },
       [mainPaths.channel]: {
         path: "channel",

@@ -1,7 +1,7 @@
 import React from "react"
 import { Text, View } from "react-native"
 import { Tab } from "./Tab"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { Panels } from "./Tabs"
 
 export const TabPanel = ({

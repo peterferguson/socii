@@ -1,9 +1,10 @@
 import React, { useEffect } from "react"
-import { Text, View, TouchableOpacity } from "react-native"
-import { useStream } from "../../hooks"
-import tw from "../../lib/tailwind"
-import { useRouter } from "../../navigation/use-router"
+import { Text, View } from "react-native"
+import { useStream } from "app/hooks"
+import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
 import GroupMemberProfilePhotos from "../GroupMemberProfilePhotos"
+import { CardButton } from "../CardButton"
 
 const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
   const router = useRouter()
@@ -14,12 +15,10 @@ const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
   )
 
   return (
-    <TouchableOpacity
+    <CardButton
       onPress={() => router.push(`/channel/${groupName}`)}
-      style={tw.style(`bg-brand-black flex-row items-center justify-between`, {
-        borderBottomRightRadius: 16,
-        borderBottomLeftRadius: 16,
-      })}
+      buttonType="BOTTOM"
+      style={tw`bg-brand-black flex-row items-center justify-between`}
     >
       <Text
         style={tw`text-left p-3 font-poppins-300 text-xs text-brand-gray dark:text-brand-black`}
@@ -32,7 +31,7 @@ const ChatWithGroupFooter = ({ groupName }: { groupName: string }) => {
           photoStyles={tw`w-6 h-6 rounded-full mx-0.5 my-2 border border-white`}
         />
       </View>
-    </TouchableOpacity>
+    </CardButton>
   )
 }
 

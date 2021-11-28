@@ -1,4 +1,4 @@
-import { getAlphaVantageData } from "../lib/firebase/db/getAlphaVantageData"
+import { getAlphaVantageData } from "app/lib/firebase/db/getAlphaVantageData"
 import { OHLCTimeseries } from "../models/OHLCTimseries"
 import { DocumentData } from "firebase/firestore"
 import { getYahooTimeseries, IntervalEnum, PeriodEnum } from "./getYahooTimeseries"

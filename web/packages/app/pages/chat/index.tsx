@@ -1,10 +1,10 @@
+import HeaderTitle from "app/components/Headers/HeaderTitle"
+import { useStream } from "app/hooks/useStream"
 import createStackNavigator from "app/navigation/create-stack-navigator"
 import { ChatStackParams } from "app/navigation/types"
 import { ChannelListScreen } from "app/screens/chat/index"
+import { headerScreenOptions } from "app/utils/headerScreenOptions"
 import React from "react"
-import HeaderContainer from "../../components/Headers/HeaderContainer"
-import { useStream } from "../../hooks/useStream"
-import { headerScreenOptions } from "../../utils/headerScreenOptions"
 
 export const ChatStack = createStackNavigator<ChatStackParams>()
 
@@ -19,7 +19,7 @@ function ChatNavigator() {
             component={ChannelListScreen}
             options={{
               title: "Chat",
-              headerTitle: () => <HeaderContainer headerTitle={"Chats"} />,
+              headerTitle: () => <HeaderTitle headerTitle={"Chats"} />,
             }}
           />
         </ChatStack.Group>

@@ -1,6 +1,6 @@
 import React from "react"
 import { View } from "react-native"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export const TabPanelContainer = ({
   panelBgColor,

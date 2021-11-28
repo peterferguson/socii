@@ -1,6 +1,6 @@
 import React from "react"
 import { Pressable, Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import SkeletonCircle from "./SkeletonCircle"
 import SkeletonText from "./SkeletonText"
@@ -12,10 +12,7 @@ const CategoryCard = ({ shortName, emoji, isLoading }) => {
   return (
     <Pressable
       key={`category-${shortName}`}
-      onPress={() => {
-        console.log(shortName)
-        router.push(`/stocks/categories/${shortName}`)
-      }}
+      onPress={() => router.push(`/stocks/categories/${shortName}`)}
       style={{
         ...tw`flex items-center mx-1 rounded-2xl border border-gray-300 text-gray-600 h-28 p-6 bg-white dark:bg-brand-black`,
         minHeight: 112,

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
-import { useStreamClient } from "../hooks/useStreamClient"
-import { StreamContext } from "./streamContext"
+import React, { useEffect, useState } from "react"
+import { useCreateStreamClient } from "../hooks/useCreateStreamClient"
+import { StreamContext } from "./StreamContext"
 
 export const StreamProvider: React.FC = ({ children }) => {
-  const { client } = useStreamClient()
+  const { client } = useCreateStreamClient()
 
   const [channel, setChannel] = useState()
   const [clientReady, setClientReady] = useState(false)

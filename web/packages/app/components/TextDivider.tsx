@@ -1,5 +1,5 @@
 import { Text, View } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 interface ITextDividerProps {
   children: React.ReactNode

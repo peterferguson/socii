@@ -1,10 +1,10 @@
 // import messaging from "@react-native-firebase/messaging"
-import logger from "../../../utils/logger"
+import logger from "app/utils/logger"
 import Constants from "expo-constants"
 import * as Notifications from "expo-notifications"
 // import { requestNotifications } from "react-native-permissions"
-// import { Alert } from "../../../components/Alerts"
-import { getLocal, saveLocal } from "../../../handlers/localstorage/common"
+// import { Alert } from "app/components/Alerts"
+import { getLocal, saveLocal } from "app/handlers/localstorage/common"
 
 // - With rnfirebase
 // export const getFCMToken = async () => {

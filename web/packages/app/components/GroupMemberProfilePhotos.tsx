@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Image, View } from "react-native"
-import { getGroupMemberPhotos } from "../lib/firebase/db/getGroupMemberPhotos"
-import tw from "../lib/tailwind"
+import { getGroupMemberPhotos } from "app/lib/firebase/db/getGroupMemberPhotos"
+import tw from "app/lib/tailwind"
 
 const GroupMemberProfilePhotos = ({
   groupName,

@@ -11,10 +11,10 @@ import {
 import { useEffect, useState } from "react"
 // import toast from "react-hot-toast"
 // import { UrlObject } from "url"
-import { auth } from "../lib/firebase"
-import { getUsernameWithEmail } from "../lib/firebase/db/getUsernameWithEmail"
-import { setUserState } from "../lib/firebase/db/setUserState"
-import { storeFailedLogin } from "../lib/firebase/db/storeFailedLogin"
+import { auth } from "app/lib/firebase"
+import { getUsernameWithEmail } from "app/lib/firebase/db/getUsernameWithEmail"
+import { setUserState } from "app/lib/firebase/db/setUserState"
+import { storeFailedLogin } from "app/lib/firebase/db/storeFailedLogin"
 import FirebaseUser from "../models/FirebaseUser"
 import { useRouter } from "../navigation/use-router"
 import { checkAlreadyOnWaitlist } from "../utils/checkAlreadyOnWaitlist"
@@ -37,8 +37,6 @@ export const useProvideAuth = () => {
 
   const signinWithProvider = async (provider: AuthProvider, redirect: string = "") => {
     setLoading(true)
-    console.log("signinWithProvider provider", provider)
-    console.log("signinWithProvider redirect", redirect)
     try {
       const { user: rawUser } = await signInWithPopup(auth, provider)
       handleUser(rawUser)
@@ -70,7 +68,6 @@ export const useProvideAuth = () => {
 
   const signout = async (redirect: string = "/", showToast: boolean = true) => {
     await signOut(auth)
-    console.log("signed out")
     const firstname = userFirstName(user?.displayName)
     // toast.dismiss()
     // showToast && toast(`Bye for now ${firstname}!`, { icon: "👋" })
@@ -85,6 +82,7 @@ export const useProvideAuth = () => {
 
   useEffect(() => {
     let unsubscribe
+    // TODO: Fix memory leak here with getUsernameWithEmail
     if (user?.uid && !user?.username && !user?.isInvited) {
       getUsernameWithEmail(user?.email).then(usersUsername => {
         setUser(prevUser => ({ ...prevUser, username: usersUsername }))

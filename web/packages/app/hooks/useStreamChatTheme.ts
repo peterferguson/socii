@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useColorScheme } from "react-native"
 import type { DeepPartial, Theme } from "stream-chat-expo"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export const useStreamChatTheme = () => {
   const colorScheme = useColorScheme()

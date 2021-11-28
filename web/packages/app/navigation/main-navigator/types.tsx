@@ -1,4 +1,3 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import createStackNavigator from "../create-stack-navigator"
 
 export type MainNavigatorParams = {

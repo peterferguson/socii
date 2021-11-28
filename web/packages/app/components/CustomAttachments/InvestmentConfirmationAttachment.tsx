@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "../../hooks/useAuth"
-import { getTickerISIN, setAgreesToTrade } from "../../lib/firebase/db"
+import { useAuth } from "app/hooks/useAuth"
+import { getTickerISIN, setAgreesToTrade } from "app/lib/firebase/db"
 import MMLButton from "./MML/Button"
 import {
   // useChannelStateContext,
@@ -8,11 +8,11 @@ import {
   useMessageContext,
 } from "stream-chat-expo"
 import toast from "react-hot-toast"
-import tw from "../../lib/tailwind"
-import { useStream } from "../../hooks/useStream"
+import tw from "app/lib/tailwind"
+import { useStream } from "app/hooks/useStream"
 import { View } from "react-native"
 import AttachmentCardWithLogo from "./AttachmentCardWithLogo"
-import { useTickerPrice } from "../../hooks/useTickerPrice"
+import { useTickerPrice } from "app/hooks/useTickerPrice"
 
 const InvestmentConfirmationAttachment = ({ attachment }) => {
   const { user } = useAuth()

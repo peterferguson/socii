@@ -8,7 +8,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated"
 import { getYForX, Path, Vector } from "react-native-redash"
-import tw from "../../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 const CURSOR = 12
 

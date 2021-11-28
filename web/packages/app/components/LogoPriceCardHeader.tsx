@@ -1,7 +1,7 @@
 // import { useTickerPrice } from "../hooks/useTickerPrice"
 import PercentChangeTag from "./PercentChangeTag"
 import AssetLogo from "./AssetLogo"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 import { View, Text } from "react-native"
 import { Price } from "../models/Price"
 

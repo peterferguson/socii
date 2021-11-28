@@ -1,8 +1,8 @@
 import { UserSearch as UserSearchIcon } from "iconsax-react-native"
 import React, { useState } from "react"
 import { TextInput } from "react-native"
-import { useSearchUsers } from "../../hooks"
-import tw from "../../lib/tailwind"
+import { useSearchUsers } from "app/hooks"
+import tw from "app/lib/tailwind"
 import { CenteredRow } from "../Centered"
 
 const UserSearchInput = ({ onSubmit, ...props }) => {
@@ -13,7 +13,7 @@ const UserSearchInput = ({ onSubmit, ...props }) => {
 
   return (
     <CenteredRow style={tw`w-11/12 px-1 py-3`}>
-      {(!isFocused || searchText === "") && (
+      {!isFocused && searchText === "" && (
         <UserSearchIcon
           size="24"
           color={tw.color("brand-black/20")}

@@ -1,4 +1,4 @@
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 
 export const headerScreenOptions = {
   animationEnabled: true,

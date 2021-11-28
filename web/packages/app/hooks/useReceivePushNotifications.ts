@@ -1,6 +1,6 @@
 // import { useEffect } from "react"
 // import { isBrowser } from "../utils/isBrowser"
-// import { messaging as messagingPromise } from "../lib/firebase/messaging"
+// import { messaging as messagingPromise } from "app/lib/firebase/messaging"
 // import { onMessage } from "../firebase/messaging"
 // import toast from "react-hot-toast"
 

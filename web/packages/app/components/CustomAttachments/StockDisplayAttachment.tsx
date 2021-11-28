@@ -1,30 +1,30 @@
-import { uncamelCase } from "../../utils/uncamelCase"
-import { useRouter } from "../../navigation/use-router"
+import { uncamelCase } from "app/utils/uncamelCase"
+import { useRouter } from "app/navigation/use-router"
 import { View, Text, Pressable, Image } from "react-native"
-import tw from "../../lib/tailwind"
-import { shadowStyle } from "../../utils/shadowStyle"
+import tw from "app/lib/tailwind"
+import { shadowStyle } from "app/utils/shadowStyle"
+import AssetLogo from "../AssetLogo"
 
 const StockDisplayAttachment = ({ attachment }) => {
   const tickerSymbol = attachment?.name
+  const isin = attachment?.isin
   const { name, exchange, ...asset } = attachment?.asset
   const router = useRouter()
+
   return (
     <Pressable
-      style={{
+      style={{ 
         ...tw`flex-col items-center justify-center p-4 mb-2 bg-white rounded-lg`,
         ...shadowStyle("lg"),
       }}
       onPress={() => router.push(attachment?.url)}
     >
-      <Image
-        style={{ ...tw`h-auto mx-auto rounded-full w-14`, ...shadowStyle("lg") }}
-        source={{ uri: attachment?.image }}
-      />
+      <AssetLogo asset={tickerSymbol} isin={isin} height="64" width="64" />
       <View style={tw`w-auto h-auto p-1`}>
         <View style={tw`px-2 mx-1 rounded-full w-full`}>
           <Text style={tw`text-xl text-center font-poppins-400`}>{name}</Text>
           <Text style={tw`text-sm text-gray-600`}>
-            ${tickerSymbol} &bull; {exchange}
+            $  &bull;  {tickerSymbol}  &bull;  {exchange}
           </Text>
         </View>
       </View>

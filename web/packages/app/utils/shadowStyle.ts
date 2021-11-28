@@ -1,5 +1,5 @@
 import { Platform } from "react-native"
-import tw from "../lib/tailwind"
+import tw from "app/lib/tailwind"
 export const shadowStyle = (tailwindShadowSize: string = "") => {
   const style = !tailwindShadowSize ? tw`shadow-${tailwindShadowSize}` : tw`shadow`
   // @ts-ignore
