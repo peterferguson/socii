@@ -7,7 +7,7 @@ export const Actions = tickerSymbol => [
   {
     Icon: () => (
       <View style={tw`rounded-full bg-brand-lightTeal p-2`}>
-        <ArrowCircleDown2 size={25} variant="Outline" />
+        <ArrowCircleDown2 size={25} variant="Outline" color={tw.color(`teal-700`)} />
       </View>
     ),
     name: `Buy ${tickerSymbol}`,
@@ -17,7 +17,7 @@ export const Actions = tickerSymbol => [
   {
     Icon: () => (
       <View style={tw`rounded-full bg-red-300 p-2`}>
-        <MoneySend size={25} variant="Outline" />
+        <MoneySend size={25} variant="Outline" color={tw.color(`red-700`)} />
       </View>
     ),
 
@@ -28,7 +28,7 @@ export const Actions = tickerSymbol => [
   {
     Icon: () => (
       <View style={tw`rounded-full bg-blue-300 p-2`}>
-        <Share size={25} variant="Bold" />
+        <Share size={25} variant="Bold" color={tw.color(`blue-700`)}/>
       </View>
     ),
     name: `Share ${tickerSymbol} with a group`,

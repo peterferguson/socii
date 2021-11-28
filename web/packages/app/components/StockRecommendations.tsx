@@ -6,20 +6,23 @@ import tw from "app/lib/tailwind"
 import { useRouter } from "../navigation/use-router"
 import { shadowStyle } from "../utils/shadowStyle"
 import AssetLogo from "./AssetLogo"
+import { CenteredColumn } from "./Centered"
 
 const StockRecommendations: React.FC<{ recommendations: Recommendations }> = ({
   recommendations,
 }) => {
   return (
-    <View style={tw`w-full px-4 my-2 font-poppins-400 `}>
-      <Text style={tw`text-xl text-brand-black dark:text-brand-gray pl-2`}>
+    <View style={tw`w-full px-4 my-2`}>
+      <Text
+        style={tw`text-xl font-poppins-400 text-brand-black dark:text-brand-gray pl-2`}
+      >
         People also viewed
       </Text>
       <View
         style={{
-          ...tw`p-4 mt-4 bg-white dark:bg-brand-black rounded-2xl flex flex-row justify-evenly items-center`,
+          ...tw`p-4 mt-2 bg-white dark:bg-brand-black rounded-2xl flex flex-row justify-evenly items-center`,
           ...shadowStyle("lg"),
-          minHeight: "15%",
+          minHeight: "10%",
         }}
       >
         {recommendations &&
@@ -53,9 +56,9 @@ const RecommendationItem: React.FC<{
 
   return (
     <Pressable style={tw`mx-2`} onPress={() => router.push(`/stocks/${symbol}`)}>
-      <View style={tw`flex flex-col items-center justify-center`}>
+      <CenteredColumn>
         <View style={tw`flex-shrink-0`}>
-          <View style={tw`flex flex-col items-center`}>
+          <CenteredColumn>
             <View style={tw`rounded-full ${!is1Col && pnlColor.replace("text", "bg")}`}>
               <View style={tw`bg-white rounded-full `}>
                 <AssetLogo
@@ -67,26 +70,21 @@ const RecommendationItem: React.FC<{
                 />
               </View>
             </View>
-            <Text
-              style={{
-                ...tw`text-base font-medium`,
-                color: logoColor,
-              }}
-            >
+            <Text style={{ ...tw`text-sm font-poppins-500`, color: logoColor }}>
               {symbol}
             </Text>
-          </View>
-          <View style={tw`text-xs mx-0.5 flex flex-row items-center p-0.5`}>
+          </CenteredColumn>
+          <View style={tw`mx-0.5 flex flex-row items-center p-0.5`}>
             <Feather
               name={pnlColor.includes("red") ? "arrow-up" : "arrow-down"}
               color={tw.color(pnlColor.replace("text-", ""))}
             />
-            <Text style={tw`text-xs font-medium ${pnlColor}`}>
+            <Text style={tw`text-tiny font-medium ${pnlColor}`}>
               {(regularMarketChangePercent * 100).toFixed(2)}%
             </Text>
           </View>
         </View>
-      </View>
+      </CenteredColumn>
     </Pressable>
   )
 }

@@ -1,7 +1,7 @@
 import { CenteredColumn } from "app/components/Centered"
 import { Socii } from "app/components/Logos"
 import { Numpad, PinValue } from "app/components/Numpad/"
-import { HeaderText } from "app/components/Text"
+import { HeaderText } from "@components/Text"
 import {
   getAuthTimelock,
   getPinAuthAttemptsLeft,
