@@ -8,6 +8,8 @@
 - and then pass the query result for the recommendations to the recommendations screen on navigation
 */
 
+import { DrawerActions } from "@react-navigation/native"
+import { AnimatedStocksHeader, HeaderTitle, UserPhoto } from "app/components"
 import { AssetsProvider } from "app/contexts/AssetsProvider"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -17,8 +19,6 @@ import StocksScreen from "app/screens/stocks/index"
 import StockScreen from "app/screens/stocks/stock"
 import React from "react"
 import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { AnimatedStocksHeader } from "../../components/Headers/AnimatedStocksHeader"
-import HeaderTitle from "../../components/Headers/HeaderTitle"
 
 const StocksStack = createStackNavigator<StocksStackParams>()
 
@@ -58,7 +58,7 @@ const StocksNavigator = () => {
           options={({ route }) => ({
             title: route.params.category,
             headerTitle: () => (
-              <HeaderTitle headerTitle={`${route.params.category} Stocks`} />
+              <HeaderTitle title={`${route.params.category} Stocks`} />
             ),
           })}
         />
@@ -67,7 +67,7 @@ const StocksNavigator = () => {
           options={({ route }) => ({
             headerTitle: () => (
               <AssetsProvider assetSymbols={[route.params.assetSymbol]}>
-                <HeaderTitle headerTitle={route.params.assetSymbol} />
+                <HeaderTitle title={route.params.assetSymbol} />
               </AssetsProvider>
             ),
           })}

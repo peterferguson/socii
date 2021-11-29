@@ -33,7 +33,7 @@ const SelectorModal: React.FC<SelectorModalProps> = ({
       defaultPositionIndex={0}
     >
       <CenteredColumn style={tw`m-2`}>
-        <HeaderTitle headerTitle={title} />
+        <HeaderTitle title={title} />
         {options.map((option, index) => (
           <Pressable
             key={`selector-option-${index}`}

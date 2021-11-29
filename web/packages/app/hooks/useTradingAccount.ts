@@ -1,4 +1,4 @@
-import { TradingAccount } from "alpaca"
+import { TradingAccount } from "@socii/alpaca"
 import { useAccount } from "./useAccount"
 
 interface IUseTradingAccount {

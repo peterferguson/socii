@@ -1,5 +1,5 @@
+import { DrawerActions } from "@react-navigation/native"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
-import HeaderWithPhoto from "app/components/Headers/HeaderWithPhoto"
 import { UserPhoto } from "app/components/UserPhoto"
 import tw from "app/lib/tailwind"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -37,10 +37,16 @@ function GroupsNavigator() {
         <GroupsStack.Screen
           name="groupsScreen"
           component={GroupsScreen}
-          options={{
-            headerTitle: () => <HeaderTitle headerTitle="Groups" />,
-            headerRight: () => <UserPhoto />,
-          }}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <UserPhoto
+                overrideOnPress={() =>
+                  navigation.dispatch(DrawerActions.toggleDrawer())
+                }
+              />
+            ),
+            headerTitle: () => <HeaderTitle title="Groups" />,
+          })}
         />
         <GroupsStack.Group>
           <GroupsStack.Screen
@@ -62,7 +68,7 @@ function GroupsNavigator() {
             name="groupSettingsScreen"
             component={GroupSettingsScreen}
             options={({ route }) => ({
-              headerTitle: () => <HeaderTitle headerTitle="Group settings" />,
+              headerTitle: () => <HeaderTitle title="Group settings" />,
             })}
           />
         </GroupsStack.Group>
@@ -79,8 +85,7 @@ function GroupsNavigator() {
           name="new"
           component={NewGroupScreen}
           options={({}) => ({
-            headerTitle: () => <HeaderTitle headerTitle={"Create a group"} />,
-            headerRight: () => <UserPhoto />,
+            headerTitle: () => <HeaderTitle title={"Create a group"} />,
           })}
         />
       </GroupsStack.Group>

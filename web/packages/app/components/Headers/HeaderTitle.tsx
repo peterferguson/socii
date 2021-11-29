@@ -3,12 +3,12 @@ import { TextStyle, View, ViewStyle } from "react-native"
 import HeaderText from "../Text/HeaderText"
 
 const HeaderTitle: React.FC<{
-  headerTitle: string
+  title: string
   text?: string
   containerStyle?: ViewStyle
   textStyle?: TextStyle
-}> = ({ headerTitle, text, containerStyle, textStyle }) => {
-  if (!text) text = headerTitle
+}> = ({ title, text, containerStyle, textStyle }) => {
+  if (!text) text = title
 
   return (
     <View style={containerStyle}>

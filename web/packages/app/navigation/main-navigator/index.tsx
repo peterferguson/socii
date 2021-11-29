@@ -26,7 +26,7 @@ export const MainNavigator = (props: NextNavigationProps) => {
             options={({ route }) => ({
               headerTitle: () => (
                 <HeaderTitle
-                  headerTitle={route.params.channelId ? route.params.channelId : "Chat"}
+                  title={route.params.channelId ? route.params.channelId : "Chat"}
                 />
               ),
             })}
@@ -36,7 +36,7 @@ export const MainNavigator = (props: NextNavigationProps) => {
             component={ThreadScreen}
             options={{
               title: "Chat Thread",
-              headerTitle: () => <HeaderTitle headerTitle={"Chat Thread"} />,
+              headerTitle: () => <HeaderTitle title={"Chat Thread"} />,
             }}
           />
         </MainStack.Group>

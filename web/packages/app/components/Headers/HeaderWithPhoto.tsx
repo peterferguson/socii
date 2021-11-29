@@ -3,17 +3,21 @@ import HeaderTitle from "app/components/Headers/HeaderTitle"
 import { UserPhoto } from "app/components/UserPhoto"
 import tw from "app/lib/tailwind"
 import React from "react"
+import { View } from "react-native"
+import { useNavigation, DrawerActions } from "@react-navigation/native"
 
 const HeaderWithPhoto = ({ title }) => {
+  const navigation = useNavigation()
   return (
-    <CenteredRow style={tw`w-full`}>
-      <CenteredRow style={tw`-mt-2`}>
-        <HeaderTitle headerTitle={title} textStyle={tw`text-center`} />
-      </CenteredRow>
-      <CenteredRow style={tw`absolute right-6 bottom-1`}>
-        <UserPhoto />
-      </CenteredRow>
-    </CenteredRow>
+    <>
+      <UserPhoto
+        overrideOnPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      />
+
+      <HeaderTitle title={title} textStyle={tw`text-center`} />
+      {/* Dummy component to title sit in the center */}
+      <View style={tw`mr-6 w-7`} />
+    </>
   )
 }
 

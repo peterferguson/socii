@@ -1,3 +1,4 @@
+import { UserPhoto } from "app/components/UserPhoto"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
 import { useStream } from "app/hooks/useStream"
 import createStackNavigator from "app/navigation/create-stack-navigator"
@@ -5,6 +6,7 @@ import { ChatStackParams } from "app/navigation/types"
 import { ChannelListScreen } from "app/screens/chat/index"
 import { headerScreenOptions } from "app/utils/headerScreenOptions"
 import React from "react"
+import { DrawerActions } from "@react-navigation/native"
 
 export const ChatStack = createStackNavigator<ChatStackParams>()
 
@@ -17,10 +19,16 @@ function ChatNavigator() {
           <ChatStack.Screen
             name="channelListScreen"
             component={ChannelListScreen}
-            options={{
-              title: "Chat",
-              headerTitle: () => <HeaderTitle headerTitle={"Chats"} />,
-            }}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <UserPhoto
+                  overrideOnPress={() =>
+                    navigation.dispatch(DrawerActions.openDrawer())
+                  }
+                />
+              ),
+              headerTitle: () => <HeaderTitle title={"Chats"} />,
+            })}
           />
         </ChatStack.Group>
       )}

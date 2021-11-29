@@ -15,8 +15,8 @@ export interface AnimatedNavBarProps {
   PostAnimationComponent: FunctionComponent
 }
 
-// - HEADER_OFFSET + HEADER_HEIGHT * 0.6
-const threshold = HEADER_HEIGHT * 0.6 + HEADER_OFFSET
+// - adjust for the tabs on the stock screen ... this should be screen dependent
+const threshold = HEADER_HEIGHT * 2.4 + HEADER_OFFSET
 
 export const AnimatedNavBar: FunctionComponent<AnimatedNavBarProps> = ({
   scrollY,
@@ -41,7 +41,9 @@ export const AnimatedNavBar: FunctionComponent<AnimatedNavBarProps> = ({
       <AnimatedHeader scrollY={scrollY} showHeader={!postAnimation} {...props}>
         <PreAnimationComponent />
       </AnimatedHeader>
-      <Animated.View style={[tw.style(`w-full justify-center items-center flex-1`), animateOpacity]}>
+      <Animated.View
+        style={[tw.style(`w-full justify-center items-center`), animateOpacity]}
+      >
         <PostAnimationComponent />
       </Animated.View>
     </>

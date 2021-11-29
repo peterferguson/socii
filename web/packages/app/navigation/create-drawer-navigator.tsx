@@ -1,6 +1,7 @@
 // https://reactnavigation.org/docs/custom-navigators/#type-checking-navigators
 // forked from https://github.com/react-navigation/react-navigation/blob/e947943ace33086405210e9454329be47d76478f/packages/drawer/src/navigators/createDrawerNavigator.tsx
 
+import React from "react"
 import {
   createNavigatorFactory,
   DefaultNavigatorOptions,
@@ -143,16 +144,7 @@ function DrawerNavigator({ children, Component, pageProps = {}, ...props }: Prop
   )
 
   return (
-    <Navigator
-      {...props}
-      drawerContent={function Content(props) {
-        return (
-          <DrawerContentScrollView {...props}>
-            <DrawerItemList {...props} />
-          </DrawerContentScrollView>
-        )
-      }}
-    >
+    <Navigator {...props}>
       {Children.map(children, child => {
         if (nextRouter && Component) {
           return cloneElement(child as any, {
