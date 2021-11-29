@@ -1,12 +1,29 @@
 import { DrawerContentScrollView } from "@react-navigation/drawer"
-import { useAuth, useTradingAccount } from "app/hooks"
+import { useAuth, useStream, useTradingAccount } from "app/hooks"
 import tw from "app/lib/tailwind"
-import React from "react"
-import { Image, Text, TouchableOpacity, View } from "react-native"
+import {
+  Coin1,
+  DirectboxSend,
+  MoneyRecive,
+  Notification1,
+  People,
+  Settings,
+} from "iconsax-react-native"
+import React, { useCallback, useEffect } from "react"
+import { Image, Pressable, Share, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { CenteredRow, CenteredColumn } from "./Centered"
+import { useRouter } from "../navigation/use-router"
+import { CenteredColumn, CenteredRow } from "./Centered"
 import { LoginOptions, LoginOptionsButtonType } from "./LoginOptions"
-import { Coin1 } from "iconsax-react-native"
+
+export const externalURLs = {
+  sociiHomepage: "https://socii.app",
+  // rainbowLearn: 'https://rainbow.me/learn',
+  // review:
+  //   'itms-apps://itunes.apple.com/us/app/appName/id1457119021?mt=8&action=write-review',
+  // twitterDeepLink: 'twitter://user?screen_name=rainbowdotme',
+  // twitterWebUrl: 'https://twitter.com/rainbowdotme',
+}
 
 const randomHex = () => {
   let letters = "0123456789ABCDEF"
@@ -18,60 +35,147 @@ const randomHex = () => {
 }
 
 const CustomDrawer = props => {
+  const router = useRouter()
+
   return (
-    <View style={{ flex: 1 }}>
-      <DrawerHeader />
-      <DrawerContentScrollView {...props}>
-        {/* <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10 }}>
-          <DrawerItemList {...props} />
-        </View> */}
-      </DrawerContentScrollView>
-      <DrawerFooter />
-    </View>
+    <>
+      <View style={{ flex: 1 }}>
+        <DrawerHeader />
+        <DrawerContentScrollView {...props}>
+          <View style={tw`pl-5 -mt-12`}>
+            <DrawerNavItem onPress={() => {}} Icon={MoneyRecive} label={"Add Cash"} />
+            <DrawerNavItem
+              onPress={() => router.push("/groups/new")}
+              Icon={People}
+              label={"Create a Group"}
+            />
+          </View>
+        </DrawerContentScrollView>
+        <DrawerFooter />
+      </View>
+    </>
   )
 }
+
+// const SelectProfileBackgroundModal = () => {
+
+// }
 
 export default CustomDrawer
 
 const DrawerHeader = () => {
   const { user } = useAuth()
   const { top: safeAreaTop } = useSafeAreaInsets()
+  const { account } = useTradingAccount()
+  const { client } = useStream()
+  const [online, setOnline] = React.useState(client?.user?.online)
 
-  const { account, error } = useTradingAccount()
+  //   useEffect(() => console.log("DrawerHeader", { account }), [account])
+  useEffect(
+    () => client?.user && setOnline(client?.user?.online),
+    [client?.user?.online]
+  )
+  useEffect(() => console.log("DrawerHeader", { online }), [online])
+
+  useEffect(() => {
+    const unreadCount = client.on(event => {
+      console.log("DrawerHeader", { event })
+      if (event.total_unread_count !== undefined) {
+        console.log(event.total_unread_count)
+      }
+    })
+
+    return () => unreadCount.unsubscribe()
+  }, [])
 
   return (
-    <CenteredRow
-      style={tw.style(`pl-5 pb-5 justify-start`, {
+    <CenteredColumn
+      style={tw.style(`pl-5 pb-5 items-start justify-start`, {
         paddingTop: 20 + safeAreaTop,
-        backgroundColor: randomHex(),
+        // backgroundColor: randomHex(),
       })}
     >
-      <Image
-        source={{ uri: user?.photoUrl }}
-        style={tw`h-20 w-20 rounded-full mb-3 border-2 border-white`}
-      />
-      <CenteredColumn style={tw`ml-5 items-start`}>
-        <Text style={tw`text-white text-lg font-open-sans-600`}>
-          {user?.displayName}
-        </Text>
-        <Text
-          style={tw`text-white text-sm font-open-sans-600 mb-2 remove-font-padding text-center`}
-        >
-          @{user?.username}
-        </Text>
-        <CenteredRow style={{ flexDirection: "row" }}>
-          <Coin1 size="14" color="#fff" />
-          <Text style={tw`ml-2 font-open-sans-300 text-white`}>
-            ${account?.buyingPower}
+      <CenteredRow style={tw`justify-between items-start`}>
+        <Image
+          source={{ uri: user?.photoUrl }}
+          style={tw`h-12 w-12 rounded-full mb-3 border border-white flex-1`}
+        />
+        <View style={tw`flex-4`} />
+        <Pressable onPress={() => {}} style={tw`flex-1`}>
+          <View
+            style={tw`absolute right-5 z-50 top-0.25 rounded-full h-2 w-2 bg-red-400`}
+          />
+          <Notification1 size="24" color={tw.color("brand-black")} />
+        </Pressable>
+      </CenteredRow>
+      <CenteredRow style={tw`items-end`}>
+        <CenteredColumn style={tw`items-start`}>
+          <Text style={tw`text-lg font-open-sans-700`}>{user?.displayName}</Text>
+          <Text
+            style={tw` text-sm font-open-sans-400 mb-2 remove-font-padding text-center`}
+          >
+            @{user?.username}
           </Text>
-        </CenteredRow>
-      </CenteredColumn>
-    </CenteredRow>
+          <CenteredRow>
+            <Coin1 size="18" color="#000" />
+            <Text style={tw`ml-2 font-open-sans-300`}>{account?.buyingPower}</Text>
+          </CenteredRow>
+        </CenteredColumn>
+      </CenteredRow>
+      {client?.user && user?.username ? (
+        <TouchableOpacity
+          onPress={() => toggleUserPresence(client, user?.username)}
+          style={tw`mt-2 -ml-2 rounded-full border ${
+            !client.user.invisible ? "border-green-500" : "border-red-500"
+          } p-2 w-full`}
+        >
+          <CenteredRow>
+            <View
+              style={tw`rounded-full h-2 w-2 mr-2 mt-0.5 ${
+                !client.user.invisible ? "bg-green-500" : "bg-red-500"
+              }`}
+            />
+            <Text
+              style={tw`text-sm font-open-sans-400 text-center ${
+                !client.user.invisible ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              Status: {!client.user.invisible ? "Online" : "Offline"}
+            </Text>
+          </CenteredRow>
+        </TouchableOpacity>
+      ) : null}
+    </CenteredColumn>
   )
+}
+
+const toggleUserPresence = async (client, username) => {
+  console.log("toggleUserPresence", { username, user: client.user })
+  await client.upsertUser({
+    id: username,
+    invisible: client.user.invisible ? false : true,
+  })
+
+  // queryUsers allows you to listen to user presence changes for john and jack
+  const users = await client.queryUsers(
+    { id: { $in: [username] } },
+    { id: -1 },
+    { presence: true }
+  )
+  console.log("toggleUserPresence", { users })
+
+  console.log("toggleUserPresence", { invisible: client.user.invisible })
 }
 
 const DrawerFooter = () => {
   const { user } = useAuth()
+  const router = useRouter()
+
+  const onPressShare = useCallback(() => {
+    Share.share({
+      message: `👋️ Hey friend! You should checkout socii, it is a new app for investing with friends ${externalURLs.sociiHomepage}`,
+    })
+  }, [])
 
   return (
     <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}>
@@ -79,39 +183,30 @@ const DrawerFooter = () => {
         <SignedInFooter />
       ) : (
         <>
-          <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {/* <Ionicons name="share-social-outline" size={22} /> */}
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily: "Roboto-Medium",
-                  marginLeft: 5,
-                }}
-              >
-                Tell a Friend
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {/* <Ionicons name="exit-outline" size={22} /> */}
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily: "Roboto-Medium",
-                  marginLeft: 5,
-                }}
-              >
-                Sign Out
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <DrawerNavItem
+            onPress={onPressShare}
+            Icon={DirectboxSend}
+            label={"Share with a friend"}
+          />
+          <DrawerNavItem
+            label={"Settings"}
+            onPress={() => router.push("/settings")}
+            Icon={Settings}
+          />
         </>
       )}
     </View>
   )
 }
+
+const DrawerNavItem = ({ onPress, label, Icon }) => (
+  <TouchableOpacity onPress={onPress} style={tw`py-4`}>
+    <CenteredRow>
+      <Icon size="24" color={tw.color("brand-black")} style={tw`flex-1`} />
+      <Text style={tw`flex-6 font-poppins-500 ml-2.5`}>{label}</Text>
+    </CenteredRow>
+  </TouchableOpacity>
+)
 
 const SignedInFooter = () => {
   return <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
