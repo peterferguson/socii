@@ -26,53 +26,41 @@ const GeneralStockNews: React.FC<{ scrollHandler: OnScroll }> = ({ scrollHandler
   const { news, loading, getMoreArticles, clearArticles } =
     useGeneralNews(`yahoo stocks`)
 
-  return (
-    <>
-      <FlatList
-        contentContainerStyle={{
-          ...tw`p-2 rounded-2xl`,
-          ...shadowStyle("lg"),
-        }}
-        data={news}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => <NewsItem item={item} />}
-        // onEndReached={getMoreArticles}
-        // onEndReachedThreshold={0.95}
-        onRefresh={() => {
-          clearArticles()
-          getMoreArticles()
-        }}
-        renderScrollComponent={props => (
-          <Animated.ScrollView {...props} onScroll={scrollHandler} />
-        )}
-        refreshing={loading && news.length > 0}
-        ListFooterComponent={
-          () =>
-            loading ? (
-              <NewsItemSkeleton />
-            ) : (
-              <TouchableOpacity
-                style={tw.style(
-                  `w-full border border-gray-200 bg-white rounded-lg py-4 items-center my-2`
-                )}
-                onPress={() => getMoreArticles()}
-              >
-                <Text>Get more news!</Text>
-              </TouchableOpacity>
-            )
-          // loading ? (
-          //   <NewsItemSkeleton />
-          // ) : (
-          //   <View style={tw`p-4`}>
-          //     <Text style={tw`text-center text-sm font-open-sans-400`}>
-          //       No more news
-          //     </Text>
-          //   </View>
-          // )
-        }
-      />
-    </>
-  )
+  return news ? (
+    <FlatList
+      contentContainerStyle={{
+        ...tw`p-2 rounded-2xl`,
+        ...shadowStyle("lg"),
+      }}
+      data={news}
+      keyExtractor={item => item._id}
+      renderItem={({ item }) => <NewsItem item={item} />}
+      // onEndReached={getMoreArticles}
+      // onEndReachedThreshold={0.95}
+      onRefresh={() => {
+        clearArticles()
+        getMoreArticles()
+      }}
+      renderScrollComponent={props => (
+        <Animated.ScrollView {...props} onScroll={scrollHandler} />
+      )}
+      refreshing={loading && news.length > 0}
+      ListFooterComponent={() =>
+        loading ? (
+          <NewsItemSkeleton />
+        ) : (
+          <TouchableOpacity
+            style={tw.style(
+              `w-full border border-gray-200 bg-white rounded-lg py-4 items-center my-2`
+            )}
+            onPress={() => getMoreArticles()}
+          >
+            <Text>Get more news!</Text>
+          </TouchableOpacity>
+        )
+      }
+    />
+  ) : null
 }
 
 export default GeneralStockNews

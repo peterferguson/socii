@@ -1,3 +1,4 @@
+import { DrawerActions, useNavigation } from "@react-navigation/native"
 import {
   CenteredColumn,
   GroupSummaryCard,
@@ -21,6 +22,7 @@ const GroupPortfolios = (): JSX.Element => {
   const groups = user?.groups || []
   const data = [...groups, "_addNewGroupPlaceHolder"]
   const router = useRouter()
+  const navigation = useNavigation()
 
   const scrollX = useSharedValue(0)
 
@@ -55,7 +57,7 @@ const GroupPortfolios = (): JSX.Element => {
         <Text style={tw`font-poppins-600 text-2xl mb-2`}>No groups yet?</Text>
         <View style={tw`w-full mt-4`}>
           <RoundButton
-            onPress={() => router.push(`/groups/new`)}
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             label={"Get started here!"}
             gradientColors={[tw.color("gray-300"), tw.color("gray-300/70")]}
             labelStyle={tw`capitalize`}
@@ -69,5 +71,3 @@ const GroupPortfolios = (): JSX.Element => {
 }
 
 export default GroupPortfolios
-
-
