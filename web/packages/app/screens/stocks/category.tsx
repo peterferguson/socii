@@ -1,15 +1,19 @@
-import type { CategoryScreenProps } from "app/navigation/types"
-import React, { useEffect, useRef, useState } from "react"
-import { ScrollView, View } from "react-native"
 //import { iexQuote } from "app/utils/iexQuote"
 // import { GetStaticPaths, GetStaticProps } from "next"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
 import { useIntersectionObserver } from "app/hooks/useIntersectionObserver"
 import { getTickerDocs } from "app/lib/firebase/db/getTickerDocs"
 import { Price } from "app/models/Price"
+import type { CategoryScreenProps } from "app/navigation/types"
 import { getCategoryData } from "app/utils/getCategoryData"
 import { getTickerProps } from "app/utils/getTickerProps"
 import { TickersProps } from "app/utils/getTickersStaticProps"
+import React, { useEffect, useRef, useState } from "react"
+import { Pressable, ScrollView, Text, View } from "react-native"
+import tw from "../../lib/tailwind"
+//import { iexQuote } from "../../utils/iexQuote"
+// import { GetStaticPaths, GetStaticProps } from "next"
+import { shadowStyle } from "../../utils/shadowStyle"
 
 interface CategoryTickerProps extends TickersProps {
   category: string
@@ -32,6 +36,7 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   const [initialCards, setInitialCards] = useState<CategoryTickerProps>(
     {} as CategoryTickerProps
   )
+  const [isVisible, setIsVisible] = useState(false)
   // const [ categoryProps, setCategoryProps ] = useState(null)
 
   useEffect(() => {
@@ -52,43 +57,46 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
   }
 
   const entry = useIntersectionObserver(lastTickerRef, {})
-  const isVisible = !!entry?.isIntersecting
+  //const isVisible = !!entry?.isIntersecting
 
   useEffect(() => {
-    const getMoreTickers = async () => {
-      // - Next 5 alpaca stocks
-      const nextTickers = tickersToLoad.slice(0, 5)
-      setTickersToLoad(tickersToLoad.slice(5))
-      const tickerDocs = await getTickerDocs(nextTickers)
-
-      lastTickerLoaded.current = tickerDocs?.slice().pop()
-
-      const tickers = await Promise.all(
-        tickerDocs?.map(async tickerDoc => {
-          const { tickerSymbol } = tickerDoc.data()
-          const props = await getTickerProps(tickerDoc, null, null)
-
-          let price: Price
-          try {
-            price = defaultPrice
-            // price = tickerSymbol ? await iexQuote(tickerSymbol, user?.token) : undefined
-          } catch (err) {
-            console.log(`Failed to find price for ${tickerSymbol}`)
-            console.log(err)
-            console.log(price)
-          }
-
-          return { ...props, price }
-        })
-      )
-
-      moreTickers.current.push(...tickers.filter(ticker => !!ticker))
-      setLoadingMoreTickers(false)
-    }
     if (isVisible) {
-      setLoadingMoreTickers(true)
-      getMoreTickers()
-      lastTickerRef.current = null
+      const getMoreTickers = async () => {
+        // - Next 5 alpaca stocks
+        const nextTickers = tickersToLoad.slice(0, 5)
+        setTickersToLoad(tickersToLoad.slice(5))
+        const tickerDocs = await getTickerDocs(nextTickers)
+
+        lastTickerLoaded.current = tickerDocs?.slice().pop()
+
+        const tickers = await Promise.all(
+          tickerDocs?.map(async tickerDoc => {
+            const { tickerSymbol } = tickerDoc.data()
+            const props = await getTickerProps(tickerDoc, null, null)
+
+            let price: Price
+            try {
+              price = defaultPrice
+              // price = tickerSymbol ? await iexQuote(tickerSymbol, user?.token) : undefined
+            } catch (err) {
+              console.log(`Failed to find price for ${tickerSymbol}`)
+              console.log(err)
+              console.log(price)
+            }
+
+            return { ...props, price }
+          })
+        )
+
+        moreTickers.current.push(...tickers.filter(ticker => !!ticker))
+        setLoadingMoreTickers(false)
+      }
+      if (isVisible) {
+        setLoadingMoreTickers(true)
+        getMoreTickers()
+        lastTickerRef.current = null
+        setIsVisible(false)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible])
@@ -121,6 +129,23 @@ export default function CategoryScreen({ navigation, route }: CategoryScreenProp
               price={defaultPrice}
             />
           ))}
+        {/* <HorizontalAssetCardSkeleton
+            cardRef={lastTickerRef}
+            className={loadingMoreTickers ? "block" : "invisible"}
+          /> */}
+        <View style={tw`items-center`}>
+          <Pressable
+            onPress={() => {
+              setIsVisible(true)
+            }}
+            style={{
+              ...tw`bg-blue-300 my-2 mx-4 w-1/2 flex flex-col justify-center items-center rounded-2xl sm:rounded-xl`,
+              ...shadowStyle("md"),
+            }}
+          >
+            <Text style={{ ...tw`text-lg text-white` }}>Load More... </Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </View>
   )

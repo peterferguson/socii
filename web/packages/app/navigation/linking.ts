@@ -9,7 +9,9 @@ import {
   StocksStackParams,
   ChatStackParams,
   ChannelStackParams,
+  SettingsStackParams,
 } from "./types"
+import { MainNavigatorParams } from "./main-navigator/types"
 import { RootNavigatorParams } from "./root-navigator/types"
 
 type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
@@ -17,6 +19,11 @@ type Props = React.ComponentProps<typeof NavigationContainer>["linking"]
 function makeRootPath<Path extends keyof RootNavigatorParams>(path: Path): Path {
   return path
 }
+
+function makeMainPath<Path extends keyof MainNavigatorParams>(path: Path): Path {
+  return path
+}
+
 function makeTabPath<Path extends keyof BottomTabNavigatorParams>(path: Path): Path {
   return path
 }
@@ -41,6 +48,9 @@ function makeChatStackPath<Path extends keyof ChatStackParams>(path: Path): Path
   return path
 }
 function makeChannelStackPath<Path extends keyof ChannelStackParams>(path: Path): Path {
+  return path
+}
+function makeSettingsPath<Path extends keyof SettingsStackParams>(path: Path): Path {
   return path
 }
 
@@ -86,10 +96,19 @@ const tabPaths = makeType({
 })
 
 const mainPaths = makeType({
-  withBottomBar: makeRootPath("withBottomBar"),
   onboarding: makeRootPath("onboarding"),
-  channel: makeRootPath("channel"),
-  thread: makeRootPath("thread"),
+  withBottomBar: makeMainPath("withBottomBar"),
+  channel: makeMainPath("channel"),
+  thread: makeMainPath("thread"),
+  settings: makeMainPath("settings"),
+})
+
+const settingsStackPaths = makeType({
+  settingsScreen: makeSettingsPath("settingsScreen"),
+  profileSettings: makeSettingsPath("profileSettings"),
+  personalSettings: makeSettingsPath("personalSettings"),
+  notificationSettings: makeSettingsPath("notificationSettings"),
+  FAQSettings: makeSettingsPath("FAQSettings"),
 })
 
 const linking: Props = {
@@ -137,6 +156,16 @@ const linking: Props = {
         path: "thread",
         // -> :channel:threadId not sure if this is correct
         screens: { [channelStackPaths.thread]: ":threadId" },
+      },
+      [mainPaths.settings]: {
+        path: "settings",
+        screens: {
+          [settingsStackPaths.settingsScreen]: "settingsScreen",
+          [settingsStackPaths.profileSettings]: "profileSettings",
+          [settingsStackPaths.personalSettings]: "personalSettings",
+          [settingsStackPaths.notificationSettings]: "notificationSettings",
+          [settingsStackPaths.FAQSettings]: "FAQSettings",
+        },
       },
     },
   },

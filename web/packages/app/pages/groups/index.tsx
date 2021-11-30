@@ -15,7 +15,7 @@ import React from "react"
 import { Cog } from "../../components/Cog"
 
 const GroupsStack = createStackNavigator<GroupsStackParams>()
-
+ 
 function GroupsNavigator() {
   return (
     <GroupsStack.Navigator

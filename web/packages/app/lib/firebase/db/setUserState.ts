@@ -23,6 +23,7 @@ export const setUserState = (
       ...prevUser,
       streamToken,
       username: data?.username || "",
+      displayName: data?.displayName || prevUser.displayName, 
       groups: data?.groups || [],
       fcmToken: data?.fcmToken || "",
       alpacaAccountId: data?.alpacaAccountId || "",

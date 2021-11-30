@@ -22,18 +22,43 @@ type ChannelStackParams = {
   thread: { threadId: string }
 }
 
+type SettingsStackParams = {
+  settingsScreen: undefined
+  profileSettings: undefined
+  personalSettings: undefined
+  notificationSettings: undefined
+  FAQSettings: undefined
+}
+
 type GroupsScreenProps = NativeStackScreenProps<GroupsStackParams, "groupsScreen">
 type GroupScreenProps = NativeStackScreenProps<GroupsStackParams, "groupScreen">
+
 type StocksScreenProps = NativeStackScreenProps<StocksStackParams, "stocksScreen">
 type StockScreenProps = NativeStackScreenProps<StocksStackParams, "stockScreen">
+type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
+
+type SettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "settingsScreen">
+type ProfileSettingsScreenProps = NativeStackScreenProps<
+  SettingsStackParams,
+  "profileSettings"
+>
+type PersonalSettingsScreenProps = NativeStackScreenProps<
+  SettingsStackParams,
+  "personalSettings"
+>
+type NotificationSettingsScreenProps = NativeStackScreenProps<
+  SettingsStackParams,
+  "notificationSettings"
+>
+type FAQSettingsScreenProps = NativeStackScreenProps<SettingsStackParams, "FAQSettings">
 
 type ChannelListScreenProps = NativeStackScreenProps<
   ChatStackParams,
   "channelListScreen"
 >
-type ChannelScreenProps = NativeStackScreenProps<ChannelStackParams, "channel">
-type ThreadScreenProps = NativeStackScreenProps<ChannelStackParams, "thread">
-type CategoryScreenProps = NativeStackScreenProps<StocksStackParams, "categoryScreen">
+
+type ChannelScreenProps = NativeStackScreenProps<MainNavigatorParams, "channel">
+type ThreadScreenProps = NativeStackScreenProps<MainNavigatorParams, "thread">
 
 type NextPageProps = any
 type NextNavigationProps = {
@@ -75,4 +100,10 @@ export type {
   CategoryScreenProps,
   OnboardingStackParams,
   MainNavigatorParams,
+  SettingsScreenProps,
+  ProfileSettingsScreenProps,
+  SettingsStackParams,
+  NotificationSettingsScreenProps,
+  PersonalSettingsScreenProps,
+  FAQSettingsScreenProps,
 }

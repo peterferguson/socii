@@ -2,9 +2,11 @@ import HeaderTitle from "app/components/Headers/HeaderTitle"
 import { useStream } from "app/hooks"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
 import { ChannelScreen, ThreadScreen } from "app/screens/chat/index"
-import { headerScreenOptions } from "app/utils/headerScreenOptions"
-import { NextNavigationProps } from "../types"
+import React from "react"
+import SettingsNavigator from "../../pages/settings"
+import { headerScreenOptions } from "../../utils/headerScreenOptions"
 import { MainStack } from "../main-navigator/types"
+import { NextNavigationProps } from "../types"
 
 export const MainNavigator = (props: NextNavigationProps) => {
   const { clientReady } = useStream()
@@ -41,6 +43,11 @@ export const MainNavigator = (props: NextNavigationProps) => {
           />
         </MainStack.Group>
       )}
+      <MainStack.Screen
+        name="settings"
+        component={SettingsNavigator}
+        options={{ headerShown: false }}
+      />
     </MainStack.Navigator>
   )
 }
