@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons"
+import { useAuth } from "app/hooks/useAuth"
 import React from "react"
 import { Dimensions, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { CenteredColumn } from "."
 import tw from "../lib/tailwind"
 import { shadowStyle } from "../utils/shadowStyle"
 
@@ -11,6 +11,7 @@ const LOGOUT_BUTTTON_WIDTH = SCREEN_WIDTH - 64
 
 const SettingsColumn = ({ settingsOptions }) => {
   const { bottom: marginBottom } = useSafeAreaInsets()
+  const { signout } = useAuth()
   return (
     <>
       <ScrollView
@@ -25,6 +26,7 @@ const SettingsColumn = ({ settingsOptions }) => {
         ))}
       </ScrollView>
       <TouchableOpacity
+        onPress={() => signout("/enter", false)}
         style={tw.style(
           `border border-red-500 py-4 rounded items-center justify-center`,
           {
@@ -53,15 +55,6 @@ const SettingRow = ({ title, subTitle, onPress, icon }) => (
           <Text style={tw`font-open-sans-400 text-xs text-gray-400`}>{subTitle}</Text>
         )}
       </View>
-      {title != "Log Out" ? (
-        <CenteredColumn style={tw`flex-0.5`}>
-          <Ionicons
-            name="arrow-forward-outline"
-            size={16}
-            color={tw.color(`gray-400`)}
-          />
-        </CenteredColumn>
-      ) : null}
     </View>
   </TouchableOpacity>
 )

@@ -106,7 +106,10 @@ const SettingsScreen = () => {
     <CenteredColumn style={tw`flex-1 justify-between`}>
       <CenteredColumn>
         {/* <UserPhotoInLogo height={USER_PHOTO_HEIGHT} width={USER_PHOTO_HEIGHT} /> */}
-        <UserPhoto imageStyle={tw`h-20 w-20 rounded-full mb-4`} />
+        <UserPhoto
+          imageStyle={tw`h-20 w-20 rounded-full mb-4`}
+          overrideOnPress={() => {}}
+        />
         <Text style={tw`text-brand-black font-poppins-500 text-2xl`}>
           {user?.displayName}
         </Text>
