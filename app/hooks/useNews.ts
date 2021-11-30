@@ -14,17 +14,6 @@ export const useStockNews = (query: string, symbol: string) => {
   const prevSymbol = usePrevious(symbol)
 
   useEffect(() => {
-    // getNewsArticlesFromFirebase(symbol)
-    //   .then((articles) => {
-    //     if (articles.length > 0) {
-    //       setNews(articles)
-    //       setLoading(false)
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log("error fetching news from firebase", e)
-    //     setDbFetchError(true)
-    //   })
     if (news.length === 0 || dbFetchError) {
       getNewsArticles(query, 3, false).then(({ value }) => {
         setNews(value)

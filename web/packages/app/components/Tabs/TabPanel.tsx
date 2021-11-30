@@ -4,7 +4,7 @@ import React from "react"
 import { Text, View } from "react-native"
 import { Easing } from "react-native-reanimated"
 import { Tab } from "./Tab"
-import { Panels } from "./Tabs"
+import { OnScroll, Panels } from "./Tabs"
 import { Dimensions } from "react-native"
 
 const transition: MotiTransitionProp = {
@@ -19,10 +19,12 @@ export const TabPanel = ({
   tab,
   panelComponents,
   activePanelDirection,
+  panelScrollHandler,
 }: {
   tab: Tab
   panelComponents: Panels
   activePanelDirection: "left" | "right" | null
+  panelScrollHandler: OnScroll
 }) => {
   const PanelComponent =
     panelComponents && tab.label in panelComponents ? panelComponents[tab.label] : null
@@ -37,7 +39,7 @@ export const TabPanel = ({
       animate={{ translateX: 0, opacity: 1 }}
     >
       {PanelComponent ? (
-        <PanelComponent />
+        <PanelComponent scrollHandler={panelScrollHandler} />
       ) : (
         <View style={tw`flex-1 items-center justify-center bg-white`}>
           <View style={tw`p-4`}>

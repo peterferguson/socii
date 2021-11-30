@@ -1,43 +1,76 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useGeneralNews, useNews, useModal } from "app/hooks"
-import { FreeNewsItem } from "app/models/rapidNews/FreeNews"
-import React from "react"
-import { View, Text, Pressable, Image, ScrollView } from "react-native"
+import { useGeneralNews, useModal } from "app/hooks"
 import tw from "app/lib/tailwind"
-import { shadowStyle } from "../utils/shadowStyle"
+import { FreeNewsItem } from "app/models/rapidNews/FreeNews"
 import dayjs from "dayjs"
 import calendar from "dayjs/plugin/calendar"
-import { CenteredRow, CenteredColumn } from "./Centered"
-import { Skeleton } from "@motify/skeleton"
-import SkeletonText from "./SkeletonText"
-import HorizontalSpacer from "./HorizontalSpacer"
-import VerticalSpacer from "./VerticalSpacer"
+import React from "react"
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native"
+import { OnScroll } from "."
+import { shadowStyle } from "../utils/shadowStyle"
+import { CenteredColumn, CenteredRow } from "./Centered"
+import { Modal, ModalBackdrop, ModalHeader } from "./Modal"
+import { NewsItemSkeleton } from "./NewsItem"
+import Animated from "react-native-reanimated"
 dayjs.extend(calendar)
 
-const GeneralStockNews: React.FC<{}> = ({ }) => {
-  const { news, loading } = useGeneralNews(
-    `stock`
-  )
+const GeneralStockNews: React.FC<{ scrollHandler: OnScroll }> = ({ scrollHandler }) => {
+  const { news, loading, getMoreArticles, clearArticles } =
+    useGeneralNews(`yahoo stocks`)
 
   return (
     <>
-      <CenteredColumn style={tw`items-start mx-4`}>
-        <Text
-          style={tw`text-xl my-2 font-poppins-400 text-brand-black dark:text-brand-gray pl-2`}
-        >
-          Related News
-        </Text>
-        <View
-          style={{
-            ...tw`p-2 bg-white rounded-2xl`,
-            ...shadowStyle("lg")
-          }}
-        >
-          {!loading
-            ? news?.map(item => <NewsItem key={item._id} item={item} />)
-            : [1, 2, 3].map(item => <NewsItemSkeleton key={item} />)}
-        </View>
-      </CenteredColumn>
+      <FlatList
+        contentContainerStyle={{
+          ...tw`p-2 rounded-2xl`,
+          ...shadowStyle("lg"),
+        }}
+        data={news}
+        keyExtractor={item => item._id}
+        renderItem={({ item }) => <NewsItem item={item} />}
+        // onEndReached={getMoreArticles}
+        // onEndReachedThreshold={0.95}
+        onRefresh={() => {
+          clearArticles()
+          getMoreArticles()
+        }}
+        renderScrollComponent={props => (
+          <Animated.ScrollView {...props} onScroll={scrollHandler} />
+        )}
+        refreshing={loading && news.length > 0}
+        ListFooterComponent={
+          () =>
+            loading ? (
+              <NewsItemSkeleton />
+            ) : (
+              <TouchableOpacity
+                style={tw.style(
+                  `w-full border border-gray-200 bg-white rounded-lg py-4 items-center my-2`
+                )}
+                onPress={() => getMoreArticles()}
+              >
+                <Text>Get more news!</Text>
+              </TouchableOpacity>
+            )
+          // loading ? (
+          //   <NewsItemSkeleton />
+          // ) : (
+          //   <View style={tw`p-4`}>
+          //     <Text style={tw`text-center text-sm font-open-sans-400`}>
+          //       No more news
+          //     </Text>
+          //   </View>
+          // )
+        }
+      />
     </>
   )
 }
@@ -50,12 +83,12 @@ const NewsItem = ({ item }: { item: FreeNewsItem }) => {
 
   return (
     <>
-      <Pressable style={tw`w-full`} onPress={handlePresent}>
+      <Pressable style={tw`w-full bg-white my-1 rounded-lg`} onPress={handlePresent}>
         <CenteredRow style={tw`p-4 w-full`}>
           <Image
             style={tw.style(`flex-1 rounded mr-2`, {
-              width:  70,
-              height:  70,
+              width: 70,
+              height: 70,
               resizeMode: "cover",
             })}
             source={{ uri: item.media }}
@@ -78,27 +111,6 @@ const NewsItem = ({ item }: { item: FreeNewsItem }) => {
   )
 }
 
-const NewsItemSkeleton = () => (
-  <CenteredRow style={tw`p-4 w-full`}>
-    <Skeleton
-      colorMode={tw.prefixMatch("dark") ? "dark" : "light"}
-      height={70}
-      width={70}
-    />
-    <HorizontalSpacer width={12} />
-    <CenteredColumn style={tw`flex-3 items-start`}>
-      <VerticalSpacer height={2} />
-      <SkeletonText width={80} height={6} />
-      <VerticalSpacer height={4} />
-      <SkeletonText width={200} height={32} />
-      <VerticalSpacer height={4} />
-      <SkeletonText width={160} height={12} />
-    </CenteredColumn>
-  </CenteredRow>
-)
-
-import { Modal, ModalBackdrop, ModalHeader } from "./Modal"
-
 const NewsModal: React.FC<{
   modalRef: React.MutableRefObject<BottomSheetModal>
   item: FreeNewsItem
@@ -118,11 +130,33 @@ const NewsModal: React.FC<{
         <View style={tw`overflow-hidden flex-1 items-center py-2`}>
           <ModalHeader modalRef={modalRef} label={"News"} />
           <CenteredColumn style={tw`flex-1`}>
-            <View style={tw`flex-1 m-4`}>
+            <CenteredRow style={tw`p-4`}>
+              <Image
+                style={tw.style(`flex-1 rounded mr-4`, {
+                  width: 70,
+                  height: 70,
+                  resizeMode: "cover",
+                })}
+                source={{ uri: item.media }}
+              />
               {item.title ? (
-                <Text style={tw`text-lg font-open-sans-600 mb-4`}>{item.title}</Text>
+                <Text
+                  numberOfLines={2}
+                  adjustsFontSizeToFit
+                  style={tw`flex-4 text-lg font-open-sans-600 mb-4`}
+                >
+                  {item.title}
+                </Text>
               ) : null}
-              <ScrollView>
+            </CenteredRow>
+
+            <View
+              style={tw.style(`flex-1 mx-4 mb-2`, {
+                borderTopWidth: 1,
+                borderTopColor: "#ccc",
+              })}
+            >
+              <ScrollView contentContainerStyle={tw`px-2 my-2`}>
                 {[
                   item.summary.split("\n").map((line, index) => (
                     <Text

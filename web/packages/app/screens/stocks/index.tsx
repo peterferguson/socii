@@ -55,8 +55,8 @@ const StocksScreenWithMemo: React.FC<{
     Stocks: () => (
       <StockPanel isLoading={isLoading} trending={trending} categories={categories} />
     ),
-    // "Stocks": ()=> <StockPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
-    News: () => <GeneralStockNews />,
+    // "Stocks": ()=> <StockPanel isLoading={isLoading} trending={trending} categories={categories}/>,
+    News: () => <GeneralStockNews scrollHandler={scrollHandler} />,
   }
 
   const { trending, isLoading } = useYahooTrending()
@@ -74,7 +74,7 @@ const StocksScreenWithMemo: React.FC<{
   const panelComponents = useMemo<Panels>(
     () =>
       Object.entries(tabPanels).reduce(
-        (acc, [label, screen]) => ({ ...acc, [label]: tabPanels[label] }),
+        (acc, [label]) => ({ ...acc, [label]: tabPanels[label] }),
         {}
       ),
     [trending]
@@ -90,6 +90,7 @@ const StocksScreenWithMemo: React.FC<{
       <Tabs
         tabs={tabs}
         panelComponents={panelComponents}
+        panelScrollHandler={scrollHandler}
         panelBgColor="transparent"
         containerStyle={tw`flex-1 items-center`}
       />

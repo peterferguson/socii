@@ -1,12 +1,18 @@
-import React, { useState } from "react"
-import { ViewProps, Dimensions } from "react-native"
 import tw from "app/lib/tailwind"
+import React, { useState } from "react"
+import {
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewProps,
+} from "react-native"
+import { CenteredColumn } from "../Centered"
 import { Tab } from "./Tab"
 import { TabHeader } from "./TabHeader"
 import { TabPanels } from "./TabPanels"
-import { CenteredColumn } from "../Centered"
 
-export type Panel = React.FC
+export type OnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+export type Panel = React.FC<{ scrollHandler?: OnScroll }>
 
 export type Panels = {
   [label: string]: Panel
@@ -17,12 +23,14 @@ export const Tabs = ({
   tabs,
   panelComponents,
   panelBgColor,
+  panelScrollHandler,
   containerStyle,
 }: {
   tabs: Tab[]
   panelComponents: Panels
   panelBgColor?: string
   containerStyle?: ViewProps
+  panelScrollHandler: OnScroll
 }) => {
   const [index, setIndex] = useState(0)
   const [activePanelDirection, setActivePanelDirection] = React.useState<
@@ -44,10 +52,18 @@ export const Tabs = ({
     })
 
   return (
+    // @ts-ignore
     <CenteredColumn style={tw.style(``, containerStyle)}>
       <TabHeader {...{ tabs, index, handleTabPress, width: TAB_WIDTH }} />
       <TabPanels
-        {...{ tabs, index, panelComponents, panelBgColor, activePanelDirection }}
+        {...{
+          tabs,
+          index,
+          panelComponents,
+          panelBgColor,
+          panelScrollHandler,
+          activePanelDirection,
+        }}
       />
     </CenteredColumn>
   )

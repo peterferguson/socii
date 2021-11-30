@@ -25,7 +25,7 @@ export const Tab = ({
       style={tw.style(
         `flex-col items-center justify-center rounded-xl ${
           selected ? "bg-white" : null
-        } p-3`,
+        } px-3 py-2`,
         { width }
       )}
       onPress={() => setIndex(index)}
