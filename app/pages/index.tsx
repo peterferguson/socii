@@ -14,7 +14,7 @@ export default function Home() {
   const [invited, setInvited] = useState(user?.isInvited || false)
 
   return (
-    <div className="relative overflow-y-scroll no-scrollbar">
+    <div className="relative no-scrollbar">
       {/* TODO Add a wave transition animation to this gradient */}
       <div className="absolute inset-0">
         <div className="w-screen h-screen bg-gradient-to-tl via-white to-white from-palette-lightest" />
@@ -23,7 +23,7 @@ export default function Home() {
         <div className="w-screen h-screen bg-gradient-to-br via-white to-white from-palette-lightest" />
       </div>
       <Hero invited={invited} setInvited={setInvited} />
-      <ScreenDemo />
+      <ScreenDemo /> 
       <OneTwoThree />
       <Footer invited={invited} setInvited={setInvited} />
     </div>
@@ -32,7 +32,7 @@ export default function Home() {
 
 const Footer = ({ invited, setInvited }) => (
   <div className="overflow-hidden bg-palette-lightest/5 max-h-lg">
-    <div className="flex flex-col items-center justify-center w-5/6 max-w-lg mx-auto text-center">
+    <div className="flex flex-col items-center justify-center  mx-auto text-center">
       {invited ? (
         <h1 className="mt-8 text-2xl font-semibold font-primary sm:text-4xl md:text-5xl md:leading-snug">
           Thanks for signing up!
@@ -55,10 +55,10 @@ const Footer = ({ invited, setInvited }) => (
             `rounded-t-[calc(100vh*2)] bg-white w-[calc(400vh)] h-[calc(400vh)] mt-12 overflow-hidden`
           )}
         >
-          <footer className="py-8 mt-2 bg-white dark:bg-gray-800">
+          <footer className="mt-2 bg-white dark:bg-gray-800">
             <Logo className="text-5xl" />
             <div className=" grid grid-rows-2 space-y-4 divide-y">
-              <div className="px-4 mx-auto max-w-screen-xl">
+              <div className="px-4 mx-auto">
                 <ul className="flex flex-wrap justify-between mx-auto text-lg font-light max-w-screen-md">
                   {["FAQ", "Terms & Conditions", "About Us"].map((item, index) => (
                     <li className="m-2" key={index}>
@@ -95,7 +95,7 @@ const Footer = ({ invited, setInvited }) => (
                 </div>
               </div>
               <div className="flex items-center justify-center w-full h-8 mx-auto mt-4 text-sm text-gray-400 uppercase font-extrathin font-primary">
-                © 2021 socii ltd. all rights reserved.
+                © 2021 socii invest ltd. all rights reserved.
               </div>
             </div>
           </footer>
