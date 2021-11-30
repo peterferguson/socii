@@ -1,12 +1,7 @@
 import { DrawerContentScrollView } from "@react-navigation/drawer"
-import {
-  useAuth,
-  usePortfolioHistory,
-  usePositions,
-  useStream,
-  useTradingAccount,
-} from "app/hooks"
+import { useAuth, useStream, useTradingAccount } from "app/hooks"
 import tw from "app/lib/tailwind"
+import Logo from "./Logos/SociiText"
 import {
   Coin1,
   DirectboxSend,
@@ -42,8 +37,9 @@ const randomHex = () => {
 
 const CustomDrawer = props => {
   const router = useRouter()
+  const { user } = useAuth()
 
-  return (
+  return user ? (
     <>
       <View style={{ flex: 1 }}>
         <DrawerHeader />
@@ -60,6 +56,23 @@ const CustomDrawer = props => {
         <DrawerFooter />
       </View>
     </>
+  ) : (
+    <View style={{ flex: 1 }}>
+      <NotAuthenticatedDrawerHeader />
+      <Text style={tw`mt-24 mb-3 text-base text-center text-gray-600 font-poppins-300`}>
+        Please connect with one of the following providers
+      </Text>
+      <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
+    </View>
+  )
+}
+
+const NotAuthenticatedDrawerHeader = props => {
+  const { top: paddingTop } = useSafeAreaInsets()
+  return (
+    <CenteredColumn style={tw.style(`pb-5`, { paddingTop })}>
+      <Logo width={120} height={120} />
+    </CenteredColumn>
   )
 }
 
@@ -178,7 +191,6 @@ const toggleUserPresence = async (client, username) => {
 }
 
 const DrawerFooter = () => {
-  const { user } = useAuth()
   const router = useRouter()
 
   const onPressShare = useCallback(() => {
@@ -189,22 +201,16 @@ const DrawerFooter = () => {
 
   return (
     <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}>
-      {!user ? (
-        <SignedInFooter />
-      ) : (
-        <>
-          <DrawerNavItem
-            onPress={onPressShare}
-            Icon={DirectboxSend}
-            label={"Share with a friend"}
-          />
-          <DrawerNavItem
-            label={"Settings"}
-            onPress={() => router.push("/settings")}
-            Icon={Settings}
-          />
-        </>
-      )}
+      <DrawerNavItem
+        onPress={onPressShare}
+        Icon={DirectboxSend}
+        label={"Share with a friend"}
+      />
+      <DrawerNavItem
+        label={"Settings"}
+        onPress={() => router.push("/settings")}
+        Icon={Settings}
+      />
     </View>
   )
 }
@@ -217,7 +223,3 @@ const DrawerNavItem = ({ onPress, label, Icon }) => (
     </CenteredRow>
   </TouchableOpacity>
 )
-
-const SignedInFooter = () => {
-  return <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
-}

@@ -12,8 +12,8 @@ const EnterCard = () => (
         Welcome to
       </Text>
       <Logo width={120} height={120} />
-      <Text style={tw`-mt-4 mb-3 text-base text-gray-600 font-poppins-300`}>
-        Please link your google account
+      <Text style={tw`-mt-4 mb-3 text-base text-center text-gray-600 font-poppins-300`}>
+        Please connect with one of the following providers
       </Text>
     </CenteredColumn>
     <LoginOptions buttonType={LoginOptionsButtonType.SIGN_IN} />
