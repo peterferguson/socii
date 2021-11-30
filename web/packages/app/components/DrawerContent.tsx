@@ -1,5 +1,11 @@
 import { DrawerContentScrollView } from "@react-navigation/drawer"
-import { useAuth, useStream, useTradingAccount } from "app/hooks"
+import {
+  useAuth,
+  usePortfolioHistory,
+  usePositions,
+  useStream,
+  useTradingAccount,
+} from "app/hooks"
 import tw from "app/lib/tailwind"
 import {
   Coin1,
@@ -37,6 +43,8 @@ const randomHex = () => {
 const CustomDrawer = props => {
   const router = useRouter()
 
+  const { history } = usePortfolioHistory()
+
   return (
     <>
       <View style={{ flex: 1 }}>
@@ -49,6 +57,7 @@ const CustomDrawer = props => {
               Icon={People}
               label={"Create a Group"}
             />
+            <Text>{JSON.stringify(history)}</Text>
           </View>
         </DrawerContentScrollView>
         <DrawerFooter />
@@ -75,18 +84,18 @@ const DrawerHeader = () => {
     () => client?.user && setOnline(client?.user?.online),
     [client?.user?.online]
   )
-  useEffect(() => console.log("DrawerHeader", { online }), [online])
+  //   useEffect(() => console.log("DrawerHeader", { online }), [online])
 
-  useEffect(() => {
-    const unreadCount = client.on(event => {
-      console.log("DrawerHeader", { event })
-      if (event.total_unread_count !== undefined) {
-        console.log(event.total_unread_count)
-      }
-    })
+  //   useEffect(() => {
+  //     const unreadCount = client.on(event => {
+  //       console.log("DrawerHeader", { event })
+  //       if (event.total_unread_count !== undefined) {
+  //         console.log(event.total_unread_count)
+  //       }
+  //     })
 
-    return () => unreadCount.unsubscribe()
-  }, [])
+  //     return () => unreadCount.unsubscribe()
+  //   }, [])
 
   return (
     <CenteredColumn
@@ -125,7 +134,7 @@ const DrawerHeader = () => {
       {client?.user && user?.username ? (
         <TouchableOpacity
           onPress={() => toggleUserPresence(client, user?.username)}
-          style={tw`mt-2 -ml-2 rounded-full border ${
+          style={tw`mt-4 -ml-2 rounded-full border ${
             !client.user.invisible ? "border-green-500" : "border-red-500"
           } p-2 w-full`}
         >

@@ -19,10 +19,9 @@ export const useAccount = (trading: boolean = false) => {
         ]
       : null,
     (url, token, alpacaId, type) => {
-      const res = fetcher(url, {
+      const res = fetcher(url + `?type=${type}&accountId=${alpacaId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ accountId: alpacaId, type }),
       })
       return res
     },

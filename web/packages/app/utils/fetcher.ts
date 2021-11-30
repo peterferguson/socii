@@ -1,4 +1,3 @@
-import fetch from "isomorphic-unfetch"
 import { Platform } from "react-native"
 import Constants from "expo-constants"
 import * as DeviceInfo from "expo-device"
@@ -27,7 +26,13 @@ export async function fetcher<JSON = any>(
   const endpoint = url.startsWith("/") ? url.replace("/", endpointPrefix) : url
 
   console.log(`Fetching ${endpoint}`)
-  const res = await fetch(endpoint, options)
+
+  let res
+  try {
+    res = await fetch(endpoint, options)
+  } catch (e) {
+    console.log(e)
+  }
 
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.

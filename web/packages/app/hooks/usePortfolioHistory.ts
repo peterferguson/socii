@@ -15,10 +15,9 @@ export const usePortfolioHistory = () => {
       ? ["/api/alpaca/portfolio", user?.token, user?.alpacaAccountId]
       : null,
     (url, token, alpacaId) => {
-      const res = fetcher(url, {
+      const res = fetcher(url + `?accountId=${alpacaId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ accountId: alpacaId }),
       })
       return res
     },
