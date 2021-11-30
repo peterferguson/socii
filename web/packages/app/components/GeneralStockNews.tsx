@@ -1,7 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useNews, useModal } from "app/hooks"
-import { WebSearchNewsItem } from "app/models/rapidNews/WebSearchNews"
-import React, { useState } from "react"
+import { useGeneralNews, useNews, useModal } from "app/hooks"
+import { FreeNewsItem } from "app/models/rapidNews/FreeNews"
+import React from "react"
 import { View, Text, Pressable, Image, ScrollView } from "react-native"
 import tw from "app/lib/tailwind"
 import { shadowStyle } from "../utils/shadowStyle"
@@ -14,15 +14,9 @@ import HorizontalSpacer from "./HorizontalSpacer"
 import VerticalSpacer from "./VerticalSpacer"
 dayjs.extend(calendar)
 
-const StockNews: React.FC<{
-  exchange: string
-  symbol: string
-  shortName: string
-  logoColor: string
-}> = ({ exchange, symbol, shortName, logoColor }) => {
-  const { news, loading } = useNews(
-    `(${exchange}:${symbol}) ${shortName} stock`,
-    symbol
+const GeneralStockNews: React.FC<{}> = ({ }) => {
+  const { news, loading } = useGeneralNews(
+    `stock`
   )
 
   return (
@@ -36,12 +30,11 @@ const StockNews: React.FC<{
         <View
           style={{
             ...tw`p-2 bg-white rounded-2xl`,
-            ...shadowStyle("lg"),
-            borderColor: logoColor,
+            ...shadowStyle("lg")
           }}
         >
           {!loading
-            ? news?.map(item => <NewsItem key={item.id} item={item} />)
+            ? news?.map(item => <NewsItem key={item._id} item={item} />)
             : [1, 2, 3].map(item => <NewsItemSkeleton key={item} />)}
         </View>
       </CenteredColumn>
@@ -49,33 +42,33 @@ const StockNews: React.FC<{
   )
 }
 
-export default StockNews
+export default GeneralStockNews
 
-const NewsItem = ({ item }: { item: WebSearchNewsItem }) => {
+const NewsItem = ({ item }: { item: FreeNewsItem }) => {
   const modalRef = React.useRef<BottomSheetModal>(null)
-
   const { handlePresent } = useModal(modalRef)
+
   return (
     <>
       <Pressable style={tw`w-full`} onPress={handlePresent}>
         <CenteredRow style={tw`p-4 w-full`}>
           <Image
             style={tw.style(`flex-1 rounded mr-2`, {
-              width: item.image.thumbnailWidth || 70,
-              height: item.image.thumbnailHeight || 70,
+              width:  70,
+              height:  70,
               resizeMode: "cover",
             })}
-            source={{ uri: item.image.url }}
+            source={{ uri: item.media }}
           />
           <CenteredColumn style={tw`flex-3 items-start`}>
             <Text style={tw`text-tiniest font-poppins-300 leading-3`}>
-              {dayjs(item.datePublished).calendar()}
+              {dayjs(item.published_date).calendar()}
             </Text>
             <Text style={tw`text-xs font-poppins-400 pb-0.5`} numberOfLines={3}>
               {item.title}
             </Text>
             <Text style={tw`text-gray-300 text-tiny font-poppins-400`}>
-              Source: {item.provider.name}
+              Source: {item.author}
             </Text>
           </CenteredColumn>
         </CenteredRow>
@@ -108,10 +101,9 @@ import { Modal, ModalBackdrop, ModalHeader } from "./Modal"
 
 const NewsModal: React.FC<{
   modalRef: React.MutableRefObject<BottomSheetModal>
-  item: WebSearchNewsItem
+  item: FreeNewsItem
 }> = ({ modalRef, item }) => {
   const scrollPositions = ["85%"]
-
 
   return (
     <Modal
@@ -132,7 +124,7 @@ const NewsModal: React.FC<{
               ) : null}
               <ScrollView>
                 {[
-                  item.body.split("\n").map((line, index) => (
+                  item.summary.split("\n").map((line, index) => (
                     <Text
                       key={`line-${index}`}
                       style={tw`text-sm my-2 font-open-sans-400`}

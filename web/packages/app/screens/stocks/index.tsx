@@ -28,18 +28,17 @@
  */
 
 import { useFocusEffect } from "@react-navigation/native"
-import StockNews from "app/components/StockNews"
+import GeneralStockNews from "app/components/GeneralStockNews"
 import StockPanel from "app/components/StockPanel"
-
 import { useSearchModal } from "app/hooks/useSearchModal"
 import { useYahooTrending } from "app/hooks/useYahooTrending"
+import tw from "app/lib/tailwind"
 import { AssetCategories } from "app/models/AssetCategories"
 import { getAssetCategoryShortNames } from "app/utils/getAssetCategoryShortNames"
 import React, { useEffect, useMemo, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import Animated from "react-native-reanimated"
 import { Panels, Tabs } from "../../components/Tabs/Tabs"
-import tw from "app/lib/tailwind"
 
 const tabs = [{ label: "Stocks" }, { label: "News" }]
 
@@ -56,7 +55,8 @@ const StocksScreenWithMemo: React.FC<{
     Stocks: () => (
       <StockPanel isLoading={isLoading} trending={trending} categories={categories} />
     ),
-    News: () => <NewsPanel />,
+    // "Stocks": ()=> <StockPanel scrollHandler={scrollHandler} isLoading={isLoading} trending={trending} categories={categories}/>,
+    News: () => <GeneralStockNews />,
   }
 
   const { trending, isLoading } = useYahooTrending()
@@ -96,14 +96,5 @@ const StocksScreenWithMemo: React.FC<{
     </Animated.ScrollView>
   )
 }
-
-const NewsPanel: React.FC<{}> = ({}) => (
-  <StockNews
-    exchange={"NYSE"}
-    symbol={"TSLA"}
-    shortName={"TSLA Inc."}
-    logoColor={"#e82127"}
-  />
-)
 
 export default React.memo(StocksScreenWithMemo)

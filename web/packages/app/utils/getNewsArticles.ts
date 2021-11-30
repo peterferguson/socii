@@ -1,46 +1,4 @@
-interface RapidApiNewsProvider {
-  name: string
-  favIcon: string
-  favIconBase64Encoding: string
-}
-
-interface RapidApiImage {
-  url: string
-  height: number
-  width: number
-  thumbnail: string
-  thumbnailHeight: number
-  thumbnailWidth: number
-  base64Encoding: string
-  name: string
-  title: string
-  provider: RapidApiNewsProvider
-  imageWebSearchUrl: string
-  webpageUrl: string
-}
-
-export interface RapidApiNewsItem {
-  id: string
-  title: string
-  url: string
-  description: string
-  body: string
-  snippet: string
-  keywords: string
-  language: string
-  isSafe: boolean
-  datePublished: string
-  provider: RapidApiNewsProvider
-  image?: RapidApiImage
-}
-
-export interface RapidApiNewsResult {
-  _type: string
-  didUMean: string
-  totalCount: number
-  relatedSearch: RapidApiNewsItem[]
-  value: RapidApiNewsItem[]
-}
+import { WebSearchNewsResult } from "app/models/rapidNews/WebSearchNews"
 
 export const getNewsArticles = async (
   query: string,
@@ -48,7 +6,7 @@ export const getNewsArticles = async (
   includeThumbnails: boolean = true,
   fromDate: string = null,
   endDate: string = null // -"2015-05-16T05:50:06"
-): Promise<RapidApiNewsResult> => {
+): Promise<WebSearchNewsResult> => {
   const hostUrl = process.env.NEXT_PUBLIC_RAPID_API_NEWS_URL || ""
 
   const params = {
