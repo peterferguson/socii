@@ -100,10 +100,14 @@ const DrawerHeader = () => {
       })}
     >
       <CenteredRow style={tw`justify-between items-start`}>
-        <Image
-          source={{ uri: user?.photoUrl }}
-          style={tw`h-12 w-12 rounded-full mb-3 border border-white flex-1`}
-        />
+        <View style={tw`flex-1`}>
+          <Image
+            source={{ uri: user?.photoUrl }}
+            width={48}
+            height={48}
+            style={tw`h-12 w-12 rounded-full mb-3 border border-white`}
+          />
+        </View>
         <View style={tw`flex-4`} />
         <Pressable onPress={() => {}} style={tw`flex-1`}>
           <View
@@ -116,13 +120,15 @@ const DrawerHeader = () => {
         <CenteredColumn style={tw`items-start`}>
           <Text style={tw`text-lg font-open-sans-700`}>{user?.displayName}</Text>
           <Text
-            style={tw` text-sm font-open-sans-400 mb-2 remove-font-padding text-center`}
+            style={tw`text-sm font-open-sans-400 mb-2 remove-font-padding text-center`}
           >
             @{user?.username}
           </Text>
           <CenteredRow>
             <Coin1 size="18" color="#000" />
-            <Text style={tw`ml-2 font-open-sans-300`}>{account?.buyingPower}</Text>
+            <Text style={tw`ml-1 font-open-sans-600`}>
+              {parseFloat(account?.buyingPower)?.toFixed(2)}
+            </Text>
           </CenteredRow>
         </CenteredColumn>
       </CenteredRow>
