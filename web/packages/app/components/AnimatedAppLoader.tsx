@@ -71,11 +71,11 @@ function AnimatedSplashScreen({ children, isAppReady }) {
       )}
 
       {!isSplashAnimationComplete && (
-        <View key="splash-screen" style={{ flex: 1 }}>
+        <View key="splash-screen" style={{ flex: 1, backgroundColor: "#000" }}>
           <MotiView
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 1, transform: [{ scale: 1 }, { translateY: 0 }] }}
             exitTransition={{ type: "timing", duration: 500 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transform: [{ scale: 10 }, { translateY: 80 }] }}
             onDidAnimate={(_, finished) => finished && setAnimationComplete(true)}
             style={[
               tw`flex-1 justify-center items-center`,

@@ -43,8 +43,6 @@ const randomHex = () => {
 const CustomDrawer = props => {
   const router = useRouter()
 
-  const { history } = usePortfolioHistory()
-
   return (
     <>
       <View style={{ flex: 1 }}>
@@ -57,7 +55,6 @@ const CustomDrawer = props => {
               Icon={People}
               label={"Create a Group"}
             />
-            <Text>{JSON.stringify(history)}</Text>
           </View>
         </DrawerContentScrollView>
         <DrawerFooter />
@@ -79,12 +76,10 @@ const DrawerHeader = () => {
   const { client } = useStream()
   const [online, setOnline] = React.useState(client?.user?.online)
 
-  //   useEffect(() => console.log("DrawerHeader", { account }), [account])
   useEffect(
     () => client?.user && setOnline(client?.user?.online),
     [client?.user?.online]
   )
-  //   useEffect(() => console.log("DrawerHeader", { online }), [online])
 
   //   useEffect(() => {
   //     const unreadCount = client.on(event => {

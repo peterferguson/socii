@@ -1,20 +1,17 @@
-import React, { useState } from "react"
-import { Image, ImageBackground, Pressable, Text, View } from "react-native"
-import MainSettingsComponent from "../../components/MainSettingsComponent"
-import { useAuth } from "../../hooks/useAuth"
-import tw from "../../lib/tailwind"
-import { useRouter } from "../../navigation/use-router"
-// import * as ImagePicker from 'expo-image-picker';
-// import {
-//   UserSearch as UserSearchIcon,
-//   CloseCircle as CloseIcon,
-// } from "iconsax-react-native"
-// import storage from '@react-native-firebase/storage'
+import { CenteredColumn, UserPhoto } from "app/components"
+import SettingsColumn from "app/components/SettingsColumn"
+import { useAuth } from "app/hooks/useAuth"
+import tw from "app/lib/tailwind"
+import { useRouter } from "app/navigation/use-router"
+import React from "react"
+import { Text, TouchableOpacity } from "react-native"
+import { MessageQuestion } from "iconsax-react-native"
+
+const USER_PHOTO_HEIGHT = 160
 
 const SettingsScreen = () => {
   const { user, signout } = useAuth()
   const router = useRouter()
-  const [image, setImage] = useState(null)
 
   // useEffect(() => {
   //   (async () => {
@@ -60,7 +57,7 @@ const SettingsScreen = () => {
   //   submitPost()
   // },[image])
 
-  // // TODO correct signout route
+  // TODO: Align icon use with rest of app
   const settingsOptions = [
     {
       title: "Profile",
@@ -94,58 +91,31 @@ const SettingsScreen = () => {
       },
       icon: "help-outline",
     },
-    {
-      title: "Log Out",
-      subTitle: "Leave this session",
-      onPress: () => {
-        signout("/enter", false)
-      },
-      icon: "exit-outline",
-    },
+    // {
+    //   title: "Log Out",
+    //   subTitle: "Leave this session",
+    //   onPress: () => {
+    //     signout("/enter", false)
+    //   },
+    //   icon: "exit-outline",
+    // },
     //{title: 'Delete Account', subTitle: "PERMANTLY DELETE ACCOUT", onPress: () => {}},
   ]
 
   return (
-    <View
-      style={tw`flex-1 flex-col items-center justify-between rounded-tr-lg rounded-tl-lg`}
-    >
-      <View style={tw`flex-col items-center text-brand-black`}>
-        {/* TODO: fully center image.. future TODO: make logo spin */}
-        <ImageBackground
-          source={require("../../../expo/assets/favicon-196x196.png")}
-          resizeMode="cover"
-          style={tw`justify-center items-center w-50 h-50`}
-        >
-          <Pressable>
-            {user?.photoUrl ? (
-              <ImageBackground
-                source={user?.photoUrl ? { uri: user.photoUrl } : null}
-                resizeMode="cover"
-                imageStyle={{ borderRadius: 100 }}
-                style={tw`relative justify-center items-center w-25 h-25`}
-              >
-                {/* <UserSearchIcon
-                    size="20"
-                    color={tw.color("white")}
-                    style={tw`absolute inset-y-0`}
-                  />                  */}
-              </ImageBackground>
-            ) : (
-              <Text>No Image</Text>
-            )}
-          </Pressable>
-        </ImageBackground>
-        <Text style={tw`text-brand-black font-semibold text-2xl`}>
+    <CenteredColumn style={tw`flex-1 justify-between`}>
+      <CenteredColumn>
+        {/* <UserPhotoInLogo height={USER_PHOTO_HEIGHT} width={USER_PHOTO_HEIGHT} /> */}
+        <UserPhoto imageStyle={tw`h-20 w-20 rounded-full mb-4`} />
+        <Text style={tw`text-brand-black font-poppins-500 text-2xl`}>
           {user?.displayName}
         </Text>
-      </View>
+      </CenteredColumn>
 
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-
-      <View style={tw`flex flex-col items-center justify-end`}>
-        <MainSettingsComponent settingsOptions={settingsOptions} />
-      </View>
-    </View>
+      <CenteredColumn style={tw`flex-1 justify-end bg-white mt-8 rounded-t-[5]`}>
+        <SettingsColumn settingsOptions={settingsOptions} />
+      </CenteredColumn>
+    </CenteredColumn>
   )
 }
 
