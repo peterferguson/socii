@@ -16,9 +16,19 @@ const fundClient = new FundingApi(
 )
 
 export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
-  let { body, method } = req
-  body = typeof body === "string" ? JSON.parse(body) : body
-  const { accountId, transferData } = body
+  let { body, method, query } = req
+  let { accountId, transferData } = {} as {
+    accountId: string
+    transferData: TransferData
+  }
+
+  try {
+    body = body && typeof body === "string" ? JSON.parse(body) : body
+    transferData = body?.transferData || query?.transferData
+    accountId = body?.accountId || query?.accountId
+  } catch (err) {
+    console.log({ err })
+  }
 
   switch (method) {
     case "POST": {
@@ -54,16 +64,16 @@ export async function handleFunding(req: NextApiRequest, res: NextApiResponse) {
       }
       break
     }
-    case "DELETE":
-      // - Delete a transfer
-      try {
-        await fundClient.deleteTransfer(accountId, transferData.id)
-        res.status(204).end(`Deleted transfer with id ${transferData.id}`)
-      } catch (error) {
-        console.log(error)
-        res.status(400).end(`Failed to delete transfer with error: ${error}`)
-      }
-      break
+    // case "DELETE":
+    //   // - Delete a transfer
+    //   try {
+    //     await fundClient.deleteTransfer(accountId, transferData.id)
+    //     res.status(204).end(`Deleted transfer with id ${transferData.id}`)
+    //   } catch (error) {
+    //     console.log(error)
+    //     res.status(400).end(`Failed to delete transfer with error: ${error}`)
+    //   }
+    //   break
     default: {
       res.setHeader("Allow", ["POST", "DELETE"])
       res.status(405).end(`Method ${method} Not Allowed`)

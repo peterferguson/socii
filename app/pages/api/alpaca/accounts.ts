@@ -13,10 +13,24 @@ const accountClient = new AccountsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
 
+interface AccountReqParams {
+  type: string
+  accountId: string
+}
+
 export async function handleAccounts(req: NextApiRequest, res: NextApiResponse) {
-  let { body, method } = req
-  body = typeof body === "string" ? JSON.parse(body) : body
-  const { type, accountId } = body
+  let { body, method, query } = req
+  let { type, accountId } = {} as AccountReqParams
+
+  try {
+    body = body && typeof body === "string" ? JSON.parse(body) : body
+    type = body?.type || query?.type
+    accountId = body?.accountId || query?.accountId
+  } catch (err) {
+    console.log({ err })
+  }
+
+  if (!accountId) return res.status(400).end(`Failed to find accountId`)
 
   switch (method) {
     case "POST":

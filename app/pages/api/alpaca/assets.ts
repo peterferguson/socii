@@ -5,21 +5,28 @@ import { NextApiRequest, NextApiResponse } from "next"
 const assetClient = new AssetsApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
+interface AssetsQueryParams {
+  symbol: string
+  id: string
+}
 
 export async function handleAssets(
   req: NextApiRequest,
   res: NextApiResponse<AssetResource | AssetResource[]>
 ) {
-  let { body, method } = req
-  body = typeof body === "string" ? JSON.parse(body) : body
+  let { body, method, query } = req
+  let { symbol, id } = {} as AssetsQueryParams
+
+  try {
+    body = body && typeof body === "string" ? JSON.parse(body) : body
+    symbol = body?.symbol || query?.symbol
+    id = body?.id || query?.id
+  } catch (err) {
+    console.log({ err })
+  }
 
   switch (method) {
     case "POST": {
-      const { symbol, id } = (typeof body === "string" ? JSON.parse(body) : body) as {
-        symbol: string
-        id: string
-      }
-
       try {
         /* query assets either by id or symbol */
         const assetResult = symbol

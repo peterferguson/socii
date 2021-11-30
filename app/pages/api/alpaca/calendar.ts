@@ -6,14 +6,25 @@ const calendarClient = new CalendarApi(
   config(process.env.ALPACA_KEY, process.env.ALPACA_SECRET)
 )
 
+interface CalenderRequestParams {
+  start: string
+  end: string
+}
+
 export async function handleCalendar(
   req: NextApiRequest,
   res: NextApiResponse<MarketDay | MarketDay[]>
 ) {
-  let { body, method } = req
-  body = typeof body === "string" ? JSON.parse(body) : body
+  let { body, method, query } = req
+  let { start, end } = {} as CalenderRequestParams
 
-  const { start, end } = body
+  try {
+    body = body && typeof body === "string" ? JSON.parse(body) : body
+    start = body?.start || query?.start
+    end = body?.end || query?.end
+  } catch (err) {
+    console.log({ err })
+  }
 
   // TODO: Error handling bad request body!
   // - format start and end dates as YYYY-MM-DD

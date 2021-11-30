@@ -11,14 +11,20 @@ export async function handlePositions(
   req: NextApiRequest,
   res: NextApiResponse<Position[]>
 ) {
-  let { body, method } = req
-  body = typeof body === "string" ? JSON.parse(body) : body
+  let { body, method, query } = req
+  let { accountId } = {} as { accountId: string }
+
+  try {
+    body = body && typeof body === "string" ? JSON.parse(body) : body
+    accountId = body?.accountId || query?.accountId
+  } catch (err) {
+    console.log({ err })
+  }
+  if (!accountId) return res.status(400).end(`Failed to find accountId`)
 
   switch (method) {
     case "POST":
       try {
-        const { accountId } = body
-
         const positions = await portfolioApi.getPositions(accountId)
 
         res
