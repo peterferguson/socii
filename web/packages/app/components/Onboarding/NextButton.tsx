@@ -3,7 +3,7 @@ import tw from "app/lib/tailwind"
 import { ArrowRight } from "iconsax-react-native"
 import { MotiView } from "moti"
 import React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, Platform } from "react-native"
 import Animated, { useAnimatedProps } from "react-native-reanimated"
 import { Circle, G, Svg } from "react-native-svg"
 
@@ -61,8 +61,14 @@ const NextButton = ({
   ) : (
     <MotiView
       style={tw`flex flex-col w-full -mt-6 items-center justify-center rounded-full mx-auto`}
-      from={{ opacity: 0, width: 0, translateX: "100%" }}
-      animate={{ opacity: 1, width: "100%", translateX: "0%" }}
+      from={Platform.select({
+        ios: { opacity: 0, width: "0%", translateX: "100%" },
+        android: { opacity: 0 },
+      })}
+      animate={Platform.select({
+        ios: { opacity: 1, width: "100%", translateX: "0%" },
+        android: { opacity: 1 },
+      })}
     >
       <LoginOptions buttonType={LoginOptionsButtonType.SIGN_UP} />
     </MotiView>
