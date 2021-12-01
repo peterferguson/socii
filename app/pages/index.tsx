@@ -23,8 +23,8 @@ export default function Home() {
         <div className="w-screen h-screen bg-gradient-to-br via-white to-white from-palette-lightest" />
       </div>
       <Hero invited={invited} setInvited={setInvited} />
-      <ScreenDemo /> 
-      <OneTwoThree />
+      <ScreenDemo />
+      {/* <OneTwoThree /> */}
       <Footer invited={invited} setInvited={setInvited} />
     </div>
   )

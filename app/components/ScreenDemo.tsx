@@ -234,7 +234,7 @@ const Screens = ({ selectedScreenIndex, changeDirection }) => {
             key={`transition-image-${i}`}
             className="absolute inset-0 z-10 flex w-full h-full"
             show={selectedScreenIndex === i && changeDirection !== undefined}
-            unmount={false}
+            unmount={true}
             enter="transition ease-in-out duration-300 transform"
             enterFrom={
               changeDirection === "right" ? "translate-x-full" : "-translate-x-full"
