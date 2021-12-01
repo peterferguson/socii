@@ -19,6 +19,7 @@
       }
     },
     "development": {
+      "cocoapods": "1.11.2",
       "developmentClient": true,
       "distribution": "internal",
       "android": {
