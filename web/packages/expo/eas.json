@@ -1,13 +1,15 @@
 {
   "build": {
     "release": {
+      "cocoapods": "1.11.2",
       "releaseChannel": "production",
       "env": {
         "STAGE": "production",
-        "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii-development"
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "socii"
       }
     },
     "preview": {
+      "extends": "release",
       "releaseChannel": "staging",
       "distribution": "internal",
       "android": {
@@ -19,8 +21,7 @@
       }
     },
     "development": {
-      "cocoapods": "1.11.2",
-      "developmentClient": true,
+      "extends": "release",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
