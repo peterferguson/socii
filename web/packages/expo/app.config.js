@@ -24,10 +24,12 @@ export default {
     backgroundColor: "#37373d",
   },
   ios: {
-    supportsTablet: true,
+    bundleIdentifier: "com.socii.development",
+    // supportsTablet: true,
   },
   android: {
     versionCode: 1,
+    package: "com.socii.development",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#37373d",
