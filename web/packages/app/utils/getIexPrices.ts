@@ -1,5 +1,6 @@
 import { iexQuote } from "./iexQuote"
 import { CurrentPrices } from "../hooks/useIexPrice"
+import { Price } from "app/models/Price"
 
 export const getIexPrices = async ({
   assets,
@@ -13,8 +14,7 @@ export const getIexPrices = async ({
   for (const asset of assets) {
     try {
       const quote = await iexQuote(asset, token)
-      const price = quote?.iexRealtimePrice || quote?.latestPrice
-      prices[asset] = price
+      prices[asset] = quote as undefined as Price
     } catch (error) {
       console.error("Failed to fetch iex price for", { asset, error })
       prices[asset] = null

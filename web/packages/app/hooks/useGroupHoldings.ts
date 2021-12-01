@@ -66,7 +66,9 @@ export const useGroupHoldings = (groupName: string) => {
               symbol,
               avgPrice,
               qty,
-              currentPrice: currentPrices[symbol],
+              currentPrice:
+                currentPrices[symbol]?.latestPrice ||
+                currentPrices[symbol]?.iexRealtimePrice,
             }
           })
         )

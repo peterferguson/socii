@@ -20,7 +20,7 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
   const symbol = asset.alpaca.symbol
   const { price } = useTickerPrice(symbol)
   const [amount, setAmount] = useState(null)
-  const group =  state.context.group
+  const group = state.context.group
   const router = useRouter()
   const [error, setError] = useState(null)
 
@@ -44,14 +44,13 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
       submittedFromCallable: true,
     }
 
-    tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side })
-      .then((r)=> {
-        router.push(`/channel/${group}`)         
+    tradeSubmission({ ...tradeArgs, type: "market", side: state.context.side }).then(
+      r => {
+        router.push(`/channel/${group}`)
         send("CLOSE")
-      }, (e) => {
-        //console.log("FAILED with error:", e);
-        setError(true)   
-      })
+      },
+      e => setError(true)
+    )
   }
   return (
     <CenteredColumn style={tw`w-full p-4 absolute top-0`}>
@@ -74,41 +73,24 @@ const OrderModal = ({ asset, state, send, modalRef }) => {
         />
       </View>
       <View style={tw`w-full flex-1`}>
-      {error ? (
-        <RoundButton
-          onPress={handleClose}
-          label={`Sorry! Something went wrong`}
-          labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
-          gradientColors={[tw.color("red-200"), tw.color("red-500")]}
-          textColor={tw.color("red-500")}
-        />
-        ):(
-        <RoundButton
-          onPress={handleSubmission}
-          label={`${state.context.side} ${symbol}`}
-          labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
-          gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
-          textColor={tw.color("teal-500")}
-        />
+        {error ? (
+          <RoundButton
+            onPress={handleClose}
+            label={`Sorry! Something went wrong`}
+            labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+            gradientColors={[tw.color("red-200"), tw.color("red-500")]}
+            textColor={tw.color("red-500")}
+          />
+        ) : (
+          <RoundButton
+            onPress={handleSubmission}
+            label={`${state.context.side} ${symbol}`}
+            labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+            gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
+            textColor={tw.color("teal-500")}
+          />
         )}
       </View>
-      {/* <View
-        style={tw`flex items-center justify-center mx-auto mt-4 text-lg font-medium sm:text-xl`}
-      >
-        <Pressable
-          style={tw.style(
-            "items-center justify-center w-full h-12 px-4 py-2 mx-2",
-            " border border-transparent",
-            "  bg-palette-lightest sm:mx-8 rounded-md"
-          )}
-          onPress={handleSubmission}
-        >
-          <Text style={tw`text-palette-darkest font-poppins-500 uppercase`}>
-            
-          </Text>
-        </Pressable>
-      </View> */}
-      {/* <Numpad onPress={undefined} width={undefined} /> */}
     </CenteredColumn>
   )
 }

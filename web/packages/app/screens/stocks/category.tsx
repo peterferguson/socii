@@ -1,5 +1,3 @@
-//import { iexQuote } from "app/utils/iexQuote"
-// import { GetStaticPaths, GetStaticProps } from "next"
 import HorizontalAssetCard from "app/components/HorizontalAssetCard"
 import { useIntersectionObserver } from "app/hooks/useIntersectionObserver"
 import { getTickerDocs } from "app/lib/firebase/db/getTickerDocs"
@@ -11,8 +9,6 @@ import { TickersProps } from "app/utils/getTickersStaticProps"
 import React, { useEffect, useRef, useState } from "react"
 import { Pressable, ScrollView, Text, View } from "react-native"
 import tw from "../../lib/tailwind"
-//import { iexQuote } from "../../utils/iexQuote"
-// import { GetStaticPaths, GetStaticProps } from "next"
 import { shadowStyle } from "../../utils/shadowStyle"
 
 interface CategoryTickerProps extends TickersProps {

@@ -146,14 +146,18 @@ const SliderCardText = ({
     {!textIsLoading ? (
       <>
         <Text
-          style={tw.style(`py-1 text-xl font-poppins-500 tracking-wider`, {
+          style={tw.style(`py-1 text-lg font-poppins-500 tracking-wider`, {
             color: logoColor,
           })}
         >
           {symbol}
         </Text>
-        <Text style={tw`py-1 text-lg tracking-tight font-poppins-400`}>
-          {shortName}
+        <Text
+          style={tw`py-1 text-base tracking-tight font-poppins-400`}
+          numberOfLines={2}
+          adjustsFontSizeToFit
+        >
+          {shortName.split(" ").slice(0, 2).join("\n")}
         </Text>
       </>
     ) : (
@@ -183,7 +187,7 @@ const SliderCardPrice = ({
         <VerticalSpacer height={4} />
       </>
     ) : (
-      <Text style={tw`font-semibold text-3xl ${pnlTextColor(percentChange)}`}>
+      <Text style={tw`font-poppinss-400 text-2xl py-2 ${pnlTextColor(percentChange)}`}>
         ${price?.toFixed(2)}
       </Text>
     )}

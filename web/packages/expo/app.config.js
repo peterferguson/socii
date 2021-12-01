@@ -3,18 +3,9 @@ require("dotenv").config({ path: "./.env.dev" })
 const STAGE = process.env.STAGE
 
 const envConfig = {
-  development: {
-    scheme: "app.socii.development",
-    backgroundColor: "#FF0000",
-  },
-  staging: {
-    scheme: "app.socii.staging",
-    backgroundColor: "#8000FF",
-  },
-  production: {
-    scheme: "app.socii",
-    backgroundColor: "#1610FF",
-  },
+  development: { scheme: "app.socii.development" },
+  staging: { scheme: "app.socii.staging" },
+  production: { scheme: "app.socii" },
 }
 
 const config = envConfig[STAGE || "development"]
@@ -33,15 +24,13 @@ export default {
     backgroundColor: "#37373d",
   },
   ios: {
-    bundleIdentifier: config.scheme,
     supportsTablet: true,
   },
   android: {
-    package: config.scheme,
     versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: config.backgroundColor,
+      backgroundColor: "#37373d",
     },
     googleServicesFile: "./google-services.json",
     permissions: ["NOTIFICATIONS"],

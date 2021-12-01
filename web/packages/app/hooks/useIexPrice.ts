@@ -1,11 +1,11 @@
 import useSWRNative from "@nandorojo/swr-react-native"
+import { Price } from "app/models/Price"
 import { SWRConfiguration } from "swr"
 import { getIexPrices } from "../utils/getIexPrices"
 import { useAuth } from "./useAuth"
-import React from "react"
 
 export interface CurrentPrices {
-  [assetSymbol: string]: number | null
+  [assetSymbol: string]: Price
 }
 
 export const useIexPrice = (

@@ -6,23 +6,23 @@ import { CenteredRow } from "."
 const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 const INPUT_HEIGHT = SCREEN_HEIGHT * 0.27
 
-const inputTextSize = (amount: string) =>
-  String(amount).length < 4
-    ? "text-8xl"
-    : String(amount).length < 5
-    ? "text-7xl"
-    : String(amount).length < 6
-    ? "text-6xl"
-    : "text-4xl"
+// const inputTextSize = (amount: string) =>
+//   String(amount).length < 4
+//     ? "text-8xl"
+//     : String(amount).length < 5
+//     ? "text-7xl"
+//     : String(amount).length < 6
+//     ? "text-6xl"
+//     : "text-4xl"
 
-const stockLabelSize = (amount: string) =>
-  String(amount).length < 3
-    ? "text-5xl"
-    : String(amount).length < 5
-    ? "text-4xl"
-    : String(amount).length < 6
-    ? "text-3xl"
-    : "text-2xl"
+// const stockLabelSize = (amount: string) =>
+//   String(amount).length < 3
+//     ? "text-5xl"
+//     : String(amount).length < 5
+//     ? "text-4xl"
+//     : String(amount).length < 6
+//     ? "text-3xl"
+//     : "text-2xl"
 
 export const LargeNumberInput = ({
   amount,
@@ -42,8 +42,8 @@ export const LargeNumberInput = ({
       <TextInput
         //textAlignVertical: "center" attempted to add to below, but android text cut off
         // working soln to just increase width of box - check in ios
-        style={tw`h-40
-          w-full text-center text-brand font-poppins-400 ${inputTextSize(amount)}`}
+        style={tw`h-40 w-full text-center text-brand font-poppins-400 text-3xl`}
+        // w-full text-center text-brand font-poppins-400 ${inputTextSize(amount)}`}
         placeholder="0.00"
         placeholderTextColor={tw.color("brand")}
         value={amount}
@@ -66,9 +66,8 @@ export const LargeNumberInput = ({
       )}
       {orderType === "shares" && (
         <View style={tw`absolute items-center bottom-12 thin:inset-y-0 thin:-right-4`}>
-          <Text style={tw`${stockLabelSize(amount)} font-poppins-200 text-brand`}>
-            {symbol}
-          </Text>
+          {/* <Text style={tw`${stockLabelSize(amount)} font-poppins-200 text-brand`}> */}
+          <Text style={tw`text-xl font-poppins-200 text-brand`}>{symbol}</Text>
         </View>
       )}
     </CenteredRow>

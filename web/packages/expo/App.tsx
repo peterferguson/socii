@@ -31,6 +31,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 
 export default function App() {
   LogBox.ignoreLogs(["Setting a timer", "umami--", "AsyncStorage"])
+  LogBox.ignoreAllLogs()
 
   const [notification, setNotification] = useState<Notifications.Notification>()
   const notificationListener = useRef<Subscription>()

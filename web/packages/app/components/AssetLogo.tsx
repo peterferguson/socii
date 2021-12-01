@@ -24,7 +24,7 @@ const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) =>
   // TODO: Add loading state
 
   const logoStyle = {
-    ...tw`flex items-center justify-center bg-gray-50 border border-gray-200 rounded-full`,
+    ...tw`items-center justify-center bg-gray-50 border border-gray-200 rounded-full`,
     width: parseInt(width) || DEFAULT_HEIGHT_AND_WIDTH,
     height: parseInt(height) || DEFAULT_HEIGHT_AND_WIDTH,
     ...shadowStyle("lg"),
@@ -38,7 +38,7 @@ const AssetLogo: React.FC<IAssetLogoProps> = ({ height, width, asset, isin }) =>
     />
   ) : (
     <View style={logoStyle}>
-      <Text style={tw`font-semibold text-gray-500 text-tiny`}>{asset}</Text>
+      <Text style={tw`font-poppins-500 text-gray-500 text-tiny`}>{asset}</Text>
     </View>
   )
 }

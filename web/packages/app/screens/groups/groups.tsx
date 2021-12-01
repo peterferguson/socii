@@ -7,8 +7,7 @@ import {
 } from "app/components"
 import { useAuth } from "app/hooks/useAuth"
 import tw from "app/lib/tailwind"
-import { useRouter } from "app/navigation/use-router"
-import React from "react"
+import React, { useMemo, useEffect } from "react"
 import { FlatList, Text, View } from "react-native"
 import Animated, {
   useAnimatedScrollHandler,
@@ -21,14 +20,8 @@ const GroupPortfolios = (): JSX.Element => {
   const { user } = useAuth()
   const groups = user?.groups || []
   const data = [...groups, "_addNewGroupPlaceHolder"]
-  const router = useRouter()
+
   const navigation = useNavigation()
-
-  const scrollX = useSharedValue(0)
-
-  const scrollHandler = useAnimatedScrollHandler(e => {
-    scrollX.value = withSpring(e.contentOffset.x)
-  })
 
   return groups.length > 0 ? (
     <CenteredColumn style={tw`mx-4 mt-4`}>
@@ -45,11 +38,7 @@ const GroupPortfolios = (): JSX.Element => {
             <GroupSummaryCard groupName={groupName} />
           )
         }
-        renderScrollComponent={props => (
-          <Animated.ScrollView {...props} onScroll={scrollHandler} />
-        )}
       />
-      <Paginator numPages={data.length} scrollX={scrollX} />
     </CenteredColumn>
   ) : (
     <CenteredColumn style={tw`h-full justify-start`}>

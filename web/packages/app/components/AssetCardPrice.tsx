@@ -1,16 +1,15 @@
-import { pnlBackgroundColor } from "../utils/pnlBackgroundColor";
-import tw from "app/lib/tailwind";
-import React from "react";
-import { View, Text } from "react-native";
-import { PriceWithChangeTagSkeleton } from "./PriceWithChangeTag";
+import { pnlBackgroundColor } from "../utils/pnlBackgroundColor"
+import tw from "app/lib/tailwind"
+import React from "react"
+import { View, Text } from "react-native"
+import { PriceWithChangeTagSkeleton } from "./PriceWithChangeTag"
+import { CenteredColumn } from "."
 
 export const AssetCardPrice = ({ isLoading, price, percentChange }) => {
-  const pnlColor = pnlBackgroundColor(price?.changePercent);
-  const pnlTextColor = pnlColor.replace("200", "600").replace("bg", "text");
+  const pnlColor = pnlBackgroundColor(percentChange)
+  const pnlTextColor = pnlColor.replace("200", "600").replace("bg", "text")
   return (
-    <View
-      style={tw.style(`flex flex-col items-center justify-center ml-4`, { flex: 2 })}
-    >
+    <CenteredColumn style={tw.style(`flex-2 ml-4`)}>
       {isLoading ? (
         <PriceWithChangeTagSkeleton />
       ) : (
@@ -31,6 +30,6 @@ export const AssetCardPrice = ({ isLoading, price, percentChange }) => {
           </View>
         </>
       )}
-    </View>
-  );
-};
+    </CenteredColumn>
+  )
+}

@@ -5,5 +5,5 @@ export interface Price {
   changePercent: number
   iexRealtimePrice: number
   latestUpdate: dayjs.Dayjs | string
-  currency: string
+  currency?: string
 }

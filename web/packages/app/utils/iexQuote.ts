@@ -1,4 +1,4 @@
-import { IEXQuoteResponse } from "@models/iex/IEXQuoteResponse"
+import { IEXQuoteResponse } from "app/models/iex/IEXQuoteResponse"
 import { fetchWithToken } from "./fetchWithToken"
 
 export const iexQuote = async (

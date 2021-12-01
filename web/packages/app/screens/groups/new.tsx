@@ -13,6 +13,7 @@ import { checkGroupNameExists, createGroup } from "app/lib/firebase/db"
 import tw from "app/lib/tailwind"
 import { ArrowSquareDown, Lock, ProfileCircle } from "iconsax-react-native"
 import debounce from "lodash/debounce"
+import { useRouter } from "app/navigation/use-router"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Dimensions, Pressable, Switch, Text, TextInputProps, View } from "react-native"
 import { MaskedTextInput } from "react-native-mask-text"
@@ -47,6 +48,7 @@ export default function NewGroupScreen() {
   const [loading, setLoading] = useState(false)
 
   const { user } = useAuth()
+  const router = useRouter()
   const modalRef = React.useRef<BottomSheetModal>(null)
   const usernameCreationModalRef = React.useRef<BottomSheetModal>(null)
   const groupTypeModalRef = React.useRef<BottomSheetModal>(null)
@@ -56,16 +58,18 @@ export default function NewGroupScreen() {
   const { handlePresent: openUsernameModal } = useModal(usernameCreationModalRef)
 
   const handlePress = React.useCallback(() => {
-    if (user?.username) {
+    if (!user?.username) {
       openUsernameModal()
       return
     }
-    if (!user?.username) {
+    if (!user) {
       openSignInModal()
       return
     }
     if (groupName && isValidGroupName && !groupNameTaken)
-      createGroup(user, groupName, groupType, initialDeposit, monthlySubscription)
+      createGroup(user, groupName, groupType, initialDeposit, monthlySubscription).then(
+        () => router.push(`/groups/${groupName}`)
+      )
   }, [
     user?.username,
     isValidGroupName,

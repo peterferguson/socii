@@ -15,7 +15,9 @@ interface IHorizontalAssetCard {
   symbol: string
   shortName: string
   price?: Price
+  isPriceLoading?: boolean
 }
+
 const HorizontalAssetCard = ({
   cardRef,
   isin,
@@ -23,10 +25,10 @@ const HorizontalAssetCard = ({
   logoColor,
   shortName,
   price,
+  isPriceLoading,
 }: IHorizontalAssetCard) => {
   const router = useRouter()
   const isLoading = !isin
-  const isPriceLoading = !price?.latestPrice
 
   return (
     <Pressable

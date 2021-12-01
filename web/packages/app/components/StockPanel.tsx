@@ -1,12 +1,12 @@
-import { Asset } from "@models/Asset"
 import CardSlider from "app/components/CardSlider"
 import { CenteredRow } from "app/components/Centered"
 import Search from "app/components/Search/Search"
 import { SearchIcon } from "app/components/Search/SearchIcon"
 import { AssetsObject } from "app/hooks/useAssetData"
+import { useIexPrice } from "app/hooks/useIexPrice"
 import tw from "app/lib/tailwind"
+import { Asset } from "app/models/Asset"
 import { AssetCategories } from "app/models/AssetCategories"
-import { Price } from "app/models/Price"
 import React, { useEffect, useState } from "react"
 import {
   FlatList,
@@ -24,26 +24,32 @@ export const StockPanel: React.FC<{
   isLoading: boolean
   trending: AssetsObject
   categories: AssetCategories
-}> = ({ isLoading, trending, categories }) => (
-  <>
-    <CenteredRow style={tw`justify-between`}>
-      <Title title={"Trending"} />
-      <SearchIcon />
-    </CenteredRow>
-    <CardSlider
-      isLoading={isLoading}
-      assets={Object.values(trending).map(asset => ({
-        asset: asset,
-        price: defaultPrice,
-      }))}
-    />
-    <Title title={"Categories"} />
-    <Categories categories={categories} />
-    <Title title={"All"} />
-    <AssetCards assets={Object.values(trending)} />
-    {Search && <Search />}
-  </>
-)
+}> = ({ isLoading, trending, categories }) => {
+  const { prices } = useIexPrice(
+    Object.values(trending).map(asset => asset.alpaca.symbol)
+  )
+
+  return (
+    <>
+      <CenteredRow style={tw`justify-between`}>
+        <Title title={"Trending"} />
+        <SearchIcon />
+      </CenteredRow>
+      <CardSlider
+        isLoading={isLoading}
+        assets={Object.values(trending).map(asset => ({
+          asset: asset,
+          price: prices[asset.alpaca.symbol],
+        }))}
+      />
+      <Title title={"Categories"} />
+      <Categories categories={categories} />
+      <Title title={"All"} />
+      <AssetCards assets={Object.values(trending)} />
+      {Search && <Search />}
+    </>
+  )
+}
 
 export default StockPanel
 
@@ -56,14 +62,6 @@ const Title = ({ title }: { title: string }) => (
   </Text>
 )
 
-const defaultPrice: Price = {
-  latestPrice: 0,
-  changePercent: -0.1,
-  iexRealtimePrice: 0,
-  latestUpdate: "9999-12-31",
-  currency: "USD",
-}
-
 const fakeAssets = [
   { ISIN: "", alpaca: { symbol: "" }, shortName: "", logoColor: "" },
   { ISIN: "", alpaca: { symbol: "" }, shortName: "", logoColor: "" },
@@ -73,12 +71,17 @@ const fakeAssets = [
 const AssetCards = ({ assets }: { assets: Asset[] }) => {
   const isLoading = assets?.length === 0
 
+  const { prices, isLoading: isPriceLoading } = useIexPrice(
+    assets.map(asset => asset.alpaca.symbol)
+  )
+
   const [initialAssets, setInitialAssets] = useState(fakeAssets)
 
   useEffect(() => {
     // - update previous display categories to avoid unmounting
     if (!isLoading) setInitialAssets(assets.slice(0, 3))
   }, [assets.length])
+
   return (
     <FlatList
       data={initialAssets.concat(assets.slice(3))}
@@ -89,7 +92,8 @@ const AssetCards = ({ assets }: { assets: Asset[] }) => {
           symbol={asset?.alpaca.symbol}
           shortName={asset?.shortName}
           logoColor={asset?.logoColor}
-          price={defaultPrice}
+          price={prices[asset?.alpaca.symbol]}
+          isPriceLoading={isLoading}
         />
       )}
       keyExtractor={(item, i) => `asset-card-${i}-${item.alpaca.symbol}`}
