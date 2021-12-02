@@ -12,7 +12,22 @@ import { enableScreens } from "react-native-screens"
 import { useDeviceContext } from "twrnc"
 import { registerForExpoNotifications } from "../app/lib/firebase/messaging"
 import tw from "../app/lib/tailwind"
+import Constants from "expo-constants"
 import logger from "../app/utils/logger"
+import * as Sentry from "sentry-expo"
+const LOCAL = Constants.manifest.extra.LOCAL_DEVELOPMENT === "true"
+const SENTRY_DSN = Constants.manifest.extra.sentry.dsn
+
+if (LOCAL) {
+  LogBox.ignoreLogs(["Setting a timer", "umami--", "AsyncStorage"])
+  LogBox.ignoreAllLogs()
+} else {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    enableInExpoDevelopment: true,
+    debug: false,
+  })
+}
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -30,9 +45,6 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 })
 
 export default function App() {
-  LogBox.ignoreLogs(["Setting a timer", "umami--", "AsyncStorage"])
-  LogBox.ignoreAllLogs()
-
   const [notification, setNotification] = useState<Notifications.Notification>()
   const notificationListener = useRef<Subscription>()
   const responseListener = useRef<Subscription>()

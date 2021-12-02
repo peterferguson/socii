@@ -52,7 +52,11 @@ export default {
     postPublish: [
       {
         file: "sentry-expo/upload-sourcemaps",
-        config: {},
+        config: {
+          organization: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
       },
     ],
   },
@@ -71,6 +75,9 @@ export default {
     algolia: {
       algoliaId: process.env.NEXT_PUBLIC_ALGOLIA_ID,
       algoliaSearchKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY,
+    },
+    sentry: {
+      dsn: process.env.SENTRY_DSN,
     },
     stream: {
       id: process.env.NEXT_PUBLIC_STREAM_API_ID,

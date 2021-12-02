@@ -5,7 +5,7 @@ import * as DeviceInfo from "expo-device"
 const development = Constants.manifest.extra.STAGE === "development"
 
 // - use for adding localhost to the url
-const local = Constants.manifest.extra.LOCAL_DEVELOPMENT === "true"
+const LOCAL = Constants.manifest.extra.LOCAL_DEVELOPMENT === "true"
 
 export async function fetcher<JSON = any>(
   url: string,
@@ -16,7 +16,7 @@ export async function fetcher<JSON = any>(
   endpointPrefix = Platform.select({
     web: "/",
     default:
-      local && !DeviceInfo.isDevice
+      LOCAL && !DeviceInfo.isDevice
         ? "http://localhost:3000/" // ! For now running localhost from app folder instead of the next folder
         : development
         ? "https://development.socii.app/"
