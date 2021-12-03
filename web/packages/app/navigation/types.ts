@@ -22,6 +22,8 @@ type ChatStackParams = {
 }
 type ChannelStackParams = {
   channel: { channelId: string }
+  oneOnOneDetails: { channelId: string }
+  groupDetails: { channelId: string }
   thread: { threadId: string }
 }
 
@@ -77,6 +79,8 @@ type MainNavigatorParams = {
   enter: NavigatorScreenParams<EnterStackParams>
   channel: NavigatorScreenParams<ChannelStackParams>
   thread: NavigatorScreenParams<ChannelStackParams>
+  groupChannelDetail: NavigatorScreenParams<ChannelStackParams>
+  oneOnOneChannelDetail: NavigatorScreenParams<ChannelStackParams>
   // profileTab: NavigatorScreenParams<ProfileStackParams>
 }
 

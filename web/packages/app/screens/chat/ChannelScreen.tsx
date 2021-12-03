@@ -1,7 +1,6 @@
 import { useHeaderHeight } from "@react-navigation/elements"
 import { CustomAttachment } from "app/components/CustomAttachments"
 import { useStream } from "app/hooks"
-import { ChannelScreenProps } from "app/navigation/types"
 import { useRouter } from "app/navigation/use-router"
 import React, { useEffect } from "react"
 import { SafeAreaView, View } from "react-native"
@@ -14,7 +13,7 @@ import {
 } from "stream-chat-expo"
 import { streami18n } from "./ChannelList"
 
-const ChannelScreen = ({ navigation, route }: ChannelScreenProps) => {
+const ChannelScreen = () => {
   const router = useRouter()
   const { client: chatClient, channel, setChannel, setThread, thread } = useStream()
   const headerHeight = useHeaderHeight()

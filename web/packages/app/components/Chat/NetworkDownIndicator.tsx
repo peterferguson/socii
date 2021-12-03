@@ -1,3 +1,4 @@
+import { useStreamChatTheme } from "app/hooks/useStreamChatTheme"
 import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { Spinner, useTheme } from "stream-chat-expo"
@@ -20,10 +21,8 @@ export const NetworkDownIndicator: React.FC<{ titleSize: "small" | "large" }> = 
   titleSize = "small",
 }) => {
   const {
-    theme: {
-      colors: { black },
-    },
-  } = useTheme()
+    colors: { black },
+  } = useStreamChatTheme()
 
   return (
     <View style={styles.networkDownContainer}>

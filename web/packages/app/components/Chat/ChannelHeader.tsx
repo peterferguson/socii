@@ -1,5 +1,6 @@
 import { useChannelMembersStatus } from "app/hooks/useChannelMembersStatus"
 import { useStream } from "app/hooks/useStream"
+import { useRouter } from "app/navigation/use-router"
 import React from "react"
 import { TouchableOpacity } from "react-native"
 import {
@@ -20,6 +21,8 @@ const ChannelHeader: React.FC<{ channel: any }> = ({ channel }) => {
   const { client } = useStream()
   const typing = useTypingString()
 
+  const router = useRouter()
+
   if (!channel || !client) return null
 
   const isOneOnOneConversation =
@@ -33,15 +36,9 @@ const ChannelHeader: React.FC<{ channel: any }> = ({ channel }) => {
         <TouchableOpacity
           onPress={() => {
             closePicker()
-            // if (isOneOnOneConversation) {
-            //   navigation.navigate("OneOnOneChannelDetailScreen", {
-            //     channel,
-            //   })
-            // } else {
-            //   navigation.navigate("GroupChannelDetailsScreen", {
-            //     channel,
-            //   })
-            // }
+            console.log("/channel/[channelId]", `/channel/${channel.id}`)
+            if (isOneOnOneConversation) router.push(`/one-on-one-details/${channel.id}`)
+            else router.push(`/group-details/${channel.id}`)
           }}
         >
           <ChannelAvatar channel={channel} />

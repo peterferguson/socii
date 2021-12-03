@@ -69,8 +69,11 @@ const chatStackPaths = makeType({
   channelList: makeChatStackPath("channelListScreen"),
   newDirectMessage: makeChatStackPath("newDirectMessageScreen"),
 })
+
 const channelStackPaths = makeType({
   channel: makeChannelStackPath("channel"),
+  oneOnOneDetails: makeChannelStackPath("oneOnOneDetails"),
+  groupDetails: makeChannelStackPath("groupDetails"),
   thread: makeChannelStackPath("thread"),
 })
 
@@ -99,6 +102,8 @@ const mainPaths = makeType({
   onboarding: makeRootPath("onboarding"),
   withBottomBar: makeMainPath("withBottomBar"),
   channel: makeMainPath("channel"),
+  oneOnOneDetails: makeMainPath("oneOnOneDetails"),
+  groupDetails: makeMainPath("groupDetails"),
   thread: makeMainPath("thread"),
   settings: makeMainPath("settings"),
 })
@@ -153,7 +158,21 @@ const linking: Props = {
       },
       [mainPaths.channel]: {
         path: "channel",
-        screens: { [channelStackPaths.channel]: ":channelId" },
+        screens: {
+          [channelStackPaths.channel]: ":channelId",
+        },
+      },
+      [mainPaths.groupDetails]: {
+        path: "group-details",
+        screens: {
+          [channelStackPaths.groupDetails]: ":channelId",
+        },
+      },
+      [mainPaths.oneOnOneDetails]: {
+        path: "one-on-one-details",
+        screens: {
+          [channelStackPaths.oneOnOneDetails]: ":channelId",
+        },
       },
       [mainPaths.thread]: {
         path: "thread",

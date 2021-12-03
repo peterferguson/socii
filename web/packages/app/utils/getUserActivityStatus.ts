@@ -12,14 +12,8 @@ export const getUserActivityStatus = (
   user?: Immutable<UserResponse<UserType>> | UserResponse<UserType>
 ) => {
   if (!user) return ""
-
-  if (user.online) {
-    return "Online"
-  }
-
-  if (Dayjs(user.last_active).isBefore(Dayjs())) {
+  if (user.online) return "Online"
+  if (Dayjs(user.last_active).isBefore(Dayjs()))
     return `Last seen ${Dayjs(user?.last_active).fromNow()}`
-  }
-
   return ""
 }

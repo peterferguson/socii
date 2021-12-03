@@ -1,3 +1,4 @@
+import { useStreamChatTheme } from "app/hooks/useStreamChatTheme"
 import { useSearchUsers } from "app/hooks/useSearchUsers"
 import type { UserType } from "app/models/stream/types"
 import dayjs from "dayjs"
@@ -86,20 +87,18 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
     }>
   >([])
   const {
-    theme: {
-      colors: {
-        accent_blue,
-        bg_gradient_end,
-        bg_gradient_start,
-        black,
-        border,
-        grey,
-        grey_gainsboro,
-        white_smoke,
-        white_snow,
-      },
+    colors: {
+      accent_blue,
+      bg_gradient_end,
+      bg_gradient_start,
+      black,
+      border,
+      grey,
+      grey_gainsboro,
+      white_smoke,
+      white_snow,
     },
-  } = useTheme()
+  } = useStreamChatTheme()
 
   const results = resultsProp || resultsContext
   const resultsLength = results.length
@@ -113,17 +112,9 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
 
     results.forEach(user => {
       const initial = user.name?.slice(0, 1).toUpperCase()
-
       if (!initial) return
-
-      if (!newSections[initial]) {
-        newSections[initial] = {
-          data: [user],
-          title: initial,
-        }
-      } else {
-        newSections[initial].data.push(user)
-      }
+      if (!newSections[initial]) newSections[initial] = { data: [user], title: initial }
+      else newSections[initial].data.push(user)
     })
     setSections(Object.values(newSections))
   }, [resultsLength])
@@ -148,14 +139,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
               </LinearGradient>
             </Defs>
           </Svg>
-          <Text
-            style={[
-              styles.matches,
-              {
-                color: grey,
-              },
-            ]}
-          >
+          <Text style={[styles.matches, { color: grey }]}>
             {searchText ? `Matches for "${searchText}"` : "On the platform"}
           </Text>
         </View>
@@ -179,41 +163,21 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             <TouchableOpacity
               key={item.id}
               onPress={() => {
-                if (toggleSelectedUser) {
-                  toggleSelectedUser(item)
-                } else {
-                  toggleUser(item)
-                }
+                if (toggleSelectedUser) toggleSelectedUser(item)
+                else toggleUser(item)
               }}
               style={[
                 styles.searchResultContainer,
-                {
-                  backgroundColor: white_snow,
-                  borderBottomColor: border,
-                },
+                { backgroundColor: white_snow, borderBottomColor: border },
               ]}
             >
               <Avatar image={item.image} name={item.name} size={40} />
               <View style={styles.searchResultUserDetails}>
-                <Text
-                  style={[
-                    styles.searchResultUserName,
-                    {
-                      color: black,
-                    },
-                  ]}
-                >
+                <Text style={[styles.searchResultUserName, { color: black }]}>
                   {item.name}
                 </Text>
                 {showOnlineStatus && (
-                  <Text
-                    style={[
-                      styles.searchResultUserLastOnline,
-                      {
-                        color: grey,
-                      },
-                    ]}
-                  >
+                  <Text style={[styles.searchResultUserLastOnline, { color: grey }]}>
                     Last online {dayjs(item.last_active).calendar()}
                   </Text>
                 )}
@@ -239,10 +203,7 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
                 key={title}
                 style={[
                   styles.sectionHeader,
-                  {
-                    backgroundColor: white_smoke,
-                    color: grey,
-                  },
+                  { backgroundColor: white_smoke, color: grey },
                 ]}
               >
                 {title}
