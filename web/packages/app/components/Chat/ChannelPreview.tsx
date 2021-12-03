@@ -2,7 +2,11 @@
 
 // TODO: Fix chat deletion and options
 
-import { useStream } from "app/hooks/useStream"
+import { useNavigation } from "@react-navigation/native"
+import { useBottomSheetOverlayContext } from "app/components/Chat/context/BottomSheetOverlayContext"
+import { useChannelInfoOverlayContext } from "app/components/Chat/context/ChannelInfoOverlayContext"
+import { useChatOverlayContext } from "app/components/Chat/context/ChatOverlayContext"
+import { useStream, useStreamChatTheme } from "app/hooks"
 import type {
   AttachmentType,
   ChannelType,
@@ -12,8 +16,9 @@ import type {
   ReactionType,
   UserType,
 } from "app/models/stream/types"
+import { ChannelListScreenProps } from "app/navigation/types"
 import React from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { RectButton } from "react-native-gesture-handler"
 import Swipeable from "react-native-gesture-handler/Swipeable"
 import {
@@ -21,7 +26,6 @@ import {
   ChannelPreviewMessengerProps,
   Delete,
   MenuPointHorizontal,
-  useTheme,
 } from "stream-chat-expo"
 
 const styles = StyleSheet.create({
@@ -56,16 +60,21 @@ export const ChannelPreview: React.FC<
 
   const { client } = useStream()
   const {
-    theme: {
-      colors: { accent_red, white_smoke },
-    },
-  } = useTheme()
+    colors: { accent_red, white_smoke },
+  } = useStreamChatTheme()
 
+  const { setOverlay } = useChatOverlayContext()
+
+  const { setData: setDataBottomSheet } = useBottomSheetOverlayContext()
+
+  const { data, setData } = useChannelInfoOverlayContext()
   const otherMembers = channel
     ? Object.values(channel.state.members).filter(
         member => member.user?.id !== client?.user?.id
       )
     : []
+
+  const navigation = useNavigation<ChannelListScreenProps>()
 
   return (
     <Swipeable
@@ -75,8 +84,8 @@ export const ChannelPreview: React.FC<
         <View style={[styles.swipeableContainer, { backgroundColor: white_smoke }]}>
           <RectButton
             onPress={() => {
-              //   setData({ channel, clientId: client.userID, navigation })
-              //   setOverlay("channelInfo")
+              setData({ channel, clientId: client.userID, navigation })
+              setOverlay("channelInfo")
             }}
             style={[styles.leftSwipeableButton]}
           >
@@ -84,18 +93,18 @@ export const ChannelPreview: React.FC<
           </RectButton>
           <RectButton
             onPress={() => {
-              //   setDataBottomSheet({
-              //     confirmText: "DELETE",
-              //     onConfirm: () => {
-              //       channel.delete()
-              //       setOverlay("none")
-              //     },
-              //     subtext: `Are you sure you want to delete this ${
-              //       otherMembers.length === 1 ? "conversation" : "group"
-              //     }?`,
-              //     title: `Delete ${otherMembers.length === 1 ? "Conversation" : "Group"}`,
-              //   })
-              //   setOverlay("confirmation")
+              setDataBottomSheet({
+                confirmText: "DELETE",
+                onConfirm: () => {
+                  channel.delete()
+                  setOverlay("none")
+                },
+                subtext: `Are you sure you want to delete this ${
+                  otherMembers.length === 1 ? "conversation" : "group"
+                }?`,
+                title: `Delete ${otherMembers.length === 1 ? "Conversation" : "Group"}`,
+              })
+              setOverlay("confirmation")
             }}
             style={[styles.rightSwipeableButton]}
           >

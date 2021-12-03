@@ -8,16 +8,15 @@ export const SearchUsersProvider: React.FC<{
 }> = ({ children, value }) => {
   const paginatedUsers = usePaginatedUsers()
 
-  const { client } = useStream()
+  const { client, clientReady } = useStream()
   const searchContext = {
     ...paginatedUsers,
     ...value,
   }
-  React.useEffect(() => console.log("client", client), [client])
   return (
     <SearchUsersContext.Provider value={searchContext as SearchUsersContext}>
       {/* @ts-ignore */}
-      {client?.user ? <Chat client={client}>{children}</Chat> : children}
+      {clientReady ? <Chat client={client}>{children}</Chat> : children}
     </SearchUsersContext.Provider>
   )
 }

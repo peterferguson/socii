@@ -74,6 +74,7 @@ export default function App() {
   return (
     <SafeAreaProvider style={tw`bg-gray-50 flex-1`}>
       <AppContextProvider>
+        
         <AnimatedAppLoader>
           <StatusBar style="auto" />
           <Navigation />

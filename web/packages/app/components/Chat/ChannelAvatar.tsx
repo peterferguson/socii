@@ -1,13 +1,3 @@
-import React from "react"
-
-import { useChannelPreviewDisplayAvatar } from "./hooks/useChannelPreviewDisplayAvatar"
-import { useChannelPreviewDisplayPresence } from "./hooks/useChannelPreviewDisplayPresence"
-
-import { Avatar } from "../Avatar/Avatar"
-import { GroupAvatar } from "../Avatar/GroupAvatar"
-
-import type { ChannelPreviewProps } from "./ChannelPreview"
-
 import type {
   AttachmentType,
   ChannelType,
@@ -15,9 +5,15 @@ import type {
   EventType,
   MessageType,
   ReactionType,
-  UserType,
   UnknownType,
+  UserType,
 } from "app/models/stream/types"
+import React from "react"
+import { Avatar } from "../Avatar/Avatar"
+import { GroupAvatar } from "../Avatar/GroupAvatar"
+import type { ChannelPreviewProps } from "./ChannelPreview"
+import { useChannelPreviewDisplayAvatar } from "./hooks/useChannelPreviewDisplayAvatar"
+import { useChannelPreviewDisplayPresence } from "./hooks/useChannelPreviewDisplayPresence"
 
 export type ChannelAvatarProps<
   At extends UnknownType = AttachmentType,

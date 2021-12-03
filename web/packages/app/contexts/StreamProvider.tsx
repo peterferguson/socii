@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useCreateStreamClient } from "../hooks/useCreateStreamClient"
 import { StreamContext } from "./StreamContext"
+import { Chat } from "stream-chat-expo"
 
 export const StreamProvider: React.FC = ({ children }) => {
   const { client } = useCreateStreamClient()
@@ -18,7 +19,8 @@ export const StreamProvider: React.FC = ({ children }) => {
     <StreamContext.Provider
       value={{ client, clientReady, channel, setChannel, thread, setThread }}
     >
-      {children}
+      {/* @ts-ignore */}
+      {clientReady ? <Chat client={client}>{children}</Chat> : children}
     </StreamContext.Provider>
   )
 }

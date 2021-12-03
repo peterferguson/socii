@@ -6,6 +6,7 @@ import Router from "next/router"
 import React, { useEffect, useMemo, useReducer } from "react"
 import { Platform } from "react-native"
 import { OverlayProvider } from "stream-chat-expo"
+import { ChatOverlayProvider } from "app/components/Chat/context/ChatOverlayProvider"
 import { AuthProvider } from "../contexts/AuthProvider"
 import { SearchProvider } from "../contexts/SearchProvider"
 import { StreamProvider } from "../contexts/StreamProvider"
@@ -73,10 +74,12 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
               value={{ style: theme }}
               translucentStatusBar={true}
             >
-              <BottomSheetModalProvider>
-                <LinkTo />
-                <RootNavigator Component={Component} pageProps={pageProps} />
-              </BottomSheetModalProvider>
+              <ChatOverlayProvider>
+                <BottomSheetModalProvider>
+                  <LinkTo />
+                  <RootNavigator Component={Component} pageProps={pageProps} />
+                </BottomSheetModalProvider>
+              </ChatOverlayProvider>
               {/* <Notifications /> */}
             </OverlayProvider>
           </SearchProvider>
