@@ -1,3 +1,4 @@
+import ChannelHeader from "app/components/Chat/ChannelHeader"
 import HeaderTitle from "app/components/Headers/HeaderTitle"
 import { useStream } from "app/hooks"
 import { BottomTabNavigator } from "app/navigation/bottom-tab-navigator"
@@ -9,7 +10,7 @@ import { MainStack } from "../main-navigator/types"
 import { NextNavigationProps } from "../types"
 
 export const MainNavigator = (props: NextNavigationProps) => {
-  const { clientReady } = useStream()
+  const { clientReady, channel } = useStream()
   return (
     <MainStack.Navigator
       initialRouteName={"withBottomBar"}
@@ -25,12 +26,8 @@ export const MainNavigator = (props: NextNavigationProps) => {
           <MainStack.Screen
             name="channel"
             component={ChannelScreen}
-            options={({ route }) => ({
-              headerTitle: () => (
-                <HeaderTitle
-                  title={route.params.channelId ? route.params.channelId : "Chat"}
-                />
-              ),
+            options={() => ({
+              header: () => <ChannelHeader channel={channel} />,
             })}
           />
           <MainStack.Screen

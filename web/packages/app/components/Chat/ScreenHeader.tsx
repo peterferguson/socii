@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ViewStyle
+  ViewStyle,
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useAttachmentPickerContext } from "stream-chat-expo"
@@ -61,9 +61,7 @@ export const BackButton: React.FC<{
     <TouchableOpacity
       onPress={() => {
         navigation.goBack()
-        if (onBack) {
-          onBack()
-        }
+        if (onBack) onBack()
       }}
       style={styles.backButton}
     >
@@ -112,11 +110,10 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = props => {
   const insets = useSafeAreaInsets()
   const { setTopInset } = useAttachmentPickerContext()
 
-  useEffect(() => {
-    if (setTopInset) {
-      setTopInset(HEADER_CONTENT_HEIGHT + insets.top)
-    }
-  }, [insets.top])
+  useEffect(
+    () => setTopInset && setTopInset(HEADER_CONTENT_HEIGHT + insets.top),
+    [insets.top]
+  )
 
   return (
     <View
@@ -133,10 +130,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = props => {
       <View
         style={[
           styles.contentContainer,
-          {
-            height: HEADER_CONTENT_HEIGHT,
-            marginTop: inSafeArea ? 0 : insets.top,
-          },
+          { height: HEADER_CONTENT_HEIGHT, marginTop: inSafeArea ? 0 : insets.top },
         ]}
       >
         <View style={styles.leftContainer}>
@@ -152,16 +146,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = props => {
               <Title />
             ) : (
               !!titleText && (
-                <Text
-                  style={[
-                    styles.title,
-                    {
-                      color: black,
-                    },
-                  ]}
-                >
-                  {titleText}
-                </Text>
+                <Text style={[styles.title, { color: black }]}>{titleText}</Text>
               )
             )}
           </View>
@@ -169,16 +154,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = props => {
             <Subtitle />
           ) : (
             !!subtitleText && (
-              <Text
-                style={[
-                  styles.subTitle,
-                  {
-                    color: grey,
-                  },
-                ]}
-              >
-                {subtitleText}
-              </Text>
+              <Text style={[styles.subTitle, { color: grey }]}>{subtitleText}</Text>
             )
           )}
         </View>
