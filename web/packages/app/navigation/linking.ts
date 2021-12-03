@@ -67,7 +67,7 @@ const groupStackPaths = makeType({
 
 const chatStackPaths = makeType({
   channelList: makeChatStackPath("channelListScreen"),
-  // new: makeGroupStackPath("new"),
+  newDirectMessage: makeChatStackPath("newDirectMessageScreen"),
 })
 const channelStackPaths = makeType({
   channel: makeChannelStackPath("channel"),
@@ -142,7 +142,10 @@ const linking: Props = {
       [tabPaths.chatTab]: {
         path: "chat",
         initialRouteName: chatStackPaths.channelList,
-        screens: { [chatStackPaths.channelList]: "" },
+        screens: {
+          [chatStackPaths.channelList]: "",
+          [chatStackPaths.newDirectMessage]: "new-direct",
+        },
       },
       [mainPaths.onboarding]: {
         path: "onboarding",

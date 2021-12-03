@@ -68,12 +68,7 @@ export function Navigation({ Component, pageProps }: NextNavigationProps) {
       <AuthProvider>
         <StreamProvider>
           <SearchProvider>
-            <OverlayProvider
-              // bottomInset={bottom}
-              // i18nInstance={streami18n}
-              value={{ style: theme }}
-              translucentStatusBar={true}
-            >
+            <OverlayProvider value={{ style: theme }} translucentStatusBar={true}>
               <ChatOverlayProvider>
                 <BottomSheetModalProvider>
                   <LinkTo />

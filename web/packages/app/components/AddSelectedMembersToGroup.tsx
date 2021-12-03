@@ -34,7 +34,7 @@ export const AddSelectedMembersToGroup: React.FC<{
 
   return (
     <CenteredColumn style={tw`items-center pt-2`}>
-      {selectedUsers.length > 0 && (
+      {selectedUsers?.length > 0 && (
         <Button label={"Add Selected Members to Group"} onPress={handlePress} />
       )}
       <SelectedUsers />

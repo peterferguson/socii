@@ -97,6 +97,8 @@ export function usePaginatedUsers(): PaginatedUsers {
     }
   }
 
+  useEffect(() => console.log("usePaginatedUsers", { searchText }), [searchText])
+
   const fetchUsers = async (query = "") => {
     if (queryInProgress.current || query === "") return
     setLoading(true)

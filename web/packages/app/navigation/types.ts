@@ -16,7 +16,10 @@ type StocksStackParams = {
 
 type OnboardingStackParams = { onboarding: undefined }
 type EnterStackParams = { enterScreen: undefined }
-type ChatStackParams = { channelListScreen: undefined }
+type ChatStackParams = {
+  channelListScreen: undefined
+  newDirectMessageScreen: undefined
+}
 type ChannelStackParams = {
   channel: { channelId: string }
   thread: { threadId: string }
