@@ -1,16 +1,18 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import tw from "app/lib/tailwind"
-import { TabBarIcon } from "../navigation/tab-bar-icon"
-
-const routeIconNames = {
-  enter: "home",
-  groups: "users",
-  chat: "message-circle",
-  stocks: "globe",
-}
+import { Profile2User, Message2, Discover, Home2 } from "iconsax-react-native"
 
 function BottomTabBar({ state, descriptors, navigation }) {
+  const routeIcons = useMemo(
+    () => ({
+      enter: { Icon: Home2 },
+      groups: { Icon: Profile2User },
+      stocks: { Icon: Discover },
+      chat: { Icon: Message2 },
+    }),
+    []
+  )
   return (
     <View style={tw`flex-row bg-white ios:pb-4 rounded-2xl`}>
       {state.routes.map((route, index) => {
@@ -23,6 +25,8 @@ function BottomTabBar({ state, descriptors, navigation }) {
             : route.name
 
         const isFocused = state.index === index
+
+        const RouteIcon = routeIcons[route.name].Icon
 
         const onPress = () => {
           const event = navigation.emit({
@@ -58,7 +62,11 @@ function BottomTabBar({ state, descriptors, navigation }) {
             }`}
           >
             <View style={tw`mx-auto mb-1`}>
-              <TabBarIcon name={routeIconNames[route.name]} color={focussedColor} />
+              <RouteIcon
+                size="25"
+                color={focussedColor}
+                variant={!isFocused ? "Outline" : "Bold"}
+              />
             </View>
             <Text
               style={tw.style(`text-tiny text-brand-black text-center`, {
