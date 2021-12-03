@@ -110,56 +110,58 @@ const StockSharingModal = ({
   return (
     <CenteredColumn style={tw`justify-evenly w-full p-4 absolute top-0`}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={tw`mt-2 flex-1 z-1000`}>
-          <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
-            Select some data to tell your friends about!
-          </Text>
-          <MultiSelect
-            items={alphaVantageQueryOptions}
-            selectedItems={selectedItems}
-            setSelectedItems={setSelectedItems}
-            style={tw`border-brand-black/30`}
-            containerStyle={tw`my-2`}
-            dropDownContainerStyle={tw.style(`border-brand-black/30`, {
-              height: DROPDOWN_ITEMS_CONTAINER_HEIGHT,
-            })}
-            searchContainerStyle={tw`border-brand-black/30`}
-            max={7} // - 10 with 3 required fields (TODO add these as initial values)
-          />
-        </View>
+        <>
+          <View style={tw`mt-2 flex-1 z-1000`}>
+            <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
+              Select some data to tell your friends about!
+            </Text>
+            <MultiSelect
+              items={alphaVantageQueryOptions}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+              style={tw`border-brand-black/30`}
+              containerStyle={tw`my-2`}
+              dropDownContainerStyle={tw.style(`border-brand-black/30`, {
+                height: DROPDOWN_ITEMS_CONTAINER_HEIGHT,
+              })}
+              searchContainerStyle={tw`border-brand-black/30`}
+              max={7} // - 10 with 3 required fields (TODO add these as initial values)
+            />
+          </View>
 
-        <View style={tw`py-2 flex-1`}>
-          <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
-            Got a price in mind?
-          </Text>
-          <PriceInput setPrice={setTargetPrice} pricePlaceholder={pricePlaceholder} />
-        </View>
+          <View style={tw`py-2 flex-1`}>
+            <Text style={tw`text-sm text-gray-500 font-poppins-400`}>
+              Got a price in mind?
+            </Text>
+            <PriceInput setPrice={setTargetPrice} pricePlaceholder={pricePlaceholder} />
+          </View>
 
-        <View style={tw`py-2 flex-4 w-full`}>
-          <Text style={tw`text-sm py-1 text-gray-500 font-poppins-400`}>
-            Tell them your thoughts!
-          </Text>
-          <TextInput
-            value={message}
-            onChangeText={setMessage}
-            multiline={true}
-            returnKeyType="done"
-            enablesReturnKeyAutomatically
-            placeholder="I like the look of..."
-            style={tw`rounded-md border border-brand-black/30 p-4 w-full h-30`}
-            textAlignVertical={"top"}
-          />
-        </View>
+          <View style={tw`py-2 flex-4 w-full`}>
+            <Text style={tw`text-sm py-1 text-gray-500 font-poppins-400`}>
+              Tell them your thoughts!
+            </Text>
+            <TextInput
+              value={message}
+              onChangeText={setMessage}
+              multiline={true}
+              returnKeyType="done"
+              enablesReturnKeyAutomatically
+              placeholder="I like the look of..."
+              style={tw`rounded-md border border-brand-black/30 p-4 w-full h-30`}
+              textAlignVertical={"top"}
+            />
+          </View>
 
-        <CenteredRow style={tw.style(`mt-4 flex-1`, { width: BUTTON_WIDTH })}>
-          <RoundButton
-            onPress={sendMessageClickHandler}
-            label={"To the moon 🌕"}
-            labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
-            gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
-            textColor={tw.color("teal-500")}
-          />
-        </CenteredRow>
+          <CenteredRow style={tw.style(`mt-4 flex-1`, { width: BUTTON_WIDTH })}>
+            <RoundButton
+              onPress={sendMessageClickHandler}
+              label={"To the moon 🌕"}
+              labelStyle={tw`text-center text-teal-700 uppercase dark:text-white`}
+              gradientColors={[tw.color("teal-100"), tw.color("teal-200/80")]}
+              textColor={tw.color("teal-500")}
+            />
+          </CenteredRow>
+        </>
       </TouchableWithoutFeedback>
     </CenteredColumn>
   )
