@@ -1,21 +1,18 @@
+import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetOverlayContext } from "app/components/Chat/context/BottomSheetOverlayContext"
 import { useChatOverlayContext } from "app/components/Chat/context/ChatOverlayContext"
 import { Contacts } from "app/components/Icons/Contacts"
 import { Delete } from "app/components/Icons/Delete"
 import { File } from "app/components/Icons/File"
-import { GoBack } from "app/components/Icons/GoBack"
 import { GoForward } from "app/components/Icons/GoForward"
 import { Mute } from "app/components/Icons/Mute"
 import { Notification } from "app/components/Icons/Notification"
 import { Picture } from "app/components/Icons/Picture"
 import { useStream } from "app/hooks/useStream"
 import { useStreamChatTheme } from "app/hooks/useStreamChatTheme"
-import { getUserActivityStatus } from "app/utils/getUserActivityStatus"
 import { useRouter } from "app/navigation/use-router"
 import React, { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
 import {
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -109,7 +106,6 @@ export const OneOnOneDetailsScreen = () => {
     colors: { accent_green, accent_red, black, border, grey, white, white_smoke },
   } = useStreamChatTheme()
   const router = useRouter()
-  const navigation = useNavigation()
   const { client, channel } = useStream()
   const { setOverlay } = useChatOverlayContext()
   const { setData } = useBottomSheetOverlayContext()
@@ -161,13 +157,12 @@ export const OneOnOneDetailsScreen = () => {
         contentContainerStyle={styles.contentContainer}
         style={styles.container}
       >
-        <Spacer />
-        <Spacer />
         <View style={[styles.userNameContainer, { borderTopColor: border }]}>
           <Text style={[styles.userName, { color: black }]}>@{user.id}</Text>
           <Text style={[styles.userName, { color: grey }]}>{user.name}</Text>
         </View>
 
+        <Spacer />
         <Spacer />
         <TouchableOpacity
           style={[styles.actionContainer, { borderBottomColor: border }]}
@@ -245,11 +240,7 @@ export const OneOnOneDetailsScreen = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            // navigation.navigate("SharedGroupsScreen", {
-            //   user,
-            // })
-          }}
+          onPress={() => router.push(`/groups/shared/${user.id}`)}
           style={[styles.actionContainer, { borderBottomColor: border }]}
         >
           <View style={styles.actionLabelContainer}>

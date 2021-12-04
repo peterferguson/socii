@@ -24,6 +24,7 @@ type ChannelStackParams = {
   channel: { channelId: string }
   oneOnOneDetails: { channelId: string }
   groupDetails: { channelId: string }
+  sharedGroups: { userId: string }
   thread: { threadId: string }
 }
 

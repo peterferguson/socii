@@ -15,7 +15,7 @@ import { streami18n } from "./ChannelList"
 
 const ChannelScreen = () => {
   const router = useRouter()
-  const { client: chatClient, channel, setChannel, setThread, thread } = useStream()
+  const { client: chatClient, channel, setThread, thread } = useStream()
   const headerHeight = useHeaderHeight()
   const { setTopInset } = useAttachmentPickerContext()
 

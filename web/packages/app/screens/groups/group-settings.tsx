@@ -9,7 +9,6 @@ import {
 import { useGroupChatChannel, useModal, useStream } from "app/hooks"
 import { useDisplayAvatar } from "app/hooks/useDisplayAvatar"
 import tw from "app/lib/tailwind"
-import { Channel } from "app/models/stream/types"
 import { createParam } from "app/navigation/use-param"
 import { AddCircle } from "iconsax-react-native"
 import React, { useEffect, useState } from "react"

@@ -74,6 +74,7 @@ const channelStackPaths = makeType({
   channel: makeChannelStackPath("channel"),
   oneOnOneDetails: makeChannelStackPath("oneOnOneDetails"),
   groupDetails: makeChannelStackPath("groupDetails"),
+  sharedGroups: makeChannelStackPath("sharedGroups"),
   thread: makeChannelStackPath("thread"),
 })
 
@@ -104,6 +105,7 @@ const mainPaths = makeType({
   channel: makeMainPath("channel"),
   oneOnOneDetails: makeMainPath("oneOnOneDetails"),
   groupDetails: makeMainPath("groupDetails"),
+  sharedGroups: makeMainPath("sharedGroups"),
   thread: makeMainPath("thread"),
   settings: makeMainPath("settings"),
 })
@@ -172,6 +174,12 @@ const linking: Props = {
         path: "one-on-one-details",
         screens: {
           [channelStackPaths.oneOnOneDetails]: ":channelId",
+        },
+      },
+      [mainPaths.sharedGroups]: {
+        path: "groups/shared",
+        screens: {
+          [channelStackPaths.sharedGroups]: ":userId",
         },
       },
       [mainPaths.thread]: {

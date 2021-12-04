@@ -5,6 +5,7 @@ export type MainNavigatorParams = {
   channel: { channelId: string }
   groupDetails: { channelId: string }
   oneOnOneDetails: { channelId: string }
+  sharedGroups: { userId: string }
   thread: { threadId: string }
   settings: undefined
 }
