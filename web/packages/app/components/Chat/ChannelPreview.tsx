@@ -67,7 +67,7 @@ export const ChannelPreview: React.FC<
 
   const { setData: setDataBottomSheet } = useBottomSheetOverlayContext()
 
-  const { data, setData } = useChannelInfoOverlayContext()
+  const { setData } = useChannelInfoOverlayContext()
   const otherMembers = channel
     ? Object.values(channel.state.members).filter(
         member => member.user?.id !== client?.user?.id

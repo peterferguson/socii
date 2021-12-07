@@ -12,6 +12,7 @@ import {
   useAttachmentPickerContext,
 } from "stream-chat-expo"
 import { streami18n } from "./ChannelList"
+import { Message } from "app/components/Chat/Message"
 
 const ChannelScreen = () => {
   const router = useRouter()
@@ -32,6 +33,7 @@ const ChannelScreen = () => {
         >
           <View style={{ flex: 1 }}>
             <MessageList
+              // Message={Message}
               onThreadSelect={thread => {
                 setThread(thread)
                 router.push(`/thread/${thread.id}`)
